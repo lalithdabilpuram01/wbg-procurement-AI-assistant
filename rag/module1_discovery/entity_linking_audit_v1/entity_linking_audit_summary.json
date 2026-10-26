@@ -1,0 +1,716 @@
+{
+ "sri_lanka_date_case": {
+  "notice_details_with_reference": [
+   {
+    "notice_op_id": "OP00179514",
+    "notice_type": "Contract Award",
+    "notice_date": "2022-05-13",
+    "project_id": "P132833"
+   }
+  ],
+  "notice_contract_links_for_1674110": 1,
+  "plan_row": [
+   {
+    "project_id": "P132833",
+    "wb_contract_number": "1674110",
+    "borrower_contract_reference": "LK-RDA-204059-CW-RFQ",
+    "plan_reference_extracted": "LK-RDA-204059-CW-RFQ",
+    "normalized_reference": "LK-RDA-204059-CW-RFQ",
+    "plan_document_id": "34172790",
+    "plan_document_date": "2023-10-02",
+    "page": "3",
+    "row_on_page": 2,
+    "section": "WORKS",
+    "match_method": "normalized reference equality, same project_id",
+    "exact_raw_string_equal": true,
+    "corroborating_fields": "category;method;review_type;amount",
+    "disagreeing_fields": "",
+    "independent_corroboration": "amount;actual_signing_date_within_7_days",
+    "contracts_for_plan_row": 1,
+    "plan_method": "Request for Quota tions",
+    "contract_method": "Request for Quotations",
+    "plan_review": "Post",
+    "contract_review": "Post",
+    "plan_actual_amount_usd": 17652.71,
+    "contract_amount_usd": 17652.71,
+    "plan_process_status": "Signed",
+    "plan_signed_planned": "2020-12-14",
+    "plan_signed_actual": "2020-12-29",
+    "ds00005_contract_signing_date": "2020-12-24",
+    "days_plan_actual_minus_ds00005": 5,
+    "days_plan_planned_minus_ds00005": -10,
+    "contracts_sharing_reference_in_project": 1,
+    "verification_status": "verified"
+   }
+  ]
+ },
+ "probe_projects": {
+  "P132833": {
+   "plan_document_id": "34172790",
+   "plan_document_date": "2023-10-02",
+   "parsed_pages": 3,
+   "plan_rows": 44,
+   "rows_with_step_reference": 44,
+   "match_exact_raw_string": 18,
+   "match_whitespace_uppercase": 20,
+   "match_normalize_ref": 20,
+   "unmatched: not signed in plan": 22,
+   "verified": 8,
+   "verified_one_to_many": 14,
+   "candidate": 7,
+   "conflicting": 2,
+   "unmatched: signed in plan; no DS00005 contract with this reference": 2,
+   "contracts": 89,
+   "contracts_step_format": 89,
+   "contracts_matched": 31,
+   "step_contracts_not_in_parsed_rows": 58,
+   "of_which_signed_after_plan_date": 0
+  },
+  "P148850": {
+   "plan_document_id": "40102923",
+   "plan_document_date": "2026-05-14",
+   "parsed_pages": 3,
+   "plan_rows": 53,
+   "rows_without_step_reference": 18,
+   "rows_with_step_reference": 35,
+   "match_exact_raw_string": 12,
+   "match_whitespace_uppercase": 12,
+   "match_normalize_ref": 14,
+   "unmatched: not signed in plan": 21,
+   "conflicting": 1,
+   "verified": 11,
+   "verified_one_to_many": 4,
+   "contracts": 43,
+   "contracts_step_format": 31,
+   "contracts_matched": 16,
+   "step_contracts_not_in_parsed_rows": 15,
+   "of_which_signed_after_plan_date": 2
+  },
+  "P175325": {
+   "plan_document_id": "40127897",
+   "plan_document_date": "2026-09-17",
+   "parsed_pages": 3,
+   "plan_rows": 44,
+   "rows_with_step_reference": 44,
+   "match_exact_raw_string": 22,
+   "match_whitespace_uppercase": 22,
+   "match_normalize_ref": 22,
+   "unmatched: not signed in plan": 22,
+   "verified": 18,
+   "verified_one_to_many": 8,
+   "candidate_one_to_many": 2,
+   "contracts": 94,
+   "contracts_step_format": 93,
+   "contracts_matched": 28,
+   "step_contracts_not_in_parsed_rows": 65,
+   "of_which_signed_after_plan_date": 0
+  },
+  "P500392": {
+   "plan_document_id": "40134065",
+   "plan_document_date": "2026-10-19",
+   "parsed_pages": 2,
+   "plan_rows": 25,
+   "rows_with_step_reference": 25,
+   "match_exact_raw_string": 15,
+   "match_whitespace_uppercase": 16,
+   "match_normalize_ref": 16,
+   "unmatched: not signed in plan": 9,
+   "verified": 14,
+   "verified_one_to_many": 10,
+   "contracts": 24,
+   "contracts_step_format": 24,
+   "contracts_matched": 24,
+   "step_contracts_not_in_parsed_rows": 0,
+   "of_which_signed_after_plan_date": 0
+  }
+ },
+ "pdf_text_scan": {
+  "P132833": {
+   "pdf": "discovery/samples/documents/pp_files/P132833_PP_34172790.pdf",
+   "pdf_pages": 6,
+   "step_contracts": 89,
+   "contracts_whose_reference_appears_in_pdf_text": 58,
+   "of_which_also_matched_in_parsed_rows": 31,
+   "found_in_text_but_not_in_parsed_rows": [
+    "1674058",
+    "1742301",
+    "1742303",
+    "1742508",
+    "1742639",
+    "1742646",
+    "1742647",
+    "1742675",
+    "1742679",
+    "1742681",
+    "1742682",
+    "1742698",
+    "1742703",
+    "1744122",
+    "1745541",
+    "1745542",
+    "1745545",
+    "1745552",
+    "1745555",
+    "1745556",
+    "1746155",
+    "1746158",
+    "1746411",
+    "1746417",
+    "1746767",
+    "1747902",
+    "1747904"
+   ],
+   "matched_rows_not_found_in_text": [],
+   "step_contracts_absent_from_text": 31,
+   "absent_signed_after_plan_date": 0,
+   "absent_signing_range": [
+    "2019-10-01",
+    "2021-11-02"
+   ],
+   "found_signing_range": [
+    "2019-11-01",
+    "2023-09-19"
+   ]
+  },
+  "P148850": {
+   "pdf": "discovery/samples/documents/pp_files/P148850_PP_40102923.pdf",
+   "pdf_pages": 7,
+   "step_contracts": 31,
+   "contracts_whose_reference_appears_in_pdf_text": 25,
+   "of_which_also_matched_in_parsed_rows": 16,
+   "found_in_text_but_not_in_parsed_rows": [
+    "1654099",
+    "1725486",
+    "1725502",
+    "1870942",
+    "1871676",
+    "1876743",
+    "1886360",
+    "1892984",
+    "1892986"
+   ],
+   "matched_rows_not_found_in_text": [],
+   "step_contracts_absent_from_text": 6,
+   "absent_signed_after_plan_date": 0,
+   "absent_signing_range": [
+    "2020-09-30",
+    "2024-11-04"
+   ],
+   "found_signing_range": [
+    "2020-01-09",
+    "2026-06-18"
+   ]
+  },
+  "P175325": {
+   "pdf": "discovery/samples/documents/pp_files/P175325_PP_40127897.pdf",
+   "pdf_pages": 10,
+   "step_contracts": 93,
+   "contracts_whose_reference_appears_in_pdf_text": 87,
+   "of_which_also_matched_in_parsed_rows": 28,
+   "found_in_text_but_not_in_parsed_rows": [
+    "1716136",
+    "1716167",
+    "1728261",
+    "1728633",
+    "1729075",
+    "1729084",
+    "1729085",
+    "1729087",
+    "1729088",
+    "1735059",
+    "1742784",
+    "1742879",
+    "1750276",
+    "1766782",
+    "1766784",
+    "1766976",
+    "1767360",
+    "1772224",
+    "1772431",
+    "1776467",
+    "1776483",
+    "1776802",
+    "1776805",
+    "1778247",
+    "1778356",
+    "1778818",
+    "1780811",
+    "1780825",
+    "1780829",
+    "1780889",
+    "1780890",
+    "1788591",
+    "1795914",
+    "1795938",
+    "1795939",
+    "1805243",
+    "1854315",
+    "1854860",
+    "1866065",
+    "1866977",
+    "1876859",
+    "1881626",
+    "1886078",
+    "1887373",
+    "1887666",
+    "1888434",
+    "1889833",
+    "1889835",
+    "1891792",
+    "1894070",
+    "1894071",
+    "1900444",
+    "1900505",
+    "1900515",
+    "1900719",
+    "1900721",
+    "1902567",
+    "1903173",
+    "1903229"
+   ],
+   "matched_rows_not_found_in_text": [],
+   "step_contracts_absent_from_text": 6,
+   "absent_signed_after_plan_date": 0,
+   "absent_signing_range": [
+    "2023-12-04",
+    "2024-12-03"
+   ],
+   "found_signing_range": [
+    "2021-08-03",
+    "2026-09-15"
+   ]
+  },
+  "P500392": {
+   "pdf": "discovery/samples/documents/pp_files/P500392_PP_40134065.pdf",
+   "pdf_pages": 4,
+   "step_contracts": 24,
+   "contracts_whose_reference_appears_in_pdf_text": 24,
+   "of_which_also_matched_in_parsed_rows": 24,
+   "found_in_text_but_not_in_parsed_rows": [],
+   "matched_rows_not_found_in_text": [],
+   "step_contracts_absent_from_text": 0,
+   "absent_signed_after_plan_date": 0,
+   "absent_signing_range": [],
+   "found_signing_range": [
+    "2025-08-14",
+    "2026-09-01"
+   ]
+  }
+ },
+ "p178432_plan_versions": {
+  "project_id": "P178432",
+  "plan_versions_local": 32,
+  "contracts": 55,
+  "contracts_step_format": 55,
+  "per_version": [
+   {
+    "version_date": "2023-07-25",
+    "document_id": "34123090",
+    "contracts_referenced": 1,
+    "contracts_signed_by_version_date": 0,
+    "signed_and_referenced": 0
+   },
+   {
+    "version_date": "2023-07-27",
+    "document_id": "34123972",
+    "contracts_referenced": 1,
+    "contracts_signed_by_version_date": 0,
+    "signed_and_referenced": 0
+   },
+   {
+    "version_date": "2023-08-15",
+    "document_id": "34144000",
+    "contracts_referenced": 1,
+    "contracts_signed_by_version_date": 0,
+    "signed_and_referenced": 0
+   },
+   {
+    "version_date": "2023-09-30",
+    "document_id": "34171062",
+    "contracts_referenced": 1,
+    "contracts_signed_by_version_date": 0,
+    "signed_and_referenced": 0
+   },
+   {
+    "version_date": "2023-10-31",
+    "document_id": "34188719",
+    "contracts_referenced": 2,
+    "contracts_signed_by_version_date": 0,
+    "signed_and_referenced": 0
+   },
+   {
+    "version_date": "2023-12-14",
+    "document_id": "34214821",
+    "contracts_referenced": 2,
+    "contracts_signed_by_version_date": 0,
+    "signed_and_referenced": 0
+   },
+   {
+    "version_date": "2024-01-11",
+    "document_id": "34236533",
+    "contracts_referenced": 2,
+    "contracts_signed_by_version_date": 1,
+    "signed_and_referenced": 0
+   },
+   {
+    "version_date": "2024-03-18",
+    "document_id": "34282878",
+    "contracts_referenced": 2,
+    "contracts_signed_by_version_date": 3,
+    "signed_and_referenced": 1
+   },
+   {
+    "version_date": "2024-05-16",
+    "document_id": "34318924",
+    "contracts_referenced": 2,
+    "contracts_signed_by_version_date": 6,
+    "signed_and_referenced": 2
+   },
+   {
+    "version_date": "2024-05-27",
+    "document_id": "34325321",
+    "contracts_referenced": 2,
+    "contracts_signed_by_version_date": 6,
+    "signed_and_referenced": 2
+   },
+   {
+    "version_date": "2024-05-28",
+    "document_id": "34326155",
+    "contracts_referenced": 2,
+    "contracts_signed_by_version_date": 6,
+    "signed_and_referenced": 2
+   },
+   {
+    "version_date": "2024-06-19",
+    "document_id": "34343242",
+    "contracts_referenced": 4,
+    "contracts_signed_by_version_date": 7,
+    "signed_and_referenced": 2
+   },
+   {
+    "version_date": "2024-07-26",
+    "document_id": "34369296",
+    "contracts_referenced": 5,
+    "contracts_signed_by_version_date": 9,
+    "signed_and_referenced": 4
+   },
+   {
+    "version_date": "2024-07-29",
+    "document_id": "34370014",
+    "contracts_referenced": 2,
+    "contracts_signed_by_version_date": 9,
+    "signed_and_referenced": 2
+   },
+   {
+    "version_date": "2024-08-12",
+    "document_id": "34376232",
+    "contracts_referenced": 2,
+    "contracts_signed_by_version_date": 10,
+    "signed_and_referenced": 2
+   },
+   {
+    "version_date": "2024-10-24",
+    "document_id": "34410612",
+    "contracts_referenced": 6,
+    "contracts_signed_by_version_date": 23,
+    "signed_and_referenced": 4
+   },
+   {
+    "version_date": "2024-10-28",
+    "document_id": "34412497",
+    "contracts_referenced": 9,
+    "contracts_signed_by_version_date": 23,
+    "signed_and_referenced": 4
+   },
+   {
+    "version_date": "2024-11-18",
+    "document_id": "34423557",
+    "contracts_referenced": 10,
+    "contracts_signed_by_version_date": 23,
+    "signed_and_referenced": 4
+   },
+   {
+    "version_date": "2025-03-13",
+    "document_id": "40000644",
+    "contracts_referenced": 11,
+    "contracts_signed_by_version_date": 29,
+    "signed_and_referenced": 7
+   },
+   {
+    "version_date": "2025-04-11",
+    "document_id": "40006455",
+    "contracts_referenced": 2,
+    "contracts_signed_by_version_date": 32,
+    "signed_and_referenced": 2
+   },
+   {
+    "version_date": "2025-07-10",
+    "document_id": "40029222",
+    "contracts_referenced": 12,
+    "contracts_signed_by_version_date": 32,
+    "signed_and_referenced": 10
+   },
+   {
+    "version_date": "2025-09-01",
+    "document_id": "40040641",
+    "contracts_referenced": 8,
+    "contracts_signed_by_version_date": 39,
+    "signed_and_referenced": 8
+   },
+   {
+    "version_date": "2025-09-02",
+    "document_id": "40040832",
+    "contracts_referenced": 13,
+    "contracts_signed_by_version_date": 39,
+    "signed_and_referenced": 10
+   },
+   {
+    "version_date": "2025-11-07",
+    "document_id": "40067037",
+    "contracts_referenced": 13,
+    "contracts_signed_by_version_date": 44,
+    "signed_and_referenced": 11
+   },
+   {
+    "version_date": "2025-11-19",
+    "document_id": "40069804",
+    "contracts_referenced": 13,
+    "contracts_signed_by_version_date": 44,
+    "signed_and_referenced": 13
+   },
+   {
+    "version_date": "2025-11-27",
+    "document_id": "40071616",
+    "contracts_referenced": 13,
+    "contracts_signed_by_version_date": 45,
+    "signed_and_referenced": 13
+   },
+   {
+    "version_date": "2025-12-22",
+    "document_id": "40078244",
+    "contracts_referenced": 13,
+    "contracts_signed_by_version_date": 46,
+    "signed_and_referenced": 13
+   },
+   {
+    "version_date": "2026-02-17",
+    "document_id": "40087159",
+    "contracts_referenced": 14,
+    "contracts_signed_by_version_date": 47,
+    "signed_and_referenced": 12
+   },
+   {
+    "version_date": "2026-02-27",
+    "document_id": "40089013",
+    "contracts_referenced": 17,
+    "contracts_signed_by_version_date": 47,
+    "signed_and_referenced": 12
+   },
+   {
+    "version_date": "2026-04-24",
+    "document_id": "40099192",
+    "contracts_referenced": 19,
+    "contracts_signed_by_version_date": 49,
+    "signed_and_referenced": 14
+   },
+   {
+    "version_date": "2026-08-21",
+    "document_id": "40123583",
+    "contracts_referenced": 36,
+    "contracts_signed_by_version_date": 55,
+    "signed_and_referenced": 36
+   },
+   {
+    "version_date": "2026-09-22",
+    "document_id": "40128598",
+    "contracts_referenced": 19,
+    "contracts_signed_by_version_date": 55,
+    "signed_and_referenced": 19
+   }
+  ],
+  "contracts_referenced_in_any_version": 55,
+  "contracts_referenced_in_latest_version": 19,
+  "referenced_earlier_but_absent_from_latest": 36,
+  "contracts_never_referenced": 0,
+  "latest_version_in_v2_manifest": true,
+  "narrative_docs_contract_references": {
+   "2023-06-27_PAD_34112390.txt": 0,
+   "2023-10-19_ISR_34182667.txt": 0,
+   "2024-04-29_ISR_34310239.txt": 0,
+   "2024-04-29_ISR_34310240.txt": 0,
+   "2024-11-08_ISR_34419449.txt": 0,
+   "2025-05-29_ISR_40017451.txt": 0,
+   "2026-01-21_ISR_40081924.txt": 0,
+   "2026-07-28_ISR_40119355.txt": 0
+  }
+ },
+ "ds00005_coverage_start": "2019-07-01",
+ "potential_counts": {
+  "high": 56,
+  "verified": 4,
+  "medium": 4,
+  "unknown": 6
+ },
+ "potential_by_country": {
+  "AR": {
+   "high": 7
+  },
+  "BF": {
+   "high": 7
+  },
+  "ET": {
+   "verified": 1,
+   "high": 5,
+   "medium": 1
+  },
+  "ID": {
+   "high": 6,
+   "unknown": 1
+  },
+  "KE": {
+   "high": 4,
+   "medium": 2,
+   "unknown": 1
+  },
+  "LK": {
+   "verified": 1,
+   "high": 6
+  },
+  "MD": {
+   "high": 6,
+   "unknown": 1
+  },
+  "PK": {
+   "high": 7
+  },
+  "PS": {
+   "verified": 1,
+   "high": 5,
+   "unknown": 1
+  },
+  "SN": {
+   "verified": 1,
+   "high": 3,
+   "medium": 1,
+   "unknown": 2
+  }
+ },
+ "match_date_differences": {
+  "plan_actual_minus_ds00005_days": [
+   [
+    0,
+    61
+   ],
+   [
+    95,
+    4
+   ],
+   [
+    3,
+    4
+   ],
+   [
+    2,
+    3
+   ],
+   [
+    4,
+    3
+   ],
+   [
+    5,
+    2
+   ],
+   [
+    6,
+    2
+   ],
+   [
+    25,
+    2
+   ],
+   [
+    109,
+    1
+   ],
+   [
+    7,
+    1
+   ],
+   [
+    46,
+    1
+   ],
+   [
+    50,
+    1
+   ],
+   [
+    9,
+    1
+   ],
+   [
+    10,
+    1
+   ],
+   [
+    15,
+    1
+   ],
+   [
+    14,
+    1
+   ],
+   [
+    13,
+    1
+   ],
+   [
+    37,
+    1
+   ]
+  ],
+  "plan_planned_minus_ds00005_days_median": -67
+ },
+ "verification_status_counts_pairs": {
+  "verified": 51,
+  "verified_one_to_many": 36,
+  "candidate": 7,
+  "conflicting": 3,
+  "candidate_one_to_many": 2
+ },
+ "verification_status_counts_contracts": {
+  "verified": 51,
+  "verified_one_to_many": 36,
+  "candidate": 7,
+  "conflicting": 3,
+  "candidate_one_to_many": 2
+ },
+ "verified_contracts_by_project": {
+  "P132833": [
+   8,
+   14,
+   7,
+   2
+  ],
+  "P148850": [
+   11,
+   4,
+   0,
+   1
+  ],
+  "P175325": [
+   18,
+   8,
+   2,
+   0
+  ],
+  "P500392": [
+   14,
+   10,
+   0,
+   0
+  ]
+ },
+ "swap_candidates": 2
+}

@@ -1,0 +1,178 @@
+[
+ {
+  "doc": "P003606,P046829_PPAR_12532078.txt",
+  "type": "PPAR",
+  "ds00005_contracts_for_project": 0,
+  "wb_contract_numbers_in_text": 0,
+  "borrower_refs_in_text": 0,
+  "step_style_refs_in_text": 0
+ },
+ {
+  "doc": "P009662_PPAR_887959.txt",
+  "type": "PPAR",
+  "ds00005_contracts_for_project": 0,
+  "wb_contract_numbers_in_text": 0,
+  "borrower_refs_in_text": 0,
+  "step_style_refs_in_text": 0
+ },
+ {
+  "doc": "P039892_SAR1990_696824.txt",
+  "type": "SAR1990",
+  "ds00005_contracts_for_project": 0,
+  "wb_contract_numbers_in_text": 0,
+  "borrower_refs_in_text": 0,
+  "step_style_refs_in_text": 0
+ },
+ {
+  "doc": "P049924,P124922_PPAR_14505807.txt",
+  "type": "PPAR",
+  "ds00005_contracts_for_project": 0,
+  "wb_contract_numbers_in_text": 0,
+  "borrower_refs_in_text": 0,
+  "step_style_refs_in_text": 0
+ },
+ {
+  "doc": "P122319_ICRR_33651570.txt",
+  "type": "ICRR",
+  "ds00005_contracts_for_project": 1,
+  "wb_contract_numbers_in_text": 0,
+  "borrower_refs_in_text": 0,
+  "step_style_refs_in_text": 0
+ },
+ {
+  "doc": "P122319_ICR_33226374.txt",
+  "type": "ICR",
+  "ds00005_contracts_for_project": 1,
+  "wb_contract_numbers_in_text": 0,
+  "borrower_refs_in_text": 0,
+  "step_style_refs_in_text": 0
+ },
+ {
+  "doc": "P122319_ISR_27050610.txt",
+  "type": "ISR",
+  "ds00005_contracts_for_project": 1,
+  "wb_contract_numbers_in_text": 0,
+  "borrower_refs_in_text": 0,
+  "step_style_refs_in_text": 0
+ },
+ {
+  "doc": "P122319_PAD_15873170.txt",
+  "type": "PAD",
+  "ds00005_contracts_for_project": 1,
+  "wb_contract_numbers_in_text": 0,
+  "borrower_refs_in_text": 0,
+  "step_style_refs_in_text": 0
+ },
+ {
+  "doc": "P122319_PP_31536504.txt",
+  "type": "PP",
+  "ds00005_contracts_for_project": 1,
+  "wb_contract_numbers_in_text": 0,
+  "borrower_refs_in_text": 0,
+  "step_style_refs_in_text": 0
+ },
+ {
+  "doc": "P127203_ICRFR_33407968.txt",
+  "type": "ICRFR",
+  "ds00005_contracts_for_project": 1,
+  "wb_contract_numbers_in_text": 0,
+  "borrower_refs_in_text": 0,
+  "step_style_refs_in_text": 0
+ },
+ {
+  "doc": "P131049_ICRR_32800471.txt",
+  "type": "ICRR",
+  "ds00005_contracts_for_project": 3,
+  "wb_contract_numbers_in_text": 0,
+  "borrower_refs_in_text": 0,
+  "step_style_refs_in_text": 0
+ },
+ {
+  "doc": "P131049_ICR_32160299.txt",
+  "type": "ICR",
+  "ds00005_contracts_for_project": 3,
+  "wb_contract_numbers_in_text": 0,
+  "borrower_refs_in_text": 0,
+  "step_style_refs_in_text": 0
+ },
+ {
+  "doc": "P131049_ISR_27391778.txt",
+  "type": "ISR",
+  "ds00005_contracts_for_project": 3,
+  "wb_contract_numbers_in_text": 0,
+  "borrower_refs_in_text": 0,
+  "step_style_refs_in_text": 0
+ },
+ {
+  "doc": "P131049_PAD_17555469.txt",
+  "type": "PAD",
+  "ds00005_contracts_for_project": 3,
+  "wb_contract_numbers_in_text": 0,
+  "borrower_refs_in_text": 0,
+  "step_style_refs_in_text": 0
+ },
+ {
+  "doc": "P131049_PP_31592934.txt",
+  "type": "PP",
+  "ds00005_contracts_for_project": 3,
+  "wb_contract_numbers_in_text": 0,
+  "borrower_refs_in_text": 0,
+  "step_style_refs_in_text": 0
+ },
+ {
+  "doc": "P145502_ICRR_34062224.txt",
+  "type": "ICRR",
+  "ds00005_contracts_for_project": 32,
+  "wb_contract_numbers_in_text": 0,
+  "borrower_refs_in_text": 0,
+  "step_style_refs_in_text": 0
+ },
+ {
+  "doc": "P145502_ICR_33841581.txt",
+  "type": "ICR",
+  "ds00005_contracts_for_project": 32,
+  "wb_contract_numbers_in_text": 0,
+  "borrower_refs_in_text": 0,
+  "step_style_refs_in_text": 0
+ },
+ {
+  "doc": "P145502_ISR_28123498.txt",
+  "type": "ISR",
+  "ds00005_contracts_for_project": 32,
+  "wb_contract_numbers_in_text": 0,
+  "borrower_refs_in_text": 0,
+  "step_style_refs_in_text": 0
+ },
+ {
+  "doc": "P145502_PAD_19368603.txt",
+  "type": "PAD",
+  "ds00005_contracts_for_project": 32,
+  "wb_contract_numbers_in_text": 0,
+  "borrower_refs_in_text": 0,
+  "step_style_refs_in_text": 0
+ },
+ {
+  "doc": "P145502_PP_31837484.txt",
+  "type": "PP",
+  "ds00005_contracts_for_project": 32,
+  "wb_contract_numbers_in_text": 0,
+  "borrower_refs_in_text": 1,
+  "step_style_refs_in_text": 3
+ },
+ {
+  "doc": "P152820_ICRSP_33935505.txt",
+  "type": "ICRSP",
+  "ds00005_contracts_for_project": 11,
+  "wb_contract_numbers_in_text": 0,
+  "borrower_refs_in_text": 0,
+  "step_style_refs_in_text": 0
+ },
+ {
+  "doc": "P515690_PADNEW_40131158.txt",
+  "type": "PADNEW",
+  "ds00005_contracts_for_project": 0,
+  "wb_contract_numbers_in_text": 0,
+  "borrower_refs_in_text": 0,
+  "step_style_refs_in_text": 0
+ }
+]

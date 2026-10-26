@@ -1,0 +1,511 @@
+{
+ "version": "benchmark_v1.1",
+ "created": "2026-10-25",
+ "corpus": "rag/corpus_v3/processed/pilot_v2 (10 PDFs; sanitised outputs only)",
+ "verification": "Every expected answer and gold page was read from the sanitised extraction (strategy-A chunks, cleaned table rows, typed plan activities and evidence links) with rag/retrieval/explore.py before the benchmark was frozen. Citation integrity of retrieved pages is re-checked against the PDF text layer at evaluation time.",
+ "relevance_rule": "A retrieved unit is relevant to a gold group if it is from the same document and its physical page range overlaps the group's pages; groups with activity_id require that exact plan row. multi-group questions (conflict / version) report 'any group' and 'all groups' recall.",
+ "questions": [
+  {
+   "id": "Q01",
+   "type": "project_fact",
+   "question": "What is the project development objective of the Ethiopia Expressway Development Support Project (P148850)?",
+   "answer": "To enhance efficiency and safety in the movement of goods and people along the Batu (Zeway)-Arsi Negele section of the Modjo-Hawassa development corridor, whilst strengthening the Recipient's institutional capacity to develop and manage high capacity highways and expressways.",
+   "gold": [
+    {
+     "document_id": "24440102",
+     "pages": [
+      18,
+      19,
+      37,
+      38,
+      39,
+      47
+     ]
+    },
+    {
+     "document_id": "40089196",
+     "pages": [
+      1
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q02",
+   "type": "project_fact",
+   "question": "What is the project development objective of the Sri Lanka Transport Connectivity and Asset Management Project?",
+   "answer": "To strengthen the Road Development Authority's capacity for asset management and improve road service delivery on the selected corridor (Ja-Ela to Chilaw on National Highway A003).",
+   "gold": [
+    {
+     "document_id": "26256705",
+     "pages": [
+      18
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q03",
+   "type": "project_fact",
+   "question": "How large was the IDA credit for P148850 at appraisal?",
+   "answer": "SDR 262.9 million (US$370 million equivalent).",
+   "gold": [
+    {
+     "document_id": "24440102",
+     "pages": [
+      1,
+      2,
+      22
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q04",
+   "type": "project_fact",
+   "question": "What credit amount was proposed for the Sri Lanka Transport Connectivity and Asset Management Project (P132833)?",
+   "answer": "SDR 90.5 million (US$125 million equivalent).",
+   "gold": [
+    {
+     "document_id": "26256705",
+     "pages": [
+      1,
+      2
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q05",
+   "type": "dates_milestones",
+   "question": "When was the Casamance Economic Development Project (P175325) approved by the Bank and when did it become effective?",
+   "answer": "Bank approval 25-Feb-2022; effectiveness 24-May-2022 (ISR key project dates).",
+   "gold": [
+    {
+     "document_id": "33851641",
+     "pages": [
+      1
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q06",
+   "type": "table",
+   "question": "What are the current PDO, implementation progress and overall risk ratings in the latest ISR for P148850?",
+   "answer": "PDO Moderately Satisfactory; Implementation Progress Moderately Satisfactory; Overall Risk Substantial.",
+   "gold": [
+    {
+     "document_id": "40089196",
+     "pages": [
+      1
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q07",
+   "type": "table",
+   "question": "What overall risk rating does the Casamance ISR report?",
+   "answer": "Moderate (PDO and IP rated Satisfactory).",
+   "gold": [
+    {
+     "document_id": "33851641",
+     "pages": [
+      1
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q08",
+   "type": "plan_activity",
+   "question": "What procurement method and market approach are planned for activity LK-MIHAPCLG-109016-CW-RFB?",
+   "answer": "Request for Bids, Open - National (works package EP-01; post review).",
+   "gold": [
+    {
+     "document_id": "33761744",
+     "pages": [
+      3
+     ],
+     "activity_id": "33761744:p3t1r10"
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q09",
+   "type": "dates_milestones",
+   "question": "What was the planned contract signing date for package LK-MIHAPCLG-109016-CW-RFB?",
+   "answer": "2019-06-11 (plan revision 2022-03-18; no actual signing date in the plan).",
+   "gold": [
+    {
+     "document_id": "33761744",
+     "pages": [
+      3
+     ],
+     "activity_id": "33761744:p3t1r10"
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q10",
+   "type": "plan_activity",
+   "question": "What is the process status of activity SN-PDEC-237672-CW-RFQ in the Casamance procurement plan?",
+   "answer": "Annulé (cancelled); RFQ (Demande de prix), Limited; estimated US$140,000.",
+   "gold": [
+    {
+     "document_id": "40009757",
+     "pages": [
+      3
+     ],
+     "activity_id": "40009757:p3t1r4"
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q11",
+   "type": "plan_activity",
+   "question": "What were the estimated and actual amounts for ET-ERA-221389-CW-DIR, the toll collection centers design and construction package?",
+   "answer": "Estimated US$8,809,012.23; actual US$9,890,912.07 (Direct Selection; signed).",
+   "gold": [
+    {
+     "document_id": "40025990",
+     "pages": [
+      4
+     ],
+     "activity_id": "40025990:p4t1r5"
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q12",
+   "type": "plan_activity",
+   "question": "What does package ET-ERA-380826-GO-RFB procure and what is its status?",
+   "answer": "ICT goods: Lot-I computers, scanners, photocopiers and printers; Lot-II SD-WAN, UPS and ICT equipment; Request for Bids, Open - International; Signed; signing planned 2024-06-20, actual 2024-11-04.",
+   "gold": [
+    {
+     "document_id": "40025990",
+     "pages": [
+      4
+     ],
+     "activity_id": "40025990:p4t2r10"
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q13",
+   "type": "contract_lookup",
+   "question": "Which World Bank contract corresponds to plan activity SN-PDEC-347105-GO-RFB and when was it signed?",
+   "answer": "WB contract 1766976, signed 2023-11-14; the plan's actual signing date agrees (evidence status exact_actual_date_supported).",
+   "gold": [
+    {
+     "document_id": "40009757",
+     "pages": [
+      3
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q14",
+   "type": "contract_lookup",
+   "question": "Is there a signed contract for package LK-MIHAPCLG-109016-CW-RFB?",
+   "answer": "A DS00005 record (WB contract 1745400, signed 2019-12-19, US$2,371,140.85) matches the reference, but the plan revision of 2022-03-18 still lists the row as pending implementation with no actual signing date: the link is a 'candidate', not verified.",
+   "gold": [
+    {
+     "document_id": "33761744",
+     "pages": [
+      3
+     ],
+     "activity_id": "33761744:p3t1r10"
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q15",
+   "type": "conflicting",
+   "question": "Do the procurement plan and the contract record agree on the amount for activity S/85/ICB/RP/IDA/2009EFY?",
+   "answer": "No: plan actual US$2,408,752.45 vs contract record US$3,535,555.66 (evidence status conflicting; not resolved).",
+   "gold": [
+    {
+     "document_id": "40025990",
+     "pages": [
+      5
+     ],
+     "activity_id": "40025990:p5t1r4"
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q16",
+   "type": "conflicting",
+   "question": "What were the original and actual closing dates of P132833?",
+   "answer": "Original closing 30-Jun-2026 (PAD; ICR data sheet); actual closing 30-Sep-2023 (ICR data sheet; closing advanced after restructuring, then a six-month extension).",
+   "gold": [
+    {
+     "document_id": "34345370",
+     "pages": [
+      6
+     ]
+    },
+    {
+     "document_id": "26256705",
+     "pages": [
+      6,
+      53,
+      54
+     ]
+    }
+   ],
+   "require_all": true
+  },
+  {
+   "id": "Q17",
+   "type": "dates_milestones",
+   "question": "What are the original and revised closing dates of credit IDA-56250?",
+   "answer": "Original closing 31-Dec-2021; revised closing 30-Jun-2026 (latest ISR).",
+   "gold": [
+    {
+     "document_id": "40089196",
+     "pages": [
+      7,
+      8
+     ]
+    },
+    {
+     "document_id": "24440102",
+     "pages": [
+      7
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q18",
+   "type": "dates_milestones",
+   "question": "When was the mid-term review of the Ethiopia expressway project held?",
+   "answer": "23-Mar-2021 (planned and actual).",
+   "gold": [
+    {
+     "document_id": "40089196",
+     "pages": [
+      8
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q19",
+   "type": "table",
+   "question": "What was the total cost of the Sri Lanka Transport Connectivity and Asset Management Project at approval, after restructurings, and actual?",
+   "answer": "US$125.00m at approval, US$70.00m after restructurings, US$68.14m actual (ICR Annex 3).",
+   "gold": [
+    {
+     "document_id": "34345370",
+     "pages": [
+      50
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q20",
+   "type": "table",
+   "question": "How much of credit IDA-56250 has been disbursed and how much was cancelled?",
+   "answer": "Original 370.00, revised 264.43, cancelled 96.99, disbursed 264.43 (US$ million; latest ISR).",
+   "gold": [
+    {
+     "document_id": "40089196",
+     "pages": [
+      7
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q21",
+   "type": "narrative",
+   "question": "What lesson about work-site safety does the IEG review draw from the Sri Lanka road project?",
+   "answer": "Sufficient awareness and capacity to manage and oversee safety at work sites can help avoid accidents; after three road fatalities the government increased safety staff, trained contractors on OHS and introduced site safety audits.",
+   "gold": [
+    {
+     "document_id": "34407877",
+     "pages": [
+      22,
+      23
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q22",
+   "type": "narrative",
+   "question": "Why was the credit closing date of the Sri Lanka transport connectivity project advanced?",
+   "answer": "The 10-year OPRC for the national road corridor was dropped and replaced by shorter provincial road contracts, so the closing date was advanced by three years.",
+   "gold": [
+    {
+     "document_id": "34345370",
+     "pages": [
+      14,
+      23,
+      24
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q23",
+   "type": "narrative",
+   "question": "Why did the Ethiopian Roads Authority choose a Design and Build approach for the expressway works?",
+   "answer": "To mitigate contract-management and procurement challenges; ERA planned Design and Build with a two-envelope system (the Bank had no standard documents for this method).",
+   "gold": [
+    {
+     "document_id": "24440102",
+     "pages": [
+      86,
+      87,
+      88
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q24",
+   "type": "narrative",
+   "question": "Why were some urban local governments excluded from annual performance assessments in the Ethiopia urban program?",
+   "answer": "12 ULGs from the Tigray region were excluded from the third and fourth APAs because of conflict and inaccessibility.",
+   "gold": [
+    {
+     "document_id": "34455066",
+     "pages": [
+      16,
+      19
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q25",
+   "type": "narrative",
+   "question": "What overall outcome rating did the ICR give the Ethiopia Urban Institutional and Infrastructure Development Program?",
+   "answer": "Satisfactory (high relevance, substantial efficacy and efficiency).",
+   "gold": [
+    {
+     "document_id": "34455066",
+     "pages": [
+      16,
+      17
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "Q26",
+   "type": "conflicting",
+   "question": "What overall outcome rating did the Sri Lanka transport connectivity project receive in the ICR and in the IEG ICR Review?",
+   "answer": "ICR: Satisfactory (split rating). IEG ICR Review: Moderately Satisfactory. Both must be shown; the sources differ.",
+   "gold": [
+    {
+     "document_id": "34345370",
+     "pages": [
+      25
+     ]
+    },
+    {
+     "document_id": "34407877",
+     "pages": [
+      16,
+      22
+     ]
+    }
+   ],
+   "require_all": true
+  },
+  {
+   "id": "Q27",
+   "type": "conflicting",
+   "question": "How has the IDA financing for the Ethiopia Expressway Development Support Project changed between appraisal and the latest ISR?",
+   "answer": "Appraisal: US$370 million credit. Latest ISR (IDA-56250): revised 264.43, cancelled 96.99 (US$ million).",
+   "gold": [
+    {
+     "document_id": "24440102",
+     "pages": [
+      1,
+      2,
+      22
+     ]
+    },
+    {
+     "document_id": "40089196",
+     "pages": [
+      7
+     ]
+    }
+   ],
+   "require_all": true
+  },
+  {
+   "id": "Q28",
+   "type": "insufficient",
+   "question": "How many bids were received for contract package LK-MIHAPCLG-109016-CW-RFB?",
+   "answer": null,
+   "gold": [],
+   "require_all": false,
+   "why": "Procurement plans and the contract snapshot hold no bidder counts for this package."
+  },
+  {
+   "id": "Q29",
+   "type": "insufficient",
+   "question": "What is the status of the procurement plan for the Indonesia projects?",
+   "answer": null,
+   "gold": [],
+   "require_all": false,
+   "why": "No Indonesian document is in the 10-PDF pilot corpus."
+  },
+  {
+   "id": "Q30",
+   "type": "insufficient",
+   "question": "What is the phone number and e-mail of the task team leader for P148850?",
+   "answer": null,
+   "gold": [],
+   "require_all": false,
+   "why": "Personal contact data is masked in the sanitised corpus and must not be returned."
+  },
+  {
+   "id": "Q31",
+   "type": "insufficient",
+   "question": "What is the planned signing date for activity SN-PDEC-999999-CW-RFB?",
+   "answer": null,
+   "gold": [],
+   "require_all": false,
+   "why": "No such activity reference exists in the plans."
+  }
+ ],
+ "amendments": [
+  "v1.1 (2026-10-25, after the first evaluation run): Q26 gold group for the ICR Review (34407877) extended from page 16 to pages 16 and 22. Page 22 ('11. Ratings' table) states both the ICR rating (Satisfactory) and the IEG rating (Moderately Satisfactory); verified in the sanitised text. This was a gold-set omission found while inspecting demo output, not a change to suit a configuration; it applies to all configurations."
+ ]
+}

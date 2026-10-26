@@ -1,0 +1,113 @@
+{
+ "$defs": {
+  "DraftClaim": {
+   "properties": {
+    "text": {
+     "description": "One factual statement",
+     "title": "Text",
+     "type": "string"
+    },
+    "evidence_ids": {
+     "description": "IDs of the evidence blocks that support the statement, e.g. ['E1']",
+     "items": {
+      "type": "string"
+     },
+     "title": "Evidence Ids",
+     "type": "array"
+    }
+   },
+   "required": [
+    "text",
+    "evidence_ids"
+   ],
+   "title": "DraftClaim",
+   "type": "object"
+  },
+  "DraftConflict": {
+   "properties": {
+    "field": {
+     "title": "Field",
+     "type": "string"
+    },
+    "values": {
+     "items": {
+      "$ref": "#/$defs/DraftConflictValue"
+     },
+     "title": "Values",
+     "type": "array"
+    }
+   },
+   "required": [
+    "field",
+    "values"
+   ],
+   "title": "DraftConflict",
+   "type": "object"
+  },
+  "DraftConflictValue": {
+   "properties": {
+    "value": {
+     "title": "Value",
+     "type": "string"
+    },
+    "evidence_id": {
+     "title": "Evidence Id",
+     "type": "string"
+    }
+   },
+   "required": [
+    "value",
+    "evidence_id"
+   ],
+   "title": "DraftConflictValue",
+   "type": "object"
+  }
+ },
+ "description": "What the generator must return (validated; anything else is rejected).",
+ "properties": {
+  "status": {
+   "enum": [
+    "answered",
+    "partial",
+    "insufficient_evidence",
+    "conflicting_evidence"
+   ],
+   "title": "Status",
+   "type": "string"
+  },
+  "answer": {
+   "title": "Answer",
+   "type": "string"
+  },
+  "claims": {
+   "items": {
+    "$ref": "#/$defs/DraftClaim"
+   },
+   "title": "Claims",
+   "type": "array"
+  },
+  "conflicts": {
+   "default": [],
+   "items": {
+    "$ref": "#/$defs/DraftConflict"
+   },
+   "title": "Conflicts",
+   "type": "array"
+  },
+  "limitations": {
+   "default": [],
+   "items": {
+    "type": "string"
+   },
+   "title": "Limitations",
+   "type": "array"
+  }
+ },
+ "required": [
+  "status",
+  "answer",
+  "claims"
+ ],
+ "title": "DraftAnswer",
+ "type": "object"
+}

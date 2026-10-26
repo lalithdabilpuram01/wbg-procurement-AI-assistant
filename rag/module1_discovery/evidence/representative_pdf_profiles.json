@@ -1,0 +1,585 @@
+[
+ {
+  "path": "discovery/samples/documents/files/P131049_PAD_17555469.pdf",
+  "pages": 94,
+  "pages_profiled": 94,
+  "body_font_size": 12,
+  "heading_candidates": 255,
+  "top_headings_sample": [
+   {
+    "page": 11,
+    "text": "I. STRATEGIC CONTEXT",
+    "size": 11.4,
+    "bold": true
+   },
+   {
+    "page": 16,
+    "text": "II. PROJECT DEVELOPMENT OBJECTIVES",
+    "size": 11.5,
+    "bold": true
+   },
+   {
+    "page": 61,
+    "text": "I. Monitoring and Evaluation",
+    "size": 11.4,
+    "bold": true
+   },
+   {
+    "page": 85,
+    "text": "I. Disaster Management and Hydro-Met Services",
+    "size": 11.4,
+    "bold": true
+   }
+  ],
+  "annex_starts": [
+   {
+    "page": 6,
+    "text": "Annex 2: Results Framework and Monitoring ......................................"
+   },
+   {
+    "page": 32,
+    "text": "ANNEX 1: MOZAMBIQUE'S STRATEGIC PROGRAM FOR CLIMATE RESILIENCE"
+   },
+   {
+    "page": 34,
+    "text": "ANNEX 2: RESULTS FRAMEWORK AND MONITORING"
+   },
+   {
+    "page": 37,
+    "text": "ANNEX 3: DETAILED PROJECT DESCRIPTION"
+   },
+   {
+    "page": 50,
+    "text": "ANNEX 4: IMPLEMENTATION ARRANGEMENTS"
+   },
+   {
+    "page": 63,
+    "text": "ANNEX 5: ECONOMIC ANALYSIS"
+   },
+   {
+    "page": 69,
+    "text": "ANNEX 6: OPERATIONAL RISK ASSESSMENT FRAMEWORK (ORAF)"
+   },
+   {
+    "page": 72,
+    "text": "ANNEX 7: IMPLEMENTATION SUPPORT PLAN"
+   },
+   {
+    "page": 73,
+    "text": "ANNEX 8: TECHNICAL ANALYSIS OF MOZAMBIQUE'S HYDRO-MET SERVICES"
+   },
+   {
+    "page": 87,
+    "text": "ANNEX 9: TEAM COMPOSITION"
+   },
+   {
+    "page": 89,
+    "text": "ANNEX 10: MAPS & ILLUSTRATIONS"
+   }
+  ],
+  "annex_count": 10,
+  "tables_detected": 0,
+  "pages_with_tables": 0,
+  "toc_dot_leader_lines": 11,
+  "printed_page_labels_first_12": [
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  "running_header_footer_lines": [],
+  "tokens_cl100k_profiled_pages": 60311,
+  "text_chars_profiled_pages": 270756,
+  "low_text_pages_profiled": 2
+ },
+ {
+  "path": "discovery/samples/documents/files/P145502_PAD_19368603.pdf",
+  "pages": 77,
+  "pages_profiled": 77,
+  "body_font_size": 12,
+  "heading_candidates": 29,
+  "top_headings_sample": [],
+  "annex_starts": [
+   {
+    "page": 36,
+    "text": "Annex 1: Results Framework and Monitoring"
+   },
+   {
+    "page": 39,
+    "text": "Annex 2: Detailed Program Description"
+   },
+   {
+    "page": 44,
+    "text": "Annex 3: Implementation Arrangements"
+   },
+   {
+    "page": 61,
+    "text": "Annex 4: Operational Risk Assessment Framework (ORAF)"
+   },
+   {
+    "page": 65,
+    "text": "Annex 5: Economic Analysis"
+   },
+   {
+    "page": 72,
+    "text": "Annex 6: Lessons from International Good Practices"
+   },
+   {
+    "page": 77,
+    "text": "Annex 7: Implementation Support Plan"
+   }
+  ],
+  "annex_count": 7,
+  "tables_detected": 29,
+  "pages_with_tables": 26,
+  "toc_dot_leader_lines": 53,
+  "printed_page_labels_first_12": [
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  "running_header_footer_lines": [],
+  "tokens_cl100k_profiled_pages": 41941,
+  "text_chars_profiled_pages": 195006,
+  "low_text_pages_profiled": 1
+ },
+ {
+  "path": "discovery/samples/documents/files/P131049_ISR_27391778.pdf",
+  "pages": 12,
+  "pages_profiled": 12,
+  "body_font_size": 8,
+  "heading_candidates": 7,
+  "top_headings_sample": [],
+  "annex_starts": [],
+  "annex_count": 0,
+  "tables_detected": 1,
+  "pages_with_tables": 1,
+  "toc_dot_leader_lines": 0,
+  "printed_page_labels_first_12": [
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  "running_header_footer_lines": [
+   "The World Bank",
+   "31-Dec-2018"
+  ],
+  "tokens_cl100k_profiled_pages": 4367,
+  "text_chars_profiled_pages": 15647,
+  "low_text_pages_profiled": 0
+ },
+ {
+  "path": "discovery/samples/documents/files/P131049_ICR_32160299.pdf",
+  "pages": 57,
+  "pages_profiled": 57,
+  "body_font_size": 11,
+  "heading_candidates": 54,
+  "top_headings_sample": [],
+  "annex_starts": [
+   {
+    "page": 30,
+    "text": "ANNEX 1. RESULTS FRAMEWORK AND KEY OUTPUTS"
+   },
+   {
+    "page": 43,
+    "text": "ANNEX 2. BANK LENDING AND IMPLEMENTATION SUPPORT/SUPERVISION"
+   },
+   {
+    "page": 45,
+    "text": "ANNEX 3. PROJECT COST BY COMPONENT"
+   },
+   {
+    "page": 46,
+    "text": "ANNEX 4. EFFICIENCY ANALYSIS"
+   },
+   {
+    "page": 50,
+    "text": "ANNEX 5. BORROWER COMMENTS"
+   },
+   {
+    "page": 52,
+    "text": "ANNEX 6. SUPPORTING DOCUMENTS (IF ANY)"
+   },
+   {
+    "page": 53,
+    "text": "APPENDIX I: ADDITIONAL INFORMATION"
+   }
+  ],
+  "annex_count": 7,
+  "tables_detected": 34,
+  "pages_with_tables": 30,
+  "toc_dot_leader_lines": 25,
+  "printed_page_labels_first_12": [
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  "running_header_footer_lines": [
+   "The World Bank"
+  ],
+  "tokens_cl100k_profiled_pages": 29941,
+  "text_chars_profiled_pages": 135823,
+  "low_text_pages_profiled": 0
+ },
+ {
+  "path": "discovery/samples/documents/files/P131049_ICRR_32800471.pdf",
+  "pages": 15,
+  "pages_profiled": 15,
+  "body_font_size": 11,
+  "heading_candidates": 23,
+  "top_headings_sample": [],
+  "annex_starts": [],
+  "annex_count": 0,
+  "tables_detected": 2,
+  "pages_with_tables": 2,
+  "toc_dot_leader_lines": 0,
+  "printed_page_labels_first_12": [
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  "running_header_footer_lines": [
+   "Independent Evaluation Group (IEG)"
+  ],
+  "tokens_cl100k_profiled_pages": 8102,
+  "text_chars_profiled_pages": 39078,
+  "low_text_pages_profiled": 0
+ },
+ {
+  "path": "discovery/samples/documents/files/P145502_PP_31837484.pdf",
+  "pages": 39,
+  "pages_profiled": 39,
+  "body_font_size": 3,
+  "heading_candidates": 8,
+  "top_headings_sample": [],
+  "annex_starts": [],
+  "annex_count": 0,
+  "tables_detected": 40,
+  "pages_with_tables": 36,
+  "toc_dot_leader_lines": 0,
+  "printed_page_labels_first_12": [
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  "running_header_footer_lines": [],
+  "tokens_cl100k_profiled_pages": 31245,
+  "text_chars_profiled_pages": 74598,
+  "low_text_pages_profiled": 0
+ },
+ {
+  "path": "discovery/samples/documents/files/P127203_ICRFR_33407968.pdf",
+  "pages": 87,
+  "pages_profiled": 87,
+  "body_font_size": 11,
+  "heading_candidates": 101,
+  "top_headings_sample": [
+   {
+    "page": 58,
+    "text": "ANNEXE 1 : CADRE DE RÉSULTATS ET PRINCIPAUX EXTRANTS",
+    "size": 12.0,
+    "bold": true
+   }
+  ],
+  "annex_starts": [
+   {
+    "page": 6,
+    "text": "ANNEXE 5. COMMENTAIRES DE L’EMPRUNTEUR, DES COFINANCIERS ET DES AUTRES"
+   },
+   {
+    "page": 6,
+    "text": "ANNEXE 7. SYSTÈMES PHOTOVOLTAÏQUES INSTALLÉS DANS LES ÉTABLISSEMENTS"
+   },
+   {
+    "page": 6,
+    "text": "ANNEXE 8. PANNEAUX SOLAIRES ET ONDULEUR FOURNIS À DES QUARTIERS DANS LE CADRE DU"
+   },
+   {
+    "page": 6,
+    "text": "ANNEXE 9. ÉLECTRIFICATION SOLAIRE DU CHAMP DE MARS À PAP AVEC LE SOUTIEN DU PROJ"
+   },
+   {
+    "page": 6,
+    "text": "ANNEXE 10.  EXEMPLES DE TABLEAUX NUMÉRIQUES DANS DES ÉTABLISSEMENTS SECONDAIRES"
+   },
+   {
+    "page": 58,
+    "text": "ANNEXE 1 : CADRE DE RÉSULTATS ET PRINCIPAUX EXTRANTS"
+   },
+   {
+    "page": 67,
+    "text": "ANNEXE 1-B :  PRINCIPAUX EXTRANTS PAR COMPOSANTE PAR RAPPORT AUX ACTIVITÉS PRÉVU"
+   },
+   {
+    "page": 72,
+    "text": "ANNEXE 2. PRÊTS BANCAIRES ET SOUTIEN/SUPERVISION DE LA MISE EN ŒUVRE"
+   },
+   {
+    "page": 75,
+    "text": "ANNEXE 3. COÛT DU PROJET PAR COMPOSANTE"
+   },
+   {
+    "page": 76,
+    "text": "ANNEXE 4. ANALYSE RELATIVE À L’EFFICACITÉ"
+   },
+   {
+    "page": 81,
+    "text": "ANNEXE 5. COMMENTAIRES DE L’EMPRUNTEUR, DES COFINANCIERS ET DES AUTRES PARTENAIR"
+   },
+   {
+    "page": 82,
+    "text": "ANNEXE 6. PIÈCES JUSTIFICATIVES (LE CAS ÉCHÉANT)"
+   }
+  ],
+  "annex_count": 12,
+  "tables_detected": 42,
+  "pages_with_tables": 41,
+  "toc_dot_leader_lines": 28,
+  "printed_page_labels_first_12": [
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  "running_header_footer_lines": [
+   "La Banque mondiale"
+  ],
+  "tokens_cl100k_profiled_pages": 62348,
+  "text_chars_profiled_pages": 213957,
+  "low_text_pages_profiled": 0
+ },
+ {
+  "path": "discovery/samples/documents/files/P039892_SAR1990_696824.pdf",
+  "pages": 114,
+  "pages_profiled": 114,
+  "body_font_size": 12,
+  "heading_candidates": 65,
+  "top_headings_sample": [
+   {
+    "page": 6,
+    "text": "I. COUNTRY AND SECTOR BACKGROUND",
+    "size": 11.0,
+    "bold": true
+   },
+   {
+    "page": 31,
+    "text": "I. Monitoring. Reporting. Accounting and Auditing",
+    "size": 12.0,
+    "bold": true
+   },
+   {
+    "page": 35,
+    "text": "III. FINANCIAL ANALYSIS",
+    "size": 12.0,
+    "bold": true
+   },
+   {
+    "page": 41,
+    "text": "IV. PROJECT BENEFITS AND RISKS",
+    "size": 12.0,
+    "bold": true
+   },
+   {
+    "page": 44,
+    "text": "V. SUMMARY OF RECOMMENDATIONS",
+    "size": 12.0,
+    "bold": true
+   },
+   {
+    "page": 46,
+    "text": "I. Institution Building",
+    "size": 12.0,
+    "bold": true
+   }
+  ],
+  "annex_starts": [
+   {
+    "page": 23,
+    "text": "Annex 9); and (iii) competitive bidding for all maintenance and rehabilitation"
+   },
+   {
+    "page": 24,
+    "text": "Annex 6 (cost estimates) and Annex 18 (economic evaluation)."
+   },
+   {
+    "page": 36,
+    "text": "Annex 7. The projections include a US$5 million borrowing from the proposed IDA "
+   },
+   {
+    "page": 41,
+    "text": "Annex 18 Table I)."
+   },
+   {
+    "page": 46,
+    "text": "Annex 1"
+   },
+   {
+    "page": 47,
+    "text": "Annex 2"
+   },
+   {
+    "page": 50,
+    "text": "Annex 3"
+   },
+   {
+    "page": 52,
+    "text": "Annex 5"
+   },
+   {
+    "page": 53,
+    "text": "Annex 5"
+   },
+   {
+    "page": 54,
+    "text": "Annex 5"
+   },
+   {
+    "page": 55,
+    "text": "Annex 6"
+   },
+   {
+    "page": 60,
+    "text": "Annex 7"
+   }
+  ],
+  "annex_count": 18,
+  "tables_detected": 0,
+  "pages_with_tables": 0,
+  "toc_dot_leader_lines": 0,
+  "printed_page_labels_first_12": [
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  "running_header_footer_lines": [],
+  "tokens_cl100k_profiled_pages": 69683,
+  "text_chars_profiled_pages": 280818,
+  "low_text_pages_profiled": 3
+ },
+ {
+  "path": "discovery/project_deep_dive/raw/P163870/pp_pdf/2021-05-18_PP_33215505.pdf",
+  "pages": 4184,
+  "pages_profiled": 15,
+  "body_font_size": 3,
+  "heading_candidates": 36,
+  "top_headings_sample": [
+   {
+    "page": 1,
+    "text": "I. General",
+    "size": 12.0,
+    "bold": true
+   },
+   {
+    "page": 1,
+    "text": "II. Goods and Works and non-consulting services.",
+    "size": 11.0,
+    "bold": true
+   },
+   {
+    "page": 2,
+    "text": "III. Selection of Consultants",
+    "size": 11.0,
+    "bold": true
+   },
+   {
+    "page": 2097,
+    "text": "II. Goods, Works and Non-Consulting Services",
+    "size": 11.0,
+    "bold": true
+   }
+  ],
+  "annex_starts": [],
+  "annex_count": 0,
+  "tables_detected": 24,
+  "pages_with_tables": 9,
+  "toc_dot_leader_lines": 0,
+  "printed_page_labels_first_12": [
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  "running_header_footer_lines": [],
+  "tokens_cl100k_profiled_pages": 14757,
+  "text_chars_profiled_pages": 43548,
+  "low_text_pages_profiled": 2
+ }
+]

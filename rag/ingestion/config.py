@@ -1,0 +1,26 @@
+"""Paths and constants for the ingestion pipeline."""
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parents[2]          # procurement-intelligence/
+CORPUS = REPO / "rag" / "corpus_v3"
+CORPUS_MANIFEST = CORPUS / "CORPUS_MANIFEST_FIRST10.csv"
+SCOPE_MANIFEST = REPO / "rag" / "module1_discovery" / "rag_scope_v3_35_projects" / "DOCUMENT_DOWNLOAD_MANIFEST_v3_35.csv"
+PROJECT_MANIFEST = REPO / "rag" / "module1_discovery" / "rag_scope_v3_35_projects" / "PROJECT_SELECTION_35.csv"
+OUTPUT = CORPUS / "processed" / "pilot_v1"            # stage-1 outputs (kept unchanged)
+OUTPUT_V2 = CORPUS / "processed" / "pilot_v2"         # quality improvements + three chunking strategies
+OUTPUT_V2_1 = CORPUS / "processed" / "pilot_v2_1"     # v2 + stacked-value table cells (extraction 2.1.0)
+REFERENCE = CORPUS / "processed" / "reference"
+CONTRACTS_SNAPSHOT = REFERENCE / "contracts_snapshot.jsonl"
+CONTRACTS_SNAPSHOT_META = REFERENCE / "contracts_snapshot.meta.json"
+
+CHUNK_TARGET_TOKENS = 500
+CHUNK_MAX_TOKENS = 650
+CHUNK_MIN_TOKENS = 80
+
+# reuse the Phase 1 helpers (wbdisc) and the plan-text parser rather than re-implementing them
+for _p in (REPO / "discovery", REPO / "rag" / "module1_discovery"):
+    if str(_p) not in sys.path:
+        sys.path.insert(0, str(_p))

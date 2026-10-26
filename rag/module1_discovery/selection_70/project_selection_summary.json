@@ -1,0 +1,61 @@
+{
+ "eligible_pool": 1362,
+ "selected": 70,
+ "distinct_countries": 70,
+ "mix": {
+  "region": {
+   "South Asia": 6,
+   "Eastern and Southern Africa": 13,
+   "Western and Central Africa": 14,
+   "Middle East, North Africa, Afghanistan, and Pakistan": 7,
+   "East Asia and Pacific": 10,
+   "Europe and Central Asia": 10,
+   "Latin America and Caribbean": 9,
+   "Other": 1
+  },
+  "status": {
+   "Closed": 45,
+   "Active": 25
+  },
+  "fy_band": {
+   "FY<=2014": 13,
+   "FY2024+": 8,
+   "FY2021-2023": 15,
+   "FY2015-2017": 19,
+   "FY2018-2020": 15
+  },
+  "major_sector": {
+   "Industry, Trade and Services": 4,
+   "Health": 8,
+   "Social Protection": 4,
+   "Transportation": 10,
+   "Water, Sanitation and Waste Management": 9,
+   "Public Administration": 8,
+   "Education": 6,
+   "Information and Communications Technologies": 3,
+   "Agriculture, Fishing and Forestry": 7,
+   "Financial Sector": 2,
+   "Energy and Extractives": 3,
+   "Energy and Mineral Resources": 2,
+   "Social Sustainability and Inclusion": 2,
+   "Digital Development": 2
+  },
+  "country_is_regional": {
+   "False": 64,
+   "True": 6
+  }
+ },
+ "with_icr": 45,
+ "with_icr_review": 45,
+ "api_notice_detail_projects": 52,
+ "verifiable_evidence_projects": 9,
+ "available_docs_selected_projects": {
+  "PAD": 78,
+  "ISR": 912,
+  "ICR": 46,
+  "ICRR": 45,
+  "PP": 3030,
+  "PPR": 195
+ },
+ "seed": 20261025
+}

@@ -1,0 +1,1058 @@
+{
+ "row_count": 408,
+ "columns": {
+  "agreement_signing_date": {
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 400,
+    "null": 8
+   },
+   "null_pct": 1.96,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 98.04,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "30-Oct-2008",
+     186
+    ],
+    [
+     "10-Dec-2012",
+     166
+    ],
+    [
+     "26-Oct-2022",
+     48
+    ]
+   ],
+   "max_len": 11,
+   "date_min": "2008-10-30",
+   "date_max": "2022-10-26"
+  },
+  "board_approval___calendar_year": {
+   "observed_kinds": {
+    "int": 408
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2008",
+     186
+    ],
+    [
+     "2012",
+     167
+    ],
+    [
+     "2022",
+     55
+    ]
+   ],
+   "max_len": 4
+  },
+  "board_approval___fiscal_year": {
+   "observed_kinds": {
+    "int": 408
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2008",
+     186
+    ],
+    [
+     "2013",
+     167
+    ],
+    [
+     "2022",
+     55
+    ]
+   ],
+   "max_len": 4
+  },
+  "board_approval_date": {
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 408
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "24-Jun-2008",
+     186
+    ],
+    [
+     "29-Nov-2012",
+     167
+    ],
+    [
+     "09-Mar-2022",
+     55
+    ]
+   ],
+   "max_len": 11,
+   "date_min": "2008-06-24",
+   "date_max": "2022-03-09"
+  },
+  "borrower": {
+   "observed_kinds": {
+    "str": 408
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 6,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Ministry of Eco, Planning and RegionDev",
+     241
+    ],
+    [
+     "Minist\u00e8re des Finances, du Budget et",
+     68
+    ],
+    [
+     "Minist\ufffdre des Finances, du Budget et",
+     42
+    ],
+    [
+     "Minist? des Finances, du Budget et",
+     36
+    ],
+    [
+     "Ministre des Finances, du Budget et",
+     20
+    ],
+    [
+     "Minist\u008are des Finances, du Budget et",
+     1
+    ]
+   ],
+   "max_len": 39
+  },
+  "borrowers_obligation_us_": {
+   "observed_kinds": {
+    "float": 225,
+    "int": 183
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 230,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0",
+     179
+    ],
+    [
+     "31616586.25",
+     1
+    ],
+    [
+     "34390207.18",
+     1
+    ],
+    [
+     "15026391.96",
+     1
+    ],
+    [
+     "14171523.35",
+     1
+    ],
+    [
+     "14710773.09",
+     1
+    ],
+    [
+     "16884623.04",
+     1
+    ],
+    [
+     "17315521.01",
+     1
+    ]
+   ],
+   "max_len": 12
+  },
+  "cancelled_amount_us_": {
+   "observed_kinds": {
+    "float": 313,
+    "int": 95
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 5,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "103619.41",
+     151
+    ],
+    [
+     "0",
+     95
+    ],
+    [
+     "27348397.73",
+     79
+    ],
+    [
+     "16028605.68",
+     47
+    ],
+    [
+     "22270628.14",
+     36
+    ]
+   ],
+   "max_len": 11
+  },
+  "closed_date_most_recent": {
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 408
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 6,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "30-Dec-2013",
+     167
+    ],
+    [
+     "30-Apr-2017",
+     116
+    ],
+    [
+     "30-Mar-2028",
+     55
+    ],
+    [
+     "31-Dec-2015",
+     29
+    ],
+    [
+     "31-Dec-2013",
+     25
+    ],
+    [
+     "31-Jan-2017",
+     16
+    ]
+   ],
+   "max_len": 11,
+   "date_min": "2013-12-30",
+   "date_max": "2028-03-30"
+  },
+  "country": {
+   "observed_kinds": {
+    "str": 408
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 2,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Cameroon",
+     241
+    ],
+    [
+     "Comoros",
+     167
+    ]
+   ],
+   "max_len": 8
+  },
+  "country_code": {
+   "observed_kinds": {
+    "str": 408
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 2,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "CM",
+     241
+    ],
+    [
+     "KM",
+     167
+    ]
+   ],
+   "max_len": 2
+  },
+  "credit_number": {
+   "observed_kinds": {
+    "str": 408
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "IDA44840",
+     186
+    ],
+    [
+     "IDAH8210",
+     167
+    ],
+    [
+     "IDA70480",
+     55
+    ]
+   ],
+   "max_len": 8
+  },
+  "credit_status": {
+   "observed_kinds": {
+    "str": 408
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 8,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Disbursing",
+     145
+    ],
+    [
+     "Fully Disbursed",
+     121
+    ],
+    [
+     "Repaying",
+     79
+    ],
+    [
+     "Disbursed",
+     30
+    ],
+    [
+     "Disbursing&Repaying",
+     19
+    ],
+    [
+     "Approved",
+     8
+    ],
+    [
+     "Effective",
+     5
+    ],
+    [
+     "Signed",
+     1
+    ]
+   ],
+   "max_len": 19
+  },
+  "credits_held_us_": {
+   "observed_kinds": {
+    "int": 228,
+    "float": 180
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 256,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0",
+     151
+    ],
+    [
+     "150958640",
+     2
+    ],
+    [
+     "150011260",
+     2
+    ],
+    [
+     "153185690",
+     1
+    ],
+    [
+     "147197400",
+     1
+    ],
+    [
+     "153192760",
+     1
+    ],
+    [
+     "156628780",
+     1
+    ],
+    [
+     "153263460",
+     1
+    ]
+   ],
+   "max_len": 12
+  },
+  "currency_of_commitment": {
+   "observed_kinds": {
+    "str": 408
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 2,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "XDR",
+     353
+    ],
+    [
+     "EUR",
+     55
+    ]
+   ],
+   "max_len": 3
+  },
+  "disbursed_amount_us_": {
+   "observed_kinds": {
+    "float": 243,
+    "int": 165
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 115,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "4971629",
+     151
+    ],
+    [
+     "33622151.08",
+     80
+    ],
+    [
+     "33703220.47",
+     23
+    ],
+    [
+     "0",
+     14
+    ],
+    [
+     "5076372.45",
+     7
+    ],
+    [
+     "4964009.38",
+     5
+    ],
+    [
+     "11132183.2",
+     4
+    ],
+    [
+     "18442726.47",
+     3
+    ]
+   ],
+   "max_len": 12
+  },
+  "due_3rd_party_us_": {
+   "observed_kinds": {
+    "int": 408
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 1,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0",
+     408
+    ]
+   ],
+   "max_len": 1
+  },
+  "due_to_ida_us_": {
+   "observed_kinds": {
+    "float": 225,
+    "int": 183
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 230,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0",
+     179
+    ],
+    [
+     "31616586.25",
+     1
+    ],
+    [
+     "34390207.18",
+     1
+    ],
+    [
+     "15026391.96",
+     1
+    ],
+    [
+     "14171523.35",
+     1
+    ],
+    [
+     "14710773.09",
+     1
+    ],
+    [
+     "16884623.04",
+     1
+    ],
+    [
+     "17315521.01",
+     1
+    ]
+   ],
+   "max_len": 12
+  },
+  "effective_date_most_recent": {
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 400,
+    "null": 8
+   },
+   "null_pct": 1.96,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 98.04,
+   "distinct": 4,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "28-Jan-2009",
+     186
+    ],
+    [
+     "17-Dec-2012",
+     166
+    ],
+    [
+     "21-Nov-2022",
+     47
+    ],
+    [
+     "10-Mar-2013",
+     1
+    ]
+   ],
+   "max_len": 11,
+   "date_min": "2009-01-28",
+   "date_max": "2022-11-21"
+  },
+  "end_of_period": {
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 408
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 186,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "31-Jul-2024",
+     3
+    ],
+    [
+     "31-Dec-2024",
+     3
+    ],
+    [
+     "29-Feb-2024",
+     3
+    ],
+    [
+     "31-Dec-2023",
+     3
+    ],
+    [
+     "31-Jan-2024",
+     3
+    ],
+    [
+     "31-Mar-2024",
+     3
+    ],
+    [
+     "30-Apr-2024",
+     3
+    ],
+    [
+     "31-May-2024",
+     3
+    ]
+   ],
+   "max_len": 11,
+   "date_min": "2011-04-30",
+   "date_max": "2026-09-30"
+  },
+  "exchange_adjustment_us_": {
+   "observed_kinds": {
+    "str:int": 399,
+    "str:decimal": 9
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 2,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0",
+     399
+    ],
+    [
+     "0.000000",
+     9
+    ]
+   ],
+   "max_len": 8
+  },
+  "first_repayment_date": {
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 241,
+    "null": 167
+   },
+   "null_pct": 40.93,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 59.07,
+   "distinct": 2,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "15-Aug-2018",
+     186
+    ],
+    [
+     "15-Apr-2027",
+     55
+    ]
+   ],
+   "max_len": 11,
+   "date_min": "2018-08-15",
+   "date_max": "2027-04-15"
+  },
+  "last_disbursement_date": {
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 361,
+    "null": 47
+   },
+   "null_pct": 11.52,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 88.48,
+   "distinct": 92,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "09-Jan-2014",
+     151
+    ],
+    [
+     "13-Dec-2019",
+     80
+    ],
+    [
+     "06-Dec-2017",
+     24
+    ],
+    [
+     "20-Feb-2013",
+     6
+    ],
+    [
+     "28-Mar-2023",
+     4
+    ],
+    [
+     "27-Oct-2017",
+     4
+    ],
+    [
+     "24-Dec-2024",
+     2
+    ],
+    [
+     "05-Sep-2023",
+     2
+    ]
+   ],
+   "max_len": 11,
+   "date_min": "1947-04-29",
+   "date_max": "2026-08-19"
+  },
+  "last_repayment_date": {
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 241,
+    "null": 167
+   },
+   "null_pct": 40.93,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 59.07,
+   "distinct": 2,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "15-Feb-2048",
+     186
+    ],
+    [
+     "15-Oct-2051",
+     55
+    ]
+   ],
+   "max_len": 11,
+   "date_min": "2048-02-15",
+   "date_max": "2051-10-15"
+  },
+  "original_principal_amount_us_": {
+   "observed_kinds": {
+    "int": 408
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "65000000",
+     186
+    ],
+    [
+     "5000000",
+     167
+    ],
+    [
+     "160000000",
+     55
+    ]
+   ],
+   "max_len": 9
+  },
+  "project_id": {
+   "observed_kinds": {
+    "str": 408
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "P104456",
+     186
+    ],
+    [
+     "P122941",
+     167
+    ],
+    [
+     "P175363",
+     55
+    ]
+   ],
+   "max_len": 7
+  },
+  "project_name": {
+   "observed_kinds": {
+    "str": 408
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 4,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "KM-DPO",
+     167
+    ],
+    [
+     "CM-Energy Sector Development SIL (FY08)",
+     150
+    ],
+    [
+     "Safety Nets and Economic Inclusion",
+     55
+    ],
+    [
+     "CM-Energy Sector Development SIL (F",
+     36
+    ]
+   ],
+   "max_len": 39
+  },
+  "region": {
+   "observed_kinds": {
+    "str": 408
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 7,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "AFRICA",
+     203
+    ],
+    [
+     "WESTERN AND CENTRAL AFRICA",
+     104
+    ],
+    [
+     "EASTERN AND SOUTHERN AFRICA",
+     52
+    ],
+    [
+     "AFRICA WEST",
+     22
+    ],
+    [
+     "AFRICA EAST",
+     21
+    ],
+    [
+     "Western and Central Africa",
+     4
+    ],
+    [
+     "Eastern and Southern Africa",
+     2
+    ]
+   ],
+   "max_len": 27
+  },
+  "repaid_3rd_party_us_": {
+   "observed_kinds": {
+    "int": 408
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 1,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0",
+     408
+    ]
+   ],
+   "max_len": 1
+  },
+  "repaid_to_ida_us_": {
+   "observed_kinds": {
+    "int": 310,
+    "float": 98
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 23,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0",
+     310
+    ],
+    [
+     "2111639.71",
+     7
+    ],
+    [
+     "3054955.36",
+     7
+    ],
+    [
+     "3669075.45",
+     6
+    ],
+    [
+     "3973091.47",
+     6
+    ],
+    [
+     "4281816.59",
+     6
+    ],
+    [
+     "732295.4",
+     6
+    ],
+    [
+     "1091476.28",
+     6
+    ]
+   ],
+   "max_len": 10
+  },
+  "service_charge_rate": {
+   "observed_kinds": {
+    "float": 234,
+    "null": 108,
+    "int": 66
+   },
+   "null_pct": 26.47,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 73.53,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0.75",
+     186
+    ],
+    [
+     "0",
+     66
+    ],
+    [
+     "1.06",
+     48
+    ]
+   ],
+   "max_len": 4
+  },
+  "sold_3rd_party_us_": {
+   "observed_kinds": {
+    "int": 408
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 1,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0",
+     408
+    ]
+   ],
+   "max_len": 1
+  },
+  "undisbursed_amount_us_": {
+   "observed_kinds": {
+    "int": 250,
+    "float": 158
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 179,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0",
+     230
+    ],
+    [
+     "121569103.8",
+     1
+    ],
+    [
+     "112807192.8",
+     1
+    ],
+    [
+     "138166368",
+     1
+    ],
+    [
+     "142457256.7",
+     1
+    ],
+    [
+     "138552686.9",
+     1
+    ],
+    [
+     "135615277",
+     1
+    ],
+    [
+     "134378399",
+     1
+    ]
+   ],
+   "max_len": 12
+  }
+ },
+ "dataset": "ds00976_history_sample",
+ "source": "Finances One DS00976 API (3 loans)"
+}

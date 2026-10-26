@@ -1,0 +1,1922 @@
+{
+ "decision": "D-26: PoC cohort = exactly 2,000 projects (replaces the 3,000 target)",
+ "selected_on": "2026-10-21",
+ "seed": 20261021,
+ "cohort_size": 2000,
+ "eligible_pool": 3120,
+ "eligibility": "v3 status in {Active, Closed} AND >=1 DS00005 contract row AND >=1 DS00979 notice",
+ "sampling_fraction": 0.641026,
+ "strata_definition": "region x status x fy_band x contract_volume_quartile",
+ "contract_volume_quartile_bounds": {
+  "Q1": {
+   "min": 1,
+   "max": 14
+  },
+  "Q2": {
+   "min": 14,
+   "max": 37
+  },
+  "Q3": {
+   "min": 37,
+   "max": 88
+  },
+  "Q4": {
+   "min": 89,
+   "max": 15322
+  }
+ },
+ "inputs": {
+  "projects_v3": {
+   "path": "discovery/data_cache/projects_v3_population.jsonl.gz",
+   "bytes": 15225376,
+   "sha256": "2d3dfac335ecbf6e7e8ab29b2ae4628ce5be41cba57765d3e0637df77b34baa2",
+   "manifest_checksum": "match"
+  },
+  "ds00005_contracts": {
+   "path": "discovery/data_cache/ds00005_contract_awards.csv",
+   "bytes": 114707540,
+   "sha256": "c77df299e08399da5e76b4cb9e46b97cafb6cf80c0b178dc40bdc5152e34e524",
+   "manifest_checksum": "match"
+  },
+  "ds01004_contracts_legacy": {
+   "path": "discovery/data_cache/ds01004_contract_awards_legacy.csv",
+   "bytes": 52348283,
+   "sha256": "aa98b9f4c66e89bc3133d48703025e7c109a4f1b5635fe6ffa3c77e8c40aa9b5",
+   "manifest_checksum": "match"
+  },
+  "ds00979_notices": {
+   "path": "discovery/data_cache/ds00979_procurement_notice.csv",
+   "bytes": 194604520,
+   "sha256": "3e155779d61cba5a77bbfecf3b940c6bebc39ca753914c52235e277bd6be7dff",
+   "manifest_checksum": "match"
+  },
+  "ds00053_ieg": {
+   "path": "discovery/data_cache/ds00053_ieg_ratings.csv",
+   "bytes": 3315235,
+   "sha256": "b124bd2b8d6b22a60a8ad5d60c6262e6c078d218476f08afdbc5cdc385850d8f",
+   "manifest_checksum": "match"
+  },
+  "ds00047_ibrd": {
+   "path": "discovery/data_cache/ds00047_ibrd_latest.csv",
+   "bytes": 2990683,
+   "sha256": "b4c2995d0b67505bb8c68160fb656f3af9a681d7b5cb65fce6914b1da152d97a",
+   "manifest_checksum": "match"
+  },
+  "ds00001_ida": {
+   "path": "discovery/data_cache/ds00001_ida_latest.csv",
+   "bytes": 3505998,
+   "sha256": "9f99c52533a6e422580aac8c9d845d75281071492d0e0f41905f8cf08d9b6804",
+   "manifest_checksum": "match"
+  },
+  "procnotices_cluster": {
+   "path": "discovery/samples/procnotices/procnotices_cluster_sample.jsonl.gz",
+   "bytes": 15002564,
+   "sha256": "81619f2f37a81110d1294d9c0768bffc2d69eddbd06090df31e47f30add85b8d",
+   "manifest_checksum": "match"
+  },
+  "projects_v3_cluster_allfields": {
+   "path": "discovery/samples/projects/projects_v3_cluster_allfields.jsonl.gz",
+   "bytes": 1039875,
+   "sha256": "a7f0241682b1222d089805f44cf8481fd9d9543fc60c8a12bf19f5bd2857bec4",
+   "manifest_checksum": "match"
+  },
+  "wds_v3_cluster_meta": {
+   "path": "discovery/samples/documents/wds_v3_cluster_meta.jsonl.gz",
+   "bytes": 6201195,
+   "sha256": "73d688c679488749894bf22537e1641cf29740970dfde1df0e9697b60ad341f7",
+   "manifest_checksum": "match"
+  },
+  "procurement_plan_activities": {
+   "path": "discovery/profiling/procurement_plan_activities.csv",
+   "bytes": 511723,
+   "sha256": "5329c975ac223127f57519b4d45abd86feb592ce3c2228bb3e89799f2ac29d64",
+   "manifest_checksum": "not in manifest"
+  }
+ },
+ "checks": {
+  "pool_unique_ids": true,
+  "cohort_rows": 2000,
+  "cohort_unique_ids": 2000,
+  "cohort_exactly_2000_unique": true,
+  "all_ids_valid_pnumber": true,
+  "all_selected_eligible": true,
+  "stratum_counts_equal_allocation": true
+ },
+ "strata": 237,
+ "strata_with_zero_allocation": 0,
+ "country_coverage_swaps": [],
+ "approval_fy_mismatches_kept_v3": [
+  {
+   "project_id": "P125198",
+   "v3_fiscalyear": 2001,
+   "derived_from_boardapprovaldate": 2010
+  }
+ ],
+ "representation": {
+  "region": {
+   "max_abs_diff_pp": 0.15,
+   "table": [
+    {
+     "region": "Eastern and Southern Africa",
+     "pool_n": 634,
+     "cohort_n": 405,
+     "pool_pct": 20.32,
+     "cohort_pct": 20.25,
+     "abs_diff_pp": 0.07
+    },
+    {
+     "region": "Western and Central Africa",
+     "pool_n": 601,
+     "cohort_n": 387,
+     "pool_pct": 19.26,
+     "cohort_pct": 19.35,
+     "abs_diff_pp": 0.09
+    },
+    {
+     "region": "East Asia and Pacific",
+     "pool_n": 453,
+     "cohort_n": 289,
+     "pool_pct": 14.52,
+     "cohort_pct": 14.45,
+     "abs_diff_pp": 0.07
+    },
+    {
+     "region": "Europe and Central Asia",
+     "pool_n": 432,
+     "cohort_n": 280,
+     "pool_pct": 13.85,
+     "cohort_pct": 14.0,
+     "abs_diff_pp": 0.15
+    },
+    {
+     "region": "Latin America and Caribbean",
+     "pool_n": 387,
+     "cohort_n": 246,
+     "pool_pct": 12.4,
+     "cohort_pct": 12.3,
+     "abs_diff_pp": 0.1
+    },
+    {
+     "region": "Middle East, North Africa, Afghanistan, and Pakistan",
+     "pool_n": 308,
+     "cohort_n": 197,
+     "pool_pct": 9.87,
+     "cohort_pct": 9.85,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "region": "South Asia",
+     "pool_n": 289,
+     "cohort_n": 184,
+     "pool_pct": 9.26,
+     "cohort_pct": 9.2,
+     "abs_diff_pp": 0.06
+    },
+    {
+     "region": "Other",
+     "pool_n": 16,
+     "cohort_n": 12,
+     "pool_pct": 0.51,
+     "cohort_pct": 0.6,
+     "abs_diff_pp": 0.09
+    }
+   ]
+  },
+  "status": {
+   "max_abs_diff_pp": 0.05,
+   "table": [
+    {
+     "status": "Closed",
+     "pool_n": 1791,
+     "cohort_n": 1149,
+     "pool_pct": 57.4,
+     "cohort_pct": 57.45,
+     "abs_diff_pp": 0.05
+    },
+    {
+     "status": "Active",
+     "pool_n": 1329,
+     "cohort_n": 851,
+     "pool_pct": 42.6,
+     "cohort_pct": 42.55,
+     "abs_diff_pp": 0.05
+    }
+   ]
+  },
+  "fy_band": {
+   "max_abs_diff_pp": 0.09,
+   "table": [
+    {
+     "fy_band": "FY2018-2020",
+     "pool_n": 826,
+     "cohort_n": 530,
+     "pool_pct": 26.47,
+     "cohort_pct": 26.5,
+     "abs_diff_pp": 0.03
+    },
+    {
+     "fy_band": "FY2021-2023",
+     "pool_n": 772,
+     "cohort_n": 493,
+     "pool_pct": 24.74,
+     "cohort_pct": 24.65,
+     "abs_diff_pp": 0.09
+    },
+    {
+     "fy_band": "FY2015-2017",
+     "pool_n": 653,
+     "cohort_n": 420,
+     "pool_pct": 20.93,
+     "cohort_pct": 21.0,
+     "abs_diff_pp": 0.07
+    },
+    {
+     "fy_band": "FY2024+",
+     "pool_n": 484,
+     "cohort_n": 309,
+     "pool_pct": 15.51,
+     "cohort_pct": 15.45,
+     "abs_diff_pp": 0.06
+    },
+    {
+     "fy_band": "FY<=2014",
+     "pool_n": 383,
+     "cohort_n": 246,
+     "pool_pct": 12.28,
+     "cohort_pct": 12.3,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "fy_band": "Unknown",
+     "pool_n": 2,
+     "cohort_n": 2,
+     "pool_pct": 0.06,
+     "cohort_pct": 0.1,
+     "abs_diff_pp": 0.04
+    }
+   ]
+  },
+  "contract_volume_quartile": {
+   "max_abs_diff_pp": 0.2,
+   "table": [
+    {
+     "contract_volume_quartile": "Q1",
+     "pool_n": 780,
+     "cohort_n": 503,
+     "pool_pct": 25.0,
+     "cohort_pct": 25.15,
+     "abs_diff_pp": 0.15
+    },
+    {
+     "contract_volume_quartile": "Q3",
+     "pool_n": 780,
+     "cohort_n": 499,
+     "pool_pct": 25.0,
+     "cohort_pct": 24.95,
+     "abs_diff_pp": 0.05
+    },
+    {
+     "contract_volume_quartile": "Q2",
+     "pool_n": 780,
+     "cohort_n": 496,
+     "pool_pct": 25.0,
+     "cohort_pct": 24.8,
+     "abs_diff_pp": 0.2
+    },
+    {
+     "contract_volume_quartile": "Q4",
+     "pool_n": 780,
+     "cohort_n": 502,
+     "pool_pct": 25.0,
+     "cohort_pct": 25.1,
+     "abs_diff_pp": 0.1
+    }
+   ]
+  },
+  "major_sector": {
+   "max_abs_diff_pp": 0.73,
+   "table": [
+    {
+     "major_sector": "Public Administration",
+     "pool_n": 450,
+     "cohort_n": 303,
+     "pool_pct": 14.42,
+     "cohort_pct": 15.15,
+     "abs_diff_pp": 0.73
+    },
+    {
+     "major_sector": "Agriculture, Fishing and Forestry",
+     "pool_n": 442,
+     "cohort_n": 283,
+     "pool_pct": 14.17,
+     "cohort_pct": 14.15,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "major_sector": "Transportation",
+     "pool_n": 321,
+     "cohort_n": 209,
+     "pool_pct": 10.29,
+     "cohort_pct": 10.45,
+     "abs_diff_pp": 0.16
+    },
+    {
+     "major_sector": "Health",
+     "pool_n": 309,
+     "cohort_n": 197,
+     "pool_pct": 9.9,
+     "cohort_pct": 9.85,
+     "abs_diff_pp": 0.05
+    },
+    {
+     "major_sector": "Education",
+     "pool_n": 307,
+     "cohort_n": 202,
+     "pool_pct": 9.84,
+     "cohort_pct": 10.1,
+     "abs_diff_pp": 0.26
+    },
+    {
+     "major_sector": "Energy and Extractives",
+     "pool_n": 291,
+     "cohort_n": 179,
+     "pool_pct": 9.33,
+     "cohort_pct": 8.95,
+     "abs_diff_pp": 0.38
+    },
+    {
+     "major_sector": "Social Protection",
+     "pool_n": 286,
+     "cohort_n": 178,
+     "pool_pct": 9.17,
+     "cohort_pct": 8.9,
+     "abs_diff_pp": 0.27
+    },
+    {
+     "major_sector": "Water, Sanitation and Waste Management",
+     "pool_n": 281,
+     "cohort_n": 181,
+     "pool_pct": 9.01,
+     "cohort_pct": 9.05,
+     "abs_diff_pp": 0.04
+    },
+    {
+     "major_sector": "Industry, Trade and Services",
+     "pool_n": 180,
+     "cohort_n": 107,
+     "pool_pct": 5.77,
+     "cohort_pct": 5.35,
+     "abs_diff_pp": 0.42
+    },
+    {
+     "major_sector": "Financial Sector",
+     "pool_n": 102,
+     "cohort_n": 67,
+     "pool_pct": 3.27,
+     "cohort_pct": 3.35,
+     "abs_diff_pp": 0.08
+    },
+    {
+     "major_sector": "Information and Communications Technologies",
+     "pool_n": 97,
+     "cohort_n": 55,
+     "pool_pct": 3.11,
+     "cohort_pct": 2.75,
+     "abs_diff_pp": 0.36
+    },
+    {
+     "major_sector": "Energy and Mineral Resources",
+     "pool_n": 28,
+     "cohort_n": 19,
+     "pool_pct": 0.9,
+     "cohort_pct": 0.95,
+     "abs_diff_pp": 0.05
+    },
+    {
+     "major_sector": "Digital Development",
+     "pool_n": 12,
+     "cohort_n": 11,
+     "pool_pct": 0.38,
+     "cohort_pct": 0.55,
+     "abs_diff_pp": 0.17
+    },
+    {
+     "major_sector": "Social Sustainability and Inclusion",
+     "pool_n": 11,
+     "cohort_n": 7,
+     "pool_pct": 0.35,
+     "cohort_pct": 0.35,
+     "abs_diff_pp": 0.0
+    },
+    {
+     "major_sector": "Unspecified (not published)",
+     "pool_n": 3,
+     "cohort_n": 2,
+     "pool_pct": 0.1,
+     "cohort_pct": 0.1,
+     "abs_diff_pp": 0.0
+    }
+   ]
+  },
+  "financing_type": {
+   "max_abs_diff_pp": 0.43,
+   "table": [
+    {
+     "financing_type": "IDA",
+     "pool_n": 1356,
+     "cohort_n": 876,
+     "pool_pct": 43.66,
+     "cohort_pct": 43.98,
+     "abs_diff_pp": 0.32
+    },
+    {
+     "financing_type": "Grants",
+     "pool_n": 956,
+     "cohort_n": 616,
+     "pool_pct": 30.78,
+     "cohort_pct": 30.92,
+     "abs_diff_pp": 0.14
+    },
+    {
+     "financing_type": "IBRD",
+     "pool_n": 712,
+     "cohort_n": 448,
+     "pool_pct": 22.92,
+     "cohort_pct": 22.49,
+     "abs_diff_pp": 0.43
+    },
+    {
+     "financing_type": "Other",
+     "pool_n": 82,
+     "cohort_n": 52,
+     "pool_pct": 2.64,
+     "cohort_pct": 2.61,
+     "abs_diff_pp": 0.03
+    }
+   ]
+  },
+  "country_code": {
+   "pool_countries": 159,
+   "cohort_countries": 155,
+   "countries_with_ge2_eligible_unrepresented": 0,
+   "single_project_countries_in_pool": 12,
+   "single_project_countries_selected": 8,
+   "max_abs_count_deviation_from_proportional": 5.05,
+   "max_abs_diff_pp": 0.25,
+   "table": [
+    {
+     "country_code": "IN",
+     "pool_n": 125,
+     "cohort_n": 77,
+     "pool_pct": 4.01,
+     "cohort_pct": 3.85,
+     "abs_diff_pp": 0.16
+    },
+    {
+     "country_code": "PK",
+     "pool_n": 85,
+     "cohort_n": 55,
+     "pool_pct": 2.72,
+     "cohort_pct": 2.75,
+     "abs_diff_pp": 0.03
+    },
+    {
+     "country_code": "BD",
+     "pool_n": 73,
+     "cohort_n": 47,
+     "pool_pct": 2.34,
+     "cohort_pct": 2.35,
+     "abs_diff_pp": 0.01
+    },
+    {
+     "country_code": "CN",
+     "pool_n": 72,
+     "cohort_n": 43,
+     "pool_pct": 2.31,
+     "cohort_pct": 2.15,
+     "abs_diff_pp": 0.16
+    },
+    {
+     "country_code": "3W",
+     "pool_n": 65,
+     "cohort_n": 38,
+     "pool_pct": 2.08,
+     "cohort_pct": 1.9,
+     "abs_diff_pp": 0.18
+    },
+    {
+     "country_code": "3E",
+     "pool_n": 58,
+     "cohort_n": 40,
+     "pool_pct": 1.86,
+     "cohort_pct": 2.0,
+     "abs_diff_pp": 0.14
+    },
+    {
+     "country_code": "ID",
+     "pool_n": 55,
+     "cohort_n": 37,
+     "pool_pct": 1.76,
+     "cohort_pct": 1.85,
+     "abs_diff_pp": 0.09
+    },
+    {
+     "country_code": "BR",
+     "pool_n": 53,
+     "cohort_n": 35,
+     "pool_pct": 1.7,
+     "cohort_pct": 1.75,
+     "abs_diff_pp": 0.05
+    },
+    {
+     "country_code": "NG",
+     "pool_n": 52,
+     "cohort_n": 35,
+     "pool_pct": 1.67,
+     "cohort_pct": 1.75,
+     "abs_diff_pp": 0.08
+    },
+    {
+     "country_code": "MZ",
+     "pool_n": 52,
+     "cohort_n": 32,
+     "pool_pct": 1.67,
+     "cohort_pct": 1.6,
+     "abs_diff_pp": 0.07
+    },
+    {
+     "country_code": "VN",
+     "pool_n": 50,
+     "cohort_n": 34,
+     "pool_pct": 1.6,
+     "cohort_pct": 1.7,
+     "abs_diff_pp": 0.1
+    },
+    {
+     "country_code": "TR",
+     "pool_n": 50,
+     "cohort_n": 34,
+     "pool_pct": 1.6,
+     "cohort_pct": 1.7,
+     "abs_diff_pp": 0.1
+    },
+    {
+     "country_code": "ET",
+     "pool_n": 50,
+     "cohort_n": 27,
+     "pool_pct": 1.6,
+     "cohort_pct": 1.35,
+     "abs_diff_pp": 0.25
+    },
+    {
+     "country_code": "ZR",
+     "pool_n": 43,
+     "cohort_n": 26,
+     "pool_pct": 1.38,
+     "cohort_pct": 1.3,
+     "abs_diff_pp": 0.08
+    },
+    {
+     "country_code": "LA",
+     "pool_n": 42,
+     "cohort_n": 23,
+     "pool_pct": 1.35,
+     "cohort_pct": 1.15,
+     "abs_diff_pp": 0.2
+    },
+    {
+     "country_code": "TZ",
+     "pool_n": 41,
+     "cohort_n": 27,
+     "pool_pct": 1.31,
+     "cohort_pct": 1.35,
+     "abs_diff_pp": 0.04
+    },
+    {
+     "country_code": "KE",
+     "pool_n": 41,
+     "cohort_n": 28,
+     "pool_pct": 1.31,
+     "cohort_pct": 1.4,
+     "abs_diff_pp": 0.09
+    },
+    {
+     "country_code": "UZ",
+     "pool_n": 38,
+     "cohort_n": 26,
+     "pool_pct": 1.22,
+     "cohort_pct": 1.3,
+     "abs_diff_pp": 0.08
+    },
+    {
+     "country_code": "GZ",
+     "pool_n": 38,
+     "cohort_n": 21,
+     "pool_pct": 1.22,
+     "cohort_pct": 1.05,
+     "abs_diff_pp": 0.17
+    },
+    {
+     "country_code": "AR",
+     "pool_n": 38,
+     "cohort_n": 25,
+     "pool_pct": 1.22,
+     "cohort_pct": 1.25,
+     "abs_diff_pp": 0.03
+    },
+    {
+     "country_code": "KG",
+     "pool_n": 37,
+     "cohort_n": 22,
+     "pool_pct": 1.19,
+     "cohort_pct": 1.1,
+     "abs_diff_pp": 0.09
+    },
+    {
+     "country_code": "NP",
+     "pool_n": 37,
+     "cohort_n": 23,
+     "pool_pct": 1.19,
+     "cohort_pct": 1.15,
+     "abs_diff_pp": 0.04
+    },
+    {
+     "country_code": "MW",
+     "pool_n": 37,
+     "cohort_n": 25,
+     "pool_pct": 1.19,
+     "cohort_pct": 1.25,
+     "abs_diff_pp": 0.06
+    },
+    {
+     "country_code": "AF",
+     "pool_n": 35,
+     "cohort_n": 21,
+     "pool_pct": 1.12,
+     "cohort_pct": 1.05,
+     "abs_diff_pp": 0.07
+    },
+    {
+     "country_code": "TJ",
+     "pool_n": 35,
+     "cohort_n": 22,
+     "pool_pct": 1.12,
+     "cohort_pct": 1.1,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "GH",
+     "pool_n": 35,
+     "cohort_n": 25,
+     "pool_pct": 1.12,
+     "cohort_pct": 1.25,
+     "abs_diff_pp": 0.13
+    },
+    {
+     "country_code": "CI",
+     "pool_n": 34,
+     "cohort_n": 23,
+     "pool_pct": 1.09,
+     "cohort_pct": 1.15,
+     "abs_diff_pp": 0.06
+    },
+    {
+     "country_code": "MG",
+     "pool_n": 33,
+     "cohort_n": 22,
+     "pool_pct": 1.06,
+     "cohort_pct": 1.1,
+     "abs_diff_pp": 0.04
+    },
+    {
+     "country_code": "NE",
+     "pool_n": 33,
+     "cohort_n": 18,
+     "pool_pct": 1.06,
+     "cohort_pct": 0.9,
+     "abs_diff_pp": 0.16
+    },
+    {
+     "country_code": "SN",
+     "pool_n": 33,
+     "cohort_n": 23,
+     "pool_pct": 1.06,
+     "cohort_pct": 1.15,
+     "abs_diff_pp": 0.09
+    },
+    {
+     "country_code": "UA",
+     "pool_n": 32,
+     "cohort_n": 19,
+     "pool_pct": 1.03,
+     "cohort_pct": 0.95,
+     "abs_diff_pp": 0.08
+    },
+    {
+     "country_code": "ZM",
+     "pool_n": 32,
+     "cohort_n": 20,
+     "pool_pct": 1.03,
+     "cohort_pct": 1.0,
+     "abs_diff_pp": 0.03
+    },
+    {
+     "country_code": "KH",
+     "pool_n": 32,
+     "cohort_n": 21,
+     "pool_pct": 1.03,
+     "cohort_pct": 1.05,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "SO",
+     "pool_n": 32,
+     "cohort_n": 21,
+     "pool_pct": 1.03,
+     "cohort_pct": 1.05,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "BF",
+     "pool_n": 32,
+     "cohort_n": 22,
+     "pool_pct": 1.03,
+     "cohort_pct": 1.1,
+     "abs_diff_pp": 0.07
+    },
+    {
+     "country_code": "HT",
+     "pool_n": 32,
+     "cohort_n": 21,
+     "pool_pct": 1.03,
+     "cohort_pct": 1.05,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "RW",
+     "pool_n": 31,
+     "cohort_n": 20,
+     "pool_pct": 0.99,
+     "cohort_pct": 1.0,
+     "abs_diff_pp": 0.01
+    },
+    {
+     "country_code": "UG",
+     "pool_n": 29,
+     "cohort_n": 17,
+     "pool_pct": 0.93,
+     "cohort_pct": 0.85,
+     "abs_diff_pp": 0.08
+    },
+    {
+     "country_code": "LR",
+     "pool_n": 29,
+     "cohort_n": 17,
+     "pool_pct": 0.93,
+     "cohort_pct": 0.85,
+     "abs_diff_pp": 0.08
+    },
+    {
+     "country_code": "CM",
+     "pool_n": 28,
+     "cohort_n": 16,
+     "pool_pct": 0.9,
+     "cohort_pct": 0.8,
+     "abs_diff_pp": 0.1
+    },
+    {
+     "country_code": "ML",
+     "pool_n": 28,
+     "cohort_n": 19,
+     "pool_pct": 0.9,
+     "cohort_pct": 0.95,
+     "abs_diff_pp": 0.05
+    },
+    {
+     "country_code": "BI",
+     "pool_n": 27,
+     "cohort_n": 19,
+     "pool_pct": 0.87,
+     "cohort_pct": 0.95,
+     "abs_diff_pp": 0.08
+    },
+    {
+     "country_code": "DJ",
+     "pool_n": 27,
+     "cohort_n": 18,
+     "pool_pct": 0.87,
+     "cohort_pct": 0.9,
+     "abs_diff_pp": 0.03
+    },
+    {
+     "country_code": "CF",
+     "pool_n": 26,
+     "cohort_n": 16,
+     "pool_pct": 0.83,
+     "cohort_pct": 0.8,
+     "abs_diff_pp": 0.03
+    },
+    {
+     "country_code": "LK",
+     "pool_n": 26,
+     "cohort_n": 20,
+     "pool_pct": 0.83,
+     "cohort_pct": 1.0,
+     "abs_diff_pp": 0.17
+    },
+    {
+     "country_code": "LB",
+     "pool_n": 25,
+     "cohort_n": 15,
+     "pool_pct": 0.8,
+     "cohort_pct": 0.75,
+     "abs_diff_pp": 0.05
+    },
+    {
+     "country_code": "SL",
+     "pool_n": 24,
+     "cohort_n": 15,
+     "pool_pct": 0.77,
+     "cohort_pct": 0.75,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "PH",
+     "pool_n": 24,
+     "cohort_n": 16,
+     "pool_pct": 0.77,
+     "cohort_pct": 0.8,
+     "abs_diff_pp": 0.03
+    },
+    {
+     "country_code": "GN",
+     "pool_n": 24,
+     "cohort_n": 17,
+     "pool_pct": 0.77,
+     "cohort_pct": 0.85,
+     "abs_diff_pp": 0.08
+    },
+    {
+     "country_code": "RS",
+     "pool_n": 23,
+     "cohort_n": 16,
+     "pool_pct": 0.74,
+     "cohort_pct": 0.8,
+     "abs_diff_pp": 0.06
+    },
+    {
+     "country_code": "TD",
+     "pool_n": 23,
+     "cohort_n": 15,
+     "pool_pct": 0.74,
+     "cohort_pct": 0.75,
+     "abs_diff_pp": 0.01
+    },
+    {
+     "country_code": "MD",
+     "pool_n": 23,
+     "cohort_n": 18,
+     "pool_pct": 0.74,
+     "cohort_pct": 0.9,
+     "abs_diff_pp": 0.16
+    },
+    {
+     "country_code": "XK",
+     "pool_n": 23,
+     "cohort_n": 17,
+     "pool_pct": 0.74,
+     "cohort_pct": 0.85,
+     "abs_diff_pp": 0.11
+    },
+    {
+     "country_code": "CG",
+     "pool_n": 23,
+     "cohort_n": 19,
+     "pool_pct": 0.74,
+     "cohort_pct": 0.95,
+     "abs_diff_pp": 0.21
+    },
+    {
+     "country_code": "AM",
+     "pool_n": 23,
+     "cohort_n": 17,
+     "pool_pct": 0.74,
+     "cohort_pct": 0.85,
+     "abs_diff_pp": 0.11
+    },
+    {
+     "country_code": "PE",
+     "pool_n": 22,
+     "cohort_n": 15,
+     "pool_pct": 0.71,
+     "cohort_pct": 0.75,
+     "abs_diff_pp": 0.04
+    },
+    {
+     "country_code": "MN",
+     "pool_n": 22,
+     "cohort_n": 16,
+     "pool_pct": 0.71,
+     "cohort_pct": 0.8,
+     "abs_diff_pp": 0.09
+    },
+    {
+     "country_code": "BJ",
+     "pool_n": 22,
+     "cohort_n": 13,
+     "pool_pct": 0.71,
+     "cohort_pct": 0.65,
+     "abs_diff_pp": 0.06
+    },
+    {
+     "country_code": "AL",
+     "pool_n": 21,
+     "cohort_n": 10,
+     "pool_pct": 0.67,
+     "cohort_pct": 0.5,
+     "abs_diff_pp": 0.17
+    },
+    {
+     "country_code": "AO",
+     "pool_n": 21,
+     "cohort_n": 12,
+     "pool_pct": 0.67,
+     "cohort_pct": 0.6,
+     "abs_diff_pp": 0.07
+    },
+    {
+     "country_code": "TN",
+     "pool_n": 21,
+     "cohort_n": 17,
+     "pool_pct": 0.67,
+     "cohort_pct": 0.85,
+     "abs_diff_pp": 0.18
+    },
+    {
+     "country_code": "HN",
+     "pool_n": 20,
+     "cohort_n": 12,
+     "pool_pct": 0.64,
+     "cohort_pct": 0.6,
+     "abs_diff_pp": 0.04
+    },
+    {
+     "country_code": "JO",
+     "pool_n": 20,
+     "cohort_n": 14,
+     "pool_pct": 0.64,
+     "cohort_pct": 0.7,
+     "abs_diff_pp": 0.06
+    },
+    {
+     "country_code": "LS",
+     "pool_n": 19,
+     "cohort_n": 9,
+     "pool_pct": 0.61,
+     "cohort_pct": 0.45,
+     "abs_diff_pp": 0.16
+    },
+    {
+     "country_code": "SB",
+     "pool_n": 19,
+     "cohort_n": 9,
+     "pool_pct": 0.61,
+     "cohort_pct": 0.45,
+     "abs_diff_pp": 0.16
+    },
+    {
+     "country_code": "GE",
+     "pool_n": 19,
+     "cohort_n": 14,
+     "pool_pct": 0.61,
+     "cohort_pct": 0.7,
+     "abs_diff_pp": 0.09
+    },
+    {
+     "country_code": "MA",
+     "pool_n": 19,
+     "cohort_n": 12,
+     "pool_pct": 0.61,
+     "cohort_pct": 0.6,
+     "abs_diff_pp": 0.01
+    },
+    {
+     "country_code": "TG",
+     "pool_n": 18,
+     "cohort_n": 12,
+     "pool_pct": 0.58,
+     "cohort_pct": 0.6,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "EG",
+     "pool_n": 18,
+     "cohort_n": 11,
+     "pool_pct": 0.58,
+     "cohort_pct": 0.55,
+     "abs_diff_pp": 0.03
+    },
+    {
+     "country_code": "GM",
+     "pool_n": 17,
+     "cohort_n": 8,
+     "pool_pct": 0.54,
+     "cohort_pct": 0.4,
+     "abs_diff_pp": 0.14
+    },
+    {
+     "country_code": "MR",
+     "pool_n": 17,
+     "cohort_n": 13,
+     "pool_pct": 0.54,
+     "cohort_pct": 0.65,
+     "abs_diff_pp": 0.11
+    },
+    {
+     "country_code": "EC",
+     "pool_n": 17,
+     "cohort_n": 10,
+     "pool_pct": 0.54,
+     "cohort_pct": 0.5,
+     "abs_diff_pp": 0.04
+    },
+    {
+     "country_code": "CO",
+     "pool_n": 16,
+     "cohort_n": 9,
+     "pool_pct": 0.51,
+     "cohort_pct": 0.45,
+     "abs_diff_pp": 0.06
+    },
+    {
+     "country_code": "KZ",
+     "pool_n": 16,
+     "cohort_n": 12,
+     "pool_pct": 0.51,
+     "cohort_pct": 0.6,
+     "abs_diff_pp": 0.09
+    },
+    {
+     "country_code": "KM",
+     "pool_n": 15,
+     "cohort_n": 10,
+     "pool_pct": 0.48,
+     "cohort_pct": 0.5,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "BA",
+     "pool_n": 15,
+     "cohort_n": 11,
+     "pool_pct": 0.48,
+     "cohort_pct": 0.55,
+     "abs_diff_pp": 0.07
+    },
+    {
+     "country_code": "IQ",
+     "pool_n": 15,
+     "cohort_n": 10,
+     "pool_pct": 0.48,
+     "cohort_pct": 0.5,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "DO",
+     "pool_n": 15,
+     "cohort_n": 11,
+     "pool_pct": 0.48,
+     "cohort_pct": 0.55,
+     "abs_diff_pp": 0.07
+    },
+    {
+     "country_code": "MV",
+     "pool_n": 15,
+     "cohort_n": 8,
+     "pool_pct": 0.48,
+     "cohort_pct": 0.4,
+     "abs_diff_pp": 0.08
+    },
+    {
+     "country_code": "PG",
+     "pool_n": 15,
+     "cohort_n": 8,
+     "pool_pct": 0.48,
+     "cohort_pct": 0.4,
+     "abs_diff_pp": 0.08
+    },
+    {
+     "country_code": "MH",
+     "pool_n": 14,
+     "cohort_n": 10,
+     "pool_pct": 0.45,
+     "cohort_pct": 0.5,
+     "abs_diff_pp": 0.05
+    },
+    {
+     "country_code": "BO",
+     "pool_n": 14,
+     "cohort_n": 6,
+     "pool_pct": 0.45,
+     "cohort_pct": 0.3,
+     "abs_diff_pp": 0.15
+    },
+    {
+     "country_code": "NI",
+     "pool_n": 14,
+     "cohort_n": 8,
+     "pool_pct": 0.45,
+     "cohort_pct": 0.4,
+     "abs_diff_pp": 0.05
+    },
+    {
+     "country_code": "1W",
+     "pool_n": 14,
+     "cohort_n": 10,
+     "pool_pct": 0.45,
+     "cohort_pct": 0.5,
+     "abs_diff_pp": 0.05
+    },
+    {
+     "country_code": "ST",
+     "pool_n": 12,
+     "cohort_n": 6,
+     "pool_pct": 0.38,
+     "cohort_pct": 0.3,
+     "abs_diff_pp": 0.08
+    },
+    {
+     "country_code": "CV",
+     "pool_n": 12,
+     "cohort_n": 9,
+     "pool_pct": 0.38,
+     "cohort_pct": 0.45,
+     "abs_diff_pp": 0.07
+    },
+    {
+     "country_code": "FM",
+     "pool_n": 12,
+     "cohort_n": 7,
+     "pool_pct": 0.38,
+     "cohort_pct": 0.35,
+     "abs_diff_pp": 0.03
+    },
+    {
+     "country_code": "MM",
+     "pool_n": 12,
+     "cohort_n": 8,
+     "pool_pct": 0.38,
+     "cohort_pct": 0.4,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "BY",
+     "pool_n": 12,
+     "cohort_n": 7,
+     "pool_pct": 0.38,
+     "cohort_pct": 0.35,
+     "abs_diff_pp": 0.03
+    },
+    {
+     "country_code": "SD",
+     "pool_n": 12,
+     "cohort_n": 8,
+     "pool_pct": 0.38,
+     "cohort_pct": 0.4,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "SX",
+     "pool_n": 12,
+     "cohort_n": 8,
+     "pool_pct": 0.38,
+     "cohort_pct": 0.4,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "SV",
+     "pool_n": 12,
+     "cohort_n": 6,
+     "pool_pct": 0.38,
+     "cohort_pct": 0.3,
+     "abs_diff_pp": 0.08
+    },
+    {
+     "country_code": "WS",
+     "pool_n": 12,
+     "cohort_n": 8,
+     "pool_pct": 0.38,
+     "cohort_pct": 0.4,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "SS",
+     "pool_n": 11,
+     "cohort_n": 8,
+     "pool_pct": 0.35,
+     "cohort_pct": 0.4,
+     "abs_diff_pp": 0.05
+    },
+    {
+     "country_code": "GW",
+     "pool_n": 11,
+     "cohort_n": 7,
+     "pool_pct": 0.35,
+     "cohort_pct": 0.35,
+     "abs_diff_pp": 0.0
+    },
+    {
+     "country_code": "JM",
+     "pool_n": 11,
+     "cohort_n": 7,
+     "pool_pct": 0.35,
+     "cohort_pct": 0.35,
+     "abs_diff_pp": 0.0
+    },
+    {
+     "country_code": "GA",
+     "pool_n": 11,
+     "cohort_n": 5,
+     "pool_pct": 0.35,
+     "cohort_pct": 0.25,
+     "abs_diff_pp": 0.1
+    },
+    {
+     "country_code": "MK",
+     "pool_n": 11,
+     "cohort_n": 4,
+     "pool_pct": 0.35,
+     "cohort_pct": 0.2,
+     "abs_diff_pp": 0.15
+    },
+    {
+     "country_code": "BT",
+     "pool_n": 11,
+     "cohort_n": 7,
+     "pool_pct": 0.35,
+     "cohort_pct": 0.35,
+     "abs_diff_pp": 0.0
+    },
+    {
+     "country_code": "KI",
+     "pool_n": 11,
+     "cohort_n": 8,
+     "pool_pct": 0.35,
+     "cohort_pct": 0.4,
+     "abs_diff_pp": 0.05
+    },
+    {
+     "country_code": "GY",
+     "pool_n": 10,
+     "cohort_n": 8,
+     "pool_pct": 0.32,
+     "cohort_pct": 0.4,
+     "abs_diff_pp": 0.08
+    },
+    {
+     "country_code": "TO",
+     "pool_n": 10,
+     "cohort_n": 7,
+     "pool_pct": 0.32,
+     "cohort_pct": 0.35,
+     "abs_diff_pp": 0.03
+    },
+    {
+     "country_code": "RO",
+     "pool_n": 10,
+     "cohort_n": 6,
+     "pool_pct": 0.32,
+     "cohort_pct": 0.3,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "MX",
+     "pool_n": 10,
+     "cohort_n": 6,
+     "pool_pct": 0.32,
+     "cohort_pct": 0.3,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "TV",
+     "pool_n": 9,
+     "cohort_n": 6,
+     "pool_pct": 0.29,
+     "cohort_pct": 0.3,
+     "abs_diff_pp": 0.01
+    },
+    {
+     "country_code": "BZ",
+     "pool_n": 9,
+     "cohort_n": 6,
+     "pool_pct": 0.29,
+     "cohort_pct": 0.3,
+     "abs_diff_pp": 0.01
+    },
+    {
+     "country_code": "6L",
+     "pool_n": 9,
+     "cohort_n": 6,
+     "pool_pct": 0.29,
+     "cohort_pct": 0.3,
+     "abs_diff_pp": 0.01
+    },
+    {
+     "country_code": "7C",
+     "pool_n": 9,
+     "cohort_n": 3,
+     "pool_pct": 0.29,
+     "cohort_pct": 0.15,
+     "abs_diff_pp": 0.14
+    },
+    {
+     "country_code": "ZA",
+     "pool_n": 9,
+     "cohort_n": 6,
+     "pool_pct": 0.29,
+     "cohort_pct": 0.3,
+     "abs_diff_pp": 0.01
+    },
+    {
+     "country_code": "4P",
+     "pool_n": 8,
+     "cohort_n": 6,
+     "pool_pct": 0.26,
+     "cohort_pct": 0.3,
+     "abs_diff_pp": 0.04
+    },
+    {
+     "country_code": "PY",
+     "pool_n": 8,
+     "cohort_n": 5,
+     "pool_pct": 0.26,
+     "cohort_pct": 0.25,
+     "abs_diff_pp": 0.01
+    },
+    {
+     "country_code": "HR",
+     "pool_n": 8,
+     "cohort_n": 6,
+     "pool_pct": 0.26,
+     "cohort_pct": 0.3,
+     "abs_diff_pp": 0.04
+    },
+    {
+     "country_code": "6O",
+     "pool_n": 8,
+     "cohort_n": 6,
+     "pool_pct": 0.26,
+     "cohort_pct": 0.3,
+     "abs_diff_pp": 0.04
+    },
+    {
+     "country_code": "SZ",
+     "pool_n": 7,
+     "cohort_n": 6,
+     "pool_pct": 0.22,
+     "cohort_pct": 0.3,
+     "abs_diff_pp": 0.08
+    },
+    {
+     "country_code": "6R",
+     "pool_n": 7,
+     "cohort_n": 2,
+     "pool_pct": 0.22,
+     "cohort_pct": 0.1,
+     "abs_diff_pp": 0.12
+    },
+    {
+     "country_code": "TP",
+     "pool_n": 7,
+     "cohort_n": 4,
+     "pool_pct": 0.22,
+     "cohort_pct": 0.2,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "AZ",
+     "pool_n": 7,
+     "cohort_n": 2,
+     "pool_pct": 0.22,
+     "cohort_pct": 0.1,
+     "abs_diff_pp": 0.12
+    },
+    {
+     "country_code": "PA",
+     "pool_n": 7,
+     "cohort_n": 5,
+     "pool_pct": 0.22,
+     "cohort_pct": 0.25,
+     "abs_diff_pp": 0.03
+    },
+    {
+     "country_code": "UY",
+     "pool_n": 7,
+     "cohort_n": 5,
+     "pool_pct": 0.22,
+     "cohort_pct": 0.25,
+     "abs_diff_pp": 0.03
+    },
+    {
+     "country_code": "CL",
+     "pool_n": 6,
+     "cohort_n": 3,
+     "pool_pct": 0.19,
+     "cohort_pct": 0.15,
+     "abs_diff_pp": 0.04
+    },
+    {
+     "country_code": "LC",
+     "pool_n": 6,
+     "cohort_n": 3,
+     "pool_pct": 0.19,
+     "cohort_pct": 0.15,
+     "abs_diff_pp": 0.04
+    },
+    {
+     "country_code": "ZW",
+     "pool_n": 6,
+     "cohort_n": 4,
+     "pool_pct": 0.19,
+     "cohort_pct": 0.2,
+     "abs_diff_pp": 0.01
+    },
+    {
+     "country_code": "4E",
+     "pool_n": 6,
+     "cohort_n": 6,
+     "pool_pct": 0.19,
+     "cohort_pct": 0.3,
+     "abs_diff_pp": 0.11
+    },
+    {
+     "country_code": "DM",
+     "pool_n": 6,
+     "cohort_n": 3,
+     "pool_pct": 0.19,
+     "cohort_pct": 0.15,
+     "abs_diff_pp": 0.04
+    },
+    {
+     "country_code": "ME",
+     "pool_n": 6,
+     "cohort_n": 5,
+     "pool_pct": 0.19,
+     "cohort_pct": 0.25,
+     "abs_diff_pp": 0.06
+    },
+    {
+     "country_code": "TH",
+     "pool_n": 5,
+     "cohort_n": 3,
+     "pool_pct": 0.16,
+     "cohort_pct": 0.15,
+     "abs_diff_pp": 0.01
+    },
+    {
+     "country_code": "CR",
+     "pool_n": 5,
+     "cohort_n": 5,
+     "pool_pct": 0.16,
+     "cohort_pct": 0.25,
+     "abs_diff_pp": 0.09
+    },
+    {
+     "country_code": "VU",
+     "pool_n": 5,
+     "cohort_n": 2,
+     "pool_pct": 0.16,
+     "cohort_pct": 0.1,
+     "abs_diff_pp": 0.06
+    },
+    {
+     "country_code": "7B",
+     "pool_n": 5,
+     "cohort_n": 5,
+     "pool_pct": 0.16,
+     "cohort_pct": 0.25,
+     "abs_diff_pp": 0.09
+    },
+    {
+     "country_code": "RU",
+     "pool_n": 5,
+     "cohort_n": 3,
+     "pool_pct": 0.16,
+     "cohort_pct": 0.15,
+     "abs_diff_pp": 0.01
+    },
+    {
+     "country_code": "3T",
+     "pool_n": 4,
+     "cohort_n": 2,
+     "pool_pct": 0.13,
+     "cohort_pct": 0.1,
+     "abs_diff_pp": 0.03
+    },
+    {
+     "country_code": "VC",
+     "pool_n": 4,
+     "cohort_n": 3,
+     "pool_pct": 0.13,
+     "cohort_pct": 0.15,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "FJ",
+     "pool_n": 4,
+     "cohort_n": 3,
+     "pool_pct": 0.13,
+     "cohort_pct": 0.15,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "P3",
+     "pool_n": 4,
+     "cohort_n": 2,
+     "pool_pct": 0.13,
+     "cohort_pct": 0.1,
+     "abs_diff_pp": 0.03
+    },
+    {
+     "country_code": "GD",
+     "pool_n": 3,
+     "cohort_n": 2,
+     "pool_pct": 0.1,
+     "cohort_pct": 0.1,
+     "abs_diff_pp": 0.0
+    },
+    {
+     "country_code": "BW",
+     "pool_n": 3,
+     "cohort_n": 3,
+     "pool_pct": 0.1,
+     "cohort_pct": 0.15,
+     "abs_diff_pp": 0.05
+    },
+    {
+     "country_code": "3S",
+     "pool_n": 3,
+     "cohort_n": 2,
+     "pool_pct": 0.1,
+     "cohort_pct": 0.1,
+     "abs_diff_pp": 0.0
+    },
+    {
+     "country_code": "SR",
+     "pool_n": 2,
+     "cohort_n": 2,
+     "pool_pct": 0.06,
+     "cohort_pct": 0.1,
+     "abs_diff_pp": 0.04
+    },
+    {
+     "country_code": "1M",
+     "pool_n": 2,
+     "cohort_n": 2,
+     "pool_pct": 0.06,
+     "cohort_pct": 0.1,
+     "abs_diff_pp": 0.04
+    },
+    {
+     "country_code": "MU",
+     "pool_n": 2,
+     "cohort_n": 1,
+     "pool_pct": 0.06,
+     "cohort_pct": 0.05,
+     "abs_diff_pp": 0.01
+    },
+    {
+     "country_code": "GT",
+     "pool_n": 2,
+     "cohort_n": 1,
+     "pool_pct": 0.06,
+     "cohort_pct": 0.05,
+     "abs_diff_pp": 0.01
+    },
+    {
+     "country_code": "8S",
+     "pool_n": 2,
+     "cohort_n": 2,
+     "pool_pct": 0.06,
+     "cohort_pct": 0.1,
+     "abs_diff_pp": 0.04
+    },
+    {
+     "country_code": "7E",
+     "pool_n": 2,
+     "cohort_n": 1,
+     "pool_pct": 0.06,
+     "cohort_pct": 0.05,
+     "abs_diff_pp": 0.01
+    },
+    {
+     "country_code": "E3",
+     "pool_n": 2,
+     "cohort_n": 2,
+     "pool_pct": 0.06,
+     "cohort_pct": 0.1,
+     "abs_diff_pp": 0.04
+    },
+    {
+     "country_code": "E5",
+     "pool_n": 2,
+     "cohort_n": 1,
+     "pool_pct": 0.06,
+     "cohort_pct": 0.05,
+     "abs_diff_pp": 0.01
+    },
+    {
+     "country_code": "NA",
+     "pool_n": 2,
+     "cohort_n": 1,
+     "pool_pct": 0.06,
+     "cohort_pct": 0.05,
+     "abs_diff_pp": 0.01
+    },
+    {
+     "country_code": "RY",
+     "pool_n": 2,
+     "cohort_n": 1,
+     "pool_pct": 0.06,
+     "cohort_pct": 0.05,
+     "abs_diff_pp": 0.01
+    },
+    {
+     "country_code": "BB",
+     "pool_n": 1,
+     "cohort_n": 1,
+     "pool_pct": 0.03,
+     "cohort_pct": 0.05,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "KR",
+     "pool_n": 1,
+     "cohort_n": 1,
+     "pool_pct": 0.03,
+     "cohort_pct": 0.05,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "SC",
+     "pool_n": 1,
+     "cohort_n": 1,
+     "pool_pct": 0.03,
+     "cohort_pct": 0.05,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "P2",
+     "pool_n": 1,
+     "cohort_n": 1,
+     "pool_pct": 0.03,
+     "cohort_pct": 0.05,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "PL",
+     "pool_n": 1,
+     "cohort_n": 0,
+     "pool_pct": 0.03,
+     "cohort_pct": 0.0,
+     "abs_diff_pp": 0.03
+    },
+    {
+     "country_code": "TM",
+     "pool_n": 1,
+     "cohort_n": 0,
+     "pool_pct": 0.03,
+     "cohort_pct": 0.0,
+     "abs_diff_pp": 0.03
+    },
+    {
+     "country_code": "E4",
+     "pool_n": 1,
+     "cohort_n": 1,
+     "pool_pct": 0.03,
+     "cohort_pct": 0.05,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "IR",
+     "pool_n": 1,
+     "cohort_n": 1,
+     "pool_pct": 0.03,
+     "cohort_pct": 0.05,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "TT",
+     "pool_n": 1,
+     "cohort_n": 1,
+     "pool_pct": 0.03,
+     "cohort_pct": 0.05,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "5M",
+     "pool_n": 1,
+     "cohort_n": 1,
+     "pool_pct": 0.03,
+     "cohort_pct": 0.05,
+     "abs_diff_pp": 0.02
+    },
+    {
+     "country_code": "PW",
+     "pool_n": 1,
+     "cohort_n": 0,
+     "pool_pct": 0.03,
+     "cohort_pct": 0.0,
+     "abs_diff_pp": 0.03
+    },
+    {
+     "country_code": "SY",
+     "pool_n": 1,
+     "cohort_n": 0,
+     "pool_pct": 0.03,
+     "cohort_pct": 0.0,
+     "abs_diff_pp": 0.03
+    }
+   ]
+  }
+ },
+ "coverage": {
+  "contracts": {
+   "distinct_contracts": 178921,
+   "contract_lines": 186907,
+   "amount_usd": 85248987799.0,
+   "per_project_quantiles": {
+    "0.1": 4.0,
+    "0.25": 14.0,
+    "0.5": 37.0,
+    "0.75": 89.0,
+    "0.9": 176.10000000000014
+   },
+   "legacy_ds01004_contracts": 6448,
+   "projects_with_legacy_contracts": 363,
+   "projects_approved_before_fy2020_partial_contract_history": 996
+  },
+  "notices": {
+   "total": 243533,
+   "by_type": {
+    "notice_award_count": 187070,
+    "notice_gpn_count": 1239,
+    "notice_ifb_count": 23780,
+    "notice_other_count": 1,
+    "notice_prequal_count": 256,
+    "notice_reoi_count": 31187
+   },
+   "per_project_quantiles": {
+    "0.1": 10.0,
+    "0.25": 25.0,
+    "0.5": 61.0,
+    "0.75": 128.0,
+    "0.9": 237.10000000000014
+   }
+  },
+  "ieg": {
+   "projects_with_ds00053_rating": 750,
+   "projects_with_v3_ieg_ratings": 763,
+   "closed_projects": 1149,
+   "closed_without_rating": 410,
+   "outcomes": {
+    "Moderately Satisfactory": 299,
+    "Satisfactory": 280,
+    "Moderately Unsatisfactory": 83,
+    "Highly Satisfactory": 45,
+    "Unsatisfactory": 27,
+    "Highly Unsatisfactory": 16
+   },
+   "evaluation_types": {
+    "ICRR": 750
+   }
+  },
+  "finance": {
+   "projects_with_loan_statements": 1597
+  },
+  "local_coverage": {
+   "notice_fulltext_projects": 184,
+   "notice_fulltext_records": 20305,
+   "project_allfields_projects": 184,
+   "doc_metadata_complete_projects": 184,
+   "doc_metadata_partial_projects": 174,
+   "doc_metadata_records": 14268,
+   "pdf_projects": 29,
+   "pdf_files": 42,
+   "pdf_types": {
+    "ICR": 3,
+    "ICRR": 3,
+    "ISR": 3,
+    "PAD": 3,
+    "PROC_PLAN": 29
+   },
+   "text_projects": 4,
+   "text_files": 27,
+   "parsed_procurement_plan_projects": 25,
+   "isr_series_projects": 1
+  },
+  "needs": {
+   "notice_fulltext_projects": 1816,
+   "notice_fulltext_records_per_ds00979": 223237,
+   "project_allfields_projects": 1816,
+   "doc_metadata_projects": 1816,
+   "doc_metadata_records_estimate": 150410,
+   "documents_by_type_estimate_for_projects_without_metadata": {
+    "PAD": {
+     "projects_expected_with_type": 1433,
+     "documents_expected": 1590
+    },
+    "PP_paper": {
+     "projects_expected_with_type": 1521,
+     "documents_expected": 4051
+    },
+    "ISR": {
+     "projects_expected_with_type": 1803,
+     "documents_expected": 19951
+    },
+    "ICR": {
+     "projects_expected_with_type": 838,
+     "documents_expected": 852
+    },
+    "ICRR": {
+     "projects_expected_with_type": 669,
+     "documents_expected": 673
+    },
+    "PPAR": {
+     "projects_expected_with_type": 0,
+     "documents_expected": 0
+    },
+    "PROC_PLAN": {
+     "projects_expected_with_type": 1816,
+     "documents_expected": 75662
+    }
+   },
+   "procurement_plans_latest_version_projects": 1975,
+   "estimate_basis": {
+    "Active": {
+     "reference_projects": 128,
+     "docs_per_project_mean": 75.2,
+     "PAD": {
+      "projects_with_type_pct": 83.6,
+      "docs_per_project_mean": 0.91
+     },
+     "PP_paper": {
+      "projects_with_type_pct": 71.1,
+      "docs_per_project_mean": 1.52
+     },
+     "ISR": {
+      "projects_with_type_pct": 99.2,
+      "docs_per_project_mean": 9.34
+     },
+     "ICR": {
+      "projects_with_type_pct": 3.1,
+      "docs_per_project_mean": 0.03
+     },
+     "ICRR": {
+      "projects_with_type_pct": 3.1,
+      "docs_per_project_mean": 0.03
+     },
+     "PPAR": {
+      "projects_with_type_pct": 0.0,
+      "docs_per_project_mean": 0.0
+     },
+     "PROC_PLAN": {
+      "projects_with_type_pct": 100.0,
+      "docs_per_project_mean": 38.1
+     }
+    },
+    "Closed": {
+     "reference_projects": 143,
+     "docs_per_project_mean": 88.4,
+     "PAD": {
+      "projects_with_type_pct": 75.5,
+      "docs_per_project_mean": 0.85
+     },
+     "PP_paper": {
+      "projects_with_type_pct": 93.0,
+      "docs_per_project_mean": 2.75
+     },
+     "ISR": {
+      "projects_with_type_pct": 99.3,
+      "docs_per_project_mean": 12.19
+     },
+     "ICR": {
+      "projects_with_type_pct": 77.6,
+      "docs_per_project_mean": 0.79
+     },
+     "ICRR": {
+      "projects_with_type_pct": 61.5,
+      "docs_per_project_mean": 0.62
+     },
+     "PPAR": {
+      "projects_with_type_pct": 0.0,
+      "docs_per_project_mean": 0.0
+     },
+     "PROC_PLAN": {
+      "projects_with_type_pct": 100.0,
+      "docs_per_project_mean": 44.27
+     }
+    }
+   }
+  }
+ }
+}

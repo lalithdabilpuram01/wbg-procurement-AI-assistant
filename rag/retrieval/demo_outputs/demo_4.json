@@ -1,0 +1,9 @@
+{
+ "query": "What is the status of the procurement plan for the Indonesia projects?",
+ "status": "insufficient_evidence",
+ "notes": [
+  "Out of the pilot corpus scope (projects -, countries ['ID'])."
+ ],
+ "results": [],
+ "latency_ms": 0.2
+}

@@ -1,0 +1,55 @@
+{
+ "run": "20261025T215335Z",
+ "examples": {
+  "project_lookup": {
+   "matched_baseline": true,
+   "run": "20261025T215335Z",
+   "detail": "1 row(s) identical on project_id + ['project_name', 'contract_award_count', 'notice_count']"
+  },
+  "contract_lookup": {
+   "matched_baseline": true,
+   "run": "20261025T215335Z",
+   "detail": "amount 67629166.65 vs Silver 67629166.65 vs sum of supplier lines 67629166.65"
+  },
+  "project_contract_counts": {
+   "matched_baseline": true,
+   "run": "20261025T215335Z",
+   "detail": "27 row(s) identical on project_id + ['contract_awards', 'contract_award_value_usd']"
+  },
+  "award_value_by_method": {
+   "matched_baseline": true,
+   "run": "20261025T215335Z",
+   "detail": "18 row(s) identical on procurement_method + ['contract_awards', 'contract_award_value_usd']"
+  },
+  "country_fiscal_year_awards": {
+   "matched_baseline": true,
+   "run": "20261025T215335Z",
+   "detail": "1 row(s) identical on contract_fiscal_year + ['contract_awards', 'contract_award_value_usd']"
+  },
+  "tender_notices_by_category": {
+   "matched_baseline": true,
+   "run": "20261025T215335Z",
+   "detail": "4 row(s) identical on procurement_category + ['tender_invitation_notices']"
+  },
+  "contracts_by_ieg_rating": {
+   "matched_baseline": true,
+   "run": "20261025T215335Z",
+   "detail": "7 row(s) identical on ieg_outcome_rating + ['contract_awards', 'contract_award_value_usd']"
+  },
+  "contract_value_of_ida_projects": {
+   "matched_baseline": true,
+   "run": "20261025T215335Z",
+   "detail": "1 row(s) identical on k + ['projects', 'contract_awards', 'contract_award_value_usd']"
+  },
+  "tender_invitations_in_fiscal_year": {
+   "matched_baseline": true,
+   "run": "20261025T215335Z",
+   "detail": "1 row(s) identical on publication_fiscal_year + ['tender_invitation_notices']"
+  },
+  "country_procurement_profile": {
+   "matched_baseline": true,
+   "run": "20261025T215335Z",
+   "detail": "10 row(s) identical on wdi_country_code + ['contract_awards', 'contract_award_value_usd', 'tender_invitation_notices']"
+  }
+ }
+}

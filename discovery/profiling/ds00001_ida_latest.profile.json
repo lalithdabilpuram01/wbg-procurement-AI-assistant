@@ -1,0 +1,1407 @@
+{
+ "row_count": 11486,
+ "columns": {
+  "Agreement Signing Date": {
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 5815,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "01/01/1900",
+     126
+    ],
+    [
+     "04/03/2020",
+     20
+    ],
+    [
+     "12/21/2023",
+     16
+    ],
+    [
+     "06/25/2021",
+     15
+    ],
+    [
+     "08/29/2025",
+     13
+    ],
+    [
+     "06/23/2003",
+     13
+    ],
+    [
+     "06/13/2008",
+     12
+    ],
+    [
+     "06/27/2025",
+     12
+    ]
+   ],
+   "max_len": 10,
+   "date_min": "1900-01-01",
+   "date_max": "2026-09-30"
+  },
+  "Board Approval Date": {
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 4015,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "04/02/2020",
+     25
+    ],
+    [
+     "09/30/2010",
+     21
+    ],
+    [
+     "06/21/2022",
+     20
+    ],
+    [
+     "03/31/2026",
+     20
+    ],
+    [
+     "03/31/2022",
+     19
+    ],
+    [
+     "06/25/2025",
+     18
+    ],
+    [
+     "05/26/2016",
+     18
+    ],
+    [
+     "03/26/2020",
+     17
+    ]
+   ],
+   "max_len": 10,
+   "date_min": "1961-05-11",
+   "date_max": "2026-09-30"
+  },
+  "Board approval - Calendar year": {
+   "observed_kinds": {
+    "str:int": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 66,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2020",
+     495
+    ],
+    [
+     "2025",
+     468
+    ],
+    [
+     "2022",
+     416
+    ],
+    [
+     "2021",
+     390
+    ],
+    [
+     "2017",
+     337
+    ],
+    [
+     "2026",
+     335
+    ],
+    [
+     "2018",
+     332
+    ],
+    [
+     "2014",
+     329
+    ]
+   ],
+   "max_len": 4
+  },
+  "Board approval - Fiscal year": {
+   "observed_kinds": {
+    "str:int": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 67,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2020",
+     445
+    ],
+    [
+     "2025",
+     434
+    ],
+    [
+     "2022",
+     430
+    ],
+    [
+     "2026",
+     415
+    ],
+    [
+     "2021",
+     414
+    ],
+    [
+     "2014",
+     332
+    ],
+    [
+     "2024",
+     332
+    ],
+    [
+     "2019",
+     328
+    ]
+   ],
+   "max_len": 4
+  },
+  "Borrower": {
+   "observed_kinds": {
+    "str": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 304,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "MINISTRY OF FINANCE",
+     1684
+    ],
+    [
+     "Ministry of Finance",
+     1303
+    ],
+    [
+     "MINISTERE DE L'ECONOMIE ET DES FINANCES",
+     577
+    ],
+    [
+     "CONTROLLER OF AID ACCOUNTS & AUDIT",
+     442
+    ],
+    [
+     "MINISTRY OF ECONOMIC AFFAIRS",
+     340
+    ],
+    [
+     "Ministry of Finance and Economic Affairs",
+     330
+    ],
+    [
+     "MINISTRY OF ECONOMY AND FINANCE",
+     284
+    ],
+    [
+     "MINISTRY FOR FINANCE",
+     271
+    ]
+   ],
+   "max_len": 40
+  },
+  "Borrowers Obligation (US$)": {
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 5316,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0.0",
+     5384
+    ],
+    [
+     "-0.01",
+     183
+    ],
+    [
+     "0.01",
+     177
+    ],
+    [
+     "0.02",
+     71
+    ],
+    [
+     "-0.02",
+     59
+    ],
+    [
+     "0.04",
+     44
+    ],
+    [
+     "0.03",
+     42
+    ],
+    [
+     "-0.03",
+     37
+    ]
+   ],
+   "max_len": 12
+  },
+  "Cancelled Amount (US$)": {
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 5991,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0.0",
+     5385
+    ],
+    [
+     "10000000.0",
+     11
+    ],
+    [
+     "20000000.0",
+     7
+    ],
+    [
+     "100000000.0",
+     7
+    ],
+    [
+     "25000000.0",
+     7
+    ],
+    [
+     "2000000.0",
+     6
+    ],
+    [
+     "13000000.0",
+     6
+    ],
+    [
+     "200000000.0",
+     6
+    ]
+   ],
+   "max_len": 12
+  },
+  "Closed Date (Most Recent)": {
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 11484,
+    "empty": 2
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.02,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.98,
+   "distinct": 1328,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "12/31/2026",
+     270
+    ],
+    [
+     "12/31/2027",
+     160
+    ],
+    [
+     "06/30/2027",
+     152
+    ],
+    [
+     "06/30/2024",
+     141
+    ],
+    [
+     "06/30/2025",
+     134
+    ],
+    [
+     "06/30/2026",
+     125
+    ],
+    [
+     "12/31/2024",
+     115
+    ],
+    [
+     "06/30/2013",
+     105
+    ]
+   ],
+   "max_len": 10,
+   "date_min": "1963-09-30",
+   "date_max": "2035-12-31"
+  },
+  "Country / Economy": {
+   "observed_kinds": {
+    "str": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 131,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "India",
+     442
+    ],
+    [
+     "Bangladesh",
+     398
+    ],
+    [
+     "Pakistan",
+     341
+    ],
+    [
+     "Tanzania",
+     313
+    ],
+    [
+     "Ethiopia",
+     291
+    ],
+    [
+     "Ghana",
+     278
+    ],
+    [
+     "Senegal",
+     262
+    ],
+    [
+     "Kenya",
+     259
+    ]
+   ],
+   "max_len": 38
+  },
+  "Country / Economy Code": {
+   "observed_kinds": {
+    "str": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 131,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "IN",
+     442
+    ],
+    [
+     "BD",
+     398
+    ],
+    [
+     "PK",
+     341
+    ],
+    [
+     "TZ",
+     313
+    ],
+    [
+     "ET",
+     291
+    ],
+    [
+     "GH",
+     278
+    ],
+    [
+     "SN",
+     262
+    ],
+    [
+     "KE",
+     259
+    ]
+   ],
+   "max_len": 2
+  },
+  "Credit Number": {
+   "observed_kinds": {
+    "str": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 11486,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "IDA29410",
+     1
+    ],
+    [
+     "IDA29440",
+     1
+    ],
+    [
+     "IDA29580",
+     1
+    ],
+    [
+     "IDA29760",
+     1
+    ],
+    [
+     "IDA29830",
+     1
+    ],
+    [
+     "IDA29840",
+     1
+    ],
+    [
+     "IDA30200",
+     1
+    ],
+    [
+     "IDA30201",
+     1
+    ]
+   ],
+   "max_len": 8,
+   "unique_when_present": true
+  },
+  "Credit Status": {
+   "observed_kinds": {
+    "str": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 10,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Repaying",
+     4274
+    ],
+    [
+     "Fully Repaid",
+     2612
+    ],
+    [
+     "Disbursing",
+     1822
+    ],
+    [
+     "Fully Disbursed",
+     1736
+    ],
+    [
+     "Disbursing&Repaying",
+     352
+    ],
+    [
+     "Effective",
+     289
+    ],
+    [
+     "Signed",
+     142
+    ],
+    [
+     "Fully Cancelled",
+     136
+    ]
+   ],
+   "max_len": 19
+  },
+  "Credits Held (US$)": {
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 6252,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0.0",
+     3966
+    ],
+    [
+     "-0.01",
+     187
+    ],
+    [
+     "0.01",
+     178
+    ],
+    [
+     "0.02",
+     72
+    ],
+    [
+     "-0.02",
+     59
+    ],
+    [
+     "0.04",
+     43
+    ],
+    [
+     "0.03",
+     42
+    ],
+    [
+     "-0.03",
+     37
+    ]
+   ],
+   "max_len": 12
+  },
+  "Currency of Commitment": {
+   "observed_kinds": {
+    "str": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 6,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "XDR",
+     9031
+    ],
+    [
+     "USD",
+     1773
+    ],
+    [
+     "EUR",
+     654
+    ],
+    [
+     "JPY",
+     25
+    ],
+    [
+     "GBP",
+     2
+    ],
+    [
+     "XAF",
+     1
+    ]
+   ],
+   "max_len": 3
+  },
+  "Disbursed Amount (US$)": {
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 10331,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0.0",
+     737
+    ],
+    [
+     "10000000.0",
+     27
+    ],
+    [
+     "5000000.0",
+     23
+    ],
+    [
+     "30000000.0",
+     19
+    ],
+    [
+     "20000000.0",
+     18
+    ],
+    [
+     "15000000.0",
+     18
+    ],
+    [
+     "6000000.0",
+     18
+    ],
+    [
+     "8000000.0",
+     17
+    ]
+   ],
+   "max_len": 13
+  },
+  "Due 3rd Party (US$)": {
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 1,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0.0",
+     11486
+    ]
+   ],
+   "max_len": 3
+  },
+  "Due to IDA (US$)": {
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 5316,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0.0",
+     5384
+    ],
+    [
+     "-0.01",
+     183
+    ],
+    [
+     "0.01",
+     177
+    ],
+    [
+     "0.02",
+     71
+    ],
+    [
+     "-0.02",
+     59
+    ],
+    [
+     "0.04",
+     44
+    ],
+    [
+     "0.03",
+     42
+    ],
+    [
+     "-0.03",
+     37
+    ]
+   ],
+   "max_len": 12
+  },
+  "Effective Date (Most Recent)": {
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 6561,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "01/01/1900",
+     353
+    ],
+    [
+     "03/29/2021",
+     14
+    ],
+    [
+     "12/21/2023",
+     12
+    ],
+    [
+     "12/21/2017",
+     11
+    ],
+    [
+     "02/19/2021",
+     11
+    ],
+    [
+     "09/30/2025",
+     11
+    ],
+    [
+     "03/31/2021",
+     11
+    ],
+    [
+     "04/18/2025",
+     10
+    ]
+   ],
+   "max_len": 10,
+   "date_min": "1900-01-01",
+   "date_max": "2026-09-29"
+  },
+  "End of Period": {
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 1,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "09/30/2026",
+     11486
+    ]
+   ],
+   "max_len": 10,
+   "date_min": "2026-09-30",
+   "date_max": "2026-09-30"
+  },
+  "Exchange Adjustment (US$)": {
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 1,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0.0",
+     11486
+    ]
+   ],
+   "max_len": 3
+  },
+  "First Repayment Date": {
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 8751,
+    "empty": 2735
+   },
+   "null_pct": 0.0,
+   "empty_pct": 23.81,
+   "sentinel_pct": 0.0,
+   "populated_pct": 76.19,
+   "distinct": 1408,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "10/15/2021",
+     41
+    ],
+    [
+     "08/15/2021",
+     40
+    ],
+    [
+     "08/15/2022",
+     37
+    ],
+    [
+     "08/15/2027",
+     34
+    ],
+    [
+     "11/15/2021",
+     33
+    ],
+    [
+     "08/15/2024",
+     32
+    ],
+    [
+     "10/01/2010",
+     31
+    ],
+    [
+     "04/15/2024",
+     30
+    ]
+   ],
+   "max_len": 10,
+   "date_min": "1968-04-01",
+   "date_max": "2038-11-01"
+  },
+  "Last Disbursement Date": {
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 9395,
+    "empty": 2091
+   },
+   "null_pct": 0.0,
+   "empty_pct": 18.2,
+   "sentinel_pct": 0.0,
+   "populated_pct": 81.8,
+   "distinct": 4920,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "09/28/2026",
+     71
+    ],
+    [
+     "09/29/2026",
+     63
+    ],
+    [
+     "09/24/2026",
+     57
+    ],
+    [
+     "09/21/2026",
+     54
+    ],
+    [
+     "09/22/2026",
+     48
+    ],
+    [
+     "09/25/2026",
+     44
+    ],
+    [
+     "09/23/2026",
+     42
+    ],
+    [
+     "09/14/2026",
+     38
+    ]
+   ],
+   "max_len": 10,
+   "date_min": "1984-10-01",
+   "date_max": "2026-10-02"
+  },
+  "Last Repayment Date": {
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 8751,
+    "empty": 2735
+   },
+   "null_pct": 0.0,
+   "empty_pct": 23.81,
+   "sentinel_pct": 0.0,
+   "populated_pct": 76.19,
+   "distinct": 1223,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "04/01/2032",
+     41
+    ],
+    [
+     "02/15/2054",
+     39
+    ],
+    [
+     "02/01/2034",
+     38
+    ],
+    [
+     "02/15/2052",
+     37
+    ],
+    [
+     "01/15/2037",
+     35
+    ],
+    [
+     "02/15/2053",
+     35
+    ],
+    [
+     "03/15/2030",
+     34
+    ],
+    [
+     "03/15/2031",
+     34
+    ]
+   ],
+   "max_len": 10,
+   "date_min": "1968-04-01",
+   "date_max": "2075-06-15"
+  },
+  "Original Principal Amount (US$)": {
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 2355,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "50000000.0",
+     406
+    ],
+    [
+     "10000000.0",
+     405
+    ],
+    [
+     "20000000.0",
+     398
+    ],
+    [
+     "15000000.0",
+     350
+    ],
+    [
+     "100000000.0",
+     350
+    ],
+    [
+     "30000000.0",
+     348
+    ],
+    [
+     "25000000.0",
+     290
+    ],
+    [
+     "5000000.0",
+     284
+    ]
+   ],
+   "max_len": 12
+  },
+  "Project ID": {
+   "observed_kinds": {
+    "str": 11482,
+    "str:int": 4
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 8037,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "P150080",
+     21
+    ],
+    [
+     "P169265",
+     18
+    ],
+    [
+     "P175043",
+     17
+    ],
+    [
+     "P162337",
+     15
+    ],
+    [
+     "P173197",
+     15
+    ],
+    [
+     "P178497",
+     13
+    ],
+    [
+     "P151847",
+     13
+    ],
+    [
+     "P167569",
+     13
+    ]
+   ],
+   "max_len": 8
+  },
+  "Project Name": {
+   "observed_kinds": {
+    "str": 11482,
+    "empty": 4
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.03,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.97,
+   "distinct": 7299,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "EDUCATION II",
+     39
+    ],
+    [
+     "SAC",
+     33
+    ],
+    [
+     "EDUCATION",
+     31
+    ],
+    [
+     "TECHNICAL ASSISTANCE",
+     30
+    ],
+    [
+     "EDUCATION I",
+     28
+    ],
+    [
+     "SWEDD",
+     21
+    ],
+    [
+     "SAC I",
+     21
+    ],
+    [
+     "HIGHWAYS III",
+     20
+    ]
+   ],
+   "max_len": 40
+  },
+  "Region": {
+   "observed_kinds": {
+    "str": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 7,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "WESTERN AND CENTRAL AFRICA",
+     3292
+    ],
+    [
+     "EASTERN AND SOUTHERN AFRICA",
+     3077
+    ],
+    [
+     "SOUTH ASIA",
+     1325
+    ],
+    [
+     "EAST ASIA AND PACIFIC",
+     1187
+    ],
+    [
+     "EUROPE AND CENTRAL ASIA",
+     927
+    ],
+    [
+     "MID EAST,NORTH AFRICA,AFG,PAK",
+     905
+    ],
+    [
+     "LATIN AMERICA AND CARIBBEAN",
+     773
+    ]
+   ],
+   "max_len": 29
+  },
+  "Repaid 3rd Party (US$)": {
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 20,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0.0",
+     11466
+    ],
+    [
+     "6000000.0",
+     2
+    ],
+    [
+     "6861742.0",
+     1
+    ],
+    [
+     "7224416.98",
+     1
+    ],
+    [
+     "2819734.91",
+     1
+    ],
+    [
+     "4744773.41",
+     1
+    ],
+    [
+     "6200000.0",
+     1
+    ],
+    [
+     "17500000.0",
+     1
+    ]
+   ],
+   "max_len": 10
+  },
+  "Repaid to IDA (US$)": {
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 7007,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0.0",
+     4252
+    ],
+    [
+     "10000000.0",
+     19
+    ],
+    [
+     "5000000.0",
+     19
+    ],
+    [
+     "8000000.0",
+     15
+    ],
+    [
+     "15000000.0",
+     14
+    ],
+    [
+     "6000000.0",
+     13
+    ],
+    [
+     "4000000.0",
+     9
+    ],
+    [
+     "20000000.0",
+     7
+    ]
+   ],
+   "max_len": 12
+  },
+  "Service Charge Rate": {
+   "observed_kinds": {
+    "str:decimal": 8756,
+    "empty": 2730
+   },
+   "null_pct": 0.0,
+   "empty_pct": 23.77,
+   "sentinel_pct": 0.0,
+   "populated_pct": 76.23,
+   "distinct": 121,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0.75",
+     6825
+    ],
+    [
+     "0.0",
+     607
+    ],
+    [
+     "2.0",
+     553
+    ],
+    [
+     "2.45",
+     43
+    ],
+    [
+     "3.91",
+     29
+    ],
+    [
+     "1.42",
+     24
+    ],
+    [
+     "2.04",
+     24
+    ],
+    [
+     "1.3",
+     23
+    ]
+   ],
+   "max_len": 7
+  },
+  "Sold 3rd Party (US$)": {
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 20,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0.0",
+     11466
+    ],
+    [
+     "6000000.0",
+     2
+    ],
+    [
+     "6861742.0",
+     1
+    ],
+    [
+     "7224416.98",
+     1
+    ],
+    [
+     "2819734.91",
+     1
+    ],
+    [
+     "4744773.41",
+     1
+    ],
+    [
+     "6200000.0",
+     1
+    ],
+    [
+     "17500000.0",
+     1
+    ]
+   ],
+   "max_len": 10
+  },
+  "Undisbursed Amount (US$)": {
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 2275,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0.0",
+     8980
+    ],
+    [
+     "-0.01",
+     39
+    ],
+    [
+     "0.01",
+     30
+    ],
+    [
+     "100000000.0",
+     11
+    ],
+    [
+     "150000000.0",
+     10
+    ],
+    [
+     "1006215.0",
+     8
+    ],
+    [
+     "5031075.0",
+     7
+    ],
+    [
+     "20000000.0",
+     7
+    ]
+   ],
+   "max_len": 12
+  }
+ },
+ "dataset": "ds00001_ida_latest",
+ "source": "Finances One DS00001 bulk CSV"
+}

@@ -1,0 +1,1046 @@
+{
+ "row_count": 507,
+ "columns": {
+  "agreement_signing_date": {
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 507
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "13-Oct-1987",
+     188
+    ],
+    [
+     "13-Feb-1974",
+     186
+    ],
+    [
+     "16-Sep-2015",
+     133
+    ]
+   ],
+   "max_len": 11,
+   "date_min": "1974-02-13",
+   "date_max": "2015-09-16"
+  },
+  "board_approval___calendar_year": {
+   "observed_kinds": {
+    "int": 507
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "1987",
+     188
+    ],
+    [
+     "1974",
+     186
+    ],
+    [
+     "2015",
+     133
+    ]
+   ],
+   "max_len": 4
+  },
+  "board_approval___fiscal_year": {
+   "observed_kinds": {
+    "int": 507
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "1988",
+     188
+    ],
+    [
+     "1974",
+     186
+    ],
+    [
+     "2016",
+     133
+    ]
+   ],
+   "max_len": 4
+  },
+  "board_approval_date": {
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 507
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "06-Oct-1987",
+     188
+    ],
+    [
+     "05-Feb-1974",
+     186
+    ],
+    [
+     "15-Sep-2015",
+     133
+    ]
+   ],
+   "max_len": 11,
+   "date_min": "1974-02-05",
+   "date_max": "2015-09-15"
+  },
+  "borrower": {
+   "observed_kinds": {
+    "str": 507
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 4,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "BANK OF INDUS. & MAIN BANK OF IRAN",
+     186
+    ],
+    [
+     "NACIONAL FINANCIERA, S.N.C. NAFIN",
+     185
+    ],
+    [
+     "Ministry of Finance",
+     133
+    ],
+    [
+     "NACIONAL FINANCIERA S.N.C. I.B.D",
+     3
+    ]
+   ],
+   "max_len": 34
+  },
+  "borrowers_obligation": {
+   "observed_kinds": {
+    "int": 430,
+    "float": 77
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 15,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0",
+     297
+    ],
+    [
+     "500000000",
+     77
+    ],
+    [
+     "-0.01",
+     47
+    ],
+    [
+     "0.01",
+     23
+    ],
+    [
+     "-0.02",
+     7
+    ],
+    [
+     "386250000",
+     6
+    ],
+    [
+     "363500000",
+     6
+    ],
+    [
+     "454500000",
+     6
+    ]
+   ],
+   "max_len": 9
+  },
+  "cancelled_amount": {
+   "observed_kinds": {
+    "int": 321,
+    "float": 186
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 2,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0",
+     321
+    ],
+    [
+     "4113815.38",
+     186
+    ]
+   ],
+   "max_len": 10
+  },
+  "closed_date_most_recent": {
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 507
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "31-Dec-1993",
+     188
+    ],
+    [
+     "31-Mar-1979",
+     186
+    ],
+    [
+     "30-Jun-2016",
+     133
+    ]
+   ],
+   "max_len": 11,
+   "date_min": "1979-03-31",
+   "date_max": "2016-06-30"
+  },
+  "country": {
+   "observed_kinds": {
+    "str": 507
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Mexico",
+     188
+    ],
+    [
+     "Iran, Islamic Republic of",
+     186
+    ],
+    [
+     "Ukraine",
+     133
+    ]
+   ],
+   "max_len": 25
+  },
+  "country_code": {
+   "observed_kinds": {
+    "str": 507
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "MX",
+     188
+    ],
+    [
+     "IR",
+     186
+    ],
+    [
+     "UA",
+     133
+    ]
+   ],
+   "max_len": 2
+  },
+  "currency_of_commitment": {
+   "observed_kinds": {
+    "null": 450,
+    "empty": 57
+   },
+   "null_pct": 88.76,
+   "empty_pct": 11.24,
+   "sentinel_pct": 0.0,
+   "populated_pct": 0.0,
+   "distinct": 0,
+   "distinct_capped": false,
+   "top_values": [],
+   "max_len": null
+  },
+  "disbursed_amount": {
+   "observed_kinds": {
+    "int": 321,
+    "float": 186
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "29975000",
+     188
+    ],
+    [
+     "70886184.62",
+     186
+    ],
+    [
+     "500000000",
+     133
+    ]
+   ],
+   "max_len": 11
+  },
+  "due_3rd_party": {
+   "observed_kinds": {
+    "int": 507
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 1,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0",
+     507
+    ]
+   ],
+   "max_len": 1
+  },
+  "due_to_ibrd": {
+   "observed_kinds": {
+    "int": 507
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 12,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0",
+     374
+    ],
+    [
+     "500000000",
+     77
+    ],
+    [
+     "386250000",
+     6
+    ],
+    [
+     "363500000",
+     6
+    ],
+    [
+     "454500000",
+     6
+    ],
+    [
+     "431750000",
+     6
+    ],
+    [
+     "409000000",
+     6
+    ],
+    [
+     "477250000",
+     6
+    ]
+   ],
+   "max_len": 9
+  },
+  "effective_date_most_recent": {
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 507
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "21-Oct-1987",
+     188
+    ],
+    [
+     "15-May-1974",
+     186
+    ],
+    [
+     "16-Sep-2015",
+     133
+    ]
+   ],
+   "max_len": 11,
+   "date_min": "1974-05-15",
+   "date_max": "2015-09-16"
+  },
+  "end_of_period": {
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 507
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 186,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "31-Jan-2017",
+     3
+    ],
+    [
+     "30-Nov-2016",
+     3
+    ],
+    [
+     "31-Oct-2016",
+     3
+    ],
+    [
+     "30-Sep-2016",
+     3
+    ],
+    [
+     "31-Jul-2016",
+     3
+    ],
+    [
+     "31-Aug-2016",
+     3
+    ],
+    [
+     "28-Feb-2017",
+     3
+    ],
+    [
+     "31-Dec-2016",
+     3
+    ]
+   ],
+   "max_len": 11,
+   "date_min": "2011-04-30",
+   "date_max": "2026-09-30"
+  },
+  "exchange_adjustment": {
+   "observed_kinds": {
+    "int": 430,
+    "float": 77
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 4,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0",
+     430
+    ],
+    [
+     "-0.01",
+     47
+    ],
+    [
+     "0.01",
+     23
+    ],
+    [
+     "-0.02",
+     7
+    ]
+   ],
+   "max_len": 5
+  },
+  "first_repayment_date": {
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 507
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "15-Nov-1998",
+     188
+    ],
+    [
+     "15-Apr-1979",
+     186
+    ],
+    [
+     "15-Feb-2022",
+     133
+    ]
+   ],
+   "max_len": 11,
+   "date_min": "1979-04-15",
+   "date_max": "2022-02-15"
+  },
+  "guarantor": {
+   "observed_kinds": {
+    "str": 498,
+    "null": 9
+   },
+   "null_pct": 1.78,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 98.22,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Mexico",
+     184
+    ],
+    [
+     "Iran, Islamic Republic of",
+     182
+    ],
+    [
+     "Ukraine",
+     132
+    ]
+   ],
+   "max_len": 25
+  },
+  "guarantor_country_code": {
+   "observed_kinds": {
+    "str": 505,
+    "null": 2
+   },
+   "null_pct": 0.39,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.61,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "MX",
+     187
+    ],
+    [
+     "IR",
+     185
+    ],
+    [
+     "UA",
+     133
+    ]
+   ],
+   "max_len": 2
+  },
+  "interest_rate": {
+   "observed_kinds": {
+    "float": 366,
+    "int": 138,
+    "null": 3
+   },
+   "null_pct": 0.59,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.41,
+   "distinct": 6,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "7.96",
+     183
+    ],
+    [
+     "7.25",
+     182
+    ],
+    [
+     "0",
+     131
+    ],
+    [
+     "8",
+     4
+    ],
+    [
+     "7",
+     3
+    ],
+    [
+     "6.47",
+     1
+    ]
+   ],
+   "max_len": 4
+  },
+  "last_disbursement_date": {
+   "observed_kinds": {
+    "null": 372,
+    "str:date[DD-Mon-YYYY]": 135
+   },
+   "null_pct": 73.37,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 26.63,
+   "distinct": 2,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "17-Sep-2015",
+     133
+    ],
+    [
+     "01-Jan-1998",
+     2
+    ]
+   ],
+   "max_len": 11,
+   "date_min": "1998-01-01",
+   "date_max": "2015-09-17"
+  },
+  "last_repayment_date": {
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 507
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "15-Nov-2002",
+     188
+    ],
+    [
+     "15-Oct-1991",
+     186
+    ],
+    [
+     "15-Aug-2032",
+     133
+    ]
+   ],
+   "max_len": 11,
+   "date_min": "1991-10-15",
+   "date_max": "2032-08-15"
+  },
+  "loan_number": {
+   "observed_kinds": {
+    "str": 507
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "IBRD2876S",
+     188
+    ],
+    [
+     "IBRD09630",
+     186
+    ],
+    [
+     "IBRD85370",
+     133
+    ]
+   ],
+   "max_len": 9
+  },
+  "loan_status": {
+   "observed_kinds": {
+    "str": 507
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 6,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Fully Repaid",
+     244
+    ],
+    [
+     "Repaid",
+     130
+    ],
+    [
+     "Fully Disbursed",
+     64
+    ],
+    [
+     "Repaying",
+     56
+    ],
+    [
+     "Disbursing",
+     10
+    ],
+    [
+     "Disbursed",
+     3
+    ]
+   ],
+   "max_len": 15
+  },
+  "loan_type": {
+   "observed_kinds": {
+    "str": 507
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 5,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "FSL",
+     133
+    ],
+    [
+     "SCPD",
+     95
+    ],
+    [
+     "NPL",
+     95
+    ],
+    [
+     "SCP USD",
+     93
+    ],
+    [
+     "NON POOL",
+     91
+    ]
+   ],
+   "max_len": 8
+  },
+  "loans_held": {
+   "observed_kinds": {
+    "int": 507
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 12,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0",
+     374
+    ],
+    [
+     "500000000",
+     77
+    ],
+    [
+     "386250000",
+     6
+    ],
+    [
+     "363500000",
+     6
+    ],
+    [
+     "454500000",
+     6
+    ],
+    [
+     "431750000",
+     6
+    ],
+    [
+     "409000000",
+     6
+    ],
+    [
+     "477250000",
+     6
+    ]
+   ],
+   "max_len": 9
+  },
+  "original_principal_amount": {
+   "observed_kinds": {
+    "int": 507
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "29975000",
+     188
+    ],
+    [
+     "75000000",
+     186
+    ],
+    [
+     "500000000",
+     133
+    ]
+   ],
+   "max_len": 9
+  },
+  "project_id": {
+   "observed_kinds": {
+    "str": 507
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "P007657",
+     188
+    ],
+    [
+     "P005201",
+     186
+    ],
+    [
+     "P151941",
+     133
+    ]
+   ],
+   "max_len": 7
+  },
+  "project_name_": {
+   "observed_kinds": {
+    "str": 450,
+    "null": 57
+   },
+   "null_pct": 11.24,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 88.76,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "MANPWR TRG PRJ",
+     169
+    ],
+    [
+     "IMDBI VIII",
+     167
+    ],
+    [
+     "Programmatic Financial Sector DPL2",
+     114
+    ]
+   ],
+   "max_len": 34
+  },
+  "region": {
+   "observed_kinds": {
+    "str": 507
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 4,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "LATIN AMERICA AND CARIBBEAN",
+     188
+    ],
+    [
+     "MIDDLE EAST AND NORTH AFRICA",
+     171
+    ],
+    [
+     "EUROPE AND CENTRAL ASIA",
+     133
+    ],
+    [
+     "MID EAST,NORTH AFRICA,AFG,PAK",
+     15
+    ]
+   ],
+   "max_len": 29
+  },
+  "repaid_3rd_party": {
+   "observed_kinds": {
+    "int": 321,
+    "float": 186
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 2,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0",
+     321
+    ],
+    [
+     "5709725.63",
+     186
+    ]
+   ],
+   "max_len": 10
+  },
+  "repaid_to_ibrd": {
+   "observed_kinds": {
+    "int": 321,
+    "float": 186
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 13,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "29975000",
+     188
+    ],
+    [
+     "65176458.99",
+     186
+    ],
+    [
+     "0",
+     77
+    ],
+    [
+     "113750000",
+     6
+    ],
+    [
+     "136500000",
+     6
+    ],
+    [
+     "45500000",
+     6
+    ],
+    [
+     "68250000",
+     6
+    ],
+    [
+     "91000000",
+     6
+    ]
+   ],
+   "max_len": 11
+  },
+  "sold_3rd_party": {
+   "observed_kinds": {
+    "int": 321,
+    "float": 186
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 2,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0",
+     321
+    ],
+    [
+     "5709725.63",
+     186
+    ]
+   ],
+   "max_len": 10
+  },
+  "undisbursed_amount": {
+   "observed_kinds": {
+    "int": 507
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 1,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0",
+     507
+    ]
+   ],
+   "max_len": 1
+  }
+ },
+ "dataset": "ds00975_history_sample",
+ "source": "Finances One DS00975 API (3 loans)"
+}

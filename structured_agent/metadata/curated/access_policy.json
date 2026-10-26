@@ -1,0 +1,13 @@
+{
+ "_about": "Assessment access policy (static). Roles map to the registry's authorized_roles; classifications control output vs filter/join use. Principals are pseudonymous demo identities, not real users. Changing this file never happens automatically after a failure.",
+ "workspaces": ["wbg-procurement-poc"],
+ "roles": {
+  "procurement_analyst": {"output_classifications": ["public"], "filter_classifications": ["public"], "max_rows": 1000},
+  "data_steward": {"output_classifications": ["public", "lineage"], "filter_classifications": ["public", "lineage", "restricted"], "max_rows": 1000}
+ },
+ "principals": {
+  "analyst-demo": {"workspace": "wbg-procurement-poc", "roles": ["procurement_analyst"]},
+  "steward-demo": {"workspace": "wbg-procurement-poc", "roles": ["data_steward"]},
+  "guest-demo": {"workspace": "wbg-procurement-poc", "roles": []}
+ }
+}

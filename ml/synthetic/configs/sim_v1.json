@@ -1,0 +1,62 @@
+{
+ "sim_version": "sim_v1",
+ "frozen_at_utc": "2026-10-25T08:40:00Z",
+ "status": "Assumed data-generating processes for a demonstration. NOT World Bank findings. Coefficients fixed before any classifier was fitted and never tuned on model results.",
+ "master_seed": 20261025,
+ "common": {
+  "noise": "Bernoulli draw from p = sigmoid(logit); intercept b0 solved numerically so mean(p) over the population equals the target prevalence",
+  "random_effects": "project effect u_p ~ N(0, sigma_project^2) and country effect v_c ~ N(0, sigma_country^2), drawn per project / country with the scenario seed; stored only in generator internals",
+  "standardisation_constants": "means / SDs of numeric drivers computed on the full in-window population and recorded in provenance (part of the simulated world, not a fitted model)",
+  "driver_policy": "drivers are a subset of the inventory `include` features available at the prediction point; no amounts, JV / supplier fields, governance or macro values, re-bid markers or post-event data"
+ },
+ "m2_amendment": {
+  "unit": "contract (wb_contract_number) at signing",
+  "outcome": "sim_amended_24m",
+  "target_prevalence_central": 0.15,
+  "prevalence_basis": "ASSUMED. Only public floor: 0.03% of contracts carry amendment wording (not a rate).",
+  "S0": {"description": "null: labels independent of every feature; no random effects", "sigma_project": 0.0, "sigma_country": 0.0},
+  "S1": {
+   "description": "linear-additive main effects + moderate project effect",
+   "sigma_project": 0.4, "sigma_country": 0.0,
+   "effects": {
+    "procurement_category": {"Works": 0.8, "Goods": 0.2, "Consultant Services": -0.2, "Non-consulting Services": 0.0},
+    "review_type": {"Prior": 0.6},
+    "procurement_method": {"Direct Selection": 0.4, "Individual Consultant Selection": 0.3, "Request for Bids": 0.3, "Request for Quotations": -0.3},
+    "z_days_from_approval": -0.25,
+    "signed_before_approval": 0.2,
+    "income_ordinal": {"1": 0.3, "2": 0.15, "3": 0.0, "4": -0.1}
+   }
+  },
+  "S2": {
+   "description": "S1 main effects + predefined non-linearity and interaction + project and country effects",
+   "sigma_project": 0.4, "sigma_country": 0.3,
+   "adds": {"works_x_prior_review": 0.6, "z_days_from_approval_squared_minus_1": 0.3}
+  }
+ },
+ "m3_rebid": {
+  "unit": "tender at first publication (de-duplicated DS00979 IFB / REOI / prequalification notice)",
+  "outcome": "sim_rebid_12m",
+  "target_prevalence_central": 0.08,
+  "prevalence_basis": "ASSUMED. Only public floor: 0.4% of tender notices carry explicit re-bid wording (not a rate).",
+  "S0": {"description": "null: labels independent of every feature; no random effects", "sigma_project": 0.0, "sigma_country": 0.0},
+  "S1": {
+   "description": "linear-additive main effects + moderate project effect",
+   "sigma_project": 0.4, "sigma_country": 0.0,
+   "effects": {
+    "short_window_lt_14d": 0.5,
+    "no_positive_window": 0.4,
+    "z_log_window": -0.2,
+    "notice_type": {"Request for Expression of Interest": -0.3, "Invitation for Prequalification": 0.2},
+    "procurement_method": {"Request for Bids": 0.3, "Quality And Cost-Based Selection": 0.2, "Request for Quotations": -0.2},
+    "procurement_category": {"Works": 0.4, "Goods": 0.2},
+    "early_project_age_lt_365d": 0.3,
+    "income_ordinal": {"1": 0.3, "2": 0.15, "3": 0.0, "4": -0.1}
+   }
+  },
+  "S2": {
+   "description": "S1 main effects + predefined non-linearity and interaction + project and country effects",
+   "sigma_project": 0.4, "sigma_country": 0.3,
+   "adds": {"works_x_short_or_no_window": 0.6, "z_log_window_squared_minus_1": 0.25}
+  }
+ }
+}

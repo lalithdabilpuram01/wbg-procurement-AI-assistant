@@ -1,0 +1,401 @@
+{
+ "structured_inventory": {
+  "DS00005 contract awards (FY2020+), cohort extract": {
+   "rows": 186907,
+   "projects": 2000,
+   "distinct_contracts": 178921,
+   "fields_populated_pct": {
+    "Project ID": 100.0,
+    "WB Contract Number": 100.0,
+    "Borrower Contract Reference Number": 100.0,
+    "Contract Signing Date": 100.0,
+    "Supplier Contract Amount (USD)": 100.0,
+    "Supplier ID": 100.0,
+    "Procurement Method": 100.0,
+    "Review type": 99.93,
+    "Contract Description": 99.91
+   },
+   "amendment_or_status_fields": []
+  },
+  "DS00979 procurement notices (bulk metadata), cohort extract": {
+   "rows": 243533,
+   "projects": 2000,
+   "fields_populated_pct": {
+    "ID": 100.0,
+    "Notice Type": 100.0,
+    "Publication Date": 100.0,
+    "Deadline Date": 100.0,
+    "Bid Description": 99.3
+   },
+   "reference_or_status_fields": []
+  },
+  "procnotices API (full text), cohort projects in Phase 1 sample": {
+   "rows": 20305,
+   "projects": 184,
+   "fields_populated_pct": {
+    "id": 100.0,
+    "bid_reference_no": 99.23,
+    "notice_type": 100.0,
+    "notice_status": 100.0,
+    "noticedate": 99.98,
+    "submission_deadline_date": 18.3,
+    "notice_text": 99.33
+   },
+   "notice_status_counts": [
+    {
+     "notice_type": "Contract Award",
+     "notice_status": "Draft",
+     "n": 2
+    },
+    {
+     "notice_type": "Contract Award",
+     "notice_status": "Published",
+     "n": 16159
+    },
+    {
+     "notice_type": "Contract Award",
+     "notice_status": "Revised",
+     "n": 28
+    },
+    {
+     "notice_type": "General Procurement Notice",
+     "notice_status": "Published",
+     "n": 108
+    },
+    {
+     "notice_type": "General Procurement Notice",
+     "notice_status": "Revised",
+     "n": 6
+    },
+    {
+     "notice_type": "Invitation for Bids",
+     "notice_status": "Cancelled",
+     "n": 2
+    },
+    {
+     "notice_type": "Invitation for Bids",
+     "notice_status": "Draft",
+     "n": 2
+    },
+    {
+     "notice_type": "Invitation for Bids",
+     "notice_status": "Published",
+     "n": 1337
+    },
+    {
+     "notice_type": "Invitation for Bids",
+     "notice_status": "Revised",
+     "n": 29
+    },
+    {
+     "notice_type": "Invitation for Prequalification",
+     "notice_status": "Published",
+     "n": 11
+    },
+    {
+     "notice_type": "Request for Expression of Interest",
+     "notice_status": "Published",
+     "n": 2607
+    },
+    {
+     "notice_type": "Request for Expression of Interest",
+     "notice_status": "Revised",
+     "n": 14
+    }
+   ],
+   "award_notice_parsed_fields_pct": {
+    "notice_version_no": 98.67,
+    "award_notification_date": 51.33,
+    "awarded_supplier_ids": 71.52,
+    "signed_price_amount": 85.54
+   }
+  },
+  "Procurement plans (parsed STEP PDFs), cohort projects": {
+   "activities": 843,
+   "projects": 25,
+   "plan_documents": 25,
+   "process_status_counts": {
+    "signed": 281,
+    "cancelled": 269,
+    "under/pending implementation": 142,
+    "completed": 108,
+    "unclassified": 31,
+    "under review": 6,
+    "terminated": 6
+   },
+   "amendment_columns": {
+    "A me nd me nts to Bi ddi ng Do cu me nts": 0,
+    "Co ntr act A me nd me nts": 0
+   },
+   "fields_populated_pct": {
+    "Activity Reference No. / Description": 99.88,
+    "Process Status": 100.0,
+    "Signed Contract | Actual": 45.31,
+    "Contract Completion | Actual": 12.57,
+    "Specific Procurement Notice / Invitation | Actual": 22.42,
+    "Estimated Amount (US$)": 89.32,
+    "Actual Amount (US$)": 99.88
+   }
+  }
+ },
+ "contract_amendment": {
+  "ds00005_amendment_described_contracts": 56,
+  "ds00005_amendment_with_prior_same_supplier_contract": 13,
+  "ds00005_amendment_with_exactly_one_prior_candidate": 8,
+  "ds00005_fields_for_amendments": "none (no amendment, revision, extension or original-contract fields)",
+  "api_award_notices_describing_amendment": 5,
+  "api_award_notices_version_gt0 (notice revisions, NOT contract amendments)": 2564,
+  "api_award_notices": 16189,
+  "api_tender_notices_with_bidding_document_addendum (NOT contract amendments)": 167,
+  "plan_amendment_columns_nonempty_values": 0
+ },
+ "rebidding": {
+  "api_tender_notices": 4002,
+  "api_tender_status_cancelled": 2,
+  "api_tender_status_revised (in-place notice revision)": 43,
+  "api_tender_text_or_description_rebid_marker": 91,
+  "api_tender_reference_rebid_marker": 11,
+  "api_tender_notice_cancellation_wording": 5,
+  "api_marked_tenders_linked_to_earlier_unmarked_tender_same_ref_stem": 2,
+  "api_repeated_tender_ref_groups_ge30d": 8,
+  "api_tender_ref_groups": 3983,
+  "api_candidate_negative_single_tender_one_award_no_signal": 1855,
+  "api_tender_refs_without_award_match": 1794,
+  "ds00979_notices_with_marker": 654,
+  "ds00979_marker_by_type": {
+   "Contract Award": 433,
+   "Invitation for Bids": 151,
+   "Request for Expression of Interest": 69,
+   "Invitation for Prequalification": 1
+  },
+  "ds00979_projects_with_marker": 142,
+  "ds00979_marked_tender_notices": 221,
+  "ds00979_marked_tenders_with_earlier_similar_tender_ge90": 123,
+  "ds00005_contracts_ref_strong_rebid_marker": 89,
+  "ds00005_contracts_ref_weak_R_suffix": 140,
+  "plan_activities": 843,
+  "plan_cancelled_activities": 269,
+  "plan_cancelled_with_successor_same_ref": 3,
+  "plan_cancelled_with_successor_similar_description_ge90": 35,
+  "plan_signed_or_completed": 389,
+  "plan_rebid_marker_in_reference_or_description": 0
+ },
+ "observation_windows": {
+  "snapshot_date": "2026-10-20",
+  "contracts_signed_ge12m_before_snapshot": 163268,
+  "tender_notices_ge12m_before_snapshot": 48487,
+  "contracts_signed_ge24m_before_snapshot": 137173,
+  "tender_notices_ge24m_before_snapshot": 41258
+ },
+ "documents": {
+  "local_v3_metadata_records_total": 23537,
+  "local_v3_metadata_records_cluster": 22337,
+  "local_v3_metadata_records_by_type_sample": 1200,
+  "local_v2_metadata_records_total": 19550,
+  "cohort_projects_complete_metadata": 184,
+  "cohort_docs_complete_metadata": 14046,
+  "cohort_projects_partial_metadata (co-tagged only)": 174,
+  "cohort_docs_partial_metadata": 222,
+  "cohort_doc_types_complete_projects": {
+   "Procurement Plan": {
+    "docs": 6896,
+    "projects": 184
+   },
+   "Implementation Status and Results Report": {
+    "docs": 1981,
+    "projects": 182
+   },
+   "Auditing Document": {
+    "docs": 1145,
+    "projects": 166
+   },
+   "Project Paper": {
+    "docs": 418,
+    "projects": 158
+   },
+   "Environmental Assessment": {
+    "docs": 364,
+    "projects": 74
+   },
+   "Disbursement Letter": {
+    "docs": 301,
+    "projects": 149
+   },
+   "Project Information Document": {
+    "docs": 263,
+    "projects": 136
+   },
+   "Agreement": {
+    "docs": 230,
+    "projects": 111
+   },
+   "Environmental and Social Commitment Plan": {
+    "docs": 215,
+    "projects": 87
+   },
+   "Environmental and Social Review Summary": {
+    "docs": 188,
+    "projects": 93
+   },
+   "Stakeholder Engagement Plan": {
+    "docs": 171,
+    "projects": 84
+   },
+   "Resettlement Plan": {
+    "docs": 169,
+    "projects": 42
+   },
+   "Project Appraisal Document": {
+    "docs": 155,
+    "projects": 142
+   },
+   "Financing Agreement": {
+    "docs": 144,
+    "projects": 89
+   },
+   "Integrated Safeguards Data Sheet": {
+    "docs": 132,
+    "projects": 62
+   },
+   "Aide Memoire": {
+    "docs": 108,
+    "projects": 59
+   },
+   "Environmental and Social Management Plan": {
+    "docs": 100,
+    "projects": 51
+   },
+   "Side Letter": {
+    "docs": 81,
+    "projects": 47
+   },
+   "Implementation Completion and Results Report": {
+    "docs": 78,
+    "projects": 77
+   },
+   "Project Information and Integrated Safeguards Data Sheet": {
+    "docs": 78,
+    "projects": 37
+   },
+   "Environmental and Social Management Framework": {
+    "docs": 77,
+    "projects": 31
+   },
+   "Procedure and Checklist": {
+    "docs": 74,
+    "projects": 51
+   },
+   "Implementation Completion Report Review": {
+    "docs": 58,
+    "projects": 58
+   },
+   "Loan Agreement": {
+    "docs": 58,
+    "projects": 49
+   },
+   "Project Agreement": {
+    "docs": 58,
+    "projects": 34
+   },
+   "Grant or Trust Fund Agreement": {
+    "docs": 48,
+    "projects": 32
+   },
+   "Minutes": {
+    "docs": 46,
+    "projects": 36
+   },
+   "Indigenous Peoples Plan": {
+    "docs": 40,
+    "projects": 18
+   },
+   "Statutory Committee Report": {
+    "docs": 31,
+    "projects": 23
+   },
+   "Environmental and Social Assessment": {
+    "docs": 29,
+    "projects": 12
+   }
+  },
+  "local_pdfs_total": 63,
+  "local_pdfs_cohort": 42,
+  "local_pdf_cohort_projects": 29,
+  "local_pdf_cohort_types": {
+   "ICR": 3,
+   "PP": 30,
+   "ICRR": 3,
+   "ISR": 3,
+   "PAD": 3
+  },
+  "local_text_total": 46,
+  "local_text_cohort": 27,
+  "local_text_cohort_projects": 4,
+  "local_text_keyword_hits": [
+   {
+    "file": "P127203_ICRFR_33407968.txt",
+    "doc_type": "ICRFR",
+    "cohort": false,
+    "category": "rebid",
+    "hits": 4,
+    "example": "t utilis\u00e9 pour pr\u00e9parer la proposition tableau de de budget, renseigner l\u2019ann\u00e9e fiscale et simuler surveillance des l\u2019impact des actions de relance commerciale sur la transferts budg\u00e9taires viabilit\u00e9 financi\u00e8re d\u2019EDH. Le mod\u00e8le a \u00e9t\u00e9 mis \u00e0 jour dans le cadre de l\u2019\u00e9tude du plan directeur"
+   },
+   {
+    "file": "P127203_ICRFR_33407968.txt",
+    "doc_type": "ICRFR",
+    "cohort": false,
+    "category": "cancelled_tender",
+    "hits": 1,
+    "example": "\u00e9seau et hors r\u00e9seau ont \u00e9t\u00e9 report\u00e9es trop tard. Il ne s\u2019agit de pas la seule raison pour laquelle 48 % de la subvention initiale de l\u2019IDA a \u00e9t\u00e9 annul\u00e9e, mais c\u2019est un 22 CPF GBM 2016-2019, page 5. Page 48 sur 80 La Banque mondiale Reconstruction de l\u2019infrastructure \u00e9lectrique et expansion d"
+   },
+   {
+    "file": "P145502_ICR_33841581.txt",
+    "doc_type": "ICR",
+    "cohort": true,
+    "category": "rebid",
+    "hits": 1,
+    "example": "kages and negotiations were reported to have been concluded but were ultimately cancelled by MoMSME. The initial ITP was also cancelled and readvertised with a reduced scope of work. In response, and after MTR, the TCM was finally recruited in December 2018 (18 months before initial closing "
+   },
+   {
+    "file": "P145502_PP_31837484.txt",
+    "doc_type": "PP",
+    "cohort": true,
+    "category": "rebid",
+    "hits": 2,
+    "example": "h concurrence will be considered by Bank only in cases of Force Majeure and circumstances beyond the control of the Purchaser/Employer); f) Re-bidding shall not be carried out with reference to contracts subject to Bank prior review without the prior concurrence of the Bank. The system of "
+   },
+   {
+    "file": "P152820_ICRSP_33935505.txt",
+    "doc_type": "ICRSP",
+    "cohort": false,
+    "category": "rebid",
+    "hits": 1,
+    "example": " \u201cjoint venture\u201d entre Enel Green Power Chile y la Empresa Nacional del Petr\u00f3leo. La planta Cerro Pabell\u00f3n est\u00e1 ubicada en el altiplano del Desierto de Atacama en la Regi\u00f3n de Antofagasta. Utiliza tecnolog\u00eda de alta entalp\u00eda con un ciclo binario. Est\u00e1 previsto que una tercera unidad gene"
+   },
+   {
+    "file": "P145502_PAD_19368603.txt",
+    "doc_type": "PAD",
+    "cohort": true,
+    "category": "rebid",
+    "hits": 1,
+    "example": "ch concurrence will be considered by Bank only in cases of Force Majeure and circumstance beyond the control of the Purchaser/Employer). f) Re-bidding shall not be carried out with reference to Contracts subject to Bank prior review without the prior concurrence of the Bank. g) The system "
+   },
+   {
+    "file": "P131049_PAD_17555469.txt",
+    "doc_type": "PAD",
+    "cohort": true,
+    "category": "rebid",
+    "hits": 2,
+    "example": "tential for specialised marine weather forecasts, and installation of buoys in key locations could improve INAM's marine forecasts, as will re-launch existing Doppler Radars. The lack of communication channels and equipment between INAM and coastal communities is of particular concern. Fu"
+   },
+   {
+    "file": "P158231_ISR_40022457.txt",
+    "doc_type": "ISR",
+    "cohort": false,
+    "category": "contract_amendment",
+    "hits": 1,
+    "example": " This indicator relates to the progress of works completed. Percentage dropped from last (Percentage) achieving targets reporting following amendment of contract for additional works 0.00 Dec/2017 69.00 30-Sep-2024 76.10 30-Apr-2025 100.00 Dec/2025 Jun 17, 2025 Page 5 of 9 The World Bank Implementati"
+   }
+  ]
+ }
+}

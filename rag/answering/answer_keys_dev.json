@@ -1,0 +1,258 @@
+{
+ "note": "DEVELOPMENT answer keys for benchmark_v1.1 (already used during retrieval development; not an independent test). Each key fact is a list of acceptable alternatives (case-insensitive substring; numbers/dates compared after normalisation). Written from the verified benchmark answers before any answer-generation run. Keys prefixed 're:' are regular expressions on the lower-cased text (used so 'Satisfactory' is not matched inside 'Moderately Satisfactory').",
+ "expected_status": {
+  "Q15": [
+   "conflicting_evidence"
+  ],
+  "Q26": [
+   "conflicting_evidence"
+  ],
+  "Q28": [
+   "insufficient_evidence"
+  ],
+  "Q29": [
+   "insufficient_evidence"
+  ],
+  "Q30": [
+   "withheld"
+  ],
+  "Q31": [
+   "insufficient_evidence"
+  ]
+ },
+ "keys": {
+  "Q01": [
+   [
+    "enhance efficiency and safety",
+    "efficiency and safety"
+   ],
+   [
+    "Arsi Negele"
+   ],
+   [
+    "institutional capacity"
+   ]
+  ],
+  "Q02": [
+   [
+    "asset management"
+   ],
+   [
+    "Road Development Authority",
+    "RDA"
+   ]
+  ],
+  "Q03": [
+   [
+    "262.9"
+   ],
+   [
+    "370"
+   ]
+  ],
+  "Q04": [
+   [
+    "90.5"
+   ],
+   [
+    "125"
+   ]
+  ],
+  "Q05": [
+   [
+    "2022-02-25"
+   ],
+   [
+    "2022-05-24"
+   ]
+  ],
+  "Q06": [
+   [
+    "Moderately Satisfactory"
+   ],
+   [
+    "Substantial"
+   ]
+  ],
+  "Q07": [
+   [
+    "Moderate"
+   ]
+  ],
+  "Q08": [
+   [
+    "Request for Bids"
+   ],
+   [
+    "Open - National",
+    "open national"
+   ]
+  ],
+  "Q09": [
+   [
+    "2019-06-11"
+   ]
+  ],
+  "Q10": [
+   [
+    "Annul",
+    "cancel"
+   ]
+  ],
+  "Q11": [
+   [
+    "8809012.23"
+   ],
+   [
+    "9890912.07"
+   ]
+  ],
+  "Q12": [
+   [
+    "Signed"
+   ],
+   [
+    "2024-11-04"
+   ]
+  ],
+  "Q13": [
+   [
+    "1766976"
+   ],
+   [
+    "2023-11-14"
+   ]
+  ],
+  "Q14": [
+   [
+    "1745400"
+   ],
+   [
+    "candidate"
+   ],
+   [
+    "Pending"
+   ]
+  ],
+  "Q15": [
+   [
+    "2408752.45"
+   ],
+   [
+    "3535555.66"
+   ]
+  ],
+  "Q16": [
+   [
+    "2026-06-30"
+   ],
+   [
+    "2023-09-30"
+   ]
+  ],
+  "Q17": [
+   [
+    "2021-12-31"
+   ],
+   [
+    "2026-06-30"
+   ]
+  ],
+  "Q18": [
+   [
+    "2021-03-23"
+   ]
+  ],
+  "Q19": [
+   [
+    "125"
+   ],
+   [
+    "70"
+   ],
+   [
+    "68.14"
+   ]
+  ],
+  "Q20": [
+   [
+    "264.43"
+   ],
+   [
+    "96.99"
+   ]
+  ],
+  "Q21": [
+   [
+    "safety"
+   ],
+   [
+    "accident",
+    "fatalit"
+   ]
+  ],
+  "Q22": [
+   [
+    "OPRC",
+    "output and performance"
+   ],
+   [
+    "provincial"
+   ]
+  ],
+  "Q23": [
+   [
+    "Design and Build"
+   ],
+   [
+    "two-envelope",
+    "two envelope",
+    "mitigat"
+   ]
+  ],
+  "Q24": [
+   [
+    "Tigray"
+   ],
+   [
+    "conflict"
+   ]
+  ],
+  "Q25": [
+   [
+    "re:(?<!moderately )satisfactory"
+   ]
+  ],
+  "Q26": [
+   [
+    "Moderately Satisfactory"
+   ],
+   [
+    "re:(?<!moderately )satisfactory"
+   ]
+  ],
+  "Q27": [
+   [
+    "370"
+   ],
+   [
+    "264.43",
+    "96.99"
+   ]
+  ]
+ },
+ "multi_source": {
+  "Q16": [
+   "34345370",
+   "26256705"
+  ],
+  "Q26": [
+   "34345370",
+   "34407877"
+  ],
+  "Q27": [
+   "24440102",
+   "40089196"
+  ]
+ }
+}

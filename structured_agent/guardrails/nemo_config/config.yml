@@ -1,0 +1,33 @@
+# NeMo Guardrails configuration for the WBG NL2SQL workflow (NeMo Guardrails 0.24.1, Colang 1.0).
+#
+# There is deliberately NO `models` section: every rail below is deterministic (the built-in regex rail and
+# custom Python actions) and the rails are only ever run as input-only or output-only checks, so NeMo never calls an
+# LLM and never loads an embedding model. Telemetry is disabled by structured_agent/guardrails/nemo_rails.py.
+
+rails:
+  config:
+    regex_detection:
+      # Built-in regex rail, input: explicit requests for credentials or secrets.
+      input:
+        patterns:
+          - "(?i)\\b(show|print|reveal|give|send|dump|list|display|leak|export|exfiltrate|share|tell)\\b[^.?!\\n]{0,60}\\b(api[ _-]?keys?|access[ _-]?tokens?|auth(entication)?[ _-]?tokens?|bearer tokens?|secret[ _-]?keys?|secrets|passwords?|credentials?|private[ _-]?keys?|connection strings?|\\.env\\b|environment variables?|portkey keys?|logfire tokens?|databricks tokens?)"
+          - "(?i)\\bwhat(?:'s| is| are)\\b[^.?!\\n]{0,30}\\b(api[ _-]?keys?|passwords?|secret[ _-]?keys?|access[ _-]?tokens?|connection strings?|credentials)\\b"
+      # Built-in regex rail, output: values shaped like secrets, in the model's reply or the final response.
+      output:
+        patterns:
+          - "-----BEGIN [A-Z ]*PRIVATE KEY-----"
+          - "(?i)\\bbearer\\s+[a-z0-9._~+/=-]{20,}"
+          - "\\b(sk|pk)-[A-Za-z0-9_-]{16,}"
+          - "\\bpylf_[A-Za-z0-9_]{16,}"
+          - "(?i)\\b(api[_-]?key|access[_-]?token|secret|password)\\b\\s*[:=]\\s*\\S{8,}"
+          - "(?i)x-portkey-api-key"
+
+  input:
+    flows:
+      - regex check input
+      - wbg input policy
+
+  output:
+    flows:
+      - regex check output
+      - wbg output policy

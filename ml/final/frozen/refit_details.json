@@ -1,0 +1,67 @@
+{
+ "refit_audit": {
+  "eligible_rows": 806,
+  "from_train": 615,
+  "from_validation": 191,
+  "projects": 101,
+  "packages": 722,
+  "max_signing": "2023-06-29",
+  "max_first_tender": "2023-06-16",
+  "test_rows": 616,
+  "contract_overlap": 0,
+  "package_overlap": 0,
+  "long_positives_in_refit": 98
+ },
+ "b1": {
+  "global_median": 147.0,
+  "alert_threshold": {
+   "t": 0.25,
+   "f1": 0.5155555555555555,
+   "alert_rate": 0.1575682382133995,
+   "precision": 0.4566929133858268,
+   "recall": 0.5918367346938775
+  }
+ },
+ "ridge": {
+  "best_params": {
+   "alpha": 31.622776601683793
+  },
+  "cv_MAE_days": 81.24,
+  "train_MAE_days": 71.04,
+  "oof_MAE_days": 81.28,
+  "oof_log_residual_sd": 0.7078,
+  "interval_log_quantiles": [
+   -0.7736,
+   0.7981
+  ],
+  "alert_threshold": {
+   "t": 0.2874834169588638,
+   "f1": 0.5829596412556054,
+   "alert_rate": 0.15508684863523572,
+   "precision": 0.52,
+   "recall": 0.6632653061224489
+  }
+ },
+ "rf": {
+  "best_params": {
+   "max_depth": null,
+   "max_features": 0.3,
+   "min_samples_leaf": 5.0
+  },
+  "cv_MAE_days": 81.87,
+  "train_MAE_days": 52.64,
+  "oof_MAE_days": 81.91,
+  "oof_log_residual_sd": 0.6957,
+  "interval_log_quantiles": [
+   -0.7313,
+   0.8172
+  ],
+  "alert_threshold": {
+   "t": 0.381913670826342,
+   "f1": 0.5380116959064327,
+   "alert_rate": 0.09057071960297766,
+   "precision": 0.6301369863013698,
+   "recall": 0.46938775510204084
+  }
+ }
+}

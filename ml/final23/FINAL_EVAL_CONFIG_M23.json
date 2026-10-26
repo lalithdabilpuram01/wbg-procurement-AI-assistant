@@ -1,0 +1,40 @@
+{
+ "frozen_at_utc": "2026-10-25T09:30:00Z",
+ "purpose": "One-time final evaluation of Models 2 and 3 (L2 logistic regression) on SYNTHETIC outcomes. Frozen before any test label is read.",
+ "disclaimer": "SYNTHETIC OUTCOMES — NOT VALIDATED WORLD BANK RISK ACCURACY",
+ "synthetic_version": {"sim_version": "sim_v1", "config": "ml/synthetic/configs/sim_v1.json", "primary_scenario": "S2", "negative_control": "S0",
+                       "supporting_validation_only": "S1 (not scored on test)"},
+ "models": {
+  "m2": {"unit": "contract at signing", "outcome": "sim_amended_24m", "feature_policy": "m2_v1 (unchanged from Stage 3A)",
+         "splits_by_fiscal_year": {"refit": "FY2020-2023 (train + validation)", "test": "FY2024"}, "refit_rows": 98857, "test_rows": 28949,
+         "assumed_prevalence": 0.15, "output": "simulated probability (%)",
+         "review_threshold": "max F1 on refit out-of-fold probabilities, alert rate <= 30% (assumed review capacity: up to 30% of contracts); shown as a demonstration review list only"},
+  "m3": {"unit": "tender at first publication (de-duplicated)", "outcome": "sim_rebid_12m", "feature_policy": "m3_v2_clean (notice_type removed; rare levels grouped at min_frequency = ceil(20 / refit prevalence); window and project age winsorised at refit p1/p99)",
+         "splits_by_fiscal_year": {"refit": "FY2016-2022 (train + validation)", "test": "FY2023-2025"}, "refit_rows": 22926, "test_rows": 20954,
+         "assumed_prevalence": 0.08, "output": "Low / Medium / High simulated risk band (probability kept for evaluation)",
+         "risk_bands": "High >= q90 of refit out-of-fold probabilities, Medium q70..q90, Low < q70 (v2 rule)",
+         "alert_threshold": "max F1 on refit out-of-fold probabilities, alert rate <= 30% (reported, secondary)"}
+ },
+ "procedure": {
+  "estimator": "LogisticRegression(L2), C from logspace(-3, 1, 9)",
+  "cv": "GroupKFold(5) by project_id on the refit population; scoring average_precision",
+  "preprocessing": "fitted inside each training fold (OneHot min_frequency, median imputation, winsorisation where declared, log1p window, StandardScaler)",
+  "oof": "cross_val_predict with the selected C (5-fold grouped) for thresholds and bands",
+  "explanations": "logistic contributions (coef x transformed value) aggregated to original features; bid-window features (deadline_status, has_positive_window, window_days) shown as one 'Bid window' factor; country contributions and design columns with project-bootstrap sign agreement < 0.8 (20 resamples) pooled as 'other factors' and not displayed as drivers",
+  "seed": 20261025
+ },
+ "metrics": {
+  "discrimination": ["PR-AUC", "ROC-AUC"],
+  "operating_point": ["recall", "precision", "F1", "confusion matrix", "alert rate"],
+  "probability": ["Brier", "calibration bins (10 quantile)", "ECE", "mean predicted probability vs realised and assumed prevalence"],
+  "uncertainty": "project-cluster bootstrap, 500 resamples, seed 20261025",
+  "generalisation": "test rows in projects absent from the refit population",
+  "m3_bands": "count, share, realised simulated event rate, ordering check (Low < Medium < High), most frequent displayed factors",
+  "null_control": "S0: ROC-AUC CI must contain 0.5 and PR-AUC CI must contain the realised prevalence"
+ },
+ "disclosures": [
+  "Scenario-level realised test prevalence was printed in the synthetic-data reports (constants.json) before this evaluation; the evaluation is not fully blind.",
+  "The Model 3 feature policy was chosen in one pre-declared validation comparison (ml/eda/stage3b_m3_cleanup_*).",
+  "The Stage 3A risk-band rule was revised (v1 -> v2) after a degenerate empty band appeared in training out-of-fold shares."
+ ]
+}

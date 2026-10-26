@@ -1,0 +1,159 @@
+{
+ "query": "Is there a signed contract for package LK-MIHAPCLG-109016-CW-RFB?",
+ "status": "ok",
+ "notes": [],
+ "results": [
+  {
+   "rank": 1,
+   "unit_id": "act:33761744:p3t1r10",
+   "unit_type": "activity",
+   "scores": {
+    "rrf": 0.0237,
+    "bm25": 10.3795,
+    "dense": 0.4868,
+    "exact_reference_match": true
+   },
+   "project_id": "P132833",
+   "project_name": "Transport Connectivity and Asset Management Project",
+   "country_code": "LK",
+   "document_id": "33761744",
+   "document_version_id": "33761744:ca2103c2206e",
+   "document_sha256": "ca2103c2206ea6f659c6b90ba01ddd62d139ca5606f2f0807501363f6a9e6f10",
+   "doc_type": "PP",
+   "document_role": "PP_coverage",
+   "title": "Sri Lanka - SOUTH ASIA- P132833- Transport Connectivity and Asset Management Project - Procurement Plan",
+   "document_date": "2022-03-17",
+   "disclosure_date": "2022-03-18",
+   "physical_page_start": 3,
+   "physical_page_end": 3,
+   "printed_page_label": "1",
+   "printed_page_label_status": "detected",
+   "section": "WORKS",
+   "table_id": "33761744:t00301",
+   "excerpt": "Procurement plan 33761744 (P132833:MIHAPCLG, revision 2022-03-18) - WORKS: LK-MIHAPCLG-109016-CW- RFB - Contract Package EP -01; review post; method Request for Bids; status under/pending implementation; estimated US$ None; actual US$ 0.0; signed contract planned 2019-06-11, actual None. Market approach Open - National. Component Piloting the Implementation of Road Asset Management Principles. Process status Pending Implementation. Stage dates: Bid Evaluation Report and Recommendation for Award: planned 2019-05-30; Contract Completion: planned 2020-09-03; Draft Bidding Document / Justification: planned 2019-04-04; Proposal Submission / Opening / Minutes: planned 2019-05-17; Signed Contract: ",
+   "source_url": "https://documents1.worldbank.org/curated/en/099205003182233814/pdf/Sri0Lanka000SO000Procurement0Plan05.pdf",
+   "local_path": "rag/corpus_v3/pdf/LK/P132833/PP_2022-03-17_33761744.pdf",
+   "association": "procurement-plan row (typed record)",
+   "activity": {
+    "activity_reference_printed": "LK-MIHAPCLG-109016-CW- RFB",
+    "activity_reference_normalized": "LK-MIHAPCLG-109016-CW-RFB",
+    "package_reference_core": "LK-MIHAPCLG-109016-CW-RFB",
+    "description_clean": "Contract Package EP -01",
+    "method_clean": "Request for Bids",
+    "market_approach_clean": "Open - National",
+    "review_type": "post",
+    "process_status_clean": "Pending Implementation",
+    "estimated_amount_usd": null,
+    "actual_amount_usd": 0.0,
+    "signed_contract_planned": "2019-06-11",
+    "signed_contract_actual": null,
+    "stage_dates": {
+     "Bid Evaluation Report and Recommendation for Award": {
+      "planned": "2019-05-30"
+     },
+     "Contract Completion": {
+      "planned": "2020-09-03"
+     },
+     "Draft Bidding Document / Justification": {
+      "planned": "2019-04-04"
+     },
+     "Proposal Submission / Opening / Minutes": {
+      "planned": "2019-05-17"
+     },
+     "Signed Contract": {
+      "planned": "2019-06-11"
+     },
+     "Specific Procurement Notice / Invitation": {
+      "planned": "2019-04-05"
+     }
+    },
+    "plan_stream_id": "P132833:MIHAPCLG",
+    "plan_version_id": "P132833:MIHAPCLG:2022-03-18",
+    "uncertain_fields": [],
+    "value_flags": []
+   },
+   "plan_stream_id": "P132833:MIHAPCLG",
+   "plan_version_id": "P132833:MIHAPCLG:2022-03-18",
+   "evidence_links": [
+    {
+     "evidence_status": "candidate",
+     "match_class": "normalized",
+     "wb_contract_number": "1745400",
+     "borrower_contract_reference": "LK-MIHAPCLG-109016-CW-RFB",
+     "date_recorded_signing": "2019-12-19",
+     "date_plan_actual_signing": null,
+     "date_planned_signing": "2019-06-11",
+     "plan_actual_amount_usd": 0.0,
+     "contract_amount_usd": 2371140.85,
+     "disagreeing_fields": [],
+     "cardinality": "one_row_one_contract",
+     "recorded_source_as_of_date": "2026-10-20"
+    }
+   ],
+   "evidence_link_note": "Contract links are typed matches between this plan row and DS00005 contract records. 'candidate' and 'conflicting' links are not verified; conflicting fields are shown, not resolved."
+  },
+  {
+   "rank": 2,
+   "unit_id": "33761744:t00301:w10-12",
+   "unit_type": "table",
+   "scores": {
+    "rrf": 0.0304,
+    "bm25": 14.3615,
+    "dense": 0.5142
+   },
+   "project_id": "P132833",
+   "project_name": "Transport Connectivity and Asset Management Project",
+   "country_code": "LK",
+   "document_id": "33761744",
+   "document_version_id": "33761744:ca2103c2206e",
+   "document_sha256": "ca2103c2206ea6f659c6b90ba01ddd62d139ca5606f2f0807501363f6a9e6f10",
+   "doc_type": "PP",
+   "document_role": "PP_coverage",
+   "title": "Sri Lanka - SOUTH ASIA- P132833- Transport Connectivity and Asset Management Project - Procurement Plan",
+   "document_date": "2022-03-17",
+   "disclosure_date": "2022-03-18",
+   "physical_page_start": 3,
+   "physical_page_end": 3,
+   "printed_page_label": "1",
+   "printed_page_label_status": "detected",
+   "section": "WORKS",
+   "table_id": "33761744:t00301",
+   "excerpt": "LK-MIHAPCLG-109016-CW-RFB / Contract Package EP -01 | IDA / 57880 | Piloting the Implementation of Road Asset Management Principles | Post | Request for Bids | Open - National | Single Stage - One Envelope | 0.00 | Pending Implementation | 2019-04-04 | 2019-04-05 | 2019-05-17 | 2019-05-30 | 2019-06-11 | 2020-09-03 || LK-MIHAPCLG-109018-CW-RFB / Contract Package EP 02 | IDA / 57880 | Piloting the Implementation of Road Asset Management Principles | Post | Request for Bids | Open - National | Single Stage - One Envelope | 0.00 | Pending Implementation | 2019-04-04 | 2019-04-05 | 2019-05-17 | 2019-05-30 | 2019-06-11 | 2020-09-03 || LK-MIHAPCLG-118682-CW-RFB / Construction of Provincial Roads in",
+   "source_url": "https://documents1.worldbank.org/curated/en/099205003182233814/pdf/Sri0Lanka000SO000Procurement0Plan05.pdf",
+   "local_path": "rag/corpus_v3/pdf/LK/P132833/PP_2022-03-17_33761744.pdf",
+   "association": "document text (project-level context; not a contract-level match)"
+  },
+  {
+   "rank": 3,
+   "unit_id": "33761744:t00301:w8-10",
+   "unit_type": "table",
+   "scores": {
+    "rrf": 0.0286,
+    "bm25": 16.236,
+    "dense": 0.5048
+   },
+   "project_id": "P132833",
+   "project_name": "Transport Connectivity and Asset Management Project",
+   "country_code": "LK",
+   "document_id": "33761744",
+   "document_version_id": "33761744:ca2103c2206e",
+   "document_sha256": "ca2103c2206ea6f659c6b90ba01ddd62d139ca5606f2f0807501363f6a9e6f10",
+   "doc_type": "PP",
+   "document_role": "PP_coverage",
+   "title": "Sri Lanka - SOUTH ASIA- P132833- Transport Connectivity and Asset Management Project - Procurement Plan",
+   "document_date": "2022-03-17",
+   "disclosure_date": "2022-03-18",
+   "physical_page_start": 3,
+   "physical_page_end": 3,
+   "printed_page_label": "1",
+   "printed_page_label_status": "detected",
+   "section": "WORKS",
+   "table_id": "33761744:t00301",
+   "excerpt": "LK-MIHAPCLG-109012-CW-RFB / Contract Package SP-01 | IDA / 57880 | Piloting the Implementation of Road Asset Management Principles | Post | Request for Bids | Open - National | Single Stage - One Envelope | 0.00 | Under Implementation | 2019-04-04 | 2019-03-31 | 2019-04-05 | 2019-05-17 | 2019-05-30 | 2019-06-11 | 2020-09-03 || LK-MIHAPCLG-109014-CW-RFB / Contract Package SP -02 | IDA / 57880 | Piloting the Implementation of Road Asset Management Principles | Post | Request for Bids | Open - National | Single Stage - One Envelope | 0.00 | Pending Implementation | 2019-04-04 | 2019-04-05 | 2019-05-17 | 2019-05-30 | 2019-06-11 | 2020-09-03 || LK-MIHAPCLG-109016-CW-RFB / Contract Package EP -01 ",
+   "source_url": "https://documents1.worldbank.org/curated/en/099205003182233814/pdf/Sri0Lanka000SO000Procurement0Plan05.pdf",
+   "local_path": "rag/corpus_v3/pdf/LK/P132833/PP_2022-03-17_33761744.pdf",
+   "association": "document text (project-level context; not a contract-level match)"
+  }
+ ],
+ "latency_ms": 5649.9
+}

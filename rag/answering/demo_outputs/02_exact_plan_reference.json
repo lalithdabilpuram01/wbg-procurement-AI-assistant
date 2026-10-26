@@ -1,0 +1,189 @@
+{
+ "question": "What procurement method and market approach are planned for activity LK-MIHAPCLG-109016-CW-RFB?",
+ "status": "answered",
+ "answer": "Plan row LK-MIHAPCLG-109016-CW-RFB (Contract Package EP -01) is in procurement plan version P132833:MIHAPCLG:2022-03-18: method Request for Bids, market approach Open - National, process status Pending Implementation. The plan row records actual amount US$0.00, signing planned 2019-06-11, no actual signing date in the plan. A DS00005 contract record WB 1745400 (signed 2019-12-19, amount US$2,371,140.85) is linked to this row with evidence status 'candidate' (normalized reference match).",
+ "citations": [
+  {
+   "evidence_id": "E1",
+   "unit_id": "act:33761744:p3t1r10",
+   "unit_type": "activity",
+   "project_id": "P132833",
+   "project_name": "Transport Connectivity and Asset Management Project",
+   "document_id": "33761744",
+   "title": "Sri Lanka - SOUTH ASIA- P132833- Transport Connectivity and Asset Management Project - Procurement Plan",
+   "doc_type": "PP",
+   "document_date": "2022-03-17",
+   "document_version_id": "33761744:ca2103c2206e",
+   "physical_page_start": 3,
+   "physical_page_end": 3,
+   "printed_page_label": "1",
+   "section": "WORKS",
+   "table_id": "33761744:t00301",
+   "excerpt": "Procurement plan row (typed record). Plan version P132833:MIHAPCLG:2022-03-18 (stream P132833:MIHAPCLG). Reference LK-MIHAPCLG-109016-CW-RFB. Description: Contract Package EP -01. Method: Request for Bids. Market approach: Open - National. Review: post. Process status: Pending Implementation. Estimated amount US$ None. Actual amount US$ 0.0. Signed contract planned 2019-06-11, actual None. Stage dates: Bid Evaluation Report and Recommendation for Award: planned 2019-05-30; Contract Completion: planned 2020-09-03; Draft Bidding Document / Justification: planned 2019-04-04; Proposal Submission /",
+   "source_url": "https://documents1.worldbank.org/curated/en/099205003182233814/pdf/Sri0Lanka000SO000Procurement0Plan05.pdf",
+   "association": "procurement-plan row (typed record)",
+   "page_check": "verified",
+   "contract_links": [
+    {
+     "evidence_status": "candidate",
+     "match_class": "normalized",
+     "wb_contract_number": "1745400",
+     "borrower_contract_reference": "LK-MIHAPCLG-109016-CW-RFB",
+     "date_recorded_signing": "2019-12-19",
+     "date_plan_actual_signing": null,
+     "date_planned_signing": "2019-06-11",
+     "plan_actual_amount_usd": 0.0,
+     "contract_amount_usd": 2371140.85,
+     "disagreeing_fields": [],
+     "cardinality": "one_row_one_contract",
+     "recorded_source_as_of_date": "2026-10-20"
+    }
+   ],
+   "plan_version_id": "P132833:MIHAPCLG:2022-03-18"
+  }
+ ],
+ "supporting_evidence_ids": [
+  "E1"
+ ],
+ "conflicts": [],
+ "limitations": [
+  "Contract link to WB 1745400 is 'candidate' (normalized reference match); it is not a verified match."
+ ],
+ "claims": [
+  {
+   "text": "Plan row LK-MIHAPCLG-109016-CW-RFB (Contract Package EP -01) is in procurement plan version P132833:MIHAPCLG:2022-03-18: method Request for Bids, market approach Open - National, process status Pending Implementation.",
+   "evidence_ids": [
+    "E1"
+   ],
+   "supported": true,
+   "checks": {
+    "ids_valid": true,
+    "unsupported_numbers": [],
+    "unsupported_dates": [],
+    "unsupported_refs": [],
+    "unsupported_quotes": [],
+    "privacy_violation": false,
+    "content_word_recall": 1.0,
+    "nli_entailment": 0.303,
+    "too_short": false,
+    "evidence_dump": false,
+    "mode": "typed_record_fields",
+    "supported": true
+   }
+  },
+  {
+   "text": "The plan row records actual amount US$0.00, signing planned 2019-06-11, no actual signing date in the plan.",
+   "evidence_ids": [
+    "E1"
+   ],
+   "supported": true,
+   "checks": {
+    "ids_valid": true,
+    "unsupported_numbers": [],
+    "unsupported_dates": [],
+    "unsupported_refs": [],
+    "unsupported_quotes": [],
+    "privacy_violation": false,
+    "content_word_recall": 0.778,
+    "nli_entailment": 0.221,
+    "too_short": false,
+    "evidence_dump": false,
+    "mode": "typed_record_fields",
+    "supported": true
+   }
+  },
+  {
+   "text": "A DS00005 contract record WB 1745400 (signed 2019-12-19, amount US$2,371,140.85) is linked to this row with evidence status 'candidate' (normalized reference match).",
+   "evidence_ids": [
+    "E1"
+   ],
+   "supported": true,
+   "checks": {
+    "ids_valid": true,
+    "unsupported_numbers": [],
+    "unsupported_dates": [],
+    "unsupported_refs": [],
+    "unsupported_quotes": [],
+    "privacy_violation": false,
+    "content_word_recall": 0.706,
+    "nli_entailment": 0.219,
+    "too_short": false,
+    "evidence_dump": false,
+    "mode": "typed_record_fields",
+    "supported": true
+   }
+  }
+ ],
+ "removed_claims": [],
+ "generator": "typed_record (deterministic; no LLM)",
+ "generator_is_llm": false,
+ "timings_ms": {
+  "retrieval_and_selection": 212,
+  "generation": 0,
+  "validation": 2531,
+  "total": 2743
+ },
+ "trace": {
+  "plan": {
+   "question": "What procurement method and market approach are planned for activity LK-MIHAPCLG-109016-CW-RFB?",
+   "comparison": false,
+   "doc_type_hints": [
+    "PP"
+   ],
+   "required_fields": {}
+  },
+  "retrieval_status": "ok",
+  "retrieved_unit_ids": [
+   "act:33761744:p3t1r10",
+   "act:33761744:p6t1r2",
+   "act:33761744:p5t2r15",
+   "act:33761744:p6t1r1",
+   "act:33761744:p5t2r11",
+   "act:33761744:p5t2r12",
+   "act:33761744:p5t2r14",
+   "act:33761744:p4t1r11",
+   "act:33761744:p5t2r4",
+   "act:33761744:p3t1r11",
+   "act:33761744:p5t2r7",
+   "act:33761744:p5t2r8",
+   "act:33761744:p5t2r13",
+   "act:33761744:p5t2r10",
+   "act:33761744:p3t1r12",
+   "act:33761744:p4t1r1",
+   "act:33761744:p3t1r6",
+   "act:33761744:p3t1r5",
+   "act:33761744:p3t1r7",
+   "act:33761744:p4t1r3"
+  ],
+  "targeted": {},
+  "selected": [
+   [
+    "E1",
+    "act:33761744:p3t1r10",
+    "33761744",
+    "verified",
+    false
+   ],
+   [
+    "E2",
+    "act:33761744:p6t1r2",
+    "33761744",
+    "verified",
+    false
+   ],
+   [
+    "E3",
+    "act:33761744:p5t2r15",
+    "33761744",
+    "verified",
+    false
+   ]
+  ],
+  "projects_in_top10": [
+   "P132833"
+  ],
+  "generator_meta": {
+   "latency_ms": 0
+  }
+ }
+}

@@ -1,0 +1,32 @@
+{
+ "question": "What is the status of the procurement plan for the Indonesia projects?",
+ "status": "insufficient_evidence",
+ "answer": "The indexed documents and typed records do not contain enough evidence to answer this question.",
+ "citations": [],
+ "supporting_evidence_ids": [],
+ "conflicts": [],
+ "limitations": [
+  "Out of the pilot corpus scope (projects -, countries ['ID'])."
+ ],
+ "claims": [],
+ "removed_claims": [],
+ "generator": "none (stopped before generation by a guard or required-field check)",
+ "generator_is_llm": false,
+ "timings_ms": {
+  "retrieval": 0,
+  "total": 0
+ },
+ "trace": {
+  "plan": {
+   "question": "What is the status of the procurement plan for the Indonesia projects?",
+   "comparison": false,
+   "doc_type_hints": [
+    "PP"
+   ],
+   "required_fields": {}
+  },
+  "retrieval_status": "insufficient_evidence",
+  "retrieved_unit_ids": [],
+  "targeted": {}
+ }
+}

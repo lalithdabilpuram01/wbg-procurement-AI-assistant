@@ -1,0 +1,448 @@
+{
+ "files": {
+  "identical": [
+   "restricted/activity_cells_original.jsonl",
+   "restricted/mask_events.jsonl",
+   "restricted/page_text.jsonl",
+   "restricted/table_cells_original.jsonl",
+   "shared/evidence_links.jsonl",
+   "shared/pages.jsonl",
+   "shared/paragraphs.jsonl",
+   "shared/plan_activities.jsonl",
+   "shared/projects.jsonl",
+   "shared/sections.jsonl",
+   "shared/tables.jsonl",
+   "strategies/A/chunks.jsonl",
+   "strategies/B/chunks.jsonl",
+   "strategies/C/chunks.jsonl",
+   "strategies/C/parents.jsonl"
+  ],
+  "different": [
+   "shared/document_versions.jsonl",
+   "shared/documents.jsonl",
+   "shared/plan_versions.jsonl",
+   "shared/table_descriptions.jsonl",
+   "shared/table_rows.jsonl"
+  ],
+  "row_counts_equal": true
+ },
+ "version_fields": {
+  "documents": {
+   "records": 10,
+   "identical_apart_from_extraction_version": true,
+   "new_extraction_version": [
+    "ingest-pilot-2.1.0"
+   ]
+  },
+  "document_versions": {
+   "records": 10,
+   "identical_apart_from_extraction_version": true,
+   "new_extraction_version": [
+    "ingest-pilot-2.1.0"
+   ]
+  },
+  "plan_versions": {
+   "records": 3,
+   "identical_apart_from_extraction_version": true,
+   "new_extraction_version": [
+    "ingest-pilot-2.1.0"
+   ]
+  },
+  "same_pdf_sha256": true
+ },
+ "table_rows": {
+  "rows": 3347,
+  "row_keys_identical": true,
+  "changed_cells": 18,
+  "changed_cells_pure_line_boundary_insertion": 18,
+  "changed_cells_equal_step6a_validated": 18,
+  "changed_cells_without_needs_review_flag": [],
+  "rows_with_fewer_masks": 0,
+  "other_fields_changed": {
+   "word_breaks_closed": 10
+  },
+  "rows_flagged": {
+   "stacked_values": 10,
+   "lost_values": 21,
+   "sanitisation_guard_fallback": 0
+  },
+  "lost_value_rows": [
+   {
+    "table_id": "24440102:t10801",
+    "row_index": 9,
+    "columns": [
+     0,
+     6
+    ],
+    "provenance": "pdf_source_words",
+    "status": "values_detected_not_extracted",
+    "unassigned_words": 0,
+    "values_withheld": true
+   },
+   {
+    "table_id": "33761744:t00401",
+    "row_index": 1,
+    "columns": [],
+    "provenance": "pdf_source_words",
+    "status": "values_missing",
+    "unassigned_words": 53,
+    "values_withheld": true
+   },
+   {
+    "table_id": "33761744:t00501",
+    "row_index": 1,
+    "columns": [
+     1,
+     3,
+     4,
+     5,
+     6,
+     10,
+     11,
+     16,
+     18,
+     22,
+     24,
+     26,
+     28
+    ],
+    "provenance": "pdf_source_words",
+    "status": "values_detected_not_extracted",
+    "unassigned_words": 0,
+    "values_withheld": true
+   },
+   {
+    "table_id": "34345370:t00701",
+    "row_index": 19,
+    "columns": [],
+    "provenance": "pdf_source_words",
+    "status": "values_missing",
+    "unassigned_words": 1,
+    "values_withheld": true
+   },
+   {
+    "table_id": "34345370:t00701",
+    "row_index": 24,
+    "columns": [],
+    "provenance": "pdf_source_words",
+    "status": "values_missing",
+    "unassigned_words": 1,
+    "values_withheld": true
+   },
+   {
+    "table_id": "34345370:t00701",
+    "row_index": 6,
+    "columns": [],
+    "provenance": "pdf_source_words",
+    "status": "values_missing",
+    "unassigned_words": 1,
+    "values_withheld": true
+   },
+   {
+    "table_id": "34345370:t04801",
+    "row_index": 1,
+    "columns": [
+     0
+    ],
+    "provenance": "pdf_source_words",
+    "status": "values_detected_not_extracted",
+    "unassigned_words": 0,
+    "values_withheld": true
+   },
+   {
+    "table_id": "34345370:t04801",
+    "row_index": 10,
+    "columns": [
+     0
+    ],
+    "provenance": "pdf_source_words",
+    "status": "values_detected_not_extracted",
+    "unassigned_words": 0,
+    "values_withheld": true
+   },
+   {
+    "table_id": "34345370:t04801",
+    "row_index": 11,
+    "columns": [
+     0
+    ],
+    "provenance": "pdf_source_words",
+    "status": "values_detected_not_extracted",
+    "unassigned_words": 0,
+    "values_withheld": true
+   },
+   {
+    "table_id": "34345370:t04801",
+    "row_index": 12,
+    "columns": [
+     0
+    ],
+    "provenance": "pdf_source_words",
+    "status": "values_detected_not_extracted",
+    "unassigned_words": 0,
+    "values_withheld": true
+   },
+   {
+    "table_id": "34345370:t04801",
+    "row_index": 13,
+    "columns": [
+     0
+    ],
+    "provenance": "pdf_source_words",
+    "status": "values_detected_not_extracted",
+    "unassigned_words": 0,
+    "values_withheld": true
+   },
+   {
+    "table_id": "34345370:t04801",
+    "row_index": 14,
+    "columns": [
+     0
+    ],
+    "provenance": "pdf_source_words",
+    "status": "values_detected_not_extracted",
+    "unassigned_words": 0,
+    "values_withheld": true
+   },
+   {
+    "table_id": "34345370:t04801",
+    "row_index": 15,
+    "columns": [
+     0
+    ],
+    "provenance": "pdf_source_words",
+    "status": "values_detected_not_extracted",
+    "unassigned_words": 0,
+    "values_withheld": true
+   },
+   {
+    "table_id": "34345370:t04801",
+    "row_index": 16,
+    "columns": [
+     0
+    ],
+    "provenance": "pdf_source_words",
+    "status": "values_detected_not_extracted",
+    "unassigned_words": 0,
+    "values_withheld": true
+   },
+   {
+    "table_id": "34345370:t04801",
+    "row_index": 2,
+    "columns": [
+     0
+    ],
+    "provenance": "pdf_source_words",
+    "status": "values_detected_not_extracted",
+    "unassigned_words": 0,
+    "values_withheld": true
+   },
+   {
+    "table_id": "34345370:t04801",
+    "row_index": 5,
+    "columns": [
+     0
+    ],
+    "provenance": "pdf_source_words",
+    "status": "values_detected_not_extracted",
+    "unassigned_words": 0,
+    "values_withheld": true
+   },
+   {
+    "table_id": "34345370:t04801",
+    "row_index": 6,
+    "columns": [
+     0
+    ],
+    "provenance": "pdf_source_words",
+    "status": "values_detected_not_extracted",
+    "unassigned_words": 0,
+    "values_withheld": true
+   },
+   {
+    "table_id": "34345370:t04801",
+    "row_index": 7,
+    "columns": [
+     0
+    ],
+    "provenance": "pdf_source_words",
+    "status": "values_detected_not_extracted",
+    "unassigned_words": 0,
+    "values_withheld": true
+   },
+   {
+    "table_id": "34345370:t04801",
+    "row_index": 8,
+    "columns": [
+     0
+    ],
+    "provenance": "pdf_source_words",
+    "status": "values_detected_not_extracted",
+    "unassigned_words": 0,
+    "values_withheld": true
+   },
+   {
+    "table_id": "34345370:t04801",
+    "row_index": 9,
+    "columns": [
+     0
+    ],
+    "provenance": "pdf_source_words",
+    "status": "values_detected_not_extracted",
+    "unassigned_words": 0,
+    "values_withheld": true
+   },
+   {
+    "table_id": "40089196:t00501",
+    "row_index": 1,
+    "columns": [
+     1,
+     3,
+     5,
+     7
+    ],
+    "provenance": "pdf_source_words",
+    "status": "values_detected_not_extracted",
+    "unassigned_words": 0,
+    "values_withheld": true
+   }
+  ],
+  "lost_value_rows_without_added_values": 21,
+  "changed_cell_list": [
+   {
+    "table_id": "24440102:t02201",
+    "row_index": 2,
+    "column": 1,
+    "pilot_v2": "340.0018.0012.00370.000.00370.00",
+    "pilot_v2_1": "340.00\n18.00\n12.00\n370.00\n0.00\n370.00"
+   },
+   {
+    "table_id": "24440102:t02201",
+    "row_index": 2,
+    "column": 2,
+    "pilot_v2": "340.0018.0012.00370.000.00370.00",
+    "pilot_v2_1": "340.00\n18.00\n12.00\n370.00\n0.00\n370.00"
+   },
+   {
+    "table_id": "24440102:t02201",
+    "row_index": 2,
+    "column": 3,
+    "pilot_v2": "1001001001000100",
+    "pilot_v2_1": "100\n100\n100\n100\n0\n100"
+   },
+   {
+    "table_id": "24440102:t10401",
+    "row_index": 2,
+    "column": 1,
+    "pilot_v2": "57375752",
+    "pilot_v2_1": "57\n37\n57\n52"
+   },
+   {
+    "table_id": "24440102:t10401",
+    "row_index": 2,
+    "column": 2,
+    "pilot_v2": "126.00.00.00.0",
+    "pilot_v2_1": "126.0\n0.0\n0.0\n0.0"
+   },
+   {
+    "table_id": "24440102:t10401",
+    "row_index": 2,
+    "column": 3,
+    "pilot_v2": "0.0100.00.00.0",
+    "pilot_v2_1": "0.0\n100.0\n0.0\n0.0"
+   },
+   {
+    "table_id": "24440102:t10401",
+    "row_index": 2,
+    "column": 4,
+    "pilot_v2": "0.00.0370.00.0",
+    "pilot_v2_1": "0.0\n0.0\n370.0\n0.0"
+   },
+   {
+    "table_id": "24440102:t10401",
+    "row_index": 2,
+    "column": 5,
+    "pilot_v2": "0.00.00.0315.0",
+    "pilot_v2_1": "0.0\n0.0\n0.0\n315.0"
+   },
+   {
+    "table_id": "24440102:t10401",
+    "row_index": 2,
+    "column": 6,
+    "pilot_v2": "99.122.00.045.0",
+    "pilot_v2_1": "99.1\n22.0\n0.0\n45.0"
+   },
+   {
+    "table_id": "24440102:t10401",
+    "row_index": 2,
+    "column": 7,
+    "pilot_v2": "225.1122.0370.0360.0",
+    "pilot_v2_1": "225.1\n122.0\n370.0\n360.0"
+   },
+   {
+    "table_id": "24440102:t10801",
+    "row_index": 10,
+    "column": 3,
+    "pilot_v2": "66",
+    "pilot_v2_1": "6\n6"
+   },
+   {
+    "table_id": "24440102:t10801",
+    "row_index": 3,
+    "column": 3,
+    "pilot_v2": "4666312",
+    "pilot_v2_1": "4\n6\n6\n6\n3\n12"
+   },
+   {
+    "table_id": "24440102:t10801",
+    "row_index": 8,
+    "column": 3,
+    "pilot_v2": "1212",
+    "pilot_v2_1": "12\n12"
+   },
+   {
+    "table_id": "24440102:t10801",
+    "row_index": 9,
+    "column": 3,
+    "pilot_v2": "1248481524",
+    "pilot_v2_1": "12\n48\n48\n15\n24"
+   },
+   {
+    "table_id": "24440102:t10901",
+    "row_index": 3,
+    "column": 3,
+    "pilot_v2": "66",
+    "pilot_v2_1": "6\n6"
+   },
+   {
+    "table_id": "24440102:t10901",
+    "row_index": 5,
+    "column": 3,
+    "pilot_v2": "62020106",
+    "pilot_v2_1": "6\n20\n20\n10\n6"
+   },
+   {
+    "table_id": "24440102:t10901",
+    "row_index": 6,
+    "column": 3,
+    "pilot_v2": "44",
+    "pilot_v2_1": "4\n4"
+   },
+   {
+    "table_id": "24440102:t10901",
+    "row_index": 7,
+    "column": 3,
+    "pilot_v2": "44",
+    "pilot_v2_1": "4\n4"
+   }
+  ]
+ },
+ "table_descriptions": {
+  "groups": 163,
+  "changed_groups": [
+   "24440102:t10401"
+  ],
+  "changes_explained": true,
+  "explanation": "only the example rows differ: line boundaries inserted, and the existing 200-character example-row truncation now cuts earlier (no value is altered; descriptions are not retrieval units)"
+ }
+}

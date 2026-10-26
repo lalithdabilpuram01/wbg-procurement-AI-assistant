@@ -1,0 +1,44 @@
+{
+ "status": "proposal from the 10-PDF pilot; no tables created",
+ "hierarchy": "Project -> Document -> DocumentVersion -> Section -> Chunk; plus PlanActivity (rows of procurement-plan tables) and ContractEvidenceLink (contract <-> plan activity), kept apart from project-level NarrativeEvidence",
+ "entities": {
+  "project": {
+   "key": "project_id",
+   "fields": ["project_id", "project_name", "country_code", "region", "income_group", "sector", "approval_fy", "status", "cohort_id", "scope_version (rag_scope_v3)"]
+  },
+  "document": {
+   "key": "document_id (WDS id)",
+   "fields": ["document_id", "project_id", "doc_type (PAD|ISR|ICR|ICRR|PP)", "role (PAD_original|ISR_first|ISR_latest|ICR|ICRR|PP_latest|PP_coverage)", "title", "wds_document_date", "wds_disclosure_date", "language", "wds_version_type (e.g. Buff cover, Gray Cover, Final)", "report_number (nullable)", "guid", "source_url", "final_url", "txt_url"]
+  },
+  "document_version": {
+   "key": "document_id + sha256",
+   "note": "One WDS document = one stored file. For plans the WDS date is NOT the plan version date: the version date is read from the PDF ('Revised Plan Date(s)' in the STEP header). A plan PDF can join a textual part with an older date (e.g. 2017, 2018) to a newer STEP table export. A project can also have parallel plan streams per executing agency (P132833: Road Development Authority and MIHAPCLG), so versions are ordered within (project, plan_stream).",
+   "fields": ["document_id", "sha256", "size_bytes", "page_count", "local_path", "downloaded_at", "pdf_producer", "pdf_creation_date", "plan_stream (executing agency; PP only)", "plan_original_approval_date (PP)", "plan_revised_date (PP, version date)", "textual_part_date (PP, nullable)", "isr_sequence (ISR)", "supersedes_document_id (nullable)", "text_layer (all pages text / pages without text)"]
+  },
+  "section": {
+   "key": "document_id + section_path",
+   "fields": ["document_id", "section_path (e.g. 'Annex 3 > Procurement')", "heading_text", "heading_level", "section_type (data_sheet|narrative|results_framework|annex|plan_textual_part|plan_table_WORKS|plan_table_GOODS|plan_table_NCS|plan_table_CONSULTING_FIRMS|plan_table_INDIVIDUAL_CONSULTANTS|ratings_table)", "physical_page_start", "physical_page_end", "printed_page_label_start (nullable)", "contains_personal_data (bool)"]
+  },
+  "chunk": {
+   "key": "chunk_id",
+   "fields": ["chunk_id", "document_id", "section_path", "chunk_type (text|table_row|table|caption)", "physical_page_start", "physical_page_end", "printed_page_label (nullable)", "text (sanitised)", "text_sha256", "token_count", "char_offsets", "language", "doc_type", "project_id", "country_code", "wds_document_date", "plan_revised_date (PP)", "sanitisation_applied (list)"]
+  },
+  "plan_activity": {
+   "key": "document_id + pdf_page + table_index + row_index",
+   "fields": ["document_id", "project_id", "plan_stream", "plan_revised_date", "pdf_page", "table_index", "row_index", "section (category)", "activity_reference_printed", "activity_reference_normalized", "package_reference_core", "step_activity_number", "review_type", "method_printed", "market_approach", "process_status_printed", "process_status_normalized", "estimated_amount_usd", "actual_amount_usd", "signed_contract_planned_date", "signed_contract_actual_date", "other_stage_dates (map stage -> {planned, actual})", "extraction_method (pdfplumber_table|text_layout|text_flow)", "extraction_confidence_checks"]
+  },
+  "contract_evidence_link": {
+   "key": "wb_contract_number + plan_activity key",
+   "fields": ["project_id", "wb_contract_number", "contract_source (DS00005|DS01004)", "borrower_contract_reference", "plan_activity_key", "match_class (exact|normalized|lot_or_sequence_suffix|legacy_text)", "cardinality (one_row_one_contract|one_row_n_contracts)", "evidence_tier (verified_amount|verified_exact_date|candidate|conflicting|ambiguous|text_reference_only)", "independent_fields_agreeing", "disagreeing_fields", "plan_values", "contract_values", "date_planned", "date_plan_actual", "date_recorded (DS00005 contract_signing_date)", "days_plan_actual_minus_recorded", "pdf_confirmed (bool)", "text_page_estimate", "rule_version", "created_at"],
+   "rule": "verified and candidate/conflicting links are stored separately (two stores, same columns); a shared project_id never creates a link"
+  },
+  "narrative_evidence": {
+   "key": "chunk_id + project_id",
+   "fields": ["project_id", "chunk_id", "topic (procurement_arrangements|procurement_performance|fm|ratings|lessons)", "rating_values (ISR/ICR/ICRR, nullable)"],
+   "rule": "project-level only; PAD/ISR/ICR/ICRR in the pilot carry no contract references, so narrative is never linked to a specific contract"
+  }
+ },
+ "filters_supported": ["country_code", "project_id", "doc_type", "role", "wds_document_date / plan_revised_date ranges", "section_type", "evidence_tier", "language"],
+ "citation_format": "{doc_type} {document_id} ({title}), page {physical_page} [printed {printed_page_label}], section '{section_path}', table {table_index} row {row_index}; source {source_url}; sha256 {sha256[:12]}",
+ "version_comparison": "order plan versions by (project_id, plan_stream, plan_revised_date); compare plan_activity rows by package_reference_core across versions (status, amounts, planned/actual dates); ISR by isr_sequence"
+}

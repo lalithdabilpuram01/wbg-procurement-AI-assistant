@@ -1,0 +1,1637 @@
+{
+ "row_count": 18350,
+ "columns": {
+  "abstracts": {
+   "observed_kinds": {
+    "null": 17538,
+    "object": 812
+   },
+   "null_pct": 95.57,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 4.43,
+   "distinct": 479,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "{\"cdata!\": \"The Support to the National Urban\\n            Transport Program (NUTP) Project is to enhance the\\n         ",
+     53
+    ],
+    [
+     "{\"cdata!\": \"The Support to the National Urban\\n            Transport Program (NUTP) Project is to enhance the\\n         ",
+     24
+    ],
+    [
+     "{\"cdata!\": \"The objectives of the First Part of the\\n            Second Phase of the Niger Basin Water Resources Develop",
+     16
+    ],
+    [
+     "{\"cdata!\": \"The development objective of the Marine\\n            Fisheries and Socio-Economic Development Project for Ke",
+     16
+    ],
+    [
+     "{\"cdata!\": \"The development objective of the 1000\\n            Electricity Transmission and Trade Project for Central As",
+     15
+    ],
+    [
+     "{\"cdata!\": \"The development objective of the First\\n            National Highways Interconnectivity Improvement Project ",
+     13
+    ],
+    [
+     "{\"cdata!\": \"The objective of the Climate Smart\\n            Agriculture Support Project of Niger is to increase\\n       ",
+     12
+    ],
+    [
+     "{\"cdata!\": \"The objective the First National\\n            Highways Interconnectivity Improvement Project for India is\\n ",
+     9
+    ]
+   ],
+   "max_len": 4499
+  },
+  "admreg": {
+   "observed_kinds": {
+    "str": 18329,
+    "null": 21
+   },
+   "null_pct": 0.11,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.89,
+   "distinct": 57,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "South Asia,South Asia",
+     4573
+    ],
+    [
+     "Latin America & Caribbean,Latin America & Caribbean",
+     2784
+    ],
+    [
+     "Africa,Africa",
+     2612
+    ],
+    [
+     "Europe and Central Asia,Europe and Central Asia",
+     2279
+    ],
+    [
+     "East Asia and Pacific,East Asia and Pacific",
+     2189
+    ],
+    [
+     "Eastern and Southern Africa,Eastern and Southern Africa",
+     1080
+    ],
+    [
+     "Middle East and North Africa,Middle East and North Africa",
+     901
+    ],
+    [
+     "Western and Central Africa,Western and Central Africa",
+     742
+    ]
+   ],
+   "max_len": 277
+  },
+  "available_in": {
+   "observed_kinds": {
+    "str": 18343,
+    "empty": 7
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.04,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.96,
+   "distinct": 94,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "English",
+     17130
+    ],
+    [
+     "Spanish",
+     278
+    ],
+    [
+     "French",
+     224
+    ],
+    [
+     "English,English,English",
+     155
+    ],
+    [
+     "English,English",
+     123
+    ],
+    [
+     "Portuguese",
+     93
+    ],
+    [
+     "Chinese,English",
+     34
+    ],
+    [
+     "English,Chinese",
+     30
+    ]
+   ],
+   "max_len": 55
+  },
+  "chronical_docm_id": {
+   "observed_kinds": {
+    "str": 18350
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 18345,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "090224b082c25786",
+     2
+    ],
+    [
+     "090224b087fb1f22",
+     2
+    ],
+    [
+     "BOSIB-edbaff96-ebc5-4ac1-8e90-e2f415130c6b",
+     2
+    ],
+    [
+     "BOSIB-dcc91f1f-9a6b-42d5-8599-062c846c31c6",
+     2
+    ],
+    [
+     "BOSIB-28a76280-0543-4d6c-bba6-efeb84b47f5c",
+     2
+    ],
+    [
+     "P099270-053ff788-5a62-4329-aaf2-5ef8f40cd84d",
+     1
+    ],
+    [
+     "P099270-47f39edf-c571-4656-ba72-ec1d277d6d5f",
+     1
+    ],
+    [
+     "P099270-0fafe36e-b939-4791-acdc-a05442a4e24f",
+     1
+    ]
+   ],
+   "max_len": 46
+  },
+  "count": {
+   "observed_kinds": {
+    "str": 18350
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 253,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "India",
+     2186
+    ],
+    [
+     "Mozambique",
+     609
+    ],
+    [
+     "Ethiopia",
+     606
+    ],
+    [
+     "Brazil",
+     549
+    ],
+    [
+     "China",
+     526
+    ],
+    [
+     "Bangladesh",
+     497
+    ],
+    [
+     "Cote d'Ivoire",
+     497
+    ],
+    [
+     "Pakistan",
+     481
+    ]
+   ],
+   "max_len": 201
+  },
+  "count_key": {
+   "observed_kinds": {
+    "str:int": 17781,
+    "str": 465,
+    "null": 104
+   },
+   "null_pct": 0.57,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.43,
+   "distinct": 203,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "82602",
+     2186
+    ],
+    [
+     "82527",
+     609
+    ],
+    [
+     "82611",
+     606
+    ],
+    [
+     "82649",
+     549
+    ],
+    [
+     "82628",
+     526
+    ],
+    [
+     "82675",
+     497
+    ],
+    [
+     "82625",
+     497
+    ],
+    [
+     "82507",
+     481
+    ]
+   ],
+   "max_len": 92
+  },
+  "disclosure_date": {
+   "observed_kinds": {
+    "str:date[ISO8601Z]": 14571,
+    "null": 3779
+   },
+   "null_pct": 20.59,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 79.41,
+   "distinct": 2792,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2020-01-31T00:00:00Z",
+     112
+    ],
+    [
+     "2011-02-11T00:00:00Z",
+     49
+    ],
+    [
+     "2023-11-16T00:00:00Z",
+     41
+    ],
+    [
+     "2020-06-30T00:00:00Z",
+     40
+    ],
+    [
+     "2023-11-01T00:00:00Z",
+     38
+    ],
+    [
+     "2021-06-01T00:00:00Z",
+     36
+    ],
+    [
+     "2023-11-02T00:00:00Z",
+     35
+    ],
+    [
+     "2023-06-29T00:00:00Z",
+     34
+    ]
+   ],
+   "max_len": 20,
+   "date_min": "2007-08-09",
+   "date_max": "2025-03-11"
+  },
+  "disclstat": {
+   "observed_kinds": {
+    "str": 17903,
+    "null": 447
+   },
+   "null_pct": 2.44,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 97.56,
+   "distinct": 1,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Disclosed",
+     17903
+    ]
+   ],
+   "max_len": 9
+  },
+  "display_title": {
+   "observed_kinds": {
+    "str:multiline": 18035,
+    "str": 315
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 8177,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "India - SOUTH ASIA- P152698-\n            National Hydrology Project - Procurement Plan",
+     689
+    ],
+    [
+     "India - SOUTH ASIA - P152698 -\n            National Hydrology Project - Audited Financial Statement",
+     216
+    ],
+    [
+     "Bolivia - LATIN AMERICA AND\n            CARIBBEAN- P164453- Health Service Delivery Network Project\n            - Procur",
+     216
+    ],
+    [
+     "India/SOUTH ASIA- P152698-\n            National Hydrology Project - Procurement Plan",
+     163
+    ],
+    [
+     "India - SOUTH ASIA- P177876- West\n            Bengal Accelerated Development of Minor Irrigation Project -\n            P",
+     138
+    ],
+    [
+     "St Maarten - LATIN AMERICA AND\n            CARIBBEAN- P167339- Sint Maarten Emergency Recovery Project\n            I - P",
+     133
+    ],
+    [
+     "Vietnam - EAST ASIA AND PACIFIC-\n            P152309- Vietnam Dam Rehabilitation and Safety Improvement\n            Proj",
+     111
+    ],
+    [
+     "Mozambique - EASTERN AND SOUTHERN\n            AFRICA- P174002- Sustainable Rural Economy Program -\n            Procureme",
+     105
+    ]
+   ],
+   "max_len": 415
+  },
+  "docdt": {
+   "observed_kinds": {
+    "str:date[ISO8601Z]": 18350
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3413,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2023-06-30T00:00:00Z",
+     67
+    ],
+    [
+     "2022-06-30T00:00:00Z",
+     59
+    ],
+    [
+     "2021-06-30T00:00:00Z",
+     49
+    ],
+    [
+     "2022-06-29T00:00:00Z",
+     42
+    ],
+    [
+     "2021-06-01T00:00:00Z",
+     42
+    ],
+    [
+     "2024-06-28T00:00:00Z",
+     40
+    ],
+    [
+     "2023-06-29T00:00:00Z",
+     37
+    ],
+    [
+     "2022-12-22T00:00:00Z",
+     34
+    ]
+   ],
+   "max_len": 20,
+   "date_min": "2002-01-01",
+   "date_max": "2025-03-12"
+  },
+  "docm_id": {
+   "observed_kinds": {
+    "str": 18350
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 18345,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "090224b082c25786",
+     2
+    ],
+    [
+     "090224b087fb1f22",
+     2
+    ],
+    [
+     "BOSIB-edbaff96-ebc5-4ac1-8e90-e2f415130c6b",
+     2
+    ],
+    [
+     "BOSIB-dcc91f1f-9a6b-42d5-8599-062c846c31c6",
+     2
+    ],
+    [
+     "BOSIB-28a76280-0543-4d6c-bba6-efeb84b47f5c",
+     2
+    ],
+    [
+     "P099270-053ff788-5a62-4329-aaf2-5ef8f40cd84d",
+     1
+    ],
+    [
+     "P099270-47f39edf-c571-4656-ba72-ec1d277d6d5f",
+     1
+    ],
+    [
+     "P099270-0fafe36e-b939-4791-acdc-a05442a4e24f",
+     1
+    ]
+   ],
+   "max_len": 46
+  },
+  "docna": {
+   "observed_kinds": {
+    "object": 18350
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 8005,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "{\"0\": {\"docna\": \"India - SOUTH ASIA- P152698- National\\n            Hydrology Project - Procurement Plan\"}}",
+     689
+    ],
+    [
+     "{\"0\": {\"docna\": \"India - SOUTH ASIA - P152698 - National\\n            Hydrology Project - Audited Financial Statement\"}}",
+     216
+    ],
+    [
+     "{\"0\": {\"docna\": \"Bolivia - LATIN AMERICA AND CARIBBEAN-\\n            P164453- Health Service Delivery Network Project -\\",
+     216
+    ],
+    [
+     "{\"0\": {\"docna\": \"India/SOUTH ASIA- P152698- National\\n            Hydrology Project - Procurement Plan\"}}",
+     163
+    ],
+    [
+     "{\"0\": {\"docna\": \"India - SOUTH ASIA- P177876- West Bengal\\n            Accelerated Development of Minor Irrigation Proje",
+     138
+    ],
+    [
+     "{\"0\": {\"docna\": \"St Maarten - LATIN AMERICA AND CARIBBEAN-\\n            P167339- Sint Maarten Emergency Recovery Project",
+     133
+    ],
+    [
+     "{\"0\": {\"docna\": \"Vietnam - EAST ASIA AND PACIFIC- P152309-\\n            Vietnam Dam Rehabilitation and Safety Improvemen",
+     111
+    ],
+    [
+     "{\"0\": {\"docna\": \"Mozambique - EASTERN AND SOUTHERN AFRICA-\\n            P174002- Sustainable Rural Economy Program - Pro",
+     105
+    ]
+   ],
+   "max_len": 317
+  },
+  "docty": {
+   "observed_kinds": {
+    "str": 18183,
+    "str:multiline": 136,
+    "null": 31
+   },
+   "null_pct": 0.17,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.83,
+   "distinct": 64,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Procurement Plan",
+     9155
+    ],
+    [
+     "Implementation Status and Results Report",
+     2448
+    ],
+    [
+     "Auditing Document",
+     1573
+    ],
+    [
+     "Environmental Assessment",
+     580
+    ],
+    [
+     "Project Paper",
+     454
+    ],
+    [
+     "Disbursement Letter",
+     376
+    ],
+    [
+     "Project Information Document",
+     356
+    ],
+    [
+     "Resettlement Plan",
+     270
+    ]
+   ],
+   "max_len": 78
+  },
+  "entityids": {
+   "observed_kinds": {
+    "object": 18350
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 18232,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "{\"entityid\": \"HQBOCS\"}",
+     113
+    ],
+    [
+     "{\"entityid\": \"AFRLR\"}",
+     2
+    ],
+    [
+     "{\"entityid\": \"000350881_20141205102225\"}",
+     2
+    ],
+    [
+     "{\"entityid\": \"090224b087fb1f22_1_0\"}",
+     2
+    ],
+    [
+     "{\"entityid\": \"34112816\"}",
+     2
+    ],
+    [
+     "{\"entityid\": \"34133739\"}",
+     2
+    ],
+    [
+     "{\"entityid\": \"34133742\"}",
+     2
+    ],
+    [
+     "{\"entityid\": \"34350054\"}",
+     1
+    ]
+   ],
+   "max_len": 42
+  },
+  "fullavailablein": {
+   "observed_kinds": {
+    "list": 18350
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 548,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "[]",
+     17803
+    ],
+    [
+     "[{\"entityid\": \"000333037_20140321122054\", \"lang\": \"English\", \"node_id\": \"19275157\"}]",
+     1
+    ],
+    [
+     "[{\"entityid\": \"000333037_20140321122401\", \"lang\": \"Russian\", \"node_id\": \"19275156\"}]",
+     1
+    ],
+    [
+     "[{\"entityid\": \"090224b08313eba0_1_0\", \"lang\": \"English\", \"node_id\": \"25145952\"}]",
+     1
+    ],
+    [
+     "[{\"entityid\": \"090224b08313eba1_1_0\", \"lang\": \"Russian\", \"node_id\": \"25145951\"}]",
+     1
+    ],
+    [
+     "[{\"entityid\": \"000333038_20090415014402\", \"lang\": \"English\", \"node_id\": \"12091517\"}]",
+     1
+    ],
+    [
+     "[{\"entityid\": \"000333037_20100414013914\", \"lang\": \"Russian\", \"node_id\": \"10449577\"}]",
+     1
+    ],
+    [
+     "[{\"entityid\": \"000076092_20080722145529\", \"lang\": \"English\", \"node_id\": \"9972007\"}]",
+     1
+    ]
+   ],
+   "max_len": 497
+  },
+  "guid": {
+   "observed_kinds": {
+    "str:int": 18350
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 18345,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "362221468291332192",
+     2
+    ],
+    [
+     "485121605927708392",
+     2
+    ],
+    [
+     "099070523151018799",
+     2
+    ],
+    [
+     "099072623163510758",
+     2
+    ],
+    [
+     "099080223155526167",
+     2
+    ],
+    [
+     "099062624054542176",
+     1
+    ],
+    [
+     "099060224125034391",
+     1
+    ],
+    [
+     "099060224125012288",
+     1
+    ]
+   ],
+   "max_len": 18
+  },
+  "id": {
+   "observed_kinds": {
+    "str:int": 18350
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 18345,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "20474566",
+     2
+    ],
+    [
+     "32576791",
+     2
+    ],
+    [
+     "34112816",
+     2
+    ],
+    [
+     "34133739",
+     2
+    ],
+    [
+     "34133742",
+     2
+    ],
+    [
+     "34350054",
+     1
+    ],
+    [
+     "34330160",
+     1
+    ],
+    [
+     "34342410",
+     1
+    ]
+   ],
+   "max_len": 8
+  },
+  "lang": {
+   "observed_kinds": {
+    "str": 18343,
+    "null": 7
+   },
+   "null_pct": 0.04,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.96,
+   "distinct": 35,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "English",
+     17531
+    ],
+    [
+     "Spanish",
+     301
+    ],
+    [
+     "French",
+     244
+    ],
+    [
+     "Portuguese",
+     97
+    ],
+    [
+     "Arabic",
+     33
+    ],
+    [
+     "Chinese",
+     29
+    ],
+    [
+     "Russian",
+     18
+    ],
+    [
+     "Bengali",
+     8
+    ]
+   ],
+   "max_len": 27
+  },
+  "last_modified_date": {
+   "observed_kinds": {
+    "null": 9810,
+    "str:date[ISO8601Z]": 8540
+   },
+   "null_pct": 53.46,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 46.54,
+   "distinct": 1286,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2022-04-26T00:00:00Z",
+     76
+    ],
+    [
+     "2023-06-29T00:00:00Z",
+     69
+    ],
+    [
+     "2022-12-22T00:00:00Z",
+     64
+    ],
+    [
+     "2023-01-31T00:00:00Z",
+     58
+    ],
+    [
+     "2023-01-19T00:00:00Z",
+     46
+    ],
+    [
+     "2023-11-16T00:00:00Z",
+     40
+    ],
+    [
+     "2023-11-02T00:00:00Z",
+     38
+    ],
+    [
+     "2022-06-29T00:00:00Z",
+     37
+    ]
+   ],
+   "max_len": 20,
+   "date_min": "2007-08-01",
+   "date_max": "2025-03-12"
+  },
+  "listing_relative_url": {
+   "observed_kinds": {
+    "str": 18350
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 18345,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "/projects/documents/2014/11/20474566/federated-states-micronesia-pacific-islands-regional-oceanscape-program-project",
+     2
+    ],
+    [
+     "/projects/documents/2020/07/32576791/minutes-virtual-meeting-board-directors-ifc-executive-directors-bank-ida-boards-dir",
+     2
+    ],
+    [
+     "/projects/documents/2023/05/34112816/minutes-meeting-executive-directors-bank-boards-directors-ifc-miga-held-may-25-2023",
+     2
+    ],
+    [
+     "/projects/documents/2023/07/34133739/minutes-meeting-executive-directors-bank-ida-boards-directors-ifc-miga-held-may-16-",
+     2
+    ],
+    [
+     "/projects/documents/2023/08/34133742/minutes-meeting-executive-directors-bank-ida-board-directors-ifc-miga-held-january-",
+     2
+    ],
+    [
+     "/projects/documents/2024/06/34350054/kazakhstan-europe-central-asia-p099270-south-west-roads-western-europe-western-chin",
+     1
+    ],
+    [
+     "/projects/documents/2024/06/34330160/disclosable-version-isr-south-west-roads-western-europe-western-china-international",
+     1
+    ],
+    [
+     "/projects/documents/2024/06/34342410/kazakhstan-west-roads-project-east-west-roads-project-implementation-support-missio",
+     1
+    ]
+   ],
+   "max_len": 346
+  },
+  "lndinstr": {
+   "observed_kinds": {
+    "null": 9328,
+    "object": 9022
+   },
+   "null_pct": 50.83,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 49.17,
+   "distinct": 17,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "{\"0\": {\"lndinstr\": \"Investment Project Financing\"}}",
+     7648
+    ],
+    [
+     "{\"0\": {\"lndinstr\": \"Specific Investment Loan\"}}",
+     906
+    ],
+    [
+     "{\"0\": {\"lndinstr\": \"Program-for-Results\"}}",
+     217
+    ],
+    [
+     "{\"0\": {\"lndinstr\": \"Adaptable Program Loan\"}}",
+     162
+    ],
+    [
+     "{\"0\": {\"lndinstr\": \"Emergency Recovery Loan\"}}",
+     35
+    ],
+    [
+     "{\"0\": {\"lndinstr\": \"Investment Project Financing\"}, \"1\": {\"lndinstr\": \"Specific Investment Loan\"}}",
+     22
+    ],
+    [
+     "{\"0\": {\"lndinstr\": \"Investment Project Financing\"}, \"1\": {\"lndinstr\": \"Specific Investment Loan\"}, \"2\": {\"lndinstr\": \"Te",
+     7
+    ],
+    [
+     "{\"0\": {\"lndinstr\": \"Development Policy Lending\"}, \"1\": {\"lndinstr\": \"Investment Project Financing\"}}",
+     5
+    ]
+   ],
+   "max_len": 146
+  },
+  "majdocty": {
+   "observed_kinds": {
+    "str": 18260,
+    "null": 90
+   },
+   "null_pct": 0.49,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.51,
+   "distinct": 7,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Project Documents",
+     9945
+    ],
+    [
+     "Project Documents,Project Documents",
+     8056
+    ],
+    [
+     "Publications & Research",
+     172
+    ],
+    [
+     "Board Documents",
+     84
+    ],
+    [
+     "Publications & Research,Publications",
+     1
+    ],
+    [
+     "Publications & Research,Publications & Research",
+     1
+    ],
+    [
+     "Economic & Sector Work",
+     1
+    ]
+   ],
+   "max_len": 47
+  },
+  "new_url": {
+   "observed_kinds": {
+    "str": 15933,
+    "null": 2417
+   },
+   "null_pct": 13.17,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 86.83,
+   "distinct": 15929,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2014/11/20474566/Federated-States-of-Micronesia-The-Pacific-Islands-Regional-Oceanscape-Program-Project",
+     2
+    ],
+    [
+     "2023/05/34112816/BOSIB0edbaff960c108e900e2f415130c6b",
+     2
+    ],
+    [
+     "2023/07/34133739/BOSIB0dcc91f1f0d5085990062c846c31c6",
+     2
+    ],
+    [
+     "2023/08/34133742/BOSIB028a7628006c0bba60efeb84b47f5c",
+     2
+    ],
+    [
+     "2024/06/34350054/P0992701053ff70291aaf215ef8f40cd84d",
+     1
+    ],
+    [
+     "2024/06/34330160/P099270147f39e0561ba721ec1d277d6d5f",
+     1
+    ],
+    [
+     "2024/06/34342410/P09927010fafe3011acdc1a05442a4e24f",
+     1
+    ],
+    [
+     "2023/12/34221659/P0992701c468170751b83218a01e1f812d3",
+     1
+    ]
+   ],
+   "max_len": 320
+  },
+  "no_of_pages": {
+   "observed_kinds": {
+    "str:int": 13572,
+    "null": 4778
+   },
+   "null_pct": 26.04,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 73.96,
+   "distinct": 450,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "7",
+     1196
+    ],
+    [
+     "8",
+     1088
+    ],
+    [
+     "6",
+     1052
+    ],
+    [
+     "5",
+     993
+    ],
+    [
+     "9",
+     879
+    ],
+    [
+     "4",
+     814
+    ],
+    [
+     "11",
+     735
+    ],
+    [
+     "10",
+     685
+    ]
+   ],
+   "max_len": 4
+  },
+  "pdfurl": {
+   "observed_kinds": {
+    "str": 17939,
+    "null": 411
+   },
+   "null_pct": 2.24,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 97.76,
+   "distinct": 17934,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "http://documents.worldbank.org/curated/en/362221468291332192/pdf/PAD11690PAD0Mu000Box385386B00OUO090.pdf",
+     2
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/485121605927708392/pdf/Minutes-of-a-Virtual-Meeting-of-the-Board-of-Directors-",
+     2
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099070523151018799/pdf/BOSIB0edbaff960c108e900e2f415130c6b.pdf",
+     2
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099072623163510758/pdf/BOSIB0dcc91f1f0d5085990062c846c31c6.pdf",
+     2
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099080223155526167/pdf/BOSIB028a7628006c0bba60efeb84b47f5c.pdf",
+     2
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099062624054542176/pdf/P0992701053ff70291aaf215ef8f40cd84d.pdf",
+     1
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099060224125034391/pdf/P099270147f39e0561ba721ec1d277d6d5f.pdf",
+     1
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099060224125012288/pdf/P09927010fafe3011acdc1a05442a4e24f.pdf",
+     1
+    ]
+   ],
+   "max_len": 307
+  },
+  "prdln": {
+   "observed_kinds": {
+    "str": 10253,
+    "null": 8097
+   },
+   "null_pct": 44.13,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 55.87,
+   "distinct": 30,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "IBRD/IDA",
+     8841
+    ],
+    [
+     "Recipient Executed Activities",
+     1003
+    ],
+    [
+     "Global Environment Project",
+     229
+    ],
+    [
+     "Special Financing",
+     121
+    ],
+    [
+     "IBRD/IDA,Guarantees",
+     11
+    ],
+    [
+     "Special Financing,Recipient Executed Activities",
+     7
+    ],
+    [
+     "Country Engagement Products",
+     6
+    ],
+    [
+     "Global Environment Project,IBRD/IDA",
+     5
+    ]
+   ],
+   "max_len": 97
+  },
+  "projectid": {
+   "observed_kinds": {
+    "str": 18350
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 411,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "P152698",
+     1228
+    ],
+    [
+     "P152309",
+     346
+    ],
+    [
+     "P148591",
+     326
+    ],
+    [
+     "P164453",
+     290
+    ],
+    [
+     "P154807",
+     253
+    ],
+    [
+     "P145054",
+     226
+    ],
+    [
+     "P177876",
+     192
+    ],
+    [
+     "P174002",
+     184
+    ]
+   ],
+   "max_len": 164
+  },
+  "projn": {
+   "observed_kinds": {
+    "str:multiline": 13783,
+    "str": 4567
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 511,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "IN-National Hydrology Project -- P152698",
+     1228
+    ],
+    [
+     "VN-Vietnam Dam Rehabilitation And Safety\n            Improvement Project -- P152309",
+     346
+    ],
+    [
+     "ET-Second Agricultural Growth Project -- P148591",
+     326
+    ],
+    [
+     "BO-Health Service Delivery Network Project\n            -- P164453",
+     290
+    ],
+    [
+     "3W-Regional Disease Surveillance Systems\n            Enhancement (Redisse) -- P154807",
+     253
+    ],
+    [
+     "8S-Central Asia South Asia Electricity\n            Transmission And Trade Proj -- P145054",
+     226
+    ],
+    [
+     "IN-West Bengal Accelerated Development Of\n            Minor Irrigation Project -- P177876",
+     192
+    ],
+    [
+     "MZ-Sustainable Rural Economy Program -- P174002",
+     183
+    ]
+   ],
+   "max_len": 1369
+  },
+  "repnb": {
+   "observed_kinds": {
+    "str": 15546,
+    "null": 2277,
+    "str:int": 527
+   },
+   "null_pct": 12.41,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 87.59,
+   "distinct": 15151,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "SFG1121",
+     63
+    ],
+    [
+     "E2686",
+     53
+    ],
+    [
+     "ISR60169",
+     26
+    ],
+    [
+     "SFG1248",
+     25
+    ],
+    [
+     "RP1070",
+     24
+    ],
+    [
+     "ISR60420",
+     18
+    ],
+    [
+     "ISR60570",
+     18
+    ],
+    [
+     "E2965",
+     16
+    ]
+   ],
+   "max_len": 13
+  },
+  "seccl": {
+   "observed_kinds": {
+    "str": 18350
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 1,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Public",
+     18350
+    ]
+   ],
+   "max_len": 6
+  },
+  "subsc": {
+   "observed_kinds": {
+    "null": 8534,
+    "str": 6544,
+    "str:multiline": 3272
+   },
+   "null_pct": 46.51,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 53.49,
+   "distinct": 763,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Public Administration - Social Protection,Social Protection",
+     338
+    ],
+    [
+     "Public Administration - Health,Health-HG,Health Facilities and Construction",
+     264
+    ],
+    [
+     "Public Administration - Water, Sanitation\n            and Waste Management,Sanitation,Water Supply",
+     249
+    ],
+    [
+     "Rural and Inter-Urban Roads,Public Administration - Transportation",
+     235
+    ],
+    [
+     "Other Public Administration",
+     233
+    ],
+    [
+     "Public Administration - Health,Health-HG",
+     233
+    ],
+    [
+     "ICT Services,Other Water Supply, Sanitation and Waste Management,Public Administration - Agriculture, Fishing\n          ",
+     221
+    ],
+    [
+     "Central Government (Central Agencies)",
+     177
+    ]
+   ],
+   "max_len": 1688
+  },
+  "theme": {
+   "observed_kinds": {
+    "null": 10450,
+    "str": 7816,
+    "str:multiline": 84
+   },
+   "null_pct": 56.95,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 43.05,
+   "distinct": 840,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Water resource management",
+     245
+    ],
+    [
+     "Environment and natural resource management",
+     153
+    ],
+    [
+     "Disaster Risk Management,Disaster Preparedness,ICT,ICT Solutions,Environment and Natural Resource Management,Private Sec",
+     138
+    ],
+    [
+     "Disaster Risk Management,Mitigation,Agriculture Finance,Social Development and Protection,Environment and Natural Resour",
+     129
+    ],
+    [
+     "Social protection and risk management,Water resource management,Rural services and infrastructure,Natural disaster manag",
+     116
+    ],
+    [
+     "City-wide Infrastructure and Service Delivery",
+     69
+    ],
+    [
+     "Natural disaster management,Water resource management",
+     69
+    ],
+    [
+     "Education for the knowledge economy",
+     67
+    ]
+   ],
+   "max_len": 2548
+  },
+  "txturl": {
+   "observed_kinds": {
+    "str": 18347,
+    "null": 3
+   },
+   "null_pct": 0.02,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.98,
+   "distinct": 18342,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "http://documents.worldbank.org/curated/en/362221468291332192/text/PAD11690PAD0Mu000Box385386B00OUO090.txt",
+     2
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/485121605927708392/text/Minutes-of-a-Virtual-Meeting-of-the-Board-of-Directors",
+     2
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099070523151018799/text/BOSIB0edbaff960c108e900e2f415130c6b.txt",
+     2
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099072623163510758/text/BOSIB0dcc91f1f0d5085990062c846c31c6.txt",
+     2
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099080223155526167/text/BOSIB028a7628006c0bba60efeb84b47f5c.txt",
+     2
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099062624054542176/text/P0992701053ff70291aaf215ef8f40cd84d.txt",
+     1
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099060224125034391/text/P099270147f39e0561ba721ec1d277d6d5f.txt",
+     1
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099060224125012288/text/P09927010fafe3011acdc1a05442a4e24f.txt",
+     1
+    ]
+   ],
+   "max_len": 308
+  },
+  "url": {
+   "observed_kinds": {
+    "str": 18350
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 18345,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "http://documents.worldbank.org/curated/en/362221468291332192/Federated-States-of-Micronesia-The-Pacific-Islands-Regional",
+     2
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/485121605927708392/Minutes-of-a-Virtual-Meeting-of-the-Board-of-Directors-of-I",
+     2
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099070523151018799/BOSIB0edbaff960c108e900e2f415130c6b",
+     2
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099072623163510758/BOSIB0dcc91f1f0d5085990062c846c31c6",
+     2
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099080223155526167/BOSIB028a7628006c0bba60efeb84b47f5c",
+     2
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099062624054542176/P0992701053ff70291aaf215ef8f40cd84d",
+     1
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099060224125034391/P099270147f39e0561ba721ec1d277d6d5f",
+     1
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099060224125012288/P09927010fafe3011acdc1a05442a4e24f",
+     1
+    ]
+   ],
+   "max_len": 299
+  },
+  "url_friendly_title": {
+   "observed_kinds": {
+    "str": 18350
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 18345,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "http://documents.worldbank.org/curated/en/362221468291332192/Federated-States-of-Micronesia-The-Pacific-Islands-Regional",
+     2
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/485121605927708392/Minutes-of-a-Virtual-Meeting-of-the-Board-of-Directors-of-I",
+     2
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099070523151018799/BOSIB0edbaff960c108e900e2f415130c6b",
+     2
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099072623163510758/BOSIB0dcc91f1f0d5085990062c846c31c6",
+     2
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099080223155526167/BOSIB028a7628006c0bba60efeb84b47f5c",
+     2
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099062624054542176/P0992701053ff70291aaf215ef8f40cd84d",
+     1
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099060224125034391/P099270147f39e0561ba721ec1d277d6d5f",
+     1
+    ],
+    [
+     "http://documents.worldbank.org/curated/en/099060224125012288/P09927010fafe3011acdc1a05442a4e24f",
+     1
+    ]
+   ],
+   "max_len": 299
+  },
+  "versiontyp": {
+   "observed_kinds": {
+    "str": 9785,
+    "null": 8564,
+    "str:int": 1
+   },
+   "null_pct": 46.67,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 53.33,
+   "distinct": 19,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Final",
+     7107
+    ],
+    [
+     "Buff cover",
+     2368
+    ],
+    [
+     "Revised",
+     135
+    ],
+    [
+     "Gray cover",
+     68
+    ],
+    [
+     "Initial appraisal",
+     43
+    ],
+    [
+     "Initial concept",
+     34
+    ],
+    [
+     "Revised buff cover",
+     12
+    ],
+    [
+     "Revised appraisal",
+     4
+    ]
+   ],
+   "max_len": 21
+  }
+ },
+ "dataset": "wds_v2_cluster_meta",
+ "source": "search API v2 wds (cluster projects)"
+}

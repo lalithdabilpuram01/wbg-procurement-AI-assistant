@@ -1,0 +1,150 @@
+{
+ "projects": 70,
+ "project_fields_blank": {
+  "region": [],
+  "income_group_fy2026": [],
+  "sector": [],
+  "approval_fy": [],
+  "status": [],
+  "contract_count": [],
+  "notice_count": [],
+  "top_method": [],
+  "direct_selection_share": [],
+  "prior_review_share": [],
+  "other_country_supplier_share": [
+   "P500392",
+   "P164412",
+   "P150991",
+   "P129861",
+   "P180263",
+   "P148600",
+   "P172571"
+  ],
+  "median_contract_value_usd": [],
+  "ifb_median_window_days": [
+   "P175325",
+   "P122841",
+   "P129861",
+   "P170329",
+   "P175669",
+   "P159929",
+   "P106685",
+   "P144269",
+   "P144103",
+   "P121019",
+   "P174059",
+   "P173858"
+  ],
+  "first_contract_signing": []
+ },
+ "income_group_no_fy2026_entry": [
+  "P148850",
+  "P164336",
+  "P123531",
+  "P177233",
+  "P176731",
+  "P163452",
+  "P143302"
+ ],
+ "documents": 382,
+ "document_fields_blank": {
+  "document_date": 0,
+  "disclosure_date": 4,
+  "version_type": 76,
+  "report_number": 31,
+  "language": 1,
+  "pdf_url": 0,
+  "guid": 0,
+  "size_bytes": 364
+ },
+ "document_fields_blank_by_type": {
+  "version_type": {
+   "ISR": 60,
+   "PP": 14,
+   "ICRR": 2
+  },
+  "report_number": {
+   "ISR": 4,
+   "PP": 27
+  }
+ },
+ "head_status": {
+  "200": 382
+ },
+ "content_type": {
+  "application/pdf;charset=utf-8": 382
+ },
+ "size_basis": {
+  "local_type_median": 364,
+  "content_length": 18
+ },
+ "languages": {
+  "English": 380,
+  "blank": 1,
+  "French": 1
+ },
+ "non_english_or_blank": [
+  {
+   "project_id": "P125151",
+   "role": "ICRR",
+   "document_id": "34347742",
+   "language": ""
+  },
+  {
+   "project_id": "P148062",
+   "role": "PP_earliest",
+   "document_id": "24773850",
+   "language": "French"
+  }
+ ],
+ "duplicate_document_ids_in_manifest": [],
+ "duplicate_pdf_urls_in_manifest": [],
+ "every_project_has": {
+  "PAD_original": 70,
+  "ISR_first": 70,
+  "ISR_latest": 70,
+  "PP_latest": 70
+ },
+ "isr_first_equals_latest": [],
+ "closed_projects": 48,
+ "closed_without_icr": [
+  "P148850",
+  "P173776",
+  "P173858"
+ ],
+ "closed_without_icrr": [
+  "P148850",
+  "P164336",
+  "P162042",
+  "P170329",
+  "P118518",
+  "P173776",
+  "P173858"
+ ],
+ "projects_with_verified_plan_contract_matches": {
+  "P132833": 20,
+  "P148850": 12,
+  "P175325": 22,
+  "P500392": 16
+ },
+ "projects_with_verifiable_reference_flag": {
+  "verified (parsed plan rows match contracts)": 4,
+  "expected (STEP-format reference share in country 73%); to verify after download": 6,
+  "expected (STEP-format reference share in country 62%); to verify after download": 13,
+  "expected (STEP-format reference share in country 74%); to verify after download": 6,
+  "expected (STEP-format reference share in country 77%); to verify after download": 6,
+  "expected (STEP-format reference share in country 79%); to verify after download": 7,
+  "expected (STEP-format reference share in country 83%); to verify after download": 7,
+  "expected (STEP-format reference share in country 85%); to verify after download": 7,
+  "expected (STEP-format reference share in country 84%); to verify after download": 7,
+  "expected (STEP-format reference share in country 88%); to verify after download": 7
+ },
+ "issues_all_listed_documents": {
+  "duplicate_record": 795,
+  "missing_metadata": 3225,
+  "isr_reupload_superseded": 11,
+  "no_pdf_url": 56,
+  "additional_PAD_not_selected": 1,
+  "translation_of_primary_PAD": 12
+ }
+}

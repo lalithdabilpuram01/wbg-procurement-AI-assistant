@@ -1,0 +1,29 @@
+{
+ "income_class_current": {
+  "url": "https://ddh-openapi.worldbank.org/resources/DR0095333/download",
+  "final_url": "https://ddh-openapi.worldbank.org/resources/DR0095333/download",
+  "status": 404,
+  "content_type": null,
+  "content_length": "0",
+  "last_modified": null,
+  "content_disposition": null
+ },
+ "income_class_historical": {
+  "url": "https://ddh-openapi.worldbank.org/resources/DR0095334/download",
+  "final_url": "https://ddh-openapi.worldbank.org/resources/DR0095334/download",
+  "status": 404,
+  "content_type": null,
+  "content_length": "0",
+  "last_modified": null,
+  "content_disposition": null
+ },
+ "wgi_dataset_2026_xlsx": {
+  "url": "https://www.worldbank.org/content/dam/sites/govindicators/doc/wgidataset_with_sourcedata-2026.xlsx",
+  "final_url": "https://www.worldbank.org/content/dam/sites/govindicators/doc/wgidataset_with_sourcedata-2026.xlsx",
+  "status": 200,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "content_length": null,
+  "last_modified": "Sun, 20 Sep 2026 21:07:48 GMT",
+  "content_disposition": null
+ }
+}

@@ -1,0 +1,78 @@
+{
+  "branches": [
+    {
+      "branch_id": "production",
+      "default": true,
+      "logical_size_bytes": 38682624,
+      "protected": false,
+      "state": "READY"
+    }
+  ],
+  "can_create_schema_in_database": true,
+  "checkpoint_tables_present": [],
+  "database": "databricks_postgres",
+  "default_search_path": "\"$user\", public",
+  "endpoint_branch": "production",
+  "label": "after",
+  "project": "wbg-procurement-dev",
+  "role_sha256": "e5ccf9253cff",
+  "schema_bytes": {
+    "__db_system": 0,
+    "public": 0,
+    "wbg_rag_pdf_poc": 958464,
+    "wbg_rag_poc": 4268032
+  },
+  "schemas": {
+    "__db_system": [],
+    "public": [],
+    "wbg_rag_pdf_poc": [
+      "citations:r",
+      "citations_pkey:i",
+      "documents:r",
+      "documents_document_id_sha256_key:i",
+      "documents_pkey:i",
+      "pages:r",
+      "pages_pkey:i",
+      "parent_chunks:r",
+      "parent_chunks_pkey:i",
+      "pdf_table_rows:r",
+      "pdf_table_rows_pkey:i",
+      "pdf_table_values:r",
+      "pdf_table_values_pkey:i",
+      "pdf_tables:r",
+      "pdf_tables_pkey:i",
+      "retrieval_units:r",
+      "retrieval_units_pkey:i",
+      "sections:r",
+      "sections_pkey:i",
+      "table_schemas:r",
+      "table_schemas_pkey:i",
+      "unit_embeddings:r",
+      "unit_embeddings_hnsw_cosine:i",
+      "unit_embeddings_pkey:i"
+    ],
+    "wbg_rag_poc": [
+      "synthetic_embeddings:r",
+      "synthetic_embeddings_embedding_hnsw_cosine:i",
+      "synthetic_embeddings_pkey:i"
+    ]
+  },
+  "server_version": "18.6 (fd34222)",
+  "session_read_only": "on",
+  "superuser": false,
+  "table_rows": {
+    "wbg_rag_pdf_poc.citations": 39,
+    "wbg_rag_pdf_poc.documents": 1,
+    "wbg_rag_pdf_poc.pages": 8,
+    "wbg_rag_pdf_poc.parent_chunks": 10,
+    "wbg_rag_pdf_poc.pdf_table_rows": 42,
+    "wbg_rag_pdf_poc.pdf_table_values": 110,
+    "wbg_rag_pdf_poc.pdf_tables": 5,
+    "wbg_rag_pdf_poc.retrieval_units": 39,
+    "wbg_rag_pdf_poc.sections": 17,
+    "wbg_rag_pdf_poc.table_schemas": 1,
+    "wbg_rag_pdf_poc.unit_embeddings": 39,
+    "wbg_rag_poc.synthetic_embeddings": 500
+  },
+  "tls": true
+}

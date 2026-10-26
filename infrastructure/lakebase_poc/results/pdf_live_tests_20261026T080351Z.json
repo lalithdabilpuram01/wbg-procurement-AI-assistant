@@ -1,0 +1,116 @@
+{
+ "run_at_utc": "2026-10-26T08:03:51+00:00",
+ "first_write_inserted": {
+  "documents": 1,
+  "pages": 8,
+  "sections": 17,
+  "parent_chunks": 10,
+  "retrieval_units": 39,
+  "unit_embeddings": 39,
+  "citations": 39,
+  "table_schemas": 1,
+  "pdf_tables": 5,
+  "pdf_table_rows": 42,
+  "pdf_table_values": 110
+ },
+ "rerun_inserted": {
+  "documents": 0,
+  "pages": 0,
+  "sections": 0,
+  "parent_chunks": 0,
+  "retrieval_units": 0,
+  "unit_embeddings": 0,
+  "citations": 0,
+  "table_schemas": 0,
+  "pdf_tables": 0,
+  "pdf_table_rows": 0,
+  "pdf_table_values": 0
+ },
+ "hnsw_recall_vs_exact": {
+  "recall@5_ef_search_default": [
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0
+  ],
+  "recall@10_ef_search_default": [
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0
+  ],
+  "recall@5_ef_search_200": [
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0
+  ],
+  "recall@10_ef_search_200": [
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0
+  ]
+ },
+ "filters": {
+  "in_scope": 10,
+  "other_project": 0,
+  "wrong_version": 0,
+  "strategy_C": 10,
+  "tables": 10,
+  "keyword_expressway": 9
+ },
+ "citations_sample": [
+  {
+   "unit_id": "40089196:t00402:w4-6",
+   "page_start": 4,
+   "page_end": 4,
+   "printed_page_label": "4",
+   "section_path": "6. RESULTS > 6.2 Intermediate Results Indicators by Components"
+  },
+  {
+   "unit_id": "40089196:t00401:w4-6",
+   "page_start": 4,
+   "page_end": 4,
+   "printed_page_label": "4",
+   "section_path": "6. RESULTS > 6.1 PDO Indicators by PDO Outcomes"
+  },
+  {
+   "unit_id": "40089196:C:0015",
+   "page_start": 8,
+   "page_end": 8,
+   "printed_page_label": "8",
+   "section_path": "8. KEY DATES"
+  },
+  {
+   "unit_id": "40089196:C:0008",
+   "page_start": 3,
+   "page_end": 3,
+   "printed_page_label": "3",
+   "section_path": "6. RESULTS"
+  },
+  {
+   "unit_id": "40089196:C:0014",
+   "page_start": 7,
+   "page_end": 8,
+   "printed_page_label": "7",
+   "section_path": "7. DATA ON FINANCIAL PERFORMANCE > 7.3 Key Dates (by loan)"
+  }
+ ],
+ "isolation": {
+  "projects": [
+   "P148850"
+  ],
+  "documents": [
+   "40089196"
+  ]
+ }
+}

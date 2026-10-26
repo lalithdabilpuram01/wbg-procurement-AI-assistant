@@ -1,0 +1,57 @@
+{
+ "frozen_at_utc": "2026-10-25T08:20:00Z",
+ "purpose": "One-time final held-out evaluation of Model 1 (tender duration). Frozen before any test target is read.",
+ "test_set": {
+  "definition": "original Stage 2A test split: valid labels with first tender published 2023-07-01..2024-10-20 (>= 730 days follow-up before the 2026-10-20 snapshot)",
+  "rows": 616, "projects": 59, "packages": 374,
+  "source": "ml/stage2a/split.py (unchanged)"
+ },
+ "target": "duration_days = contract_signing_date - first tender notice publication date; modelled as ln(duration_days); point prediction exp(yhat)",
+ "refit": {
+  "historical_cutoff": "2023-06-30",
+  "eligibility": "train + validation rows (first tender 2019-07-01..2023-06-30) whose contract was signed on/before 2023-06-30 (strictly as-of)",
+  "eligible_rows_audited_before_test": 806,
+  "eligible_breakdown": {"train": 615, "validation": 191},
+  "eligible_projects": 101, "eligible_packages": 722,
+  "overlap_with_test": {"contracts": 0, "packages": 0}
+ },
+ "features": {
+  "categorical": ["procurement_method", "procurement_category", "review_type", "region_name", "country_grp", "sector"],
+  "log1p_numeric": ["api_window_days", "project_prior_tender_notices"],
+  "numeric": ["project_age_days_at_tender", "approval_fiscal_year", "income_ordinal"],
+  "excluded": {"first_tender_type": "identical to category"},
+  "preprocessing": "ml/stage2b/regression.py make_pipeline: OneHot(min_frequency=20, infrequent handling), median imputation, log1p, StandardScaler; fitted inside training folds only"
+ },
+ "candidates": {
+  "B1": "median by method x category, fallback method -> category -> global, k = 1 (Stage 2A); long score = cell exceedance share",
+  "Ridge": "PRIMARY. alpha from logspace(-3, 3, 25) by 5-fold GroupKFold(project), CV metric MAE days",
+  "RandomForest": "CHALLENGER. n_estimators 500; grid max_depth {4,6,10,None} x min_samples_leaf {5,10,20} x max_features {0.3,0.6,1.0}; same CV",
+  "not_evaluated": ["XGBoost", "Elastic Net", "Lasso", "OLS", "survival models"]
+ },
+ "long_duration": {
+  "threshold_days": 365,
+  "score_regression": "P(D > 365) = 1 - Phi((ln 365 - yhat) / sigma), sigma = SD of out-of-fold training log residuals",
+  "alert_rule": "threshold maximising F1 on training out-of-fold scores subject to alert rate <= 30%; ties -> higher threshold",
+  "also_reported": ["point prediction > 365 days (fixed)", "top 20% of scores (capacity view)"]
+ },
+ "prediction_interval": "P10-P90 from out-of-fold training log-residual quantiles",
+ "random_seed": 20261025,
+ "cv": "GroupKFold(n_splits=5) by project_id on refit rows",
+ "metrics": {
+  "regression": ["MAE (primary)", "MedAE", "RMSE", "mean bias", "P10-P90 coverage", "package-weighted MAE", "MAE improvement vs B1"],
+  "uncertainty": "paired cluster bootstrap, 2,000 resamples, project clusters and package clusters, seed 20261025",
+  "long_detection": ["TP", "FP", "TN", "FN", "precision", "recall", "F1", "PR-AUC", "alert rate", "precision-recall curve"],
+  "segments": ["duration band", "review type", "method (QCBS, RFB, ...)", "category", "region", "country", "seen vs unseen projects", "per project", "quarter"]
+ },
+ "selection_rule": "Recommend Random Forest only if its MAE reduction vs Ridge is positive with both project- and package-cluster CIs excluding zero and it is not worse on unseen projects or long-tender F1; otherwise prefer the simpler stable model (Ridge if it is not worse than B1, else B1). No post-test experiments.",
+ "inputs_sha256": {
+  "labels": "computed and verified at refit",
+  "features": "computed and verified at refit",
+  "cohort_manifest": "82a43185f427b3e647e062086cfea812018964e4f8cbb91877346e9a02dac940"
+ },
+ "disclosures": [
+  "Phase 1 diagnostics printed the median of the test window (141.5 days) and the Phase 1 EDA showed medians for fiscal years overlapping the test window; the test is therefore not completely blind.",
+  "Validation was reused across Stage 2A-2D comparisons; Ridge and Random Forest were chosen with knowledge of validation results.",
+  "Population: linked, observed, signed contracts from advertised tenders in the 184 reference-linked cohort projects; not all published tenders and not the World Bank portfolio."
+ ]
+}

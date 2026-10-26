@@ -1,0 +1,1695 @@
+{
+ "api_vs_local": {
+  "P003606": {
+   "api_total": 8,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Project Performance Assessment Report": 1,
+    "Implementation Completion Report Review": 1,
+    "Implementation Completion and Results Report": 1,
+    "Project Agreement": 1,
+    "Grant or Trust Fund Agreement": 1,
+    "Side Letter": 1,
+    "Project Appraisal Document": 1,
+    "Project Information Document": 1
+   },
+   "local_coverage_pct_of_api": 12.5
+  },
+  "P009662": {
+   "api_total": 7,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Project Performance Assessment Report": 1,
+    "Announcement": 1,
+    "Memorandum & Recommendation of the President": 1,
+    "Staff Appraisal Report": 1,
+    "Credit Agreement": 1,
+    "Project Agreement": 1,
+    "Agreement": 1
+   },
+   "local_coverage_pct_of_api": 14.3
+  },
+  "P039892": {
+   "api_total": 7,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Implementation Completion Report Review": 1,
+    "Implementation Completion and Results Report": 1,
+    "Grant or Trust Fund Agreement": 1,
+    "Credit Agreement": 2,
+    "Memorandum & Recommendation of the President": 1,
+    "Staff Appraisal Report": 1
+   },
+   "local_coverage_pct_of_api": 14.3
+  },
+  "P046829": {
+   "api_total": 9,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Project Performance Assessment Report": 2,
+    "Implementation Completion Report Review": 1,
+    "Implementation Completion and Results Report": 1,
+    "Project Information Document": 1,
+    "Project Agreement": 1,
+    "Side Letter": 1,
+    "Grant or Trust Fund Agreement": 1,
+    "Loan Agreement": 1
+   },
+   "local_coverage_pct_of_api": 11.1
+  },
+  "P049924": {
+   "api_total": 9,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Project Performance Assessment Report": 2,
+    "Implementation Completion Report Review": 1,
+    "Implementation Completion and Results Report": 1,
+    "Brief": 1,
+    "Loan Agreement": 1,
+    "Project Information Document": 1,
+    "Project Appraisal Document": 1,
+    "Grant or Trust Fund Agreement": 1
+   },
+   "local_coverage_pct_of_api": 11.1
+  },
+  "P122319": {
+   "api_total": 58,
+   "local_pdfs": 5,
+   "local_found_in_api": 5,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Implementation Completion Report Review": 1,
+    "Auditing Document": 8,
+    "Implementation Completion and Results Report": 1,
+    "Implementation Status and Results Report": 18,
+    "Procurement Plan": 5,
+    "Project Paper": 1,
+    "Loan Agreement": 1,
+    "Side Letter": 1,
+    "Disbursement Letter": 1,
+    "Project Appraisal Document": 1,
+    "Project Information Document": 2,
+    "Integrated Safeguards Data Sheet": 2,
+    "Environmental Assessment": 6,
+    "Resettlement Plan": 8,
+    "Indigenous Peoples Plan": 2
+   },
+   "local_coverage_pct_of_api": 8.6
+  },
+  "P124922": {
+   "api_total": 2,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Project Performance Assessment Report": 2
+   },
+   "local_coverage_pct_of_api": 50.0
+  },
+  "P127203": {
+   "api_total": 46,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Implementation Completion Report Review": 1,
+    "Implementation Completion and Results Report": 2,
+    "Auditing Document": 1,
+    "Project Paper": 5,
+    "Implementation Status and Results Report": 12,
+    "Procurement Plan": 5,
+    "Financing Agreement": 2,
+    "Disbursement Letter": 2,
+    "Side Letter": 1,
+    "Project Information Document": 2,
+    "Agreement": 1,
+    "Project Appraisal Document": 2,
+    "Integrated Safeguards Data Sheet": 2,
+    "Environmental Assessment": 6,
+    "Resettlement Plan": 2
+   },
+   "local_coverage_pct_of_api": 2.2
+  },
+  "P127725": {
+   "api_total": 132,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Implementation Completion Report Review": 1,
+    "Implementation Completion and Results Report": 1,
+    "Auditing Document": 10,
+    "Implementation Status and Results Report": 19,
+    "Procurement Plan": 82,
+    "Letter": 2,
+    "Project Paper": 4,
+    "Agreement": 1,
+    "Side Letter": 2,
+    "Project Agreement": 1,
+    "Financing Agreement": 1,
+    "Disbursement Letter": 1,
+    "Project Appraisal Document": 1,
+    "Project Information Document": 2,
+    "Integrated Safeguards Data Sheet": 2,
+    "Environmental Assessment": 1,
+    "Board Report": 1
+   },
+   "local_coverage_pct_of_api": 0.8
+  },
+  "P128909": {
+   "api_total": 106,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Auditing Document": 23,
+    "Implementation Completion Report Review": 1,
+    "Implementation Completion and Results Report": 1,
+    "Procurement Plan": 42,
+    "Implementation Status and Results Report": 14,
+    "Project Paper": 6,
+    "Agreement": 5,
+    "Disbursement Letter": 5,
+    "Grant or Trust Fund Agreement": 3,
+    "Project Appraisal Document": 1,
+    "Integrated Safeguards Data Sheet": 2,
+    "Project Information Document": 2,
+    "Environmental Assessment": 1
+   },
+   "local_coverage_pct_of_api": 0.9
+  },
+  "P131049": {
+   "api_total": 55,
+   "local_pdfs": 5,
+   "local_found_in_api": 5,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Auditing Document": 6,
+    "Implementation Completion Report Review": 1,
+    "Implementation Completion and Results Report": 1,
+    "Implementation Status and Results Report": 14,
+    "Procurement Plan": 25,
+    "Project Paper": 1,
+    "Project Appraisal Document": 1,
+    "Project Information Document": 2,
+    "Integrated Safeguards Data Sheet": 2,
+    "Resettlement Plan": 1,
+    "Environmental Assessment": 1
+   },
+   "local_coverage_pct_of_api": 9.1
+  },
+  "P131655": {
+   "api_total": 37,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Auditing Document": 5,
+    "Implementation Completion Report Review": 1,
+    "Implementation Completion and Results Report": 1,
+    "Procurement Plan": 6,
+    "Implementation Status and Results Report": 13,
+    "Environmental Assessment": 1,
+    "Project Paper": 2,
+    "Agreement": 1,
+    "Integrated Safeguards Data Sheet": 3,
+    "Financing Agreement": 1,
+    "Project Appraisal Document": 1,
+    "Project Information Document": 1,
+    "": 1
+   },
+   "local_coverage_pct_of_api": 2.7
+  },
+  "P132742": {
+   "api_total": 72,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Implementation Completion Report Review": 1,
+    "Implementation Completion and Results Report": 1,
+    "Implementation Status and Results Report": 19,
+    "Procurement Plan": 17,
+    "Auditing Document": 12,
+    "Agreement": 2,
+    "Project Paper": 5,
+    "Financing Agreement": 3,
+    "Side Letter": 3,
+    "Disbursement Letter": 2,
+    "Minutes": 1,
+    "Statutory Committee Report": 1,
+    "Integrated Safeguards Data Sheet": 2,
+    "Project Information Document": 2,
+    "Environmental Assessment": 1
+   },
+   "local_coverage_pct_of_api": 1.4
+  },
+  "P132833": {
+   "api_total": 115,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Auditing Document": 11,
+    "Implementation Completion Report Review": 1,
+    "Implementation Completion and Results Report": 1,
+    "Procurement Plan": 58,
+    "Implementation Status and Results Report": 16,
+    "Agreement": 4,
+    "Project Paper": 5,
+    "Integrated Safeguards Data Sheet": 5,
+    "Disbursement Letter": 2,
+    "Resettlement Plan": 3,
+    "Environmental Assessment": 4,
+    "Side Letter": 1,
+    "Financing Agreement": 1,
+    "Project Information Document": 2,
+    "Project Appraisal Document": 1
+   },
+   "local_coverage_pct_of_api": 0.9
+  },
+  "P133116": {
+   "api_total": 58,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Auditing Document": 7,
+    "Implementation Completion Report Review": 1,
+    "Implementation Completion and Results Report": 1,
+    "Implementation Status and Results Report": 14,
+    "Procurement Plan": 10,
+    "Project Paper": 1,
+    "Side Letter": 1,
+    "Project Agreement": 1,
+    "Loan Agreement": 1,
+    "Disbursement Letter": 1,
+    "Statutory Committee Report": 1,
+    "Integrated Safeguards Data Sheet": 2,
+    "Project Appraisal Document": 1,
+    "Project Information Document": 2,
+    "Environmental Assessment": 8,
+    "Resettlement Plan": 4,
+    "Indigenous Peoples Plan": 2
+   },
+   "local_coverage_pct_of_api": 1.7
+  },
+  "P145502": {
+   "api_total": 81,
+   "local_pdfs": 5,
+   "local_found_in_api": 5,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Implementation Completion Report Review": 1,
+    "Auditing Document": 4,
+    "Implementation Completion and Results Report": 1,
+    "Implementation Status and Results Report": 14,
+    "Project Paper": 4,
+    "Procurement Plan": 39,
+    "Agreement": 1,
+    "Auditing Document; Financial Monitoring Report; Letter; Memorandum": 2,
+    "Integrated Safeguards Data Sheet": 3,
+    "Brief": 1,
+    "Environmental Assessment": 3,
+    "Disbursement Letter": 1,
+    "Loan Agreement": 1,
+    "Side Letter": 2,
+    "Statutory Committee Report": 1,
+    "Project Appraisal Document": 1,
+    "Project Information Document": 2
+   },
+   "local_coverage_pct_of_api": 6.2
+  },
+  "P145534": {
+   "api_total": 71,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Implementation Completion Report Review": 1,
+    "Implementation Completion and Results Report": 1,
+    "Auditing Document": 8,
+    "Procurement Plan": 33,
+    "Implementation Status and Results Report": 13,
+    "Project Paper": 3,
+    "Correspondence": 1,
+    "Disbursement Letter": 1,
+    "Financing Agreement": 1,
+    "Side Letter": 1,
+    "Statutory Committee Report": 1,
+    "Project Appraisal Document": 1,
+    "Project Information Document": 1,
+    "Integrated Safeguards Data Sheet": 2,
+    "Indigenous Peoples Plan": 1,
+    "Environmental Assessment": 2
+   },
+   "local_coverage_pct_of_api": 1.4
+  },
+  "P148850": {
+   "api_total": 161,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Letter": 3,
+    "Project Paper": 7,
+    "Procurement Plan": 65,
+    "Agreement": 6,
+    "Implementation Status and Results Report": 21,
+    "Auditing Document": 19,
+    "Climate Co-Benefits Assessment": 1,
+    "Financing Agreement": 2,
+    "Project Agreement": 2,
+    "Integrated Safeguards Data Sheet": 2,
+    "Project Information and Integrated Safeguards Data Sheet": 1,
+    "Aide Memoire": 1,
+    "Resettlement Plan": 17,
+    "Brief": 1,
+    "Correspondence": 1,
+    "Side Letter": 1,
+    "Disbursement Letter": 1,
+    "Board Summary": 1,
+    "Project Appraisal Document": 1,
+    "Statutory Committee Report": 1,
+    "Project Information Document": 2,
+    "Environmental Assessment": 1,
+    "Board Report": 4
+   },
+   "local_coverage_pct_of_api": 0.6
+  },
+  "P150481": {
+   "api_total": 81,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Implementation Completion Report Review": 1,
+    "Implementation Completion and Results Report": 1,
+    "Auditing Document": 9,
+    "Procurement Plan": 44,
+    "Project Paper": 3,
+    "Implementation Status and Results Report": 18,
+    "Project Appraisal Document": 2,
+    "Project Information Document": 2,
+    "Integrated Safeguards Data Sheet": 1
+   },
+   "local_coverage_pct_of_api": 1.2
+  },
+  "P152820": {
+   "api_total": 49,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Auditing Document": 5,
+    "Implementation Completion and Results Report": 2,
+    "Implementation Status and Results Report": 8,
+    "Procurement Plan": 26,
+    "Project Paper": 3,
+    "Report": 1,
+    "Project Information Document": 2,
+    "Integrated Safeguards Data Sheet": 2
+   },
+   "local_coverage_pct_of_api": 2.0
+  },
+  "P155198": {
+   "api_total": 50,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Implementation Completion Report Review": 1,
+    "Auditing Document": 8,
+    "Implementation Completion and Results Report": 1,
+    "Implementation Status and Results Report": 13,
+    "Project Paper": 3,
+    "Agreement": 1,
+    "Procurement Plan": 12,
+    "Disbursement Letter": 1,
+    "Loan Agreement": 1,
+    "Side Letter": 1,
+    "Project Appraisal Document": 2,
+    "Project Information Document": 4,
+    "Integrated Safeguards Data Sheet": 2
+   },
+   "local_coverage_pct_of_api": 2.0
+  },
+  "P155412": {
+   "api_total": 135,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Implementation Completion and Results Report": 1,
+    "Auditing Document": 10,
+    "Procurement Plan": 81,
+    "Implementation Status and Results Report": 20,
+    "Aide Memoire": 1,
+    "Project Paper": 4,
+    "Financing Agreement": 2,
+    "Agreement": 2,
+    "Disbursement Letter": 4,
+    "Environmental Assessment": 2,
+    "Integrated Safeguards Data Sheet": 3,
+    "Side Letter": 1,
+    "Project Appraisal Document": 1,
+    "Grant or Trust Fund Agreement": 1,
+    "Project Information Document": 2
+   },
+   "local_coverage_pct_of_api": 0.7
+  },
+  "P157206": {
+   "api_total": 79,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Auditing Document": 7,
+    "Brief": 1,
+    "Implementation Completion Report Review": 1,
+    "Implementation Completion and Results Report": 1,
+    "Implementation Status and Results Report": 17,
+    "Procurement Plan": 35,
+    "Project Paper": 3,
+    "Disbursement Letter": 2,
+    "Financing Agreement": 1,
+    "Project Agreement": 1,
+    "Minutes": 1,
+    "Project Appraisal Document": 1,
+    "Project Information and Integrated Safeguards Data Sheet": 2,
+    "Environmental Assessment": 2,
+    "Board Report": 1,
+    "Resettlement Plan": 2,
+    "Agreement": 1
+   },
+   "local_coverage_pct_of_api": 1.3
+  },
+  "P157490": {
+   "api_total": 45,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Implementation Completion Report Review": 1,
+    "Auditing Document": 7,
+    "Implementation Status and Results Report": 10,
+    "Procurement Plan": 19,
+    "Project Paper": 2,
+    "Agreement": 1,
+    "Grant or Trust Fund Agreement": 1,
+    "Disbursement Letter": 1,
+    "Project Information and Integrated Safeguards Data Sheet": 2,
+    "Environmental Assessment": 1
+   },
+   "local_coverage_pct_of_api": 2.2
+  },
+  "P163345": {
+   "api_total": 94,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Auditing Document": 20,
+    "Implementation Completion Report Review": 1,
+    "Implementation Completion and Results Report": 1,
+    "Implementation Status and Results Report": 17,
+    "Procurement Plan": 35,
+    "Project Paper": 4,
+    "Loan Agreement": 2,
+    "Disbursement Letter": 2,
+    "Minutes": 1,
+    "Indigenous Peoples Plan": 2,
+    "Environmental Assessment": 2,
+    "Agreement": 1,
+    "Integrated Safeguards Data Sheet": 1,
+    "": 2,
+    "Project Information and Integrated Safeguards Data Sheet": 3
+   },
+   "local_coverage_pct_of_api": 1.1
+  },
+  "P163868": {
+   "api_total": 74,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Implementation Completion Report Review": 1,
+    "Auditing Document": 7,
+    "Implementation Completion and Results Report": 1,
+    "Procurement Plan": 34,
+    "Implementation Status and Results Report": 14,
+    "Aide Memoire": 1,
+    "Integrated Safeguards Data Sheet": 2,
+    "Disbursement Letter": 3,
+    "Agreement": 2,
+    "Project Paper": 2,
+    "Report": 1,
+    "Loan Agreement": 1,
+    "Project Appraisal Document": 1,
+    "Program Information Document": 2,
+    "Program-for-Results Environmental and Social Systems Assessment": 1,
+    "Environmental Assessment": 1
+   },
+   "local_coverage_pct_of_api": 1.4
+  },
+  "P163870": {
+   "api_total": 164,
+   "local_pdfs": 102,
+   "local_found_in_api": 102,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Auditing Document": 6,
+    "Project Paper": 4,
+    "Implementation Status and Results Report": 17,
+    "Procurement Plan": 103,
+    "Climate Co-Benefits Assessment": 1,
+    "Financing Agreement": 2,
+    "Agreement": 2,
+    "": 2,
+    "Project Information and Integrated Safeguards Data Sheet": 4,
+    "Aide Memoire": 2,
+    "Environmental Assessment": 9,
+    "Resettlement Plan": 8,
+    "Disbursement Letter": 2,
+    "Project Agreement": 1,
+    "Minutes": 1
+   },
+   "local_coverage_pct_of_api": 62.2
+  },
+  "P163923": {
+   "api_total": 28,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Implementation Completion and Results Report": 1,
+    "Auditing Document": 4,
+    "Implementation Status and Results Report": 7,
+    "Procurement Plan": 13,
+    "Project Paper": 1,
+    "Integrated Safeguards Data Sheet": 1,
+    "Environmental Assessment": 1
+   },
+   "local_coverage_pct_of_api": 3.6
+  },
+  "P164453": {
+   "api_total": 295,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Auditing Document": 10,
+    "Implementation Completion Report Review": 1,
+    "Implementation Completion and Results Report": 1,
+    "Project Paper": 5,
+    "Procurement Plan": 223,
+    "Implementation Status and Results Report": 10,
+    "Environmental Assessment": 30,
+    "Disbursement Letter": 5,
+    "Agreement": 2,
+    "Integrated Safeguards Data Sheet": 1,
+    "Financing Agreement": 1,
+    "Loan Agreement": 1,
+    "Project Appraisal Document": 2,
+    "Project Information and Integrated Safeguards Data Sheet": 2,
+    "Resettlement Plan": 1
+   },
+   "local_coverage_pct_of_api": 0.3
+  },
+  "P165782": {
+   "api_total": 84,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Implementation Status and Results Report": 17,
+    "Procurement Plan": 34,
+    "Auditing Document": 6,
+    "Aide Memoire": 1,
+    "Project Paper": 4,
+    "Climate Co-Benefits Assessment": 1,
+    "Disbursement Letter": 3,
+    "Financing Agreement": 2,
+    "Agreement": 3,
+    "Project Information and Integrated Safeguards Data Sheet": 2,
+    "Environmental Assessment": 5,
+    "Resettlement Plan": 2,
+    "Report": 2,
+    "Minutes": 1,
+    "Project Appraisal Document": 1
+   },
+   "local_coverage_pct_of_api": 1.2
+  },
+  "P166845": {
+   "api_total": 13,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Auditing Document": 1,
+    "Procurement Plan": 4,
+    "Project Paper": 3,
+    "Implementation Status and Results Report": 1,
+    "Project Information Document": 2,
+    "Integrated Safeguards Data Sheet": 2
+   },
+   "local_coverage_pct_of_api": 7.7
+  },
+  "P173367": {
+   "api_total": 94,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Auditing Document": 7,
+    "Procurement Plan": 46,
+    "Project Paper": 7,
+    "Implementation Status and Results Report": 9,
+    "Procedure and Checklist": 3,
+    "Loan Agreement": 2,
+    "Disbursement Letter": 2,
+    "Environmental and Social Commitment Plan": 3,
+    "Report": 1,
+    "Minutes": 2,
+    "Environmental and Social Assessment; Social Assessment": 2,
+    "Environmental Assessment; Environmental and Social Assessment; Social Assessment": 1,
+    "Stakeholder Engagement Plan": 2,
+    "Board Summary": 1,
+    "Project Information Document": 3,
+    "Project Appraisal Document": 2,
+    "Environmental and Social Review Summary": 1
+   },
+   "local_coverage_pct_of_api": 1.1
+  },
+  "P174017": {
+   "api_total": 37,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Implementation Status and Results Report": 6,
+    "Auditing Document": 5,
+    "Aide Memoire": 2,
+    "Procurement Plan": 11,
+    "Project Paper": 3,
+    "Agreement": 2,
+    "Disbursement Letter": 1,
+    "Environmental and Social Review Summary": 2,
+    "Environmental and Social Commitment Plan": 1,
+    "Stakeholder Engagement Plan": 1,
+    "Procedure and Checklist": 1,
+    "Environmental and Social Management Plan": 1,
+    "Project Information Document": 1
+   },
+   "local_coverage_pct_of_api": 2.7
+  },
+  "P174571": {
+   "api_total": 10,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Auditing Document": 2,
+    "Project Paper": 1,
+    "Implementation Status and Results Report": 1,
+    "Procurement Plan": 1,
+    "Environmental and Social Review Summary": 2,
+    "Stakeholder Engagement Plan": 1,
+    "Environmental and Social Commitment Plan": 1,
+    "Project Information Document": 1
+   },
+   "local_coverage_pct_of_api": 10.0
+  },
+  "P175325": {
+   "api_total": 103,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Procurement Plan": 57,
+    "Implementation Status and Results Report": 9,
+    "Climate Co-Benefits Assessment": 1,
+    "Aide Memoire": 7,
+    "Financing Agreement": 2,
+    "Disbursement Letter": 3,
+    "Auditing Document": 4,
+    "Project Paper": 1,
+    "Environmental and Social Commitment Plan": 4,
+    "Project Information Document": 3,
+    "Stakeholder Engagement Plan": 3,
+    "Environmental and Social Review Summary": 4,
+    "Environmental Assessment; Environmental and Social Assessment; Social Assessment": 1,
+    "Minutes": 1,
+    "Project Appraisal Document": 1,
+    "Environmental and Social Management Plan": 1,
+    "Agreement": 1
+   },
+   "local_coverage_pct_of_api": 1.0
+  },
+  "P175659": {
+   "api_total": 43,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Implementation Status and Results Report": 10,
+    "Procurement Plan": 18,
+    "Auditing Document": 3,
+    "Project Paper": 1,
+    "Financing Agreement": 1,
+    "Disbursement Letter": 1,
+    "Project Appraisal Document": 1,
+    "Environmental Assessment; Environmental and Social Assessment; Social Assessment": 1,
+    "Project Information Document": 2,
+    "Environmental and Social Review Summary": 2,
+    "Stakeholder Engagement Plan": 1,
+    "Environmental and Social Commitment Plan": 1,
+    "Environmental and Social Management Plan": 1
+   },
+   "local_coverage_pct_of_api": 2.3
+  },
+  "P175928": {
+   "api_total": 25,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Implementation Completion and Results Report": 1,
+    "Auditing Document": 4,
+    "Procurement Plan": 9,
+    "Project Paper": 2,
+    "Implementation Status and Results Report": 1,
+    "Stakeholder Engagement Plan": 2,
+    "Procedure and Checklist": 2,
+    "Environmental and Social Commitment Plan": 2,
+    "Project Information Document": 1,
+    "Environmental and Social Review Summary": 1
+   },
+   "local_coverage_pct_of_api": 4.0
+  },
+  "P176105": {
+   "api_total": 124,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Procurement Plan": 89,
+    "Implementation Status and Results Report": 9,
+    "Auditing Document": 6,
+    "Project Paper": 1,
+    "Report": 3,
+    "Environmental and Social Management Plan": 2,
+    "Aide Memoire": 1,
+    "Procedure and Checklist": 1,
+    "Disbursement Letter": 1,
+    "Loan Agreement": 1,
+    "Project Appraisal Document": 2,
+    "Environmental and Social Commitment Plan": 3,
+    "Project Information Document": 2,
+    "Stakeholder Engagement Plan": 1,
+    "Environmental and Social Review Summary": 2
+   },
+   "local_coverage_pct_of_api": 0.8
+  },
+  "P176948": {
+   "api_total": 64,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Procurement Plan": 22,
+    "Auditing Document": 4,
+    "Implementation Status and Results Report": 10,
+    "Climate Co-Benefits Assessment": 1,
+    "Financing Agreement": 2,
+    "Agreement": 2,
+    "Disbursement Letter": 3,
+    "Project Paper": 1,
+    "Environmental and Social Commitment Plan": 5,
+    "Project Information Document": 3,
+    "Environmental and Social Review Summary": 3,
+    "Stakeholder Engagement Plan": 2,
+    "Aide Memoire": 1,
+    "Project Appraisal Document": 1,
+    "Environmental Assessment; Environmental and Social Assessment; Social Assessment": 1,
+    "Environmental and Social Management Framework": 2,
+    "Procedure and Checklist": 1
+   },
+   "local_coverage_pct_of_api": 1.6
+  },
+  "P177004": {
+   "api_total": 73,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Procurement Plan": 45,
+    "Auditing Document": 3,
+    "Implementation Status and Results Report": 9,
+    "Aide Memoire": 2,
+    "Stakeholder Engagement Plan": 2,
+    "Loan Agreement": 1,
+    "Disbursement Letter": 1,
+    "Project Appraisal Document": 1,
+    "Project Information Document": 2,
+    "Environmental and Social Management Framework": 2,
+    "Environmental and Social Management Plan": 1,
+    "Environmental and Social Commitment Plan": 1,
+    "Procedure and Checklist": 1,
+    "Environmental and Social Review Summary": 2
+   },
+   "local_coverage_pct_of_api": 1.4
+  },
+  "P178432": {
+   "api_total": 56,
+   "local_pdfs": 32,
+   "local_found_in_api": 32,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Procurement Plan": 32,
+    "Implementation Status and Results Report": 7,
+    "Auditing Document": 4,
+    "Agreement": 1,
+    "Grant or Trust Fund Agreement": 1,
+    "Disbursement Letter": 1,
+    "Project Appraisal Document": 1,
+    "Environmental and Social Commitment Plan": 3,
+    "Project Information Document": 2,
+    "Stakeholder Engagement Plan": 2,
+    "Environmental and Social Review Summary": 2
+   },
+   "local_coverage_pct_of_api": 57.1
+  },
+  "P178545": {
+   "api_total": 50,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Implementation Status and Results Report": 7,
+    "Procurement Plan": 23,
+    "Auditing Document": 2,
+    "Agreement": 2,
+    "Disbursement Letter": 2,
+    "Project Paper": 1,
+    "Aide Memoire": 1,
+    "Financing Agreement": 1,
+    "Project Appraisal Document": 1,
+    "Environmental and Social Management Plan": 2,
+    "Procedure and Checklist": 1,
+    "Environmental and Social Management Framework": 1,
+    "Environmental and Social Commitment Plan": 1,
+    "Environmental and Social Review Summary": 2,
+    "Stakeholder Engagement Plan": 1,
+    "Project Information Document": 2
+   },
+   "local_coverage_pct_of_api": 2.0
+  },
+  "P180060": {
+   "api_total": 59,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Procurement Plan": 34,
+    "Auditing Document": 4,
+    "Implementation Status and Results Report": 5,
+    "Disbursement Letter": 1,
+    "Financing Agreement": 1,
+    "Minutes": 1,
+    "Project Appraisal Document": 1,
+    "Environmental and Social Commitment Plan": 2,
+    "Environmental and Social Review Summary": 2,
+    "Stakeholder Engagement Plan": 2,
+    "Environmental and Social Management Plan": 2,
+    "Project Information Document": 2,
+    "Procedure and Checklist": 1,
+    "Environmental and Social Management Framework": 1
+   },
+   "local_coverage_pct_of_api": 1.7
+  },
+  "P181016": {
+   "api_total": 19,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Auditing Document": 2,
+    "Procurement Plan": 8,
+    "Implementation Status and Results Report": 3,
+    "Environmental and Social Commitment Plan": 1,
+    "Project Paper": 1,
+    "Agreement": 1,
+    "Disbursement Letter": 1,
+    "Environmental and Social Review Summary": 1,
+    "": 1
+   },
+   "local_coverage_pct_of_api": 5.3
+  },
+  "P181271": {
+   "api_total": 20,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Implementation Status and Results Report": 3,
+    "Procurement Plan": 5,
+    "Project Paper": 1,
+    "Report": 1,
+    "Auditing Document": 1,
+    "Aide Memoire": 2,
+    "Letter": 1,
+    "Grant or Trust Fund Agreement": 1,
+    "Disbursement Letter": 1,
+    "Environmental and Social Commitment Plan": 1,
+    "Stakeholder Engagement Plan": 1,
+    "Project Information Document": 1,
+    "Environmental and Social Review Summary": 1
+   },
+   "local_coverage_pct_of_api": 5.0
+  },
+  "P181385": {
+   "api_total": 56,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Project Information Document": 6,
+    "Implementation Status and Results Report": 5,
+    "Procurement Plan": 16,
+    "Aide Memoire": 3,
+    "Letter": 1,
+    "Grant or Trust Fund Agreement": 2,
+    "Disbursement Letter": 4,
+    "Auditing Document": 1,
+    "Climate Co-Benefits Assessment": 1,
+    "Social Assessment": 2,
+    "Environmental and Social Management Plan": 1,
+    "Procedure and Checklist": 1,
+    "Environmental and Social Management Framework": 1,
+    "Financing Agreement": 2,
+    "Project Paper": 1,
+    "Environmental and Social Review Summary": 2,
+    "Environmental and Social Commitment Plan": 2,
+    "Stakeholder Engagement Plan": 2,
+    "Working Paper": 1,
+    "Project Appraisal Document": 1,
+    "Project Document": 1
+   },
+   "local_coverage_pct_of_api": 1.8
+  },
+  "P500392": {
+   "api_total": 35,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Project Information Document": 5,
+    "Environmental and Social Review Summary": 3,
+    "Procurement Plan": 9,
+    "Project Paper": 1,
+    "Implementation Status and Results Report": 5,
+    "Auditing Document": 4,
+    "Letter": 1,
+    "Grant or Trust Fund Agreement": 2,
+    "Disbursement Letter": 1,
+    "Project Appraisal Document": 1,
+    "Environmental and Social Commitment Plan": 2,
+    "Stakeholder Engagement Plan": 1
+   },
+   "local_coverage_pct_of_api": 2.9
+  },
+  "P503941": {
+   "api_total": 33,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Procurement Plan": 12,
+    "Environmental and Social Management Plan": 4,
+    "Implementation Status and Results Report": 4,
+    "Aide Memoire": 2,
+    "Procedure and Checklist": 1,
+    "Financing Agreement": 1,
+    "Disbursement Letter": 1,
+    "Minutes": 1,
+    "Project Appraisal Document": 1,
+    "Environmental and Social Commitment Plan": 2,
+    "Project Information Document": 1,
+    "Environmental and Social Review Summary": 2,
+    "Stakeholder Engagement Plan": 1
+   },
+   "local_coverage_pct_of_api": 3.0
+  },
+  "P504023": {
+   "api_total": 27,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Implementation Status and Results Report": 5,
+    "Aide Memoire": 4,
+    "Resettlement Plan; Environmental and Social Management Plan": 1,
+    "Auditing Document": 1,
+    "Procurement Plan": 6,
+    "Environmental and Social Management Plan": 1,
+    "Minutes": 1,
+    "Project Agreement": 1,
+    "Financing Agreement": 1,
+    "Disbursement Letter": 1,
+    "Project Appraisal Document": 1,
+    "Environmental and Social Review Summary": 1,
+    "Stakeholder Engagement Plan": 1,
+    "Environmental and Social Commitment Plan": 1,
+    "Project Document": 1
+   },
+   "local_coverage_pct_of_api": 3.7
+  },
+  "P506407": {
+   "api_total": 27,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Procurement Plan": 7,
+    "Project Paper": 2,
+    "Agreement": 3,
+    "Disbursement Letter": 3,
+    "Environmental and Social Commitment Plan": 6,
+    "Social Assessment; Environmental Assessment; Environmental and Social Assessment": 1,
+    "Environmental Assessment; Environmental and Social Assessment; Social Assessment": 1,
+    "Environmental and Social Assessment; Social Assessment; Environmental Assessment": 1,
+    "Environmental and Social Review Summary": 1,
+    "Stakeholder Engagement Plan": 1,
+    "Project Information Document": 1
+   },
+   "local_coverage_pct_of_api": 3.7
+  },
+  "P507207": {
+   "api_total": 52,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Procurement Plan": 32,
+    "Implementation Status and Results Report": 2,
+    "Environmental and Social Management Plan": 2,
+    "Climate Co-Benefits Assessment": 1,
+    "Procedure and Checklist": 1,
+    "Project Agreement": 1,
+    "Financing Agreement": 1,
+    "Minutes": 1,
+    "Disbursement Letter": 2,
+    "Project Appraisal Document": 1,
+    "Environmental and Social Commitment Plan": 2,
+    "Project Information Document": 2,
+    "Stakeholder Engagement Plan": 1,
+    "Environmental and Social Review Summary": 2,
+    "Agreement": 1
+   },
+   "local_coverage_pct_of_api": 1.9
+  },
+  "P508222": {
+   "api_total": 54,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Procurement Plan": 31,
+    "Implementation Status and Results Report": 4,
+    "Agreement": 1,
+    "Financing Agreement": 1,
+    "Disbursement Letter": 1,
+    "Environmental and Social Commitment Plan": 3,
+    "Stakeholder Engagement Plan": 3,
+    "Environmental and Social Review Summary": 4,
+    "Program Appraisal Document": 1,
+    "Program-for-Results Environmental and Social Systems Assessment": 3,
+    "Program Information Document": 2
+   },
+   "local_coverage_pct_of_api": 1.9
+  },
+  "P515690": {
+   "api_total": 10,
+   "local_pdfs": 1,
+   "local_found_in_api": 1,
+   "local_missing_from_api": [],
+   "api_by_type": {
+    "Project Appraisal Document": 1,
+    "Environmental and Social Commitment Plan": 3,
+    "Project Information Document": 2,
+    "Stakeholder Engagement Plan": 2,
+    "Environmental and Social Review Summary": 2
+   },
+   "local_coverage_pct_of_api": 10.0
+  }
+ },
+ "pdf_head_checks": [
+  {
+   "doc_id": "9349576",
+   "docty": "Implementation Completion and Results Report",
+   "url": "http://documents.worldbank.org/curated/en/766961468217164840/pdf/ICR7010ICR0P0036060Box327353B01public1.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/766961468217164840/pdf/ICR7010ICR0P0036060Box327353B01public1.pdf",
+   "redirects": 3,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "9349576",
+   "docty": "Implementation Completion and Results Report",
+   "variant": "https",
+   "url": "https://documents.worldbank.org/curated/en/766961468217164840/pdf/ICR7010ICR0P0036060Box327353B01public1.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/766961468217164840/pdf/ICR7010ICR0P0036060Box327353B01public1.pdf",
+   "redirects": 2,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "18223798",
+   "docty": "Project Agreement",
+   "url": "http://documents.worldbank.org/curated/en/391891468255872632/pdf/Credit-0294-India-Binar-Agricultural-Markets-Project-Project-Agreement.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/391891468255872632/pdf/Credit-0294-India-Binar-Agricultural-Markets-Project-Project-Agreement.pdf",
+   "redirects": 3,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "18223798",
+   "docty": "Project Agreement",
+   "variant": "https",
+   "url": "https://documents.worldbank.org/curated/en/391891468255872632/pdf/Credit-0294-India-Binar-Agricultural-Markets-Project-Project-Agreement.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/391891468255872632/pdf/Credit-0294-India-Binar-Agricultural-Markets-Project-Project-Agreement.pdf",
+   "redirects": 2,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "19569645",
+   "docty": "Implementation Completion Report Review",
+   "url": "http://documents.worldbank.org/curated/en/878951474898822797/pdf/000020051-20140526210150.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/878951474898822797/pdf/000020051-20140526210150.pdf",
+   "redirects": 3,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": "32597"
+  },
+  {
+   "doc_id": "19569645",
+   "docty": "Implementation Completion Report Review",
+   "variant": "https",
+   "url": "https://documents.worldbank.org/curated/en/878951474898822797/pdf/000020051-20140526210150.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/878951474898822797/pdf/000020051-20140526210150.pdf",
+   "redirects": 2,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": "32597"
+  },
+  {
+   "doc_id": "442476",
+   "docty": "Project Information Document",
+   "url": "http://documents.worldbank.org/curated/en/141941468769238481/pdf/multi0page.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/141941468769238481/pdf/multi0page.pdf",
+   "redirects": 3,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "442476",
+   "docty": "Project Information Document",
+   "variant": "https",
+   "url": "https://documents.worldbank.org/curated/en/141941468769238481/pdf/multi0page.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/141941468769238481/pdf/multi0page.pdf",
+   "redirects": 2,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "14943931",
+   "docty": "Project Performance Assessment Report",
+   "url": "http://documents.worldbank.org/curated/en/230771468026978574/pdf/635780PPAR0P0300803101100BOX361536B.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/230771468026978574/pdf/635780PPAR0P0300803101100BOX361536B.pdf",
+   "redirects": 3,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "14943931",
+   "docty": "Project Performance Assessment Report",
+   "variant": "https",
+   "url": "https://documents.worldbank.org/curated/en/230771468026978574/pdf/635780PPAR0P0300803101100BOX361536B.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/230771468026978574/pdf/635780PPAR0P0300803101100BOX361536B.pdf",
+   "redirects": 2,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "29974573",
+   "docty": "Implementation Status and Results Report",
+   "url": "http://documents.worldbank.org/curated/en/628851528701663920/pdf/Disclosable-Version-of-the-ISR-ZhangHu-Railway-P122319-Sequence-No-13.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/628851528701663920/pdf/Disclosable-Version-of-the-ISR-ZhangHu-Railway-P122319-Sequence-No-13.pdf",
+   "redirects": 3,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "29974573",
+   "docty": "Implementation Status and Results Report",
+   "variant": "https",
+   "url": "https://documents.worldbank.org/curated/en/628851528701663920/pdf/Disclosable-Version-of-the-ISR-ZhangHu-Railway-P122319-Sequence-No-13.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/628851528701663920/pdf/Disclosable-Version-of-the-ISR-ZhangHu-Railway-P122319-Sequence-No-13.pdf",
+   "redirects": 2,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "14943931",
+   "docty": "Project Performance Assessment Report",
+   "url": "http://documents.worldbank.org/curated/en/230771468026978574/pdf/635780PPAR0P0300803101100BOX361536B.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/230771468026978574/pdf/635780PPAR0P0300803101100BOX361536B.pdf",
+   "redirects": 3,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "14943931",
+   "docty": "Project Performance Assessment Report",
+   "variant": "https",
+   "url": "https://documents.worldbank.org/curated/en/230771468026978574/pdf/635780PPAR0P0300803101100BOX361536B.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/230771468026978574/pdf/635780PPAR0P0300803101100BOX361536B.pdf",
+   "redirects": 2,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "14644317",
+   "docty": "Integrated Safeguards Data Sheet",
+   "url": "http://documents.worldbank.org/curated/en/955551468251119641/pdf/Integrated0Saf00Sheet0Concept0Stage.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/955551468251119641/pdf/Integrated0Saf00Sheet0Concept0Stage.pdf",
+   "redirects": 3,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": "25142"
+  },
+  {
+   "doc_id": "14644317",
+   "docty": "Integrated Safeguards Data Sheet",
+   "variant": "https",
+   "url": "https://documents.worldbank.org/curated/en/955551468251119641/pdf/Integrated0Saf00Sheet0Concept0Stage.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/955551468251119641/pdf/Integrated0Saf00Sheet0Concept0Stage.pdf",
+   "redirects": 2,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": "25142"
+  },
+  {
+   "doc_id": "34209184",
+   "docty": "Procurement Plan",
+   "url": "http://documents.worldbank.org/curated/en/099120623043011799/pdf/P12772502e3b500f60a84d0fb9b2b01a5d8.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/099120623043011799/pdf/P12772502e3b500f60a84d0fb9b2b01a5d8.pdf",
+   "redirects": 3,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "34209184",
+   "docty": "Procurement Plan",
+   "variant": "https",
+   "url": "https://documents.worldbank.org/curated/en/099120623043011799/pdf/P12772502e3b500f60a84d0fb9b2b01a5d8.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/099120623043011799/pdf/P12772502e3b500f60a84d0fb9b2b01a5d8.pdf",
+   "redirects": 2,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "31053768",
+   "docty": "Procurement Plan",
+   "url": "http://documents.worldbank.org/curated/en/692851557342145769/pdf/Liberia-AFRICA-P128909-Liberia-Health-Systems-Strengthening-Procurement-Plan.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/692851557342145769/pdf/Liberia-AFRICA-P128909-Liberia-Health-Systems-Strengthening-Procurement-Plan.pdf",
+   "redirects": 3,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "31053768",
+   "docty": "Procurement Plan",
+   "variant": "https",
+   "url": "https://documents.worldbank.org/curated/en/692851557342145769/pdf/Liberia-AFRICA-P128909-Liberia-Health-Systems-Strengthening-Procurement-Plan.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/692851557342145769/pdf/Liberia-AFRICA-P128909-Liberia-Health-Systems-Strengthening-Procurement-Plan.pdf",
+   "redirects": 2,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "27488497",
+   "docty": "Procurement Plan",
+   "url": "http://documents.worldbank.org/curated/en/644881495469147880/pdf/Plan-Archive-5.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/644881495469147880/pdf/Plan-Archive-5.pdf",
+   "redirects": 3,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "27488497",
+   "docty": "Procurement Plan",
+   "variant": "https",
+   "url": "https://documents.worldbank.org/curated/en/644881495469147880/pdf/Plan-Archive-5.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/644881495469147880/pdf/Plan-Archive-5.pdf",
+   "redirects": 2,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "20474566",
+   "docty": "Project Appraisal Document",
+   "url": "http://documents.worldbank.org/curated/en/362221468291332192/pdf/PAD11690PAD0Mu000Box385386B00OUO090.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/362221468291332192/pdf/PAD11690PAD0Mu000Box385386B00OUO090.pdf",
+   "redirects": 3,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "20474566",
+   "docty": "Project Appraisal Document",
+   "variant": "https",
+   "url": "https://documents.worldbank.org/curated/en/362221468291332192/pdf/PAD11690PAD0Mu000Box385386B00OUO090.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/362221468291332192/pdf/PAD11690PAD0Mu000Box385386B00OUO090.pdf",
+   "redirects": 2,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "28028042",
+   "docty": "Disbursement Letter",
+   "url": "http://documents.worldbank.org/curated/en/229821507143970471/pdf/ITK171540-20179041504.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/229821507143970471/pdf/ITK171540-20179041504.pdf",
+   "redirects": 3,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "28028042",
+   "docty": "Disbursement Letter",
+   "variant": "https",
+   "url": "https://documents.worldbank.org/curated/en/229821507143970471/pdf/ITK171540-20179041504.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/229821507143970471/pdf/ITK171540-20179041504.pdf",
+   "redirects": 2,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "32515432",
+   "docty": "Procurement Plan",
+   "url": "http://documents.worldbank.org/curated/en/502141603711779107/pdf/Sri-Lanka-SOUTH-ASIA-P132833-Transport-Connectivity-and-Asset-Management-Project-Procurement-Plan.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/502141603711779107/pdf/Sri-Lanka-SOUTH-ASIA-P132833-Transport-Connectivity-and-Asset-Management-Project-Procurement-Plan.pdf",
+   "redirects": 3,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "32515432",
+   "docty": "Procurement Plan",
+   "variant": "https",
+   "url": "https://documents.worldbank.org/curated/en/502141603711779107/pdf/Sri-Lanka-SOUTH-ASIA-P132833-Transport-Connectivity-and-Asset-Management-Project-Procurement-Plan.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/502141603711779107/pdf/Sri-Lanka-SOUTH-ASIA-P132833-Transport-Connectivity-and-Asset-Management-Project-Procurement-Plan.pdf",
+   "redirects": 2,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "23007961",
+   "docty": "Implementation Status and Results Report",
+   "url": "http://documents.worldbank.org/curated/en/238131468011125932/pdf/ISR-Disclosable-P133116-12-10-2014-1418254914362.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/238131468011125932/pdf/ISR-Disclosable-P133116-12-10-2014-1418254914362.pdf",
+   "redirects": 3,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "23007961",
+   "docty": "Implementation Status and Results Report",
+   "variant": "https",
+   "url": "https://documents.worldbank.org/curated/en/238131468011125932/pdf/ISR-Disclosable-P133116-12-10-2014-1418254914362.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/238131468011125932/pdf/ISR-Disclosable-P133116-12-10-2014-1418254914362.pdf",
+   "redirects": 2,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "30970202",
+   "docty": "Procurement Plan",
+   "url": "http://documents.worldbank.org/curated/en/989701554820889181/pdf/India-SOUTH-ASIA-P145502-TECHNOLOGY-CENTER-SYSTEMS-PROJECT-TCSP-Procurement-Plan.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/989701554820889181/pdf/India-SOUTH-ASIA-P145502-TECHNOLOGY-CENTER-SYSTEMS-PROJECT-TCSP-Procurement-Plan.pdf",
+   "redirects": 3,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "30970202",
+   "docty": "Procurement Plan",
+   "variant": "https",
+   "url": "https://documents.worldbank.org/curated/en/989701554820889181/pdf/India-SOUTH-ASIA-P145502-TECHNOLOGY-CENTER-SYSTEMS-PROJECT-TCSP-Procurement-Plan.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/989701554820889181/pdf/India-SOUTH-ASIA-P145502-TECHNOLOGY-CENTER-SYSTEMS-PROJECT-TCSP-Procurement-Plan.pdf",
+   "redirects": 2,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "30802626",
+   "docty": "Procurement Plan",
+   "url": "http://documents.worldbank.org/curated/en/176111549020899345/pdf/Myanmar-EAST-ASIA-AND-PACIFIC-P145534-MM-Telecommunications-Sector-Reform-Procurement-Plan.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/176111549020899345/pdf/Myanmar-EAST-ASIA-AND-PACIFIC-P145534-MM-Telecommunications-Sector-Reform-Procurement-Plan.pdf",
+   "redirects": 3,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "30802626",
+   "docty": "Procurement Plan",
+   "variant": "https",
+   "url": "https://documents.worldbank.org/curated/en/176111549020899345/pdf/Myanmar-EAST-ASIA-AND-PACIFIC-P145534-MM-Telecommunications-Sector-Reform-Procurement-Plan.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/176111549020899345/pdf/Myanmar-EAST-ASIA-AND-PACIFIC-P145534-MM-Telecommunications-Sector-Reform-Procurement-Plan.pdf",
+   "redirects": 2,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "29789595",
+   "docty": "Implementation Status and Results Report",
+   "url": "http://documents.worldbank.org/curated/en/647541523243486835/pdf/Disclosable-Version-of-the-ISR-Ethiopia-Expressway-Development-Support-Project-P148850-Sequence-No-05.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/647541523243486835/pdf/Disclosable-Version-of-the-ISR-Ethiopia-Expressway-Development-Support-Project-P148850-Sequence-No-05.pdf",
+   "redirects": 3,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "29789595",
+   "docty": "Implementation Status and Results Report",
+   "variant": "https",
+   "url": "https://documents.worldbank.org/curated/en/647541523243486835/pdf/Disclosable-Version-of-the-ISR-Ethiopia-Expressway-Development-Support-Project-P148850-Sequence-No-05.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/647541523243486835/pdf/Disclosable-Version-of-the-ISR-Ethiopia-Expressway-Development-Support-Project-P148850-Sequence-No-05.pdf",
+   "redirects": 2,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "29539728",
+   "docty": "Implementation Status and Results Report",
+   "url": "http://documents.worldbank.org/curated/en/515721516992324883/pdf/Disclosable-Version-of-the-ISR-Health-System-Resiliency-Strengthening-P150481-Sequence-No-08.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/515721516992324883/pdf/Disclosable-Version-of-the-ISR-Health-System-Resiliency-Strengthening-P150481-Sequence-No-08.pdf",
+   "redirects": 3,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "29539728",
+   "docty": "Implementation Status and Results Report",
+   "variant": "https",
+   "url": "https://documents.worldbank.org/curated/en/515721516992324883/pdf/Disclosable-Version-of-the-ISR-Health-System-Resiliency-Strengthening-P150481-Sequence-No-08.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/515721516992324883/pdf/Disclosable-Version-of-the-ISR-Health-System-Resiliency-Strengthening-P150481-Sequence-No-08.pdf",
+   "redirects": 2,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "30290432",
+   "docty": "Auditing Document",
+   "url": "http://documents.worldbank.org/curated/en/539911532466271658/pdf/P152820-TFA3726-Chile-Geothermal-Development-Audit-Financial-Statements-as-of-Dec-31-2017.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/539911532466271658/pdf/P152820-TFA3726-Chile-Geothermal-Development-Audit-Financial-Statements-as-of-Dec-31-2017.pdf",
+   "redirects": 3,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  },
+  {
+   "doc_id": "30290432",
+   "docty": "Auditing Document",
+   "variant": "https",
+   "url": "https://documents.worldbank.org/curated/en/539911532466271658/pdf/P152820-TFA3726-Chile-Geothermal-Development-Audit-Financial-Statements-as-of-Dec-31-2017.pdf",
+   "status": 200,
+   "final_url": "https://documents1.worldbank.org/curated/en/539911532466271658/pdf/P152820-TFA3726-Chile-Geothermal-Development-Audit-Financial-Statements-as-of-Dec-31-2017.pdf",
+   "redirects": 2,
+   "content_type": "application/pdf;charset=utf-8",
+   "content_length": null
+  }
+ ],
+ "versions_duplicates_volumes_cluster_meta": {
+  "volnb_totvolnb_pairs_top": [
+   [
+    [
+     "",
+     ""
+    ],
+    12226
+   ],
+   [
+    [
+     "1",
+     "1"
+    ],
+    8432
+   ],
+   [
+    [
+     "1",
+     ""
+    ],
+    986
+   ],
+   [
+    [
+     "2",
+     "2"
+    ],
+    44
+   ],
+   [
+    [
+     "1",
+     "2"
+    ],
+    44
+   ],
+   [
+    [
+     "2",
+     "3"
+    ],
+    40
+   ],
+   [
+    [
+     "1",
+     "3"
+    ],
+    40
+   ],
+   [
+    [
+     "3",
+     "3"
+    ],
+    33
+   ],
+   [
+    [
+     "1",
+     "5"
+    ],
+    16
+   ],
+   [
+    [
+     "3",
+     "4"
+    ],
+    15
+   ]
+  ],
+  "multi_volume_records": 666,
+  "multi_volume_types": {
+   "Environmental Assessment": 416,
+   "Resettlement Plan": 183,
+   "Indigenous Peoples Plan": 44,
+   "": 7,
+   "Project Paper": 4,
+   "Procurement Plan": 4,
+   "Board Report": 4,
+   "Aide Memoire": 2
+  },
+  "repnb_shared_by_several_records": 502,
+  "guid_shared_by_several_records": 9,
+  "same_project_type_date_title_groups": 1171,
+  "extra_records_in_those_groups": 1786,
+  "isr_sequence_numbers_with_several_records": 101,
+  "versiontyp_values": {
+   "Final": 10718,
+   "null": 8686,
+   "Buff cover": 2275,
+   "Buff Cover": 314,
+   "Revised": 140,
+   "Gray cover": 51,
+   "Initial appraisal": 46,
+   "Gray Cover": 40,
+   "Initial concept": 36,
+   "Revised buff cover": 11,
+   "Revised appraisal": 4,
+   "Initial": 3
+  }
+ },
+ "summary": {
+  "projects_compared": 53,
+  "local_pdfs_with_doc_id": 197,
+  "local_found_in_api": 197,
+  "local_missing_from_api": {},
+  "head_status": {
+   "200": 40
+  },
+  "head_content_types": {
+   "application/pdf;charset=utf-8": 40
+  }
+ }
+}

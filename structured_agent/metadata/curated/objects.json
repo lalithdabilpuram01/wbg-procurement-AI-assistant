@@ -1,0 +1,126 @@
+{
+ "_about": "Curated registry fields per Databricks object. Descriptions come from the live Databricks table comment (verified); grain/key for Silver come from the Silver audit inventory, for Gold from the cited documentation, for KPI views from gold/procurement_kpis/kpi_queries.py GRAINS. All grains and keys are re-checked live by metadata/verify_metadata.py.",
+ "defaults": {
+  "gold": {"authorized_roles": ["procurement_analyst", "data_steward"], "authorized_operations": ["select", "aggregate"]},
+  "silver": {"authorized_roles": ["data_steward"], "authorized_operations": ["select", "aggregate"]}
+ },
+ "objects": {
+  "workspace.wbg_gold.gold_project_portfolio": {
+   "logical_name": "Project portfolio",
+   "grain": "project (one row per cohort project, 2,000)",
+   "grain_columns": ["project_id"],
+   "grain_source": "Databricks table comment; gold/README.md (gold_project_portfolio)",
+   "limitations": [
+    "Current-state snapshot (projects 2026-10-21, contracts 2026-10-20, financing 2026-09-30, IEG 2026-10-18); status and commitments are not historical values.",
+    "Contract values, IBRD/IDA counts and project commitments are separate measures and are never combined."
+   ]
+  },
+  "workspace.wbg_gold.gold_contract_analytics": {
+   "logical_name": "Contract awards (contract grain)",
+   "grain": "contract award (one row per current DS00005 contract, 178,921)",
+   "grain_columns": ["wb_contract_number"],
+   "grain_source": "Databricks table comment and column comment (wb_contract_number = primary key); gold/README.md",
+   "limitations": [
+    "DS00005 contracts signed FY2020 onward only; legacy FY2006-2016 contracts are excluded.",
+    "Award-notice links exist only for the 184 projects in the API notice-detail pull; NULL link counts mean not covered, and no_link_found does not prove the contract has no notice.",
+    "contract_amount_usd covers all financiers of a contract; it is not an IBRD/IDA amount."
+   ]
+  },
+  "workspace.wbg_gold.gold_procurement_notices": {
+   "logical_name": "Procurement notices (notice grain)",
+   "grain": "procurement notice (one row per DS00979 notice, 243,533)",
+   "grain_columns": ["notice_op_id"],
+   "grain_source": "Databricks table comment; gold/README.md; Silver audit key of procurement_notices (notice_op_id)",
+   "limitations": [
+    "Notices are not contracts: tender invitations, prequalification, expressions of interest, contract-award announcements and general notices are distinguished by notice_class.",
+    "Rows with identical metadata are kept and counted as published (identical_metadata_group_size).",
+    "Response windows are published windows, not verified tender durations; award-notice and GPN deadlines are source defaults.",
+    "Notice-to-contract links exist only for award notices of the 184 API-covered projects; not every tender can be linked to a signed contract."
+   ]
+  },
+  "workspace.wbg_gold.gold_country_context": {
+   "logical_name": "Country economic and governance context",
+   "grain": "economy x calendar year (217 economies x 2000-2025, 5,642)",
+   "grain_columns": ["country_code", "year"],
+   "grain_source": "Databricks table comment (one row per WDI economy x calendar year)",
+   "limitations": [
+    "Keyed strictly by published calendar year; join lags are not approved, so every join must state the year explicitly.",
+    "Current-vintage estimates, not point-in-time observations; regional projects have no country context."
+   ]
+  },
+  "workspace.wbg_gold.gold_financing_analytics": {
+   "logical_name": "IBRD/IDA financing instruments",
+   "grain": "financing instrument (one IBRD loan or IDA credit/grant, 2,685)",
+   "grain_columns": ["financing_number"],
+   "grain_source": "Databricks table comment and column comment (financing_number = primary key)",
+   "limitations": [
+    "Financing commitments are not contract awards and are never added to contract values.",
+    "Published US$ amounts are not on one consistent exchange-rate basis; IBRD currency is not published.",
+    "Status and balances are a 2026-09-30 snapshot."
+   ]
+  },
+  "workspace.wbg_gold.vw_kpi_overview": {
+   "logical_name": "KPI overview (headline totals)",
+   "certified_aggregate": true,
+   "limitations": ["Approved KPI view; the D-23 dashboard KPI decision is still pending."]
+  },
+  "workspace.wbg_gold.vw_kpi_contract_awards": {
+   "logical_name": "KPI contract-award cube",
+   "certified_aggregate": true,
+   "limitations": ["Additive cube: counts and values may be summed across its dimensions.", "Approved KPI view; the D-23 dashboard KPI decision is still pending."]
+  },
+  "workspace.wbg_gold.vw_kpi_contract_value_distribution": {
+   "logical_name": "KPI contract-value distribution",
+   "certified_aggregate": true,
+   "required_filters": [{"column": "grouping_level", "kind": "equality", "reason": "grouping_level rows are subtotals of each other (view comment: always filter to ONE grouping_level)"}],
+   "limitations": ["Percentiles are discrete (actual contract values) and are not additive.", "Approved KPI view; the D-23 dashboard KPI decision is still pending."]
+  },
+  "workspace.wbg_gold.vw_kpi_notice_activity": {
+   "logical_name": "KPI notice-activity cube",
+   "certified_aggregate": true,
+   "limitations": ["Additive cube by publication fiscal year (separate from contract signing year).", "Approved KPI view; the D-23 dashboard KPI decision is still pending."]
+  },
+  "workspace.wbg_gold.vw_kpi_response_windows": {
+   "logical_name": "KPI published response windows",
+   "certified_aggregate": true,
+   "required_filters": [{"column": "grouping_level", "kind": "equality", "reason": "grouping_level rows are subtotals (view comment: filter to ONE grouping_level)"}],
+   "limitations": ["Published windows for eligible solicitations, NOT verified tender durations.", "Approved KPI view; the D-23 dashboard KPI decision is still pending."]
+  },
+  "workspace.wbg_gold.vw_kpi_financing_instruments": {
+   "logical_name": "KPI financing-instrument counts",
+   "certified_aggregate": true,
+   "limitations": ["Instrument counts only; no financing amounts.", "Approved KPI view; the D-23 dashboard KPI decision is still pending."]
+  },
+  "workspace.wbg_gold.vw_kpi_country_comparison": {
+   "logical_name": "KPI country comparison",
+   "certified_aggregate": true,
+   "limitations": ["latest_income_group is the current FY2026 classification, not a historical value.", "Approved KPI view; the D-23 dashboard KPI decision is still pending."]
+  },
+  "workspace.wbg_silver.projects": {"logical_name": "Projects (Silver)"},
+  "workspace.wbg_silver.contract_awards": {"logical_name": "Contract awards (Silver)"},
+  "workspace.wbg_silver.contract_award_lines": {"logical_name": "Contract supplier lines (Silver)",
+   "limitations": ["Line grain: never sum contract_amount_usd here; use supplier_amount_usd at line grain or contract_amount_usd at contract grain, never both."]},
+  "workspace.wbg_silver.contract_awards_legacy": {"logical_name": "Legacy contract awards FY2006-2016 (Silver)",
+   "limitations": ["Prior-review contracts only; gap FY2017-2019; do not compare totals with DS00005."]},
+  "workspace.wbg_silver.procurement_notices": {"logical_name": "Procurement notices (Silver)"},
+  "workspace.wbg_silver.procurement_notice_details": {"logical_name": "Procurement notice API details (Silver)",
+   "limitations": ["184 projects only; notice_text is restricted by a column mask (D-14) and never selectable."]},
+  "workspace.wbg_silver.notice_contract_link_candidates": {"logical_name": "Notice-contract link candidates (Silver)",
+   "limitations": ["Candidates, not confirmed links; never aggregate amounts over this table."]},
+  "workspace.wbg_silver.notice_contract_links": {"logical_name": "Evidence-supported notice-contract links (Silver)",
+   "limitations": ["Award notices only; 5.0% of contracts are linked; many-to-many links must be aggregated per distinct contract."]},
+  "workspace.wbg_silver.ibrd_loans": {"logical_name": "IBRD loans (Silver)"},
+  "workspace.wbg_silver.ida_credits": {"logical_name": "IDA credits (Silver)"},
+  "workspace.wbg_silver.ieg_project_ratings": {"logical_name": "IEG project ratings (Silver)",
+   "limitations": ["Latest-only snapshot; selection-biased (750 projects)."]},
+  "workspace.wbg_silver.project_details_v3": {"logical_name": "Project details v3 (Silver)",
+   "limitations": ["184 projects only; absence is not zero."]},
+  "workspace.wbg_silver.project_loan_transactions": {"logical_name": "Project loan transactions (Silver)",
+   "limitations": ["Currency and unit unverified; never added to US$ measures."]},
+  "workspace.wbg_silver.wdi_country": {"logical_name": "WDI country reference (Silver)"},
+  "workspace.wbg_silver.wdi_indicator_observations": {"logical_name": "WDI indicator observations (Silver)"},
+  "workspace.wbg_silver.wgi_estimates": {"logical_name": "WGI estimates (Silver)"},
+  "workspace.wbg_silver.cpia_ratings": {"logical_name": "CPIA ratings (Silver)"},
+  "workspace.wbg_silver.income_classification_history": {"logical_name": "Income classification history (Silver)"}
+ }
+}

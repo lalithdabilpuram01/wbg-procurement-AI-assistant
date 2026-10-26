@@ -1,0 +1,121 @@
+project_id,step,document_id,document_date,reason,added_row_level,added_verified,added_text_only,cumulative_row_level,cumulative_verified,material,threshold_contracts
+P132833,0,34172790,2023-10-02,latest plan (always kept),58,11,0,58,11,True,
+P132833,1,33761744,2022-03-17,greedy marginal coverage,8,0,0,66,11,True,4
+P132833,2,30428832,2018-09-18,greedy marginal coverage,1,0,0,67,11,False,4
+P146314,0,32869536,2021-03-01,latest plan (always kept),49,8,3,49,8,True,
+P146314,1,32261694,2020-07-21,greedy marginal coverage,1,1,0,50,9,False,3
+P163721,0,34322561,2024-05-22,latest plan (always kept),64,18,0,64,18,True,
+P163721,1,33812456,2022-05-08,greedy marginal coverage,0,16,0,64,34,True,3
+P163721,2,34302231,2024-04-16,greedy marginal coverage,0,0,0,64,34,False,3
+P178432,0,40128598,2026-09-22,latest plan (always kept),19,0,0,19,0,True,
+P178432,1,40123583,2026-08-21,greedy marginal coverage,36,0,0,55,0,True,3
+P178432,2,40067037,2025-11-07,greedy marginal coverage,0,10,0,55,10,True,3
+P178432,3,40099192,2026-04-24,greedy marginal coverage,0,1,0,55,11,False,3
+P156019,0,34410985,2024-10-24,latest plan (always kept),940,61,0,940,61,True,
+P156019,1,33782782,2022-04-08,greedy marginal coverage,127,0,0,1067,61,True,68
+P156019,2,34365733,2024-07-17,greedy marginal coverage,23,16,0,1090,77,True,68
+P156019,3,31953908,2020-04-15,greedy marginal coverage,12,0,0,1102,77,False,68
+P163714,0,40130767,2026-10-01,latest plan (always kept),0,0,0,0,0,True,
+P163714,1,40124126,2026-08-25,greedy marginal coverage,14,12,0,14,12,True,3
+P163714,2,40098551,2026-04-21,greedy marginal coverage,0,2,0,14,14,False,3
+P159303,0,33928837,2022-10-31,latest plan (always kept),8,8,0,8,8,True,
+P159303,1,32507204,2020-10-22,greedy marginal coverage,2,0,0,10,8,False,3
+P148850,0,40102923,2026-05-14,latest plan (always kept),25,14,2,25,14,True,
+P148850,1,40025990,2025-06-27,greedy marginal coverage,6,4,10,31,18,True,3
+P148850,2,33711513,2022-01-24,greedy marginal coverage,0,1,0,31,19,False,3
+P164336,0,40038169,2025-08-15,latest plan (always kept),0,0,73,0,0,True,
+P164336,1,40034572,2025-07-28,greedy marginal coverage,62,26,0,62,26,True,16
+P164336,2,40034069,2025-07-25,greedy marginal coverage,45,24,0,107,50,True,16
+P164336,3,40034366,2025-07-25,greedy marginal coverage,44,17,0,151,67,True,16
+P164336,4,40034529,2025-07-28,greedy marginal coverage,26,7,0,177,74,True,16
+P164336,5,33418928,2021-09-15,greedy marginal coverage,24,20,0,201,94,True,16
+P164336,6,33763474,2022-03-21,greedy marginal coverage,15,7,0,216,101,True,16
+P164336,7,40034596,2025-07-28,greedy marginal coverage,1,1,49,217,102,True,16
+P164336,8,40014363,2025-05-20,greedy marginal coverage,0,5,0,217,107,True,16
+P164336,9,40034369,2025-07-25,greedy marginal coverage,0,0,32,217,107,True,16
+P164336,10,40036460,2025-08-05,greedy marginal coverage,0,0,29,217,107,True,16
+P164336,11,33887741,2022-08-25,greedy marginal coverage,0,0,21,217,107,True,16
+P164336,12,33753479,2022-03-09,greedy marginal coverage,0,0,4,217,107,False,16
+P123531,0,33855002,2022-06-28,latest plan (always kept),50,38,22,50,38,True,
+P123531,1,33842288,2022-06-14,greedy marginal coverage,0,0,0,50,38,False,3
+P177233,0,40133293,2026-10-15,latest plan (always kept),275,1,0,275,1,True,
+P177233,1,40097193,2026-04-14,greedy marginal coverage,37,21,0,312,22,True,16
+P177233,2,40068019,2025-11-14,greedy marginal coverage,0,45,0,312,67,True,16
+P177233,3,34396066,2024-09-27,greedy marginal coverage,0,16,0,312,83,True,16
+P177233,4,40090515,2026-03-09,greedy marginal coverage,0,7,0,312,90,True,16
+P177233,5,34449834,2025-01-27,greedy marginal coverage,0,1,0,312,91,False,16
+P176731,0,40133023,2026-10-14,latest plan (always kept),1,0,0,1,0,True,
+P176731,1,40102009,2026-05-09,greedy marginal coverage,10,7,0,11,7,True,3
+P176731,2,40122469,2026-08-14,greedy marginal coverage,0,0,0,11,7,False,3
+P163452,0,34318962,2024-05-16,latest plan (always kept),66,55,0,66,55,True,
+P163452,1,33720543,2022-02-03,greedy marginal coverage,0,1,0,66,56,False,3
+P143302,0,34038501,2023-04-10,latest plan (always kept),44,28,1,44,28,True,
+P143302,1,33901524,2022-09-20,greedy marginal coverage,0,1,0,44,29,False,3
+P175325,0,40127897,2026-09-17,latest plan (always kept),87,0,1,87,0,True,
+P175325,1,40086354,2026-01-12,greedy marginal coverage,6,6,0,93,6,True,5
+P175325,2,40009757,2025-04-29,greedy marginal coverage,0,33,0,93,39,True,5
+P175325,3,40102194,2026-05-11,greedy marginal coverage,0,9,0,93,48,True,5
+P175325,4,40081826,2026-01-21,greedy marginal coverage,0,3,0,93,51,True,5
+P175325,5,40108840,2026-06-12,greedy marginal coverage,0,0,0,93,51,False,5
+P162042,0,40078588,2025-12-23,latest plan (always kept),85,19,4,85,19,True,
+P162042,1,34322218,2024-05-21,greedy marginal coverage,1,0,0,86,19,False,5
+P125565,0,33774135,2022-03-28,latest plan (always kept),0,0,52,0,0,True,
+P125565,1,33720053,2022-02-02,greedy marginal coverage,0,0,0,0,0,False,3
+P167681,0,34327467,2024-05-30,latest plan (always kept),47,33,0,47,33,True,
+P167681,1,34298289,2024-04-09,greedy marginal coverage,0,0,0,47,33,False,3
+P156186,0,40129158,2026-09-24,latest plan (always kept),126,68,0,126,68,True,
+P156186,1,30350527,2018-08-15,greedy marginal coverage,4,0,0,130,68,False,8
+P124018,0,33226313,2021-06-28,latest plan (always kept),6,6,1,6,6,True,
+P124018,1,33188347,2021-05-26,greedy marginal coverage,0,0,0,6,6,False,3
+P122841,0,31874637,2020-03-17,latest plan (always kept),2,0,10,2,0,True,
+P122841,1,31646679,2019-12-17,greedy marginal coverage,0,0,0,2,0,False,3
+P133288,0,34228503,2024-01-03,latest plan (always kept),91,7,0,91,7,True,
+P133288,1,33803422,2022-04-26,greedy marginal coverage,0,7,0,91,14,True,6
+P133288,2,34088241,2023-06-14,greedy marginal coverage,0,1,0,91,15,False,6
+P170329,0,34009585,2023-02-24,latest plan (always kept),14,3,1,14,3,True,
+P170329,1,33804512,2022-04-26,greedy marginal coverage,2,2,0,16,5,False,4
+P125151,0,34046098,2023-04-20,latest plan (always kept),6,2,0,6,2,True,
+P125151,1,33755902,2022-03-11,greedy marginal coverage,8,3,0,14,5,True,3
+P125151,2,31095230,2019-05-22,greedy marginal coverage,2,0,0,16,5,False,3
+P179534,0,40125216,2026-09-01,latest plan (always kept),171,0,0,171,0,True,
+P179534,1,40103580,2026-05-18,greedy marginal coverage,0,11,0,171,11,True,9
+P179534,2,40040489,2025-08-29,greedy marginal coverage,0,1,0,171,12,False,9
+P175669,0,40131160,2026-10-02,latest plan (always kept),127,0,0,127,0,True,
+P175669,1,40083557,2026-01-29,greedy marginal coverage,0,43,0,127,43,True,6
+P175669,2,40003242,2025-03-26,greedy marginal coverage,0,3,0,127,46,True,6
+P175669,3,40127340,2026-09-14,greedy marginal coverage,0,0,0,127,46,False,6
+P159929,0,34209688,2023-12-07,latest plan (always kept),17,5,0,17,5,True,
+P159929,1,33723591,2022-02-07,greedy marginal coverage,11,15,0,28,20,True,3
+P159929,2,34146036,2023-08-18,greedy marginal coverage,0,0,0,28,20,False,3
+P106685,0,33889720,2022-08-29,latest plan (always kept),10,5,0,10,5,True,
+P106685,1,33849978,2022-06-23,greedy marginal coverage,0,0,0,10,5,False,3
+P165543,0,40008324,2025-04-22,latest plan (always kept),0,0,0,0,0,True,
+P165543,1,34418110,2024-11-06,greedy marginal coverage,116,11,0,116,11,True,13
+P165543,2,40005572,2025-04-08,greedy marginal coverage,113,13,0,229,24,True,13
+P165543,3,34333644,2024-06-05,greedy marginal coverage,5,2,0,234,26,False,13
+P096532,0,34195796,2023-11-13,latest plan (always kept),0,0,3,0,0,True,
+P096532,1,33447356,2021-09-28,greedy marginal coverage,0,0,31,0,0,True,3
+P096532,2,33424240,2021-09-17,greedy marginal coverage,0,0,15,0,0,True,3
+P096532,3,33352926,2021-08-19,greedy marginal coverage,0,0,14,0,0,True,3
+P096532,4,32765763,2021-01-21,greedy marginal coverage,0,0,12,0,0,True,3
+P096532,5,34106757,2023-05-31,greedy marginal coverage,0,0,10,0,0,True,3
+P096532,6,33617282,2021-11-16,greedy marginal coverage,0,0,5,0,0,True,3
+P096532,7,33054569,2021-05-06,greedy marginal coverage,0,0,5,0,0,True,3
+P096532,8,34195795,2023-11-13,greedy marginal coverage,0,0,4,0,0,True,3
+P096532,9,34101367,2023-06-25,greedy marginal coverage,0,0,2,0,0,False,3
+P144269,0,34011504,2023-03-02,latest plan (always kept),2,0,0,2,0,True,
+P144269,1,33982967,2023-01-19,greedy marginal coverage,0,0,0,2,0,False,3
+P180811,0,40135029,2026-10-23,latest plan (always kept),43,0,0,43,0,True,
+P180811,1,40133718,2026-10-16,greedy marginal coverage,23,0,0,66,0,True,4
+P180811,2,40132437,2026-10-11,greedy marginal coverage,7,0,0,73,0,True,4
+P180811,3,40100333,2026-04-30,greedy marginal coverage,1,1,0,74,1,False,4
+P169548,0,40132469,2026-10-12,latest plan (always kept),35,0,0,35,0,True,
+P169548,1,40093728,2026-03-26,greedy marginal coverage,0,26,0,35,26,True,3
+P169548,2,40129468,2026-09-25,greedy marginal coverage,0,0,0,35,26,False,3
+P168076,0,34429761,2024-11-29,latest plan (always kept),242,70,0,242,70,True,
+P168076,1,34129005,2023-08-02,greedy marginal coverage,0,3,0,242,73,True,12
+P168076,2,34212244,2023-12-11,greedy marginal coverage,0,2,0,242,75,False,12
+P157599,0,34396733,2024-09-30,latest plan (always kept),3,1,0,3,1,True,
+P157599,1,34376033,2024-08-12,greedy marginal coverage,6,0,0,9,1,True,5
+P157599,2,32172273,2020-06-25,greedy marginal coverage,5,0,0,14,1,True,5
+P157599,3,33146498,2021-06-07,greedy marginal coverage,3,0,0,17,1,False,5

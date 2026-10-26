@@ -1,0 +1,7 @@
+# uv-managed local environment and caches (recreate with: uv sync --locked)
+.venv/
+__pycache__/
+.pytest_cache/
+# Local Lakebase settings (may contain the login identity; never commit)
+lakebase.local.env
+*.local.env

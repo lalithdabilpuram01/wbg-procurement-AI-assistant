@@ -1,0 +1,179 @@
+{
+ "dataset": "ds00005_contract_awards_population",
+ "source": "Finances One DS00005 bulk CSV",
+ "rows_profiled": 295058,
+ "columns": [
+  {
+   "name": "As of Date",
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 295058
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Borrower Contract Reference Number",
+   "observed_kinds": {
+    "str": 292884,
+    "str:int": 2079,
+    "str:decimal": 90,
+    "sentinel": 2,
+    "str:date[YYYY-MM-DD]": 1,
+    "str:thousands-separated-number": 1,
+    "str:multiline": 1
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Borrower Country / Economy",
+   "observed_kinds": {
+    "str": 295058
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Borrower Country / Economy Code",
+   "observed_kinds": {
+    "str": 284850,
+    "empty": 9948,
+    "str:int": 257,
+    "sentinel": 3
+   },
+   "populated_pct": 96.63
+  },
+  {
+   "name": "Contract Description",
+   "observed_kinds": {
+    "str": 284301,
+    "str:multiline": 10380,
+    "empty": 350,
+    "str:int": 21,
+    "str:thousands-separated-number": 5,
+    "str:date[DD-Mon-YYYY]": 1
+   },
+   "populated_pct": 99.88
+  },
+  {
+   "name": "Contract Signing Date",
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 295058
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Contract signed - Calendar year",
+   "observed_kinds": {
+    "str:int": 295058
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Fiscal Year",
+   "observed_kinds": {
+    "str:int": 295058
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Procurement Category",
+   "observed_kinds": {
+    "str": 295058
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Procurement Method",
+   "observed_kinds": {
+    "str": 295058
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Project Global Practice",
+   "observed_kinds": {
+    "str": 264765,
+    "empty": 30293
+   },
+   "populated_pct": 89.73
+  },
+  {
+   "name": "Project ID",
+   "observed_kinds": {
+    "str": 295058
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Project Name",
+   "observed_kinds": {
+    "str": 295058
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Region",
+   "observed_kinds": {
+    "str": 295058
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Review type",
+   "observed_kinds": {
+    "str": 294870,
+    "empty": 188
+   },
+   "populated_pct": 99.94
+  },
+  {
+   "name": "Supplier",
+   "observed_kinds": {
+    "str": 295049,
+    "sentinel": 7,
+    "str:int": 2
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Supplier Contract Amount (USD)",
+   "observed_kinds": {
+    "str:decimal": 295057,
+    "empty": 1
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Supplier Country / Economy",
+   "observed_kinds": {
+    "str": 294386,
+    "sentinel": 640,
+    "empty": 32
+   },
+   "populated_pct": 99.77
+  },
+  {
+   "name": "Supplier Country / Economy Code",
+   "observed_kinds": {
+    "str": 294365,
+    "sentinel": 661,
+    "empty": 32
+   },
+   "populated_pct": 99.77
+  },
+  {
+   "name": "Supplier ID",
+   "observed_kinds": {
+    "str:int": 229992,
+    "str": 65065,
+    "empty": 1
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "WB Contract Number",
+   "observed_kinds": {
+    "str:int": 295058
+   },
+   "populated_pct": 100.0
+  }
+ ]
+}

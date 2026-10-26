@@ -1,0 +1,52 @@
+section,metric,value,denominator,pct,definition,source
+inventory,cohort_projects,2000,,,Approved cohort (D-26),cohort manifest
+inventory,ds00005_contract_rows,186907,,,"Contract x supplier lines, FY2020+",DS00005 cohort extract
+inventory,ds00005_distinct_contracts,178921,,,Distinct WB Contract Number,DS00005
+inventory,ds00979_notices,243533,,,"Notices linked to cohort projects by Project ID (no reference no., no text)",DS00979
+inventory,ds00979_tender_notices,55223,243533,22.68,IFB + REOI + prequalification notices,DS00979
+inventory,api_fulltext_projects,184,2000,9.2,Cohort projects with full notice text + bid reference,procnotices API sample
+inventory,api_fulltext_notices,20305,243533,8.34,Notices with text for cohort projects,procnotices API sample
+inventory,plan_projects,25,2000,1.25,Cohort projects with a parsed STEP plan,procurement_plan_activities.csv
+inventory,plan_activities,843,,,"Parsed plan activities, cohort projects",procurement_plan_activities.csv
+amendment,ds00005_contracts_describing_amendment,56,178921,0.03,"Contracts whose description explicitly names a contract amendment, addendum, avenant, aditivo or extension (narrow pattern)",DS00005
+amendment,ds00005_amendment_contracts_linkable_to_prior_contract,13,56,23.21,"Of those, with >=1 earlier contract in the same project sharing a STEP Supplier ID",DS00005
+amendment,ds00005_amendment_contracts_unique_prior_candidate,8,56,14.29,"Of those, exactly one earlier same-supplier contract (still needs verification)",DS00005
+amendment,api_award_notices_describing_amendment,5,16189,0.03,Award notices whose text explicitly describes a contract amendment,procnotices API
+amendment,api_award_notice_revisions_version_gt0,2564,16189,15.84,"Award notices with Notice Version No > 0: revisions of the notice, not contract amendments",procnotices API
+amendment,api_tender_notices_bidding_doc_addenda,167,4002,4.17,"Tender notices mentioning addenda/corrigenda/deadline extensions: bidding-document changes, not contract amendments",procnotices API
+amendment,plan_amendment_step_values,0,843,0.0,"Non-empty values in STEP plan 'Contract Amendments' columns (header present, no values)",procurement plans
+amendment,confirmed_positive_labels,0,178921,0.0,Verified amendment events linked to an original contract (no human verification done yet),-
+amendment,confirmed_negative_labels,0,178921,0.0,No source records the absence of amendments over a defined window,-
+amendment,unknown_contracts,178921,178921,100.0,All cohort contracts: outcome not established,-
+rebidding,api_tender_status_cancelled,2,4002,0.05,Tender notices with notice_status = Cancelled,procnotices API (184 cohort projects)
+rebidding,api_tender_text_or_description_rebid_marker,91,4002,2.27,"Tender notices whose text or description contains explicit re-bid wording (rebid, re-tender, re-advertisement, relance, second call, infructueux, desierto...)",procnotices API (184 cohort projects)
+rebidding,api_tender_reference_rebid_marker,11,4002,0.27,Tender notices whose bid reference carries a re-bid marker,procnotices API (184 cohort projects)
+rebidding,api_tender_notice_cancellation_wording,5,4002,0.12,Tender notices stating the notice/tender/bids were cancelled or annulled (or status Cancelled),procnotices API (184 cohort projects)
+rebidding,api_marked_tenders_linked_to_earlier_unmarked_tender_same_ref_stem,2,4002,0.05,Marked re-bid notices with an earlier unmarked tender notice in the same project whose normalised reference equals the marked reference without its re-bid suffix,procnotices API (184 cohort projects)
+rebidding,api_repeated_tender_ref_groups_ge30d,8,3983,0.2,Project + normalised reference groups with >=2 tender notices >=30 days apart (repetition alone does not prove re-bidding),procnotices API (184 cohort projects)
+rebidding,api_candidate_negative_single_tender_one_award_no_signal,1855,3983,46.57,"Reference groups with exactly one tender notice, exactly one matching award notice, no cancellation or re-bid signal (candidate negative only)",procnotices API (184 cohort projects)
+rebidding,ds00979_notices_with_rebid_marker,654,243533,0.27,Notices (all types) whose Bid Description contains explicit re-bid wording,"DS00979 (2,000 projects)"
+rebidding,ds00979_projects_with_rebid_marker,142,2000,7.1,Cohort projects with >=1 such notice,DS00979
+rebidding,ds00979_marked_tender_notices,221,55223,0.4,Tender notices (IFB/REOI/prequal) with explicit re-bid wording,DS00979
+rebidding,ds00979_marked_tenders_with_earlier_similar_tender,123,221,55.66,"Of those, an earlier unmarked tender notice in the same project with description similarity >=90 (candidate original)",DS00979
+rebidding,ds00005_contracts_ref_rebid_marker,89,178921,0.05,Contracts whose reference carries an explicit re-bid marker (awarded after a re-bid),DS00005
+rebidding,ds00005_contracts_ref_weak_R_suffix,140,178921,0.08,References ending in -R/R1/R2 (ambiguous; not counted as evidence),DS00005
+rebidding,plan_cancelled_activities,269,843,31.91,Plan activities with Process Status = cancelled,procurement plans (25 projects)
+rebidding,plan_cancelled_with_successor_candidate,38,269,14.13,Cancelled activities with a non-cancelled activity in the same plan having the same reference or description similarity >=90,procurement plans
+rebidding,confirmed_positive_labels,0,,,Verified original tender -> re-bid pairs (no human verification done yet),-
+rebidding,confirmed_negative_labels,0,,,Verified first-round success over a defined window (none verified),-
+windows,contracts_with_ge24m_observation,137173,178921,76.67,Contracts signed >=24 months before the DS00005 snapshot (2026-10-20); later contracts are right-censored for amendments,DS00005
+windows,tender_notices_with_ge12m_observation,48487,55223,87.8,Tender notices published >=12 months before the snapshot,DS00979
+documents,local_v3_metadata_records,23537,,,WDS v3 metadata records on disk (cluster + by-type sample),samples/documents
+documents,cohort_projects_with_complete_doc_metadata,184,2000,9.2,Cohort projects whose full document list was retrieved in Phase 1,WDS v3 cluster metadata
+documents,cohort_docs_complete_metadata,14046,,,Document records for those projects,WDS v3 cluster metadata
+documents,cohort_projects_partial_doc_metadata,174,2000,8.7,Cohort projects appearing only as co-tagged projects (partial lists),WDS v3 cluster metadata
+documents,local_pdfs_cohort,42,63,66.67,Downloaded PDFs belonging to cohort projects,samples/documents
+documents,local_pdf_cohort_projects,29,2000,1.45,Cohort projects with >=1 downloaded PDF,samples/documents
+documents,local_text_cohort,27,46,58.7,Text files (extracted or WDS txt) belonging to cohort projects,samples/documents
+documents,docs_procurement_plan,6896,,,Procurement Plan documents listed for the 184 cohort projects with complete metadata (184 projects),WDS v3 cluster metadata
+documents,docs_implementation_status_and_results_report,1981,,,Implementation Status and Results Report documents listed for the 184 cohort projects with complete metadata (182 projects),WDS v3 cluster metadata
+documents,docs_implementation_completion_and_results_report,78,,,Implementation Completion and Results Report documents listed for the 184 cohort projects with complete metadata (77 projects),WDS v3 cluster metadata
+documents,docs_implementation_completion_report_review,58,,,Implementation Completion Report Review documents listed for the 184 cohort projects with complete metadata (58 projects),WDS v3 cluster metadata
+documents,docs_project_paper,418,,,Project Paper documents listed for the 184 cohort projects with complete metadata (158 projects),WDS v3 cluster metadata
+documents,docs_aide_memoire,108,,,Aide Memoire documents listed for the 184 cohort projects with complete metadata (59 projects),WDS v3 cluster metadata

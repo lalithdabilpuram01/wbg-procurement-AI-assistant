@@ -1,0 +1,306 @@
+{
+ "generated_at_utc": "2026-10-26T07:53:59+00:00",
+ "mode": "DRY RUN: no Lakebase connection, nothing written",
+ "target": {
+  "schema": "wbg_rag_pdf_poc",
+  "tables": [
+   "documents",
+   "pages",
+   "sections",
+   "parent_chunks",
+   "retrieval_units",
+   "unit_embeddings",
+   "citations",
+   "table_schemas",
+   "pdf_tables",
+   "pdf_table_rows",
+   "pdf_table_values"
+  ],
+  "separate_from": "wbg_rag_poc (synthetic POC, untouched)",
+  "ddl": [
+   "CREATE SCHEMA IF NOT EXISTS \"wbg_rag_pdf_poc\"",
+   "CREATE TABLE IF NOT EXISTS \"wbg_rag_pdf_poc\".documents (\n        document_version_id  text PRIMARY KEY,            -- '<document_id>:<sha256[:12]>'\n        document_id          text NOT NULL,\n        project_id           text NOT NULL CHECK (project_id ~ '^P[0-9]{6}$'),\n        country_code         text NOT NULL,\n        doc_type             text NOT NULL,\n        document_role        text,\n        title                text NOT NULL,\n        document_date        date,\n        disclosure_date      date,\n        source_url           text NOT NULL,\n        sha256               char(64) NOT NULL,\n        size_bytes           bigint NOT NULL CHECK (size_bytes > 0),\n        page_count           integer NOT NULL CHECK (page_count > 0),\n        volume_path          text NOT NULL CHECK (volume_path LIKE '/Volumes/%'),\n        extraction_version   text NOT NULL,\n        pipeline_code_hash   text NOT NULL,\n        loaded_at            timestamptz NOT NULL DEFAULT now(),\n        UNIQUE (document_id, sha256))",
+   "CREATE TABLE IF NOT EXISTS \"wbg_rag_pdf_poc\".pages (\n        document_version_id  text NOT NULL REFERENCES \"wbg_rag_pdf_poc\".documents (document_version_id),\n        page                 integer NOT NULL CHECK (page > 0),\n        printed_page_label   text,\n        chars                integer,\n        tables_detected      integer,\n        PRIMARY KEY (document_version_id, page))",
+   "CREATE TABLE IF NOT EXISTS \"wbg_rag_pdf_poc\".sections (\n        section_id           text PRIMARY KEY,\n        document_version_id  text NOT NULL REFERENCES \"wbg_rag_pdf_poc\".documents (document_version_id),\n        section_path         text NOT NULL,\n        heading_text         text,\n        heading_level        integer,\n        section_order        integer,\n        page_start           integer,\n        page_end             integer,\n        printed_page_label_start text,\n        printed_page_label_end   text)",
+   "CREATE TABLE IF NOT EXISTS \"wbg_rag_pdf_poc\".parent_chunks (\n        parent_id            text PRIMARY KEY,\n        document_version_id  text NOT NULL REFERENCES \"wbg_rag_pdf_poc\".documents (document_version_id),\n        section_path         text,\n        page_start           integer NOT NULL,\n        page_end             integer NOT NULL,\n        text                 text NOT NULL,\n        child_ids            text[] NOT NULL)",
+   "CREATE TABLE IF NOT EXISTS \"wbg_rag_pdf_poc\".retrieval_units (\n        unit_id              text PRIMARY KEY,\n        document_version_id  text NOT NULL REFERENCES \"wbg_rag_pdf_poc\".documents (document_version_id),\n        unit_type            text NOT NULL CHECK (unit_type IN ('chunk', 'table')),\n        strategy_version     text NOT NULL,\n        section_id           text,\n        section_path         text,\n        parent_id            text REFERENCES \"wbg_rag_pdf_poc\".parent_chunks (parent_id),\n        table_id             text,\n        page_start           integer NOT NULL,\n        page_end             integer NOT NULL CHECK (page_end >= page_start),\n        printed_page_label   text,\n        indexed_text         text NOT NULL,              -- exactly the text that was embedded\n        excerpt              text NOT NULL,              -- sanitised text shown to users\n        indexed_text_sha256  char(64) NOT NULL,\n        source_spans         jsonb NOT NULL DEFAULT '[]'::jsonb,   -- paragraph/page spans the unit was built from\n        sanitisation         jsonb NOT NULL DEFAULT '{}'::jsonb)",
+   "CREATE TABLE IF NOT EXISTS \"wbg_rag_pdf_poc\".unit_embeddings (\n        unit_id              text PRIMARY KEY REFERENCES \"wbg_rag_pdf_poc\".retrieval_units (unit_id),\n        model                text NOT NULL,\n        preprocessing        jsonb NOT NULL,             -- e.g. {\"normalize_embeddings\": true, \"input\": \"indexed_text\"}\n        source_cache         text NOT NULL,              -- cached .npy file the vector was read from\n        embedding            vector(768) NOT NULL,\n        embedding_sha256     char(64) NOT NULL)",
+   "CREATE INDEX IF NOT EXISTS \"unit_embeddings_hnsw_cosine\" ON \"wbg_rag_pdf_poc\".unit_embeddings USING hnsw (embedding vector_cosine_ops)",
+   "CREATE TABLE IF NOT EXISTS \"wbg_rag_pdf_poc\".citations (\n        unit_id              text PRIMARY KEY REFERENCES \"wbg_rag_pdf_poc\".retrieval_units (unit_id),\n        document_version_id  text NOT NULL REFERENCES \"wbg_rag_pdf_poc\".documents (document_version_id),\n        project_id           text NOT NULL,\n        document_id          text NOT NULL,\n        page_start           integer NOT NULL,\n        page_end             integer NOT NULL,\n        printed_page_label   text,\n        section_path         text,\n        source_url           text NOT NULL,\n        volume_path          text NOT NULL)",
+   "CREATE TABLE IF NOT EXISTS \"wbg_rag_pdf_poc\".table_schemas (\n        table_schema_id      text PRIMARY KEY,            -- e.g. 'wb_isr_results_indicators_v1'\n        description          text NOT NULL,\n        fields               jsonb NOT NULL,              -- [{\"name\", \"type\", \"unit_source\"}, ...]\n        status               text NOT NULL CHECK (status IN ('draft', 'approved', 'retired')))",
+   "CREATE TABLE IF NOT EXISTS \"wbg_rag_pdf_poc\".pdf_tables (\n        table_id             text PRIMARY KEY,\n        document_version_id  text NOT NULL REFERENCES \"wbg_rag_pdf_poc\".documents (document_version_id),\n        table_group_id       text NOT NULL,               -- logical table spanning continuation parts\n        table_schema_id      text REFERENCES \"wbg_rag_pdf_poc\".table_schemas (table_schema_id),\n        page                 integer NOT NULL,\n        caption              text,\n        section_path         text,\n        header               jsonb NOT NULL,\n        n_columns            integer NOT NULL,\n        n_data_rows          integer NOT NULL,\n        continuation_of      text,\n        description          text,                        -- searchable description of the logical table\n        extraction_version   text NOT NULL)",
+   "CREATE TABLE IF NOT EXISTS \"wbg_rag_pdf_poc\".pdf_table_rows (\n        table_id             text NOT NULL REFERENCES \"wbg_rag_pdf_poc\".pdf_tables (table_id),\n        row_index            integer NOT NULL,\n        page                 integer NOT NULL,\n        is_header            boolean NOT NULL,\n        cells                jsonb NOT NULL,              -- sanitised cells, original column order\n        PRIMARY KEY (table_id, row_index))",
+   "CREATE TABLE IF NOT EXISTS \"wbg_rag_pdf_poc\".pdf_table_values (\n        table_id             text NOT NULL,\n        row_index            integer NOT NULL,\n        field_name           text NOT NULL,\n        value_text           text,\n        value_numeric        numeric,\n        unit                 text,\n        quality              text NOT NULL CHECK (quality IN ('complete_row', 'needs_review')),\n        PRIMARY KEY (table_id, row_index, field_name),\n        FOREIGN KEY (table_id, row_index) REFERENCES \"wbg_rag_pdf_poc\".pdf_table_rows (table_id, row_index))"
+  ]
+ },
+ "filters": {
+  "project_id": "P148850",
+  "document_id": "40089196",
+  "document_version_id": "40089196:c32be7ca2d3d",
+  "sha256": "c32be7ca2d3d1ce2ea8e2e017cd7ef2cedea0e9aad940711e6f5b4cb7e5a4d24",
+  "volume_path": "/Volumes/workspace/default/wbg_rag_pdfs_poc/ET/P148850/ISR_2026-02-28_40089196.pdf",
+  "strategy": "C"
+ },
+ "record_counts": {
+  "documents": 1,
+  "pages": 8,
+  "sections": 17,
+  "parent_chunks": 10,
+  "retrieval_units": 39,
+  "unit_embeddings": 39,
+  "citations": 39,
+  "table_schemas": 1,
+  "pdf_tables": 5,
+  "pdf_table_rows": 42,
+  "pdf_table_values": 110
+ },
+ "total_records": 311,
+ "write_bound": 1000,
+ "embeddings": {
+  "count": 39,
+  "dimensions": 768,
+  "model": "Alibaba-NLP/gte-base-en-v1.5",
+  "preprocessing": {
+   "input": "indexed_text",
+   "normalize_embeddings": true,
+   "batch_size": 16,
+   "library": "sentence-transformers",
+   "trust_remote_code": true
+  },
+  "source_cache": "emb_C_2396_d1afdad97857d7e4.npy",
+  "regenerated": false
+ },
+ "checks": {
+  "identity": {
+   "project_approved": true,
+   "in_approved_document_manifest": true,
+   "corpus_manifest_sha256": true,
+   "local_pdf_sha256": true,
+   "processed_version_sha256": true,
+   "processed_manifest_sha256": true,
+   "document_version_id": true,
+   "project_matches": true,
+   "no_validation_errors": true
+  },
+  "embedding_cache": "emb_C_2396_d1afdad97857d7e4.npy",
+  "vectors": {
+   "count": 39,
+   "dimensions": 768,
+   "all_finite": true,
+   "unit_norm": true,
+   "unique_vectors": true,
+   "aligned_with_units": true
+  },
+  "unique_unit_ids": true,
+  "single_document_version": true,
+  "only_project": [
+   "P148850"
+  ],
+  "unit_ids_belong_to_document": true,
+  "sanitised_sources_only": [
+   "shared",
+   "strategies"
+  ],
+  "sanitisation_masks_in_units": 0,
+  "residual_personal_data": {
+   "email": 0,
+   "phone": 0,
+   "mask_placeholders": 0
+  },
+  "parents_referenced_exist": true,
+  "table_values_reference_rows": true
+ },
+ "exact_numeric_lookup_roads_constructed_km": {
+  "current_value": [
+   [
+    "57.40",
+    57.4,
+    "Kilometers",
+    3
+   ]
+  ],
+  "current_date": [
+   [
+    "25-Feb-2026",
+    null,
+    null,
+    3
+   ]
+  ],
+  "target_value": [
+   [
+    "57.40",
+    57.4,
+    "Kilometers",
+    3
+   ]
+  ],
+  "target_period": [
+   [
+    "Jun/2026",
+    null,
+    null,
+    3
+   ]
+  ]
+ },
+ "retrieval_preview_exact_local": [
+  {
+   "query_id": "Q01",
+   "question": "What is the project development objective of the Ethiopia Expressway Development Support Project (P148850)?",
+   "gold_pages": [
+    1
+   ],
+   "top5_unit_ids": [
+    "40089196:C:0002",
+    "40089196:C:0005",
+    "40089196:C:0003",
+    "40089196:C:0000",
+    "40089196:C:0008"
+   ],
+   "top5_distances": [
+    0.168327,
+    0.181354,
+    0.182871,
+    0.189683,
+    0.192687
+   ],
+   "gold_page_hit_at_5": true
+  },
+  {
+   "query_id": "Q06",
+   "question": "What are the current PDO, implementation progress and overall risk ratings in the latest ISR for P148850?",
+   "gold_pages": [
+    1
+   ],
+   "top5_unit_ids": [
+    "40089196:C:0004",
+    "40089196:t00301:w12-13",
+    "40089196:t00401:w2-4",
+    "40089196:t00301:w10-12",
+    "40089196:t00401:w1-2"
+   ],
+   "top5_distances": [
+    0.275926,
+    0.296441,
+    0.310068,
+    0.320549,
+    0.330119
+   ],
+   "gold_page_hit_at_5": true
+  },
+  {
+   "query_id": "Q17",
+   "question": "What are the original and revised closing dates of credit IDA-56250?",
+   "gold_pages": [
+    7,
+    8
+   ],
+   "top5_unit_ids": [
+    "40089196:C:0014",
+    "40089196:C:0013",
+    "40089196:t00301:w2-4",
+    "40089196:C:0016",
+    "40089196:t00402:w2-4"
+   ],
+   "top5_distances": [
+    0.468572,
+    0.475563,
+    0.513192,
+    0.516911,
+    0.519463
+   ],
+   "gold_page_hit_at_5": true
+  },
+  {
+   "query_id": "Q18",
+   "question": "When was the mid-term review of the Ethiopia expressway project held?",
+   "gold_pages": [
+    8
+   ],
+   "top5_unit_ids": [
+    "40089196:C:0006",
+    "40089196:C:0015",
+    "40089196:t00402:w4-6",
+    "40089196:t00501:w4-6",
+    "40089196:t00501:w2-4"
+   ],
+   "top5_distances": [
+    0.265446,
+    0.300249,
+    0.312404,
+    0.313208,
+    0.317969
+   ],
+   "gold_page_hit_at_5": true
+  },
+  {
+   "query_id": "Q20",
+   "question": "How much of credit IDA-56250 has been disbursed and how much was cancelled?",
+   "gold_pages": [
+    7
+   ],
+   "top5_unit_ids": [
+    "40089196:C:0013",
+    "40089196:C:0012",
+    "40089196:C:0014",
+    "40089196:C:0016",
+    "40089196:C:0004"
+   ],
+   "top5_distances": [
+    0.435319,
+    0.519576,
+    0.537574,
+    0.546512,
+    0.548074
+   ],
+   "gold_page_hit_at_5": true
+  },
+  {
+   "query_id": "Q27",
+   "question": "How has the IDA financing for the Ethiopia Expressway Development Support Project changed between appraisal and the latest ISR?",
+   "gold_pages": [
+    7
+   ],
+   "top5_unit_ids": [
+    "40089196:C:0013",
+    "40089196:C:0003",
+    "40089196:C:0000",
+    "40089196:C:0014",
+    "40089196:t00401:w4-6"
+   ],
+   "top5_distances": [
+    0.291507,
+    0.298169,
+    0.302794,
+    0.304448,
+    0.316015
+   ],
+   "gold_page_hit_at_5": true
+  }
+ ],
+ "storage": {
+  "record_json_bytes_by_table": {
+   "documents": 796,
+   "pages": 981,
+   "sections": 5363,
+   "parent_chunks": 7012,
+   "retrieval_units": 53936,
+   "unit_embeddings": 14351,
+   "citations": 19203,
+   "table_schemas": 871,
+   "pdf_tables": 6485,
+   "pdf_table_rows": 9806,
+   "pdf_table_values": 19817
+  },
+  "relational_estimate_bytes": 207932,
+  "vectors_estimate_bytes": 330351,
+  "total_estimate_bytes": 538282,
+  "basis": "record JSON size x 1.5 + per-vector heap/TOAST/HNSW bytes measured in Step 2"
+ },
+ "write_requires": "explicit approval, then LAKEBASE_LIVE_TESTS=1 and LAKEBASE_PDF_POC_WRITE_APPROVED=1 for that invocation",
+ "rollback": {
+  "statement": "DROP SCHEMA \"wbg_rag_pdf_poc\" CASCADE",
+  "scope": "drops only the PDF POC schema; wbg_rag_poc, the vector extension and everything else stay"
+ }
+}

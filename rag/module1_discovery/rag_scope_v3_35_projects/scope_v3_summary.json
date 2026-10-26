@@ -1,0 +1,189 @@
+{
+ "projects": 35,
+ "countries": [
+  "LK",
+  "ET",
+  "SN",
+  "ID",
+  "AR"
+ ],
+ "documents_by_type": {
+  "PAD": 35,
+  "ISR": 70,
+  "ICR": 25,
+  "ICRR": 22,
+  "PP": 85
+ },
+ "documents_by_role": {
+  "PAD_original": 35,
+  "ISR_first": 35,
+  "ISR_latest": 35,
+  "ICR": 25,
+  "ICRR": 22,
+  "PP_coverage": 50,
+  "PP_latest": 35
+ },
+ "documents": 237,
+ "already_local": 6,
+ "new_downloads": 231,
+ "est_bytes_new": 90613341,
+ "size_basis": {
+  "local_type_median": 176,
+  "local_type_median (PP)": 48,
+  "content_length": 7
+ },
+ "head_status_added": {
+  "200": 48,
+  "": 2
+ },
+ "pp_added_vs_v2": 50,
+ "pp_dropped_vs_v2": [
+  {
+   "project_id": "P132833",
+   "document_id": "29493164",
+   "role": "PP_earliest"
+  },
+  {
+   "project_id": "P156019",
+   "document_id": "27696116",
+   "role": "PP_earliest"
+  },
+  {
+   "project_id": "P148850",
+   "document_id": "25821899",
+   "role": "PP_earliest"
+  },
+  {
+   "project_id": "P164336",
+   "document_id": "31142313",
+   "role": "PP_earliest"
+  },
+  {
+   "project_id": "P175325",
+   "document_id": "33212834",
+   "role": "PP_earliest"
+  },
+  {
+   "project_id": "P156186",
+   "document_id": "29497769",
+   "role": "PP_earliest"
+  },
+  {
+   "project_id": "P179534",
+   "document_id": "34020290",
+   "role": "PP_earliest"
+  },
+  {
+   "project_id": "P165543",
+   "document_id": "32019629",
+   "role": "PP_earliest"
+  }
+ ],
+ "denominators": {
+  "contracts_ds00005": 5103,
+  "contracts_with_step_package": 4214,
+  "contracts_ds01004_legacy": 143
+ },
+ "coverage_v2_plan_choice": {
+  "plan_versions": 43,
+  "verified": 461,
+  "verified_amount": 431,
+  "verified_exact_date": 30,
+  "row_level": 2714,
+  "candidate": 2097,
+  "conflicting": 156,
+  "text_only": 173,
+  "any": 2887
+ },
+ "coverage_v3_plan_choice": {
+  "plan_versions": 85,
+  "verified": 908,
+  "verified_amount": 554,
+  "verified_exact_date": 354,
+  "row_level": 3486,
+  "candidate": 2440,
+  "conflicting": 138,
+  "text_only": 410,
+  "any": 3896
+ },
+ "coverage_all_versions": {
+  "versions_for_max": 126,
+  "verified": 992,
+  "verified_amount": 572,
+  "verified_exact_date": 420,
+  "row_level": 3535,
+  "candidate": 2518,
+  "conflicting": 25,
+  "text_only": 427,
+  "any": 3962
+ },
+ "plan_versions": {
+  "listed": 2164,
+  "texts_available": 2111,
+  "texts_unavailable": 53,
+  "v2": 43,
+  "v3": 85,
+  "full_cover": 126
+ },
+ "missing_metadata_in_manifest": {
+  "document_date": 0,
+  "disclosure_date": 2,
+  "version_type": 42,
+  "report_number": 40,
+  "language": 1,
+  "pdf_url": 0,
+  "guid": 0
+ },
+ "first_batch": [
+  [
+   "P132833",
+   "PAD_original",
+   "26256705"
+  ],
+  [
+   "P132833",
+   "ICR",
+   "34345370"
+  ],
+  [
+   "P132833",
+   "ICRR",
+   "34407877"
+  ],
+  [
+   "P132833",
+   "PP_coverage",
+   "33761744"
+  ],
+  [
+   "P148850",
+   "PAD_original",
+   "24440102"
+  ],
+  [
+   "P148850",
+   "ISR_latest",
+   "40089196"
+  ],
+  [
+   "P148850",
+   "PP_coverage",
+   "40025990"
+  ],
+  [
+   "P163452",
+   "ICR",
+   "34455066"
+  ],
+  [
+   "P175325",
+   "ISR_first",
+   "33851641"
+  ],
+  [
+   "P175325",
+   "PP_coverage",
+   "40009757"
+  ]
+ ]
+}

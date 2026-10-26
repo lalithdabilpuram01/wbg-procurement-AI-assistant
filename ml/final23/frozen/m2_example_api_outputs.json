@@ -1,0 +1,162 @@
+[
+ {
+  "unit_id": "1831129",
+  "inputs": {
+   "procurement_method": "Quality And Cost-Based Selection",
+   "procurement_category": "Consultant Services",
+   "review_type": "Post",
+   "region_name": "Eastern and Southern Africa",
+   "country_grp": "REGIONAL",
+   "sector": "Energy and Extractives",
+   "days_from_approval": 3899.0,
+   "signed_before_approval": 0.0,
+   "approval_fiscal_year": 2014.0,
+   "income_ordinal": null
+  },
+  "model": "m2_l2_logistic_sim_v1_S2",
+  "scenario": "S2 (primary simulation)",
+  "simulated_probability_pct": 9.8,
+  "main_simulated_factors": [
+   {
+    "feature": "days_from_approval",
+    "label": "Time since project approval",
+    "log_odds_contribution": 0.132
+   }
+  ],
+  "disclaimer": "SYNTHETIC OUTCOMES \u2014 NOT VALIDATED WORLD BANK RISK ACCURACY",
+  "note": "Simulated drivers from an assumed data-generating process; not World Bank risk factors.",
+  "review_list_flag": false,
+  "review_list_note": "Demonstration review list: threshold set for <= 30% of refit contracts; not validated on real amendments."
+ },
+ {
+  "unit_id": "1831187",
+  "inputs": {
+   "procurement_method": "Request for Quotations",
+   "procurement_category": "Goods",
+   "review_type": "Post",
+   "region_name": "Eastern and Southern Africa",
+   "country_grp": "REGIONAL",
+   "sector": "Energy and Extractives",
+   "days_from_approval": 3952.0,
+   "signed_before_approval": 0.0,
+   "approval_fiscal_year": 2014.0,
+   "income_ordinal": null
+  },
+  "model": "m2_l2_logistic_sim_v1_S2",
+  "scenario": "S2 (primary simulation)",
+  "simulated_probability_pct": 10.1,
+  "main_simulated_factors": [
+   {
+    "feature": "days_from_approval",
+    "label": "Time since project approval",
+    "log_odds_contribution": 0.135
+   }
+  ],
+  "disclaimer": "SYNTHETIC OUTCOMES \u2014 NOT VALIDATED WORLD BANK RISK ACCURACY",
+  "note": "Simulated drivers from an assumed data-generating process; not World Bank risk factors.",
+  "review_list_flag": false,
+  "review_list_note": "Demonstration review list: threshold set for <= 30% of refit contracts; not validated on real amendments."
+ },
+ {
+  "unit_id": "1831111",
+  "inputs": {
+   "procurement_method": "Request for Bids",
+   "procurement_category": "Non-consulting Services",
+   "review_type": "Post",
+   "region_name": "Eastern and Southern Africa",
+   "country_grp": "REGIONAL",
+   "sector": "Energy and Extractives",
+   "days_from_approval": 3775.0,
+   "signed_before_approval": 0.0,
+   "approval_fiscal_year": 2014.0,
+   "income_ordinal": null
+  },
+  "model": "m2_l2_logistic_sim_v1_S2",
+  "scenario": "S2 (primary simulation)",
+  "simulated_probability_pct": 12.5,
+  "main_simulated_factors": [
+   {
+    "feature": "procurement_method",
+    "label": "Procurement method",
+    "log_odds_contribution": 0.143
+   },
+   {
+    "feature": "days_from_approval",
+    "label": "Time since project approval",
+    "log_odds_contribution": 0.126
+   }
+  ],
+  "disclaimer": "SYNTHETIC OUTCOMES \u2014 NOT VALIDATED WORLD BANK RISK ACCURACY",
+  "note": "Simulated drivers from an assumed data-generating process; not World Bank risk factors.",
+  "review_list_flag": false,
+  "review_list_note": "Demonstration review list: threshold set for <= 30% of refit contracts; not validated on real amendments."
+ },
+ {
+  "unit_id": "1830353",
+  "inputs": {
+   "procurement_method": "Request for Bids",
+   "procurement_category": "Goods",
+   "review_type": "Post",
+   "region_name": "Eastern and Southern Africa",
+   "country_grp": "REGIONAL",
+   "sector": "Energy and Extractives",
+   "days_from_approval": 3829.0,
+   "signed_before_approval": 0.0,
+   "approval_fiscal_year": 2014.0,
+   "income_ordinal": null
+  },
+  "model": "m2_l2_logistic_sim_v1_S2",
+  "scenario": "S2 (primary simulation)",
+  "simulated_probability_pct": 14.6,
+  "main_simulated_factors": [
+   {
+    "feature": "procurement_method",
+    "label": "Procurement method",
+    "log_odds_contribution": 0.143
+   },
+   {
+    "feature": "days_from_approval",
+    "label": "Time since project approval",
+    "log_odds_contribution": 0.129
+   }
+  ],
+  "disclaimer": "SYNTHETIC OUTCOMES \u2014 NOT VALIDATED WORLD BANK RISK ACCURACY",
+  "note": "Simulated drivers from an assumed data-generating process; not World Bank risk factors.",
+  "review_list_flag": false,
+  "review_list_note": "Demonstration review list: threshold set for <= 30% of refit contracts; not validated on real amendments."
+ },
+ {
+  "unit_id": "1831095",
+  "inputs": {
+   "procurement_method": "Individual Consultant Selection",
+   "procurement_category": "Consultant Services",
+   "review_type": "Post",
+   "region_name": "Eastern and Southern Africa",
+   "country_grp": "REGIONAL",
+   "sector": "Energy and Extractives",
+   "days_from_approval": 3879.0,
+   "signed_before_approval": 0.0,
+   "approval_fiscal_year": 2014.0,
+   "income_ordinal": null
+  },
+  "model": "m2_l2_logistic_sim_v1_S2",
+  "scenario": "S2 (primary simulation)",
+  "simulated_probability_pct": 12.1,
+  "main_simulated_factors": [
+   {
+    "feature": "procurement_method",
+    "label": "Procurement method",
+    "log_odds_contribution": 0.225
+   },
+   {
+    "feature": "days_from_approval",
+    "label": "Time since project approval",
+    "log_odds_contribution": 0.131
+   }
+  ],
+  "disclaimer": "SYNTHETIC OUTCOMES \u2014 NOT VALIDATED WORLD BANK RISK ACCURACY",
+  "note": "Simulated drivers from an assumed data-generating process; not World Bank risk factors.",
+  "review_list_flag": false,
+  "review_list_note": "Demonstration review list: threshold set for <= 30% of refit contracts; not validated on real amendments."
+ }
+]

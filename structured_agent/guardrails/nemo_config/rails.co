@@ -1,0 +1,17 @@
+# Custom NeMo rail flows (Colang 1.0). Each flow calls a deterministic Python action registered by
+# structured_agent/guardrails/nemo_rails.py; the decision dict is returned to the caller through output variables.
+
+define flow wbg input policy
+  $wbg_decision = execute wbg_input_policy(text=$user_message)
+  if not $wbg_decision["allowed"]
+    bot refuse to respond
+    stop
+
+define flow wbg output policy
+  $wbg_decision = execute wbg_output_policy(text=$bot_message, stage=$guard_stage)
+  if not $wbg_decision["allowed"]
+    bot refuse to respond
+    stop
+
+define bot refuse to respond
+  "The request was blocked by a guardrail policy."

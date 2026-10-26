@@ -1,0 +1,218 @@
+{
+ "row_counts": {
+  "documents": 1,
+  "pages": 8,
+  "sections": 17,
+  "parent_chunks": 10,
+  "retrieval_units": 39,
+  "unit_embeddings": 39,
+  "citations": 39,
+  "table_schemas": 1,
+  "pdf_tables": 5,
+  "pdf_table_rows": 42,
+  "pdf_table_values": 110
+ },
+ "row_counts_as_approved": true,
+ "storage": {
+  "database_bytes": 13434880,
+  "schema_tables_total_bytes": 958464,
+  "unit_embeddings_total_bytes": 434176,
+  "hnsw_index_bytes": 172032,
+  "relational_tables_total_bytes": 524288,
+  "by_table": {
+   "citations": {
+    "total_bytes": 65536,
+    "heap_bytes": 16384
+   },
+   "documents": {
+    "total_bytes": 49152,
+    "heap_bytes": 8192
+   },
+   "pages": {
+    "total_bytes": 32768,
+    "heap_bytes": 8192
+   },
+   "parent_chunks": {
+    "total_bytes": 32768,
+    "heap_bytes": 8192
+   },
+   "pdf_table_rows": {
+    "total_bytes": 65536,
+    "heap_bytes": 16384
+   },
+   "pdf_table_values": {
+    "total_bytes": 65536,
+    "heap_bytes": 16384
+   },
+   "pdf_tables": {
+    "total_bytes": 32768,
+    "heap_bytes": 8192
+   },
+   "retrieval_units": {
+    "total_bytes": 114688,
+    "heap_bytes": 49152
+   },
+   "sections": {
+    "total_bytes": 32768,
+    "heap_bytes": 8192
+   },
+   "table_schemas": {
+    "total_bytes": 32768,
+    "heap_bytes": 8192
+   },
+   "unit_embeddings": {
+    "total_bytes": 434176,
+    "heap_bytes": 16384
+   }
+  }
+ },
+ "hnsw_index": {
+  "name": "unit_embeddings_hnsw_cosine",
+  "access_method": "hnsw",
+  "valid": true,
+  "ready": true,
+  "operator_class": "vector_cosine_ops"
+ },
+ "plans": {
+  "default": [
+   "Limit",
+   "Sort",
+   "Seq Scan"
+  ],
+  "seqscan_disabled": [
+   "Limit",
+   "Index Scan using unit_embeddings_hnsw_cosine"
+  ]
+ },
+ "numeric_lookup": [
+  {
+   "indicator": "Roads constructed (Kilometers)",
+   "field_name": "baseline_period",
+   "value_text": "May/2015",
+   "value_numeric": null,
+   "unit": null,
+   "page": 3,
+   "table_id": "40089196:t00301",
+   "quality": "complete_row"
+  },
+  {
+   "indicator": "Roads constructed (Kilometers)",
+   "field_name": "baseline_value",
+   "value_text": "0.00",
+   "value_numeric": "0",
+   "unit": "Kilometers",
+   "page": 3,
+   "table_id": "40089196:t00301",
+   "quality": "complete_row"
+  },
+  {
+   "indicator": "Roads constructed (Kilometers)",
+   "field_name": "current_date",
+   "value_text": "25-Feb-2026",
+   "value_numeric": null,
+   "unit": null,
+   "page": 3,
+   "table_id": "40089196:t00301",
+   "quality": "complete_row"
+  },
+  {
+   "indicator": "Roads constructed (Kilometers)",
+   "field_name": "current_value",
+   "value_text": "57.40",
+   "value_numeric": "57.4",
+   "unit": "Kilometers",
+   "page": 3,
+   "table_id": "40089196:t00301",
+   "quality": "complete_row"
+  },
+  {
+   "indicator": "Roads constructed (Kilometers)",
+   "field_name": "indicator_name",
+   "value_text": "Roads constructed (Kilometers)",
+   "value_numeric": null,
+   "unit": "Kilometers",
+   "page": 3,
+   "table_id": "40089196:t00301",
+   "quality": "complete_row"
+  },
+  {
+   "indicator": "Roads constructed (Kilometers)",
+   "field_name": "previous_date",
+   "value_text": "30-Jul-2025",
+   "value_numeric": null,
+   "unit": null,
+   "page": 3,
+   "table_id": "40089196:t00301",
+   "quality": "complete_row"
+  },
+  {
+   "indicator": "Roads constructed (Kilometers)",
+   "field_name": "previous_value",
+   "value_text": "56",
+   "value_numeric": "56",
+   "unit": "Kilometers",
+   "page": 3,
+   "table_id": "40089196:t00301",
+   "quality": "complete_row"
+  },
+  {
+   "indicator": "Roads constructed (Kilometers)",
+   "field_name": "target_period",
+   "value_text": "Jun/2026",
+   "value_numeric": null,
+   "unit": null,
+   "page": 3,
+   "table_id": "40089196:t00301",
+   "quality": "complete_row"
+  },
+  {
+   "indicator": "Roads constructed (Kilometers)",
+   "field_name": "target_value",
+   "value_text": "57.40",
+   "value_numeric": "57.4",
+   "unit": "Kilometers",
+   "page": 3,
+   "table_id": "40089196:t00301",
+   "quality": "complete_row"
+  }
+ ],
+ "needs_review_values": [
+  {
+   "table_id": "40089196:t00301",
+   "row_index": 12,
+   "field_name": "baseline_value",
+   "value_text": "0.00"
+  },
+  {
+   "table_id": "40089196:t00301",
+   "row_index": 12,
+   "field_name": "current_value",
+   "value_text": "5"
+  },
+  {
+   "table_id": "40089196:t00301",
+   "row_index": 12,
+   "field_name": "indicator_name",
+   "value_text": "Reduction in road accident fatalities along the Addis \u2013 Adama and"
+  },
+  {
+   "table_id": "40089196:t00301",
+   "row_index": 12,
+   "field_name": "previous_value",
+   "value_text": "5"
+  },
+  {
+   "table_id": "40089196:t00301",
+   "row_index": 12,
+   "field_name": "target_value",
+   "value_text": "20.00"
+  }
+ ],
+ "table_schemas": [
+  [
+   "wb_isr_results_indicators_v1",
+   "draft"
+  ]
+ ],
+ "stored_matches_prepared": true
+}

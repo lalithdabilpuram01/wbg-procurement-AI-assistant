@@ -1,0 +1,27 @@
+{
+ "_about": "Business vocabulary mapped to registry objects, columns and metrics. Targets are verified to exist in the schema at build time; the vocabulary itself is curated and needs procurement SME review (status 'unverified' until reviewed).",
+ "source": "Curated for the Structured Data Agent from Gold column comments and KPI view names; pending SME review",
+ "synonyms": [
+  {"terms": ["tender", "tenders", "bid invitation", "bid invitations", "invitation for bids", "ifb", "call for bids"], "target_kind": "metric", "target_ref": "tender_invitation_notice_count"},
+  {"terms": ["solicitation", "solicitations", "rfq", "reoi", "expression of interest", "prequalification"], "target_kind": "metric", "target_ref": "solicitation_notice_count"},
+  {"terms": ["award announcement", "award notice", "award notices", "award records", "contract award notice"], "target_kind": "metric", "target_ref": "contract_award_announcement_count"},
+  {"terms": ["contracts", "signed contracts", "contract awards", "awards", "awarded contracts"], "target_kind": "metric", "target_ref": "contract_award_count"},
+  {"terms": ["award value", "contract value", "contract amount", "awarded amount", "value of contracts", "spend", "procurement spend"], "target_kind": "metric", "target_ref": "contract_award_value_usd"},
+  {"terms": ["loan amount", "credit amount", "principal", "ibrd financing", "ida financing", "lending"], "target_kind": "metric", "target_ref": "ibrd_ida_original_principal_usd"},
+  {"terms": ["project commitment", "commitment", "committed amount", "total commitment"], "target_kind": "metric", "target_ref": "project_current_commitment_usd"},
+  {"terms": ["total value", "value", "amount", "how much money", "funding"], "target_kind": "metric", "target_ref": "contract_award_value_usd", "note": "ambiguous: also financing principal and project commitment"},
+  {"terms": ["total value", "value", "amount", "how much money", "funding"], "target_kind": "metric", "target_ref": "ibrd_ida_original_principal_usd", "note": "ambiguous"},
+  {"terms": ["total value", "value", "amount", "how much money", "funding"], "target_kind": "metric", "target_ref": "project_current_commitment_usd", "note": "ambiguous"},
+  {"terms": ["vendor", "vendors", "supplier", "suppliers", "contractor", "contractors", "firm", "firms", "bidder country"], "target_kind": "object", "target_ref": "workspace.wbg_gold.gold_contract_analytics", "note": "aggregated supplier flags only; supplier names are prohibited"},
+  {"terms": ["selection method", "procurement method", "method", "procurement approach"], "target_kind": "column", "target_ref": "workspace.wbg_gold.gold_contract_analytics.procurement_method"},
+  {"terms": ["category", "goods", "works", "consulting services", "non-consulting services"], "target_kind": "column", "target_ref": "workspace.wbg_gold.gold_contract_analytics.procurement_category"},
+  {"terms": ["deadline", "response window", "bidding period", "submission period", "time to respond"], "target_kind": "object", "target_ref": "workspace.wbg_gold.vw_kpi_response_windows"},
+  {"terms": ["outcome rating", "ieg rating", "project rating", "evaluation rating"], "target_kind": "column", "target_ref": "workspace.wbg_gold.gold_project_portfolio.ieg_outcome_rating"},
+  {"terms": ["gdp", "inflation", "governance", "corruption", "cpia", "income group", "economy"], "target_kind": "object", "target_ref": "workspace.wbg_gold.gold_country_context"},
+  {"terms": ["portfolio", "operation", "operations", "project", "projects"], "target_kind": "object", "target_ref": "workspace.wbg_gold.gold_project_portfolio"},
+  {"terms": ["signing date", "signed", "date signed"], "target_kind": "column", "target_ref": "workspace.wbg_gold.gold_contract_analytics.contract_signing_date"},
+  {"terms": ["loan", "loans", "credit", "credits", "grant", "ida", "ibrd", "financing instrument"], "target_kind": "object", "target_ref": "workspace.wbg_gold.gold_financing_analytics"},
+  {"terms": ["fiscal year", "fy"], "target_kind": "column", "target_ref": "workspace.wbg_gold.vw_kpi_contract_awards.contract_fiscal_year"},
+  {"terms": ["country", "countries", "borrower country"], "target_kind": "object", "target_ref": "workspace.wbg_gold.vw_kpi_country_comparison"}
+ ]
+}

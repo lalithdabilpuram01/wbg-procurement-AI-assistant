@@ -1,0 +1,54 @@
+{
+ "_about": "Reviewed SQL templates. They are 'curated' until the evaluation executes them through the validated gateway and the result matches an independent baseline query; the evaluation then records them as 'verified' in metadata/verification/sql_examples_verification_*.json, which the next explicit registry initialisation reads. User values are always named parameters.",
+ "examples": [
+  {"example_id": "project_lookup", "question": "Show the portfolio record for a project",
+   "sql": "SELECT project_id, project_name, region_name, source_country_name, approval_fiscal_year, project_status_snapshot, contract_award_count, contract_award_amount_usd, notice_count, ibrd_loan_count, ida_credit_count FROM workspace.wbg_gold.gold_project_portfolio WHERE project_id = :project_id LIMIT 10",
+   "parameters": {"project_id": "P148850"}, "objects": ["workspace.wbg_gold.gold_project_portfolio"], "metrics": []},
+
+  {"example_id": "contract_lookup", "question": "Show a contract award by its World Bank contract number",
+   "sql": "SELECT wb_contract_number, project_id, project_name, procurement_category, procurement_method, review_type, contract_signing_date, contract_fiscal_year, contract_amount_usd, award_notice_link_status FROM workspace.wbg_gold.gold_contract_analytics WHERE wb_contract_number = :wb_contract_number LIMIT 10",
+   "parameters": {"wb_contract_number": "1803814"}, "objects": ["workspace.wbg_gold.gold_contract_analytics"], "metrics": []},
+
+  {"example_id": "project_contract_counts", "question": "How many contract awards and what award value does each project in a country have?",
+   "sql": "SELECT project_id, count(*) AS contract_awards, sum(contract_amount_usd) AS contract_award_value_usd FROM workspace.wbg_gold.gold_contract_analytics WHERE wdi_country_code = :country_code GROUP BY project_id ORDER BY contract_awards DESC LIMIT 100",
+   "parameters": {"country_code": "ET"}, "objects": ["workspace.wbg_gold.gold_contract_analytics"], "metrics": ["contract_award_count", "contract_award_value_usd"]},
+
+  {"example_id": "award_value_by_method", "question": "What is the contract award value by procurement method?",
+   "sql": "SELECT procurement_method, sum(contract_awards) AS contract_awards, sum(contract_award_value_usd) AS contract_award_value_usd FROM workspace.wbg_gold.vw_kpi_contract_awards GROUP BY procurement_method ORDER BY contract_award_value_usd DESC LIMIT 100",
+   "parameters": {}, "objects": ["workspace.wbg_gold.vw_kpi_contract_awards"], "metrics": ["contract_award_count", "contract_award_value_usd"],
+   "expected_result": {"sum_contract_awards": 178921, "sum_contract_award_value_usd": "85248987799.45", "source": "gold/README.md (178,921 contracts = US$85,248,987,799.45)"}},
+
+  {"example_id": "country_fiscal_year_awards", "question": "How many contracts were awarded, and for what value, in a country in a fiscal year?",
+   "sql": "SELECT contract_fiscal_year, wdi_country_code, sum(contract_awards) AS contract_awards, sum(contract_award_value_usd) AS contract_award_value_usd FROM workspace.wbg_gold.vw_kpi_contract_awards WHERE wdi_country_code = :country_code AND contract_fiscal_year = :fiscal_year GROUP BY contract_fiscal_year, wdi_country_code LIMIT 10",
+   "parameters": {"country_code": "ET", "fiscal_year": 2023}, "objects": ["workspace.wbg_gold.vw_kpi_contract_awards"], "metrics": ["contract_award_count", "contract_award_value_usd"]},
+
+  {"example_id": "tender_notices_by_category", "question": "How many tender invitation notices were published per procurement category?",
+   "sql": "SELECT procurement_category, count(*) AS tender_invitation_notices FROM workspace.wbg_gold.gold_procurement_notices WHERE is_tender_invitation GROUP BY procurement_category ORDER BY tender_invitation_notices DESC LIMIT 20",
+   "parameters": {}, "objects": ["workspace.wbg_gold.gold_procurement_notices"], "metrics": ["tender_invitation_notice_count"]},
+
+  {"example_id": "contracts_by_ieg_rating", "question": "What contract award value went to projects by IEG outcome rating?",
+   "sql": "SELECT p.ieg_outcome_rating, count(*) AS contract_awards, sum(c.contract_amount_usd) AS contract_award_value_usd FROM workspace.wbg_gold.gold_contract_analytics AS c JOIN workspace.wbg_gold.gold_project_portfolio AS p ON c.project_id = p.project_id GROUP BY p.ieg_outcome_rating ORDER BY contract_award_value_usd DESC LIMIT 20",
+   "parameters": {}, "objects": ["workspace.wbg_gold.gold_contract_analytics", "workspace.wbg_gold.gold_project_portfolio"], "metrics": ["contract_award_count", "contract_award_value_usd"]},
+
+  {"example_id": "contract_value_of_ida_projects", "question": "What is the contract award value of projects that have IDA financing?",
+   "sql": "WITH ida_projects AS (SELECT project_id, count(*) AS ida_instruments FROM workspace.wbg_gold.gold_financing_analytics WHERE lender = :lender GROUP BY project_id) SELECT count(DISTINCT c.project_id) AS projects, count(*) AS contract_awards, sum(c.contract_amount_usd) AS contract_award_value_usd FROM workspace.wbg_gold.gold_contract_analytics AS c JOIN ida_projects AS f ON c.project_id = f.project_id LIMIT 10",
+   "parameters": {"lender": "IDA"}, "objects": ["workspace.wbg_gold.gold_contract_analytics", "workspace.wbg_gold.gold_financing_analytics"], "metrics": ["contract_award_value_usd"]},
+
+  {"example_id": "tender_invitations_in_fiscal_year", "question": "How many invitations for bids were published in a fiscal year?",
+   "sql": "SELECT publication_fiscal_year, sum(procurement_notices) AS tender_invitation_notices FROM workspace.wbg_gold.vw_kpi_notice_activity WHERE notice_class = 'tender_invitation' AND publication_fiscal_year = :fiscal_year GROUP BY publication_fiscal_year LIMIT 10",
+   "parameters": {"fiscal_year": 2024}, "objects": ["workspace.wbg_gold.vw_kpi_notice_activity"], "metrics": ["tender_invitation_notice_count"]},
+
+  {"example_id": "country_procurement_profile", "question": "For each country, what are the contract awards, award value and tender invitations, top countries by award value?",
+   "sql": "WITH contracts AS (SELECT wdi_country_code, count(*) AS contract_awards, sum(contract_amount_usd) AS contract_award_value_usd FROM workspace.wbg_gold.gold_contract_analytics WHERE geography_type = 'single_country' GROUP BY wdi_country_code), tenders AS (SELECT wdi_country_code, count_if(is_tender_invitation) AS tender_invitation_notices FROM workspace.wbg_gold.gold_procurement_notices WHERE geography_type = 'single_country' GROUP BY wdi_country_code) SELECT c.wdi_country_code, c.contract_awards, c.contract_award_value_usd, coalesce(t.tender_invitation_notices, 0) AS tender_invitation_notices FROM contracts AS c LEFT JOIN tenders AS t ON c.wdi_country_code = t.wdi_country_code ORDER BY c.contract_award_value_usd DESC LIMIT 10",
+   "parameters": {}, "objects": ["workspace.wbg_gold.gold_contract_analytics", "workspace.wbg_gold.gold_procurement_notices"], "metrics": ["contract_award_count", "contract_award_value_usd", "tender_invitation_notice_count"]},
+
+  {"example_id": "median_response_window_by_type", "question": "What is the median published response window by notice type?",
+   "sql": "SELECT notice_type, eligible_solicitation_notices, positive_window_notices, p50_window_days FROM workspace.wbg_gold.vw_kpi_response_windows WHERE grouping_level = 'type' ORDER BY notice_type LIMIT 20",
+   "parameters": {}, "objects": ["workspace.wbg_gold.vw_kpi_response_windows"], "metrics": ["median_published_response_window_days"]},
+
+  {"example_id": "headline_totals", "question": "What are the headline procurement totals?",
+   "sql": "SELECT total_projects, contract_awards, total_contract_award_value_usd, procurement_notices, tender_invitation_notices, contract_award_announcement_notices, ibrd_loan_instruments, ida_credit_instruments FROM workspace.wbg_gold.vw_kpi_overview LIMIT 1",
+   "parameters": {}, "objects": ["workspace.wbg_gold.vw_kpi_overview"], "metrics": ["project_count", "contract_award_count", "contract_award_value_usd", "procurement_notice_count"],
+   "expected_result": {"total_projects": 2000, "contract_awards": 178921, "total_contract_award_value_usd": "85248987799.45", "procurement_notices": 243533, "source": "gold/README.md run log"}}
+ ]
+}

@@ -1,0 +1,30 @@
+{
+ "question": "What is the phone number and e-mail of the task team leader for P148850?",
+ "status": "withheld",
+ "answer": "This request asks for personal contact information, which is masked in the corpus and is not returned.",
+ "citations": [],
+ "supporting_evidence_ids": [],
+ "conflicts": [],
+ "limitations": [
+  "Personal contact data is masked in the sanitised corpus and is not returned."
+ ],
+ "claims": [],
+ "removed_claims": [],
+ "generator": "none (stopped before generation by a guard or required-field check)",
+ "generator_is_llm": false,
+ "timings_ms": {
+  "retrieval": 0,
+  "total": 0
+ },
+ "trace": {
+  "plan": {
+   "question": "What is the phone number and e-mail of the task team leader for P148850?",
+   "comparison": false,
+   "doc_type_hints": [],
+   "required_fields": {}
+  },
+  "retrieval_status": "withheld_personal_data",
+  "retrieved_unit_ids": [],
+  "targeted": {}
+ }
+}

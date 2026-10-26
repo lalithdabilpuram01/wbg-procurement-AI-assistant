@@ -1,0 +1,1159 @@
+{
+ "wdi": {
+  "NY.GDP.MKTP.KD.ZG": {
+   "official_name": "GDP growth (annual %)",
+   "source": "World Development Indicators",
+   "api_total": 6916,
+   "pages": 1,
+   "records": 6916,
+   "V1_count_matches_total": true,
+   "lastupdated": "2026-10-08",
+   "V1_lastupdated_matches_source": true,
+   "retrieved_utc": "2026-10-22T18:21:46+00:00",
+   "bytes": 1516146,
+   "sha256": "07bf08cd83944766f7287d4811097102c1e2eacdd4ceccc7774a12c0b20cfd03",
+   "V2_indicator_code_all_match": true,
+   "V2_duplicate_country_year": 0,
+   "V2_all_entities_have_years_2000_2025": true,
+   "entities": 266,
+   "V3_entities_resolved": 266,
+   "V3_unresolved_entities": [],
+   "economies": 217,
+   "aggregates": 49,
+   "V4_null_pct_all_rows": 4.54,
+   "V4_null_pct_economies": 5.1,
+   "V4_economies_with_no_value_2000_2025": [
+    "GI",
+    "KP",
+    "VG"
+   ],
+   "V4_economies_with_value_by_year": {
+    "2000": 199,
+    "2001": 200,
+    "2002": 200,
+    "2003": 204,
+    "2004": 204,
+    "2005": 204,
+    "2006": 204,
+    "2007": 205,
+    "2008": 206,
+    "2009": 209,
+    "2010": 210,
+    "2011": 210,
+    "2012": 209,
+    "2013": 209,
+    "2014": 210,
+    "2015": 211,
+    "2016": 210,
+    "2017": 210,
+    "2018": 211,
+    "2019": 210,
+    "2020": 210,
+    "2021": 210,
+    "2022": 209,
+    "2023": 204,
+    "2024": 200,
+    "2025": 186
+   },
+   "obs_status_values": {
+    "<empty>": 6916
+   },
+   "unit_values": {
+    "<empty>": 6916
+   }
+  },
+  "FP.CPI.TOTL.ZG": {
+   "official_name": "Inflation, consumer prices (annual %)",
+   "source": "World Development Indicators",
+   "api_total": 6916,
+   "pages": 1,
+   "records": 6916,
+   "V1_count_matches_total": true,
+   "lastupdated": "2026-10-08",
+   "V1_lastupdated_matches_source": true,
+   "retrieved_utc": "2026-10-22T18:21:48+00:00",
+   "bytes": 1597780,
+   "sha256": "25b55dac49ae80c8c645d0f1d93eda4a675c35945c8944238b6cb4e86fd2368a",
+   "V2_indicator_code_all_match": true,
+   "V2_duplicate_country_year": 0,
+   "V2_all_entities_have_years_2000_2025": true,
+   "entities": 266,
+   "V3_entities_resolved": 266,
+   "V3_unresolved_entities": [],
+   "economies": 217,
+   "aggregates": 49,
+   "V4_null_pct_all_rows": 14.05,
+   "V4_null_pct_economies": 16.75,
+   "V4_economies_with_no_value_2000_2025": [
+    "AD",
+    "AS",
+    "BM",
+    "CU",
+    "ER",
+    "FO",
+    "GI",
+    "GL",
+    "GU",
+    "IM",
+    "JG",
+    "KP",
+    "LI",
+    "MC",
+    "MF",
+    "MH",
+    "MP",
+    "PF",
+    "PR",
+    "SO",
+    "TC",
+    "TM",
+    "VG",
+    "VI"
+   ],
+   "V4_economies_with_value_by_year": {
+    "2000": 163,
+    "2001": 168,
+    "2002": 170,
+    "2003": 173,
+    "2004": 174,
+    "2005": 177,
+    "2006": 180,
+    "2007": 182,
+    "2008": 183,
+    "2009": 186,
+    "2010": 188,
+    "2011": 192,
+    "2012": 191,
+    "2013": 190,
+    "2014": 190,
+    "2015": 189,
+    "2016": 189,
+    "2017": 185,
+    "2018": 184,
+    "2019": 184,
+    "2020": 179,
+    "2021": 179,
+    "2022": 179,
+    "2023": 177,
+    "2024": 176,
+    "2025": 169
+   },
+   "obs_status_values": {
+    "<empty>": 6916
+   },
+   "unit_values": {
+    "<empty>": 6916
+   }
+  },
+  "NY.GDP.PCAP.CD": {
+   "official_name": "GDP per capita (current US$)",
+   "source": "World Development Indicators",
+   "api_total": 6916,
+   "pages": 1,
+   "records": 6916,
+   "V1_count_matches_total": true,
+   "lastupdated": "2026-10-08",
+   "V1_lastupdated_matches_source": true,
+   "retrieved_utc": "2026-10-22T18:21:50+00:00",
+   "bytes": 1543130,
+   "sha256": "c99f5c6d1493c8770b1aaef0373a77556e05b5d6e6fba6468f3376cc874c10d6",
+   "V2_indicator_code_all_match": true,
+   "V2_duplicate_country_year": 0,
+   "V2_all_entities_have_years_2000_2025": true,
+   "entities": 266,
+   "V3_entities_resolved": 266,
+   "V3_unresolved_entities": [],
+   "economies": 217,
+   "aggregates": 49,
+   "V4_null_pct_all_rows": 3.47,
+   "V4_null_pct_economies": 3.79,
+   "V4_economies_with_no_value_2000_2025": [
+    "GI",
+    "KP",
+    "VG"
+   ],
+   "V4_economies_with_value_by_year": {
+    "2000": 204,
+    "2001": 205,
+    "2002": 209,
+    "2003": 209,
+    "2004": 209,
+    "2005": 209,
+    "2006": 210,
+    "2007": 210,
+    "2008": 211,
+    "2009": 213,
+    "2010": 213,
+    "2011": 214,
+    "2012": 212,
+    "2013": 212,
+    "2014": 213,
+    "2015": 212,
+    "2016": 211,
+    "2017": 211,
+    "2018": 211,
+    "2019": 211,
+    "2020": 210,
+    "2021": 210,
+    "2022": 209,
+    "2023": 204,
+    "2024": 200,
+    "2025": 186
+   },
+   "obs_status_values": {
+    "<empty>": 6916
+   },
+   "unit_values": {
+    "<empty>": 6916
+   }
+  }
+ },
+ "oghist": {
+  "file": "OGHIST_2026_10_08.xlsx",
+  "bytes": 115957,
+  "sha256": "a4024eb8052150155034559daf053aabbc16336d8290efeb5629e6eeb6515a60",
+  "sheets": {
+   "Parameters": [
+    10,
+    2
+   ],
+   "Thresholds": [
+    47,
+    55
+   ],
+   "Country Analytical History": [
+    235,
+    254
+   ],
+   "Operational Category Change": [
+    487,
+    11
+   ],
+   "Country Indebtedness History": [
+    241,
+    28
+   ]
+  },
+  "classification_sheet": "Country Analytical History",
+  "header_row_fiscal_years": 5,
+  "header_row_data_year": 6,
+  "economy_rows": 223,
+  "V2_duplicate_codes": 0,
+  "fiscal_years": [
+   1989,
+   2027
+  ],
+  "fiscal_year_columns": 39,
+  "V2_fiscal_years_contiguous": true,
+  "gni_data_year_first_last": [
+   1987,
+   2025
+  ],
+  "value_counts": {
+   "H": 2454,
+   "LM": 2138,
+   "L": 1780,
+   "UM": 1716,
+   "..": 481,
+   "None": 126,
+   "LM*": 2
+  },
+  "footer_or_note_rows": 3,
+  "codes_not_in_api_country_list": [
+   "ANT",
+   "CSK",
+   "MYT",
+   "SUN",
+   "TWN",
+   "YUG"
+  ],
+  "parameters_sheet": {
+   "Fiscal Yeay": "FY21",
+   "Publication Date": "(July 2020)",
+   "Low Income Threshold": "$1,035 or less",
+   "Lower Middle Income Range": "$1,036  to $4,045",
+   "Upper Middle Income Range": "$4,046 to $12,535",
+   "High Income Threshold": "$12,536 or more",
+   "Number of economies": "189",
+   "GNI Year": "2019",
+   "Term of Income Classification": "until 1 July 2021"
+  }
+ },
+ "r3_local_files_unchanged": {
+  "samples/indicators/GOV_WGI_CC.EST.jsonl.gz": true,
+  "samples/indicators/GOV_WGI_GE.EST.jsonl.gz": true,
+  "samples/indicators/GOV_WGI_PV.EST.jsonl.gz": true,
+  "samples/indicators/GOV_WGI_RL.EST.jsonl.gz": true,
+  "samples/indicators/GOV_WGI_RQ.EST.jsonl.gz": true,
+  "samples/indicators/GOV_WGI_VA.EST.jsonl.gz": true,
+  "samples/indicators/IQ.CPA.FINQ.XQ.jsonl.gz": true,
+  "samples/indicators/IQ.CPA.IRAI.XQ.jsonl.gz": true,
+  "samples/indicators/IQ.CPA.PADM.XQ.jsonl.gz": true,
+  "samples/indicators/IQ.CPA.PROP.XQ.jsonl.gz": true,
+  "samples/indicators/IQ.CPA.PUBS.XQ.jsonl.gz": true,
+  "samples/indicators/IQ.CPA.TRAN.XQ.jsonl.gz": true
+ },
+ "cohort_coverage": {
+  "projects": 2000,
+  "regional_projects_excluded_D29": 139,
+  "single_country_projects": 1861,
+  "single_country_economies": 134,
+  "by_source": {
+   "wdi_NY.GDP.MKTP.KD.ZG": {
+    "matched": {
+     "economies": 134,
+     "projects": 1861
+    },
+    "unmatched_or_missing_list": []
+   },
+   "wdi_FP.CPI.TOTL.ZG": {
+    "matched": {
+     "economies": 132,
+     "projects": 1830
+    },
+    "no_values": {
+     "economies": 2,
+     "projects": 31
+    },
+    "unmatched_or_missing_list": [
+     {
+      "wb_country_code": "MH",
+      "country_name": "Marshall Islands",
+      "projects": 10
+     },
+     {
+      "wb_country_code": "SO",
+      "country_name": "Somalia, Federal Republic of",
+      "projects": 21
+     }
+    ]
+   },
+   "wdi_NY.GDP.PCAP.CD": {
+    "matched": {
+     "economies": 134,
+     "projects": 1861
+    },
+    "unmatched_or_missing_list": []
+   },
+   "wgi_GE.EST": {
+    "matched": {
+     "economies": 133,
+     "projects": 1853
+    },
+    "unmatched": {
+     "economies": 1,
+     "projects": 8
+    },
+    "unmatched_or_missing_list": [
+     {
+      "wb_country_code": "SX",
+      "country_name": "St Maarten",
+      "projects": 8
+     }
+    ]
+   },
+   "cpia": {
+    "matched": {
+     "economies": 89,
+     "projects": 1426
+    },
+    "not_covered": {
+     "economies": 45,
+     "projects": 435
+    },
+    "unmatched_or_missing_list": [
+     {
+      "wb_country_code": "AR",
+      "country_name": "Argentina",
+      "projects": 25
+     },
+     {
+      "wb_country_code": "BB",
+      "country_name": "Barbados",
+      "projects": 1
+     },
+     {
+      "wb_country_code": "BR",
+      "country_name": "Brazil",
+      "projects": 35
+     },
+     {
+      "wb_country_code": "BW",
+      "country_name": "Botswana",
+      "projects": 3
+     },
+     {
+      "wb_country_code": "BY",
+      "country_name": "Belarus",
+      "projects": 7
+     },
+     {
+      "wb_country_code": "CL",
+      "country_name": "Chile",
+      "projects": 3
+     },
+     {
+      "wb_country_code": "CN",
+      "country_name": "China",
+      "projects": 43
+     },
+     {
+      "wb_country_code": "CO",
+      "country_name": "Colombia",
+      "projects": 9
+     },
+     {
+      "wb_country_code": "CR",
+      "country_name": "Costa Rica",
+      "projects": 5
+     },
+     {
+      "wb_country_code": "DO",
+      "country_name": "Dominican Republic",
+      "projects": 11
+     },
+     {
+      "wb_country_code": "EC",
+      "country_name": "Ecuador",
+      "projects": 10
+     },
+     {
+      "wb_country_code": "EG",
+      "country_name": "Egypt, Arab Republic of",
+      "projects": 11
+     },
+     {
+      "wb_country_code": "GA",
+      "country_name": "Gabon",
+      "projects": 5
+     },
+     {
+      "wb_country_code": "GT",
+      "country_name": "Guatemala",
+      "projects": 1
+     },
+     {
+      "wb_country_code": "GZ",
+      "country_name": "West Bank and Gaza",
+      "projects": 21
+     },
+     {
+      "wb_country_code": "HR",
+      "country_name": "Croatia",
+      "projects": 6
+     },
+     {
+      "wb_country_code": "IQ",
+      "country_name": "Iraq",
+      "projects": 10
+     },
+     {
+      "wb_country_code": "IR",
+      "country_name": "Iran, Islamic Republic of",
+      "projects": 1
+     },
+     {
+      "wb_country_code": "JM",
+      "country_name": "Jamaica",
+      "projects": 7
+     },
+     {
+      "wb_country_code": "JO",
+      "country_name": "Jordan",
+      "projects": 14
+     },
+     {
+      "wb_country_code": "KR",
+      "country_name": "Korea, Republic of",
+      "projects": 1
+     },
+     {
+      "wb_country_code": "KZ",
+      "country_name": "Kazakhstan",
+      "projects": 12
+     },
+     {
+      "wb_country_code": "LB",
+      "country_name": "Lebanon",
+      "projects": 15
+     },
+     {
+      "wb_country_code": "MA",
+      "country_name": "Morocco",
+      "projects": 12
+     },
+     {
+      "wb_country_code": "ME",
+      "country_name": "Montenegro",
+      "projects": 5
+     },
+     {
+      "wb_country_code": "MK",
+      "country_name": "North Macedonia",
+      "projects": 4
+     },
+     {
+      "wb_country_code": "MU",
+      "country_name": "Mauritius",
+      "projects": 1
+     },
+     {
+      "wb_country_code": "MX",
+      "country_name": "Mexico",
+      "projects": 6
+     },
+     {
+      "wb_country_code": "NA",
+      "country_name": "Namibia",
+      "projects": 1
+     },
+     {
+      "wb_country_code": "PA",
+      "country_name": "Panama",
+      "projects": 5
+     },
+     {
+      "wb_country_code": "PE",
+      "country_name": "Peru",
+      "projects": 15
+     },
+     {
+      "wb_country_code": "PH",
+      "country_name": "Philippines",
+      "projects": 16
+     },
+     {
+      "wb_country_code": "PY",
+      "country_name": "Paraguay",
+      "projects": 5
+     },
+     {
+      "wb_country_code": "RO",
+      "country_name": "Romania",
+      "projects": 6
+     },
+     {
+      "wb_country_code": "RU",
+      "country_name": "Russian Federation",
+      "projects": 3
+     },
+     {
+      "wb_country_code": "SC",
+      "country_name": "Seychelles",
+      "projects": 1
+     },
+     {
+      "wb_country_code": "SV",
+      "country_name": "El Salvador",
+      "projects": 6
+     },
+     {
+      "wb_country_code": "SX",
+      "country_name": "St Maarten",
+      "projects": 8
+     },
+     {
+      "wb_country_code": "TH",
+      "country_name": "Thailand",
+      "projects": 3
+     },
+     {
+      "wb_country_code": "TN",
+      "country_name": "Tunisia",
+      "projects": 17
+     },
+     {
+      "wb_country_code": "TR",
+      "country_name": "Turkiye",
+      "projects": 34
+     },
+     {
+      "wb_country_code": "TT",
+      "country_name": "Trinidad and Tobago",
+      "projects": 1
+     },
+     {
+      "wb_country_code": "UA",
+      "country_name": "Ukraine",
+      "projects": 19
+     },
+     {
+      "wb_country_code": "UY",
+      "country_name": "Uruguay",
+      "projects": 5
+     },
+     {
+      "wb_country_code": "ZA",
+      "country_name": "South Africa",
+      "projects": 6
+     }
+    ]
+   },
+   "oghist": {
+    "matched": {
+     "economies": 134,
+     "projects": 1861
+    },
+    "unmatched_or_missing_list": []
+   }
+  },
+  "wdi_missing_country_years": {
+   "NY.GDP.MKTP.KD.ZG": {
+    "cohort_country_years": 3484,
+    "missing": 62,
+    "missing_pct": 1.78,
+    "missing_2005_2025_pct": 1.46,
+    "economies_with_any_gap": {
+     "AF": [
+      2025,
+      2000
+     ],
+     "DJ": [
+      2013,
+      2012,
+      2011,
+      2010,
+      2009,
+      2008,
+      2007,
+      2006,
+      2005,
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ],
+     "LB": [
+      2025
+     ],
+     "SS": [
+      2025,
+      2024,
+      2023,
+      2022,
+      2021,
+      2020,
+      2019,
+      2018,
+      2017,
+      2016,
+      2008,
+      2007,
+      2006,
+      2005,
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ],
+     "SX": [
+      2009,
+      2008,
+      2007,
+      2006,
+      2005,
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ],
+     "XK": [
+      2008,
+      2007,
+      2006,
+      2005,
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ],
+     "YE": [
+      2025,
+      2024,
+      2023,
+      2022,
+      2021,
+      2020,
+      2019
+     ]
+    }
+   },
+   "FP.CPI.TOTL.ZG": {
+    "cohort_country_years": 3484,
+    "missing": 253,
+    "missing_pct": 7.26,
+    "missing_2005_2025_pct": 5.65,
+    "economies_with_any_gap": {
+     "AF": [
+      2025,
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ],
+     "AR": [
+      2025,
+      2017,
+      2016,
+      2015,
+      2014,
+      2013,
+      2012,
+      2011,
+      2010,
+      2009,
+      2008,
+      2007,
+      2006,
+      2005,
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ],
+     "BA": [
+      2005,
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ],
+     "BB": [
+      2022,
+      2021,
+      2020
+     ],
+     "CD": [
+      2025,
+      2024,
+      2023,
+      2022,
+      2021,
+      2020,
+      2019,
+      2018,
+      2017
+     ],
+     "DJ": [
+      2000
+     ],
+     "FM": [
+      2025,
+      2024,
+      2023
+     ],
+     "GM": [
+      2025
+     ],
+     "GN": [
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ],
+     "KI": [
+      2006,
+      2005,
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ],
+     "KM": [
+      2000
+     ],
+     "LB": [
+      2008,
+      2007,
+      2006,
+      2005,
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ],
+     "LR": [
+      2001,
+      2000
+     ],
+     "ME": [
+      2005,
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ],
+     "MH": [
+      2025,
+      2024,
+      2023,
+      2022,
+      2021,
+      2020,
+      2019,
+      2018,
+      2017,
+      2016,
+      2015,
+      2014,
+      2013,
+      2012,
+      2011,
+      2010,
+      2009,
+      2008,
+      2007,
+      2006,
+      2005,
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ],
+     "MM": [
+      2025,
+      2024,
+      2023,
+      2022,
+      2021,
+      2020
+     ],
+     "MZ": [
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ],
+     "NA": [
+      2002,
+      2001,
+      2000
+     ],
+     "SD": [
+      2025,
+      2024,
+      2023
+     ],
+     "SL": [
+      2006,
+      2005,
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ],
+     "SO": [
+      2025,
+      2024,
+      2023,
+      2022,
+      2021,
+      2020,
+      2019,
+      2018,
+      2017,
+      2016,
+      2015,
+      2014,
+      2013,
+      2012,
+      2011,
+      2010,
+      2009,
+      2008,
+      2007,
+      2006,
+      2005,
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ],
+     "SR": [
+      2019,
+      2018
+     ],
+     "SS": [
+      2025,
+      2008,
+      2007,
+      2006,
+      2005,
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ],
+     "SX": [
+      2025,
+      2024,
+      2023,
+      2022,
+      2021,
+      2020,
+      2019,
+      2018,
+      2005,
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ],
+     "SZ": [
+      2025,
+      2024,
+      2023,
+      2022,
+      2021,
+      2020
+     ],
+     "TJ": [
+      2000
+     ],
+     "TL": [
+      2002,
+      2001,
+      2000
+     ],
+     "TV": [
+      2025,
+      2024,
+      2023,
+      2022,
+      2021,
+      2020,
+      2019,
+      2018,
+      2017,
+      2016,
+      2015,
+      2014,
+      2013,
+      2012,
+      2010,
+      2009,
+      2008,
+      2007,
+      2006,
+      2005,
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ],
+     "UZ": [
+      2010,
+      2009,
+      2008,
+      2007,
+      2006,
+      2005,
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ],
+     "XK": [
+      2002,
+      2001,
+      2000
+     ],
+     "YE": [
+      2025,
+      2024,
+      2023,
+      2022,
+      2021,
+      2020,
+      2019,
+      2018,
+      2017,
+      2016,
+      2015
+     ],
+     "ZW": [
+      2025,
+      2024,
+      2023,
+      2009,
+      2008,
+      2007,
+      2006,
+      2005,
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ]
+    }
+   },
+   "NY.GDP.PCAP.CD": {
+    "cohort_country_years": 3484,
+    "missing": 44,
+    "missing_pct": 1.26,
+    "missing_2005_2025_pct": 1.03,
+    "economies_with_any_gap": {
+     "AF": [
+      2025
+     ],
+     "LB": [
+      2025
+     ],
+     "SS": [
+      2025,
+      2024,
+      2023,
+      2022,
+      2021,
+      2020,
+      2019,
+      2018,
+      2017,
+      2016,
+      2007,
+      2006,
+      2005,
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ],
+     "SX": [
+      2008,
+      2007,
+      2006,
+      2005,
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ],
+     "XK": [
+      2007,
+      2006,
+      2005,
+      2004,
+      2003,
+      2002,
+      2001,
+      2000
+     ],
+     "YE": [
+      2025,
+      2024,
+      2023,
+      2022,
+      2021,
+      2020,
+      2019
+     ]
+    }
+   }
+  },
+  "oghist_missing_fy2005_2027": {
+   "TUV": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010
+   ],
+   "SRB": [
+    2005,
+    2006,
+    2007
+   ],
+   "XKX": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009
+   ],
+   "MNE": [
+    2005,
+    2006,
+    2007
+   ],
+   "ETH": [
+    2026
+   ],
+   "SSD": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012
+   ],
+   "SXM": [
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011
+   ]
+  }
+ },
+ "publication_lag_evidence": {
+  "NY.GDP.MKTP.KD.ZG": {
+   "2022": 209,
+   "2023": 204,
+   "2024": 200,
+   "2025": 186
+  },
+  "FP.CPI.TOTL.ZG": {
+   "2022": 179,
+   "2023": 177,
+   "2024": 176,
+   "2025": 169
+  },
+  "NY.GDP.PCAP.CD": {
+   "2022": 209,
+   "2023": 204,
+   "2024": 200,
+   "2025": 186
+  }
+ },
+ "probe_consistency": {
+  "NY.GDP.MKTP.KD.ZG": {
+   "economies_compared": 214,
+   "differences": {}
+  },
+  "FP.CPI.TOTL.ZG": {
+   "economies_compared": 193,
+   "differences": {}
+  },
+  "NY.GDP.PCAP.CD": {
+   "economies_compared": 214,
+   "differences": {}
+  }
+ }
+}

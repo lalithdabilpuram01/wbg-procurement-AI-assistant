@@ -1,0 +1,55 @@
+"""Structured-output calls to Claude through the EXISTING Portkey client (no new HTTP code, no new live-call path).
+
+`PortkeyClaudeClient` already enforces the Claude-only route, the dual live-call opt-in (`LiveAccess`), typed
+`LlmError`s and no retries. Offline, it is built with an in-memory `httpx.MockTransport` only. Live, hosts pass the
+budgeted subclass from `live_llm.py`.
+
+Claude's structured outputs accept a subset of JSON Schema (no string length, numeric or complex array constraints;
+`additionalProperties: false` on every object). `strict_output_schema` reduces a Pydantic schema to that subset; the
+full Pydantic model still validates every reply client-side, so no constraint is lost.
+"""
+from __future__ import annotations
+
+from typing import Any
+
+from structured_agent.nl2sql.llm_client import ClaudeRequest, PortkeyClaudeClient
+
+from .contracts import Usage
+
+UNSUPPORTED_KEYWORDS = frozenset({"minLength", "maxLength", "pattern", "minimum", "maximum", "exclusiveMinimum",
+                                  "exclusiveMaximum", "multipleOf", "minItems", "maxItems", "uniqueItems", "default", "title"})
+
+
+def strict_output_schema(schema: Any) -> Any:
+    """A copy of `schema` without unsupported keywords; every object is closed and lists all its properties as required."""
+    if isinstance(schema, list):
+        return [strict_output_schema(item) for item in schema]
+    if not isinstance(schema, dict):
+        return schema
+    clean: dict[str, Any] = {}
+    for key, value in schema.items():
+        if key in ("properties", "$defs"):                  # mappings of names (a property may be called "required")
+            clean[key] = {name: strict_output_schema(sub) for name, sub in value.items()}
+        elif key not in UNSUPPORTED_KEYWORDS:
+            clean[key] = strict_output_schema(value)
+    if "properties" in clean:
+        clean["additionalProperties"] = False
+        clean["required"] = list(clean["properties"])
+    return clean
+
+
+class PortkeyJsonClient:
+    def __init__(self, client: PortkeyClaudeClient):
+        self._client = client
+
+    @property
+    def model(self) -> str:
+        return self._client.model
+
+    def complete(self, *, system: str, user: str, schema: dict[str, Any], schema_name: str, trace_id: str,
+                 timeout_seconds: float | None = None) -> tuple[dict[str, Any] | None, str, Usage]:
+        response = self._client.complete(ClaudeRequest(system=system, user=user, trace_id=trace_id,
+                                                       json_schema=strict_output_schema(schema), schema_name=schema_name,
+                                                       timeout_seconds=timeout_seconds))
+        return response.parsed, response.content, Usage(llm_calls=1, input_tokens=response.input_tokens,
+                                                        output_tokens=response.output_tokens)

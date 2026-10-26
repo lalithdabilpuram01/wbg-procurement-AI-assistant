@@ -1,0 +1,487 @@
+table_id,document_id,page,check,severity,detail
+24440102:t00701,24440102,7,column_labels,high,only 0/8 columns labelled
+24440102:t00701,24440102,7,merged_cells,medium,20/39 data rows have text only in the first cell (spanning/merged)
+24440102:t00701,24440102,7,duplicate_rows,medium,4 repeated data row(s)
+24440102:t00801,24440102,8,column_labels,high,only 1/15 columns labelled
+24440102:t00801,24440102,8,merged_cells,medium,11/34 data rows have text only in the first cell (spanning/merged)
+24440102:t00801,24440102,8,duplicate_rows,medium,2 repeated data row(s)
+24440102:t00801,24440102,8,totals,low,2 total/subtotal row(s) stored as ordinary rows (not flagged)
+24440102:t00901,24440102,9,column_labels,high,only 2/6 columns labelled
+24440102:t00901,24440102,9,merged_cells,medium,17/34 data rows have text only in the first cell (spanning/merged)
+24440102:t00901,24440102,9,empty_columns,low,1 column(s) empty in every data row (split/merged header columns)
+24440102:t00901,24440102,9,duplicate_rows,medium,3 repeated data row(s)
+24440102:t00901,24440102,9,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t00901,24440102,9,totals,low,1 total/subtotal row(s) stored as ordinary rows (not flagged)
+24440102:t01001,24440102,10,column_labels,high,only 2/10 columns labelled
+24440102:t01001,24440102,10,merged_cells,medium,11/33 data rows have text only in the first cell (spanning/merged)
+24440102:t01001,24440102,10,duplicate_rows,medium,3 repeated data row(s)
+24440102:t01001,24440102,10,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t01101,24440102,11,column_labels,high,only 1/4 columns labelled
+24440102:t01101,24440102,11,merged_cells,medium,22/39 data rows have text only in the first cell (spanning/merged)
+24440102:t01101,24440102,11,duplicate_rows,medium,5 repeated data row(s)
+24440102:t01101,24440102,11,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t01201,24440102,12,column_labels,medium,3 unlabelled column(s)
+24440102:t01201,24440102,12,merged_cells,medium,11/34 data rows have text only in the first cell (spanning/merged)
+24440102:t01201,24440102,12,duplicate_rows,medium,1 repeated data row(s)
+24440102:t01301,24440102,13,column_labels,medium,4 unlabelled column(s)
+24440102:t01301,24440102,13,duplicate_rows,medium,2 repeated data row(s)
+24440102:t02201,24440102,22,numeric_line_merge,high,"3 value(s) glued from separate numbers stacked in one source cell (e.g. r2c2:340.0018, r2c3:340.0018, r2c4:1001001001000100)"
+24440102:t02501,24440102,25,column_labels,medium,1 unlabelled column(s)
+24440102:t03101,24440102,31,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t03101,24440102,31,totals,low,1 total/subtotal row(s) stored as ordinary rows (not flagged)
+24440102:t03701,24440102,37,column_labels,high,only 1/13 columns labelled
+24440102:t03701,24440102,37,merged_cells,medium,21/30 data rows have text only in the first cell (spanning/merged)
+24440102:t03701,24440102,37,empty_columns,low,4 column(s) empty in every data row (split/merged header columns)
+24440102:t03701,24440102,37,duplicate_rows,medium,1 repeated data row(s)
+24440102:t03701,24440102,37,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t03801,24440102,38,column_labels,high,only 1/12 columns labelled
+24440102:t03801,24440102,38,merged_cells,medium,25/35 data rows have text only in the first cell (spanning/merged)
+24440102:t03801,24440102,38,empty_columns,low,4 column(s) empty in every data row (split/merged header columns)
+24440102:t03801,24440102,38,duplicate_rows,medium,7 repeated data row(s)
+24440102:t03801,24440102,38,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t03901,24440102,39,column_labels,high,only 1/12 columns labelled
+24440102:t03901,24440102,39,merged_cells,medium,26/39 data rows have text only in the first cell (spanning/merged)
+24440102:t03901,24440102,39,empty_columns,low,4 column(s) empty in every data row (split/merged header columns)
+24440102:t03901,24440102,39,duplicate_rows,medium,2 repeated data row(s)
+24440102:t03901,24440102,39,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t04001,24440102,40,column_labels,high,only 1/12 columns labelled
+24440102:t04001,24440102,40,merged_cells,medium,29/40 data rows have text only in the first cell (spanning/merged)
+24440102:t04001,24440102,40,empty_columns,low,4 column(s) empty in every data row (split/merged header columns)
+24440102:t04001,24440102,40,duplicate_rows,medium,4 repeated data row(s)
+24440102:t04001,24440102,40,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t04101,24440102,41,column_labels,high,only 1/12 columns labelled
+24440102:t04101,24440102,41,merged_cells,medium,13/18 data rows have text only in the first cell (spanning/merged)
+24440102:t04101,24440102,41,empty_columns,low,4 column(s) empty in every data row (split/merged header columns)
+24440102:t04101,24440102,41,duplicate_rows,medium,4 repeated data row(s)
+24440102:t04101,24440102,41,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t04201,24440102,42,column_labels,high,only 1/5 columns labelled
+24440102:t04301,24440102,43,column_labels,high,only 1/5 columns labelled
+24440102:t04401,24440102,44,column_labels,high,only 1/5 columns labelled
+24440102:t04501,24440102,45,column_labels,high,only 1/5 columns labelled
+24440102:t04601,24440102,46,column_labels,high,only 1/5 columns labelled
+24440102:t06501,24440102,65,column_labels,high,only 3/7 columns labelled
+24440102:t06501,24440102,65,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+24440102:t06601,24440102,66,column_labels,high,only 0/5 columns labelled
+24440102:t06601,24440102,66,empty_columns,low,1 column(s) empty in every data row (split/merged header columns)
+24440102:t06601,24440102,66,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t07201,24440102,72,column_labels,high,only 4/12 columns labelled
+24440102:t07201,24440102,72,empty_columns,low,8 column(s) empty in every data row (split/merged header columns)
+24440102:t07201,24440102,72,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t07301,24440102,73,column_labels,high,only 4/12 columns labelled
+24440102:t07301,24440102,73,empty_columns,low,8 column(s) empty in every data row (split/merged header columns)
+24440102:t07301,24440102,73,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t07401,24440102,74,column_labels,high,only 4/12 columns labelled
+24440102:t07401,24440102,74,empty_columns,low,8 column(s) empty in every data row (split/merged header columns)
+24440102:t07401,24440102,74,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t07501,24440102,75,column_labels,high,only 4/12 columns labelled
+24440102:t07501,24440102,75,empty_columns,low,11 column(s) empty in every data row (split/merged header columns)
+24440102:t08301,24440102,83,column_labels,medium,1 unlabelled column(s)
+24440102:t08301,24440102,83,totals,low,1 total/subtotal row(s) stored as ordinary rows (not flagged)
+24440102:t08601,24440102,86,column_labels,high,only 2/6 columns labelled
+24440102:t08601,24440102,86,merged_cells,medium,1/3 data rows have text only in the first cell (spanning/merged)
+24440102:t08601,24440102,86,empty_columns,low,4 column(s) empty in every data row (split/merged header columns)
+24440102:t08601,24440102,86,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t09201,24440102,92,column_labels,high,only 0/9 columns labelled
+24440102:t09201,24440102,92,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t09301,24440102,93,column_labels,high,only 0/7 columns labelled
+24440102:t09301,24440102,93,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t09401,24440102,94,column_labels,high,only 0/7 columns labelled
+24440102:t09401,24440102,94,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t09401,24440102,94,totals,low,1 total/subtotal row(s) stored as ordinary rows (not flagged)
+24440102:t09501,24440102,95,column_labels,high,only 0/7 columns labelled
+24440102:t09501,24440102,95,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t09501,24440102,95,totals,low,1 total/subtotal row(s) stored as ordinary rows (not flagged)
+24440102:t09901,24440102,99,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t09901,24440102,99,totals,low,1 total/subtotal row(s) stored as ordinary rows (not flagged)
+24440102:t10401,24440102,104,numeric_line_merge,high,"4 value(s) glued from separate numbers stacked in one source cell (e.g. r2c2:57375752, r2c4:0.0100, r2c5:0.00, r2c6:0.00)"
+24440102:t10401,24440102,104,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t10401,24440102,104,totals,low,1 total/subtotal row(s) stored as ordinary rows (not flagged)
+24440102:t10801,24440102,108,column_labels,medium,3 unlabelled column(s)
+24440102:t10801,24440102,108,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+24440102:t10801,24440102,108,numeric_line_merge,high,"4 value(s) glued from separate numbers stacked in one source cell (e.g. r3c4:4666312, r8c4:1212, r9c4:1248481524, r10c4:66)"
+24440102:t10801,24440102,108,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t10801,24440102,108,blank_vs_zero,low,1 dash/n.a. cell(s): must stay non-numeric (not zero)
+24440102:t10901,24440102,109,column_labels,medium,3 unlabelled column(s)
+24440102:t10901,24440102,109,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+24440102:t10901,24440102,109,numeric_line_merge,high,"4 value(s) glued from separate numbers stacked in one source cell (e.g. r3c4:66, r5c4:62020106, r6c4:44, r7c4:44)"
+24440102:t10901,24440102,109,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t10901,24440102,109,blank_vs_zero,low,1 dash/n.a. cell(s): must stay non-numeric (not zero)
+24440102:t10902,24440102,109,column_labels,high,only 4/12 columns labelled
+24440102:t10902,24440102,109,empty_columns,low,8 column(s) empty in every data row (split/merged header columns)
+24440102:t10902,24440102,109,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t11001,24440102,110,column_labels,medium,2 unlabelled column(s)
+24440102:t11001,24440102,110,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+24440102:t11201,24440102,112,column_labels,medium,4 unlabelled column(s)
+24440102:t11201,24440102,112,empty_columns,low,4 column(s) empty in every data row (split/merged header columns)
+24440102:t11201,24440102,112,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t11301,24440102,113,column_labels,medium,1 unlabelled column(s)
+24440102:t11301,24440102,113,empty_columns,low,1 column(s) empty in every data row (split/merged header columns)
+24440102:t11301,24440102,113,duplicate_rows,medium,1 repeated data row(s)
+24440102:t11401,24440102,114,column_labels,high,only 4/17 columns labelled
+24440102:t11401,24440102,114,empty_columns,low,6 column(s) empty in every data row (split/merged header columns)
+24440102:t11401,24440102,114,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t11401,24440102,114,blank_vs_zero,low,3 dash/n.a. cell(s): must stay non-numeric (not zero)
+24440102:t11403,24440102,114,column_labels,high,only 4/19 columns labelled
+24440102:t11403,24440102,114,empty_columns,low,4 column(s) empty in every data row (split/merged header columns)
+24440102:t11403,24440102,114,blank_vs_zero,low,6 dash/n.a. cell(s): must stay non-numeric (not zero)
+24440102:t11403,24440102,114,footnotes,low,1 cell(s) with footnote markers/notes kept inline
+24440102:t11501,24440102,115,column_labels,high,only 1/16 columns labelled
+24440102:t11501,24440102,115,empty_columns,low,5 column(s) empty in every data row (split/merged header columns)
+24440102:t11501,24440102,115,duplicate_rows,medium,3 repeated data row(s)
+24440102:t11601,24440102,116,column_labels,high,only 5/12 columns labelled
+24440102:t11601,24440102,116,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+24440102:t11801,24440102,118,column_labels,medium,1 unlabelled column(s)
+24440102:t11801,24440102,118,units,medium,numeric cells without a currency/unit in header or caption
+24440102:t11901,24440102,119,column_labels,medium,1 unlabelled column(s)
+26256705:t00601,26256705,6,column_labels,high,only 1/11 columns labelled
+26256705:t00601,26256705,6,merged_cells,medium,13/33 data rows have text only in the first cell (spanning/merged)
+26256705:t00601,26256705,6,units,medium,numeric cells without a currency/unit in header or caption
+26256705:t00601,26256705,6,totals,low,1 total/subtotal row(s) stored as ordinary rows (not flagged)
+26256705:t00701,26256705,7,column_labels,high,only 2/17 columns labelled
+26256705:t00701,26256705,7,merged_cells,medium,12/34 data rows have text only in the first cell (spanning/merged)
+26256705:t00701,26256705,7,units,medium,numeric cells without a currency/unit in header or caption
+26256705:t00701,26256705,7,totals,low,2 total/subtotal row(s) stored as ordinary rows (not flagged)
+26256705:t00801,26256705,8,column_labels,high,only 3/10 columns labelled
+26256705:t00801,26256705,8,merged_cells,medium,13/33 data rows have text only in the first cell (spanning/merged)
+26256705:t00801,26256705,8,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+26256705:t00801,26256705,8,units,medium,numeric cells without a currency/unit in header or caption
+26256705:t00801,26256705,8,totals,low,1 total/subtotal row(s) stored as ordinary rows (not flagged)
+26256705:t00901,26256705,9,column_labels,high,only 2/6 columns labelled
+26256705:t00901,26256705,9,merged_cells,medium,23/38 data rows have text only in the first cell (spanning/merged)
+26256705:t00901,26256705,9,duplicate_rows,medium,4 repeated data row(s)
+26256705:t00901,26256705,9,units,medium,numeric cells without a currency/unit in header or caption
+26256705:t01001,26256705,10,merged_cells,medium,31/40 data rows have text only in the first cell (spanning/merged)
+26256705:t01001,26256705,10,duplicate_rows,medium,7 repeated data row(s)
+26256705:t01101,26256705,11,column_labels,medium,4 unlabelled column(s)
+26256705:t01101,26256705,11,merged_cells,medium,28/39 data rows have text only in the first cell (spanning/merged)
+26256705:t01101,26256705,11,duplicate_rows,medium,7 repeated data row(s)
+26256705:t01201,26256705,12,column_labels,high,only 0/7 columns labelled
+26256705:t01201,26256705,12,duplicate_rows,medium,2 repeated data row(s)
+26256705:t01301,26256705,13,column_labels,high,only 0/7 columns labelled
+26256705:t01301,26256705,13,duplicate_rows,medium,1 repeated data row(s)
+26256705:t02301,26256705,23,totals,low,1 total/subtotal row(s) stored as ordinary rows (not flagged)
+26256705:t03401,26256705,34,column_labels,high,only 1/13 columns labelled
+26256705:t03401,26256705,34,merged_cells,medium,18/28 data rows have text only in the first cell (spanning/merged)
+26256705:t03401,26256705,34,units,medium,numeric cells without a currency/unit in header or caption
+26256705:t03501,26256705,35,column_labels,high,only 4/12 columns labelled
+26256705:t03501,26256705,35,merged_cells,medium,13/42 data rows have text only in the first cell (spanning/merged)
+26256705:t03501,26256705,35,units,medium,numeric cells without a currency/unit in header or caption
+26256705:t03601,26256705,36,column_labels,high,only 4/12 columns labelled
+26256705:t03601,26256705,36,units,medium,numeric cells without a currency/unit in header or caption
+26256705:t03701,26256705,37,column_labels,medium,1 unlabelled column(s)
+26256705:t03701,26256705,37,duplicate_rows,medium,1 repeated data row(s)
+26256705:t03801,26256705,38,column_labels,medium,1 unlabelled column(s)
+26256705:t05302,26256705,53,column_labels,medium,1 unlabelled column(s)
+26256705:t05302,26256705,53,totals,low,1 total/subtotal row(s) stored as ordinary rows (not flagged)
+26256705:t05901,26256705,59,duplicate_rows,medium,1 repeated data row(s)
+26256705:t05901,26256705,59,units,medium,numeric cells without a currency/unit in header or caption
+26256705:t06702,26256705,67,units,medium,numeric cells without a currency/unit in header or caption
+26256705:t06702,26256705,67,blank_vs_zero,low,4 dash/n.a. cell(s): must stay non-numeric (not zero)
+26256705:t06801,26256705,68,units,medium,numeric cells without a currency/unit in header or caption
+26256705:t06801,26256705,68,totals,low,1 total/subtotal row(s) stored as ordinary rows (not flagged)
+26256705:t06901,26256705,69,units,medium,numeric cells without a currency/unit in header or caption
+26256705:t07001,26256705,70,units,medium,numeric cells without a currency/unit in header or caption
+26256705:t07001,26256705,70,totals,low,1 total/subtotal row(s) stored as ordinary rows (not flagged)
+26256705:t07001,26256705,70,blank_vs_zero,low,11 dash/n.a. cell(s): must stay non-numeric (not zero)
+26256705:t07101,26256705,71,column_labels,high,only 0/5 columns labelled
+26256705:t07201,26256705,72,column_labels,high,only 0/5 columns labelled
+26256705:t07201,26256705,72,units,medium,numeric cells without a currency/unit in header or caption
+26256705:t07202,26256705,72,column_labels,medium,1 unlabelled column(s)
+26256705:t07202,26256705,72,units,medium,numeric cells without a currency/unit in header or caption
+26256705:t07301,26256705,73,column_labels,medium,1 unlabelled column(s)
+26256705:t07301,26256705,73,units,medium,numeric cells without a currency/unit in header or caption
+33761744:t00101,33761744,1,duplicate_rows,medium,1 repeated data row(s)
+33761744:t00101,33761744,1,units,medium,numeric cells without a currency/unit in header or caption
+33761744:t00201,33761744,2,units,medium,numeric cells without a currency/unit in header or caption
+33761744:t00301,33761744,3,empty_columns,low,11 column(s) empty in every data row (split/merged header columns)
+33761744:t00401,33761744,4,empty_columns,low,13 column(s) empty in every data row (split/merged header columns)
+33761744:t00401,33761744,4,totals,low,1 total/subtotal row(s) stored as ordinary rows (not flagged)
+33761744:t00501,33761744,5,empty_columns,low,15 column(s) empty in every data row (split/merged header columns)
+33761744:t00502,33761744,5,empty_columns,low,16 column(s) empty in every data row (split/merged header columns)
+33761744:t00601,33761744,6,empty_columns,low,16 column(s) empty in every data row (split/merged header columns)
+33761744:t00602,33761744,6,empty_columns,low,28 column(s) empty in every data row (split/merged header columns)
+33761744:t00603,33761744,6,column_labels,medium,2 unlabelled column(s)
+33761744:t00603,33761744,6,empty_columns,low,27 column(s) empty in every data row (split/merged header columns)
+33761744:t00604,33761744,6,empty_columns,low,5 column(s) empty in every data row (split/merged header columns)
+33761744:t00701,33761744,7,empty_columns,low,5 column(s) empty in every data row (split/merged header columns)
+33761744:t00801,33761744,8,empty_columns,low,6 column(s) empty in every data row (split/merged header columns)
+33851641:t00103,33851641,1,column_labels,medium,1 unlabelled column(s)
+33851641:t00701,33851641,7,column_labels,high,only 0/2 columns labelled
+33851641:t00701,33851641,7,merged_cells,medium,7/8 data rows have text only in the first cell (spanning/merged)
+33851641:t00801,33851641,8,column_labels,high,only 0/2 columns labelled
+34345370:t00502,34345370,5,column_labels,medium,2 unlabelled column(s)
+34345370:t00502,34345370,5,merged_cells,medium,9/25 data rows have text only in the first cell (spanning/merged)
+34345370:t00502,34345370,5,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+34345370:t00601,34345370,6,column_labels,high,only 1/16 columns labelled
+34345370:t00601,34345370,6,empty_columns,low,8 column(s) empty in every data row (split/merged header columns)
+34345370:t00601,34345370,6,units,medium,numeric cells without a currency/unit in header or caption
+34345370:t00601,34345370,6,totals,low,3 total/subtotal row(s) stored as ordinary rows (not flagged)
+34345370:t00701,34345370,7,column_labels,high,only 1/16 columns labelled
+34345370:t00701,34345370,7,empty_columns,low,6 column(s) empty in every data row (split/merged header columns)
+34345370:t00701,34345370,7,duplicate_rows,medium,4 repeated data row(s)
+34345370:t00701,34345370,7,units,medium,numeric cells without a currency/unit in header or caption
+34345370:t00801,34345370,8,column_labels,high,only 4/13 columns labelled
+34345370:t00801,34345370,8,empty_columns,low,4 column(s) empty in every data row (split/merged header columns)
+34345370:t00801,34345370,8,units,medium,numeric cells without a currency/unit in header or caption
+34345370:t00901,34345370,9,column_labels,high,only 2/9 columns labelled
+34345370:t00901,34345370,9,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+34345370:t00901,34345370,9,units,medium,numeric cells without a currency/unit in header or caption
+34345370:t01201,34345370,12,column_labels,high,only 0/6 columns labelled
+34345370:t01201,34345370,12,empty_columns,low,3 column(s) empty in every data row (split/merged header columns)
+34345370:t01301,34345370,13,column_labels,high,only 3/9 columns labelled
+34345370:t01301,34345370,13,empty_columns,low,6 column(s) empty in every data row (split/merged header columns)
+34345370:t01501,34345370,15,column_labels,medium,2 unlabelled column(s)
+34345370:t01501,34345370,15,empty_columns,low,1 column(s) empty in every data row (split/merged header columns)
+34345370:t01502,34345370,15,column_labels,high,only 3/8 columns labelled
+34345370:t01502,34345370,15,empty_columns,low,6 column(s) empty in every data row (split/merged header columns)
+34345370:t01601,34345370,16,column_labels,medium,1 unlabelled column(s)
+34345370:t01601,34345370,16,units,medium,numeric cells without a currency/unit in header or caption
+34345370:t01901,34345370,19,column_labels,high,only 5/15 columns labelled
+34345370:t01901,34345370,19,empty_columns,low,6 column(s) empty in every data row (split/merged header columns)
+34345370:t01901,34345370,19,units,medium,numeric cells without a currency/unit in header or caption
+34345370:t02001,34345370,20,column_labels,medium,1 unlabelled column(s)
+34345370:t02001,34345370,20,units,medium,numeric cells without a currency/unit in header or caption
+34345370:t02201,34345370,22,column_labels,high,only 5/15 columns labelled
+34345370:t02201,34345370,22,empty_columns,low,9 column(s) empty in every data row (split/merged header columns)
+34345370:t02201,34345370,22,packed_cells,high,5 cell(s) hold several values (a whole printed line in one cell)
+34345370:t02201,34345370,22,units,medium,numeric cells without a currency/unit in header or caption
+34345370:t02301,34345370,23,column_labels,high,only 2/5 columns labelled
+34345370:t02301,34345370,23,empty_columns,low,3 column(s) empty in every data row (split/merged header columns)
+34345370:t02302,34345370,23,column_labels,high,only 2/9 columns labelled
+34345370:t02302,34345370,23,empty_columns,low,9 column(s) empty in every data row (split/merged header columns)
+34345370:t02401,34345370,24,column_labels,high,only 0/3 columns labelled
+34345370:t02501,34345370,25,column_labels,medium,1 unlabelled column(s)
+34345370:t02501,34345370,25,units,medium,numeric cells without a currency/unit in header or caption
+34345370:t02501,34345370,25,blank_vs_zero,low,2 dash/n.a. cell(s): must stay non-numeric (not zero)
+34345370:t03601,34345370,36,column_labels,high,only 0/7 columns labelled
+34345370:t03601,34345370,36,duplicate_rows,medium,3 repeated data row(s)
+34345370:t03601,34345370,36,units,medium,numeric cells without a currency/unit in header or caption
+34345370:t03701,34345370,37,column_labels,high,only 0/7 columns labelled
+34345370:t03701,34345370,37,empty_columns,low,1 column(s) empty in every data row (split/merged header columns)
+34345370:t03701,34345370,37,units,medium,numeric cells without a currency/unit in header or caption
+34345370:t03701,34345370,37,footnotes,low,1 cell(s) with footnote markers/notes kept inline
+34345370:t03801,34345370,38,column_labels,high,only 0/7 columns labelled
+34345370:t03801,34345370,38,units,medium,numeric cells without a currency/unit in header or caption
+34345370:t03901,34345370,39,column_labels,high,only 0/8 columns labelled
+34345370:t03901,34345370,39,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+34345370:t04001,34345370,40,column_labels,high,only 0/8 columns labelled
+34345370:t04001,34345370,40,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+34345370:t04101,34345370,41,column_labels,high,only 0/8 columns labelled
+34345370:t04101,34345370,41,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+34345370:t04201,34345370,42,column_labels,high,only 0/8 columns labelled
+34345370:t04201,34345370,42,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+34345370:t04201,34345370,42,duplicate_rows,medium,1 repeated data row(s)
+34345370:t04201,34345370,42,units,medium,numeric cells without a currency/unit in header or caption
+34345370:t04301,34345370,43,column_labels,high,only 0/8 columns labelled
+34345370:t04301,34345370,43,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+34345370:t04301,34345370,43,duplicate_rows,medium,4 repeated data row(s)
+34345370:t04301,34345370,43,units,medium,numeric cells without a currency/unit in header or caption
+34345370:t04401,34345370,44,column_labels,high,only 0/8 columns labelled
+34345370:t04401,34345370,44,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+34345370:t04401,34345370,44,units,medium,numeric cells without a currency/unit in header or caption
+34345370:t04501,34345370,45,column_labels,high,only 0/2 columns labelled
+34345370:t04501,34345370,45,units,medium,numeric cells without a currency/unit in header or caption
+34345370:t04601,34345370,46,column_labels,high,only 0/2 columns labelled
+34345370:t04601,34345370,46,units,medium,numeric cells without a currency/unit in header or caption
+34345370:t04701,34345370,47,column_labels,high,only 1/3 columns labelled
+34345370:t04701,34345370,47,empty_columns,low,3 column(s) empty in every data row (split/merged header columns)
+34345370:t04702,34345370,47,duplicate_rows,medium,10 repeated data row(s)
+34345370:t04801,34345370,48,duplicate_rows,medium,8 repeated data row(s)
+34345370:t04802,34345370,48,column_labels,high,only 1/5 columns labelled
+34345370:t04802,34345370,48,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+34345370:t04901,34345370,49,column_labels,high,only 0/3 columns labelled
+34345370:t04901,34345370,49,totals,low,2 total/subtotal row(s) stored as ordinary rows (not flagged)
+34345370:t05001,34345370,50,column_labels,high,only 6/18 columns labelled
+34345370:t05001,34345370,50,empty_columns,low,7 column(s) empty in every data row (split/merged header columns)
+34345370:t05001,34345370,50,duplicate_rows,medium,1 repeated data row(s)
+34345370:t05001,34345370,50,blank_vs_zero,low,2 dash/n.a. cell(s): must stay non-numeric (not zero)
+34345370:t05401,34345370,54,column_labels,medium,3 unlabelled column(s)
+34345370:t05401,34345370,54,empty_columns,low,3 column(s) empty in every data row (split/merged header columns)
+34345370:t05501,34345370,55,column_labels,high,only 1/3 columns labelled
+34345370:t05601,34345370,56,column_labels,high,only 1/3 columns labelled
+34345370:t05701,34345370,57,column_labels,high,only 1/3 columns labelled
+34407877:t01401,34407877,14,column_labels,medium,2 unlabelled column(s)
+34407877:t01401,34407877,14,merged_cells,medium,8/20 data rows have text only in the first cell (spanning/merged)
+34407877:t01401,34407877,14,empty_columns,low,1 column(s) empty in every data row (split/merged header columns)
+34407877:t01401,34407877,14,units,medium,numeric cells without a currency/unit in header or caption
+34407877:t01601,34407877,16,column_labels,medium,1 unlabelled column(s)
+34407877:t01601,34407877,16,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t00101,34455066,1,column_labels,high,only 0/3 columns labelled
+34455066:t00101,34455066,1,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+34455066:t00501,34455066,5,column_labels,high,only 1/6 columns labelled
+34455066:t00501,34455066,5,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+34455066:t00501,34455066,5,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t00601,34455066,6,column_labels,high,only 4/19 columns labelled
+34455066:t00601,34455066,6,empty_columns,low,4 column(s) empty in every data row (split/merged header columns)
+34455066:t00601,34455066,6,duplicate_rows,medium,1 repeated data row(s)
+34455066:t00701,34455066,7,column_labels,high,only 0/13 columns labelled
+34455066:t00701,34455066,7,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+34455066:t00701,34455066,7,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t00801,34455066,8,column_labels,high,only 1/11 columns labelled
+34455066:t00801,34455066,8,empty_columns,low,3 column(s) empty in every data row (split/merged header columns)
+34455066:t00801,34455066,8,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t00902,34455066,9,column_labels,high,only 1/3 columns labelled
+34455066:t00902,34455066,9,empty_columns,low,3 column(s) empty in every data row (split/merged header columns)
+34455066:t01101,34455066,11,column_labels,medium,2 unlabelled column(s)
+34455066:t01101,34455066,11,empty_columns,low,1 column(s) empty in every data row (split/merged header columns)
+34455066:t01101,34455066,11,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t01201,34455066,12,column_labels,high,only 1/3 columns labelled
+34455066:t01201,34455066,12,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t01201,34455066,12,totals,low,1 total/subtotal row(s) stored as ordinary rows (not flagged)
+34455066:t01301,34455066,13,column_labels,high,only 1/3 columns labelled
+34455066:t01301,34455066,13,empty_columns,low,3 column(s) empty in every data row (split/merged header columns)
+34455066:t01401,34455066,14,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t01501,34455066,15,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t01701,34455066,17,column_labels,high,only 4/12 columns labelled
+34455066:t01701,34455066,17,empty_columns,low,8 column(s) empty in every data row (split/merged header columns)
+34455066:t01701,34455066,17,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t01702,34455066,17,column_labels,high,only 1/3 columns labelled
+34455066:t01702,34455066,17,empty_columns,low,3 column(s) empty in every data row (split/merged header columns)
+34455066:t01901,34455066,19,column_labels,high,only 1/3 columns labelled
+34455066:t01901,34455066,19,empty_columns,low,3 column(s) empty in every data row (split/merged header columns)
+34455066:t02301,34455066,23,column_labels,high,only 1/3 columns labelled
+34455066:t02301,34455066,23,empty_columns,low,3 column(s) empty in every data row (split/merged header columns)
+34455066:t02501,34455066,25,column_labels,high,only 0/9 columns labelled
+34455066:t02501,34455066,25,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t02601,34455066,26,column_labels,high,only 4/10 columns labelled
+34455066:t02601,34455066,26,empty_columns,low,1 column(s) empty in every data row (split/merged header columns)
+34455066:t02601,34455066,26,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t02701,34455066,27,column_labels,high,only 4/10 columns labelled
+34455066:t02701,34455066,27,empty_columns,low,1 column(s) empty in every data row (split/merged header columns)
+34455066:t02701,34455066,27,duplicate_rows,medium,2 repeated data row(s)
+34455066:t02701,34455066,27,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t02801,34455066,28,column_labels,high,only 4/10 columns labelled
+34455066:t02801,34455066,28,empty_columns,low,1 column(s) empty in every data row (split/merged header columns)
+34455066:t02801,34455066,28,duplicate_rows,medium,2 repeated data row(s)
+34455066:t02801,34455066,28,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t02901,34455066,29,column_labels,high,only 3/18 columns labelled
+34455066:t02901,34455066,29,empty_columns,low,6 column(s) empty in every data row (split/merged header columns)
+34455066:t02901,34455066,29,duplicate_rows,medium,1 repeated data row(s)
+34455066:t02901,34455066,29,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t03001,34455066,30,column_labels,high,only 2/9 columns labelled
+34455066:t03001,34455066,30,empty_columns,low,5 column(s) empty in every data row (split/merged header columns)
+34455066:t03001,34455066,30,duplicate_rows,medium,9 repeated data row(s)
+34455066:t03001,34455066,30,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t03101,34455066,31,column_labels,high,only 2/9 columns labelled
+34455066:t03101,34455066,31,empty_columns,low,4 column(s) empty in every data row (split/merged header columns)
+34455066:t03101,34455066,31,duplicate_rows,medium,10 repeated data row(s)
+34455066:t03101,34455066,31,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t03201,34455066,32,column_labels,medium,5 unlabelled column(s)
+34455066:t03201,34455066,32,empty_columns,low,3 column(s) empty in every data row (split/merged header columns)
+34455066:t03201,34455066,32,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t03301,34455066,33,column_labels,medium,5 unlabelled column(s)
+34455066:t03301,34455066,33,empty_columns,low,3 column(s) empty in every data row (split/merged header columns)
+34455066:t03301,34455066,33,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t03401,34455066,34,column_labels,high,only 2/8 columns labelled
+34455066:t03401,34455066,34,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+34455066:t03501,34455066,35,column_labels,high,only 1/10 columns labelled
+34455066:t03501,34455066,35,empty_columns,low,3 column(s) empty in every data row (split/merged header columns)
+34455066:t03601,34455066,36,column_labels,high,only 1/8 columns labelled
+34455066:t03601,34455066,36,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+34455066:t03601,34455066,36,duplicate_rows,medium,3 repeated data row(s)
+34455066:t03701,34455066,37,column_labels,high,only 1/10 columns labelled
+34455066:t03701,34455066,37,empty_columns,low,3 column(s) empty in every data row (split/merged header columns)
+34455066:t03701,34455066,37,duplicate_rows,medium,1 repeated data row(s)
+34455066:t03801,34455066,38,column_labels,high,only 1/10 columns labelled
+34455066:t03801,34455066,38,empty_columns,low,3 column(s) empty in every data row (split/merged header columns)
+34455066:t03801,34455066,38,duplicate_rows,medium,3 repeated data row(s)
+34455066:t03901,34455066,39,column_labels,high,only 1/8 columns labelled
+34455066:t03901,34455066,39,empty_columns,low,5 column(s) empty in every data row (split/merged header columns)
+34455066:t03902,34455066,39,column_labels,high,only 1/3 columns labelled
+34455066:t03902,34455066,39,empty_columns,low,3 column(s) empty in every data row (split/merged header columns)
+34455066:t04001,34455066,40,column_labels,high,only 1/9 columns labelled
+34455066:t04001,34455066,40,empty_columns,low,5 column(s) empty in every data row (split/merged header columns)
+34455066:t04101,34455066,41,column_labels,high,only 1/9 columns labelled
+34455066:t04101,34455066,41,empty_columns,low,5 column(s) empty in every data row (split/merged header columns)
+34455066:t04101,34455066,41,totals,low,2 total/subtotal row(s) stored as ordinary rows (not flagged)
+34455066:t04201,34455066,42,column_labels,medium,1 unlabelled column(s)
+34455066:t04202,34455066,42,column_labels,high,only 4/10 columns labelled
+34455066:t04202,34455066,42,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+34455066:t04202,34455066,42,totals,low,1 total/subtotal row(s) stored as ordinary rows (not flagged)
+34455066:t04301,34455066,43,column_labels,high,only 1/3 columns labelled
+34455066:t04301,34455066,43,empty_columns,low,3 column(s) empty in every data row (split/merged header columns)
+34455066:t04401,34455066,44,column_labels,high,only 1/3 columns labelled
+34455066:t04401,34455066,44,empty_columns,low,3 column(s) empty in every data row (split/merged header columns)
+34455066:t04501,34455066,45,column_labels,high,only 0/3 columns labelled
+34455066:t04501,34455066,45,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+34455066:t04502,34455066,45,reversed_header_text,high,"12 header word(s) read backwards from rotated text (e.g. eganiarD, laicremmoC, cilbuP)"
+34455066:t04502,34455066,45,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t04601,34455066,46,column_labels,high,only 4/12 columns labelled
+34455066:t04601,34455066,46,empty_columns,low,8 column(s) empty in every data row (split/merged header columns)
+34455066:t04601,34455066,46,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t04701,34455066,47,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t04801,34455066,48,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t04801,34455066,48,totals,low,1 total/subtotal row(s) stored as ordinary rows (not flagged)
+34455066:t04802,34455066,48,column_labels,high,only 5/20 columns labelled
+34455066:t04802,34455066,48,empty_columns,low,6 column(s) empty in every data row (split/merged header columns)
+34455066:t04802,34455066,48,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t04901,34455066,49,column_labels,high,only 5/17 columns labelled
+34455066:t04901,34455066,49,empty_columns,low,5 column(s) empty in every data row (split/merged header columns)
+34455066:t04901,34455066,49,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t04902,34455066,49,column_labels,medium,3 unlabelled column(s)
+34455066:t04902,34455066,49,empty_columns,low,5 column(s) empty in every data row (split/merged header columns)
+34455066:t05001,34455066,50,column_labels,medium,11 unlabelled column(s)
+34455066:t05001,34455066,50,empty_columns,low,18 column(s) empty in every data row (split/merged header columns)
+34455066:t05002,34455066,50,empty_columns,low,3 column(s) empty in every data row (split/merged header columns)
+34455066:t05101,34455066,51,column_labels,medium,1 unlabelled column(s)
+34455066:t05101,34455066,51,totals,low,1 total/subtotal row(s) stored as ordinary rows (not flagged)
+34455066:t05201,34455066,52,column_labels,high,only 1/3 columns labelled
+34455066:t05201,34455066,52,empty_columns,low,3 column(s) empty in every data row (split/merged header columns)
+34455066:t05202,34455066,52,column_labels,high,only 3/9 columns labelled
+34455066:t05202,34455066,52,empty_columns,low,5 column(s) empty in every data row (split/merged header columns)
+34455066:t05202,34455066,52,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t05202,34455066,52,totals,low,3 total/subtotal row(s) stored as ordinary rows (not flagged)
+34455066:t05301,34455066,53,column_labels,high,only 3/9 columns labelled
+34455066:t05301,34455066,53,empty_columns,low,3 column(s) empty in every data row (split/merged header columns)
+34455066:t05301,34455066,53,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t05301,34455066,53,totals,low,2 total/subtotal row(s) stored as ordinary rows (not flagged)
+34455066:t05401,34455066,54,column_labels,high,only 3/9 columns labelled
+34455066:t05401,34455066,54,empty_columns,low,4 column(s) empty in every data row (split/merged header columns)
+34455066:t05401,34455066,54,units,medium,numeric cells without a currency/unit in header or caption
+34455066:t05501,34455066,55,column_labels,high,only 3/9 columns labelled
+34455066:t05501,34455066,55,empty_columns,low,4 column(s) empty in every data row (split/merged header columns)
+34455066:t05501,34455066,55,units,medium,numeric cells without a currency/unit in header or caption
+40009757:t00301,40009757,3,empty_columns,low,9 column(s) empty in every data row (split/merged header columns)
+40009757:t00302,40009757,3,empty_columns,low,7 column(s) empty in every data row (split/merged header columns)
+40009757:t00401,40009757,4,empty_columns,low,13 column(s) empty in every data row (split/merged header columns)
+40009757:t00402,40009757,4,empty_columns,low,14 column(s) empty in every data row (split/merged header columns)
+40009757:t00403,40009757,4,column_labels,medium,2 unlabelled column(s)
+40009757:t00403,40009757,4,empty_columns,low,7 column(s) empty in every data row (split/merged header columns)
+40009757:t00501,40009757,5,column_labels,medium,2 unlabelled column(s)
+40009757:t00501,40009757,5,empty_columns,low,4 column(s) empty in every data row (split/merged header columns)
+40009757:t00502,40009757,5,empty_columns,low,1 column(s) empty in every data row (split/merged header columns)
+40009757:t00601,40009757,6,empty_columns,low,1 column(s) empty in every data row (split/merged header columns)
+40009757:t00701,40009757,7,empty_columns,low,1 column(s) empty in every data row (split/merged header columns)
+40009757:t00801,40009757,8,empty_columns,low,1 column(s) empty in every data row (split/merged header columns)
+40025990:t00101,40025990,1,column_labels,medium,1 unlabelled column(s)
+40025990:t00102,40025990,1,column_labels,high,only 0/7 columns labelled
+40025990:t00102,40025990,1,units,medium,numeric cells without a currency/unit in header or caption
+40025990:t00201,40025990,2,column_labels,high,only 0/7 columns labelled
+40025990:t00201,40025990,2,empty_columns,low,1 column(s) empty in every data row (split/merged header columns)
+40025990:t00201,40025990,2,units,medium,numeric cells without a currency/unit in header or caption
+40025990:t00201,40025990,2,blank_vs_zero,low,6 dash/n.a. cell(s): must stay non-numeric (not zero)
+40025990:t00202,40025990,2,column_labels,medium,1 unlabelled column(s)
+40025990:t00202,40025990,2,empty_columns,low,1 column(s) empty in every data row (split/merged header columns)
+40025990:t00202,40025990,2,units,medium,numeric cells without a currency/unit in header or caption
+40025990:t00203,40025990,2,column_labels,high,only 0/6 columns labelled
+40025990:t00203,40025990,2,units,medium,numeric cells without a currency/unit in header or caption
+40025990:t00301,40025990,3,column_labels,high,only 0/6 columns labelled
+40025990:t00301,40025990,3,empty_columns,low,1 column(s) empty in every data row (split/merged header columns)
+40025990:t00301,40025990,3,units,medium,numeric cells without a currency/unit in header or caption
+40025990:t00401,40025990,4,empty_columns,low,9 column(s) empty in every data row (split/merged header columns)
+40025990:t00402,40025990,4,empty_columns,low,8 column(s) empty in every data row (split/merged header columns)
+40025990:t00403,40025990,4,empty_columns,low,29 column(s) empty in every data row (split/merged header columns)
+40025990:t00404,40025990,4,column_labels,high,only 1/26 columns labelled
+40025990:t00404,40025990,4,empty_columns,low,26 column(s) empty in every data row (split/merged header columns)
+40025990:t00501,40025990,5,column_labels,medium,2 unlabelled column(s)
+40025990:t00501,40025990,5,empty_columns,low,4 column(s) empty in every data row (split/merged header columns)
+40025990:t00502,40025990,5,empty_columns,low,2 column(s) empty in every data row (split/merged header columns)
+40025990:t00601,40025990,6,empty_columns,low,7 column(s) empty in every data row (split/merged header columns)
+40089196:t00301,40089196,3,column_labels,high,only 4/9 columns labelled
+40089196:t00401,40089196,4,column_labels,high,only 4/9 columns labelled
+40089196:t00401,40089196,4,empty_columns,low,1 column(s) empty in every data row (split/merged header columns)
+40089196:t00401,40089196,4,continuation_split_row,high,first row has a label but no values; its values may be on the previous page
+40089196:t00402,40089196,4,column_labels,high,only 4/9 columns labelled
+40089196:t00501,40089196,5,column_labels,high,only 4/9 columns labelled
+40089196:t00501,40089196,5,continuation_split_row,high,first row has a label but no values; its values may be on the previous page
+40089196:t00601,40089196,6,column_labels,high,only 4/9 columns labelled

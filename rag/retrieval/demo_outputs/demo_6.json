@@ -1,0 +1,172 @@
+{
+ "query": "Do the procurement plan and the contract record agree on the amount for activity S/85/ICB/RP/IDA/2009EFY?",
+ "status": "ok",
+ "notes": [],
+ "results": [
+  {
+   "rank": 1,
+   "unit_id": "act:40025990:p5t1r4",
+   "unit_type": "activity",
+   "scores": {
+    "rrf": 0.0301,
+    "bm25": 16.0218,
+    "dense": 0.574,
+    "exact_reference_match": true
+   },
+   "project_id": "P148850",
+   "project_name": "Ethiopia- Expressway Development Support Project",
+   "country_code": "ET",
+   "document_id": "40025990",
+   "document_version_id": "40025990:1fb4c3baeebe",
+   "document_sha256": "1fb4c3baeebe513cdc3912d4ca6f7ae701a9863d5387e85868203fcd0e1b531c",
+   "doc_type": "PP",
+   "document_role": "PP_coverage",
+   "title": "Ethiopia - EASTERN AND SOUTHERN AFRICA- P148850- Ethiopia- Expressway Development Support Project - Procurement Plan",
+   "document_date": "2025-06-27",
+   "disclosure_date": "2025-06-27",
+   "physical_page_start": 5,
+   "physical_page_end": 5,
+   "printed_page_label": "2",
+   "printed_page_label_status": "detected",
+   "section": "CONSULTING FIRMS",
+   "table_id": "40025990:t00501",
+   "excerpt": "Procurement plan 40025990 (P148850:ERA, revision 2025-06-27) - CONSULTING FIRMS: S/85/ICB/RP/IDA/2009EFY - Strengthening the functional units of expressways and high capacity highways; review prior; method Quality And Cost-Based Selection; status signed; estimated US$ 6000000.0; actual US$ 2408752.45; signed contract planned 2018-02-28, actual 2020-06-03. Market approach Open - International. Component Component 2: Institutional Development and Regulatory Framework. Process status Signed. Stage dates: Combined Evaluation Report and Draft Neg otiated Contract: actual 2020-03-20, planned 2018-01-24; Contract Completion: planned 2020-02-28; Evaluation of Technic al Proposal: actual 2019-10-31, ",
+   "source_url": "https://documents1.worldbank.org/curated/en/099062725094533466/pdf/P148850-6d30073f-7dec-4d3d-bc28-24f6a6840dc3.pdf",
+   "local_path": "rag/corpus_v3/pdf/ET/P148850/PP_2025-06-27_40025990.pdf",
+   "association": "procurement-plan row (typed record)",
+   "activity": {
+    "activity_reference_printed": "S/85/ICB/RP/IDA/2009EFY",
+    "activity_reference_normalized": "S-85-ICB-RP-IDA-2009EFY",
+    "package_reference_core": null,
+    "description_clean": "Strengthening the functional units of expressways and high capacity highways",
+    "method_clean": "Quality And Cost-Based Selection",
+    "market_approach_clean": "Open - International",
+    "review_type": "prior",
+    "process_status_clean": "Signed",
+    "estimated_amount_usd": 6000000.0,
+    "actual_amount_usd": 2408752.45,
+    "signed_contract_planned": "2018-02-28",
+    "signed_contract_actual": "2020-06-03",
+    "stage_dates": {
+     "Combined Evaluation Report and Draft Neg otiated Contract": {
+      "actual": "2020-03-20",
+      "planned": "2018-01-24"
+     },
+     "Contract Completion": {
+      "planned": "2020-02-28"
+     },
+     "Evaluation of Technic al Proposal": {
+      "actual": "2019-10-31",
+      "planned": "2017-12-20"
+     },
+     "Expression of Interest Notice": {
+      "actual": "2017-09-28",
+      "planned": "2017-07-28"
+     },
+     "Opening of Technical Proposals / Minutes": {
+      "planned": "2017-11-05"
+     },
+     "Short List and Draft R equest for Proposals": {
+      "actual": "2018-07-17",
+      "planned": "2017-09-10"
+     },
+     "Signed Contract": {
+      "actual": "2020-06-03",
+      "planned": "2018-02-28"
+     },
+     "Terms of Reference": {
+      "planned": "2017-06-30"
+     }
+    },
+    "plan_stream_id": "P148850:ERA",
+    "plan_version_id": "P148850:ERA:2025-06-27",
+    "uncertain_fields": [],
+    "value_flags": []
+   },
+   "plan_stream_id": "P148850:ERA",
+   "plan_version_id": "P148850:ERA:2025-06-27",
+   "evidence_links": [
+    {
+     "evidence_status": "conflicting",
+     "match_class": "exact",
+     "wb_contract_number": "1616502",
+     "borrower_contract_reference": "S/85/ICB/RP/IDA/2009EFY",
+     "date_recorded_signing": "2020-05-22",
+     "date_plan_actual_signing": "2020-06-03",
+     "date_planned_signing": "2018-02-28",
+     "plan_actual_amount_usd": 2408752.45,
+     "contract_amount_usd": 3535555.66,
+     "disagreeing_fields": [
+      "actual_amount"
+     ],
+     "cardinality": "one_row_one_contract",
+     "recorded_source_as_of_date": "2026-10-20"
+    }
+   ],
+   "evidence_link_note": "Contract links are typed matches between this plan row and DS00005 contract records. 'candidate' and 'conflicting' links are not verified; conflicting fields are shown, not resolved."
+  },
+  {
+   "rank": 2,
+   "unit_id": "40025990:t00502:w1-2",
+   "unit_type": "table",
+   "scores": {
+    "rrf": 0.0284,
+    "bm25": 14.7126,
+    "dense": 0.5783
+   },
+   "project_id": "P148850",
+   "project_name": "Ethiopia- Expressway Development Support Project",
+   "country_code": "ET",
+   "document_id": "40025990",
+   "document_version_id": "40025990:1fb4c3baeebe",
+   "document_sha256": "1fb4c3baeebe513cdc3912d4ca6f7ae701a9863d5387e85868203fcd0e1b531c",
+   "doc_type": "PP",
+   "document_role": "PP_coverage",
+   "title": "Ethiopia - EASTERN AND SOUTHERN AFRICA- P148850- Ethiopia- Expressway Development Support Project - Procurement Plan",
+   "document_date": "2025-06-27",
+   "disclosure_date": "2025-06-27",
+   "physical_page_start": 5,
+   "physical_page_end": 5,
+   "printed_page_label": "2",
+   "printed_page_label_status": "detected",
+   "section": "INDIVIDUAL CONSULTANTS",
+   "table_id": "40025990:t00502",
+   "excerpt": "INDIVIDUAL CONSULTANTS || Activity Reference No. / Description | Loan / Credit No. | Component | Review Type | Method | Market Approach | Contract Type | Estimated Amount (US$) | Actual Amount (US$) | Process Status | Terms of Reference | Invitation to Identified/Selected Consultant | Draft Negotiated Contract | Signed Contract | Contract Completion",
+   "source_url": "https://documents1.worldbank.org/curated/en/099062725094533466/pdf/P148850-6d30073f-7dec-4d3d-bc28-24f6a6840dc3.pdf",
+   "local_path": "rag/corpus_v3/pdf/ET/P148850/PP_2025-06-27_40025990.pdf",
+   "association": "document text (project-level context; not a contract-level match)"
+  },
+  {
+   "rank": 3,
+   "unit_id": "40025990:t00402:w1-2",
+   "unit_type": "table",
+   "scores": {
+    "rrf": 0.0269,
+    "bm25": 15.1036,
+    "dense": 0.5612
+   },
+   "project_id": "P148850",
+   "project_name": "Ethiopia- Expressway Development Support Project",
+   "country_code": "ET",
+   "document_id": "40025990",
+   "document_version_id": "40025990:1fb4c3baeebe",
+   "document_sha256": "1fb4c3baeebe513cdc3912d4ca6f7ae701a9863d5387e85868203fcd0e1b531c",
+   "doc_type": "PP",
+   "document_role": "PP_coverage",
+   "title": "Ethiopia - EASTERN AND SOUTHERN AFRICA- P148850- Ethiopia- Expressway Development Support Project - Procurement Plan",
+   "document_date": "2025-06-27",
+   "disclosure_date": "2025-06-27",
+   "physical_page_start": 4,
+   "physical_page_end": 4,
+   "printed_page_label": "1",
+   "printed_page_label_status": "detected",
+   "section": "GOODS",
+   "table_id": "40025990:t00402",
+   "excerpt": "GOODS || Activity Reference No. / Description | Loan / Credit No. | Component | Review Type | Method | Market Approach | Procurement Process | Prequalification (Y/N) | Estimated Amount (US$) | Actual Amount (US$) | Process Status | Draft Pre-qualification Documents | Prequalification Evaluation Report | Draft Bidding Document / Justification | Specific Procurement Notice / Invitation | Bidding Documents as Issued | Proposal Submission / Opening / Minutes | Bid Evaluation Report and Recommendation for Award | Signed Contract | Contract Completion",
+   "source_url": "https://documents1.worldbank.org/curated/en/099062725094533466/pdf/P148850-6d30073f-7dec-4d3d-bc28-24f6a6840dc3.pdf",
+   "local_path": "rag/corpus_v3/pdf/ET/P148850/PP_2025-06-27_40025990.pdf",
+   "association": "document text (project-level context; not a contract-level match)"
+  }
+ ],
+ "latency_ms": 3189.0
+}

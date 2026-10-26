@@ -1,0 +1,14 @@
+{
+ "base_store_entries": 5381,
+ "base_store_manifest_sha256": "27964bf9746278e93f30914572ef6d745e362146da372e5d4c620f3ee75c9d61",
+ "config_fingerprint": "eb3d4e4e8d66ea7127390799b32edb9ed22ecc4c0d7c76c16144b9ab659168f6",
+ "label": "pilot-v2-1.A-tables",
+ "manifest_id": "8e25da87ece61ea054a707cd4e613a240ef591f80e21b62d0d78f836114cedab",
+ "schema": "regeneration-manifest-1",
+ "scope": "A-tables",
+ "to_generate": [],
+ "unit_order_sha256": "319a669c70e4a977a5048bb51ed4cd62a6b942a300b9921addecf51c6b6b4271",
+ "units_reused": 679,
+ "units_to_generate": 0,
+ "units_total": 679
+}

@@ -1,0 +1,1301 @@
+{
+ "api_projects_queried": 2000,
+ "api_errors": [],
+ "documents_total_all_types": 162930,
+ "documents_per_project": {
+  "median": 69.0,
+  "p10": 27,
+  "p90": 140,
+  "max": 992,
+  "zero": 0
+ },
+ "docs_by_type_total": {
+  "PAD": 1805,
+  "ISR": 21615,
+  "ICR": 927,
+  "ICRR": 770,
+  "PP": 83333,
+  "PPR": 4355,
+  "PID": 2818,
+  "ESRS": 1969,
+  "AUD": 13674
+ },
+ "projects_with_type": {
+  "PAD": {
+   "projects": 1651,
+   "pct": 82.5
+  },
+  "ISR": {
+   "projects": 1971,
+   "pct": 98.5
+  },
+  "ICR": {
+   "projects": 910,
+   "pct": 45.5
+  },
+  "ICRR": {
+   "projects": 757,
+   "pct": 37.9
+  },
+  "PP": {
+   "projects": 1999,
+   "pct": 100.0
+  },
+  "PPR": {
+   "projects": 1639,
+   "pct": 82.0
+  },
+  "PID": {
+   "projects": 1497,
+   "pct": 74.8
+  },
+  "ESRS": {
+   "projects": 931,
+   "pct": 46.5
+  },
+  "AUD": {
+   "projects": 1818,
+   "pct": 90.9
+  }
+ },
+ "per_project_type_count_distribution": {
+  "PAD": {
+   "0": 349,
+   "1": 1503,
+   "2": 142,
+   "3": 6
+  },
+  "ISR": {
+   "0": 29,
+   "1": 49,
+   "2": 70,
+   "3": 95,
+   "4": 93,
+   "5": 103,
+   "6": 66,
+   "7": 99,
+   "8": 99,
+   "9": 132,
+   "10": 1165
+  },
+  "ICR": {
+   "0": 1090,
+   "1": 894,
+   "2": 15,
+   "3": 1
+  },
+  "ICRR": {
+   "0": 1243,
+   "1": 744,
+   "2": 13
+  },
+  "PP": {
+   "0": 1,
+   "1": 14,
+   "2": 23,
+   "3": 27,
+   "4": 32,
+   "5": 35,
+   "6": 39,
+   "7": 40,
+   "8": 35,
+   "9": 51,
+   "10": 1703
+  }
+ },
+ "tiers": {
+  "core_narrative": 1646,
+  "full_lifecycle": 743,
+  "procurement": 1999,
+  "eligible_core_plus_procurement": 1646
+ },
+ "by_stratum": {
+  "region": {
+   "East Asia and Pacific": {
+    "projects": 289,
+    "core_narrative": 236,
+    "full_lifecycle": 118,
+    "with_icr": 148
+   },
+   "Eastern and Southern Africa": {
+    "projects": 405,
+    "core_narrative": 333,
+    "full_lifecycle": 127,
+    "with_icr": 158
+   },
+   "Europe and Central Asia": {
+    "projects": 280,
+    "core_narrative": 225,
+    "full_lifecycle": 86,
+    "with_icr": 116
+   },
+   "Latin America and Caribbean": {
+    "projects": 246,
+    "core_narrative": 210,
+    "full_lifecycle": 99,
+    "with_icr": 112
+   },
+   "Middle East, North Africa, Afghanistan, and Pakistan": {
+    "projects": 197,
+    "core_narrative": 150,
+    "full_lifecycle": 61,
+    "with_icr": 84
+   },
+   "Other": {
+    "projects": 12,
+    "core_narrative": 1,
+    "full_lifecycle": 0,
+    "with_icr": 3
+   },
+   "South Asia": {
+    "projects": 184,
+    "core_narrative": 162,
+    "full_lifecycle": 90,
+    "with_icr": 101
+   },
+   "Western and Central Africa": {
+    "projects": 387,
+    "core_narrative": 329,
+    "full_lifecycle": 162,
+    "with_icr": 188
+   }
+  },
+  "status": {
+   "Active": {
+    "projects": 851,
+    "core_narrative": 737,
+    "full_lifecycle": 8,
+    "with_icr": 11
+   },
+   "Closed": {
+    "projects": 1149,
+    "core_narrative": 909,
+    "full_lifecycle": 735,
+    "with_icr": 899
+   }
+  },
+  "fy_band": {
+   "FY2015-2017": {
+    "projects": 420,
+    "core_narrative": 334,
+    "full_lifecycle": 291,
+    "with_icr": 349
+   },
+   "FY2018-2020": {
+    "projects": 530,
+    "core_narrative": 451,
+    "full_lifecycle": 206,
+    "with_icr": 259
+   },
+   "FY2021-2023": {
+    "projects": 493,
+    "core_narrative": 396,
+    "full_lifecycle": 31,
+    "with_icr": 71
+   },
+   "FY2024+": {
+    "projects": 309,
+    "core_narrative": 240,
+    "full_lifecycle": 2,
+    "with_icr": 2
+   },
+   "FY<=2014": {
+    "projects": 246,
+    "core_narrative": 225,
+    "full_lifecycle": 213,
+    "with_icr": 229
+   },
+   "Unknown": {
+    "projects": 2,
+    "core_narrative": 0,
+    "full_lifecycle": 0,
+    "with_icr": 0
+   }
+  },
+  "contract_volume_quartile": {
+   "Q1": {
+    "projects": 503,
+    "core_narrative": 356,
+    "full_lifecycle": 182,
+    "with_icr": 252
+   },
+   "Q2": {
+    "projects": 496,
+    "core_narrative": 385,
+    "full_lifecycle": 182,
+    "with_icr": 240
+   },
+   "Q3": {
+    "projects": 499,
+    "core_narrative": 441,
+    "full_lifecycle": 187,
+    "with_icr": 213
+   },
+   "Q4": {
+    "projects": 502,
+    "core_narrative": 464,
+    "full_lifecycle": 192,
+    "with_icr": 205
+   }
+  },
+  "major_sector": {
+   "Agriculture, Fishing and Forestry": {
+    "projects": 283,
+    "core_narrative": 221,
+    "full_lifecycle": 123,
+    "with_icr": 145
+   },
+   "Digital Development": {
+    "projects": 11,
+    "core_narrative": 10,
+    "full_lifecycle": 0,
+    "with_icr": 0
+   },
+   "Education": {
+    "projects": 202,
+    "core_narrative": 164,
+    "full_lifecycle": 88,
+    "with_icr": 108
+   },
+   "Energy and Extractives": {
+    "projects": 179,
+    "core_narrative": 144,
+    "full_lifecycle": 61,
+    "with_icr": 80
+   },
+   "Energy and Mineral Resources": {
+    "projects": 19,
+    "core_narrative": 17,
+    "full_lifecycle": 0,
+    "with_icr": 0
+   },
+   "Financial Sector": {
+    "projects": 67,
+    "core_narrative": 58,
+    "full_lifecycle": 30,
+    "with_icr": 35
+   },
+   "Health": {
+    "projects": 197,
+    "core_narrative": 159,
+    "full_lifecycle": 53,
+    "with_icr": 69
+   },
+   "Industry, Trade and Services": {
+    "projects": 107,
+    "core_narrative": 98,
+    "full_lifecycle": 46,
+    "with_icr": 51
+   },
+   "Information and Communications Technologies": {
+    "projects": 55,
+    "core_narrative": 48,
+    "full_lifecycle": 15,
+    "with_icr": 21
+   },
+   "Public Administration": {
+    "projects": 303,
+    "core_narrative": 221,
+    "full_lifecycle": 97,
+    "with_icr": 127
+   },
+   "Social Protection": {
+    "projects": 178,
+    "core_narrative": 142,
+    "full_lifecycle": 62,
+    "with_icr": 86
+   },
+   "Social Sustainability and Inclusion": {
+    "projects": 7,
+    "core_narrative": 4,
+    "full_lifecycle": 0,
+    "with_icr": 0
+   },
+   "Transportation": {
+    "projects": 209,
+    "core_narrative": 194,
+    "full_lifecycle": 93,
+    "with_icr": 106
+   },
+   "Unspecified (not published)": {
+    "projects": 2,
+    "core_narrative": 0,
+    "full_lifecycle": 0,
+    "with_icr": 0
+   },
+   "Water, Sanitation and Waste Management": {
+    "projects": 181,
+    "core_narrative": 166,
+    "full_lifecycle": 75,
+    "with_icr": 82
+   }
+  },
+  "country_is_regional": {
+   "False": {
+    "projects": 1861,
+    "core_narrative": 1537,
+    "full_lifecycle": 694,
+    "with_icr": 852
+   },
+   "True": {
+    "projects": 139,
+    "core_narrative": 109,
+    "full_lifecycle": 49,
+    "with_icr": 58
+   }
+  }
+ },
+ "median_pages_used": {
+  "PAD": 77.0,
+  "ISR": 8,
+  "ICR": 58.5,
+  "ICRR": 20,
+  "PPR": 14.0,
+  "PP": 8
+ },
+ "estimated_narrative_pages": {
+  "all_eligible_all_isrs": 392887.5,
+  "simulated_500_all_isrs": 119498.0,
+  "simulated_500_isr_cap_4": 87658.0,
+  "pilot_isr_cap_4": 7130.0
+ },
+ "simulated_500_not_materialised": {
+  "size": 500,
+  "mix": {
+   "region": {
+    "East Asia and Pacific": 71,
+    "Eastern and Southern Africa": 101,
+    "Europe and Central Asia": 69,
+    "Latin America and Caribbean": 64,
+    "Middle East, North Africa, Afghanistan, and Pakistan": 45,
+    "Other": 1,
+    "South Asia": 49,
+    "Western and Central Africa": 100
+   },
+   "status": {
+    "Active": 224,
+    "Closed": 276
+   },
+   "fy_band": {
+    "FY2021-2023": 127,
+    "FY2018-2020": 128,
+    "FY2024+": 74,
+    "FY2015-2017": 102,
+    "FY<=2014": 69
+   },
+   "contract_volume_quartile": {
+    "Q4": 140,
+    "Q3": 126,
+    "Q1": 117,
+    "Q2": 117
+   }
+  }
+ },
+ "proposed_pilot": {
+  "size": 43,
+  "mix": {
+   "region": {
+    "Latin America and Caribbean": 6,
+    "Europe and Central Asia": 6,
+    "East Asia and Pacific": 6,
+    "South Asia": 6,
+    "Other": 1,
+    "Western and Central Africa": 6,
+    "Middle East, North Africa, Afghanistan, and Pakistan": 6,
+    "Eastern and Southern Africa": 6
+   },
+   "status": {
+    "Closed": 21,
+    "Active": 22
+   },
+   "fy_band": {
+    "FY2015-2017": 5,
+    "FY<=2014": 4,
+    "FY2018-2020": 18,
+    "FY2021-2023": 11,
+    "FY2024+": 5
+   },
+   "contract_volume_quartile": {
+    "Q3": 11,
+    "Q1": 7,
+    "Q2": 8,
+    "Q4": 17
+   }
+  },
+  "with_icr": 14,
+  "rows": [
+   {
+    "project_id": "P114294",
+    "region": "Latin America and Caribbean",
+    "status": "Closed",
+    "fy_band": "FY2015-2017",
+    "major_sector": "Agriculture, Fishing and Forestry",
+    "contract_volume_quartile": "Q3",
+    "counts": {
+     "PAD": 2,
+     "ISR": 14,
+     "ICR": 1,
+     "ICRR": 1,
+     "PP": 28,
+     "PPR": 3,
+     "PID": 3,
+     "ESRS": 0,
+     "AUD": 5
+    },
+    "api_total_documents": 70
+   },
+   {
+    "project_id": "P118196",
+    "region": "Europe and Central Asia",
+    "status": "Closed",
+    "fy_band": "FY<=2014",
+    "major_sector": "Water, Sanitation and Waste Management",
+    "contract_volume_quartile": "Q1",
+    "counts": {
+     "PAD": 1,
+     "ISR": 17,
+     "ICR": 1,
+     "ICRR": 1,
+     "PP": 2,
+     "PPR": 2,
+     "PID": 5,
+     "ESRS": 0,
+     "AUD": 25
+    },
+    "api_total_documents": 72
+   },
+   {
+    "project_id": "P126130",
+    "region": "Europe and Central Asia",
+    "status": "Closed",
+    "fy_band": "FY<=2014",
+    "major_sector": "Health",
+    "contract_volume_quartile": "Q3",
+    "counts": {
+     "PAD": 1,
+     "ISR": 61,
+     "ICR": 1,
+     "ICRR": 1,
+     "PP": 66,
+     "PPR": 5,
+     "PID": 2,
+     "ESRS": 0,
+     "AUD": 12
+    },
+    "api_total_documents": 173
+   },
+   {
+    "project_id": "P132775",
+    "region": "East Asia and Pacific",
+    "status": "Closed",
+    "fy_band": "FY2015-2017",
+    "major_sector": "Transportation",
+    "contract_volume_quartile": "Q1",
+    "counts": {
+     "PAD": 1,
+     "ISR": 13,
+     "ICR": 1,
+     "ICRR": 1,
+     "PP": 17,
+     "PPR": 2,
+     "PID": 2,
+     "ESRS": 0,
+     "AUD": 7
+    },
+    "api_total_documents": 80
+   },
+   {
+    "project_id": "P144335",
+    "region": "South Asia",
+    "status": "Closed",
+    "fy_band": "FY<=2014",
+    "major_sector": "Transportation",
+    "contract_volume_quartile": "Q1",
+    "counts": {
+     "PAD": 1,
+     "ISR": 19,
+     "ICR": 1,
+     "ICRR": 1,
+     "PP": 85,
+     "PPR": 2,
+     "PID": 2,
+     "ESRS": 0,
+     "AUD": 13
+    },
+    "api_total_documents": 151
+   },
+   {
+    "project_id": "P145054",
+    "region": "Other",
+    "status": "Active",
+    "fy_band": "FY<=2014",
+    "major_sector": "Energy and Extractives",
+    "contract_volume_quartile": "Q2",
+    "counts": {
+     "PAD": 1,
+     "ISR": 24,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 54,
+     "PPR": 7,
+     "PID": 5,
+     "ESRS": 0,
+     "AUD": 60
+    },
+    "api_total_documents": 252
+   },
+   {
+    "project_id": "P148062",
+    "region": "Western and Central Africa",
+    "status": "Closed",
+    "fy_band": "FY2015-2017",
+    "major_sector": "Education",
+    "contract_volume_quartile": "Q4",
+    "counts": {
+     "PAD": 1,
+     "ISR": 20,
+     "ICR": 1,
+     "ICRR": 1,
+     "PP": 67,
+     "PPR": 4,
+     "PID": 2,
+     "ESRS": 0,
+     "AUD": 13
+    },
+    "api_total_documents": 150
+   },
+   {
+    "project_id": "P155732",
+    "region": "Middle East, North Africa, Afghanistan, and Pakistan",
+    "status": "Closed",
+    "fy_band": "FY2015-2017",
+    "major_sector": "Transportation",
+    "contract_volume_quartile": "Q4",
+    "counts": {
+     "PAD": 2,
+     "ISR": 22,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 196,
+     "PPR": 10,
+     "PID": 2,
+     "ESRS": 0,
+     "AUD": 20
+    },
+    "api_total_documents": 376
+   },
+   {
+    "project_id": "P157054",
+    "region": "South Asia",
+    "status": "Closed",
+    "fy_band": "FY2018-2020",
+    "major_sector": "Transportation",
+    "contract_volume_quartile": "Q4",
+    "counts": {
+     "PAD": 1,
+     "ISR": 11,
+     "ICR": 1,
+     "ICRR": 1,
+     "PP": 58,
+     "PPR": 1,
+     "PID": 0,
+     "ESRS": 0,
+     "AUD": 7
+    },
+    "api_total_documents": 95
+   },
+   {
+    "project_id": "P158760",
+    "region": "East Asia and Pacific",
+    "status": "Closed",
+    "fy_band": "FY2018-2020",
+    "major_sector": "Water, Sanitation and Waste Management",
+    "contract_volume_quartile": "Q3",
+    "counts": {
+     "PAD": 1,
+     "ISR": 14,
+     "ICR": 1,
+     "ICRR": 1,
+     "PP": 34,
+     "PPR": 1,
+     "PID": 0,
+     "ESRS": 0,
+     "AUD": 7
+    },
+    "api_total_documents": 70
+   },
+   {
+    "project_id": "P160005",
+    "region": "South Asia",
+    "status": "Active",
+    "fy_band": "FY2018-2020",
+    "major_sector": "Water, Sanitation and Waste Management",
+    "contract_volume_quartile": "Q4",
+    "counts": {
+     "PAD": 1,
+     "ISR": 17,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 97,
+     "PPR": 5,
+     "PID": 0,
+     "ESRS": 0,
+     "AUD": 4
+    },
+    "api_total_documents": 149
+   },
+   {
+    "project_id": "P160224",
+    "region": "Middle East, North Africa, Afghanistan, and Pakistan",
+    "status": "Closed",
+    "fy_band": "FY2018-2020",
+    "major_sector": "Transportation",
+    "contract_volume_quartile": "Q1",
+    "counts": {
+     "PAD": 2,
+     "ISR": 10,
+     "ICR": 1,
+     "ICRR": 1,
+     "PP": 6,
+     "PPR": 0,
+     "PID": 0,
+     "ESRS": 0,
+     "AUD": 5
+    },
+    "api_total_documents": 38
+   },
+   {
+    "project_id": "P160642",
+    "region": "Western and Central Africa",
+    "status": "Closed",
+    "fy_band": "FY2018-2020",
+    "major_sector": "Education",
+    "contract_volume_quartile": "Q4",
+    "counts": {
+     "PAD": 1,
+     "ISR": 8,
+     "ICR": 1,
+     "ICRR": 1,
+     "PP": 29,
+     "PPR": 2,
+     "PID": 0,
+     "ESRS": 0,
+     "AUD": 5
+    },
+    "api_total_documents": 57
+   },
+   {
+    "project_id": "P160865",
+    "region": "Western and Central Africa",
+    "status": "Active",
+    "fy_band": "FY2021-2023",
+    "major_sector": "Industry, Trade and Services",
+    "contract_volume_quartile": "Q4",
+    "counts": {
+     "PAD": 1,
+     "ISR": 9,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 433,
+     "PPR": 0,
+     "PID": 0,
+     "ESRS": 0,
+     "AUD": 42
+    },
+    "api_total_documents": 497
+   },
+   {
+    "project_id": "P161624",
+    "region": "Middle East, North Africa, Afghanistan, and Pakistan",
+    "status": "Closed",
+    "fy_band": "FY2015-2017",
+    "major_sector": "Health",
+    "contract_volume_quartile": "Q3",
+    "counts": {
+     "PAD": 1,
+     "ISR": 10,
+     "ICR": 1,
+     "ICRR": 1,
+     "PP": 57,
+     "PPR": 2,
+     "PID": 0,
+     "ESRS": 0,
+     "AUD": 5
+    },
+    "api_total_documents": 92
+   },
+   {
+    "project_id": "P162901",
+    "region": "Middle East, North Africa, Afghanistan, and Pakistan",
+    "status": "Active",
+    "fy_band": "FY2018-2020",
+    "major_sector": "Public Administration",
+    "contract_volume_quartile": "Q4",
+    "counts": {
+     "PAD": 3,
+     "ISR": 18,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 60,
+     "PPR": 6,
+     "PID": 0,
+     "ESRS": 0,
+     "AUD": 6
+    },
+    "api_total_documents": 119
+   },
+   {
+    "project_id": "P163353",
+    "region": "Western and Central Africa",
+    "status": "Active",
+    "fy_band": "FY2018-2020",
+    "major_sector": "Transportation",
+    "contract_volume_quartile": "Q4",
+    "counts": {
+     "PAD": 1,
+     "ISR": 12,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 408,
+     "PPR": 1,
+     "PID": 0,
+     "ESRS": 0,
+     "AUD": 4
+    },
+    "api_total_documents": 453
+   },
+   {
+    "project_id": "P164424",
+    "region": "Europe and Central Asia",
+    "status": "Closed",
+    "fy_band": "FY2018-2020",
+    "major_sector": "Agriculture, Fishing and Forestry",
+    "contract_volume_quartile": "Q4",
+    "counts": {
+     "PAD": 1,
+     "ISR": 16,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 40,
+     "PPR": 2,
+     "PID": 0,
+     "ESRS": 0,
+     "AUD": 8
+    },
+    "api_total_documents": 76
+   },
+   {
+    "project_id": "P164435",
+    "region": "Eastern and Southern Africa",
+    "status": "Active",
+    "fy_band": "FY2018-2020",
+    "major_sector": "Energy and Extractives",
+    "contract_volume_quartile": "Q4",
+    "counts": {
+     "PAD": 1,
+     "ISR": 13,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 70,
+     "PPR": 4,
+     "PID": 5,
+     "ESRS": 4,
+     "AUD": 4
+    },
+    "api_total_documents": 125
+   },
+   {
+    "project_id": "P164764",
+    "region": "Eastern and Southern Africa",
+    "status": "Closed",
+    "fy_band": "FY2018-2020",
+    "major_sector": "Agriculture, Fishing and Forestry",
+    "contract_volume_quartile": "Q4",
+    "counts": {
+     "PAD": 1,
+     "ISR": 14,
+     "ICR": 1,
+     "ICRR": 0,
+     "PP": 41,
+     "PPR": 2,
+     "PID": 0,
+     "ESRS": 0,
+     "AUD": 9
+    },
+    "api_total_documents": 80
+   },
+   {
+    "project_id": "P165477",
+    "region": "South Asia",
+    "status": "Closed",
+    "fy_band": "FY2018-2020",
+    "major_sector": "Public Administration",
+    "contract_volume_quartile": "Q3",
+    "counts": {
+     "PAD": 1,
+     "ISR": 14,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 26,
+     "PPR": 5,
+     "PID": 0,
+     "ESRS": 0,
+     "AUD": 6
+    },
+    "api_total_documents": 63
+   },
+   {
+    "project_id": "P166802",
+    "region": "Eastern and Southern Africa",
+    "status": "Closed",
+    "fy_band": "FY2018-2020",
+    "major_sector": "Agriculture, Fishing and Forestry",
+    "contract_volume_quartile": "Q4",
+    "counts": {
+     "PAD": 1,
+     "ISR": 17,
+     "ICR": 1,
+     "ICRR": 1,
+     "PP": 148,
+     "PPR": 2,
+     "PID": 0,
+     "ESRS": 0,
+     "AUD": 12
+    },
+    "api_total_documents": 194
+   },
+   {
+    "project_id": "P167380",
+    "region": "Middle East, North Africa, Afghanistan, and Pakistan",
+    "status": "Active",
+    "fy_band": "FY2018-2020",
+    "major_sector": "Industry, Trade and Services",
+    "contract_volume_quartile": "Q2",
+    "counts": {
+     "PAD": 2,
+     "ISR": 16,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 30,
+     "PPR": 1,
+     "PID": 4,
+     "ESRS": 2,
+     "AUD": 5
+    },
+    "api_total_documents": 70
+   },
+   {
+    "project_id": "P168862",
+    "region": "Europe and Central Asia",
+    "status": "Active",
+    "fy_band": "FY2021-2023",
+    "major_sector": "Water, Sanitation and Waste Management",
+    "contract_volume_quartile": "Q3",
+    "counts": {
+     "PAD": 1,
+     "ISR": 16,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 103,
+     "PPR": 3,
+     "PID": 3,
+     "ESRS": 3,
+     "AUD": 14
+    },
+    "api_total_documents": 191
+   },
+   {
+    "project_id": "P171377",
+    "region": "East Asia and Pacific",
+    "status": "Active",
+    "fy_band": "FY2018-2020",
+    "major_sector": "Industry, Trade and Services",
+    "contract_volume_quartile": "Q4",
+    "counts": {
+     "PAD": 1,
+     "ISR": 10,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 25,
+     "PPR": 1,
+     "PID": 2,
+     "ESRS": 1,
+     "AUD": 5
+    },
+    "api_total_documents": 56
+   },
+   {
+    "project_id": "P171516",
+    "region": "South Asia",
+    "status": "Active",
+    "fy_band": "FY2021-2023",
+    "major_sector": "Education",
+    "contract_volume_quartile": "Q2",
+    "counts": {
+     "PAD": 1,
+     "ISR": 12,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 22,
+     "PPR": 3,
+     "PID": 1,
+     "ESRS": 2,
+     "AUD": 4
+    },
+    "api_total_documents": 58
+   },
+   {
+    "project_id": "P171976",
+    "region": "Latin America and Caribbean",
+    "status": "Closed",
+    "fy_band": "FY2021-2023",
+    "major_sector": "Information and Communications Technologies",
+    "contract_volume_quartile": "Q2",
+    "counts": {
+     "PAD": 1,
+     "ISR": 10,
+     "ICR": 1,
+     "ICRR": 0,
+     "PP": 26,
+     "PPR": 2,
+     "PID": 2,
+     "ESRS": 3,
+     "AUD": 6
+    },
+    "api_total_documents": 62
+   },
+   {
+    "project_id": "P173881",
+    "region": "Latin America and Caribbean",
+    "status": "Closed",
+    "fy_band": "FY2018-2020",
+    "major_sector": "Health",
+    "contract_volume_quartile": "Q4",
+    "counts": {
+     "PAD": 1,
+     "ISR": 8,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 25,
+     "PPR": 2,
+     "PID": 1,
+     "ESRS": 1,
+     "AUD": 2
+    },
+    "api_total_documents": 60
+   },
+   {
+    "project_id": "P173939",
+    "region": "Eastern and Southern Africa",
+    "status": "Closed",
+    "fy_band": "FY2018-2020",
+    "major_sector": "Health",
+    "contract_volume_quartile": "Q3",
+    "counts": {
+     "PAD": 1,
+     "ISR": 11,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 27,
+     "PPR": 2,
+     "PID": 1,
+     "ESRS": 1,
+     "AUD": 8
+    },
+    "api_total_documents": 62
+   },
+   {
+    "project_id": "P173998",
+    "region": "Europe and Central Asia",
+    "status": "Active",
+    "fy_band": "FY2018-2020",
+    "major_sector": "Industry, Trade and Services",
+    "contract_volume_quartile": "Q3",
+    "counts": {
+     "PAD": 1,
+     "ISR": 13,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 41,
+     "PPR": 2,
+     "PID": 1,
+     "ESRS": 1,
+     "AUD": 8
+    },
+    "api_total_documents": 87
+   },
+   {
+    "project_id": "P174219",
+    "region": "East Asia and Pacific",
+    "status": "Closed",
+    "fy_band": "FY2018-2020",
+    "major_sector": "Health",
+    "contract_volume_quartile": "Q2",
+    "counts": {
+     "PAD": 1,
+     "ISR": 9,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 18,
+     "PPR": 1,
+     "PID": 1,
+     "ESRS": 2,
+     "AUD": 5
+    },
+    "api_total_documents": 44
+   },
+   {
+    "project_id": "P174637",
+    "region": "East Asia and Pacific",
+    "status": "Active",
+    "fy_band": "FY2021-2023",
+    "major_sector": "Social Protection",
+    "contract_volume_quartile": "Q3",
+    "counts": {
+     "PAD": 1,
+     "ISR": 8,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 57,
+     "PPR": 0,
+     "PID": 2,
+     "ESRS": 2,
+     "AUD": 3
+    },
+    "api_total_documents": 83
+   },
+   {
+    "project_id": "P174937",
+    "region": "South Asia",
+    "status": "Active",
+    "fy_band": "FY2021-2023",
+    "major_sector": "Health",
+    "contract_volume_quartile": "Q4",
+    "counts": {
+     "PAD": 1,
+     "ISR": 10,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 35,
+     "PPR": 2,
+     "PID": 2,
+     "ESRS": 2,
+     "AUD": 3
+    },
+    "api_total_documents": 70
+   },
+   {
+    "project_id": "P175720",
+    "region": "Latin America and Caribbean",
+    "status": "Active",
+    "fy_band": "FY2021-2023",
+    "major_sector": "Transportation",
+    "contract_volume_quartile": "Q2",
+    "counts": {
+     "PAD": 1,
+     "ISR": 9,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 15,
+     "PPR": 1,
+     "PID": 2,
+     "ESRS": 3,
+     "AUD": 3
+    },
+    "api_total_documents": 51
+   },
+   {
+    "project_id": "P176317",
+    "region": "East Asia and Pacific",
+    "status": "Active",
+    "fy_band": "FY2024+",
+    "major_sector": "Digital Development",
+    "contract_volume_quartile": "Q1",
+    "counts": {
+     "PAD": 1,
+     "ISR": 4,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 11,
+     "PPR": 0,
+     "PID": 1,
+     "ESRS": 3,
+     "AUD": 1
+    },
+    "api_total_documents": 32
+   },
+   {
+    "project_id": "P176721",
+    "region": "Western and Central Africa",
+    "status": "Closed",
+    "fy_band": "FY2021-2023",
+    "major_sector": "Health",
+    "contract_volume_quartile": "Q2",
+    "counts": {
+     "PAD": 1,
+     "ISR": 6,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 10,
+     "PPR": 5,
+     "PID": 1,
+     "ESRS": 1,
+     "AUD": 4
+    },
+    "api_total_documents": 39
+   },
+   {
+    "project_id": "P177041",
+    "region": "Western and Central Africa",
+    "status": "Active",
+    "fy_band": "FY2021-2023",
+    "major_sector": "Agriculture, Fishing and Forestry",
+    "contract_volume_quartile": "Q4",
+    "counts": {
+     "PAD": 1,
+     "ISR": 7,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 18,
+     "PPR": 2,
+     "PID": 3,
+     "ESRS": 4,
+     "AUD": 2
+    },
+    "api_total_documents": 57
+   },
+   {
+    "project_id": "P177741",
+    "region": "Latin America and Caribbean",
+    "status": "Active",
+    "fy_band": "FY2021-2023",
+    "major_sector": "Education",
+    "contract_volume_quartile": "Q4",
+    "counts": {
+     "PAD": 1,
+     "ISR": 9,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 72,
+     "PPR": 1,
+     "PID": 4,
+     "ESRS": 3,
+     "AUD": 3
+    },
+    "api_total_documents": 107
+   },
+   {
+    "project_id": "P178701",
+    "region": "Eastern and Southern Africa",
+    "status": "Active",
+    "fy_band": "FY2021-2023",
+    "major_sector": "Energy and Extractives",
+    "contract_volume_quartile": "Q3",
+    "counts": {
+     "PAD": 1,
+     "ISR": 8,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 81,
+     "PPR": 1,
+     "PID": 2,
+     "ESRS": 2,
+     "AUD": 1
+    },
+    "api_total_documents": 111
+   },
+   {
+    "project_id": "P180555",
+    "region": "Latin America and Caribbean",
+    "status": "Active",
+    "fy_band": "FY2024+",
+    "major_sector": "Transportation",
+    "contract_volume_quartile": "Q1",
+    "counts": {
+     "PAD": 1,
+     "ISR": 4,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 10,
+     "PPR": 0,
+     "PID": 0,
+     "ESRS": 2,
+     "AUD": 1
+    },
+    "api_total_documents": 37
+   },
+   {
+    "project_id": "P181200",
+    "region": "Europe and Central Asia",
+    "status": "Active",
+    "fy_band": "FY2024+",
+    "major_sector": "Industry, Trade and Services",
+    "contract_volume_quartile": "Q3",
+    "counts": {
+     "PAD": 1,
+     "ISR": 7,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 27,
+     "PPR": 3,
+     "PID": 2,
+     "ESRS": 4,
+     "AUD": 3
+    },
+    "api_total_documents": 69
+   },
+   {
+    "project_id": "P500553",
+    "region": "Eastern and Southern Africa",
+    "status": "Active",
+    "fy_band": "FY2024+",
+    "major_sector": "Agriculture, Fishing and Forestry",
+    "contract_volume_quartile": "Q1",
+    "counts": {
+     "PAD": 1,
+     "ISR": 3,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 13,
+     "PPR": 0,
+     "PID": 2,
+     "ESRS": 0,
+     "AUD": 0
+    },
+    "api_total_documents": 28
+   },
+   {
+    "project_id": "P506969",
+    "region": "Middle East, North Africa, Afghanistan, and Pakistan",
+    "status": "Active",
+    "fy_band": "FY2024+",
+    "major_sector": "Social Sustainability and Inclusion",
+    "contract_volume_quartile": "Q2",
+    "counts": {
+     "PAD": 1,
+     "ISR": 3,
+     "ICR": 0,
+     "ICRR": 0,
+     "PP": 9,
+     "PPR": 0,
+     "PID": 2,
+     "ESRS": 1,
+     "AUD": 0
+    },
+    "api_total_documents": 24
+   }
+  ]
+ },
+ "languages_total": {
+  "Arabic|English": 23,
+  "Vietnamese": 9,
+  "Turkish": 9,
+  "Urdu": 7,
+  "English": 6,
+  "English|Spanish": 6,
+  "Khmer": 6,
+  "Sindhi": 5,
+  "Telugu": 5,
+  "Swahili": 5
+ }
+}

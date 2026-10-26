@@ -1,0 +1,122 @@
+{
+ "question": "What lesson about work-site safety does the IEG review draw from the Sri Lanka road project?",
+ "status": "insufficient_evidence",
+ "answer": "The indexed documents and typed records do not contain enough evidence to answer this question.",
+ "citations": [],
+ "supporting_evidence_ids": [],
+ "conflicts": [],
+ "limitations": [
+  "Generation failed to return valid structured output; no answer is shown."
+ ],
+ "claims": [],
+ "removed_claims": [],
+ "generator": "ollama:llama3.2:1b",
+ "generator_is_llm": true,
+ "timings_ms": {
+  "retrieval": 158,
+  "generation": 35438
+ },
+ "trace": {
+  "plan": {
+   "question": "What lesson about work-site safety does the IEG review draw from the Sri Lanka road project?",
+   "comparison": false,
+   "doc_type_hints": [
+    "ICRR"
+   ],
+   "required_fields": {}
+  },
+  "retrieval_status": "ok",
+  "retrieved_unit_ids": [
+   "34407877:C:0020",
+   "34407877:C:0016",
+   "34407877:C:0055",
+   "26256705:C:0071",
+   "34407877:C:0021",
+   "34345370:C:0020",
+   "34407877:C:0043",
+   "34407877:C:0030",
+   "34407877:C:0059",
+   "34345370:t04201:w6-10",
+   "34407877:C:0028",
+   "34407877:C:0029",
+   "34345370:t04101:w26-29",
+   "26256705:C:0056",
+   "34407877:C:0025",
+   "34407877:C:0054",
+   "34407877:C:0047",
+   "34345370:C:0060",
+   "34407877:C:0018",
+   "34345370:C:0022"
+  ],
+  "targeted": {},
+  "selected": [
+   [
+    "E1",
+    "34407877:C:0020",
+    "34407877",
+    "verified",
+    false
+   ],
+   [
+    "E2",
+    "34407877:C:0016",
+    "34407877",
+    "verified",
+    false
+   ],
+   [
+    "E3",
+    "34407877:C:0055",
+    "34407877",
+    "verified",
+    false
+   ],
+   [
+    "E4",
+    "26256705:C:0071",
+    "26256705",
+    "verified",
+    false
+   ],
+   [
+    "E5",
+    "34345370:C:0020",
+    "34345370",
+    "verified",
+    false
+   ],
+   [
+    "E6",
+    "34345370:t04201:w6-10",
+    "34345370",
+    "verified",
+    false
+   ],
+   [
+    "E7",
+    "34345370:t04101:w26-29",
+    "34345370",
+    "verified",
+    false
+   ],
+   [
+    "E8",
+    "26256705:C:0056",
+    "26256705",
+    "verified",
+    false
+   ]
+  ],
+  "projects_in_top10": [
+   "P132833"
+  ],
+  "generator_meta": {
+   "attempts": 2,
+   "latency_ms": 17280,
+   "prompt_tokens": 1923,
+   "output_tokens": 700,
+   "parse_error": "1 validation error for DraftAnswer\n  Invalid JSON: EOF while parsing a string at line 1 column 2901 [type=json_invalid, input_value='{\"status\":\"conflicting_e...dence_ids\":[\"E1\",\"E3\",\"', input_type=str",
+   "generation_failed": true
+  }
+ }
+}

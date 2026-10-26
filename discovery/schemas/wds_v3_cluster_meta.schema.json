@@ -1,0 +1,461 @@
+{
+ "dataset": "wds_v3_cluster_meta",
+ "source": "search API v3 wds (cluster projects)",
+ "rows_profiled": 22337,
+ "columns": [
+  {
+   "name": "EnvironmentalCategory",
+   "observed_kinds": {
+    "str": 13537,
+    "null": 8800
+   },
+   "populated_pct": 60.6
+  },
+  {
+   "name": "abstracts",
+   "observed_kinds": {
+    "null": 20924,
+    "object": 1413
+   },
+   "populated_pct": 6.33
+  },
+  {
+   "name": "admreg",
+   "observed_kinds": {
+    "str": 22257,
+    "null": 80
+   },
+   "populated_pct": 99.64
+  },
+  {
+   "name": "alt_title",
+   "observed_kinds": {
+    "null": 21834,
+    "object": 503
+   },
+   "populated_pct": 2.25
+  },
+  {
+   "name": "authors",
+   "observed_kinds": {
+    "object": 20987,
+    "null": 1350
+   },
+   "populated_pct": 93.96
+  },
+  {
+   "name": "available_in",
+   "observed_kinds": {
+    "str": 22324,
+    "empty": 13
+   },
+   "populated_pct": 99.94
+  },
+  {
+   "name": "bdmdt",
+   "observed_kinds": {
+    "null": 22055,
+    "str:date[ISO8601Z]": 282
+   },
+   "populated_pct": 1.26
+  },
+  {
+   "name": "chronical_docm_id",
+   "observed_kinds": {
+    "str": 22334,
+    "null": 3
+   },
+   "populated_pct": 99.99
+  },
+  {
+   "name": "closedt",
+   "observed_kinds": {
+    "null": 22084,
+    "str:date[ISO8601Z]": 253
+   },
+   "populated_pct": 1.13
+  },
+  {
+   "name": "colti",
+   "observed_kinds": {
+    "null": 22219,
+    "str": 118
+   },
+   "populated_pct": 0.53
+  },
+  {
+   "name": "count",
+   "observed_kinds": {
+    "str": 22318,
+    "null": 19
+   },
+   "populated_pct": 99.91
+  },
+  {
+   "name": "datestored",
+   "observed_kinds": {
+    "str:date[ISO8601Z]": 22337
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "disclosure_date",
+   "observed_kinds": {
+    "str:date[ISO8601Z]": 22287,
+    "null": 50
+   },
+   "populated_pct": 99.78
+  },
+  {
+   "name": "disclosure_type",
+   "observed_kinds": {
+    "null": 22313,
+    "str": 24
+   },
+   "populated_pct": 0.11
+  },
+  {
+   "name": "disclstat",
+   "observed_kinds": {
+    "str": 21878,
+    "null": 459
+   },
+   "populated_pct": 97.95
+  },
+  {
+   "name": "display_title",
+   "observed_kinds": {
+    "str": 22335,
+    "str:multiline": 2
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "docdt",
+   "observed_kinds": {
+    "str:date[ISO8601Z]": 22335,
+    "str": 2
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "docna",
+   "observed_kinds": {
+    "object": 22337
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "docty",
+   "observed_kinds": {
+    "str": 22300,
+    "null": 37
+   },
+   "populated_pct": 99.83
+  },
+  {
+   "name": "dois",
+   "observed_kinds": {
+    "null": 22332,
+    "str": 5
+   },
+   "populated_pct": 0.02
+  },
+  {
+   "name": "entityids",
+   "observed_kinds": {
+    "null": 12025,
+    "object": 10312
+   },
+   "populated_pct": 46.17
+  },
+  {
+   "name": "fullavailablein",
+   "observed_kinds": {
+    "list": 22337
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "geo_regions",
+   "observed_kinds": {
+    "null": 20840,
+    "object": 1497
+   },
+   "populated_pct": 6.7
+  },
+  {
+   "name": "guid",
+   "observed_kinds": {
+    "str:int": 22337
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "historic_topic",
+   "observed_kinds": {
+    "null": 14764,
+    "str": 7573
+   },
+   "populated_pct": 33.9
+  },
+  {
+   "name": "id",
+   "observed_kinds": {
+    "str:int": 22337
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "isbn",
+   "observed_kinds": {
+    "null": 22334,
+    "str": 3
+   },
+   "populated_pct": 0.01
+  },
+  {
+   "name": "keywd",
+   "observed_kinds": {
+    "null": 12887,
+    "object": 9450
+   },
+   "populated_pct": 42.31
+  },
+  {
+   "name": "lang",
+   "observed_kinds": {
+    "str": 22324,
+    "null": 13
+   },
+   "populated_pct": 99.94
+  },
+  {
+   "name": "last_modified_date",
+   "observed_kinds": {
+    "null": 16454,
+    "str:date[ISO8601Z]": 5883
+   },
+   "populated_pct": 26.34
+  },
+  {
+   "name": "lndinstr",
+   "observed_kinds": {
+    "object": 22337
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "lndinstr_exact",
+   "observed_kinds": {
+    "str": 22337
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "majdocty",
+   "observed_kinds": {
+    "str": 22220,
+    "null": 117
+   },
+   "populated_pct": 99.48
+  },
+  {
+   "name": "majtheme",
+   "observed_kinds": {
+    "str": 21450,
+    "null": 887
+   },
+   "populated_pct": 96.03
+  },
+  {
+   "name": "ml_abstracts",
+   "observed_kinds": {
+    "null": 22312,
+    "str": 25
+   },
+   "populated_pct": 0.11
+  },
+  {
+   "name": "origu",
+   "observed_kinds": {
+    "str": 15821,
+    "null": 6464,
+    "sentinel": 52
+   },
+   "populated_pct": 70.83
+  },
+  {
+   "name": "owner",
+   "observed_kinds": {
+    "null": 13141,
+    "str": 9038,
+    "sentinel": 158
+   },
+   "populated_pct": 40.46
+  },
+  {
+   "name": "pdfurl",
+   "observed_kinds": {
+    "str": 22235,
+    "null": 102
+   },
+   "populated_pct": 99.54
+  },
+  {
+   "name": "prdln",
+   "observed_kinds": {
+    "str": 22337
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "prdln_exact",
+   "observed_kinds": {
+    "str": 22337
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "projectid",
+   "observed_kinds": {
+    "str": 22337
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "projn",
+   "observed_kinds": {
+    "str": 22337
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "repnb",
+   "observed_kinds": {
+    "str": 17150,
+    "null": 4501,
+    "str:int": 686
+   },
+   "populated_pct": 79.85
+  },
+  {
+   "name": "repnme",
+   "observed_kinds": {
+    "null": 13217,
+    "object": 9120
+   },
+   "populated_pct": 40.83
+  },
+  {
+   "name": "seccl",
+   "observed_kinds": {
+    "str": 22337
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "sectr",
+   "observed_kinds": {
+    "object": 22337
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "subsc",
+   "observed_kinds": {
+    "str": 22337
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "subtopic",
+   "observed_kinds": {
+    "null": 12916,
+    "str": 9421
+   },
+   "populated_pct": 42.18
+  },
+  {
+   "name": "teratopic",
+   "observed_kinds": {
+    "null": 14764,
+    "str": 7573
+   },
+   "populated_pct": 33.9
+  },
+  {
+   "name": "theme",
+   "observed_kinds": {
+    "str": 22337
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "totvolnb",
+   "observed_kinds": {
+    "null": 13218,
+    "str:int": 9118,
+    "str": 1
+   },
+   "populated_pct": 40.82
+  },
+  {
+   "name": "trustfund",
+   "observed_kinds": {
+    "null": 17530,
+    "str": 4807
+   },
+   "populated_pct": 21.52
+  },
+  {
+   "name": "txturl",
+   "observed_kinds": {
+    "str": 22235,
+    "null": 102
+   },
+   "populated_pct": 99.54
+  },
+  {
+   "name": "unregnbr",
+   "observed_kinds": {
+    "null": 22325,
+    "str": 9,
+    "str:int": 3
+   },
+   "populated_pct": 0.05
+  },
+  {
+   "name": "url",
+   "observed_kinds": {
+    "str": 22337
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "versiontyp",
+   "observed_kinds": {
+    "str": 13650,
+    "null": 8686,
+    "str:int": 1
+   },
+   "populated_pct": 61.11
+  },
+  {
+   "name": "virt_coll",
+   "observed_kinds": {
+    "null": 22335,
+    "str": 2
+   },
+   "populated_pct": 0.01
+  },
+  {
+   "name": "volnb",
+   "observed_kinds": {
+    "null": 12238,
+    "str:int": 10099
+   },
+   "populated_pct": 45.21
+  }
+ ]
+}

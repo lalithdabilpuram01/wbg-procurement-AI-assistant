@@ -1,0 +1,223 @@
+{
+ "question": "How has the IDA financing for the Ethiopia Expressway Development Support Project changed between appraisal and the latest ISR?",
+ "status": "insufficient_evidence",
+ "answer": "The indexed documents and typed records do not contain enough evidence to answer this question.",
+ "citations": [],
+ "supporting_evidence_ids": [],
+ "conflicts": [],
+ "limitations": [
+  "Removed unsupported claim: The IDA financing for the Ethiopia Expressway Development Support Project changed from 100.00% to 96.99% between appraisal and the latest ISR.",
+  "No generated claim could be verified against the cited evidence."
+ ],
+ "claims": [],
+ "removed_claims": [
+  {
+   "text": "The IDA financing for the Ethiopia Expressway Development Support Project changed from 100.00% to 96.99% between appraisal and the latest ISR.",
+   "evidence_ids": [
+    "E1",
+    "E3",
+    "E4",
+    "E5",
+    "E6",
+    "E7",
+    "E8"
+   ],
+   "supported": false,
+   "checks": {
+    "ids_valid": true,
+    "unsupported_numbers": [
+     96.99,
+     100.0
+    ],
+    "unsupported_dates": [],
+    "unsupported_refs": [],
+    "unsupported_quotes": [],
+    "privacy_violation": false,
+    "content_word_recall": 0.583,
+    "nli_entailment": 0.276,
+    "too_short": false,
+    "evidence_dump": false,
+    "supported": false
+   }
+  },
+  {
+   "text": "The IDA financing for the Ethiopia Expressway Development Support Project changed from 100.00% to 96.99% between appraisal and the latest ISR.",
+   "evidence_ids": [
+    "E3",
+    "E4",
+    "E5",
+    "E6",
+    "E7",
+    "E8"
+   ],
+   "supported": false,
+   "checks": {
+    "ids_valid": true,
+    "unsupported_numbers": [
+     96.99,
+     100.0
+    ],
+    "unsupported_dates": [],
+    "unsupported_refs": [],
+    "unsupported_quotes": [],
+    "privacy_violation": false,
+    "content_word_recall": 0.583,
+    "nli_entailment": 0.276,
+    "too_short": false,
+    "evidence_dump": false,
+    "supported": false
+   }
+  },
+  {
+   "text": "The IDA financing for the Ethiopia Expressway Development Support Project changed from 100.00% to 96.99% between appraisal and the latest ISR.",
+   "evidence_ids": [
+    "E1",
+    "E3",
+    "E4",
+    "E5",
+    "E6",
+    "E7",
+    "E8"
+   ],
+   "supported": false,
+   "checks": {
+    "ids_valid": true,
+    "unsupported_numbers": [
+     96.99,
+     100.0
+    ],
+    "unsupported_dates": [],
+    "unsupported_refs": [],
+    "unsupported_quotes": [],
+    "privacy_violation": false,
+    "content_word_recall": 0.583,
+    "nli_entailment": 0.276,
+    "too_short": false,
+    "evidence_dump": false,
+    "supported": false
+   }
+  }
+ ],
+ "generator": "ollama:llama3.2:1b",
+ "generator_is_llm": true,
+ "timings_ms": {
+  "retrieval_and_selection": 667,
+  "generation": 7524,
+  "validation": 4777,
+  "total": 12968
+ },
+ "trace": {
+  "plan": {
+   "question": "How has the IDA financing for the Ethiopia Expressway Development Support Project changed between appraisal and the latest ISR?",
+   "comparison": true,
+   "doc_type_hints": [
+    "PAD",
+    "ISR"
+   ],
+   "required_fields": {}
+  },
+  "retrieval_status": "ok",
+  "retrieved_unit_ids": [
+   "40089196:C:0000",
+   "24440102:t00801:w1-2",
+   "40089196:t00402:w6-7",
+   "40089196:C:0003",
+   "24440102:t02201:w1-2",
+   "24440102:t00801:w2-5",
+   "40089196:C:0002",
+   "24440102:C:0036",
+   "34455066:t01101:w1-2",
+   "24440102:C:0045",
+   "24440102:t04401:w19-21",
+   "40025990:t00501:w12-13",
+   "24440102:t00701:w4-6",
+   "24440102:t00801:w9-11",
+   "24440102:C:0000",
+   "24440102:C:0032",
+   "40089196:t00601:w1-2",
+   "24440102:C:0040",
+   "40089196:t00401:w4-6",
+   "40089196:C:0007"
+  ],
+  "targeted": {
+   "PAD": [
+    "24440102:t00801:w1-2",
+    "24440102:C:0036",
+    "24440102:t02201:w1-2"
+   ],
+   "ISR": [
+    "40089196:C:0000",
+    "40089196:C:0013",
+    "40089196:C:0002"
+   ]
+  },
+  "selected": [
+   [
+    "E1",
+    "40089196:C:0000",
+    "40089196",
+    "verified",
+    false
+   ],
+   [
+    "E2",
+    "40089196:C:0013",
+    "40089196",
+    "verified",
+    false
+   ],
+   [
+    "E3",
+    "24440102:t00801:w1-2",
+    "24440102",
+    "verified",
+    false
+   ],
+   [
+    "E4",
+    "40089196:t00402:w6-7",
+    "40089196",
+    "verified",
+    false
+   ],
+   [
+    "E5",
+    "24440102:t02201:w1-2",
+    "24440102",
+    "verified_with_text_exception",
+    false
+   ],
+   [
+    "E6",
+    "24440102:C:0036",
+    "24440102",
+    "not_checkable",
+    false
+   ],
+   [
+    "E7",
+    "34455066:t01101:w1-2",
+    "34455066",
+    "verified",
+    false
+   ],
+   [
+    "E8",
+    "40025990:t00501:w12-13",
+    "40025990",
+    "verified",
+    false
+   ]
+  ],
+  "projects_in_top10": [
+   "P148850",
+   "P163452"
+  ],
+  "generator_meta": {
+   "attempts": 1,
+   "latency_ms": 7521,
+   "prompt_tokens": 1440,
+   "output_tokens": 321
+  }
+ }
+}

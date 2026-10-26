@@ -1,0 +1,272 @@
+{
+ "row_count": 5832,
+ "columns": {
+  "country_id": {
+   "observed_kinds": {
+    "str": 5562,
+    "empty": 243,
+    "sentinel": 27
+   },
+   "null_pct": 0.0,
+   "empty_pct": 4.17,
+   "sentinel_pct": 0.46,
+   "populated_pct": 95.37,
+   "distinct": 207,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "AF",
+     27
+    ],
+    [
+     "AL",
+     27
+    ],
+    [
+     "DZ",
+     27
+    ],
+    [
+     "AS",
+     27
+    ],
+    [
+     "AD",
+     27
+    ],
+    [
+     "AO",
+     27
+    ],
+    [
+     "AG",
+     27
+    ],
+    [
+     "AR",
+     27
+    ]
+   ],
+   "max_len": 2
+  },
+  "country_name": {
+   "observed_kinds": {
+    "str": 5832
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 216,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Anguilla",
+     27
+    ],
+    [
+     "Cook Islands",
+     27
+    ],
+    [
+     "French Guiana",
+     27
+    ],
+    [
+     "Jersey",
+     27
+    ],
+    [
+     "Martinique",
+     27
+    ],
+    [
+     "Niue",
+     27
+    ],
+    [
+     "Reunion",
+     27
+    ],
+    [
+     "Afghanistan",
+     27
+    ]
+   ],
+   "max_len": 30
+  },
+  "countryiso3code": {
+   "observed_kinds": {
+    "str": 5589,
+    "empty": 243
+   },
+   "null_pct": 0.0,
+   "empty_pct": 4.17,
+   "sentinel_pct": 0.0,
+   "populated_pct": 95.83,
+   "distinct": 207,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "AFG",
+     27
+    ],
+    [
+     "ALB",
+     27
+    ],
+    [
+     "DZA",
+     27
+    ],
+    [
+     "ASM",
+     27
+    ],
+    [
+     "AND",
+     27
+    ],
+    [
+     "AGO",
+     27
+    ],
+    [
+     "ATG",
+     27
+    ],
+    [
+     "ARG",
+     27
+    ]
+   ],
+   "max_len": 3
+  },
+  "date": {
+   "observed_kinds": {
+    "str:int": 5832
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 27,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2025",
+     216
+    ],
+    [
+     "2024",
+     216
+    ],
+    [
+     "2023",
+     216
+    ],
+    [
+     "2022",
+     216
+    ],
+    [
+     "2021",
+     216
+    ],
+    [
+     "2020",
+     216
+    ],
+    [
+     "2019",
+     216
+    ],
+    [
+     "2018",
+     216
+    ]
+   ],
+   "max_len": 4
+  },
+  "indicator": {
+   "observed_kinds": {
+    "str": 5832
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 1,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "GOV_WGI_CC.EST",
+     5832
+    ]
+   ],
+   "max_len": 14
+  },
+  "obs_status": {
+   "observed_kinds": {
+    "empty": 5832
+   },
+   "null_pct": 0.0,
+   "empty_pct": 100.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 0.0,
+   "distinct": 0,
+   "distinct_capped": false,
+   "top_values": [],
+   "max_len": null
+  },
+  "value": {
+   "observed_kinds": {
+    "float": 5588,
+    "null": 244
+   },
+   "null_pct": 4.18,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 95.82,
+   "distinct": 5335,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "1.3280539",
+     8
+    ],
+    [
+     "1.1798258",
+     7
+    ],
+    [
+     "1.175974",
+     7
+    ],
+    [
+     "1.1745578",
+     7
+    ],
+    [
+     "1.1726624",
+     7
+    ],
+    [
+     "1.1695013",
+     7
+    ],
+    [
+     "1.3362247",
+     7
+    ],
+    [
+     "1.1795348",
+     6
+    ]
+   ],
+   "max_len": 10
+  }
+ },
+ "dataset": "indicator_GOV_WGI_CC.EST",
+ "source": "Indicators API"
+}

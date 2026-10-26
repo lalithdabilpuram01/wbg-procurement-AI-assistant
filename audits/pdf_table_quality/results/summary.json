@@ -1,0 +1,126 @@
+{
+ "tables_detected": 220,
+ "tables_audited_automated": 220,
+ "tables_manually_verified": 12,
+ "rows_examined": 3347,
+ "by_doc_type": {
+  "ICR": 93,
+  "ICRR": 3,
+  "ISR": 10,
+  "PAD": 79,
+  "PP": 35
+ },
+ "by_category": {
+  "icr_annex": 53,
+  "icr_body": 34,
+  "icrr_table": 3,
+  "isr_other": 5,
+  "isr_results_indicators": 5,
+  "pad_financial": 33,
+  "pad_other": 33,
+  "procurement_plan_other": 9,
+  "procurement_plan_step": 26,
+  "staff": 19
+ },
+ "classification": {
+  "unusable_for_structured_queries": 136,
+  "needs_review": 81,
+  "verified": 3
+ },
+ "classification_by_category": {
+  "icr_annex": {
+   "unusable_for_structured_queries": 42,
+   "needs_review": 11
+  },
+  "icr_body": {
+   "needs_review": 9,
+   "unusable_for_structured_queries": 24,
+   "verified": 1
+  },
+  "icrr_table": {
+   "needs_review": 2,
+   "unusable_for_structured_queries": 1
+  },
+  "isr_other": {
+   "needs_review": 3,
+   "unusable_for_structured_queries": 2
+  },
+  "isr_results_indicators": {
+   "needs_review": 1,
+   "unusable_for_structured_queries": 4
+  },
+  "pad_financial": {
+   "unusable_for_structured_queries": 18,
+   "needs_review": 15
+  },
+  "pad_other": {
+   "unusable_for_structured_queries": 21,
+   "needs_review": 11,
+   "verified": 1
+  },
+  "procurement_plan_other": {
+   "needs_review": 4,
+   "unusable_for_structured_queries": 5
+  },
+  "procurement_plan_step": {
+   "needs_review": 25,
+   "verified": 1
+  },
+  "staff": {
+   "unusable_for_structured_queries": 19
+  }
+ },
+ "tables_with_all_columns_labelled": 57,
+ "tables_with_majority_unlabelled": 124,
+ "continuation_tables": 57,
+ "continuation_findings": {
+  "continuation_split_row": 2
+ },
+ "quantity_tokens": 3580,
+ "tokens_exact": 3554,
+ "tokens_wrap_joined": 11,
+ "tokens_line_merge": 15,
+ "tokens_not_in_source": 0,
+ "findings_by_check": {
+  "column_labels/high": 124,
+  "empty_columns/low": 124,
+  "units/medium": 94,
+  "column_labels/medium": 39,
+  "duplicate_rows/medium": 38,
+  "totals/low": 25,
+  "merged_cells/medium": 23,
+  "blank_vs_zero/low": 9,
+  "numeric_line_merge/high": 4,
+  "footnotes/low": 2,
+  "continuation_split_row/high": 2,
+  "packed_cells/high": 1,
+  "reversed_header_text/high": 1
+ },
+ "missed_table_candidate_pages": 19,
+ "plan_activities": {
+  "activities": 236,
+  "amounts_checked": 367,
+  "amounts_found_in_source_row": 367,
+  "amounts_not_found": [],
+  "amounts_not_found_count": 0,
+  "stage_dates_checked": 1547,
+  "stage_dates_found_in_source_row": 1547,
+  "stage_dates_not_found": [],
+  "plan_versions_per_document": {
+   "40009757": [
+    "P175325:PDEC:2025-04-29"
+   ],
+   "33761744": [
+    "P132833:MIHAPCLG:2022-03-18"
+   ],
+   "40025990": [
+    "P148850:ERA:2025-06-27"
+   ]
+  },
+  "value_flags": {
+   "extractor_disagreement": 8,
+   "text_before_reference_in_cell": 7
+  },
+  "activities_with_both_amounts_missing": 2
+ }
+}

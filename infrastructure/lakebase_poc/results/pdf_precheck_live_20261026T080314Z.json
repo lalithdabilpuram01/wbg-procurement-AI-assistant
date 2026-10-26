@@ -1,0 +1,21 @@
+{
+ "endpoint_setting": "projects/wbg-procurement-dev/branches/production/endpoints/primary",
+ "endpoint_is_approved": true,
+ "host_belongs_to_endpoint": true,
+ "database": "databricks_postgres",
+ "database_is_approved": true,
+ "server_version": "18.6 (fd34222)",
+ "vector_extension": "0.8.6",
+ "lakebase_vector_extension": null,
+ "schemas": [
+  "__db_system",
+  "public",
+  "wbg_rag_poc"
+ ],
+ "target": {
+  "schema_exists": false,
+  "relations": {},
+  "unexpected_relations": []
+ },
+ "target_clean": true
+}

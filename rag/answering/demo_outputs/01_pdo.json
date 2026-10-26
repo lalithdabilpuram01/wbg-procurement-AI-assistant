@@ -1,0 +1,92 @@
+{
+ "question": "What is the project development objective of the Ethiopia Expressway Development Support Project (P148850)?",
+ "status": "insufficient_evidence",
+ "answer": "The indexed documents and typed records do not contain enough evidence to answer this question.",
+ "citations": [],
+ "supporting_evidence_ids": [],
+ "conflicts": [],
+ "limitations": [
+  "Generation failed to return valid structured output; no answer is shown."
+ ],
+ "claims": [],
+ "removed_claims": [],
+ "generator": "ollama:llama3.2:1b",
+ "generator_is_llm": true,
+ "timings_ms": {
+  "retrieval": 1886,
+  "generation": 30477
+ },
+ "trace": {
+  "plan": {
+   "question": "What is the project development objective of the Ethiopia Expressway Development Support Project (P148850)?",
+   "comparison": false,
+   "doc_type_hints": [],
+   "required_fields": {}
+  },
+  "retrieval_status": "ok",
+  "retrieved_unit_ids": [
+   "24440102:t03701:w6-8",
+   "24440102:t00901:w14-16",
+   "24440102:t04501:w4-6",
+   "24440102:t04201:w27-29",
+   "24440102:C:0018",
+   "24440102:t04201:w33-35",
+   "24440102:t04301:w18-20",
+   "24440102:t04201:w29-31",
+   "24440102:t04401:w21-23",
+   "24440102:t03801:w1-2",
+   "24440102:t04401:w29-31",
+   "24440102:t04001:w39-40",
+   "24440102:t04401:w33-35",
+   "24440102:C:0023",
+   "24440102:t04101:w17-18",
+   "24440102:t04501:w22-24",
+   "24440102:t04201:w1-2",
+   "24440102:t04401:w23-25",
+   "40089196:C:0002",
+   "24440102:t04601:w18-20"
+  ],
+  "targeted": {},
+  "selected": [
+   [
+    "E1",
+    "24440102:t03701:w6-8",
+    "24440102",
+    "verified",
+    false
+   ],
+   [
+    "E2",
+    "24440102:t00901:w14-16",
+    "24440102",
+    "verified",
+    false
+   ],
+   [
+    "E3",
+    "24440102:t04501:w4-6",
+    "24440102",
+    "verified",
+    false
+   ],
+   [
+    "E4",
+    "40089196:C:0002",
+    "40089196",
+    "verified",
+    false
+   ]
+  ],
+  "projects_in_top10": [
+   "P148850"
+  ],
+  "generator_meta": {
+   "attempts": 2,
+   "latency_ms": 17244,
+   "prompt_tokens": 730,
+   "output_tokens": 700,
+   "parse_error": "1 validation error for DraftAnswer\n  Invalid JSON: EOF while parsing a string at line 1 column 3139 [type=json_invalid, input_value='{\"status\":\"conflicting_e...\",\"E3\",\"E4\",\"E2\",\"E2\",\"', input_type=str",
+   "generation_failed": true
+  }
+ }
+}

@@ -1,0 +1,9 @@
+{
+ "query": "What is the phone number and e-mail of the task team leader for P148850?",
+ "status": "withheld_personal_data",
+ "notes": [
+  "Personal contact data is masked in the sanitised corpus and is not returned."
+ ],
+ "results": [],
+ "latency_ms": 0.0
+}

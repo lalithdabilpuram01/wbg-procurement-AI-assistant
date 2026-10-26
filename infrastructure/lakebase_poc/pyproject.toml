@@ -1,0 +1,20 @@
+[project]
+name = "lakebase-poc"
+version = "0.1.0"
+requires-python = "==3.12.*"
+dependencies = [
+    "numpy>=2.5.4",
+    "pgvector>=0.5.1",
+    "psycopg[binary]>=3.3.6",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
+
+[tool.pytest.ini_options]
+# Offline tests only by default. Live Lakebase tests (tests_live/) run only when selected explicitly AND
+# LAKEBASE_LIVE_TESTS=1 is set for that invocation.
+testpaths = ["tests"]
+pythonpath = ["."]

@@ -1,0 +1,83 @@
+{
+ "identity": {
+  "project_approved": true,
+  "in_approved_document_manifest": true,
+  "corpus_manifest_sha256": true,
+  "local_pdf_sha256": true,
+  "processed_version_sha256": true,
+  "processed_manifest_sha256": true,
+  "document_version_id": true,
+  "project_matches": true,
+  "no_validation_errors": true
+ },
+ "record_counts": {
+  "documents": 1,
+  "pages": 8,
+  "sections": 17,
+  "parent_chunks": 10,
+  "retrieval_units": 39,
+  "unit_embeddings": 39,
+  "citations": 39,
+  "table_schemas": 1,
+  "pdf_tables": 5,
+  "pdf_table_rows": 42,
+  "pdf_table_values": 110
+ },
+ "record_counts_as_approved": true,
+ "total": 311,
+ "vectors_768_finite_unit_unique": {
+  "count": 39,
+  "dimensions": 768,
+  "all_finite": true,
+  "unit_norm": true,
+  "unique_vectors": true,
+  "aligned_with_units": true
+ },
+ "units_text_hash_matches": true,
+ "embedding_sha256_matches_vectors": true,
+ "cache_key": "d1afdad97857d7e4",
+ "cache_file": "emb_C_2396_d1afdad97857d7e4.npy",
+ "cache_key_matches_file": true,
+ "strategy": "C",
+ "model": "Alibaba-NLP/gte-base-en-v1.5",
+ "preprocessing": {
+  "input": "indexed_text",
+  "normalize_embeddings": true,
+  "batch_size": 16,
+  "library": "sentence-transformers",
+  "trust_remote_code": true
+ },
+ "projects": [
+  "P148850"
+ ],
+ "single_document_version": true,
+ "files_opened_under_processed": [
+  "pilot_v2/run_manifest.json",
+  "pilot_v2/shared/document_versions.jsonl",
+  "pilot_v2/shared/documents.jsonl",
+  "pilot_v2/shared/evidence_links.jsonl",
+  "pilot_v2/shared/pages.jsonl",
+  "pilot_v2/shared/plan_activities.jsonl",
+  "pilot_v2/shared/plan_versions.jsonl",
+  "pilot_v2/shared/projects.jsonl",
+  "pilot_v2/shared/sections.jsonl",
+  "pilot_v2/shared/table_descriptions.jsonl",
+  "pilot_v2/shared/table_rows.jsonl",
+  "pilot_v2/shared/tables.jsonl",
+  "pilot_v2/strategies/C/chunks.jsonl",
+  "pilot_v2/strategies/C/parents.jsonl"
+ ],
+ "restricted_opened": [],
+ "residual_personal_data": {
+  "email": 0,
+  "phone": 0,
+  "mask_placeholders": 0
+ },
+ "needs_review_rows": [
+  "40089196:t00301#12"
+ ],
+ "table_schema_status": [
+  "draft"
+ ],
+ "all_passed": true
+}

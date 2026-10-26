@@ -1,0 +1,156 @@
+[
+ {
+  "unit_id": "OP00183772",
+  "inputs": {
+   "procurement_method": "Consultant Qualification Selection",
+   "procurement_category": "Consultant Services",
+   "region_name": "Latin America and Caribbean",
+   "country_grp": "JM",
+   "sector": "Industry, Trade and Services",
+   "deadline_status": "positive_window",
+   "window_days": 8.0,
+   "has_positive_window": 1.0,
+   "project_age_days": 2903.0,
+   "income_ordinal": 3.0
+  },
+  "model": "m3_l2_logistic_sim_v1_S2",
+  "scenario": "S2 (primary simulation)",
+  "simulated_probability_pct": 6.6,
+  "main_simulated_factors": [],
+  "disclaimer": "SYNTHETIC OUTCOMES \u2014 NOT VALIDATED WORLD BANK RISK ACCURACY",
+  "note": "Simulated drivers from an assumed data-generating process; not World Bank risk factors.",
+  "risk_band": "Low",
+  "risk_band_note": "Relative rank within the simulated model population (High = top 10% of refit scores); not a validated absolute risk. Simulated \u2014 Demonstration Only."
+ },
+ {
+  "unit_id": "OP00186231",
+  "inputs": {
+   "procurement_method": "Request for Bids",
+   "procurement_category": "Goods",
+   "region_name": "Western and Central Africa",
+   "country_grp": "NG",
+   "sector": "Social Protection",
+   "deadline_status": "positive_window",
+   "window_days": 40.0,
+   "has_positive_window": 1.0,
+   "project_age_days": 569.0,
+   "income_ordinal": 2.0
+  },
+  "model": "m3_l2_logistic_sim_v1_S2",
+  "scenario": "S2 (primary simulation)",
+  "simulated_probability_pct": 5.8,
+  "main_simulated_factors": [
+   {
+    "feature": "procurement_method",
+    "label": "Procurement method",
+    "log_odds_contribution": 0.479
+   },
+   {
+    "feature": "project_age_days",
+    "label": "Project age at publication",
+    "log_odds_contribution": 0.017
+   }
+  ],
+  "disclaimer": "SYNTHETIC OUTCOMES \u2014 NOT VALIDATED WORLD BANK RISK ACCURACY",
+  "note": "Simulated drivers from an assumed data-generating process; not World Bank risk factors.",
+  "risk_band": "Low",
+  "risk_band_note": "Relative rank within the simulated model population (High = top 10% of refit scores); not a validated absolute risk. Simulated \u2014 Demonstration Only."
+ },
+ {
+  "unit_id": "OP00186239",
+  "inputs": {
+   "procurement_method": "Request for Bids",
+   "procurement_category": "Goods",
+   "region_name": "Europe and Central Asia",
+   "country_grp": "GE",
+   "sector": "Social Protection",
+   "deadline_status": "positive_window",
+   "window_days": 21.0,
+   "has_positive_window": 1.0,
+   "project_age_days": 797.0,
+   "income_ordinal": 3.0
+  },
+  "model": "m3_l2_logistic_sim_v1_S2",
+  "scenario": "S2 (primary simulation)",
+  "simulated_probability_pct": 5.9,
+  "main_simulated_factors": [
+   {
+    "feature": "procurement_method",
+    "label": "Procurement method",
+    "log_odds_contribution": 0.479
+   },
+   {
+    "feature": "project_age_days",
+    "label": "Project age at publication",
+    "log_odds_contribution": 0.01
+   }
+  ],
+  "disclaimer": "SYNTHETIC OUTCOMES \u2014 NOT VALIDATED WORLD BANK RISK ACCURACY",
+  "note": "Simulated drivers from an assumed data-generating process; not World Bank risk factors.",
+  "risk_band": "Low",
+  "risk_band_note": "Relative rank within the simulated model population (High = top 10% of refit scores); not a validated absolute risk. Simulated \u2014 Demonstration Only."
+ },
+ {
+  "unit_id": "OP00186258",
+  "inputs": {
+   "procurement_method": "Consultant Qualification Selection",
+   "procurement_category": "Consultant Services",
+   "region_name": "Western and Central Africa",
+   "country_grp": "GN",
+   "sector": "Education",
+   "deadline_status": "positive_window",
+   "window_days": 14.0,
+   "has_positive_window": 1.0,
+   "project_age_days": 1093.0,
+   "income_ordinal": 1.0
+  },
+  "model": "m3_l2_logistic_sim_v1_S2",
+  "scenario": "S2 (primary simulation)",
+  "simulated_probability_pct": 5.8,
+  "main_simulated_factors": [
+   {
+    "feature": "income_ordinal",
+    "label": "Country income group",
+    "log_odds_contribution": 0.245
+   },
+   {
+    "feature": "project_age_days",
+    "label": "Project age at publication",
+    "log_odds_contribution": 0.001
+   }
+  ],
+  "disclaimer": "SYNTHETIC OUTCOMES \u2014 NOT VALIDATED WORLD BANK RISK ACCURACY",
+  "note": "Simulated drivers from an assumed data-generating process; not World Bank risk factors.",
+  "risk_band": "Low",
+  "risk_band_note": "Relative rank within the simulated model population (High = top 10% of refit scores); not a validated absolute risk. Simulated \u2014 Demonstration Only."
+ },
+ {
+  "unit_id": "OP00186260",
+  "inputs": {
+   "procurement_method": "Consultant Qualification Selection",
+   "procurement_category": "Consultant Services",
+   "region_name": "Western and Central Africa",
+   "country_grp": "BJ",
+   "sector": "Agriculture, Fishing and Forestry",
+   "deadline_status": "positive_window",
+   "window_days": 15.0,
+   "has_positive_window": 1.0,
+   "project_age_days": 1133.0,
+   "income_ordinal": 2.0
+  },
+  "model": "m3_l2_logistic_sim_v1_S2",
+  "scenario": "S2 (primary simulation)",
+  "simulated_probability_pct": 4.1,
+  "main_simulated_factors": [
+   {
+    "feature": "project_age_days",
+    "label": "Project age at publication",
+    "log_odds_contribution": 0.0
+   }
+  ],
+  "disclaimer": "SYNTHETIC OUTCOMES \u2014 NOT VALIDATED WORLD BANK RISK ACCURACY",
+  "note": "Simulated drivers from an assumed data-generating process; not World Bank risk factors.",
+  "risk_band": "Low",
+  "risk_band_note": "Relative rank within the simulated model population (High = top 10% of refit scores); not a validated absolute risk. Simulated \u2014 Demonstration Only."
+ }
+]

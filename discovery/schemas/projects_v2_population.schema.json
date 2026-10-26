@@ -1,0 +1,424 @@
+{
+ "dataset": "projects_v2_population",
+ "source": "search API v2 projects (selected fields; frozen index)",
+ "rows_profiled": 22729,
+ "columns": [
+  {
+   "name": "approvalfy",
+   "observed_kinds": {
+    "str:int": 15722,
+    "null": 7007
+   },
+   "populated_pct": 69.17
+  },
+  {
+   "name": "boardapprovaldate",
+   "observed_kinds": {
+    "str:date[ISO8601Z]": 15722,
+    "null": 7007
+   },
+   "populated_pct": 69.17
+  },
+  {
+   "name": "borrower",
+   "observed_kinds": {
+    "null": 16810,
+    "str": 5919
+   },
+   "populated_pct": 26.04
+  },
+  {
+   "name": "cancellations",
+   "observed_kinds": {
+    "null": 16628,
+    "list": 6101
+   },
+   "populated_pct": 26.84
+  },
+  {
+   "name": "ccsa_practice_name",
+   "observed_kinds": {
+    "null": 19722,
+    "list": 3007
+   },
+   "populated_pct": 13.23
+  },
+  {
+   "name": "closingdate",
+   "observed_kinds": {
+    "str:date[M/D/YYYY h:mm:ss AM]": 15475,
+    "null": 7254
+   },
+   "populated_pct": 68.08
+  },
+  {
+   "name": "cons_serv_reqd_ind",
+   "observed_kinds": {
+    "null": 21168,
+    "str": 1561
+   },
+   "populated_pct": 6.87
+  },
+  {
+   "name": "countrycode",
+   "observed_kinds": {
+    "list": 19876,
+    "null": 2853
+   },
+   "populated_pct": 87.45
+  },
+  {
+   "name": "countryname",
+   "observed_kinds": {
+    "list": 19876,
+    "null": 2853
+   },
+   "populated_pct": 87.45
+  },
+  {
+   "name": "countryshortname",
+   "observed_kinds": {
+    "str": 19876,
+    "null": 2853
+   },
+   "populated_pct": 87.45
+  },
+  {
+   "name": "curr_ibrd_commitment",
+   "observed_kinds": {
+    "str:int": 17952,
+    "null": 2849,
+    "str:decimal": 1928
+   },
+   "populated_pct": 87.47
+  },
+  {
+   "name": "curr_ida_commitment",
+   "observed_kinds": {
+    "str:int": 17538,
+    "null": 2849,
+    "str:decimal": 2342
+   },
+   "populated_pct": 87.47
+  },
+  {
+   "name": "curr_total_commitment",
+   "observed_kinds": {
+    "str:int": 13058,
+    "str:decimal": 6822,
+    "null": 2849
+   },
+   "populated_pct": 87.47
+  },
+  {
+   "name": "envassesmentcategorycode",
+   "observed_kinds": {
+    "str": 11457,
+    "null": 11272
+   },
+   "populated_pct": 50.41
+  },
+  {
+   "name": "esrc_ovrl_risk_rate",
+   "observed_kinds": {
+    "null": 20898,
+    "str": 1831
+   },
+   "populated_pct": 8.06
+  },
+  {
+   "name": "grantamt",
+   "observed_kinds": {
+    "null": 20513,
+    "str:thousands-separated-number": 1970,
+    "str:int": 246
+   },
+   "populated_pct": 9.75
+  },
+  {
+   "name": "ibrdcommamt",
+   "observed_kinds": {
+    "str:int": 12002,
+    "str:thousands-separated-number": 7878,
+    "null": 2849
+   },
+   "populated_pct": 87.47
+  },
+  {
+   "name": "id",
+   "observed_kinds": {
+    "str": 22729
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "idacommamt",
+   "observed_kinds": {
+    "str:int": 11136,
+    "str:thousands-separated-number": 8744,
+    "null": 2849
+   },
+   "populated_pct": 87.47
+  },
+  {
+   "name": "impagency",
+   "observed_kinds": {
+    "null": 16617,
+    "str": 6112
+   },
+   "populated_pct": 26.89
+  },
+  {
+   "name": "last_stage_reached_name",
+   "observed_kinds": {
+    "str": 13247,
+    "null": 9482
+   },
+   "populated_pct": 58.28
+  },
+  {
+   "name": "lendinginstr",
+   "observed_kinds": {
+    "str": 19681,
+    "null": 3048
+   },
+   "populated_pct": 86.59
+  },
+  {
+   "name": "lendinginstrcode",
+   "observed_kinds": {
+    "str": 19681,
+    "null": 3048
+   },
+   "populated_pct": 86.59
+  },
+  {
+   "name": "lendinginstrtype",
+   "observed_kinds": {
+    "str": 19681,
+    "null": 3048
+   },
+   "populated_pct": 86.59
+  },
+  {
+   "name": "lendprojectcost",
+   "observed_kinds": {
+    "str:thousands-separated-number": 19237,
+    "null": 3006,
+    "str:int": 486
+   },
+   "populated_pct": 86.77
+  },
+  {
+   "name": "loanid",
+   "observed_kinds": {
+    "null": 12109,
+    "list": 10620
+   },
+   "populated_pct": 46.72
+  },
+  {
+   "name": "mainloan",
+   "observed_kinds": {
+    "sentinel": 9819,
+    "str:int": 8256,
+    "null": 2849,
+    "str": 1805
+   },
+   "populated_pct": 44.27
+  },
+  {
+   "name": "p2a_updated_date",
+   "observed_kinds": {
+    "str:date[YYYY-MM-DD hh:mm:ss.f]": 12648,
+    "null": 10081
+   },
+   "populated_pct": 55.65
+  },
+  {
+   "name": "parentprojid",
+   "observed_kinds": {
+    "null": 20524,
+    "list": 2205
+   },
+   "populated_pct": 9.7
+  },
+  {
+   "name": "pdo",
+   "observed_kinds": {
+    "null": 12622,
+    "str": 9471,
+    "str:multiline": 633,
+    "sentinel": 3
+   },
+   "populated_pct": 44.45
+  },
+  {
+   "name": "prodline",
+   "observed_kinds": {
+    "str": 19880,
+    "null": 2849
+   },
+   "populated_pct": 87.47
+  },
+  {
+   "name": "prodlinetext",
+   "observed_kinds": {
+    "str": 19880,
+    "null": 2849
+   },
+   "populated_pct": 87.47
+  },
+  {
+   "name": "productlinetype",
+   "observed_kinds": {
+    "str": 19880,
+    "null": 2849
+   },
+   "populated_pct": 87.47
+  },
+  {
+   "name": "proj_last_upd_date",
+   "observed_kinds": {
+    "str:date[ISO8601Z]": 13623,
+    "null": 9106
+   },
+   "populated_pct": 59.94
+  },
+  {
+   "name": "project_abstract",
+   "observed_kinds": {
+    "object": 12066,
+    "null": 10663
+   },
+   "populated_pct": 53.09
+  },
+  {
+   "name": "project_gp_info",
+   "observed_kinds": {
+    "str": 13378,
+    "null": 9351
+   },
+   "populated_pct": 58.86
+  },
+  {
+   "name": "project_name",
+   "observed_kinds": {
+    "str": 19880,
+    "null": 2849
+   },
+   "populated_pct": 87.47
+  },
+  {
+   "name": "projectstatusdisplay",
+   "observed_kinds": {
+    "str": 19877,
+    "null": 2852
+   },
+   "populated_pct": 87.45
+  },
+  {
+   "name": "recent_close_date1",
+   "observed_kinds": {
+    "null": 16629,
+    "str:date[M/D/YYYY h:mm:ss AM]": 6100
+   },
+   "populated_pct": 26.84
+  },
+  {
+   "name": "regionname",
+   "observed_kinds": {
+    "str": 19876,
+    "null": 2853
+   },
+   "populated_pct": 87.45
+  },
+  {
+   "name": "rel_loan_ids",
+   "observed_kinds": {
+    "list": 15796,
+    "null": 6933
+   },
+   "populated_pct": 69.5
+  },
+  {
+   "name": "sector1",
+   "observed_kinds": {
+    "object": 19880,
+    "null": 2849
+   },
+   "populated_pct": 87.47
+  },
+  {
+   "name": "sector2",
+   "observed_kinds": {
+    "null": 12779,
+    "object": 9950
+   },
+   "populated_pct": 43.78
+  },
+  {
+   "name": "sector3",
+   "observed_kinds": {
+    "null": 16032,
+    "object": 6697
+   },
+   "populated_pct": 29.46
+  },
+  {
+   "name": "source",
+   "observed_kinds": {
+    "list": 22729
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "status",
+   "observed_kinds": {
+    "str": 19877,
+    "null": 2852
+   },
+   "populated_pct": 87.45
+  },
+  {
+   "name": "supplementprojectflg",
+   "observed_kinds": {
+    "str": 19390,
+    "null": 3339
+   },
+   "populated_pct": 85.31
+  },
+  {
+   "name": "themev2_level1_exact",
+   "observed_kinds": {
+    "list": 12718,
+    "null": 10011
+   },
+   "populated_pct": 55.95
+  },
+  {
+   "name": "totalamt",
+   "observed_kinds": {
+    "str:thousands-separated-number": 16176,
+    "str:int": 3704,
+    "null": 2849
+   },
+   "populated_pct": 87.47
+  },
+  {
+   "name": "totalcommamt",
+   "observed_kinds": {
+    "str:thousands-separated-number": 17319,
+    "str:int": 5410
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "url",
+   "observed_kinds": {
+    "str": 22729
+   },
+   "populated_pct": 100.0
+  }
+ ]
+}

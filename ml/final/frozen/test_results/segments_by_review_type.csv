@@ -1,0 +1,3 @@
+segment,n,projects,actual_median,actual_long,MAE_b1,bias_b1,recall_b1,precision_b1,F1_b1,alerts_b1,MAE_ridge,bias_ridge,recall_ridge,precision_ridge,F1_ridge,alerts_ridge,MAE_rf,bias_rf,recall_rf,precision_rf,F1_rf,alerts_rf,sparse_n_lt_20
+Post,533,50,121.0,28,63.1,-14.7,0.714,0.435,0.541,46,70.5,-31.7,0.179,0.5,0.263,10,68.1,-40.8,0.071,0.5,0.125,4,False
+Prior,83,27,327.0,36,146.8,-108.7,0.5,0.667,0.571,27,116.5,-73.3,0.556,0.571,0.563,35,108.3,-57.0,0.472,0.708,0.567,24,False

@@ -1,0 +1,287 @@
+{
+ "dataset": "wds_v2_cluster_meta",
+ "source": "search API v2 wds (cluster projects)",
+ "rows_profiled": 18350,
+ "columns": [
+  {
+   "name": "abstracts",
+   "observed_kinds": {
+    "null": 17538,
+    "object": 812
+   },
+   "populated_pct": 4.43
+  },
+  {
+   "name": "admreg",
+   "observed_kinds": {
+    "str": 18329,
+    "null": 21
+   },
+   "populated_pct": 99.89
+  },
+  {
+   "name": "available_in",
+   "observed_kinds": {
+    "str": 18343,
+    "empty": 7
+   },
+   "populated_pct": 99.96
+  },
+  {
+   "name": "chronical_docm_id",
+   "observed_kinds": {
+    "str": 18350
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "count",
+   "observed_kinds": {
+    "str": 18350
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "count_key",
+   "observed_kinds": {
+    "str:int": 17781,
+    "str": 465,
+    "null": 104
+   },
+   "populated_pct": 99.43
+  },
+  {
+   "name": "disclosure_date",
+   "observed_kinds": {
+    "str:date[ISO8601Z]": 14571,
+    "null": 3779
+   },
+   "populated_pct": 79.41
+  },
+  {
+   "name": "disclstat",
+   "observed_kinds": {
+    "str": 17903,
+    "null": 447
+   },
+   "populated_pct": 97.56
+  },
+  {
+   "name": "display_title",
+   "observed_kinds": {
+    "str:multiline": 18035,
+    "str": 315
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "docdt",
+   "observed_kinds": {
+    "str:date[ISO8601Z]": 18350
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "docm_id",
+   "observed_kinds": {
+    "str": 18350
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "docna",
+   "observed_kinds": {
+    "object": 18350
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "docty",
+   "observed_kinds": {
+    "str": 18183,
+    "str:multiline": 136,
+    "null": 31
+   },
+   "populated_pct": 99.83
+  },
+  {
+   "name": "entityids",
+   "observed_kinds": {
+    "object": 18350
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "fullavailablein",
+   "observed_kinds": {
+    "list": 18350
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "guid",
+   "observed_kinds": {
+    "str:int": 18350
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "id",
+   "observed_kinds": {
+    "str:int": 18350
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "lang",
+   "observed_kinds": {
+    "str": 18343,
+    "null": 7
+   },
+   "populated_pct": 99.96
+  },
+  {
+   "name": "last_modified_date",
+   "observed_kinds": {
+    "null": 9810,
+    "str:date[ISO8601Z]": 8540
+   },
+   "populated_pct": 46.54
+  },
+  {
+   "name": "listing_relative_url",
+   "observed_kinds": {
+    "str": 18350
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "lndinstr",
+   "observed_kinds": {
+    "null": 9328,
+    "object": 9022
+   },
+   "populated_pct": 49.17
+  },
+  {
+   "name": "majdocty",
+   "observed_kinds": {
+    "str": 18260,
+    "null": 90
+   },
+   "populated_pct": 99.51
+  },
+  {
+   "name": "new_url",
+   "observed_kinds": {
+    "str": 15933,
+    "null": 2417
+   },
+   "populated_pct": 86.83
+  },
+  {
+   "name": "no_of_pages",
+   "observed_kinds": {
+    "str:int": 13572,
+    "null": 4778
+   },
+   "populated_pct": 73.96
+  },
+  {
+   "name": "pdfurl",
+   "observed_kinds": {
+    "str": 17939,
+    "null": 411
+   },
+   "populated_pct": 97.76
+  },
+  {
+   "name": "prdln",
+   "observed_kinds": {
+    "str": 10253,
+    "null": 8097
+   },
+   "populated_pct": 55.87
+  },
+  {
+   "name": "projectid",
+   "observed_kinds": {
+    "str": 18350
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "projn",
+   "observed_kinds": {
+    "str:multiline": 13783,
+    "str": 4567
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "repnb",
+   "observed_kinds": {
+    "str": 15546,
+    "null": 2277,
+    "str:int": 527
+   },
+   "populated_pct": 87.59
+  },
+  {
+   "name": "seccl",
+   "observed_kinds": {
+    "str": 18350
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "subsc",
+   "observed_kinds": {
+    "null": 8534,
+    "str": 6544,
+    "str:multiline": 3272
+   },
+   "populated_pct": 53.49
+  },
+  {
+   "name": "theme",
+   "observed_kinds": {
+    "null": 10450,
+    "str": 7816,
+    "str:multiline": 84
+   },
+   "populated_pct": 43.05
+  },
+  {
+   "name": "txturl",
+   "observed_kinds": {
+    "str": 18347,
+    "null": 3
+   },
+   "populated_pct": 99.98
+  },
+  {
+   "name": "url",
+   "observed_kinds": {
+    "str": 18350
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "url_friendly_title",
+   "observed_kinds": {
+    "str": 18350
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "versiontyp",
+   "observed_kinds": {
+    "str": 9785,
+    "null": 8564,
+    "str:int": 1
+   },
+   "populated_pct": 53.33
+  }
+ ]
+}

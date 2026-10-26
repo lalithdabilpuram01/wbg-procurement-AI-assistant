@@ -1,0 +1,246 @@
+{
+ "dataset": "ds00976_history_sample",
+ "source": "Finances One DS00976 API (3 loans)",
+ "rows_profiled": 408,
+ "columns": [
+  {
+   "name": "agreement_signing_date",
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 400,
+    "null": 8
+   },
+   "populated_pct": 98.04
+  },
+  {
+   "name": "board_approval___calendar_year",
+   "observed_kinds": {
+    "int": 408
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "board_approval___fiscal_year",
+   "observed_kinds": {
+    "int": 408
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "board_approval_date",
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 408
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "borrower",
+   "observed_kinds": {
+    "str": 408
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "borrowers_obligation_us_",
+   "observed_kinds": {
+    "float": 225,
+    "int": 183
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "cancelled_amount_us_",
+   "observed_kinds": {
+    "float": 313,
+    "int": 95
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "closed_date_most_recent",
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 408
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "country",
+   "observed_kinds": {
+    "str": 408
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "country_code",
+   "observed_kinds": {
+    "str": 408
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "credit_number",
+   "observed_kinds": {
+    "str": 408
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "credit_status",
+   "observed_kinds": {
+    "str": 408
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "credits_held_us_",
+   "observed_kinds": {
+    "int": 228,
+    "float": 180
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "currency_of_commitment",
+   "observed_kinds": {
+    "str": 408
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "disbursed_amount_us_",
+   "observed_kinds": {
+    "float": 243,
+    "int": 165
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "due_3rd_party_us_",
+   "observed_kinds": {
+    "int": 408
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "due_to_ida_us_",
+   "observed_kinds": {
+    "float": 225,
+    "int": 183
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "effective_date_most_recent",
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 400,
+    "null": 8
+   },
+   "populated_pct": 98.04
+  },
+  {
+   "name": "end_of_period",
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 408
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "exchange_adjustment_us_",
+   "observed_kinds": {
+    "str:int": 399,
+    "str:decimal": 9
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "first_repayment_date",
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 241,
+    "null": 167
+   },
+   "populated_pct": 59.07
+  },
+  {
+   "name": "last_disbursement_date",
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 361,
+    "null": 47
+   },
+   "populated_pct": 88.48
+  },
+  {
+   "name": "last_repayment_date",
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 241,
+    "null": 167
+   },
+   "populated_pct": 59.07
+  },
+  {
+   "name": "original_principal_amount_us_",
+   "observed_kinds": {
+    "int": 408
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "project_id",
+   "observed_kinds": {
+    "str": 408
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "project_name",
+   "observed_kinds": {
+    "str": 408
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "region",
+   "observed_kinds": {
+    "str": 408
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "repaid_3rd_party_us_",
+   "observed_kinds": {
+    "int": 408
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "repaid_to_ida_us_",
+   "observed_kinds": {
+    "int": 310,
+    "float": 98
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "service_charge_rate",
+   "observed_kinds": {
+    "float": 234,
+    "null": 108,
+    "int": 66
+   },
+   "populated_pct": 73.53
+  },
+  {
+   "name": "sold_3rd_party_us_",
+   "observed_kinds": {
+    "int": 408
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "undisbursed_amount_us_",
+   "observed_kinds": {
+    "int": 250,
+    "float": 158
+   },
+   "populated_pct": 100.0
+  }
+ ]
+}

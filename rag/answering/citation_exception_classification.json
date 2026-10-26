@@ -1,0 +1,38 @@
+{
+ "act:40025990:p4t2r5": {
+  "page_check": "verified_with_text_exception",
+  "probes": 1,
+  "found": 0,
+  "reason": "printed reference has adjacent-cell spill-over; all normalised reference parts are on the cited page"
+ },
+ "24440102:A:0000": {
+  "page_check": "verified_with_text_exception",
+  "probes": 3,
+  "found": 2,
+  "reason": "part of the excerpt differs from the PDF text layer (word repair, hyphenation or reading order); remaining probes found on the cited page"
+ },
+ "24440102:t02201:w1-2": {
+  "page_check": "verified_with_text_exception",
+  "probes": 8,
+  "found": 4,
+  "reason": "part of the excerpt differs from the PDF text layer (word repair, hyphenation or reading order); remaining probes found on the cited page"
+ },
+ "act:40025990:p4t2r11": {
+  "page_check": "verified_with_text_exception",
+  "probes": 1,
+  "found": 0,
+  "reason": "printed reference has adjacent-cell spill-over; all normalised reference parts are on the cited page"
+ },
+ "24440102:C:0000": {
+  "page_check": "verified_with_text_exception",
+  "probes": 3,
+  "found": 2,
+  "reason": "part of the excerpt differs from the PDF text layer (word repair, hyphenation or reading order); remaining probes found on the cited page"
+ },
+ "34455066:C:0023": {
+  "page_check": "verified_with_text_exception",
+  "probes": 3,
+  "found": 2,
+  "reason": "part of the excerpt differs from the PDF text layer (word repair, hyphenation or reading order); remaining probes found on the cited page"
+ }
+}

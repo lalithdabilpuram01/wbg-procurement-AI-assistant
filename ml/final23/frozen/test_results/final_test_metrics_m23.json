@@ -1,0 +1,1999 @@
+{
+ "scored_at_utc": "2026-10-25T16:08:14.497175+00:00",
+ "disclaimer": "SYNTHETIC OUTCOMES \u2014 NOT VALIDATED WORLD BANK RISK ACCURACY",
+ "integrity_checks_all_pass": true,
+ "models": {
+  "m2": {
+   "S2": {
+    "overall": {
+     "n": 28949,
+     "projects": 1053,
+     "realised_prevalence": 0.1378,
+     "mean_predicted_probability": 0.1493,
+     "PR_AUC": 0.2322,
+     "ROC_AUC": 0.6554,
+     "Brier": 0.1143,
+     "Brier_constant_prevalence": 0.1188,
+     "ECE": 0.0141,
+     "calibration_bins": {
+      "mean_predicted": [
+       0.0611,
+       0.0762,
+       0.0894,
+       0.1022,
+       0.1162,
+       0.1324,
+       0.1548,
+       0.1933,
+       0.2627,
+       0.305
+      ],
+      "observed": [
+       0.0636,
+       0.0753,
+       0.0745,
+       0.0934,
+       0.1093,
+       0.1432,
+       0.1377,
+       0.1736,
+       0.2453,
+       0.2631
+      ]
+     },
+     "at_frozen_threshold": {
+      "TP": 2021,
+      "FP": 7007,
+      "FN": 1969,
+      "TN": 17952,
+      "precision": 0.2239,
+      "recall": 0.5065,
+      "F1": 0.3105,
+      "alert_rate": 0.3119
+     },
+     "capacity": {
+      "5%": {
+       "TP": 402,
+       "FP": 1046,
+       "FN": 3588,
+       "TN": 23913,
+       "precision": 0.2776,
+       "recall": 0.1008,
+       "F1": 0.1478,
+       "alert_rate": 0.05
+      },
+      "10%": {
+       "TP": 761,
+       "FP": 2134,
+       "FN": 3229,
+       "TN": 22825,
+       "precision": 0.2629,
+       "recall": 0.1907,
+       "F1": 0.2211,
+       "alert_rate": 0.1
+      },
+      "20%": {
+       "TP": 1472,
+       "FP": 4318,
+       "FN": 2518,
+       "TN": 20641,
+       "precision": 0.2542,
+       "recall": 0.3689,
+       "F1": 0.301,
+       "alert_rate": 0.2
+      },
+      "30%": {
+       "TP": 1974,
+       "FP": 6711,
+       "FN": 2016,
+       "TN": 18248,
+       "precision": 0.2273,
+       "recall": 0.4947,
+       "F1": 0.3115,
+       "alert_rate": 0.3
+      }
+     }
+    },
+    "ci_project": {
+     "PR_AUC": [
+      0.2006,
+      0.2525
+     ],
+     "ROC_AUC": [
+      0.6301,
+      0.6676
+     ],
+     "F1": [
+      0.2533,
+      0.3493
+     ],
+     "recall": [
+      0.3481,
+      0.6559
+     ],
+     "precision": [
+      0.196,
+      0.2408
+     ],
+     "prevalence": [
+      0.1153,
+      0.1615
+     ]
+    },
+    "assumed_population_prevalence": 0.15,
+    "unseen_projects": {
+     "n": 2311,
+     "projects": 166,
+     "realised_prevalence": 0.1558,
+     "mean_predicted_probability": 0.1266,
+     "PR_AUC": 0.2469,
+     "ROC_AUC": 0.6239,
+     "Brier": 0.1282,
+     "Brier_constant_prevalence": 0.1315,
+     "ECE": 0.0436,
+     "calibration_bins": {
+      "mean_predicted": [
+       0.0599,
+       0.0762,
+       0.0871,
+       0.0962,
+       0.1074,
+       0.1185,
+       0.1295,
+       0.139,
+       0.1635,
+       0.2914
+      ],
+      "observed": [
+       0.0837,
+       0.125,
+       0.0909,
+       0.1422,
+       0.1631,
+       0.0565,
+       0.1616,
+       0.2339,
+       0.1495,
+       0.3463
+      ]
+     },
+     "at_frozen_threshold": {
+      "TP": 96,
+      "FP": 219,
+      "FN": 264,
+      "TN": 1732,
+      "precision": 0.3048,
+      "recall": 0.2667,
+      "F1": 0.2844,
+      "alert_rate": 0.1363
+     },
+     "capacity": {
+      "5%": {
+       "TP": 36,
+       "FP": 80,
+       "FN": 324,
+       "TN": 1871,
+       "precision": 0.3103,
+       "recall": 0.1,
+       "F1": 0.1513,
+       "alert_rate": 0.0502
+      },
+      "10%": {
+       "TP": 80,
+       "FP": 152,
+       "FN": 280,
+       "TN": 1799,
+       "precision": 0.3448,
+       "recall": 0.2222,
+       "F1": 0.2703,
+       "alert_rate": 0.1004
+      },
+      "20%": {
+       "TP": 114,
+       "FP": 349,
+       "FN": 246,
+       "TN": 1602,
+       "precision": 0.2462,
+       "recall": 0.3167,
+       "F1": 0.277,
+       "alert_rate": 0.2003
+      },
+      "30%": {
+       "TP": 171,
+       "FP": 523,
+       "FN": 189,
+       "TN": 1428,
+       "precision": 0.2464,
+       "recall": 0.475,
+       "F1": 0.3245,
+       "alert_rate": 0.3003
+      }
+     },
+     "ci_project": {
+      "PR_AUC": [
+       0.1908,
+       0.2937
+      ],
+      "ROC_AUC": [
+       0.5808,
+       0.653
+      ],
+      "F1": [
+       0.224,
+       0.3457
+      ],
+      "recall": [
+       0.1817,
+       0.3945
+      ],
+      "precision": [
+       0.2467,
+       0.3687
+      ],
+      "prevalence": [
+       0.1245,
+       0.1923
+      ]
+     }
+    },
+    "segments": {
+     "procurement_method": [
+      {
+       "segment": "Consultant Qualification Selection",
+       "n": 1470,
+       "positives": 99,
+       "PR_AUC": 0.1045,
+       "TP": 3,
+       "FP": 14,
+       "FN": 96,
+       "TN": 1357,
+       "precision": 0.1765,
+       "recall": 0.0303,
+       "F1": 0.0517,
+       "alert_rate": 0.0116
+      },
+      {
+       "segment": "Direct Selection",
+       "n": 3129,
+       "positives": 481,
+       "PR_AUC": 0.2244,
+       "TP": 181,
+       "FP": 704,
+       "FN": 300,
+       "TN": 1944,
+       "precision": 0.2045,
+       "recall": 0.3763,
+       "F1": 0.265,
+       "alert_rate": 0.2828
+      },
+      {
+       "segment": "Individual Consultant Selection",
+       "n": 6886,
+       "positives": 790,
+       "PR_AUC": 0.1727,
+       "TP": 242,
+       "FP": 900,
+       "FN": 548,
+       "TN": 5196,
+       "precision": 0.2119,
+       "recall": 0.3063,
+       "F1": 0.2505,
+       "alert_rate": 0.1658
+      },
+      {
+       "segment": "Quality And Cost-Based Selection",
+       "n": 737,
+       "positives": 78,
+       "PR_AUC": 0.2244,
+       "TP": 24,
+       "FP": 94,
+       "FN": 54,
+       "TN": 565,
+       "precision": 0.2034,
+       "recall": 0.3077,
+       "F1": 0.2449,
+       "alert_rate": 0.1601
+      },
+      {
+       "segment": "Request for Bids",
+       "n": 5414,
+       "positives": 973,
+       "PR_AUC": 0.2828,
+       "TP": 691,
+       "FP": 2348,
+       "FN": 282,
+       "TN": 2093,
+       "precision": 0.2274,
+       "recall": 0.7102,
+       "F1": 0.3445,
+       "alert_rate": 0.5613
+      },
+      {
+       "segment": "Request for Quotations",
+       "n": 11073,
+       "positives": 1551,
+       "PR_AUC": 0.2285,
+       "TP": 875,
+       "FP": 2920,
+       "FN": 676,
+       "TN": 6602,
+       "precision": 0.2306,
+       "recall": 0.5642,
+       "F1": 0.3273,
+       "alert_rate": 0.3427
+      }
+     ],
+     "procurement_category": [
+      {
+       "segment": "Consultant Services",
+       "n": 11190,
+       "positives": 1249,
+       "PR_AUC": 0.1734,
+       "TP": 316,
+       "FP": 1212,
+       "FN": 933,
+       "TN": 8729,
+       "precision": 0.2068,
+       "recall": 0.253,
+       "F1": 0.2276,
+       "alert_rate": 0.1366
+      },
+      {
+       "segment": "Goods",
+       "n": 8188,
+       "positives": 850,
+       "PR_AUC": 0.161,
+       "TP": 160,
+       "FP": 740,
+       "FN": 690,
+       "TN": 6598,
+       "precision": 0.1778,
+       "recall": 0.1882,
+       "F1": 0.1829,
+       "alert_rate": 0.1099
+      },
+      {
+       "segment": "Non-consulting Services",
+       "n": 1741,
+       "positives": 165,
+       "PR_AUC": 0.143,
+       "TP": 29,
+       "FP": 145,
+       "FN": 136,
+       "TN": 1431,
+       "precision": 0.1667,
+       "recall": 0.1758,
+       "F1": 0.1711,
+       "alert_rate": 0.0999
+      },
+      {
+       "segment": "Works",
+       "n": 7830,
+       "positives": 1726,
+       "PR_AUC": 0.2846,
+       "TP": 1516,
+       "FP": 4910,
+       "FN": 210,
+       "TN": 1194,
+       "precision": 0.2359,
+       "recall": 0.8783,
+       "F1": 0.3719,
+       "alert_rate": 0.8207
+      }
+     ],
+     "region_name": [
+      {
+       "segment": "East Asia and Pacific",
+       "n": 1824,
+       "positives": 236,
+       "PR_AUC": 0.2276,
+       "TP": 99,
+       "FP": 365,
+       "FN": 137,
+       "TN": 1223,
+       "precision": 0.2134,
+       "recall": 0.4195,
+       "F1": 0.2829,
+       "alert_rate": 0.2544
+      },
+      {
+       "segment": "Eastern and Southern Africa",
+       "n": 6126,
+       "positives": 781,
+       "PR_AUC": 0.233,
+       "TP": 338,
+       "FP": 1362,
+       "FN": 443,
+       "TN": 3983,
+       "precision": 0.1988,
+       "recall": 0.4328,
+       "F1": 0.2725,
+       "alert_rate": 0.2775
+      },
+      {
+       "segment": "Europe and Central Asia",
+       "n": 3365,
+       "positives": 467,
+       "PR_AUC": 0.2239,
+       "TP": 138,
+       "FP": 500,
+       "FN": 329,
+       "TN": 2398,
+       "precision": 0.2163,
+       "recall": 0.2955,
+       "F1": 0.2498,
+       "alert_rate": 0.1896
+      },
+      {
+       "segment": "Latin America and Caribbean",
+       "n": 3852,
+       "positives": 485,
+       "PR_AUC": 0.1977,
+       "TP": 207,
+       "FP": 753,
+       "FN": 278,
+       "TN": 2614,
+       "precision": 0.2156,
+       "recall": 0.4268,
+       "F1": 0.2865,
+       "alert_rate": 0.2492
+      },
+      {
+       "segment": "Middle East, North Africa, Afghanistan, and Pakistan",
+       "n": 1339,
+       "positives": 122,
+       "PR_AUC": 0.1497,
+       "TP": 34,
+       "FP": 172,
+       "FN": 88,
+       "TN": 1045,
+       "precision": 0.165,
+       "recall": 0.2787,
+       "F1": 0.2073,
+       "alert_rate": 0.1538
+      },
+      {
+       "segment": "South Asia",
+       "n": 5513,
+       "positives": 1078,
+       "PR_AUC": 0.2576,
+       "TP": 933,
+       "FP": 2898,
+       "FN": 145,
+       "TN": 1537,
+       "precision": 0.2435,
+       "recall": 0.8655,
+       "F1": 0.3801,
+       "alert_rate": 0.6949
+      },
+      {
+       "segment": "Western and Central Africa",
+       "n": 6896,
+       "positives": 819,
+       "PR_AUC": 0.2005,
+       "TP": 272,
+       "FP": 956,
+       "FN": 547,
+       "TN": 5121,
+       "precision": 0.2215,
+       "recall": 0.3321,
+       "F1": 0.2658,
+       "alert_rate": 0.1781
+      }
+     ]
+    }
+   },
+   "S0": {
+    "overall": {
+     "n": 28949,
+     "projects": 1053,
+     "realised_prevalence": 0.152,
+     "mean_predicted_probability": 0.1538,
+     "PR_AUC": 0.1542,
+     "ROC_AUC": 0.5042,
+     "Brier": 0.1289,
+     "Brier_constant_prevalence": 0.1289,
+     "ECE": 0.005,
+     "calibration_bins": {
+      "mean_predicted": [
+       0.147,
+       0.15,
+       0.1513,
+       0.1521,
+       0.1532,
+       0.1542,
+       0.1552,
+       0.1563,
+       0.1584,
+       0.1601
+      ],
+      "observed": [
+       0.1453,
+       0.1532,
+       0.147,
+       0.1615,
+       0.1427,
+       0.1539,
+       0.1588,
+       0.1498,
+       0.1528,
+       0.1554
+      ]
+     },
+     "at_frozen_threshold": {
+      "TP": 1180,
+      "FP": 6523,
+      "FN": 3221,
+      "TN": 18025,
+      "precision": 0.1532,
+      "recall": 0.2681,
+      "F1": 0.195,
+      "alert_rate": 0.2661
+     },
+     "capacity": {
+      "5%": {
+       "TP": 235,
+       "FP": 1213,
+       "FN": 4166,
+       "TN": 23335,
+       "precision": 0.1623,
+       "recall": 0.0534,
+       "F1": 0.0804,
+       "alert_rate": 0.05
+      },
+      "10%": {
+       "TP": 450,
+       "FP": 2445,
+       "FN": 3951,
+       "TN": 22103,
+       "precision": 0.1554,
+       "recall": 0.1022,
+       "F1": 0.1234,
+       "alert_rate": 0.1
+      },
+      "20%": {
+       "TP": 892,
+       "FP": 4898,
+       "FN": 3509,
+       "TN": 19650,
+       "precision": 0.1541,
+       "recall": 0.2027,
+       "F1": 0.1751,
+       "alert_rate": 0.2
+      },
+      "30%": {
+       "TP": 1326,
+       "FP": 7359,
+       "FN": 3075,
+       "TN": 17189,
+       "precision": 0.1527,
+       "recall": 0.3013,
+       "F1": 0.2027,
+       "alert_rate": 0.3
+      }
+     }
+    },
+    "ci_project": {
+     "PR_AUC": [
+      0.1497,
+      0.159
+     ],
+     "ROC_AUC": [
+      0.4972,
+      0.5121
+     ],
+     "F1": [
+      0.1483,
+      0.2263
+     ],
+     "recall": [
+      0.1435,
+      0.4369
+     ],
+     "precision": [
+      0.1469,
+      0.1614
+     ],
+     "prevalence": [
+      0.1483,
+      0.1556
+     ]
+    },
+    "assumed_population_prevalence": 0.15,
+    "unseen_projects": {
+     "n": 2311,
+     "projects": 166,
+     "realised_prevalence": 0.1584,
+     "mean_predicted_probability": 0.1522,
+     "PR_AUC": 0.1536,
+     "ROC_AUC": 0.483,
+     "Brier": 0.1334,
+     "Brier_constant_prevalence": 0.1333,
+     "ECE": 0.0243,
+     "calibration_bins": {
+      "mean_predicted": [
+       0.1451,
+       0.1469,
+       0.1492,
+       0.1506,
+       0.1513,
+       0.1526,
+       0.1539,
+       0.1547,
+       0.1555,
+       0.163
+      ],
+      "observed": [
+       0.1452,
+       0.1739,
+       0.1957,
+       0.2069,
+       0.1391,
+       0.1515,
+       0.1111,
+       0.1659,
+       0.1773,
+       0.1385
+      ]
+     },
+     "at_frozen_threshold": {
+      "TP": 34,
+      "FP": 206,
+      "FN": 332,
+      "TN": 1739,
+      "precision": 0.1417,
+      "recall": 0.0929,
+      "F1": 0.1122,
+      "alert_rate": 0.1039
+     },
+     "capacity": {
+      "5%": {
+       "TP": 19,
+       "FP": 97,
+       "FN": 347,
+       "TN": 1848,
+       "precision": 0.1638,
+       "recall": 0.0519,
+       "F1": 0.0788,
+       "alert_rate": 0.0502
+      },
+      "10%": {
+       "TP": 32,
+       "FP": 200,
+       "FN": 334,
+       "TN": 1745,
+       "precision": 0.1379,
+       "recall": 0.0874,
+       "F1": 0.107,
+       "alert_rate": 0.1004
+      },
+      "20%": {
+       "TP": 72,
+       "FP": 391,
+       "FN": 294,
+       "TN": 1554,
+       "precision": 0.1555,
+       "recall": 0.1967,
+       "F1": 0.1737,
+       "alert_rate": 0.2003
+      },
+      "30%": {
+       "TP": 104,
+       "FP": 590,
+       "FN": 262,
+       "TN": 1355,
+       "precision": 0.1499,
+       "recall": 0.2842,
+       "F1": 0.1962,
+       "alert_rate": 0.3003
+      }
+     },
+     "ci_project": {
+      "PR_AUC": [
+       0.1326,
+       0.1745
+      ],
+      "ROC_AUC": [
+       0.447,
+       0.511
+      ],
+      "F1": [
+       0.075,
+       0.153
+      ],
+      "recall": [
+       0.0544,
+       0.1518
+      ],
+      "precision": [
+       0.1102,
+       0.1764
+      ],
+      "prevalence": [
+       0.1425,
+       0.1748
+      ]
+     }
+    },
+    "segments": {
+     "procurement_method": [
+      {
+       "segment": "Consultant Qualification Selection",
+       "n": 1470,
+       "positives": 213,
+       "PR_AUC": 0.1504,
+       "TP": 18,
+       "FP": 117,
+       "FN": 195,
+       "TN": 1140,
+       "precision": 0.1333,
+       "recall": 0.0845,
+       "F1": 0.1034,
+       "alert_rate": 0.0918
+      },
+      {
+       "segment": "Direct Selection",
+       "n": 3129,
+       "positives": 490,
+       "PR_AUC": 0.1727,
+       "TP": 10,
+       "FP": 46,
+       "FN": 480,
+       "TN": 2593,
+       "precision": 0.1786,
+       "recall": 0.0204,
+       "F1": 0.0366,
+       "alert_rate": 0.0179
+      },
+      {
+       "segment": "Individual Consultant Selection",
+       "n": 6886,
+       "positives": 1046,
+       "PR_AUC": 0.1474,
+       "TP": 267,
+       "FP": 1596,
+       "FN": 779,
+       "TN": 4244,
+       "precision": 0.1433,
+       "recall": 0.2553,
+       "F1": 0.1836,
+       "alert_rate": 0.2705
+      },
+      {
+       "segment": "Least Cost Selection",
+       "n": 127,
+       "positives": 23,
+       "PR_AUC": 0.1802,
+       "TP": 2,
+       "FP": 8,
+       "FN": 21,
+       "TN": 96,
+       "precision": 0.2,
+       "recall": 0.087,
+       "F1": 0.1212,
+       "alert_rate": 0.0787
+      },
+      {
+       "segment": "Quality And Cost-Based Selection",
+       "n": 737,
+       "positives": 102,
+       "PR_AUC": 0.1404,
+       "TP": 2,
+       "FP": 8,
+       "FN": 100,
+       "TN": 627,
+       "precision": 0.2,
+       "recall": 0.0196,
+       "F1": 0.0357,
+       "alert_rate": 0.0136
+      },
+      {
+       "segment": "Request for Bids",
+       "n": 5414,
+       "positives": 804,
+       "PR_AUC": 0.1514,
+       "TP": 185,
+       "FP": 1094,
+       "FN": 619,
+       "TN": 3516,
+       "precision": 0.1446,
+       "recall": 0.2301,
+       "F1": 0.1776,
+       "alert_rate": 0.2362
+      },
+      {
+       "segment": "Request for Quotations",
+       "n": 11073,
+       "positives": 1711,
+       "PR_AUC": 0.1592,
+       "TP": 693,
+       "FP": 3641,
+       "FN": 1018,
+       "TN": 5721,
+       "precision": 0.1599,
+       "recall": 0.405,
+       "F1": 0.2293,
+       "alert_rate": 0.3914
+      }
+     ],
+     "procurement_category": [
+      {
+       "segment": "Consultant Services",
+       "n": 11190,
+       "positives": 1694,
+       "PR_AUC": 0.1492,
+       "TP": 297,
+       "FP": 1765,
+       "FN": 1397,
+       "TN": 7731,
+       "precision": 0.144,
+       "recall": 0.1753,
+       "F1": 0.1581,
+       "alert_rate": 0.1843
+      },
+      {
+       "segment": "Goods",
+       "n": 8188,
+       "positives": 1241,
+       "PR_AUC": 0.1586,
+       "TP": 324,
+       "FP": 1716,
+       "FN": 917,
+       "TN": 5231,
+       "precision": 0.1588,
+       "recall": 0.2611,
+       "F1": 0.1975,
+       "alert_rate": 0.2491
+      },
+      {
+       "segment": "Non-consulting Services",
+       "n": 1741,
+       "positives": 255,
+       "PR_AUC": 0.1487,
+       "TP": 8,
+       "FP": 37,
+       "FN": 247,
+       "TN": 1449,
+       "precision": 0.1778,
+       "recall": 0.0314,
+       "F1": 0.0533,
+       "alert_rate": 0.0258
+      },
+      {
+       "segment": "Works",
+       "n": 7830,
+       "positives": 1211,
+       "PR_AUC": 0.1575,
+       "TP": 551,
+       "FP": 3005,
+       "FN": 660,
+       "TN": 3614,
+       "precision": 0.1549,
+       "recall": 0.455,
+       "F1": 0.2312,
+       "alert_rate": 0.4542
+      }
+     ],
+     "region_name": [
+      {
+       "segment": "East Asia and Pacific",
+       "n": 1824,
+       "positives": 282,
+       "PR_AUC": 0.1729,
+       "TP": 34,
+       "FP": 144,
+       "FN": 248,
+       "TN": 1398,
+       "precision": 0.191,
+       "recall": 0.1206,
+       "F1": 0.1478,
+       "alert_rate": 0.0976
+      },
+      {
+       "segment": "Eastern and Southern Africa",
+       "n": 6126,
+       "positives": 957,
+       "PR_AUC": 0.1598,
+       "TP": 221,
+       "FP": 1201,
+       "FN": 736,
+       "TN": 3968,
+       "precision": 0.1554,
+       "recall": 0.2309,
+       "F1": 0.1858,
+       "alert_rate": 0.2321
+      },
+      {
+       "segment": "Europe and Central Asia",
+       "n": 3365,
+       "positives": 514,
+       "PR_AUC": 0.1489,
+       "TP": 5,
+       "FP": 33,
+       "FN": 509,
+       "TN": 2818,
+       "precision": 0.1316,
+       "recall": 0.0097,
+       "F1": 0.0181,
+       "alert_rate": 0.0113
+      },
+      {
+       "segment": "Latin America and Caribbean",
+       "n": 3852,
+       "positives": 568,
+       "PR_AUC": 0.1463,
+       "TP": 218,
+       "FP": 1351,
+       "FN": 350,
+       "TN": 1933,
+       "precision": 0.1389,
+       "recall": 0.3838,
+       "F1": 0.204,
+       "alert_rate": 0.4073
+      },
+      {
+       "segment": "Middle East, North Africa, Afghanistan, and Pakistan",
+       "n": 1339,
+       "positives": 193,
+       "PR_AUC": 0.1419,
+       "TP": 6,
+       "FP": 40,
+       "FN": 187,
+       "TN": 1106,
+       "precision": 0.1304,
+       "recall": 0.0311,
+       "F1": 0.0502,
+       "alert_rate": 0.0344
+      },
+      {
+       "segment": "South Asia",
+       "n": 5513,
+       "positives": 836,
+       "PR_AUC": 0.1548,
+       "TP": 618,
+       "FP": 3350,
+       "FN": 218,
+       "TN": 1327,
+       "precision": 0.1557,
+       "recall": 0.7392,
+       "F1": 0.2573,
+       "alert_rate": 0.7198
+      },
+      {
+       "segment": "Western and Central Africa",
+       "n": 6896,
+       "positives": 1046,
+       "PR_AUC": 0.1567,
+       "TP": 77,
+       "FP": 404,
+       "FN": 969,
+       "TN": 5446,
+       "precision": 0.1601,
+       "recall": 0.0736,
+       "F1": 0.1009,
+       "alert_rate": 0.0698
+      }
+     ]
+    },
+    "null_control": {
+     "ROC_AUC_ci_contains_0.5": true,
+     "PR_AUC_ci_contains_prevalence": true,
+     "pass": true
+    }
+   }
+  },
+  "m3": {
+   "S2": {
+    "overall": {
+     "n": 20954,
+     "projects": 1192,
+     "realised_prevalence": 0.0819,
+     "mean_predicted_probability": 0.0799,
+     "PR_AUC": 0.334,
+     "ROC_AUC": 0.7349,
+     "Brier": 0.0648,
+     "Brier_constant_prevalence": 0.0752,
+     "ECE": 0.0123,
+     "calibration_bins": {
+      "mean_predicted": [
+       0.0192,
+       0.0281,
+       0.0348,
+       0.0413,
+       0.0484,
+       0.0566,
+       0.0674,
+       0.0869,
+       0.124,
+       0.2919
+      ],
+      "observed": [
+       0.0353,
+       0.0349,
+       0.0348,
+       0.0401,
+       0.052,
+       0.0549,
+       0.0577,
+       0.0696,
+       0.1027,
+       0.3373
+      ]
+     },
+     "at_frozen_threshold": {
+      "TP": 543,
+      "FP": 701,
+      "FN": 1174,
+      "TN": 18536,
+      "precision": 0.4365,
+      "recall": 0.3162,
+      "F1": 0.3668,
+      "alert_rate": 0.0594
+     },
+     "capacity": {
+      "5%": {
+       "TP": 502,
+       "FP": 546,
+       "FN": 1215,
+       "TN": 18691,
+       "precision": 0.479,
+       "recall": 0.2924,
+       "F1": 0.3631,
+       "alert_rate": 0.05
+      },
+      "10%": {
+       "TP": 707,
+       "FP": 1389,
+       "FN": 1010,
+       "TN": 17848,
+       "precision": 0.3373,
+       "recall": 0.4118,
+       "F1": 0.3708,
+       "alert_rate": 0.1
+      },
+      "20%": {
+       "TP": 922,
+       "FP": 3269,
+       "FN": 795,
+       "TN": 15968,
+       "precision": 0.22,
+       "recall": 0.537,
+       "F1": 0.3121,
+       "alert_rate": 0.2
+      },
+      "30%": {
+       "TP": 1068,
+       "FP": 5219,
+       "FN": 649,
+       "TN": 14018,
+       "precision": 0.1699,
+       "recall": 0.622,
+       "F1": 0.2669,
+       "alert_rate": 0.3
+      }
+     }
+    },
+    "ci_project": {
+     "PR_AUC": [
+      0.2968,
+      0.37
+     ],
+     "ROC_AUC": [
+      0.7104,
+      0.7547
+     ],
+     "F1": [
+      0.3323,
+      0.399
+     ],
+     "recall": [
+      0.2752,
+      0.3572
+     ],
+     "precision": [
+      0.4008,
+      0.47
+     ],
+     "prevalence": [
+      0.0735,
+      0.0926
+     ]
+    },
+    "assumed_population_prevalence": 0.08,
+    "unseen_projects": {
+     "n": 7712,
+     "projects": 458,
+     "realised_prevalence": 0.0794,
+     "mean_predicted_probability": 0.0755,
+     "PR_AUC": 0.3413,
+     "ROC_AUC": 0.7292,
+     "Brier": 0.0628,
+     "Brier_constant_prevalence": 0.0731,
+     "ECE": 0.0217,
+     "calibration_bins": {
+      "mean_predicted": [
+       0.0188,
+       0.0273,
+       0.0338,
+       0.0401,
+       0.0466,
+       0.0539,
+       0.064,
+       0.0817,
+       0.1167,
+       0.2722
+      ],
+      "observed": [
+       0.0298,
+       0.0415,
+       0.039,
+       0.0324,
+       0.0584,
+       0.0649,
+       0.0505,
+       0.0506,
+       0.0801,
+       0.3472
+      ]
+     },
+     "at_frozen_threshold": {
+      "TP": 196,
+      "FP": 225,
+      "FN": 416,
+      "TN": 6875,
+      "precision": 0.4656,
+      "recall": 0.3203,
+      "F1": 0.3795,
+      "alert_rate": 0.0546
+     },
+     "capacity": {
+      "5%": {
+       "TP": 189,
+       "FP": 197,
+       "FN": 423,
+       "TN": 6903,
+       "precision": 0.4896,
+       "recall": 0.3088,
+       "F1": 0.3788,
+       "alert_rate": 0.0501
+      },
+      "10%": {
+       "TP": 268,
+       "FP": 504,
+       "FN": 344,
+       "TN": 6596,
+       "precision": 0.3472,
+       "recall": 0.4379,
+       "F1": 0.3873,
+       "alert_rate": 0.1001
+      },
+      "20%": {
+       "TP": 329,
+       "FP": 1214,
+       "FN": 283,
+       "TN": 5886,
+       "precision": 0.2132,
+       "recall": 0.5376,
+       "F1": 0.3053,
+       "alert_rate": 0.2001
+      },
+      "30%": {
+       "TP": 368,
+       "FP": 1946,
+       "FN": 244,
+       "TN": 5154,
+       "precision": 0.159,
+       "recall": 0.6013,
+       "F1": 0.2515,
+       "alert_rate": 0.3001
+      }
+     },
+     "ci_project": {
+      "PR_AUC": [
+       0.2759,
+       0.4
+      ],
+      "ROC_AUC": [
+       0.6888,
+       0.7608
+      ],
+      "F1": [
+       0.3105,
+       0.4387
+      ],
+      "recall": [
+       0.2434,
+       0.3901
+      ],
+      "precision": [
+       0.3972,
+       0.5337
+      ],
+      "prevalence": [
+       0.0677,
+       0.0929
+      ]
+     }
+    },
+    "segments": {
+     "procurement_method": [
+      {
+       "segment": "Consultant Qualification Selection",
+       "n": 2461,
+       "positives": 124,
+       "PR_AUC": 0.3165,
+       "TP": 37,
+       "FP": 33,
+       "FN": 87,
+       "TN": 2304,
+       "precision": 0.5286,
+       "recall": 0.2984,
+       "F1": 0.3814,
+       "alert_rate": 0.0284
+      },
+      {
+       "segment": "Individual Consultant Selection",
+       "n": 6203,
+       "positives": 419,
+       "PR_AUC": 0.329,
+       "TP": 160,
+       "FP": 177,
+       "FN": 259,
+       "TN": 5607,
+       "precision": 0.4748,
+       "recall": 0.3819,
+       "F1": 0.4233,
+       "alert_rate": 0.0543
+      },
+      {
+       "segment": "Quality And Cost-Based Selection",
+       "n": 2670,
+       "positives": 122,
+       "PR_AUC": 0.158,
+       "TP": 16,
+       "FP": 30,
+       "FN": 106,
+       "TN": 2518,
+       "precision": 0.3478,
+       "recall": 0.1311,
+       "F1": 0.1905,
+       "alert_rate": 0.0172
+      },
+      {
+       "segment": "Request for Bids",
+       "n": 6449,
+       "positives": 682,
+       "PR_AUC": 0.3375,
+       "TP": 203,
+       "FP": 282,
+       "FN": 479,
+       "TN": 5485,
+       "precision": 0.4186,
+       "recall": 0.2977,
+       "F1": 0.3479,
+       "alert_rate": 0.0752
+      },
+      {
+       "segment": "Request for Quotations",
+       "n": 2649,
+       "positives": 332,
+       "PR_AUC": 0.3799,
+       "TP": 117,
+       "FP": 170,
+       "FN": 215,
+       "TN": 2147,
+       "precision": 0.4077,
+       "recall": 0.3524,
+       "F1": 0.378,
+       "alert_rate": 0.1083
+      }
+     ],
+     "procurement_category": [
+      {
+       "segment": "Consultant Services",
+       "n": 11703,
+       "positives": 690,
+       "PR_AUC": 0.2909,
+       "TP": 222,
+       "FP": 249,
+       "FN": 468,
+       "TN": 10764,
+       "precision": 0.4713,
+       "recall": 0.3217,
+       "F1": 0.3824,
+       "alert_rate": 0.0402
+      },
+      {
+       "segment": "Goods",
+       "n": 4288,
+       "positives": 402,
+       "PR_AUC": 0.2999,
+       "TP": 107,
+       "FP": 150,
+       "FN": 295,
+       "TN": 3736,
+       "precision": 0.4163,
+       "recall": 0.2662,
+       "F1": 0.3247,
+       "alert_rate": 0.0599
+      },
+      {
+       "segment": "Non-consulting Services",
+       "n": 727,
+       "positives": 56,
+       "PR_AUC": 0.3017,
+       "TP": 19,
+       "FP": 36,
+       "FN": 37,
+       "TN": 635,
+       "precision": 0.3455,
+       "recall": 0.3393,
+       "F1": 0.3423,
+       "alert_rate": 0.0757
+      },
+      {
+       "segment": "Works",
+       "n": 4210,
+       "positives": 566,
+       "PR_AUC": 0.3898,
+       "TP": 194,
+       "FP": 266,
+       "FN": 372,
+       "TN": 3378,
+       "precision": 0.4217,
+       "recall": 0.3428,
+       "F1": 0.3782,
+       "alert_rate": 0.1093
+      }
+     ],
+     "region_name": [
+      {
+       "segment": "East Asia and Pacific",
+       "n": 1762,
+       "positives": 161,
+       "PR_AUC": 0.4439,
+       "TP": 92,
+       "FP": 111,
+       "FN": 69,
+       "TN": 1490,
+       "precision": 0.4532,
+       "recall": 0.5714,
+       "F1": 0.5055,
+       "alert_rate": 0.1152
+      },
+      {
+       "segment": "Eastern and Southern Africa",
+       "n": 7228,
+       "positives": 570,
+       "PR_AUC": 0.2683,
+       "TP": 151,
+       "FP": 211,
+       "FN": 419,
+       "TN": 6447,
+       "precision": 0.4171,
+       "recall": 0.2649,
+       "F1": 0.324,
+       "alert_rate": 0.0501
+      },
+      {
+       "segment": "Europe and Central Asia",
+       "n": 1874,
+       "positives": 104,
+       "PR_AUC": 0.2071,
+       "TP": 24,
+       "FP": 26,
+       "FN": 80,
+       "TN": 1744,
+       "precision": 0.48,
+       "recall": 0.2308,
+       "F1": 0.3117,
+       "alert_rate": 0.0267
+      },
+      {
+       "segment": "Latin America and Caribbean",
+       "n": 1288,
+       "positives": 98,
+       "PR_AUC": 0.2257,
+       "TP": 22,
+       "FP": 52,
+       "FN": 76,
+       "TN": 1138,
+       "precision": 0.2973,
+       "recall": 0.2245,
+       "F1": 0.2558,
+       "alert_rate": 0.0575
+      },
+      {
+       "segment": "Middle East, North Africa, Afghanistan, and Pakistan",
+       "n": 1664,
+       "positives": 129,
+       "PR_AUC": 0.3837,
+       "TP": 33,
+       "FP": 29,
+       "FN": 96,
+       "TN": 1506,
+       "precision": 0.5323,
+       "recall": 0.2558,
+       "F1": 0.3455,
+       "alert_rate": 0.0373
+      },
+      {
+       "segment": "South Asia",
+       "n": 2423,
+       "positives": 310,
+       "PR_AUC": 0.4348,
+       "TP": 102,
+       "FP": 118,
+       "FN": 208,
+       "TN": 1995,
+       "precision": 0.4636,
+       "recall": 0.329,
+       "F1": 0.3849,
+       "alert_rate": 0.0908
+      },
+      {
+       "segment": "Western and Central Africa",
+       "n": 4705,
+       "positives": 344,
+       "PR_AUC": 0.3642,
+       "TP": 119,
+       "FP": 152,
+       "FN": 225,
+       "TN": 4209,
+       "precision": 0.4391,
+       "recall": 0.3459,
+       "F1": 0.387,
+       "alert_rate": 0.0576
+      }
+     ]
+    },
+    "risk_bands": {
+     "Low": {
+      "n": 14382,
+      "share": 0.6864,
+      "simulated_event_rate": 0.0436,
+      "most_frequent_displayed_factors": {
+       "Project age at publication": 8234,
+       "Country income group": 3617,
+       "Procurement method": 3451
+      }
+     },
+     "Medium": {
+      "n": 4236,
+      "share": 0.2022,
+      "simulated_event_rate": 0.0836,
+      "most_frequent_displayed_factors": {
+       "Procurement method": 2173,
+       "Procurement category": 1922,
+       "Project age at publication": 1774
+      }
+     },
+     "High": {
+      "n": 2336,
+      "share": 0.1115,
+      "simulated_event_rate": 0.3151,
+      "most_frequent_displayed_factors": {
+       "Procurement category": 1124,
+       "Procurement method": 1109,
+       "Project age at publication": 853
+      }
+     },
+     "ordered_low_lt_medium_lt_high": true,
+     "cutoffs": {
+      "medium_cutoff_q70": 0.0723,
+      "high_cutoff_q90": 0.14772,
+      "rule": "High >= q90 of refit out-of-fold probabilities, Medium q70..q90, Low < q70 (v2 rule)"
+     }
+    }
+   },
+   "S0": {
+    "overall": {
+     "n": 20954,
+     "projects": 1192,
+     "realised_prevalence": 0.0801,
+     "mean_predicted_probability": 0.0834,
+     "PR_AUC": 0.0804,
+     "ROC_AUC": 0.5005,
+     "Brier": 0.074,
+     "Brier_constant_prevalence": 0.0737,
+     "ECE": 0.0134,
+     "calibration_bins": {
+      "mean_predicted": [
+       0.0579,
+       0.0672,
+       0.0724,
+       0.0766,
+       0.0798,
+       0.0831,
+       0.0871,
+       0.0926,
+       0.1008,
+       0.1168
+      ],
+      "observed": [
+       0.084,
+       0.0811,
+       0.0716,
+       0.0787,
+       0.0883,
+       0.0755,
+       0.0768,
+       0.0849,
+       0.0787,
+       0.0816
+      ]
+     },
+     "at_frozen_threshold": {
+      "TP": 520,
+      "FP": 5828,
+      "FN": 1159,
+      "TN": 13447,
+      "precision": 0.0819,
+      "recall": 0.3097,
+      "F1": 0.1296,
+      "alert_rate": 0.3029
+     },
+     "capacity": {
+      "5%": {
+       "TP": 71,
+       "FP": 977,
+       "FN": 1608,
+       "TN": 18298,
+       "precision": 0.0677,
+       "recall": 0.0423,
+       "F1": 0.0521,
+       "alert_rate": 0.05
+      },
+      "10%": {
+       "TP": 171,
+       "FP": 1925,
+       "FN": 1508,
+       "TN": 17350,
+       "precision": 0.0816,
+       "recall": 0.1018,
+       "F1": 0.0906,
+       "alert_rate": 0.1
+      },
+      "20%": {
+       "TP": 335,
+       "FP": 3856,
+       "FN": 1344,
+       "TN": 15419,
+       "precision": 0.0799,
+       "recall": 0.1995,
+       "F1": 0.1141,
+       "alert_rate": 0.2
+      },
+      "30%": {
+       "TP": 514,
+       "FP": 5773,
+       "FN": 1165,
+       "TN": 13502,
+       "precision": 0.0818,
+       "recall": 0.3061,
+       "F1": 0.129,
+       "alert_rate": 0.3
+      }
+     }
+    },
+    "ci_project": {
+     "PR_AUC": [
+      0.0758,
+      0.0857
+     ],
+     "ROC_AUC": [
+      0.4871,
+      0.514
+     ],
+     "F1": [
+      0.1195,
+      0.1394
+     ],
+     "recall": [
+      0.268,
+      0.3568
+     ],
+     "precision": [
+      0.0754,
+      0.0881
+     ],
+     "prevalence": [
+      0.0767,
+      0.0839
+     ]
+    },
+    "assumed_population_prevalence": 0.08,
+    "unseen_projects": {
+     "n": 7712,
+     "projects": 458,
+     "realised_prevalence": 0.0764,
+     "mean_predicted_probability": 0.0863,
+     "PR_AUC": 0.0741,
+     "ROC_AUC": 0.4819,
+     "Brier": 0.0711,
+     "Brier_constant_prevalence": 0.0705,
+     "ECE": 0.0194,
+     "calibration_bins": {
+      "mean_predicted": [
+       0.0595,
+       0.0697,
+       0.0746,
+       0.0781,
+       0.0817,
+       0.0857,
+       0.0899,
+       0.0956,
+       0.1036,
+       0.1247
+      ],
+      "observed": [
+       0.092,
+       0.0765,
+       0.0804,
+       0.0804,
+       0.0739,
+       0.0713,
+       0.0698,
+       0.0636,
+       0.0871,
+       0.0687
+      ]
+     },
+     "at_frozen_threshold": {
+      "TP": 204,
+      "FP": 2617,
+      "FN": 385,
+      "TN": 4506,
+      "precision": 0.0723,
+      "recall": 0.3463,
+      "F1": 0.1196,
+      "alert_rate": 0.3658
+     },
+     "capacity": {
+      "5%": {
+       "TP": 20,
+       "FP": 366,
+       "FN": 569,
+       "TN": 6757,
+       "precision": 0.0518,
+       "recall": 0.034,
+       "F1": 0.041,
+       "alert_rate": 0.0501
+      },
+      "10%": {
+       "TP": 53,
+       "FP": 719,
+       "FN": 536,
+       "TN": 6404,
+       "precision": 0.0687,
+       "recall": 0.09,
+       "F1": 0.0779,
+       "alert_rate": 0.1001
+      },
+      "20%": {
+       "TP": 120,
+       "FP": 1423,
+       "FN": 469,
+       "TN": 5700,
+       "precision": 0.0778,
+       "recall": 0.2037,
+       "F1": 0.1126,
+       "alert_rate": 0.2001
+      },
+      "30%": {
+       "TP": 169,
+       "FP": 2145,
+       "FN": 420,
+       "TN": 4978,
+       "precision": 0.073,
+       "recall": 0.2869,
+       "F1": 0.1164,
+       "alert_rate": 0.3001
+      }
+     },
+     "ci_project": {
+      "PR_AUC": [
+       0.0685,
+       0.0837
+      ],
+      "ROC_AUC": [
+       0.4618,
+       0.5041
+      ],
+      "F1": [
+       0.1052,
+       0.1355
+      ],
+      "recall": [
+       0.2723,
+       0.4218
+      ],
+      "precision": [
+       0.0631,
+       0.0829
+      ],
+      "prevalence": [
+       0.0713,
+       0.0816
+      ]
+     }
+    },
+    "segments": {
+     "procurement_method": [
+      {
+       "segment": "Consultant Qualification Selection",
+       "n": 2461,
+       "positives": 177,
+       "PR_AUC": 0.0816,
+       "TP": 57,
+       "FP": 593,
+       "FN": 120,
+       "TN": 1691,
+       "precision": 0.0877,
+       "recall": 0.322,
+       "F1": 0.1378,
+       "alert_rate": 0.2641
+      },
+      {
+       "segment": "Individual Consultant Selection",
+       "n": 6203,
+       "positives": 493,
+       "PR_AUC": 0.0759,
+       "TP": 135,
+       "FP": 1566,
+       "FN": 358,
+       "TN": 4144,
+       "precision": 0.0794,
+       "recall": 0.2738,
+       "F1": 0.1231,
+       "alert_rate": 0.2742
+      },
+      {
+       "segment": "Quality And Cost-Based Selection",
+       "n": 2670,
+       "positives": 224,
+       "PR_AUC": 0.0977,
+       "TP": 65,
+       "FP": 544,
+       "FN": 159,
+       "TN": 1902,
+       "precision": 0.1067,
+       "recall": 0.2902,
+       "F1": 0.1561,
+       "alert_rate": 0.2281
+      },
+      {
+       "segment": "Request for Bids",
+       "n": 6449,
+       "positives": 514,
+       "PR_AUC": 0.0775,
+       "TP": 205,
+       "FP": 2482,
+       "FN": 309,
+       "TN": 3453,
+       "precision": 0.0763,
+       "recall": 0.3988,
+       "F1": 0.1281,
+       "alert_rate": 0.4167
+      },
+      {
+       "segment": "Request for Quotations",
+       "n": 2649,
+       "positives": 229,
+       "PR_AUC": 0.0969,
+       "TP": 42,
+       "FP": 410,
+       "FN": 187,
+       "TN": 2010,
+       "precision": 0.0929,
+       "recall": 0.1834,
+       "F1": 0.1233,
+       "alert_rate": 0.1706
+      }
+     ],
+     "procurement_category": [
+      {
+       "segment": "Consultant Services",
+       "n": 11703,
+       "positives": 923,
+       "PR_AUC": 0.0804,
+       "TP": 272,
+       "FP": 2925,
+       "FN": 651,
+       "TN": 7855,
+       "precision": 0.0851,
+       "recall": 0.2947,
+       "F1": 0.132,
+       "alert_rate": 0.2732
+      },
+      {
+       "segment": "Goods",
+       "n": 4288,
+       "positives": 330,
+       "PR_AUC": 0.0777,
+       "TP": 144,
+       "FP": 1704,
+       "FN": 186,
+       "TN": 2254,
+       "precision": 0.0779,
+       "recall": 0.4364,
+       "F1": 0.1322,
+       "alert_rate": 0.431
+      },
+      {
+       "segment": "Non-consulting Services",
+       "n": 727,
+       "positives": 55,
+       "PR_AUC": 0.08,
+       "TP": 13,
+       "FP": 180,
+       "FN": 42,
+       "TN": 492,
+       "precision": 0.0674,
+       "recall": 0.2364,
+       "F1": 0.1048,
+       "alert_rate": 0.2655
+      },
+      {
+       "segment": "Works",
+       "n": 4210,
+       "positives": 369,
+       "PR_AUC": 0.0879,
+       "TP": 91,
+       "FP": 1019,
+       "FN": 278,
+       "TN": 2822,
+       "precision": 0.082,
+       "recall": 0.2466,
+       "F1": 0.1231,
+       "alert_rate": 0.2637
+      }
+     ],
+     "region_name": [
+      {
+       "segment": "East Asia and Pacific",
+       "n": 1762,
+       "positives": 142,
+       "PR_AUC": 0.0744,
+       "TP": 24,
+       "FP": 298,
+       "FN": 118,
+       "TN": 1322,
+       "precision": 0.0745,
+       "recall": 0.169,
+       "F1": 0.1034,
+       "alert_rate": 0.1827
+      },
+      {
+       "segment": "Eastern and Southern Africa",
+       "n": 7228,
+       "positives": 570,
+       "PR_AUC": 0.0835,
+       "TP": 248,
+       "FP": 2725,
+       "FN": 322,
+       "TN": 3933,
+       "precision": 0.0834,
+       "recall": 0.4351,
+       "F1": 0.14,
+       "alert_rate": 0.4113
+      },
+      {
+       "segment": "Europe and Central Asia",
+       "n": 1874,
+       "positives": 157,
+       "PR_AUC": 0.0818,
+       "TP": 25,
+       "FP": 267,
+       "FN": 132,
+       "TN": 1450,
+       "precision": 0.0856,
+       "recall": 0.1592,
+       "F1": 0.1114,
+       "alert_rate": 0.1558
+      },
+      {
+       "segment": "Latin America and Caribbean",
+       "n": 1288,
+       "positives": 99,
+       "PR_AUC": 0.0702,
+       "TP": 3,
+       "FP": 115,
+       "FN": 96,
+       "TN": 1074,
+       "precision": 0.0254,
+       "recall": 0.0303,
+       "F1": 0.0276,
+       "alert_rate": 0.0916
+      },
+      {
+       "segment": "Middle East, North Africa, Afghanistan, and Pakistan",
+       "n": 1664,
+       "positives": 128,
+       "PR_AUC": 0.0775,
+       "TP": 15,
+       "FP": 172,
+       "FN": 113,
+       "TN": 1364,
+       "precision": 0.0802,
+       "recall": 0.1172,
+       "F1": 0.0952,
+       "alert_rate": 0.1124
+      },
+      {
+       "segment": "South Asia",
+       "n": 2423,
+       "positives": 208,
+       "PR_AUC": 0.0832,
+       "TP": 67,
+       "FP": 743,
+       "FN": 141,
+       "TN": 1472,
+       "precision": 0.0827,
+       "recall": 0.3221,
+       "F1": 0.1316,
+       "alert_rate": 0.3343
+      },
+      {
+       "segment": "Western and Central Africa",
+       "n": 4705,
+       "positives": 375,
+       "PR_AUC": 0.0817,
+       "TP": 138,
+       "FP": 1506,
+       "FN": 237,
+       "TN": 2824,
+       "precision": 0.0839,
+       "recall": 0.368,
+       "F1": 0.1367,
+       "alert_rate": 0.3494
+      }
+     ]
+    },
+    "risk_bands": {
+     "Low": {
+      "n": 14451,
+      "share": 0.6897,
+      "simulated_event_rate": 0.0792,
+      "most_frequent_displayed_factors": {
+       "Project age at publication": 7433,
+       "Country income group": 2708,
+       "Procurement method": 21
+      }
+     },
+     "Medium": {
+      "n": 3322,
+      "share": 0.1585,
+      "simulated_event_rate": 0.0792,
+      "most_frequent_displayed_factors": {
+       "Project age at publication": 1968,
+       "Country income group": 1019,
+       "Procurement method": 40
+      }
+     },
+     "High": {
+      "n": 3181,
+      "share": 0.1518,
+      "simulated_event_rate": 0.0852,
+      "most_frequent_displayed_factors": {
+       "Project age at publication": 2063,
+       "Country income group": 1673,
+       "Procurement method": 177
+      }
+     },
+     "ordered_low_lt_medium_lt_high": false,
+     "cutoffs": {
+      "medium_cutoff_q70": 0.08878,
+      "high_cutoff_q90": 0.10083,
+      "rule": "High >= q90 of refit out-of-fold probabilities, Medium q70..q90, Low < q70 (v2 rule)"
+     }
+    },
+    "null_control": {
+     "ROC_AUC_ci_contains_0.5": true,
+     "PR_AUC_ci_contains_prevalence": true,
+     "pass": true
+    }
+   }
+  }
+ }
+}

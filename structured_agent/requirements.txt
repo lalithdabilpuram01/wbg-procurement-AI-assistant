@@ -1,0 +1,15 @@
+# Structured Data Agent dependencies (Python 3.12, /opt/anaconda3). Installed with approval on 2026-10-25:
+sqlglot==30.24.0
+psycopg[binary]==3.3.6
+# Already present in the environment and used as-is:
+pydantic==2.13.3
+fastmcp==2.12.5
+mcp==1.16.0               # transport needs anyio>=4.5: run the MCP server from .venv-structured-mcp (mcp_env/)
+opentelemetry-api==1.27.0
+opentelemetry-sdk==1.27.0
+rank-bm25==0.2.2
+sentence-transformers==5.4.1
+numpy
+databricks-connect==17.3.14
+pytest
+# Not installed (need approval): logfire, portkey-ai, pgvector (PostgreSQL extension)

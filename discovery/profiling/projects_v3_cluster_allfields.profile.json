@@ -1,0 +1,3315 @@
+{
+ "row_count": 276,
+ "columns": {
+  "boardapprovaldate": {
+   "observed_kinds": {
+    "str:date[ISO8601Z]": 275,
+    "null": 1
+   },
+   "null_pct": 0.36,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.64,
+   "distinct": 244,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2017-12-14T00:00:00Z",
+     4
+    ],
+    [
+     "2022-06-27T00:00:00Z",
+     3
+    ],
+    [
+     "2013-10-29T00:00:00Z",
+     2
+    ],
+    [
+     "2014-04-03T00:00:00Z",
+     2
+    ],
+    [
+     "2014-03-28T00:00:00Z",
+     2
+    ],
+    [
+     "2014-12-22T00:00:00Z",
+     2
+    ],
+    [
+     "2015-03-31T00:00:00Z",
+     2
+    ],
+    [
+     "2017-07-20T00:00:00Z",
+     2
+    ]
+   ],
+   "max_len": 20,
+   "date_min": "2008-05-01",
+   "date_max": "2026-03-19"
+  },
+  "boardapprovaldate_exact": {
+   "observed_kinds": {
+    "str:date[YYYY-MM-DD]": 275,
+    "null": 1
+   },
+   "null_pct": 0.36,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.64,
+   "distinct": 244,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2017-12-14",
+     4
+    ],
+    [
+     "2022-06-27",
+     3
+    ],
+    [
+     "2013-10-29",
+     2
+    ],
+    [
+     "2014-04-03",
+     2
+    ],
+    [
+     "2014-03-28",
+     2
+    ],
+    [
+     "2014-12-22",
+     2
+    ],
+    [
+     "2015-03-31",
+     2
+    ],
+    [
+     "2017-07-20",
+     2
+    ]
+   ],
+   "max_len": 10,
+   "date_min": "2008-05-01",
+   "date_max": "2026-03-19"
+  },
+  "borrower": {
+   "observed_kinds": {
+    "str": 275,
+    "null": 1
+   },
+   "null_pct": 0.36,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.64,
+   "distinct": 193,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Ministry of Finance",
+     9
+    ],
+    [
+     "India",
+     8
+    ],
+    [
+     "People's Republic of Bangladesh",
+     6
+    ],
+    [
+     "Islamic Republic of Pakistan",
+     6
+    ],
+    [
+     "Republic of Indonesia",
+     6
+    ],
+    [
+     "People's Republic of China",
+     5
+    ],
+    [
+     "Independent State of Samoa",
+     5
+    ],
+    [
+     "Republic of Maldives",
+     4
+    ]
+   ],
+   "max_len": 151
+  },
+  "borrower_exact": {
+   "observed_kinds": {
+    "str": 275,
+    "null": 1
+   },
+   "null_pct": 0.36,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.64,
+   "distinct": 193,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Ministry of Finance",
+     9
+    ],
+    [
+     "India",
+     8
+    ],
+    [
+     "People's Republic of Bangladesh",
+     6
+    ],
+    [
+     "Islamic Republic of Pakistan",
+     6
+    ],
+    [
+     "Republic of Indonesia",
+     6
+    ],
+    [
+     "People's Republic of China",
+     5
+    ],
+    [
+     "Independent State of Samoa",
+     5
+    ],
+    [
+     "Republic of Maldives",
+     4
+    ]
+   ],
+   "max_len": 151
+  },
+  "closingdate": {
+   "observed_kinds": {
+    "str:date[YYYY-MM-DD]": 275,
+    "null": 1
+   },
+   "null_pct": 0.36,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.64,
+   "distinct": 121,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2026-12-31",
+     13
+    ],
+    [
+     "2027-12-31",
+     12
+    ],
+    [
+     "2027-03-31",
+     11
+    ],
+    [
+     "2023-06-30",
+     9
+    ],
+    [
+     "2028-12-31",
+     9
+    ],
+    [
+     "2026-06-30",
+     9
+    ],
+    [
+     "2028-06-30",
+     9
+    ],
+    [
+     "2022-12-31",
+     8
+    ]
+   ],
+   "max_len": 10,
+   "date_min": "2019-08-31",
+   "date_max": "2033-12-31"
+  },
+  "cons_serv_reqd_ind": {
+   "observed_kinds": {
+    "str": 247,
+    "null": 29
+   },
+   "null_pct": 10.51,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 89.49,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Yes",
+     163
+    ],
+    [
+     "TBD",
+     46
+    ],
+    [
+     "No",
+     38
+    ]
+   ],
+   "max_len": 3
+  },
+  "cons_serv_reqd_ind_exact": {
+   "observed_kinds": {
+    "str": 247,
+    "null": 29
+   },
+   "null_pct": 10.51,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 89.49,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Yes",
+     163
+    ],
+    [
+     "TBD",
+     46
+    ],
+    [
+     "No",
+     38
+    ]
+   ],
+   "max_len": 3
+  },
+  "countrycode": {
+   "observed_kinds": {
+    "list": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 106,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "[\"1W\"]",
+     15
+    ],
+    [
+     "[\"IN\"]",
+     14
+    ],
+    [
+     "[\"BD\"]",
+     9
+    ],
+    [
+     "[\"CN\"]",
+     8
+    ],
+    [
+     "[\"PK\"]",
+     8
+    ],
+    [
+     "[\"ID\"]",
+     8
+    ],
+    [
+     "[\"BR\"]",
+     7
+    ],
+    [
+     "[\"AF\"]",
+     6
+    ]
+   ],
+   "max_len": 6
+  },
+  "countryhomepageurl": {
+   "observed_kinds": {
+    "str": 238,
+    "null": 38
+   },
+   "null_pct": 13.77,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 86.23,
+   "distinct": 84,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "http://www.worldbank.org/en/country/india",
+     14
+    ],
+    [
+     "http://www.worldbank.org/en/country/bangladesh",
+     9
+    ],
+    [
+     "http://www.worldbank.org/en/country/pacificislands",
+     9
+    ],
+    [
+     "http://www.worldbank.org/en/country/china",
+     8
+    ],
+    [
+     "http://www.worldbank.org/en/country/pakistan",
+     8
+    ],
+    [
+     "http://www.worldbank.org/en/country/indonesia",
+     8
+    ],
+    [
+     "http://www.worldbank.org/en/country/eu",
+     7
+    ],
+    [
+     "http://www.worldbank.org/en/country/afghanistan",
+     6
+    ]
+   ],
+   "max_len": 58
+  },
+  "countryname": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 106,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "World",
+     15
+    ],
+    [
+     "Republic of India",
+     14
+    ],
+    [
+     "People's Republic of Bangladesh",
+     9
+    ],
+    [
+     "People's Republic of China",
+     8
+    ],
+    [
+     "Islamic Republic of Pakistan",
+     8
+    ],
+    [
+     "Republic of Indonesia",
+     8
+    ],
+    [
+     "Federative Republic of Brazil",
+     7
+    ],
+    [
+     "Islamic  Republic of Afghanistan",
+     6
+    ]
+   ],
+   "max_len": 44
+  },
+  "countryshortname": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 106,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "World",
+     15
+    ],
+    [
+     "India",
+     14
+    ],
+    [
+     "Bangladesh",
+     9
+    ],
+    [
+     "China",
+     8
+    ],
+    [
+     "Pakistan",
+     8
+    ],
+    [
+     "Indonesia",
+     8
+    ],
+    [
+     "Brazil",
+     7
+    ],
+    [
+     "Afghanistan",
+     6
+    ]
+   ],
+   "max_len": 32
+  },
+  "countryshortname_exact": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 106,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "World",
+     15
+    ],
+    [
+     "India",
+     14
+    ],
+    [
+     "Bangladesh",
+     9
+    ],
+    [
+     "China",
+     8
+    ],
+    [
+     "Pakistan",
+     8
+    ],
+    [
+     "Indonesia",
+     8
+    ],
+    [
+     "Brazil",
+     7
+    ],
+    [
+     "Afghanistan",
+     6
+    ]
+   ],
+   "max_len": 32
+  },
+  "curr_ibrd_commitment": {
+   "observed_kinds": {
+    "str:int": 203,
+    "null": 73
+   },
+   "null_pct": 26.45,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 73.55,
+   "distinct": 53,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0",
+     128
+    ],
+    [
+     "50000000",
+     6
+    ],
+    [
+     "300000000",
+     5
+    ],
+    [
+     "200000000",
+     3
+    ],
+    [
+     "150000000",
+     3
+    ],
+    [
+     "100000000",
+     3
+    ],
+    [
+     "250000000",
+     3
+    ],
+    [
+     "500000000",
+     2
+    ]
+   ],
+   "max_len": 10
+  },
+  "curr_ida_commitment": {
+   "observed_kinds": {
+    "str:int": 203,
+    "null": 73
+   },
+   "null_pct": 26.45,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 73.55,
+   "distinct": 89,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0",
+     71
+    ],
+    [
+     "150000000",
+     6
+    ],
+    [
+     "30000000",
+     6
+    ],
+    [
+     "200000000",
+     6
+    ],
+    [
+     "50000000",
+     5
+    ],
+    [
+     "250000000",
+     4
+    ],
+    [
+     "45000000",
+     4
+    ],
+    [
+     "100000000",
+     4
+    ]
+   ],
+   "max_len": 10
+  },
+  "curr_project_cost": {
+   "observed_kinds": {
+    "str:int": 256,
+    "null": 20
+   },
+   "null_pct": 7.25,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 92.75,
+   "distinct": 186,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "50000000",
+     8
+    ],
+    [
+     "250000000",
+     7
+    ],
+    [
+     "0",
+     7
+    ],
+    [
+     "100000000",
+     6
+    ],
+    [
+     "45000000",
+     5
+    ],
+    [
+     "300000000",
+     5
+    ],
+    [
+     "68000000",
+     4
+    ],
+    [
+     "400000000",
+     4
+    ]
+   ],
+   "max_len": 11
+  },
+  "curr_total_commitment": {
+   "observed_kinds": {
+    "str:int": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 189,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "50000000",
+     13
+    ],
+    [
+     "300000000",
+     9
+    ],
+    [
+     "100000000",
+     8
+    ],
+    [
+     "200000000",
+     7
+    ],
+    [
+     "250000000",
+     7
+    ],
+    [
+     "150000000",
+     7
+    ],
+    [
+     "30000000",
+     5
+    ],
+    [
+     "20000000",
+     5
+    ]
+   ],
+   "max_len": 11
+  },
+  "envassesmentcategorycode": {
+   "observed_kinds": {
+    "null": 149,
+    "str": 127
+   },
+   "null_pct": 53.99,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 46.01,
+   "distinct": 5,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "B",
+     85
+    ],
+    [
+     "A",
+     21
+    ],
+    [
+     "C",
+     19
+    ],
+    [
+     "F",
+     1
+    ],
+    [
+     "H",
+     1
+    ]
+   ],
+   "max_len": 1
+  },
+  "esrc_ovrl_risk_rate": {
+   "observed_kinds": {
+    "str": 142,
+    "null": 134
+   },
+   "null_pct": 48.55,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 51.45,
+   "distinct": 4,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "S",
+     56
+    ],
+    [
+     "M",
+     50
+    ],
+    [
+     "L",
+     25
+    ],
+    [
+     "H",
+     11
+    ]
+   ],
+   "max_len": 1
+  },
+  "esrc_ovrl_risk_rate_exact": {
+   "observed_kinds": {
+    "str": 142,
+    "null": 134
+   },
+   "null_pct": 48.55,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 51.45,
+   "distinct": 4,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "S",
+     56
+    ],
+    [
+     "M",
+     50
+    ],
+    [
+     "L",
+     25
+    ],
+    [
+     "H",
+     11
+    ]
+   ],
+   "max_len": 1
+  },
+  "financers": {
+   "observed_kinds": {
+    "list": 275,
+    "null": 1
+   },
+   "null_pct": 0.36,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.64,
+   "distinct": 267,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "[{\"fincr_curr_amt\": \"250000000\", \"fincr_curr_id\": \"USD  \", \"fincr_id\": \"IBRD\", \"fincr_usd_amt\": \"250000000\", \"fincrname\"",
+     3
+    ],
+    [
+     "[{\"fincr_curr_amt\": \"50000000\", \"fincr_curr_id\": \"USD  \", \"fincr_id\": \"IBRD\", \"fincr_usd_amt\": \"50000000\", \"fincrname\": ",
+     2
+    ],
+    [
+     "[{\"fincr_curr_amt\": \"300000\", \"fincr_curr_id\": \"USD  \", \"fincr_id\": \"EGPS\", \"fincr_usd_amt\": \"300000\", \"fincrname\": \"Ext",
+     2
+    ],
+    [
+     "[{\"fincr_curr_amt\": \"20000000\", \"fincr_curr_id\": \"USD  \", \"fincr_id\": \"IDAT\", \"fincr_usd_amt\": \"20000000\", \"fincrname\": ",
+     2
+    ],
+    [
+     "[{\"fincr_curr_amt\": \"45000000\", \"fincr_curr_id\": \"USD  \", \"fincr_id\": \"IDA\", \"fincr_usd_amt\": \"45000000\", \"fincrname\": \"",
+     2
+    ],
+    [
+     "[{\"fincr_curr_amt\": \"50000000\", \"fincr_curr_id\": \"USD  \", \"fincr_id\": \"IDAT\", \"fincr_usd_amt\": \"50000000\", \"fincrname\": ",
+     2
+    ],
+    [
+     "[{\"fincr_curr_amt\": \"30000000\", \"fincr_curr_id\": \"USD  \", \"fincr_id\": \"IDAT\", \"fincr_usd_amt\": \"30000000\", \"fincrname\": ",
+     2
+    ],
+    [
+     "[{\"fincr_curr_amt\": \"375000000\", \"fincr_curr_id\": \"USD  \", \"fincr_id\": \"BORR\", \"fincr_usd_amt\": \"375000000\", \"fincrname\"",
+     1
+    ]
+   ],
+   "max_len": 2613
+  },
+  "fiscalyear": {
+   "observed_kinds": {
+    "str:int": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 18,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2022",
+     41
+    ],
+    [
+     "2023",
+     24
+    ],
+    [
+     "2017",
+     22
+    ],
+    [
+     "2019",
+     21
+    ],
+    [
+     "2021",
+     21
+    ],
+    [
+     "2018",
+     20
+    ],
+    [
+     "2024",
+     20
+    ],
+    [
+     "2025",
+     20
+    ]
+   ],
+   "max_len": 4
+  },
+  "geo_locations": {
+   "observed_kinds": {
+    "list": 259,
+    "null": 17
+   },
+   "null_pct": 6.16,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 93.84,
+   "distinct": 259,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "[{\"admin_unit1_name\": null, \"admin_unit2_name\": null, \"geo_latitude_nbr\": \"46.088711\", \"geo_loc_id\": \"1518649\", \"geo_loc",
+     1
+    ],
+    [
+     "[{\"admin_unit1_name\": \"Yozgat Province\", \"admin_unit2_name\": null, \"geo_latitude_nbr\": \"39.583328\", \"geo_loc_id\": \"29656",
+     1
+    ],
+    [
+     "[{\"admin_unit1_name\": null, \"admin_unit2_name\": null, \"geo_latitude_nbr\": \"-22.902781\", \"geo_loc_id\": \"3451190\", \"geo_lo",
+     1
+    ],
+    [
+     "[{\"admin_unit1_name\": \"Cesar\", \"admin_unit2_name\": null, \"geo_latitude_nbr\": \"10.46314\", \"geo_loc_id\": \"3666304\", \"geo_l",
+     1
+    ],
+    [
+     "[{\"admin_unit1_name\": null, \"admin_unit2_name\": null, \"geo_latitude_nbr\": \"-1.28333\", \"geo_loc_id\": \"184742\", \"geo_loc_n",
+     1
+    ],
+    [
+     "[{\"admin_unit1_name\": \"Bengal\", \"admin_unit2_name\": null, \"geo_latitude_nbr\": \"24.0\", \"geo_loc_id\": \"1252881\", \"geo_loc_",
+     1
+    ],
+    [
+     "[{\"admin_unit1_name\": \"Hebei\", \"admin_unit2_name\": null, \"geo_latitude_nbr\": \"39.0\", \"geo_loc_id\": \"1808773\", \"geo_loc_n",
+     1
+    ],
+    [
+     "[{\"admin_unit1_name\": \"Ulaanbaatar Hot\", \"admin_unit2_name\": null, \"geo_latitude_nbr\": \"47.907711\", \"geo_loc_id\": \"20284",
+     1
+    ]
+   ],
+   "max_len": 39643,
+   "unique_when_present": true
+  },
+  "grantamt": {
+   "observed_kinds": {
+    "str:int": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 97,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0",
+     159
+    ],
+    [
+     "5000000",
+     6
+    ],
+    [
+     "300000",
+     4
+    ],
+    [
+     "3600000",
+     3
+    ],
+    [
+     "1000000",
+     3
+    ],
+    [
+     "110000000",
+     2
+    ],
+    [
+     "27000000",
+     2
+    ],
+    [
+     "8500000",
+     2
+    ]
+   ],
+   "max_len": 11
+  },
+  "icr_ratings": {
+   "observed_kinds": {
+    "null": 152,
+    "list": 124
+   },
+   "null_pct": 55.07,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 44.93,
+   "distinct": 120,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "[{\"bankqualityentry\": null, \"banksupervision\": null, \"borrgovt\": null, \"borrimplegency\": null, \"borroverall\": null, \"com",
+     2
+    ],
+    [
+     "[{\"bankqualityentry\": null, \"banksupervision\": null, \"borrgovt\": null, \"borrimplegency\": null, \"borroverall\": null, \"com",
+     2
+    ],
+    [
+     "[{\"bankqualityentry\": null, \"banksupervision\": null, \"borrgovt\": null, \"borrimplegency\": null, \"borroverall\": null, \"com",
+     2
+    ],
+    [
+     "[{\"bankqualityentry\": null, \"banksupervision\": null, \"borrgovt\": null, \"borrimplegency\": null, \"borroverall\": null, \"com",
+     2
+    ],
+    [
+     "[{\"bankqualityentry\": null, \"banksupervision\": null, \"borrgovt\": null, \"borrimplegency\": null, \"borroverall\": null, \"com",
+     1
+    ],
+    [
+     "[{\"bankqualityentry\": null, \"banksupervision\": null, \"borrgovt\": null, \"borrimplegency\": null, \"borroverall\": null, \"com",
+     1
+    ],
+    [
+     "[{\"bankqualityentry\": null, \"banksupervision\": null, \"borrgovt\": null, \"borrimplegency\": null, \"borroverall\": null, \"com",
+     1
+    ],
+    [
+     "[{\"bankqualityentry\": \"Not Rated\", \"banksupervision\": \"Not Rated\", \"borrgovt\": null, \"borrimplegency\": null, \"borroveral",
+     1
+    ]
+   ],
+   "max_len": 13740
+  },
+  "id": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 276,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "P099270",
+     1
+    ],
+    [
+     "P106284",
+     1
+    ],
+    [
+     "P111996",
+     1
+    ],
+    [
+     "P117947",
+     1
+    ],
+    [
+     "P121019",
+     1
+    ],
+    [
+     "P121185",
+     1
+    ],
+    [
+     "P122319",
+     1
+    ],
+    [
+     "P122320",
+     1
+    ]
+   ],
+   "max_len": 7,
+   "unique_when_present": true
+  },
+  "idacommamt": {
+   "observed_kinds": {
+    "str:int": 203,
+    "null": 73
+   },
+   "null_pct": 26.45,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 73.55,
+   "distinct": 89,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "0",
+     71
+    ],
+    [
+     "150000000",
+     6
+    ],
+    [
+     "30000000",
+     6
+    ],
+    [
+     "200000000",
+     6
+    ],
+    [
+     "50000000",
+     5
+    ],
+    [
+     "250000000",
+     4
+    ],
+    [
+     "45000000",
+     4
+    ],
+    [
+     "100000000",
+     4
+    ]
+   ],
+   "max_len": 10
+  },
+  "ieg_ratings": {
+   "observed_kinds": {
+    "null": 183,
+    "list": 93
+   },
+   "null_pct": 66.3,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 33.7,
+   "distinct": 92,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "[{\"bankqualityofsupervision\": \"Satisfactory\", \"borrowcompliance\": null, \"borrowimplementation\": null, \"evaldate\": \"2024-",
+     2
+    ],
+    [
+     "[{\"bankqualityofsupervision\": \"Satisfactory\", \"borrowcompliance\": null, \"borrowimplementation\": null, \"evaldate\": \"2025-",
+     1
+    ],
+    [
+     "[{\"bankqualityofsupervision\": \"Satisfactory\", \"borrowcompliance\": null, \"borrowimplementation\": null, \"evaldate\": \"2024-",
+     1
+    ],
+    [
+     "[{\"bankqualityofsupervision\": \"Moderately Satisfactory\", \"borrowcompliance\": null, \"borrowimplementation\": null, \"evalda",
+     1
+    ],
+    [
+     "[{\"bankqualityofsupervision\": \"Moderately Satisfactory\", \"borrowcompliance\": \"Not Rated\", \"borrowimplementation\": null, ",
+     1
+    ],
+    [
+     "[{\"bankqualityofsupervision\": \"Satisfactory\", \"borrowcompliance\": null, \"borrowimplementation\": null, \"evaldate\": \"2026-",
+     1
+    ],
+    [
+     "[{\"bankqualityofsupervision\": \"Moderately Satisfactory\", \"borrowcompliance\": \"Not Rated\", \"borrowimplementation\": null, ",
+     1
+    ],
+    [
+     "[{\"bankqualityofsupervision\": \"Moderately Satisfactory\", \"borrowcompliance\": \"Not Rated\", \"borrowimplementation\": null, ",
+     1
+    ]
+   ],
+   "max_len": 677
+  },
+  "impagency": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 255,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Ministry of Health",
+     8
+    ],
+    [
+     "Ministry of Finance",
+     7
+    ],
+    [
+     "Ministry of Education",
+     3
+    ],
+    [
+     "Kabul Municipality (KM)",
+     2
+    ],
+    [
+     "Ministry of Education and Sports",
+     2
+    ],
+    [
+     "Ministry of Agriculture",
+     2
+    ],
+    [
+     "Community Development and Investment Agency (ARIS)",
+     2
+    ],
+    [
+     "Interstate Statistical Committee of the Commonwealth of Independent States (CIS-STAT)",
+     2
+    ]
+   ],
+   "max_len": 476
+  },
+  "impagency_exact": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 255,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Ministry of Health",
+     8
+    ],
+    [
+     "Ministry of Finance",
+     7
+    ],
+    [
+     "Ministry of Education",
+     3
+    ],
+    [
+     "Kabul Municipality (KM)",
+     2
+    ],
+    [
+     "Ministry of Education and Sports",
+     2
+    ],
+    [
+     "Ministry of Agriculture",
+     2
+    ],
+    [
+     "Community Development and Investment Agency (ARIS)",
+     2
+    ],
+    [
+     "Interstate Statistical Committee of the Commonwealth of Independent States (CIS-STAT)",
+     2
+    ]
+   ],
+   "max_len": 476
+  },
+  "indicators": {
+   "observed_kinds": {
+    "list": 236,
+    "null": 40
+   },
+   "null_pct": 14.49,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 85.51,
+   "distinct": 236,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "[{\"Baseline\": {\"Comment\": null, \"Date\": \"2010-06-30T00:00:00Z\", \"Value\": \"No\"}, \"Current\": {\"Comment\": null, \"Date\": \"20",
+     1
+    ],
+    [
+     "[{\"Baseline\": {\"Comment\": null, \"Date\": \"2008-04-07T00:00:00Z\", \"Value\": \"0.00\"}, \"Current\": {\"Comment\": null, \"Date\": \"",
+     1
+    ],
+    [
+     "[{\"Baseline\": {\"Comment\": null, \"Date\": \"2008-12-30T00:00:00Z\", \"Value\": \"0.00\"}, \"Current\": {\"Comment\": null, \"Date\": \"",
+     1
+    ],
+    [
+     "[{\"Baseline\": {\"Comment\": null, \"Date\": \"2010-12-31T00:00:00Z\", \"Value\": \"27.90\"}, \"Current\": {\"Comment\": null, \"Date\": ",
+     1
+    ],
+    [
+     "[{\"Baseline\": {\"Comment\": null, \"Date\": \"2012-12-31T00:00:00Z\", \"Value\": \"0.00\"}, \"Current\": {\"Comment\": null, \"Date\": \"",
+     1
+    ],
+    [
+     "[{\"Baseline\": {\"Comment\": null, \"Date\": \"2013-09-12T00:00:00Z\", \"Value\": \"No AMS\"}, \"Current\": {\"Comment\": null, \"Date\":",
+     1
+    ],
+    [
+     "[{\"Baseline\": {\"Comment\": null, \"Date\": \"2010-12-31T00:00:00Z\", \"Value\": \"0.00\"}, \"Current\": {\"Comment\": null, \"Date\": \"",
+     1
+    ],
+    [
+     "[{\"Baseline\": {\"Comment\": null, \"Date\": \"2019-06-14T00:00:00Z\", \"Value\": \"0.00\"}, \"Current\": {\"Comment\": null, \"Date\": \"",
+     1
+    ]
+   ],
+   "max_len": 24229,
+   "unique_when_present": true
+  },
+  "isr_ratings": {
+   "observed_kinds": {
+    "list": 273,
+    "null": 3
+   },
+   "null_pct": 1.09,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 98.91,
+   "distinct": 271,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "[{\"code\": \"1000\", \"isr_date\": \"2023-05-23\", \"name\": \"Overall\", \"value\": \"Low\"}, {\"code\": \"10\", \"isr_date\": \"2023-05-23\",",
+     2
+    ],
+    [
+     "[{\"code\": \"18\", \"isr_date\": \"2026-07-28\", \"name\": \"Financial Management\", \"value\": \"Satisfactory\"}, {\"code\": \"125\", \"isr",
+     2
+    ],
+    [
+     "[{\"code\": \"18\", \"isr_date\": \"2024-06-02\", \"name\": \"Financial Management\", \"value\": \"Satisfactory\"}, {\"code\": \"125\", \"isr",
+     1
+    ],
+    [
+     "[{\"code\": \"25\", \"isr_date\": \"2022-12-22\", \"name\": \"Counterpart Funding\", \"value\": \"Satisfactory\"}, {\"code\": \"18\", \"isr_d",
+     1
+    ],
+    [
+     "[{\"code\": \"25\", \"isr_date\": \"2023-01-02\", \"name\": \"Counterpart Funding\", \"value\": \"Satisfactory\"}, {\"code\": \"18\", \"isr_d",
+     1
+    ],
+    [
+     "[{\"code\": \"25\", \"isr_date\": \"2020-10-02\", \"name\": \"Counterpart Funding\", \"value\": \"Moderately Satisfactory\"}, {\"code\": \"",
+     1
+    ],
+    [
+     "[{\"code\": \"18\", \"isr_date\": \"2024-09-24\", \"name\": \"Financial Management\", \"value\": \"Satisfactory\"}, {\"code\": \"125\", \"isr",
+     1
+    ],
+    [
+     "[{\"code\": \"25\", \"isr_date\": \"2020-06-30\", \"name\": \"Counterpart Funding\", \"value\": \"Satisfactory\"}, {\"code\": \"18\", \"isr_d",
+     1
+    ]
+   ],
+   "max_len": 2476
+  },
+  "last_stage_reached_name": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 5,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Board Approved",
+     217
+    ],
+    [
+     "CD Approved",
+     27
+    ],
+    [
+     "RVP Approved",
+     19
+    ],
+    [
+     "GD Approved",
+     12
+    ],
+    [
+     "Concept Review",
+     1
+    ]
+   ],
+   "max_len": 14
+  },
+  "lendprojectcost": {
+   "observed_kinds": {
+    "str:int": 256,
+    "null": 20
+   },
+   "null_pct": 7.25,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 92.75,
+   "distinct": 186,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "50000000",
+     8
+    ],
+    [
+     "250000000",
+     7
+    ],
+    [
+     "0",
+     7
+    ],
+    [
+     "100000000",
+     6
+    ],
+    [
+     "45000000",
+     5
+    ],
+    [
+     "300000000",
+     5
+    ],
+    [
+     "68000000",
+     4
+    ],
+    [
+     "400000000",
+     4
+    ]
+   ],
+   "max_len": 11
+  },
+  "loan_effective_date": {
+   "observed_kinds": {
+    "str:date[YYYY-MM-DD]": 275,
+    "null": 1
+   },
+   "null_pct": 0.36,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.64,
+   "distinct": 255,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2022-09-26",
+     3
+    ],
+    [
+     "2014-04-11",
+     2
+    ],
+    [
+     "2014-05-08",
+     2
+    ],
+    [
+     "2015-02-16",
+     2
+    ],
+    [
+     "2016-06-20",
+     2
+    ],
+    [
+     "2017-09-11",
+     2
+    ],
+    [
+     "2017-09-20",
+     2
+    ],
+    [
+     "2018-07-26",
+     2
+    ]
+   ],
+   "max_len": 10,
+   "date_min": "2008-08-13",
+   "date_max": "2026-08-06"
+  },
+  "loan_transactions": {
+   "observed_kinds": {
+    "list": 203,
+    "null": 73
+   },
+   "null_pct": 26.45,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 73.55,
+   "distinct": 203,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "[{\"amount\": \"-1350000\", \"financier_loan\": \"IBRD-76810\", \"period\": \"2021-11-30T00:00:00.000Z\", \"transactiontype\": \"LOAN_D",
+     1
+    ],
+    [
+     "[{\"amount\": \"-1.036179004E7\", \"financier_loan\": \"IBRD-75370\", \"period\": \"2015-02-15T00:00:00.000Z\", \"transactiontype\": \"",
+     1
+    ],
+    [
+     "[{\"amount\": \"-1.313193776E7\", \"financier_loan\": \"IBRD-77190\", \"period\": \"2014-04-15T00:00:00.000Z\", \"transactiontype\": \"",
+     1
+    ],
+    [
+     "[{\"amount\": \"-1.4097026705E8\", \"financier_loan\": \"IBRD-80830\", \"period\": \"2019-08-15T00:00:00.000Z\", \"transactiontype\": ",
+     1
+    ],
+    [
+     "[{\"amount\": \"-1075900\", \"financier_loan\": \"IDA-61210\", \"period\": \"2024-07-03T00:00:00.000Z\", \"transactiontype\": \"LOAN_DI",
+     1
+    ],
+    [
+     "[{\"amount\": \"1.05215032E7\", \"financier_loan\": \"IBRD-83010\", \"period\": \"2020-03-15T00:00:00.000Z\", \"transactiontype\": \"LO",
+     1
+    ],
+    [
+     "[{\"amount\": \"-1735733.34\", \"financier_loan\": \"IBRD-81310\", \"period\": \"2016-11-22T00:00:00.000Z\", \"transactiontype\": \"LOA",
+     1
+    ],
+    [
+     "[{\"amount\": \"-108591.98\", \"financier_loan\": \"IDA-64930\", \"period\": \"2024-06-24T00:00:00.000Z\", \"transactiontype\": \"LOAN_",
+     1
+    ]
+   ],
+   "max_len": 125146,
+   "unique_when_present": true
+  },
+  "major_sector_code": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 84,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "TX",
+     28
+    ],
+    [
+     "BX",
+     28
+    ],
+    [
+     "HX",
+     22
+    ],
+    [
+     "LX",
+     20
+    ],
+    [
+     "EX",
+     19
+    ],
+    [
+     "AX",
+     14
+    ],
+    [
+     "SX",
+     10
+    ],
+    [
+     "WX",
+     9
+    ]
+   ],
+   "max_len": 14
+  },
+  "major_sector_name": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 84,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "FY17 - Transportation",
+     28
+    ],
+    [
+     "FY17 - Public Administration",
+     28
+    ],
+    [
+     "FY17 - Health",
+     22
+    ],
+    [
+     "FY17 - Energy and Extractives",
+     20
+    ],
+    [
+     "FY17 - Education",
+     19
+    ],
+    [
+     "FY17 - Agriculture, Fishing and Forestry",
+     14
+    ],
+    [
+     "FY17 - Social Protection",
+     10
+    ],
+    [
+     "FY17 - Water, Sanitation and Waste Management",
+     9
+    ]
+   ],
+   "max_len": 162
+  },
+  "major_sectors": {
+   "observed_kinds": {
+    "list": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 245,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "[{\"major_sector\": {\"major_sector_code\": \"BX\", \"major_sector_name\": \"FY17 - Public Administration\", \"sectors\": [{\"sector_",
+     11
+    ],
+    [
+     "[{\"major_sector\": {\"major_sector_code\": \"BX\", \"major_sector_name\": \"FY17 - Public Administration\", \"sectors\": [{\"sector_",
+     9
+    ],
+    [
+     "[{\"major_sector\": {\"major_sector_code\": \"BX\", \"major_sector_name\": \"FY17 - Public Administration\", \"sectors\": [{\"sector_",
+     4
+    ],
+    [
+     "[{\"major_sector\": {\"major_sector_code\": \"SX\", \"major_sector_name\": \"FY17 - Social Protection\", \"sectors\": [{\"sector_code",
+     3
+    ],
+    [
+     "[{\"major_sector\": {\"major_sector_code\": \"TX\", \"major_sector_name\": \"FY17 - Transportation\", \"sectors\": [{\"sector_code\": ",
+     2
+    ],
+    [
+     "[{\"major_sector\": {\"major_sector_code\": \"TX\", \"major_sector_name\": \"FY17 - Transportation\", \"sectors\": [{\"sector_code\": ",
+     2
+    ],
+    [
+     "[{\"major_sector\": {\"major_sector_code\": \"HX\", \"major_sector_name\": \"FY17 - Health\", \"sectors\": [{\"sector_code\": \"HF\", \"s",
+     2
+    ],
+    [
+     "[{\"major_sector\": {\"major_sector_code\": \"HX\", \"major_sector_name\": \"FY17 - Health\", \"sectors\": [{\"sector_code\": \"HF\", \"s",
+     2
+    ]
+   ],
+   "max_len": 1195
+  },
+  "milestones": {
+   "observed_kinds": {
+    "list": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 276,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "[{\"apprvl_date\": \"2009-04-30T00:00:00Z\", \"authorize_negotiations_date\": \"2008-10-15T00:00:00Z\", \"begin_apprsl_date\": \"20",
+     1
+    ],
+    [
+     "[{\"apprvl_date\": \"2008-05-01T00:00:00Z\", \"authorize_negotiations_date\": \"2008-03-17T00:00:00Z\", \"begin_apprsl_date\": \"20",
+     1
+    ],
+    [
+     "[{\"apprvl_date\": \"2009-07-09T00:00:00Z\", \"authorize_negotiations_date\": \"2009-04-30T00:00:00Z\", \"begin_apprsl_date\": \"20",
+     1
+    ],
+    [
+     "[{\"apprvl_date\": \"2011-07-21T00:00:00Z\", \"authorize_negotiations_date\": \"2011-04-14T00:00:00Z\", \"begin_apprsl_date\": \"20",
+     1
+    ],
+    [
+     "[{\"apprvl_date\": \"2012-11-15T00:00:00Z\", \"authorize_negotiations_date\": \"2012-07-24T00:00:00Z\", \"begin_apprsl_date\": \"20",
+     1
+    ],
+    [
+     "[{\"apprvl_date\": \"2013-10-29T00:00:00Z\", \"authorize_negotiations_date\": \"2013-09-26T00:00:00Z\", \"begin_apprsl_date\": \"20",
+     1
+    ],
+    [
+     "[{\"apprvl_date\": \"2012-03-15T00:00:00Z\", \"authorize_negotiations_date\": \"2012-02-01T00:00:00Z\", \"begin_apprsl_date\": \"20",
+     1
+    ],
+    [
+     "[{\"apprvl_date\": \"2012-04-03T00:00:00Z\", \"authorize_negotiations_date\": \"2011-12-19T00:00:00Z\", \"begin_apprsl_date\": \"20",
+     1
+    ]
+   ],
+   "max_len": 367,
+   "unique_when_present": true
+  },
+  "mjsector": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 188,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "FY17 - Public Administration - Transportation,FY17 - Rural and Inter-Urban Roads",
+     14
+    ],
+    [
+     "FY17 - Health,FY17 - Public Administration - Health",
+     13
+    ],
+    [
+     "FY17 - Central Government (Central Agencies)",
+     12
+    ],
+    [
+     "FY17 - Public Administration - Social Protection,FY17 - Social Protection",
+     10
+    ],
+    [
+     "FY17 - Other Public Administration",
+     9
+    ],
+    [
+     "FY17 - Health,FY17 - Health Facilities and Construction,FY17 - Public Administration - Health",
+     8
+    ],
+    [
+     "FY17 - Public Administration - Water, Sanitation and Waste Management,FY17 - Sanitation,FY17 - Water Supply",
+     5
+    ],
+    [
+     "FY17 - Energy Transmission and Distribution,FY17 - Public Administration - Energy and Extractives",
+     4
+    ]
+   ],
+   "max_len": 280
+  },
+  "mjsector_exact": {
+   "observed_kinds": {
+    "list": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 188,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "[\"FY17 - Public Administration - Transportation\", \"FY17 - Rural and Inter-Urban Roads\"]",
+     14
+    ],
+    [
+     "[\"FY17 - Health\", \"FY17 - Public Administration - Health\"]",
+     13
+    ],
+    [
+     "[\"FY17 - Central Government (Central Agencies)\"]",
+     12
+    ],
+    [
+     "[\"FY17 - Public Administration - Social Protection\", \"FY17 - Social Protection\"]",
+     10
+    ],
+    [
+     "[\"FY17 - Other Public Administration\"]",
+     9
+    ],
+    [
+     "[\"FY17 - Health\", \"FY17 - Health Facilities and Construction\", \"FY17 - Public Administration - Health\"]",
+     8
+    ],
+    [
+     "[\"FY17 - Public Administration - Water, Sanitation and Waste Management\", \"FY17 - Sanitation\", \"FY17 - Water Supply\"]",
+     5
+    ],
+    [
+     "[\"FY17 - Energy Transmission and Distribution\", \"FY17 - Public Administration - Energy and Extractives\"]",
+     4
+    ]
+   ],
+   "max_len": 296
+  },
+  "p2a_flag": {
+   "observed_kinds": {
+    "null": 269,
+    "str": 7
+   },
+   "null_pct": 97.46,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 2.54,
+   "distinct": 1,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Y",
+     7
+    ]
+   ],
+   "max_len": 1
+  },
+  "p2a_updated_date": {
+   "observed_kinds": {
+    "null": 269,
+    "str:date[YYYY-MM-DD]": 7
+   },
+   "null_pct": 97.46,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 2.54,
+   "distinct": 6,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2026-03-10",
+     2
+    ],
+    [
+     "2025-06-28",
+     1
+    ],
+    [
+     "2025-05-21",
+     1
+    ],
+    [
+     "2026-03-05",
+     1
+    ],
+    [
+     "2025-12-12",
+     1
+    ],
+    [
+     "2026-03-19",
+     1
+    ]
+   ],
+   "max_len": 10,
+   "date_min": "2025-05-21",
+   "date_max": "2026-03-19"
+  },
+  "parentprojid": {
+   "observed_kinds": {
+    "null": 275,
+    "str": 1
+   },
+   "null_pct": 99.64,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 0.36,
+   "distinct": 1,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "P155047",
+     1
+    ]
+   ],
+   "max_len": 7,
+   "unique_when_present": true
+  },
+  "parentprojid_exact": {
+   "observed_kinds": {
+    "null": 275,
+    "str": 1
+   },
+   "null_pct": 99.64,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 0.36,
+   "distinct": 1,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "P155047",
+     1
+    ]
+   ],
+   "max_len": 7,
+   "unique_when_present": true
+  },
+  "pdo": {
+   "observed_kinds": {
+    "str": 264,
+    "null": 12
+   },
+   "null_pct": 4.35,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 95.65,
+   "distinct": 264,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "The objective of the Project is to improve transport efficiency along road sections in Kyzylorda, South Kazakhstan and A",
+     1
+    ],
+    [
+     "The objective of the Project is to improve the effectiveness and efficiency of the land registry and cadastre services t",
+     1
+    ],
+    [
+     "(a) to improve the level of service provided to suburban rail transport users in the RJMR in a safe and cost-efficient m",
+     1
+    ],
+    [
+     "The Project Development Objective is to enhance the efficiency, affordability, quality, safety, and environmental sustai",
+     1
+    ],
+    [
+     "The overall objective of this project is to increase private investment in the Kenya infrastructure market across sector",
+     1
+    ],
+    [
+     "The development objective of the project is to improve the National Highway network connectivity to less-developed areas",
+     1
+    ],
+    [
+     "The development objective of the proposed project is to improve accessibility and mobility by responding to existing and",
+     1
+    ],
+    [
+     "The development objective (PDO) is to enable consumers in selected areas to access heating appliances and services produ",
+     1
+    ]
+   ],
+   "max_len": 947,
+   "unique_when_present": true
+  },
+  "prodline_exact": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 4,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "PE",
+     203
+    ],
+    [
+     "RE",
+     61
+    ],
+    [
+     "GE",
+     7
+    ],
+    [
+     "SF",
+     5
+    ]
+   ],
+   "max_len": 2
+  },
+  "proj_id": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 276,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "P099270",
+     1
+    ],
+    [
+     "P106284",
+     1
+    ],
+    [
+     "P111996",
+     1
+    ],
+    [
+     "P117947",
+     1
+    ],
+    [
+     "P121019",
+     1
+    ],
+    [
+     "P121185",
+     1
+    ],
+    [
+     "P122319",
+     1
+    ],
+    [
+     "P122320",
+     1
+    ]
+   ],
+   "max_len": 7,
+   "unique_when_present": true
+  },
+  "proj_last_upd_date": {
+   "observed_kinds": {
+    "str:date[ISO8601Z]": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 188,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2024-03-27T00:00:00Z",
+     5
+    ],
+    [
+     "2023-10-16T00:00:00Z",
+     5
+    ],
+    [
+     "2024-03-28T00:00:00Z",
+     4
+    ],
+    [
+     "2024-05-20T00:00:00Z",
+     4
+    ],
+    [
+     "2024-06-25T00:00:00Z",
+     4
+    ],
+    [
+     "2024-04-09T00:00:00Z",
+     4
+    ],
+    [
+     "2024-01-30T00:00:00Z",
+     4
+    ],
+    [
+     "2023-11-01T00:00:00Z",
+     3
+    ]
+   ],
+   "max_len": 20,
+   "date_min": "2020-12-23",
+   "date_max": "2025-08-18"
+  },
+  "project_abstract": {
+   "observed_kinds": {
+    "str": 225,
+    "null": 50,
+    "str:multiline": 1
+   },
+   "null_pct": 18.12,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 81.88,
+   "distinct": 225,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "The objective of the Pacific Islands Regional Oceanscape Program Project for the Federated States of Micronesia is to st",
+     2
+    ],
+    [
+     "The development objective of he South West Roads Project is to increase transport efficiency on the road sections betwee",
+     1
+    ],
+    [
+     "The Cadastre Modernization Project for Turkey is to contribute to government agenda to improve quality and effectiveness",
+     1
+    ],
+    [
+     "The objectives of the Second Rio de Janeiro Mass Transit Project for Brazil is to: a) improve the level-of-service provi",
+     1
+    ],
+    [
+     "The objective of the Support to the National Urban Transport Program Project for Colombia is to enhance the efficiency, ",
+     1
+    ],
+    [
+     "The overall objective of Adaptable Program Lending for Infrastructure Finance and Public-Private Partnership Project for",
+     1
+    ],
+    [
+     "The objective of the National Highways Interconnectivity Improvement Project for India is improve the National Highway n",
+     1
+    ],
+    [
+     "The development objective of the Zhangjiakou Hohhot (ZhangHu) Railway Project for China is to improve accessibility and ",
+     1
+    ]
+   ],
+   "max_len": 8000
+  },
+  "project_name": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 275,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Implementation of the International Comparison Program (ICP) in the Commonwealth of Independent States (CIS)",
+     2
+    ],
+    [
+     "SOUTH-WEST ROADS:  WESTERN EUROPE-WESTERN CHINA INTERNATIONAL TRANSIT CORRIDOR (CAREC 1B & 6B)",
+     1
+    ],
+    [
+     "Turkey Land Registration and Cadastre Modernization Project",
+     1
+    ],
+    [
+     "Upgrading and Greening the Rio de Janeiro Urban Rail System",
+     1
+    ],
+    [
+     "Support to the National Urban Transit Program Project",
+     1
+    ],
+    [
+     "Kenya Infrastructure Finance/PPP project",
+     1
+    ],
+    [
+     "National Highways Interconnectivity Improvement Project",
+     1
+    ],
+    [
+     "ZhangHu Railway",
+     1
+    ]
+   ],
+   "max_len": 127
+  },
+  "projectfinancialtype": {
+   "observed_kinds": {
+    "list": 274,
+    "null": 2
+   },
+   "null_pct": 0.72,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.28,
+   "distinct": 36,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "[\"Grants\"]",
+     51
+    ],
+    [
+     "[\"IDA\"]",
+     46
+    ],
+    [
+     "[\"IBRD\", \"Other\"]",
+     36
+    ],
+    [
+     "[\"IDA\", \"Other\"]",
+     32
+    ],
+    [
+     "[\"IBRD\"]",
+     21
+    ],
+    [
+     "[\"IDA\", \"IDA\"]",
+     13
+    ],
+    [
+     "[\"IDA\", \"IDA\", \"Other\"]",
+     10
+    ],
+    [
+     "[\"Other\"]",
+     8
+    ]
+   ],
+   "max_len": 113
+  },
+  "projectfinancialtype_exact": {
+   "observed_kinds": {
+    "str": 274,
+    "null": 2
+   },
+   "null_pct": 0.72,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.28,
+   "distinct": 36,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Grants",
+     51
+    ],
+    [
+     "IDA",
+     46
+    ],
+    [
+     "IBRD,Other",
+     36
+    ],
+    [
+     "IDA,Other",
+     32
+    ],
+    [
+     "IBRD",
+     21
+    ],
+    [
+     "IDA,IDA",
+     13
+    ],
+    [
+     "IDA,IDA,Other",
+     10
+    ],
+    [
+     "Other",
+     8
+    ]
+   ],
+   "max_len": 73
+  },
+  "projid_id_display": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 276,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "P099270",
+     1
+    ],
+    [
+     "P106284",
+     1
+    ],
+    [
+     "P111996",
+     1
+    ],
+    [
+     "P117947",
+     1
+    ],
+    [
+     "P121019",
+     1
+    ],
+    [
+     "P121185",
+     1
+    ],
+    [
+     "P122319",
+     1
+    ],
+    [
+     "P122320",
+     1
+    ]
+   ],
+   "max_len": 7,
+   "unique_when_present": true
+  },
+  "public_disclosure_date": {
+   "observed_kinds": {
+    "str:date[YYYY-MM-DD]": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 266,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2014-11-20",
+     2
+    ],
+    [
+     "2013-10-03",
+     2
+    ],
+    [
+     "2016-09-26",
+     2
+    ],
+    [
+     "2017-08-03",
+     2
+    ],
+    [
+     "2017-02-08",
+     2
+    ],
+    [
+     "2018-02-15",
+     2
+    ],
+    [
+     "2017-08-01",
+     2
+    ],
+    [
+     "2020-03-26",
+     2
+    ]
+   ],
+   "max_len": 10,
+   "date_min": "2007-07-31",
+   "date_max": "2025-04-22"
+  },
+  "regionhomepageurl": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 7,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "http://www.worldbank.org/afr",
+     74
+    ],
+    [
+     "http://www.worldbank.org/eca",
+     37
+    ],
+    [
+     "https://www.worldbank.org/lac",
+     37
+    ],
+    [
+     "http://www.worldbank.org/sar",
+     37
+    ],
+    [
+     "http://www.worldbank.org/eap",
+     37
+    ],
+    [
+     "http://www.worldbank.org/menaap",
+     37
+    ],
+    [
+     "https://www.worldbank.org/en/where-we-work",
+     17
+    ]
+   ],
+   "max_len": 42
+  },
+  "regionname": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 8,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Europe and Central Asia",
+     37
+    ],
+    [
+     "Latin America and Caribbean",
+     37
+    ],
+    [
+     "Eastern and Southern Africa",
+     37
+    ],
+    [
+     "South Asia",
+     37
+    ],
+    [
+     "East Asia and Pacific",
+     37
+    ],
+    [
+     "Western and Central Africa",
+     37
+    ],
+    [
+     "Middle East, North Africa, Afghanistan, and Pakistan",
+     37
+    ],
+    [
+     "Other",
+     17
+    ]
+   ],
+   "max_len": 52
+  },
+  "regionname_exact": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 8,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Europe and Central Asia",
+     37
+    ],
+    [
+     "Latin America and Caribbean",
+     37
+    ],
+    [
+     "Eastern and Southern Africa",
+     37
+    ],
+    [
+     "South Asia",
+     37
+    ],
+    [
+     "East Asia and Pacific",
+     37
+    ],
+    [
+     "Western and Central Africa",
+     37
+    ],
+    [
+     "Middle East, North Africa, Afghanistan, and Pakistan",
+     37
+    ],
+    [
+     "Other",
+     17
+    ]
+   ],
+   "max_len": 52
+  },
+  "sector_exact": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 188,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "FY17 - Public Administration - Transportation,FY17 - Rural and Inter-Urban Roads",
+     14
+    ],
+    [
+     "FY17 - Health,FY17 - Public Administration - Health",
+     13
+    ],
+    [
+     "FY17 - Central Government (Central Agencies)",
+     12
+    ],
+    [
+     "FY17 - Public Administration - Social Protection,FY17 - Social Protection",
+     10
+    ],
+    [
+     "FY17 - Other Public Administration",
+     9
+    ],
+    [
+     "FY17 - Health,FY17 - Health Facilities and Construction,FY17 - Public Administration - Health",
+     8
+    ],
+    [
+     "FY17 - Public Administration - Water, Sanitation and Waste Management,FY17 - Sanitation,FY17 - Water Supply",
+     5
+    ],
+    [
+     "FY17 - Energy Transmission and Distribution,FY17 - Public Administration - Energy and Extractives",
+     4
+    ]
+   ],
+   "max_len": 280
+  },
+  "sector_name": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 188,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "FY17 - Public Administration - Transportation,FY17 - Rural and Inter-Urban Roads",
+     14
+    ],
+    [
+     "FY17 - Health,FY17 - Public Administration - Health",
+     13
+    ],
+    [
+     "FY17 - Central Government (Central Agencies)",
+     12
+    ],
+    [
+     "FY17 - Public Administration - Social Protection,FY17 - Social Protection",
+     10
+    ],
+    [
+     "FY17 - Other Public Administration",
+     9
+    ],
+    [
+     "FY17 - Health,FY17 - Health Facilities and Construction,FY17 - Public Administration - Health",
+     8
+    ],
+    [
+     "FY17 - Public Administration - Water, Sanitation and Waste Management,FY17 - Sanitation,FY17 - Water Supply",
+     5
+    ],
+    [
+     "FY17 - Energy Transmission and Distribution,FY17 - Public Administration - Energy and Extractives",
+     4
+    ]
+   ],
+   "max_len": 280
+  },
+  "sector_percent": {
+   "observed_kinds": {
+    "str": 237,
+    "str:decimal": 39
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 174,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "100.0",
+     38
+    ],
+    [
+     "1.0,99.0",
+     9
+    ],
+    [
+     "10.0,90.0",
+     7
+    ],
+    [
+     "7.0,93.0",
+     7
+    ],
+    [
+     "8.0,92.0",
+     6
+    ],
+    [
+     "12.0,88.0",
+     6
+    ],
+    [
+     "13.0,87.0",
+     5
+    ],
+    [
+     "4.0,96.0",
+     5
+    ]
+   ],
+   "max_len": 30
+  },
+  "sectorcode": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 188,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "TF,TI",
+     14
+    ],
+    [
+     "HF,HG",
+     13
+    ],
+    [
+     "BC",
+     12
+    ],
+    [
+     "SA,SG",
+     10
+    ],
+    [
+     "BZ",
+     9
+    ],
+    [
+     "HF,HG,HQ",
+     8
+    ],
+    [
+     "WA,WC,WF",
+     5
+    ],
+    [
+     "LP,LT",
+     4
+    ]
+   ],
+   "max_len": 20
+  },
+  "sectorcode_exact": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 188,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "TF,TI",
+     14
+    ],
+    [
+     "HF,HG",
+     13
+    ],
+    [
+     "BC",
+     12
+    ],
+    [
+     "SA,SG",
+     10
+    ],
+    [
+     "BZ",
+     9
+    ],
+    [
+     "HF,HG,HQ",
+     8
+    ],
+    [
+     "WA,WC,WF",
+     5
+    ],
+    [
+     "LP,LT",
+     4
+    ]
+   ],
+   "max_len": 20
+  },
+  "status": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Closed",
+     145
+    ],
+    [
+     "Active",
+     130
+    ],
+    [
+     "Dropped",
+     1
+    ]
+   ],
+   "max_len": 7
+  },
+  "status_exact": {
+   "observed_kinds": {
+    "list": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 3,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "[\"Closed\"]",
+     145
+    ],
+    [
+     "[\"Active\"]",
+     130
+    ],
+    [
+     "[\"Dropped\"]",
+     1
+    ]
+   ],
+   "max_len": 11
+  },
+  "teamleaderupi": {
+   "observed_kinds": {
+    "str:int": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 250,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "00000352122",
+     3
+    ],
+    [
+     "00000399276",
+     3
+    ],
+    [
+     "00000268001",
+     3
+    ],
+    [
+     "00000296116",
+     2
+    ],
+    [
+     "00000545417",
+     2
+    ],
+    [
+     "00000522298",
+     2
+    ],
+    [
+     "00000327499",
+     2
+    ],
+    [
+     "00000226522",
+     2
+    ]
+   ],
+   "max_len": 11
+  },
+  "teamleadname": {
+   "observed_kinds": {
+    "list": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 250,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "[\"Haileyesus Adamtei \"]",
+     3
+    ],
+    [
+     "[\"Ketevan Nozadze \"]",
+     3
+    ],
+    [
+     "[\"Fabio Pittaluga \"]",
+     3
+    ],
+    [
+     "[\"Nijat Valiyev \"]",
+     2
+    ],
+    [
+     "[\"B K M Ashraful Islam \"]",
+     2
+    ],
+    [
+     "[\"Kazumi Inden \"]",
+     2
+    ],
+    [
+     "[\"Odete Duarte Muximpua \"]",
+     2
+    ],
+    [
+     "[\"Ximing Peng \"]",
+     2
+    ]
+   ],
+   "max_len": 43
+  },
+  "theme": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 266,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "FY17 - Climate change,FY17 - Environment and Natural Resource Management,FY17 - Environmental policies and institutions,",
+     2
+    ],
+    [
+     "FY17 - Job Creation,FY17 - Jobs,FY17 - Private Sector Development,FY17 - Rural Development,FY17 - Rural Infrastructure a",
+     2
+    ],
+    [
+     "FY17 - Access to Education,FY17 - Education,FY17 - Education Financing,FY17 - Human Development and Gender",
+     2
+    ],
+    [
+     "FY17 - Disaster Preparedness,FY17 - Disaster Response and Recovery,FY17 - Disaster Risk Finance,FY17 - Disaster Risk Man",
+     2
+    ],
+    [
+     "FY17 - Data Development and Capacity Building,FY17 - Data production, accessibility and use,FY17 - Institutional strengt",
+     2
+    ],
+    [
+     "FY17 - Climate change,FY17 - Energy,FY17 - Energy Policies & Reform,FY17 - Environment and Natural Resource Management,F",
+     2
+    ],
+    [
+     "FY17 - Access to Energy,FY17 - Energy,FY17 - Energy Policies & Reform,FY17 - Environment and Natural Resource Management",
+     2
+    ],
+    [
+     "FY17 - Indigenous People and Ethnic Minorities,FY17 - Participation and Civic Engagement,FY17 - Social Development and P",
+     2
+    ]
+   ],
+   "max_len": 1373
+  },
+  "theme_exact": {
+   "observed_kinds": {
+    "list": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 266,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "[\"FY17 - Climate change\", \"FY17 - Environment and Natural Resource Management\", \"FY17 - Environmental policies and insti",
+     2
+    ],
+    [
+     "[\"FY17 - Job Creation\", \"FY17 - Jobs\", \"FY17 - Private Sector Development\", \"FY17 - Rural Development\", \"FY17 - Rural In",
+     2
+    ],
+    [
+     "[\"FY17 - Access to Education\", \"FY17 - Education\", \"FY17 - Education Financing\", \"FY17 - Human Development and Gender\"]",
+     2
+    ],
+    [
+     "[\"FY17 - Disaster Preparedness\", \"FY17 - Disaster Response and Recovery\", \"FY17 - Disaster Risk Finance\", \"FY17 - Disast",
+     2
+    ],
+    [
+     "[\"FY17 - Data Development and Capacity Building\", \"FY17 - Data production, accessibility and use\", \"FY17 - Institutional",
+     2
+    ],
+    [
+     "[\"FY17 - Climate change\", \"FY17 - Energy\", \"FY17 - Energy Policies & Reform\", \"FY17 - Environment and Natural Resource M",
+     2
+    ],
+    [
+     "[\"FY17 - Access to Energy\", \"FY17 - Energy\", \"FY17 - Energy Policies & Reform\", \"FY17 - Environment and Natural Resource",
+     2
+    ],
+    [
+     "[\"FY17 - Indigenous People and Ethnic Minorities\", \"FY17 - Participation and Civic Engagement\", \"FY17 - Social Developme",
+     2
+    ]
+   ],
+   "max_len": 1506
+  },
+  "theme_list": {
+   "observed_kinds": {
+    "list": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 274,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "[{\"code\": \"60\", \"name\": \"FY17 - Human Development and Gender\", \"percent\": \"100\", \"seqno\": \"1\", \"theme2\": [{\"code\": \"65\",",
+     2
+    ],
+    [
+     "[{\"code\": \"40\", \"name\": \"FY17 - Public Sector Management\", \"percent\": \"100\", \"seqno\": \"1\", \"theme2\": [{\"code\": \"44\", \"na",
+     2
+    ],
+    [
+     "[{\"code\": \"10\", \"name\": \"FY17 - Economic Policy\", \"percent\": \"85\", \"seqno\": \"1\", \"theme2\": [{\"code\": \"14\", \"name\": \"FY17",
+     1
+    ],
+    [
+     "[{\"code\": \"40\", \"name\": \"FY17 - Public Sector Management\", \"percent\": \"51\", \"seqno\": \"1\", \"theme2\": [{\"code\": \"43\", \"nam",
+     1
+    ],
+    [
+     "[{\"code\": \"20\", \"name\": \"FY17 - Private Sector Development\", \"percent\": \"10\", \"seqno\": \"1\", \"theme2\": [{\"code\": \"23\", \"n",
+     1
+    ],
+    [
+     "[{\"code\": \"80\", \"name\": \"FY17 - Environment and Natural Resource Management\", \"percent\": \"100\", \"seqno\": \"4\", \"theme2\": ",
+     1
+    ],
+    [
+     "[{\"code\": \"10\", \"name\": \"FY17 - Economic Policy\", \"percent\": \"3\", \"seqno\": \"1\", \"theme2\": [{\"code\": \"11\", \"name\": \"FY17 ",
+     1
+    ],
+    [
+     "[{\"code\": \"20\", \"name\": \"FY17 - Private Sector Development\", \"percent\": \"16\", \"seqno\": \"1\", \"theme2\": [{\"code\": \"22\", \"n",
+     1
+    ]
+   ],
+   "max_len": 4304
+  },
+  "themecode": {
+   "observed_kinds": {
+    "str": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 266,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "80,81,811,84",
+     2
+    ],
+    [
+     "20,22,221,70,71,711,72,723",
+     2
+    ],
+    [
+     "60,65,651,652",
+     2
+    ],
+    [
+     "30,33,331,70,75,751,752,753,80,85,851",
+     2
+    ],
+    [
+     "40,44,441,442",
+     2
+    ],
+    [
+     "80,81,811,86,862",
+     2
+    ],
+    [
+     "80,86,862,863",
+     2
+    ],
+    [
+     "50,51,511,513",
+     2
+    ]
+   ],
+   "max_len": 307
+  },
+  "themecode_exact": {
+   "observed_kinds": {
+    "list": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 266,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "[\"80\", \"81\", \"811\", \"84\"]",
+     2
+    ],
+    [
+     "[\"20\", \"22\", \"221\", \"70\", \"71\", \"711\", \"72\", \"723\"]",
+     2
+    ],
+    [
+     "[\"60\", \"65\", \"651\", \"652\"]",
+     2
+    ],
+    [
+     "[\"30\", \"33\", \"331\", \"70\", \"75\", \"751\", \"752\", \"753\", \"80\", \"85\", \"851\"]",
+     2
+    ],
+    [
+     "[\"40\", \"44\", \"441\", \"442\"]",
+     2
+    ],
+    [
+     "[\"80\", \"81\", \"811\", \"86\", \"862\"]",
+     2
+    ],
+    [
+     "[\"80\", \"86\", \"862\", \"863\"]",
+     2
+    ],
+    [
+     "[\"50\", \"51\", \"511\", \"513\"]",
+     2
+    ]
+   ],
+   "max_len": 440
+  },
+  "themev2_level1_exact": {
+   "observed_kinds": {
+    "list": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 237,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "[\"FY17 - Environment and Natural Resource Management\", \"FY17 - Environment and Natural Resource Management\"]",
+     6
+    ],
+    [
+     "[\"FY17 - Public Sector Management\", \"FY17 - Public Sector Management\", \"FY17 - Urban and Rural Development\"]",
+     3
+    ],
+    [
+     "[\"FY17 - Environment and Natural Resource Management\", \"FY17 - Finance\", \"FY17 - Urban and Rural Development\", \"FY17 - U",
+     3
+    ],
+    [
+     "[\"FY17 - Human Development and Gender\", \"FY17 - Human Development and Gender\", \"FY17 - Human Development and Gender\"]",
+     3
+    ],
+    [
+     "[\"FY17 - Human Development and Gender\", \"FY17 - Human Development and Gender\", \"FY17 - Human Development and Gender\", \"F",
+     3
+    ],
+    [
+     "[\"FY17 - Human Development and Gender\", \"FY17 - Human Development and Gender\", \"FY17 - Human Development and Gender\", \"F",
+     3
+    ],
+    [
+     "[\"FY17 - Environment and Natural Resource Management\", \"FY17 - Environment and Natural Resource Management\", \"FY17 - Urb",
+     3
+    ],
+    [
+     "[\"FY17 - Public Sector Management\"]",
+     3
+    ]
+   ],
+   "max_len": 969
+  },
+  "themev2_level2_exact": {
+   "observed_kinds": {
+    "list": 276
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 264,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "[\"FY17 - Climate change\", \"FY17 - Environmental policies and institutions\"]",
+     2
+    ],
+    [
+     "[\"FY17 - Jobs\", \"FY17 - Rural Development\", \"FY17 - Urban Development\"]",
+     2
+    ],
+    [
+     "[\"FY17 - Education\", \"FY17 - Education\"]",
+     2
+    ],
+    [
+     "[\"FY17 - Disaster Risk Management\", \"FY17 - Disaster Risk Management\", \"FY17 - Disaster Risk Management\", \"FY17 - Financ",
+     2
+    ],
+    [
+     "[\"FY17 - Data Development and Capacity Building\", \"FY17 - Data Development and Capacity Building\"]",
+     2
+    ],
+    [
+     "[\"FY17 - Climate change\", \"FY17 - Energy\"]",
+     2
+    ],
+    [
+     "[\"FY17 - Energy\", \"FY17 - Energy\"]",
+     2
+    ],
+    [
+     "[\"FY17 - Climate change\", \"FY17 - Climate change\", \"FY17 - Disease Control\", \"FY17 - Education\", \"FY17 - Education\", \"FY",
+     2
+    ]
+   ],
+   "max_len": 785
+  },
+  "themev2_level3_exact": {
+   "observed_kinds": {
+    "list": 275,
+    "null": 1
+   },
+   "null_pct": 0.36,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.64,
+   "distinct": 263,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "[\"FY17 - Mitigation\"]",
+     3
+    ],
+    [
+     "[\"FY17 - Job Creation\", \"FY17 - Rural Infrastructure and service delivery\", \"FY17 - Urban Infrastructure and Service Del",
+     2
+    ],
+    [
+     "[\"FY17 - Access to Education\", \"FY17 - Education Financing\"]",
+     2
+    ],
+    [
+     "[\"FY17 - Disaster Preparedness\", \"FY17 - Disaster Response and Recovery\", \"FY17 - Disaster Risk Finance\", \"FY17 - Disast",
+     2
+    ],
+    [
+     "[\"FY17 - Data production, accessibility and use\", \"FY17 - Institutional strengthening and capacity building\"]",
+     2
+    ],
+    [
+     "[\"FY17 - Energy Policies & Reform\", \"FY17 - Mitigation\"]",
+     2
+    ],
+    [
+     "[\"FY17 - Access to Energy\", \"FY17 - Energy Policies & Reform\"]",
+     2
+    ],
+    [
+     "[\"FY17 - Indigenous People and Ethnic Minorities\", \"FY17 - Participation and Civic Engagement\"]",
+     2
+    ]
+   ],
+   "max_len": 943
+  },
+  "totalamt": {
+   "observed_kinds": {
+    "str:int": 203,
+    "null": 73
+   },
+   "null_pct": 26.45,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 73.55,
+   "distinct": 120,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "50000000",
+     11
+    ],
+    [
+     "300000000",
+     10
+    ],
+    [
+     "150000000",
+     9
+    ],
+    [
+     "200000000",
+     8
+    ],
+    [
+     "250000000",
+     7
+    ],
+    [
+     "100000000",
+     7
+    ],
+    [
+     "30000000",
+     7
+    ],
+    [
+     "60000000",
+     4
+    ]
+   ],
+   "max_len": 11
+  }
+ },
+ "dataset": "projects_v3_cluster_allfields",
+ "source": "search API v3 projects fl=* (cluster)"
+}

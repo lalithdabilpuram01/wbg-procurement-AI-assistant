@@ -1,0 +1,223 @@
+{
+ "question": "What were the estimated and actual amounts for ET-ERA-221389-CW-DIR, the toll collection centers design and construction package?",
+ "status": "answered",
+ "answer": "Plan row ET-ERA-221389-CW-DIR (Procurement of Toll Collection Centers Design and Construction at both Interchanges of Lot 02) is in procurement plan version P148850:ERA:2025-06-27: method Direct Selection, market approach Direct, process status Signed. The plan row records estimated amount US$8,809,012.23, actual amount US$9,890,912.07, signing planned 2021-03-04, signing actual 2021-08-13. A DS00005 contract record WB 1675726 (signed 2021-07-30, amount US$9,890,912.07) is linked to this row with evidence status 'amount_verified' (exact reference match).",
+ "citations": [
+  {
+   "evidence_id": "E1",
+   "unit_id": "act:40025990:p4t1r5",
+   "unit_type": "activity",
+   "project_id": "P148850",
+   "project_name": "Ethiopia- Expressway Development Support Project",
+   "document_id": "40025990",
+   "title": "Ethiopia - EASTERN AND SOUTHERN AFRICA- P148850- Ethiopia- Expressway Development Support Project - Procurement Plan",
+   "doc_type": "PP",
+   "document_date": "2025-06-27",
+   "document_version_id": "40025990:1fb4c3baeebe",
+   "physical_page_start": 4,
+   "physical_page_end": 4,
+   "printed_page_label": "1",
+   "section": "WORKS",
+   "table_id": "40025990:t00401",
+   "excerpt": "Procurement plan row (typed record). Plan version P148850:ERA:2025-06-27 (stream P148850:ERA). Reference ET-ERA-221389-CW-DIR. Description: Procurement of Toll Collection Centers Design and Construction at both Interchanges of Lot 02. Method: Direct Selection. Market approach: Direct. Review: post. Process status: Signed. Estimated amount US$ 8809012.23. Actual amount US$ 9890912.07. Signed contract planned 2021-03-04, actual 2021-08-13. Stage dates: Contract Complet ion: planned 2021-11-25; Draft Bidding Docum ent / Justification: actual 2021-02-18, planned 2021-02-25; Signed Contract: actual",
+   "source_url": "https://documents1.worldbank.org/curated/en/099062725094533466/pdf/P148850-6d30073f-7dec-4d3d-bc28-24f6a6840dc3.pdf",
+   "association": "procurement-plan row (typed record)",
+   "page_check": "verified",
+   "contract_links": [
+    {
+     "evidence_status": "amount_verified",
+     "match_class": "exact",
+     "wb_contract_number": "1675726",
+     "borrower_contract_reference": "ET-ERA-221389-CW-DIR",
+     "date_recorded_signing": "2021-07-30",
+     "date_plan_actual_signing": "2021-08-13",
+     "date_planned_signing": "2021-03-04",
+     "plan_actual_amount_usd": 9890912.07,
+     "contract_amount_usd": 9890912.07,
+     "disagreeing_fields": [],
+     "cardinality": "one_row_one_contract",
+     "recorded_source_as_of_date": "2026-10-20"
+    }
+   ],
+   "plan_version_id": "P148850:ERA:2025-06-27"
+  }
+ ],
+ "supporting_evidence_ids": [
+  "E1"
+ ],
+ "conflicts": [],
+ "limitations": [],
+ "claims": [
+  {
+   "text": "Plan row ET-ERA-221389-CW-DIR (Procurement of Toll Collection Centers Design and Construction at both Interchanges of Lot 02) is in procurement plan version P148850:ERA:2025-06-27: method Direct Selection, market approach Direct, process status Signed.",
+   "evidence_ids": [
+    "E1"
+   ],
+   "supported": true,
+   "checks": {
+    "ids_valid": true,
+    "unsupported_numbers": [],
+    "unsupported_dates": [],
+    "unsupported_refs": [],
+    "unsupported_quotes": [],
+    "privacy_violation": false,
+    "content_word_recall": 1.0,
+    "nli_entailment": 0.32,
+    "too_short": false,
+    "evidence_dump": false,
+    "mode": "typed_record_fields",
+    "supported": true
+   }
+  },
+  {
+   "text": "The plan row records estimated amount US$8,809,012.23, actual amount US$9,890,912.07, signing planned 2021-03-04, signing actual 2021-08-13.",
+   "evidence_ids": [
+    "E1"
+   ],
+   "supported": true,
+   "checks": {
+    "ids_valid": true,
+    "unsupported_numbers": [],
+    "unsupported_dates": [],
+    "unsupported_refs": [],
+    "unsupported_quotes": [],
+    "privacy_violation": false,
+    "content_word_recall": 0.615,
+    "nli_entailment": 0.545,
+    "too_short": false,
+    "evidence_dump": false,
+    "mode": "typed_record_fields",
+    "supported": true
+   }
+  },
+  {
+   "text": "A DS00005 contract record WB 1675726 (signed 2021-07-30, amount US$9,890,912.07) is linked to this row with evidence status 'amount_verified' (exact reference match).",
+   "evidence_ids": [
+    "E1"
+   ],
+   "supported": true,
+   "checks": {
+    "ids_valid": true,
+    "unsupported_numbers": [],
+    "unsupported_dates": [],
+    "unsupported_refs": [],
+    "unsupported_quotes": [],
+    "privacy_violation": false,
+    "content_word_recall": 0.706,
+    "nli_entailment": 0.182,
+    "too_short": false,
+    "evidence_dump": false,
+    "mode": "typed_record_fields",
+    "supported": true
+   }
+  }
+ ],
+ "removed_claims": [],
+ "generator": "typed_record (deterministic; no LLM)",
+ "generator_is_llm": false,
+ "timings_ms": {
+  "retrieval_and_selection": 153,
+  "generation": 0,
+  "validation": 2477,
+  "total": 2631
+ },
+ "trace": {
+  "plan": {
+   "question": "What were the estimated and actual amounts for ET-ERA-221389-CW-DIR, the toll collection centers design and construction package?",
+   "comparison": false,
+   "doc_type_hints": [
+    "PP"
+   ],
+   "required_fields": {}
+  },
+  "retrieval_status": "ok",
+  "retrieved_unit_ids": [
+   "act:40025990:p4t1r5",
+   "40025990:t00401:w4-6",
+   "act:40025990:p4t2r9",
+   "24440102:C:0092",
+   "act:40025990:p4t2r11",
+   "24440102:C:0089",
+   "40089196:t00402:w6-7",
+   "40025990:t00402:w8-10",
+   "24440102:C:0088",
+   "34345370:C:0021",
+   "24440102:C:0103",
+   "34407877:C:0045",
+   "24440102:C:0082",
+   "24440102:C:0085",
+   "40025990:t00402:w10-12",
+   "34345370:C:0046",
+   "24440102:C:0172",
+   "24440102:C:0176",
+   "26256705:C:0057",
+   "26256705:C:0069"
+  ],
+  "targeted": {},
+  "selected": [
+   [
+    "E1",
+    "act:40025990:p4t1r5",
+    "40025990",
+    "verified",
+    false
+   ],
+   [
+    "E2",
+    "40025990:t00401:w4-6",
+    "40025990",
+    "verified",
+    false
+   ],
+   [
+    "E3",
+    "act:40025990:p4t2r9",
+    "40025990",
+    "verified",
+    false
+   ],
+   [
+    "E4",
+    "24440102:C:0092",
+    "24440102",
+    "verified",
+    false
+   ],
+   [
+    "E5",
+    "24440102:C:0089",
+    "24440102",
+    "verified",
+    false
+   ],
+   [
+    "E6",
+    "40089196:t00402:w6-7",
+    "40089196",
+    "verified",
+    false
+   ],
+   [
+    "E7",
+    "34345370:C:0021",
+    "34345370",
+    "verified",
+    false
+   ],
+   [
+    "E8",
+    "24440102:C:0103",
+    "24440102",
+    "verified",
+    false
+   ]
+  ],
+  "projects_in_top10": [
+   "P132833",
+   "P148850"
+  ],
+  "generator_meta": {
+   "latency_ms": 0
+  }
+ }
+}

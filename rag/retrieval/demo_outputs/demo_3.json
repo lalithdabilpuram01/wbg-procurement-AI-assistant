@@ -1,0 +1,111 @@
+{
+ "query": "What overall outcome rating did the Sri Lanka transport connectivity project receive in the ICR and in the IEG ICR Review?",
+ "status": "ok",
+ "notes": [],
+ "results": [
+  {
+   "rank": 1,
+   "unit_id": "34407877:C:0054",
+   "unit_type": "chunk",
+   "scores": {
+    "rrf": 0.0284,
+    "bm25": 22.0864,
+    "dense": 0.7893
+   },
+   "project_id": "P132833",
+   "project_name": "Transport Connectivity and Asset Management Project",
+   "country_code": "LK",
+   "document_id": "34407877",
+   "document_version_id": "34407877:f1daf66f5a2b",
+   "document_sha256": "f1daf66f5a2bc4f4d6cef080b89865f51cbce21bdd1cee91fa5fb06d14c73995",
+   "doc_type": "ICRR",
+   "document_role": "ICRR",
+   "title": "Sri Lanka - Transport Sector Project",
+   "document_date": "2024-10-18",
+   "disclosure_date": "2024-10-18",
+   "physical_page_start": 22,
+   "physical_page_end": 22,
+   "printed_page_label": "22",
+   "printed_page_label_status": "detected",
+   "section": "11. Ratings",
+   "table_id": null,
+   "excerpt": "11. Ratings\n\nRatings ICR IEG Reason for Disagreements/Comment\n\nOutcome Satisfactory Moderately Satisfactory Shortcomings in efficacy and efficiency\n\nBank Performance Satisfactory Moderately Satisfactory Shortcomings in quality of supervision\n\nQuality of M&E Substantial Substantial\n\nQuality of ICR --- Substantial",
+   "source_url": "https://documents1.worldbank.org/curated/en/099101824130531103/pdf/P132833-79454847-e45b-4721-a139-77f48a951ddc.pdf",
+   "local_path": "rag/corpus_v3/pdf/LK/P132833/ICRR_2024-10-18_34407877.pdf",
+   "association": "document text (project-level context; not a contract-level match)",
+   "parent_id": "34407877:C:p015",
+   "parent_pages": [
+    22,
+    22
+   ]
+  },
+  {
+   "rank": 2,
+   "unit_id": "34345370:C:0034",
+   "unit_type": "chunk",
+   "scores": {
+    "rrf": 0.0235,
+    "bm25": 31.2412,
+    "dense": 0.7611
+   },
+   "project_id": "P132833",
+   "project_name": "Transport Connectivity and Asset Management Project",
+   "country_code": "LK",
+   "document_id": "34345370",
+   "document_version_id": "34345370:fef821c7135c",
+   "document_sha256": "fef821c7135c3e8246d77146a45a9f23550efed8dcc2280448f8d7aa8f9b6dce",
+   "doc_type": "ICR",
+   "document_role": "ICR",
+   "title": "Sri Lanka - Transport Connectivity and Asset Management Project",
+   "document_date": "2024-06-19",
+   "disclosure_date": "2024-06-20",
+   "physical_page_start": 25,
+   "physical_page_end": 25,
+   "printed_page_label": "21",
+   "printed_page_label_status": "detected",
+   "section": "II. OUTCOME > D. JUSTIFICATION OF OVERALL OUTCOME RATING",
+   "table_id": null,
+   "excerpt": "D. JUSTIFICATION OF OVERALL OUTCOME RATING\n\n46. The overall outcome rating of the Project is Satisfactory based on the split rating method, as summarized in Table 7.\n\nTable 7. Summary of the Split Rating",
+   "source_url": "https://documents1.worldbank.org/curated/en/099062024101516722/pdf/BOSIB-4ec133ff-1a0c-489f-98ce-2d86a1cee951.pdf",
+   "local_path": "rag/corpus_v3/pdf/LK/P132833/ICR_2024-06-19_34345370.pdf",
+   "association": "document text (project-level context; not a contract-level match)",
+   "parent_id": "34345370:C:p010",
+   "parent_pages": [
+    25,
+    26
+   ]
+  },
+  {
+   "rank": 3,
+   "unit_id": "34345370:t04501:w6-7",
+   "unit_type": "table",
+   "scores": {
+    "rrf": 0.0225,
+    "bm25": 17.8078,
+    "dense": 0.7777
+   },
+   "project_id": "P132833",
+   "project_name": "Transport Connectivity and Asset Management Project",
+   "country_code": "LK",
+   "document_id": "34345370",
+   "document_version_id": "34345370:fef821c7135c",
+   "document_sha256": "fef821c7135c3e8246d77146a45a9f23550efed8dcc2280448f8d7aa8f9b6dce",
+   "doc_type": "ICR",
+   "document_role": "ICR",
+   "title": "Sri Lanka - Transport Connectivity and Asset Management Project",
+   "document_date": "2024-06-19",
+   "disclosure_date": "2024-06-20",
+   "physical_page_start": 45,
+   "physical_page_end": 45,
+   "printed_page_label": null,
+   "printed_page_label_status": "not detected (cite the physical page)",
+   "section": "ANNEX 1. RESULTS FRAMEWORK AND KEY OUTPUTS > B. KEY OUTPUTS BY COMPONENT",
+   "table_id": "34345370:t04501",
+   "excerpt": "Outcome Indicators | 1. Reduction in average roughness on the selected corridor 2. Increased User Satisfaction on the Corridor || Intermediate Results Indicators | 1. Reduction in the number of accidents on the corridor 2. Roads rehabilitated, Non-rural",
+   "source_url": "https://documents1.worldbank.org/curated/en/099062024101516722/pdf/BOSIB-4ec133ff-1a0c-489f-98ce-2d86a1cee951.pdf",
+   "local_path": "rag/corpus_v3/pdf/LK/P132833/ICR_2024-06-19_34345370.pdf",
+   "association": "document text (project-level context; not a contract-level match)"
+  }
+ ],
+ "latency_ms": 3218.3
+}

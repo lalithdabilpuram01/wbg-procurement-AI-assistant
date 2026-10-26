@@ -1,0 +1,156 @@
+{
+ "runs": {
+  "legacy": "20261026T161334Z_strategyC_legacy",
+  "unit": "20261026T161352Z_strategyC_unit",
+  "baseline": "20261025T164420Z"
+ },
+ "configs": [
+  "bm25_C",
+  "dense_C",
+  "hybrid_C",
+  "hybrid_C_guarded"
+ ],
+ "searches_recorded": {
+  "legacy": 125,
+  "unit": 125
+ },
+ "full_result_lists_identical": true,
+ "searches_identical": 125,
+ "per_question_identical_unit_vs_legacy": true,
+ "per_question_identical_vs_baseline": {
+  "legacy": true,
+  "unit": true
+ },
+ "metrics_identical_unit_vs_legacy": true,
+ "metrics_identical_vs_baseline": {
+  "legacy": true,
+  "unit": true
+ },
+ "citation_check_identical": true,
+ "privacy_check_identical": true,
+ "metrics": {
+  "bm25_C": {
+   "recall@5": 0.778,
+   "recall@10": 0.815,
+   "MRR": 0.585,
+   "precision@5": 0.23,
+   "all_groups@10_on_multi_source": 0.0,
+   "citation_verified_rate_top5": 0.974,
+   "insufficient_correctly_flagged": "0/4",
+   "answerable_wrongly_flagged": 0,
+   "by_type_recall@5": {
+    "conflicting": 1.0,
+    "contract_lookup": 1.0,
+    "dates_milestones": 1.0,
+    "narrative": 0.6,
+    "plan_activity": 0.5,
+    "project_fact": 0.5,
+    "table": 1.0
+   },
+   "by_type_MRR": {
+    "conflicting": 0.812,
+    "contract_lookup": 0.6,
+    "dates_milestones": 0.688,
+    "narrative": 0.333,
+    "plan_activity": 0.5,
+    "project_fact": 0.233,
+    "table": 1.0
+   }
+  },
+  "dense_C": {
+   "recall@5": 0.444,
+   "recall@10": 0.593,
+   "MRR": 0.35,
+   "precision@5": 0.133,
+   "all_groups@10_on_multi_source": 0.333,
+   "citation_verified_rate_top5": 1.0,
+   "insufficient_correctly_flagged": "0/4",
+   "answerable_wrongly_flagged": 0,
+   "by_type_recall@5": {
+    "conflicting": 0.25,
+    "contract_lookup": 0.5,
+    "dates_milestones": 0.5,
+    "narrative": 0.2,
+    "plan_activity": 0.25,
+    "project_fact": 0.5,
+    "table": 1.0
+   },
+   "by_type_MRR": {
+    "conflicting": 0.15,
+    "contract_lookup": 0.25,
+    "dates_milestones": 0.5,
+    "narrative": 0.251,
+    "plan_activity": 0.25,
+    "project_fact": 0.375,
+    "table": 0.646
+   }
+  },
+  "hybrid_C": {
+   "recall@5": 0.778,
+   "recall@10": 0.852,
+   "MRR": 0.593,
+   "precision@5": 0.244,
+   "all_groups@10_on_multi_source": 0.667,
+   "citation_verified_rate_top5": 0.987,
+   "insufficient_correctly_flagged": "0/4",
+   "answerable_wrongly_flagged": 0,
+   "by_type_recall@5": {
+    "conflicting": 1.0,
+    "contract_lookup": 0.5,
+    "dates_milestones": 0.75,
+    "narrative": 0.8,
+    "plan_activity": 0.75,
+    "project_fact": 0.75,
+    "table": 0.75
+   },
+   "by_type_MRR": {
+    "conflicting": 0.8,
+    "contract_lookup": 0.25,
+    "dates_milestones": 0.786,
+    "narrative": 0.5,
+    "plan_activity": 0.383,
+    "project_fact": 0.625,
+    "table": 0.656
+   }
+  },
+  "hybrid_C_guarded": {
+   "recall@5": 0.889,
+   "recall@10": 0.963,
+   "MRR": 0.777,
+   "precision@5": 0.252,
+   "all_groups@10_on_multi_source": 0.667,
+   "citation_verified_rate_top5": 0.985,
+   "insufficient_correctly_flagged": "3/4",
+   "answerable_wrongly_flagged": 0,
+   "by_type_recall@5": {
+    "conflicting": 1.0,
+    "contract_lookup": 1.0,
+    "dates_milestones": 1.0,
+    "narrative": 0.8,
+    "plan_activity": 1.0,
+    "project_fact": 0.75,
+    "table": 0.75
+   },
+   "by_type_MRR": {
+    "conflicting": 0.8,
+    "contract_lookup": 1.0,
+    "dates_milestones": 0.875,
+    "narrative": 0.507,
+    "plan_activity": 1.0,
+    "project_fact": 0.778,
+    "table": 0.656
+   }
+  }
+ },
+ "baseline_differences": {},
+ "in_process_parity": {
+  "bm25|unguarded": "31/31",
+  "bm25|guarded": "31/31",
+  "dense|unguarded": "31/31",
+  "dense|guarded": "31/31",
+  "hybrid|unguarded": "31/31",
+  "hybrid|guarded": "31/31",
+  "hybrid|guarded|rerank": "31/31"
+ },
+ "network_attempts_blocked": 0
+}

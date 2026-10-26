@@ -1,0 +1,852 @@
+{
+ "row_count": 12629,
+ "columns": {
+  "Agreement Type": {
+   "observed_kinds": {
+    "str": 12629
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 8,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "IDA",
+     5878
+    ],
+    [
+     "IBRD",
+     5816
+    ],
+    [
+     "RETF",
+     377
+    ],
+    [
+     "GEF",
+     349
+    ],
+    [
+     "Special Financing",
+     173
+    ],
+    [
+     "MONT",
+     33
+    ],
+    [
+     "SPF",
+     2
+    ],
+    [
+     "CARB",
+     1
+    ]
+   ],
+   "max_len": 17
+  },
+  "Approval FY": {
+   "observed_kinds": {
+    "str:int": 12629
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 67,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2010",
+     338
+    ],
+    [
+     "2011",
+     329
+    ],
+    [
+     "2006",
+     320
+    ],
+    [
+     "2005",
+     310
+    ],
+    [
+     "2014",
+     309
+    ],
+    [
+     "2009",
+     307
+    ],
+    [
+     "2007",
+     303
+    ],
+    [
+     "1998",
+     299
+    ]
+   ],
+   "max_len": 4
+  },
+  "As of Date": {
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 12629
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 1,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "10/18/2026",
+     12629
+    ]
+   ],
+   "max_len": 10,
+   "date_min": "2026-10-18",
+   "date_max": "2026-10-18"
+  },
+  "Bank Performance": {
+   "observed_kinds": {
+    "str": 8518,
+    "sentinel": 4111
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 32.55,
+   "populated_pct": 67.45,
+   "distinct": 7,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Not Rated",
+     4111
+    ],
+    [
+     "Satisfactory",
+     3701
+    ],
+    [
+     "Moderately Satisfactory",
+     2649
+    ],
+    [
+     "Unsatisfactory",
+     954
+    ],
+    [
+     "Moderately Unsatisfactory",
+     883
+    ],
+    [
+     "Highly Satisfactory",
+     273
+    ],
+    [
+     "Highly Unsatisfactory",
+     58
+    ]
+   ],
+   "max_len": 25
+  },
+  "Country / Economy": {
+   "observed_kinds": {
+    "str": 12629
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 187,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Republic of India",
+     562
+    ],
+    [
+     "People's Republic of China",
+     457
+    ],
+    [
+     "Republic of Indonesia",
+     420
+    ],
+    [
+     "Federative Republic of Brazil",
+     405
+    ],
+    [
+     "Islamic Republic of Pakistan",
+     276
+    ],
+    [
+     "People's Republic of Bangladesh",
+     256
+    ],
+    [
+     "United Mexican States",
+     247
+    ],
+    [
+     "Republic of Colombia",
+     213
+    ]
+   ],
+   "max_len": 47
+  },
+  "Country / Economy FCS Lending Group": {
+   "observed_kinds": {
+    "str": 12629
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 9,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "IBRD non-FCS",
+     6043
+    ],
+    [
+     "IDA non-FCS",
+     3693
+    ],
+    [
+     "BLEND non-FCS",
+     981
+    ],
+    [
+     "IDA FCS",
+     836
+    ],
+    [
+     "OTHER non-FCS",
+     675
+    ],
+    [
+     "BLEND FCS",
+     152
+    ],
+    [
+     " non-FCS",
+     97
+    ],
+    [
+     "IBRD FCS",
+     91
+    ]
+   ],
+   "max_len": 13
+  },
+  "Country / Economy FCS Status": {
+   "observed_kinds": {
+    "str": 12629
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 2,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "non-FCS",
+     11489
+    ],
+    [
+     "FCS",
+     1140
+    ]
+   ],
+   "max_len": 7
+  },
+  "Country / Economy Lending Group": {
+   "observed_kinds": {
+    "str": 12532,
+    "empty": 97
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.77,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.23,
+   "distinct": 4,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "IBRD",
+     6134
+    ],
+    [
+     "IDA",
+     4529
+    ],
+    [
+     "BLEND",
+     1133
+    ],
+    [
+     "OTHER",
+     736
+    ]
+   ],
+   "max_len": 5
+  },
+  "Evaluation FY": {
+   "observed_kinds": {
+    "str:int": 12629
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 55,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2015",
+     399
+    ],
+    [
+     "2024",
+     371
+    ],
+    [
+     "2014",
+     370
+    ],
+    [
+     "2017",
+     331
+    ],
+    [
+     "2018",
+     329
+    ],
+    [
+     "2005",
+     313
+    ],
+    [
+     "2006",
+     311
+    ],
+    [
+     "2026",
+     309
+    ]
+   ],
+   "max_len": 4
+  },
+  "Evaluation Type": {
+   "observed_kinds": {
+    "str": 12629
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 7,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "ICRR",
+     6909
+    ],
+    [
+     "PPAR",
+     3713
+    ],
+    [
+     "PCR",
+     1482
+    ],
+    [
+     "EVM",
+     487
+    ],
+    [
+     "PCN",
+     35
+    ],
+    [
+     "PCM",
+     2
+    ],
+    [
+     "CSSR",
+     1
+    ]
+   ],
+   "max_len": 4
+  },
+  "Final Closing FY": {
+   "observed_kinds": {
+    "str:int": 8105,
+    "empty": 4524
+   },
+   "null_pct": 0.0,
+   "empty_pct": 35.82,
+   "sentinel_pct": 0.0,
+   "populated_pct": 64.18,
+   "distinct": 50,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2012",
+     364
+    ],
+    [
+     "2013",
+     341
+    ],
+    [
+     "2011",
+     316
+    ],
+    [
+     "2004",
+     315
+    ],
+    [
+     "2024",
+     307
+    ],
+    [
+     "2005",
+     299
+    ],
+    [
+     "2014",
+     296
+    ],
+    [
+     "2006",
+     294
+    ]
+   ],
+   "max_len": 4
+  },
+  "Global Practice": {
+   "observed_kinds": {
+    "str": 8076,
+    "empty": 4553
+   },
+   "null_pct": 0.0,
+   "empty_pct": 36.05,
+   "sentinel_pct": 0.0,
+   "populated_pct": 63.95,
+   "distinct": 18,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Urban, Subnational Finance, Tourism, and Disaster Management",
+     960
+    ],
+    [
+     "Macroeconomics, Trade and Investment",
+     944
+    ],
+    [
+     "Transport and Logistics",
+     737
+    ],
+    [
+     "Education",
+     711
+    ],
+    [
+     "Energy",
+     681
+    ],
+    [
+     "Finance, Competitiveness and Innovation",
+     662
+    ],
+    [
+     "Water",
+     592
+    ],
+    [
+     "Health, Nutrition & Population",
+     573
+    ]
+   ],
+   "max_len": 60
+  },
+  "Lending Instrument Type": {
+   "observed_kinds": {
+    "str": 12629
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 2,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "IPF",
+     10822
+    ],
+    [
+     "DPF",
+     1807
+    ]
+   ],
+   "max_len": 3
+  },
+  "M&E Quality": {
+   "observed_kinds": {
+    "sentinel": 7533,
+    "str": 5096
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 59.65,
+   "populated_pct": 40.35,
+   "distinct": 5,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Not Rated",
+     7533
+    ],
+    [
+     "Modest",
+     2407
+    ],
+    [
+     "Substantial",
+     2063
+    ],
+    [
+     "Negligible",
+     488
+    ],
+    [
+     "High",
+     138
+    ]
+   ],
+   "max_len": 11
+  },
+  "Outcome": {
+   "observed_kinds": {
+    "str": 12478,
+    "sentinel": 151
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 1.2,
+   "populated_pct": 98.8,
+   "distinct": 7,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Satisfactory",
+     5639
+    ],
+    [
+     "Moderately Satisfactory",
+     3153
+    ],
+    [
+     "Unsatisfactory",
+     1870
+    ],
+    [
+     "Moderately Unsatisfactory",
+     1224
+    ],
+    [
+     "Highly Satisfactory",
+     398
+    ],
+    [
+     "Highly Unsatisfactory",
+     194
+    ],
+    [
+     "Not Rated",
+     151
+    ]
+   ],
+   "max_len": 25
+  },
+  "Practice Group": {
+   "observed_kinds": {
+    "str": 8069,
+    "empty": 4560
+   },
+   "null_pct": 0.0,
+   "empty_pct": 36.11,
+   "sentinel_pct": 0.0,
+   "populated_pct": 63.89,
+   "distinct": 6,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Infrastructure",
+     2376
+    ],
+    [
+     "Equitable Growth, Finance and Institutions",
+     2182
+    ],
+    [
+     "Human Development",
+     1786
+    ],
+    [
+     "Sustainable Development",
+     1692
+    ],
+    [
+     "Digital",
+     30
+    ],
+    [
+     "Other",
+     3
+    ]
+   ],
+   "max_len": 42
+  },
+  "Project ID": {
+   "observed_kinds": {
+    "str": 12629
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 12628,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "P122764",
+     2
+    ],
+    [
+     "P131049",
+     1
+    ],
+    [
+     "P147514",
+     1
+    ],
+    [
+     "P067498",
+     1
+    ],
+    [
+     "P067103",
+     1
+    ],
+    [
+     "P003446",
+     1
+    ],
+    [
+     "P006191",
+     1
+    ],
+    [
+     "P071617",
+     1
+    ]
+   ],
+   "max_len": 7
+  },
+  "Project Name": {
+   "observed_kinds": {
+    "str": 12629
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 10959,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "EDUCATION II",
+     64
+    ],
+    [
+     "EDUCATION I",
+     38
+    ],
+    [
+     "TECHNICAL ASSISTANCE",
+     38
+    ],
+    [
+     "EDUCATION III",
+     37
+    ],
+    [
+     "EDUCATION",
+     36
+    ],
+    [
+     "HIGHWAYS IV",
+     34
+    ],
+    [
+     "HIGHWAYS III",
+     32
+    ],
+    [
+     "HIGHWAYS II",
+     30
+    ]
+   ],
+   "max_len": 131
+  },
+  "Quality at Entry": {
+   "observed_kinds": {
+    "str": 8970,
+    "sentinel": 3659
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 28.97,
+   "populated_pct": 71.03,
+   "distinct": 7,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Satisfactory",
+     3872
+    ],
+    [
+     "Not Rated",
+     3659
+    ],
+    [
+     "Moderately Satisfactory",
+     2008
+    ],
+    [
+     "Unsatisfactory",
+     1449
+    ],
+    [
+     "Moderately Unsatisfactory",
+     1185
+    ],
+    [
+     "Highly Satisfactory",
+     344
+    ],
+    [
+     "Highly Unsatisfactory",
+     112
+    ]
+   ],
+   "max_len": 25
+  },
+  "Quality of Supervision": {
+   "observed_kinds": {
+    "str": 9638,
+    "sentinel": 2991
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 23.68,
+   "populated_pct": 76.32,
+   "distinct": 7,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Satisfactory",
+     5473
+    ],
+    [
+     "Not Rated",
+     2991
+    ],
+    [
+     "Moderately Satisfactory",
+     1862
+    ],
+    [
+     "Unsatisfactory",
+     1166
+    ],
+    [
+     "Moderately Unsatisfactory",
+     629
+    ],
+    [
+     "Highly Satisfactory",
+     435
+    ],
+    [
+     "Highly Unsatisfactory",
+     73
+    ]
+   ],
+   "max_len": 25
+  },
+  "WB Region": {
+   "observed_kinds": {
+    "str": 12629
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 9,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Latin America and Caribbean",
+     2404
+    ],
+    [
+     "East Asia and Pacific",
+     2041
+    ],
+    [
+     "Western and Central Africa",
+     1939
+    ],
+    [
+     "Eastern and Southern Africa",
+     1882
+    ],
+    [
+     "Europe and Central Asia",
+     1715
+    ],
+    [
+     "Middle East, North Africa, Afghanistan, and Pakistan",
+     1456
+    ],
+    [
+     "South Asia",
+     1129
+    ],
+    [
+     "Africa",
+     56
+    ]
+   ],
+   "max_len": 52
+  }
+ },
+ "dataset": "ds00053_ieg_ratings_population",
+ "source": "Finances One DS00053 bulk CSV"
+}

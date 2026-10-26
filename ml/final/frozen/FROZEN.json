@@ -1,0 +1,20 @@
+{
+ "config_sha256": "b3e7e8c9f6ea0f033a29db6377136ab1a899724a30f05a59902e978e8eecfc1c",
+ "labels_sha256": "b28572a568548ecb2254d0ccf1bfae6e256da64556d1be371a995575be61ad89",
+ "features_sha256": "c7f7c56c63c8a420075770ee364305096d1e635cbd05e19618d581c8b1fb8652",
+ "split_py_sha256": "6584d0848fad95985a14c95d32fcee95f6cee48df5e1c081cfc72ebeff36d1de",
+ "refit_py_sha256": "3062cc272c0078862366bdb29f98e4a0755863095688435826dc6c76cdf8341a",
+ "models_sha256": {
+  "b1_final.joblib": "c10c11477d8ab5f555c5847c20a9c6348013329502ac51cda0bd68192cc62ff5",
+  "rf_final.joblib": "10c128175fe035c76c1f1dbafa6a29a49a3664eb6f8507dc0077249866358774",
+  "ridge_final.joblib": "94a36c5c0cb6d1cb67a1ba54e281c06be6a56713ee914130d9589256c92c1f22"
+ },
+ "test_predictions_sha256": "bfd977a22999df291cddff3a5ebf2486e76fbb62641da32a3f79ea31ad634641",
+ "refit_details_sha256": "1425e603cfd47b764bf82c326f5d32dd5611c3c84ade40153e18917ccefa35bd",
+ "test_targets_read": false,
+ "versions": {
+  "sklearn": "1.5.1",
+  "numpy": "1.26.4",
+  "pandas": "2.3.3"
+ }
+}

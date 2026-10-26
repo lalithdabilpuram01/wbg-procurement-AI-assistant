@@ -1,0 +1,116 @@
+{
+ "query": "Why did the Ethiopian Roads Authority choose a Design and Build approach for the expressway works?",
+ "status": "ok",
+ "notes": [],
+ "results": [
+  {
+   "rank": 1,
+   "unit_id": "24440102:C:0131",
+   "unit_type": "chunk",
+   "scores": {
+    "rrf": 0.03,
+    "bm25": 18.1768,
+    "dense": 0.705
+   },
+   "project_id": "P148850",
+   "project_name": "Ethiopia- Expressway Development Support Project",
+   "country_code": "ET",
+   "document_id": "24440102",
+   "document_version_id": "24440102:b1276d43b554",
+   "document_sha256": "b1276d43b5547894d0f3f20a50fc6b6381a7b69b34deb010615e51e627657c77",
+   "doc_type": "PAD",
+   "document_role": "PAD_original",
+   "title": "Ethiopia - Expressway Development Support Project",
+   "document_date": "2015-04-27",
+   "disclosure_date": "2015-05-19",
+   "physical_page_start": 87,
+   "physical_page_end": 87,
+   "printed_page_label": "74",
+   "printed_page_label_status": "detected",
+   "section": "Annex 3: Implementation Arrangements > B. Financial Management, Disbursements, and Procurement",
+   "table_id": null,
+   "excerpt": "Specific to this Project, ERA has opted to use a Design and Build approach to mitigate some of the above issues and the Bank has no standard documents for this procurement method. Preparation of bidding documents and concluding evaluation of bids will possibly require more effort and time than normal, which could lead to delays. The overall project risk for procurement is “Moderate” and will be mitigated through training, the use of pre-approved model documents based on the Bank’s OPRC standard contract form and TA support. 56. Procurable items under the Bank financed project will include road construction works (which comprise about 80 percent of the total cost) and various consulting servi",
+   "source_url": "https://documents1.worldbank.org/curated/en/882371468000596899/pdf/PAD1135-UPLOAD-NEW-VERSION-REVISED-Box391445B-OUO-9-UPDATE-BOARD-NUMBERS-IDA-R2015-0093-3.pdf",
+   "local_path": "rag/corpus_v3/pdf/ET/P148850/PAD_2015-04-27_24440102.pdf",
+   "association": "document text (project-level context; not a contract-level match)",
+   "parent_id": "24440102:C:p031",
+   "parent_pages": [
+    85,
+    87
+   ]
+  },
+  {
+   "rank": 2,
+   "unit_id": "24440102:C:0028",
+   "unit_type": "chunk",
+   "scores": {
+    "rrf": 0.0296,
+    "bm25": 15.1787,
+    "dense": 0.7555
+   },
+   "project_id": "P148850",
+   "project_name": "Ethiopia- Expressway Development Support Project",
+   "country_code": "ET",
+   "document_id": "24440102",
+   "document_version_id": "24440102:b1276d43b554",
+   "document_sha256": "b1276d43b5547894d0f3f20a50fc6b6381a7b69b34deb010615e51e627657c77",
+   "doc_type": "PAD",
+   "document_role": "PAD_original",
+   "title": "Ethiopia - Expressway Development Support Project",
+   "document_date": "2015-04-27",
+   "disclosure_date": "2015-05-19",
+   "physical_page_start": 23,
+   "physical_page_end": 23,
+   "printed_page_label": "10",
+   "printed_page_label_status": "detected",
+   "section": "III. PROJECT DESCRIPTION > C. Lessons Learned and Reflected in the Project Design",
+   "table_id": null,
+   "excerpt": "The decision to introduce segregated dual carriageway highways along a new alignment is appropriate on the grounds of safety and efficient transport. The project includes a standalone Road Safety component to introduce “The Safe System” along the expressways and critical accident-prone corridors; (d) Many road construction projects experience delays and cost overruns due to poor design work and contract administration by consultants, and delayed mobilization by contractors. These issues are to be addressed through the adoption of a Design and Build contract format, which is being used successfully by ERA; and (e) Safeguard issues on Design and Build contracts were commonly addressed with fra",
+   "source_url": "https://documents1.worldbank.org/curated/en/882371468000596899/pdf/PAD1135-UPLOAD-NEW-VERSION-REVISED-Box391445B-OUO-9-UPDATE-BOARD-NUMBERS-IDA-R2015-0093-3.pdf",
+   "local_path": "rag/corpus_v3/pdf/ET/P148850/PAD_2015-04-27_24440102.pdf",
+   "association": "document text (project-level context; not a contract-level match)",
+   "parent_id": "24440102:C:p006",
+   "parent_pages": [
+    22,
+    23
+   ]
+  },
+  {
+   "rank": 3,
+   "unit_id": "24440102:C:0034",
+   "unit_type": "chunk",
+   "scores": {
+    "rrf": 0.0286,
+    "bm25": 16.7447,
+    "dense": 0.6981
+   },
+   "project_id": "P148850",
+   "project_name": "Ethiopia- Expressway Development Support Project",
+   "country_code": "ET",
+   "document_id": "24440102",
+   "document_version_id": "24440102:b1276d43b554",
+   "document_sha256": "b1276d43b5547894d0f3f20a50fc6b6381a7b69b34deb010615e51e627657c77",
+   "doc_type": "PAD",
+   "document_role": "PAD_original",
+   "title": "Ethiopia - Expressway Development Support Project",
+   "document_date": "2015-04-27",
+   "disclosure_date": "2015-05-19",
+   "physical_page_start": 24,
+   "physical_page_end": 25,
+   "printed_page_label": "11",
+   "printed_page_label_status": "detected",
+   "section": "V. KEY RISKS > A. Overall Risk Rating and Explanation of Key Risks",
+   "table_id": null,
+   "excerpt": "A. Overall Risk Rating and Explanation of Key Risks\n\n46. As multiple donors will finance separate sections of the road, and this is a new greenfield development along associated sections, which potentially have adverse environmental and social impacts, the risk at preparation and implementation is considered to be substantial. 47. Environment and Social: This is a greenfield development project that will take farmlands and some scattered rural houses. The new highway passes close to lakes, parks and a marshy area which are environmentally sensitive. The number of people to be affected by the associated projects is high, and resettlement and livelihood restoration issues require attention; jo",
+   "source_url": "https://documents1.worldbank.org/curated/en/882371468000596899/pdf/PAD1135-UPLOAD-NEW-VERSION-REVISED-Box391445B-OUO-9-UPDATE-BOARD-NUMBERS-IDA-R2015-0093-3.pdf",
+   "local_path": "rag/corpus_v3/pdf/ET/P148850/PAD_2015-04-27_24440102.pdf",
+   "association": "document text (project-level context; not a contract-level match)",
+   "parent_id": "24440102:C:p008",
+   "parent_pages": [
+    24,
+    25
+   ]
+  }
+ ],
+ "latency_ms": 3472.1
+}

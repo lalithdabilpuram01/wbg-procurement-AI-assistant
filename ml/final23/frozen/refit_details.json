@@ -1,0 +1,2171 @@
+{
+ "m2": {
+  "policy": "m2_v1",
+  "refit_rows": 98857,
+  "refit_projects": 1561,
+  "test_rows": 28949,
+  "test_projects": 1053,
+  "test_projects_unseen_in_refit": 166,
+  "scenarios": {
+   "S2": {
+    "C": 0.03162277660168379,
+    "min_frequency": 50,
+    "refit_prevalence": 0.1538,
+    "threshold": {
+     "t": 0.16701662414847687,
+     "TP": 6655,
+     "FP": 22984,
+     "FN": 8546,
+     "TN": 60672,
+     "precision": 0.2245,
+     "recall": 0.4378,
+     "F1": 0.2968,
+     "alert_rate": 0.2998
+    },
+    "oof_PR_AUC_note": "refit out-of-fold only; not a test metric",
+    "unstable_design_columns": [
+     "approval_fiscal_year",
+     "country_grp_AL",
+     "country_grp_AM",
+     "country_grp_AO",
+     "country_grp_AR",
+     "country_grp_BA",
+     "country_grp_BJ",
+     "country_grp_BW",
+     "country_grp_BZ",
+     "country_grp_CI",
+     "country_grp_CL",
+     "country_grp_CN",
+     "country_grp_CR",
+     "country_grp_CV",
+     "country_grp_DM",
+     "country_grp_EG",
+     "country_grp_FM",
+     "country_grp_GW",
+     "country_grp_HN",
+     "country_grp_HR",
+     "country_grp_IQ",
+     "country_grp_KE",
+     "country_grp_KI",
+     "country_grp_LA",
+     "country_grp_LS",
+     "country_grp_MD",
+     "country_grp_ME",
+     "country_grp_MK",
+     "country_grp_MV",
+     "country_grp_MW",
+     "country_grp_MX",
+     "country_grp_NE",
+     "country_grp_NP",
+     "country_grp_PA",
+     "country_grp_PE",
+     "country_grp_PG",
+     "country_grp_PY",
+     "country_grp_RS",
+     "country_grp_RU",
+     "country_grp_SD",
+     "country_grp_TG",
+     "country_grp_TV",
+     "country_grp_UY",
+     "country_grp_UZ",
+     "country_grp_VC",
+     "country_grp_WS",
+     "country_grp_XK",
+     "country_grp_YE",
+     "country_grp_ZA",
+     "country_grp_ZW",
+     "country_grp_infrequent_sklearn",
+     "procurement_method_E-Auctions",
+     "procurement_method_Force Account",
+     "procurement_method_Quality And Cost-Based Selection",
+     "procurement_method_Quality Based Selection",
+     "procurement_method_infrequent_sklearn",
+     "region_name_Latin America and Caribbean",
+     "region_name_Other",
+     "sector_Education",
+     "sector_Health",
+     "sector_Industry, Trade and Services",
+     "sector_Social Protection",
+     "sector_Transportation",
+     "sector_Water, Sanitation and Waste Management",
+     "sector_infrequent_sklearn"
+    ],
+    "coefficients": {
+     "country_grp_RO": {
+      "coef": 0.7334,
+      "sign_agreement": 0.95
+     },
+     "country_grp_LR": {
+      "coef": 0.7231,
+      "sign_agreement": 1.0
+     },
+     "procurement_category_Works": {
+      "coef": 0.6191,
+      "sign_agreement": 1.0
+     },
+     "country_grp_CO": {
+      "coef": -0.6178,
+      "sign_agreement": 1.0
+     },
+     "country_grp_SO": {
+      "coef": -0.598,
+      "sign_agreement": 1.0
+     },
+     "country_grp_HT": {
+      "coef": -0.5567,
+      "sign_agreement": 1.0
+     },
+     "country_grp_BF": {
+      "coef": -0.4966,
+      "sign_agreement": 1.0
+     },
+     "country_grp_IN": {
+      "coef": 0.4901,
+      "sign_agreement": 1.0
+     },
+     "country_grp_CD": {
+      "coef": 0.4689,
+      "sign_agreement": 0.95
+     },
+     "review_type_Post": {
+      "coef": -0.4664,
+      "sign_agreement": 1.0
+     },
+     "country_grp_DO": {
+      "coef": 0.4483,
+      "sign_agreement": 0.8
+     },
+     "procurement_category_Consultant Services": {
+      "coef": -0.4257,
+      "sign_agreement": 1.0
+     },
+     "country_grp_EC": {
+      "coef": -0.4156,
+      "sign_agreement": 1.0
+     },
+     "country_grp_PH": {
+      "coef": 0.4048,
+      "sign_agreement": 0.95
+     },
+     "country_grp_KG": {
+      "coef": -0.3981,
+      "sign_agreement": 1.0
+     },
+     "country_grp_TZ": {
+      "coef": 0.3965,
+      "sign_agreement": 1.0
+     },
+     "country_grp_BO": {
+      "coef": 0.3947,
+      "sign_agreement": 0.85
+     },
+     "country_grp_BT": {
+      "coef": -0.3934,
+      "sign_agreement": 1.0
+     },
+     "country_grp_PK": {
+      "coef": -0.3805,
+      "sign_agreement": 1.0
+     },
+     "country_grp_GY": {
+      "coef": -0.3759,
+      "sign_agreement": 0.95
+     },
+     "country_grp_SB": {
+      "coef": -0.3702,
+      "sign_agreement": 0.9
+     },
+     "country_grp_UA": {
+      "coef": -0.3499,
+      "sign_agreement": 0.95
+     },
+     "country_grp_BR": {
+      "coef": 0.3451,
+      "sign_agreement": 1.0
+     },
+     "country_grp_SV": {
+      "coef": 0.3333,
+      "sign_agreement": 0.8
+     },
+     "procurement_method_Direct Selection": {
+      "coef": 0.3305,
+      "sign_agreement": 1.0
+     },
+     "country_grp_KZ": {
+      "coef": -0.3279,
+      "sign_agreement": 1.0
+     },
+     "country_grp_VC": {
+      "coef": -0.3185,
+      "sign_agreement": 0.5
+     },
+     "country_grp_ID": {
+      "coef": 0.3147,
+      "sign_agreement": 0.8
+     },
+     "procurement_category_Non-consulting Services": {
+      "coef": -0.3075,
+      "sign_agreement": 1.0
+     },
+     "country_grp_BW": {
+      "coef": 0.3073,
+      "sign_agreement": 0.65
+     },
+     "country_grp_TR": {
+      "coef": 0.3042,
+      "sign_agreement": 0.8
+     },
+     "country_grp_LK": {
+      "coef": -0.303,
+      "sign_agreement": 0.85
+     },
+     "country_grp_TD": {
+      "coef": 0.2959,
+      "sign_agreement": 1.0
+     },
+     "country_grp_KM": {
+      "coef": 0.2934,
+      "sign_agreement": 1.0
+     },
+     "review_type_Prior": {
+      "coef": 0.2853,
+      "sign_agreement": 1.0
+     },
+     "procurement_method_Request for Quotations": {
+      "coef": -0.283,
+      "sign_agreement": 1.0
+     },
+     "country_grp_DJ": {
+      "coef": 0.2784,
+      "sign_agreement": 1.0
+     },
+     "country_grp_TJ": {
+      "coef": -0.2775,
+      "sign_agreement": 1.0
+     },
+     "country_grp_MN": {
+      "coef": -0.2765,
+      "sign_agreement": 0.95
+     },
+     "country_grp_ET": {
+      "coef": -0.2694,
+      "sign_agreement": 1.0
+     },
+     "country_grp_CM": {
+      "coef": -0.2618,
+      "sign_agreement": 1.0
+     },
+     "country_grp_TN": {
+      "coef": -0.2508,
+      "sign_agreement": 1.0
+     },
+     "country_grp_MZ": {
+      "coef": 0.2478,
+      "sign_agreement": 1.0
+     },
+     "country_grp_BI": {
+      "coef": -0.2427,
+      "sign_agreement": 0.95
+     },
+     "country_grp_CG": {
+      "coef": -0.2402,
+      "sign_agreement": 1.0
+     },
+     "country_grp_RU": {
+      "coef": 0.2397,
+      "sign_agreement": 0.5
+     },
+     "country_grp_AO": {
+      "coef": 0.2383,
+      "sign_agreement": 0.5
+     },
+     "country_grp_LB": {
+      "coef": 0.2374,
+      "sign_agreement": 1.0
+     },
+     "country_grp_BY": {
+      "coef": 0.237,
+      "sign_agreement": 0.95
+     },
+     "country_grp_GH": {
+      "coef": -0.2322,
+      "sign_agreement": 0.9
+     },
+     "country_grp_MA": {
+      "coef": -0.2306,
+      "sign_agreement": 0.9
+     },
+     "country_grp_KH": {
+      "coef": 0.23,
+      "sign_agreement": 1.0
+     },
+     "country_grp_NI": {
+      "coef": -0.2293,
+      "sign_agreement": 0.95
+     },
+     "procurement_method_Individual Consultant Selection": {
+      "coef": 0.2253,
+      "sign_agreement": 1.0
+     },
+     "country_grp_AF": {
+      "coef": 0.2204,
+      "sign_agreement": 1.0
+     },
+     "country_grp_TO": {
+      "coef": -0.2144,
+      "sign_agreement": 1.0
+     },
+     "country_grp_GM": {
+      "coef": 0.2138,
+      "sign_agreement": 1.0
+     },
+     "country_grp_GE": {
+      "coef": -0.2072,
+      "sign_agreement": 0.9
+     },
+     "country_grp_JO": {
+      "coef": 0.204,
+      "sign_agreement": 0.95
+     },
+     "sector_Agriculture, Fishing and Forestry": {
+      "coef": 0.1993,
+      "sign_agreement": 0.9
+     },
+     "country_grp_MX": {
+      "coef": -0.1988,
+      "sign_agreement": 0.7
+     },
+     "procurement_method_Community Driven Development": {
+      "coef": -0.1967,
+      "sign_agreement": 1.0
+     },
+     "country_grp_MM": {
+      "coef": -0.1937,
+      "sign_agreement": 1.0
+     },
+     "country_grp_GN": {
+      "coef": 0.1903,
+      "sign_agreement": 1.0
+     },
+     "country_grp_RW": {
+      "coef": 0.1836,
+      "sign_agreement": 1.0
+     },
+     "procurement_method_Consultant Qualification Selection": {
+      "coef": -0.1814,
+      "sign_agreement": 1.0
+     },
+     "country_grp_GA": {
+      "coef": -0.1812,
+      "sign_agreement": 0.9
+     },
+     "country_grp_SN": {
+      "coef": 0.1768,
+      "sign_agreement": 0.9
+     },
+     "country_grp_JM": {
+      "coef": -0.1699,
+      "sign_agreement": 1.0
+     },
+     "country_grp_KE": {
+      "coef": -0.1626,
+      "sign_agreement": 0.5
+     },
+     "country_grp_UG": {
+      "coef": -0.1624,
+      "sign_agreement": 0.8
+     },
+     "country_grp_MH": {
+      "coef": 0.1613,
+      "sign_agreement": 0.95
+     },
+     "signed_before_approval": {
+      "coef": 0.1598,
+      "sign_agreement": 1.0
+     },
+     "country_grp_CF": {
+      "coef": 0.1597,
+      "sign_agreement": 0.8
+     },
+     "country_grp_NG": {
+      "coef": -0.1554,
+      "sign_agreement": 0.95
+     },
+     "country_grp_ST": {
+      "coef": -0.1534,
+      "sign_agreement": 0.8
+     },
+     "country_grp_MR": {
+      "coef": -0.1518,
+      "sign_agreement": 0.9
+     },
+     "country_grp_ZM": {
+      "coef": 0.1505,
+      "sign_agreement": 0.9
+     },
+     "region_name_Middle East, North Africa, Afghanistan, and Pakistan": {
+      "coef": -0.1476,
+      "sign_agreement": 1.0
+     },
+     "country_grp_BD": {
+      "coef": 0.1463,
+      "sign_agreement": 0.85
+     },
+     "country_grp_HN": {
+      "coef": 0.1441,
+      "sign_agreement": 0.7
+     },
+     "sector_Information and Communications Technologies": {
+      "coef": -0.143,
+      "sign_agreement": 1.0
+     },
+     "procurement_method_Request for Bids": {
+      "coef": 0.1429,
+      "sign_agreement": 1.0
+     },
+     "country_grp_RS": {
+      "coef": -0.1393,
+      "sign_agreement": 0.65
+     },
+     "country_grp_MG": {
+      "coef": 0.1392,
+      "sign_agreement": 1.0
+     },
+     "country_grp_SZ": {
+      "coef": 0.1385,
+      "sign_agreement": 0.85
+     },
+     "country_grp_BA": {
+      "coef": -0.1378,
+      "sign_agreement": 0.65
+     },
+     "sector_Financial Sector": {
+      "coef": -0.1319,
+      "sign_agreement": 0.95
+     },
+     "sector_infrequent_sklearn": {
+      "coef": 0.1287,
+      "sign_agreement": 0.55
+     },
+     "procurement_category_Goods": {
+      "coef": -0.1284,
+      "sign_agreement": 0.95
+     },
+     "procurement_method_Request for Proposals": {
+      "coef": 0.1274,
+      "sign_agreement": 1.0
+     },
+     "region_name_Western and Central Africa": {
+      "coef": -0.1212,
+      "sign_agreement": 0.85
+     },
+     "region_name_Europe and Central Asia": {
+      "coef": 0.1181,
+      "sign_agreement": 1.0
+     },
+     "country_grp_ML": {
+      "coef": 0.1176,
+      "sign_agreement": 0.85
+     },
+     "procurement_method_Fixed Budget Selection": {
+      "coef": -0.1139,
+      "sign_agreement": 0.9
+     },
+     "country_grp_MV": {
+      "coef": -0.1138,
+      "sign_agreement": 0.5
+     },
+     "country_grp_MD": {
+      "coef": -0.1113,
+      "sign_agreement": 0.7
+     },
+     "country_grp_PA": {
+      "coef": -0.1106,
+      "sign_agreement": 0.7
+     },
+     "country_grp_CV": {
+      "coef": -0.1091,
+      "sign_agreement": 0.6
+     },
+     "country_grp_FM": {
+      "coef": 0.1084,
+      "sign_agreement": 0.55
+     },
+     "country_grp_MK": {
+      "coef": 0.1062,
+      "sign_agreement": 0.55
+     },
+     "country_grp_SX": {
+      "coef": 0.0953,
+      "sign_agreement": 0.9
+     },
+     "country_grp_DM": {
+      "coef": 0.0931,
+      "sign_agreement": 0.6
+     },
+     "region_name_Eastern and Southern Africa": {
+      "coef": -0.0928,
+      "sign_agreement": 0.9
+     },
+     "country_grp_BJ": {
+      "coef": 0.0909,
+      "sign_agreement": 0.7
+     },
+     "sector_Water, Sanitation and Waste Management": {
+      "coef": -0.0889,
+      "sign_agreement": 0.45
+     },
+     "country_grp_REGIONAL": {
+      "coef": 0.0887,
+      "sign_agreement": 0.9
+     },
+     "country_grp_NP": {
+      "coef": 0.0866,
+      "sign_agreement": 0.7
+     },
+     "country_grp_NE": {
+      "coef": 0.0834,
+      "sign_agreement": 0.55
+     },
+     "country_grp_CL": {
+      "coef": -0.0783,
+      "sign_agreement": 0.5
+     },
+     "country_grp_CI": {
+      "coef": -0.0778,
+      "sign_agreement": 0.7
+     },
+     "procurement_method_Commercial Practices": {
+      "coef": -0.077,
+      "sign_agreement": 0.8
+     },
+     "country_grp_EG": {
+      "coef": -0.0764,
+      "sign_agreement": 0.55
+     },
+     "country_grp_PS": {
+      "coef": -0.0753,
+      "sign_agreement": 0.8
+     },
+     "income_ordinal": {
+      "coef": -0.0747,
+      "sign_agreement": 1.0
+     },
+     "country_grp_PE": {
+      "coef": 0.0742,
+      "sign_agreement": 0.7
+     },
+     "country_grp_PY": {
+      "coef": 0.0742,
+      "sign_agreement": 0.55
+     },
+     "procurement_method_UN Agencies (Direct)": {
+      "coef": -0.0714,
+      "sign_agreement": 0.9
+     },
+     "sector_Public Administration": {
+      "coef": -0.0697,
+      "sign_agreement": 0.95
+     },
+     "region_name_South Asia": {
+      "coef": -0.0694,
+      "sign_agreement": 0.9
+     },
+     "country_grp_SD": {
+      "coef": -0.0667,
+      "sign_agreement": 0.5
+     },
+     "country_grp_VN": {
+      "coef": -0.0635,
+      "sign_agreement": 0.8
+     },
+     "country_grp_GW": {
+      "coef": 0.0634,
+      "sign_agreement": 0.55
+     },
+     "review_type_infrequent_sklearn": {
+      "coef": -0.0615,
+      "sign_agreement": 1.0
+     },
+     "country_grp_LS": {
+      "coef": 0.0614,
+      "sign_agreement": 0.45
+     },
+     "procurement_method_Force Account": {
+      "coef": -0.0597,
+      "sign_agreement": 0.45
+     },
+     "country_grp_infrequent_sklearn": {
+      "coef": 0.0597,
+      "sign_agreement": 0.7
+     },
+     "country_grp_AM": {
+      "coef": 0.0596,
+      "sign_agreement": 0.75
+     },
+     "country_grp_WS": {
+      "coef": 0.0595,
+      "sign_agreement": 0.55
+     },
+     "sector_Energy and Extractives": {
+      "coef": -0.0574,
+      "sign_agreement": 0.95
+     },
+     "country_grp_IQ": {
+      "coef": -0.0546,
+      "sign_agreement": 0.6
+     },
+     "sector_Transportation": {
+      "coef": -0.0519,
+      "sign_agreement": 0.55
+     },
+     "country_grp_AL": {
+      "coef": -0.0517,
+      "sign_agreement": 0.5
+     },
+     "country_grp_PG": {
+      "coef": -0.0509,
+      "sign_agreement": 0.65
+     },
+     "country_grp_CR": {
+      "coef": -0.0495,
+      "sign_agreement": 0.5
+     },
+     "country_grp_TV": {
+      "coef": -0.0471,
+      "sign_agreement": 0.45
+     },
+     "region_name_East Asia and Pacific": {
+      "coef": 0.0469,
+      "sign_agreement": 0.8
+     },
+     "procurement_method_E-Auctions": {
+      "coef": -0.0466,
+      "sign_agreement": 0.4
+     },
+     "days_from_approval": {
+      "coef": 0.0459,
+      "sign_agreement": 0.85
+     },
+     "country_grp_CN": {
+      "coef": -0.0441,
+      "sign_agreement": 0.7
+     },
+     "procurement_method_Least Cost Selection": {
+      "coef": -0.0414,
+      "sign_agreement": 0.85
+     },
+     "region_name_Latin America and Caribbean": {
+      "coef": 0.0391,
+      "sign_agreement": 0.7
+     },
+     "country_grp_LA": {
+      "coef": 0.0386,
+      "sign_agreement": 0.7
+     },
+     "country_grp_ME": {
+      "coef": -0.0368,
+      "sign_agreement": 0.3
+     },
+     "country_grp_UY": {
+      "coef": -0.0362,
+      "sign_agreement": 0.7
+     },
+     "country_grp_KI": {
+      "coef": 0.0356,
+      "sign_agreement": 0.5
+     },
+     "sector_Industry, Trade and Services": {
+      "coef": -0.0278,
+      "sign_agreement": 0.6
+     },
+     "country_grp_HR": {
+      "coef": 0.0263,
+      "sign_agreement": 0.35
+     },
+     "sector_Health": {
+      "coef": -0.0208,
+      "sign_agreement": 0.35
+     },
+     "country_grp_SL": {
+      "coef": -0.0195,
+      "sign_agreement": 0.85
+     },
+     "country_grp_BZ": {
+      "coef": 0.0179,
+      "sign_agreement": 0.5
+     },
+     "approval_fiscal_year": {
+      "coef": -0.0164,
+      "sign_agreement": 0.75
+     },
+     "country_grp_UZ": {
+      "coef": 0.0162,
+      "sign_agreement": 0.55
+     },
+     "country_grp_AR": {
+      "coef": 0.0159,
+      "sign_agreement": 0.4
+     },
+     "region_name_Other": {
+      "coef": -0.0155,
+      "sign_agreement": 0.45
+     },
+     "sector_Social Protection": {
+      "coef": 0.0139,
+      "sign_agreement": 0.55
+     },
+     "procurement_method_infrequent_sklearn": {
+      "coef": 0.0131,
+      "sign_agreement": 0.4
+     },
+     "procurement_method_Quality And Cost-Based Selection": {
+      "coef": -0.0116,
+      "sign_agreement": 0.55
+     },
+     "country_grp_ZA": {
+      "coef": 0.0109,
+      "sign_agreement": 0.4
+     },
+     "country_grp_TG": {
+      "coef": 0.0108,
+      "sign_agreement": 0.45
+     },
+     "country_grp_MW": {
+      "coef": -0.0105,
+      "sign_agreement": 0.25
+     },
+     "sector_Education": {
+      "coef": 0.007,
+      "sign_agreement": 0.55
+     },
+     "country_grp_ZW": {
+      "coef": -0.006,
+      "sign_agreement": 0.55
+     },
+     "country_grp_XK": {
+      "coef": 0.0023,
+      "sign_agreement": 0.5
+     },
+     "procurement_method_Quality Based Selection": {
+      "coef": 0.001,
+      "sign_agreement": 0.35
+     },
+     "country_grp_YE": {
+      "coef": 0.0007,
+      "sign_agreement": 0.35
+     }
+    }
+   },
+   "S0": {
+    "C": 0.001,
+    "min_frequency": 50,
+    "refit_prevalence": 0.1538,
+    "threshold": {
+     "t": 0.15613980414955744,
+     "TP": 4588,
+     "FP": 25047,
+     "FN": 10614,
+     "TN": 58608,
+     "precision": 0.1548,
+     "recall": 0.3018,
+     "F1": 0.2047,
+     "alert_rate": 0.2998
+    },
+    "oof_PR_AUC_note": "refit out-of-fold only; not a test metric",
+    "unstable_design_columns": [
+     "approval_fiscal_year",
+     "country_grp_AL",
+     "country_grp_AR",
+     "country_grp_BA",
+     "country_grp_BD",
+     "country_grp_BI",
+     "country_grp_BO",
+     "country_grp_BR",
+     "country_grp_BT",
+     "country_grp_BW",
+     "country_grp_BY",
+     "country_grp_BZ",
+     "country_grp_CD",
+     "country_grp_CG",
+     "country_grp_CI",
+     "country_grp_CL",
+     "country_grp_CM",
+     "country_grp_CN",
+     "country_grp_CO",
+     "country_grp_CR",
+     "country_grp_DJ",
+     "country_grp_DM",
+     "country_grp_DO",
+     "country_grp_EC",
+     "country_grp_EG",
+     "country_grp_FM",
+     "country_grp_GA",
+     "country_grp_GE",
+     "country_grp_GM",
+     "country_grp_GN",
+     "country_grp_GY",
+     "country_grp_HR",
+     "country_grp_HT",
+     "country_grp_KH",
+     "country_grp_KI",
+     "country_grp_KM",
+     "country_grp_KZ",
+     "country_grp_LA",
+     "country_grp_LK",
+     "country_grp_LS",
+     "country_grp_MA",
+     "country_grp_MD",
+     "country_grp_ME",
+     "country_grp_MH",
+     "country_grp_MK",
+     "country_grp_ML",
+     "country_grp_MX",
+     "country_grp_MZ",
+     "country_grp_NE",
+     "country_grp_NG",
+     "country_grp_NI",
+     "country_grp_NP",
+     "country_grp_PA",
+     "country_grp_PE",
+     "country_grp_PK",
+     "country_grp_PY",
+     "country_grp_REGIONAL",
+     "country_grp_RU",
+     "country_grp_SB",
+     "country_grp_SN",
+     "country_grp_ST",
+     "country_grp_SV",
+     "country_grp_SZ",
+     "country_grp_TD",
+     "country_grp_TN",
+     "country_grp_TO",
+     "country_grp_TR",
+     "country_grp_TV",
+     "country_grp_UA",
+     "country_grp_UZ",
+     "country_grp_VC",
+     "country_grp_WS",
+     "country_grp_YE",
+     "country_grp_ZA",
+     "country_grp_ZM",
+     "country_grp_infrequent_sklearn",
+     "days_from_approval",
+     "income_ordinal",
+     "procurement_category_Consultant Services",
+     "procurement_category_Goods",
+     "procurement_category_Works",
+     "procurement_method_Commercial Practices",
+     "procurement_method_E-Auctions",
+     "procurement_method_Fixed Budget Selection",
+     "procurement_method_Force Account",
+     "procurement_method_Request for Bids",
+     "procurement_method_Request for Quotations",
+     "procurement_method_UN Agencies (Direct)",
+     "procurement_method_infrequent_sklearn",
+     "region_name_East Asia and Pacific",
+     "region_name_Europe and Central Asia",
+     "region_name_Latin America and Caribbean",
+     "region_name_Middle East, North Africa, Afghanistan, and Pakistan",
+     "region_name_South Asia",
+     "region_name_Western and Central Africa",
+     "review_type_Post",
+     "review_type_Prior",
+     "review_type_infrequent_sklearn",
+     "sector_Education",
+     "sector_Health",
+     "sector_Information and Communications Technologies",
+     "sector_Public Administration",
+     "sector_Social Protection"
+    ],
+    "coefficients": {
+     "procurement_method_Direct Selection": {
+      "coef": -0.0296,
+      "sign_agreement": 0.95
+     },
+     "country_grp_UY": {
+      "coef": 0.0264,
+      "sign_agreement": 1.0
+     },
+     "country_grp_ET": {
+      "coef": 0.0245,
+      "sign_agreement": 0.95
+     },
+     "procurement_method_Quality And Cost-Based Selection": {
+      "coef": -0.0236,
+      "sign_agreement": 1.0
+     },
+     "sector_Water, Sanitation and Waste Management": {
+      "coef": -0.0202,
+      "sign_agreement": 0.85
+     },
+     "sector_Agriculture, Fishing and Forestry": {
+      "coef": 0.0196,
+      "sign_agreement": 1.0
+     },
+     "sector_Energy and Extractives": {
+      "coef": -0.0188,
+      "sign_agreement": 0.9
+     },
+     "country_grp_IN": {
+      "coef": 0.0183,
+      "sign_agreement": 0.9
+     },
+     "country_grp_KE": {
+      "coef": -0.0177,
+      "sign_agreement": 0.9
+     },
+     "country_grp_HN": {
+      "coef": -0.0175,
+      "sign_agreement": 0.85
+     },
+     "procurement_method_Individual Consultant Selection": {
+      "coef": 0.0169,
+      "sign_agreement": 0.9
+     },
+     "sector_Transportation": {
+      "coef": 0.0165,
+      "sign_agreement": 0.8
+     },
+     "country_grp_ID": {
+      "coef": -0.0165,
+      "sign_agreement": 0.95
+     },
+     "procurement_category_Non-consulting Services": {
+      "coef": -0.0153,
+      "sign_agreement": 0.8
+     },
+     "signed_before_approval": {
+      "coef": 0.0148,
+      "sign_agreement": 1.0
+     },
+     "region_name_Europe and Central Asia": {
+      "coef": -0.0145,
+      "sign_agreement": 0.75
+     },
+     "country_grp_MG": {
+      "coef": 0.0145,
+      "sign_agreement": 0.9
+     },
+     "country_grp_PH": {
+      "coef": -0.0132,
+      "sign_agreement": 0.95
+     },
+     "country_grp_XK": {
+      "coef": 0.0122,
+      "sign_agreement": 0.95
+     },
+     "country_grp_BF": {
+      "coef": 0.0121,
+      "sign_agreement": 1.0
+     },
+     "country_grp_AM": {
+      "coef": -0.0116,
+      "sign_agreement": 0.9
+     },
+     "country_grp_JM": {
+      "coef": 0.0115,
+      "sign_agreement": 0.8
+     },
+     "procurement_method_Community Driven Development": {
+      "coef": -0.0113,
+      "sign_agreement": 0.9
+     },
+     "country_grp_GH": {
+      "coef": -0.0113,
+      "sign_agreement": 0.85
+     },
+     "country_grp_MR": {
+      "coef": -0.011,
+      "sign_agreement": 1.0
+     },
+     "country_grp_PS": {
+      "coef": -0.011,
+      "sign_agreement": 0.9
+     },
+     "country_grp_MW": {
+      "coef": 0.0106,
+      "sign_agreement": 0.9
+     },
+     "procurement_category_Goods": {
+      "coef": 0.0104,
+      "sign_agreement": 0.75
+     },
+     "country_grp_HR": {
+      "coef": 0.0104,
+      "sign_agreement": 0.5
+     },
+     "region_name_South Asia": {
+      "coef": 0.0103,
+      "sign_agreement": 0.75
+     },
+     "country_grp_VN": {
+      "coef": 0.0102,
+      "sign_agreement": 0.85
+     },
+     "country_grp_TZ": {
+      "coef": -0.0101,
+      "sign_agreement": 0.85
+     },
+     "country_grp_UG": {
+      "coef": -0.0101,
+      "sign_agreement": 1.0
+     },
+     "country_grp_RW": {
+      "coef": 0.01,
+      "sign_agreement": 0.8
+     },
+     "country_grp_BJ": {
+      "coef": -0.0099,
+      "sign_agreement": 0.9
+     },
+     "country_grp_MV": {
+      "coef": -0.0098,
+      "sign_agreement": 0.9
+     },
+     "country_grp_GY": {
+      "coef": -0.0096,
+      "sign_agreement": 0.6
+     },
+     "country_grp_UZ": {
+      "coef": 0.0094,
+      "sign_agreement": 0.7
+     },
+     "procurement_method_Least Cost Selection": {
+      "coef": 0.0094,
+      "sign_agreement": 0.95
+     },
+     "country_grp_RS": {
+      "coef": -0.0089,
+      "sign_agreement": 0.85
+     },
+     "procurement_method_Request for Bids": {
+      "coef": 0.0089,
+      "sign_agreement": 0.75
+     },
+     "country_grp_TG": {
+      "coef": -0.0089,
+      "sign_agreement": 0.95
+     },
+     "country_grp_NE": {
+      "coef": 0.0087,
+      "sign_agreement": 0.7
+     },
+     "country_grp_IQ": {
+      "coef": 0.0087,
+      "sign_agreement": 0.85
+     },
+     "country_grp_DM": {
+      "coef": -0.0085,
+      "sign_agreement": 0.7
+     },
+     "sector_Information and Communications Technologies": {
+      "coef": 0.0085,
+      "sign_agreement": 0.75
+     },
+     "country_grp_MM": {
+      "coef": 0.0082,
+      "sign_agreement": 0.9
+     },
+     "country_grp_TJ": {
+      "coef": 0.0081,
+      "sign_agreement": 0.95
+     },
+     "sector_Industry, Trade and Services": {
+      "coef": -0.008,
+      "sign_agreement": 0.8
+     },
+     "region_name_Latin America and Caribbean": {
+      "coef": 0.0079,
+      "sign_agreement": 0.75
+     },
+     "sector_Social Protection": {
+      "coef": -0.0079,
+      "sign_agreement": 0.6
+     },
+     "region_name_Western and Central Africa": {
+      "coef": -0.0079,
+      "sign_agreement": 0.75
+     },
+     "country_grp_JO": {
+      "coef": 0.0078,
+      "sign_agreement": 0.95
+     },
+     "procurement_method_Consultant Qualification Selection": {
+      "coef": 0.0077,
+      "sign_agreement": 0.8
+     },
+     "days_from_approval": {
+      "coef": 0.0077,
+      "sign_agreement": 0.7
+     },
+     "country_grp_PA": {
+      "coef": 0.0075,
+      "sign_agreement": 0.5
+     },
+     "country_grp_AF": {
+      "coef": 0.0075,
+      "sign_agreement": 0.8
+     },
+     "region_name_Eastern and Southern Africa": {
+      "coef": 0.0074,
+      "sign_agreement": 0.85
+     },
+     "country_grp_KG": {
+      "coef": -0.0073,
+      "sign_agreement": 0.85
+     },
+     "sector_Financial Sector": {
+      "coef": 0.0072,
+      "sign_agreement": 0.85
+     },
+     "country_grp_TD": {
+      "coef": 0.0072,
+      "sign_agreement": 0.7
+     },
+     "country_grp_CL": {
+      "coef": -0.0071,
+      "sign_agreement": 0.7
+     },
+     "country_grp_BR": {
+      "coef": 0.0071,
+      "sign_agreement": 0.7
+     },
+     "country_grp_ZW": {
+      "coef": 0.0071,
+      "sign_agreement": 0.85
+     },
+     "country_grp_LR": {
+      "coef": -0.0071,
+      "sign_agreement": 0.85
+     },
+     "country_grp_RO": {
+      "coef": -0.0071,
+      "sign_agreement": 1.0
+     },
+     "country_grp_PK": {
+      "coef": -0.0069,
+      "sign_agreement": 0.75
+     },
+     "country_grp_SL": {
+      "coef": -0.0068,
+      "sign_agreement": 0.85
+     },
+     "country_grp_SO": {
+      "coef": -0.0067,
+      "sign_agreement": 0.95
+     },
+     "country_grp_BD": {
+      "coef": -0.0066,
+      "sign_agreement": 0.65
+     },
+     "country_grp_MN": {
+      "coef": 0.0065,
+      "sign_agreement": 0.8
+     },
+     "region_name_Middle East, North Africa, Afghanistan, and Pakistan": {
+      "coef": -0.0062,
+      "sign_agreement": 0.6
+     },
+     "country_grp_SX": {
+      "coef": -0.006,
+      "sign_agreement": 0.95
+     },
+     "country_grp_GW": {
+      "coef": -0.0058,
+      "sign_agreement": 0.8
+     },
+     "country_grp_ME": {
+      "coef": -0.0057,
+      "sign_agreement": 0.5
+     },
+     "country_grp_TN": {
+      "coef": -0.0056,
+      "sign_agreement": 0.65
+     },
+     "country_grp_REGIONAL": {
+      "coef": -0.0056,
+      "sign_agreement": 0.75
+     },
+     "country_grp_CN": {
+      "coef": 0.0054,
+      "sign_agreement": 0.7
+     },
+     "country_grp_MD": {
+      "coef": -0.0054,
+      "sign_agreement": 0.65
+     },
+     "procurement_method_UN Agencies (Direct)": {
+      "coef": 0.0053,
+      "sign_agreement": 0.75
+     },
+     "country_grp_CV": {
+      "coef": -0.0053,
+      "sign_agreement": 1.0
+     },
+     "country_grp_NG": {
+      "coef": 0.0053,
+      "sign_agreement": 0.7
+     },
+     "country_grp_ZM": {
+      "coef": 0.0052,
+      "sign_agreement": 0.65
+     },
+     "country_grp_CF": {
+      "coef": -0.0051,
+      "sign_agreement": 0.85
+     },
+     "country_grp_VC": {
+      "coef": 0.0047,
+      "sign_agreement": 0.75
+     },
+     "country_grp_AR": {
+      "coef": 0.0046,
+      "sign_agreement": 0.65
+     },
+     "country_grp_PY": {
+      "coef": 0.0045,
+      "sign_agreement": 0.75
+     },
+     "procurement_method_Force Account": {
+      "coef": 0.0043,
+      "sign_agreement": 0.75
+     },
+     "country_grp_LB": {
+      "coef": -0.0043,
+      "sign_agreement": 0.95
+     },
+     "country_grp_PE": {
+      "coef": 0.0042,
+      "sign_agreement": 0.65
+     },
+     "country_grp_GM": {
+      "coef": 0.0042,
+      "sign_agreement": 0.7
+     },
+     "review_type_Post": {
+      "coef": -0.0041,
+      "sign_agreement": 0.55
+     },
+     "country_grp_NI": {
+      "coef": -0.0041,
+      "sign_agreement": 0.65
+     },
+     "country_grp_KM": {
+      "coef": -0.004,
+      "sign_agreement": 0.5
+     },
+     "country_grp_BA": {
+      "coef": 0.004,
+      "sign_agreement": 0.55
+     },
+     "procurement_method_Commercial Practices": {
+      "coef": -0.004,
+      "sign_agreement": 0.65
+     },
+     "country_grp_AO": {
+      "coef": 0.004,
+      "sign_agreement": 0.8
+     },
+     "procurement_method_E-Auctions": {
+      "coef": 0.0039,
+      "sign_agreement": 0.55
+     },
+     "procurement_method_Request for Quotations": {
+      "coef": 0.0039,
+      "sign_agreement": 0.55
+     },
+     "country_grp_PG": {
+      "coef": -0.0038,
+      "sign_agreement": 0.8
+     },
+     "country_grp_SD": {
+      "coef": 0.0037,
+      "sign_agreement": 0.8
+     },
+     "country_grp_TR": {
+      "coef": 0.0036,
+      "sign_agreement": 0.7
+     },
+     "country_grp_BW": {
+      "coef": -0.0034,
+      "sign_agreement": 0.3
+     },
+     "country_grp_MH": {
+      "coef": -0.0032,
+      "sign_agreement": 0.55
+     },
+     "procurement_method_Request for Proposals": {
+      "coef": 0.003,
+      "sign_agreement": 0.9
+     },
+     "country_grp_TV": {
+      "coef": 0.0029,
+      "sign_agreement": 0.65
+     },
+     "procurement_category_Works": {
+      "coef": 0.0029,
+      "sign_agreement": 0.65
+     },
+     "country_grp_BO": {
+      "coef": -0.0028,
+      "sign_agreement": 0.7
+     },
+     "country_grp_FM": {
+      "coef": 0.0028,
+      "sign_agreement": 0.75
+     },
+     "country_grp_CM": {
+      "coef": -0.0027,
+      "sign_agreement": 0.65
+     },
+     "country_grp_LA": {
+      "coef": 0.0027,
+      "sign_agreement": 0.6
+     },
+     "country_grp_MK": {
+      "coef": -0.0026,
+      "sign_agreement": 0.4
+     },
+     "region_name_Other": {
+      "coef": -0.0026,
+      "sign_agreement": 0.85
+     },
+     "country_grp_KZ": {
+      "coef": 0.0026,
+      "sign_agreement": 0.75
+     },
+     "country_grp_CR": {
+      "coef": 0.0025,
+      "sign_agreement": 0.45
+     },
+     "country_grp_DJ": {
+      "coef": 0.0025,
+      "sign_agreement": 0.7
+     },
+     "country_grp_BI": {
+      "coef": -0.0025,
+      "sign_agreement": 0.65
+     },
+     "country_grp_EG": {
+      "coef": -0.0023,
+      "sign_agreement": 0.7
+     },
+     "country_grp_DO": {
+      "coef": -0.0023,
+      "sign_agreement": 0.65
+     },
+     "procurement_category_Consultant Services": {
+      "coef": -0.0023,
+      "sign_agreement": 0.6
+     },
+     "sector_Education": {
+      "coef": 0.0021,
+      "sign_agreement": 0.55
+     },
+     "country_grp_TO": {
+      "coef": 0.002,
+      "sign_agreement": 0.65
+     },
+     "country_grp_ML": {
+      "coef": 0.0019,
+      "sign_agreement": 0.5
+     },
+     "country_grp_infrequent_sklearn": {
+      "coef": 0.0019,
+      "sign_agreement": 0.5
+     },
+     "sector_Health": {
+      "coef": -0.0018,
+      "sign_agreement": 0.7
+     },
+     "country_grp_NP": {
+      "coef": 0.0017,
+      "sign_agreement": 0.5
+     },
+     "country_grp_MZ": {
+      "coef": -0.0017,
+      "sign_agreement": 0.45
+     },
+     "country_grp_SZ": {
+      "coef": -0.0016,
+      "sign_agreement": 0.6
+     },
+     "country_grp_CO": {
+      "coef": -0.0016,
+      "sign_agreement": 0.55
+     },
+     "approval_fiscal_year": {
+      "coef": 0.0015,
+      "sign_agreement": 0.65
+     },
+     "country_grp_HT": {
+      "coef": -0.0015,
+      "sign_agreement": 0.4
+     },
+     "procurement_method_Quality Based Selection": {
+      "coef": -0.0015,
+      "sign_agreement": 0.8
+     },
+     "procurement_method_Fixed Budget Selection": {
+      "coef": 0.0014,
+      "sign_agreement": 0.7
+     },
+     "country_grp_MX": {
+      "coef": -0.0014,
+      "sign_agreement": 0.5
+     },
+     "country_grp_CD": {
+      "coef": -0.0014,
+      "sign_agreement": 0.35
+     },
+     "country_grp_GN": {
+      "coef": 0.0013,
+      "sign_agreement": 0.7
+     },
+     "country_grp_MA": {
+      "coef": -0.0012,
+      "sign_agreement": 0.6
+     },
+     "region_name_East Asia and Pacific": {
+      "coef": 0.0012,
+      "sign_agreement": 0.45
+     },
+     "sector_Public Administration": {
+      "coef": -0.0012,
+      "sign_agreement": 0.5
+     },
+     "country_grp_LK": {
+      "coef": -0.0011,
+      "sign_agreement": 0.45
+     },
+     "country_grp_GA": {
+      "coef": -0.001,
+      "sign_agreement": 0.6
+     },
+     "country_grp_BY": {
+      "coef": -0.001,
+      "sign_agreement": 0.55
+     },
+     "country_grp_KH": {
+      "coef": -0.001,
+      "sign_agreement": 0.65
+     },
+     "country_grp_BT": {
+      "coef": 0.0009,
+      "sign_agreement": 0.65
+     },
+     "procurement_method_infrequent_sklearn": {
+      "coef": 0.0009,
+      "sign_agreement": 0.75
+     },
+     "country_grp_SB": {
+      "coef": -0.0009,
+      "sign_agreement": 0.65
+     },
+     "country_grp_LS": {
+      "coef": 0.0009,
+      "sign_agreement": 0.55
+     },
+     "country_grp_YE": {
+      "coef": -0.0009,
+      "sign_agreement": 0.75
+     },
+     "country_grp_SV": {
+      "coef": 0.0008,
+      "sign_agreement": 0.65
+     },
+     "country_grp_WS": {
+      "coef": -0.0008,
+      "sign_agreement": 0.4
+     },
+     "country_grp_UA": {
+      "coef": -0.0008,
+      "sign_agreement": 0.4
+     },
+     "country_grp_EC": {
+      "coef": 0.0008,
+      "sign_agreement": 0.6
+     },
+     "country_grp_CI": {
+      "coef": 0.0007,
+      "sign_agreement": 0.25
+     },
+     "country_grp_ST": {
+      "coef": 0.0007,
+      "sign_agreement": 0.45
+     },
+     "country_grp_GE": {
+      "coef": 0.0007,
+      "sign_agreement": 0.35
+     },
+     "country_grp_AL": {
+      "coef": -0.0006,
+      "sign_agreement": 0.25
+     },
+     "country_grp_RU": {
+      "coef": 0.0006,
+      "sign_agreement": 0.5
+     },
+     "country_grp_KI": {
+      "coef": -0.0004,
+      "sign_agreement": 0.4
+     },
+     "country_grp_BZ": {
+      "coef": -0.0004,
+      "sign_agreement": 0.55
+     },
+     "review_type_infrequent_sklearn": {
+      "coef": -0.0004,
+      "sign_agreement": 0.75
+     },
+     "sector_infrequent_sklearn": {
+      "coef": -0.0003,
+      "sign_agreement": 0.8
+     },
+     "country_grp_CG": {
+      "coef": -0.0003,
+      "sign_agreement": 0.4
+     },
+     "income_ordinal": {
+      "coef": -0.0003,
+      "sign_agreement": 0.5
+     },
+     "review_type_Prior": {
+      "coef": 0.0002,
+      "sign_agreement": 0.55
+     },
+     "country_grp_ZA": {
+      "coef": -0.0,
+      "sign_agreement": 0.5
+     },
+     "country_grp_SN": {
+      "coef": -0.0,
+      "sign_agreement": 0.55
+     }
+    }
+   }
+  }
+ },
+ "m3": {
+  "policy": "m3_v2_clean",
+  "refit_rows": 22926,
+  "refit_projects": 1266,
+  "test_rows": 20954,
+  "test_projects": 1192,
+  "test_projects_unseen_in_refit": 458,
+  "scenarios": {
+   "S2": {
+    "C": 0.31622776601683794,
+    "min_frequency": 263,
+    "refit_prevalence": 0.0761,
+    "threshold": {
+     "t": 0.21788872834783898,
+     "TP": 468,
+     "FP": 588,
+     "FN": 1277,
+     "TN": 20593,
+     "precision": 0.4432,
+     "recall": 0.2682,
+     "F1": 0.3342,
+     "alert_rate": 0.0461
+    },
+    "oof_PR_AUC_note": "refit out-of-fold only; not a test metric",
+    "unstable_design_columns": [
+     "country_grp_AF",
+     "country_grp_AM",
+     "country_grp_BD",
+     "country_grp_BI",
+     "country_grp_CD",
+     "country_grp_CI",
+     "country_grp_ET",
+     "country_grp_GH",
+     "country_grp_IN",
+     "country_grp_KE",
+     "country_grp_KG",
+     "country_grp_MW",
+     "country_grp_NG",
+     "country_grp_UZ",
+     "procurement_category_Goods",
+     "procurement_category_Non-consulting Services",
+     "procurement_method_Request for Quotations",
+     "region_name_Latin America and Caribbean",
+     "region_name_South Asia",
+     "region_name_Western and Central Africa",
+     "sector_Education",
+     "sector_Energy and Extractives",
+     "sector_Financial Sector",
+     "sector_Health",
+     "sector_Industry, Trade and Services",
+     "sector_Information and Communications Technologies",
+     "sector_Social Protection",
+     "sector_infrequent_sklearn"
+    ],
+    "coefficients": {
+     "deadline_status_positive_window": {
+      "coef": -2.2923,
+      "sign_agreement": 1.0
+     },
+     "deadline_status_infrequent_sklearn": {
+      "coef": 2.1718,
+      "sign_agreement": 1.0
+     },
+     "has_positive_window": {
+      "coef": 0.7555,
+      "sign_agreement": 1.0
+     },
+     "country_grp_PK": {
+      "coef": -0.7249,
+      "sign_agreement": 1.0
+     },
+     "window_days": {
+      "coef": -0.7041,
+      "sign_agreement": 1.0
+     },
+     "country_grp_BR": {
+      "coef": 0.636,
+      "sign_agreement": 0.95
+     },
+     "country_grp_CN": {
+      "coef": -0.6232,
+      "sign_agreement": 1.0
+     },
+     "procurement_category_Unknown": {
+      "coef": -0.6036,
+      "sign_agreement": 1.0
+     },
+     "procurement_method_Request for Bids": {
+      "coef": 0.4786,
+      "sign_agreement": 1.0
+     },
+     "country_grp_MZ": {
+      "coef": -0.4635,
+      "sign_agreement": 1.0
+     },
+     "procurement_category_Works": {
+      "coef": 0.4586,
+      "sign_agreement": 1.0
+     },
+     "country_grp_AF": {
+      "coef": 0.4367,
+      "sign_agreement": 0.65
+     },
+     "procurement_method_Consultant Qualification Selection": {
+      "coef": -0.4078,
+      "sign_agreement": 1.0
+     },
+     "country_grp_CI": {
+      "coef": -0.3692,
+      "sign_agreement": 0.35
+     },
+     "country_grp_NG": {
+      "coef": 0.366,
+      "sign_agreement": 0.55
+     },
+     "country_grp_KE": {
+      "coef": 0.3607,
+      "sign_agreement": 0.75
+     },
+     "deadline_status_before_publication_date_invalid": {
+      "coef": -0.3404,
+      "sign_agreement": 1.0
+     },
+     "country_grp_AM": {
+      "coef": -0.3329,
+      "sign_agreement": 0.65
+     },
+     "country_grp_SO": {
+      "coef": -0.3125,
+      "sign_agreement": 0.85
+     },
+     "procurement_method_Individual Consultant Selection": {
+      "coef": -0.2895,
+      "sign_agreement": 1.0
+     },
+     "region_name_Europe and Central Asia": {
+      "coef": -0.2498,
+      "sign_agreement": 1.0
+     },
+     "procurement_category_Consultant Services": {
+      "coef": -0.2423,
+      "sign_agreement": 1.0
+     },
+     "country_grp_CG": {
+      "coef": 0.2343,
+      "sign_agreement": 0.8
+     },
+     "procurement_method_Quality And Cost-Based Selection": {
+      "coef": -0.2152,
+      "sign_agreement": 1.0
+     },
+     "country_grp_BI": {
+      "coef": 0.2117,
+      "sign_agreement": 0.5
+     },
+     "region_name_East Asia and Pacific": {
+      "coef": 0.1817,
+      "sign_agreement": 1.0
+     },
+     "country_grp_GH": {
+      "coef": 0.1785,
+      "sign_agreement": 0.75
+     },
+     "income_ordinal": {
+      "coef": -0.1717,
+      "sign_agreement": 1.0
+     },
+     "procurement_method_infrequent_sklearn": {
+      "coef": 0.1652,
+      "sign_agreement": 0.9
+     },
+     "country_grp_ET": {
+      "coef": 0.1605,
+      "sign_agreement": 0.65
+     },
+     "country_grp_IN": {
+      "coef": -0.1534,
+      "sign_agreement": 0.65
+     },
+     "sector_Public Administration": {
+      "coef": -0.1518,
+      "sign_agreement": 0.9
+     },
+     "procurement_method_Least Cost Selection": {
+      "coef": -0.1473,
+      "sign_agreement": 0.8
+     },
+     "sector_Water, Sanitation and Waste Management": {
+      "coef": 0.147,
+      "sign_agreement": 0.8
+     },
+     "region_name_Eastern and Southern Africa": {
+      "coef": -0.1415,
+      "sign_agreement": 0.95
+     },
+     "sector_Information and Communications Technologies": {
+      "coef": -0.1381,
+      "sign_agreement": 0.6
+     },
+     "sector_Agriculture, Fishing and Forestry": {
+      "coef": -0.1345,
+      "sign_agreement": 0.85
+     },
+     "country_grp_infrequent_sklearn": {
+      "coef": 0.1318,
+      "sign_agreement": 1.0
+     },
+     "sector_Transportation": {
+      "coef": -0.1273,
+      "sign_agreement": 0.9
+     },
+     "country_grp_MW": {
+      "coef": -0.1169,
+      "sign_agreement": 0.5
+     },
+     "sector_Education": {
+      "coef": -0.1108,
+      "sign_agreement": 0.65
+     },
+     "sector_Financial Sector": {
+      "coef": 0.1008,
+      "sign_agreement": 0.5
+     },
+     "region_name_infrequent_sklearn": {
+      "coef": -0.1007,
+      "sign_agreement": 1.0
+     },
+     "country_grp_REGIONAL": {
+      "coef": -0.0961,
+      "sign_agreement": 0.9
+     },
+     "country_grp_CD": {
+      "coef": 0.0945,
+      "sign_agreement": 0.5
+     },
+     "procurement_method_Request for Quotations": {
+      "coef": -0.086,
+      "sign_agreement": 0.75
+     },
+     "country_grp_BD": {
+      "coef": -0.0858,
+      "sign_agreement": 0.7
+     },
+     "region_name_Middle East, North Africa, Afghanistan, and Pakistan": {
+      "coef": -0.0857,
+      "sign_agreement": 0.85
+     },
+     "country_grp_UZ": {
+      "coef": -0.0795,
+      "sign_agreement": 0.6
+     },
+     "sector_infrequent_sklearn": {
+      "coef": -0.0663,
+      "sign_agreement": 0.65
+     },
+     "procurement_category_Non-consulting Services": {
+      "coef": -0.0626,
+      "sign_agreement": 0.75
+     },
+     "procurement_category_Goods": {
+      "coef": -0.0521,
+      "sign_agreement": 0.65
+     },
+     "sector_Health": {
+      "coef": -0.0504,
+      "sign_agreement": 0.55
+     },
+     "country_grp_MG": {
+      "coef": 0.0499,
+      "sign_agreement": 0.85
+     },
+     "deadline_status_equals_publication_date_no_window": {
+      "coef": -0.0411,
+      "sign_agreement": 0.8
+     },
+     "region_name_Western and Central Africa": {
+      "coef": -0.04,
+      "sign_agreement": 0.7
+     },
+     "region_name_South Asia": {
+      "coef": -0.0372,
+      "sign_agreement": 0.5
+     },
+     "region_name_Latin America and Caribbean": {
+      "coef": -0.0289,
+      "sign_agreement": 0.6
+     },
+     "project_age_days": {
+      "coef": -0.0253,
+      "sign_agreement": 0.8
+     },
+     "sector_Energy and Extractives": {
+      "coef": 0.0225,
+      "sign_agreement": 0.65
+     },
+     "country_grp_KG": {
+      "coef": -0.0048,
+      "sign_agreement": 0.35
+     },
+     "sector_Social Protection": {
+      "coef": 0.0039,
+      "sign_agreement": 0.7
+     },
+     "sector_Industry, Trade and Services": {
+      "coef": 0.0031,
+      "sign_agreement": 0.5
+     }
+    },
+    "risk_bands": {
+     "medium_cutoff_q70": 0.0723,
+     "high_cutoff_q90": 0.14772,
+     "rule": "High >= q90 of refit out-of-fold probabilities, Medium q70..q90, Low < q70 (v2 rule)"
+    }
+   },
+   "S0": {
+    "C": 3.1622776601683795,
+    "min_frequency": 246,
+    "refit_prevalence": 0.0816,
+    "threshold": {
+     "t": 0.08909296339999717,
+     "TP": 577,
+     "FP": 6180,
+     "FN": 1293,
+     "TN": 14876,
+     "precision": 0.0854,
+     "recall": 0.3086,
+     "F1": 0.1338,
+     "alert_rate": 0.2947
+    },
+    "oof_PR_AUC_note": "refit out-of-fold only; not a test metric",
+    "unstable_design_columns": [
+     "country_grp_AM",
+     "country_grp_BD",
+     "country_grp_BI",
+     "country_grp_CD",
+     "country_grp_CG",
+     "country_grp_CI",
+     "country_grp_ET",
+     "country_grp_GH",
+     "country_grp_KE",
+     "country_grp_MW",
+     "country_grp_MZ",
+     "country_grp_NE",
+     "country_grp_NG",
+     "country_grp_REGIONAL",
+     "country_grp_SO",
+     "country_grp_UZ",
+     "country_grp_infrequent_sklearn",
+     "procurement_method_Request for Bids",
+     "region_name_South Asia",
+     "sector_Health",
+     "sector_Information and Communications Technologies",
+     "sector_Social Protection",
+     "window_days"
+    ],
+    "coefficients": {
+     "deadline_status_infrequent_sklearn": {
+      "coef": -0.8273,
+      "sign_agreement": 1.0
+     },
+     "country_grp_AF": {
+      "coef": -0.8082,
+      "sign_agreement": 0.85
+     },
+     "sector_infrequent_sklearn": {
+      "coef": 0.4992,
+      "sign_agreement": 0.85
+     },
+     "sector_Financial Sector": {
+      "coef": -0.4495,
+      "sign_agreement": 1.0
+     },
+     "country_grp_NE": {
+      "coef": -0.3917,
+      "sign_agreement": 0.6
+     },
+     "country_grp_MW": {
+      "coef": -0.3853,
+      "sign_agreement": 0.65
+     },
+     "deadline_status_before_publication_date_invalid": {
+      "coef": -0.3804,
+      "sign_agreement": 1.0
+     },
+     "procurement_category_Non-consulting Services": {
+      "coef": -0.3718,
+      "sign_agreement": 1.0
+     },
+     "procurement_method_infrequent_sklearn": {
+      "coef": -0.3523,
+      "sign_agreement": 1.0
+     },
+     "country_grp_KG": {
+      "coef": -0.3494,
+      "sign_agreement": 0.95
+     },
+     "sector_Industry, Trade and Services": {
+      "coef": -0.3482,
+      "sign_agreement": 1.0
+     },
+     "country_grp_CG": {
+      "coef": 0.3459,
+      "sign_agreement": 0.6
+     },
+     "country_grp_CI": {
+      "coef": 0.3232,
+      "sign_agreement": 0.45
+     },
+     "country_grp_BR": {
+      "coef": 0.3228,
+      "sign_agreement": 0.85
+     },
+     "procurement_category_Unknown": {
+      "coef": -0.2937,
+      "sign_agreement": 1.0
+     },
+     "country_grp_PK": {
+      "coef": -0.2927,
+      "sign_agreement": 0.85
+     },
+     "country_grp_ET": {
+      "coef": -0.2734,
+      "sign_agreement": 0.75
+     },
+     "region_name_Latin America and Caribbean": {
+      "coef": -0.2662,
+      "sign_agreement": 1.0
+     },
+     "procurement_method_Quality And Cost-Based Selection": {
+      "coef": -0.2644,
+      "sign_agreement": 1.0
+     },
+     "procurement_method_Request for Quotations": {
+      "coef": -0.26,
+      "sign_agreement": 0.9
+     },
+     "procurement_category_Works": {
+      "coef": -0.2586,
+      "sign_agreement": 1.0
+     },
+     "procurement_method_Individual Consultant Selection": {
+      "coef": -0.2562,
+      "sign_agreement": 1.0
+     },
+     "region_name_Western and Central Africa": {
+      "coef": -0.2464,
+      "sign_agreement": 1.0
+     },
+     "procurement_method_Consultant Qualification Selection": {
+      "coef": -0.2353,
+      "sign_agreement": 1.0
+     },
+     "deadline_status_positive_window": {
+      "coef": -0.2193,
+      "sign_agreement": 0.9
+     },
+     "region_name_Eastern and Southern Africa": {
+      "coef": -0.2138,
+      "sign_agreement": 0.95
+     },
+     "country_grp_KE": {
+      "coef": 0.2131,
+      "sign_agreement": 0.6
+     },
+     "procurement_category_Consultant Services": {
+      "coef": -0.2123,
+      "sign_agreement": 0.9
+     },
+     "country_grp_IN": {
+      "coef": -0.2109,
+      "sign_agreement": 0.95
+     },
+     "sector_Education": {
+      "coef": -0.2091,
+      "sign_agreement": 1.0
+     },
+     "procurement_category_Goods": {
+      "coef": -0.208,
+      "sign_agreement": 1.0
+     },
+     "sector_Public Administration": {
+      "coef": -0.2061,
+      "sign_agreement": 1.0
+     },
+     "sector_Energy and Extractives": {
+      "coef": -0.2028,
+      "sign_agreement": 1.0
+     },
+     "region_name_infrequent_sklearn": {
+      "coef": -0.1825,
+      "sign_agreement": 0.8
+     },
+     "procurement_method_Least Cost Selection": {
+      "coef": 0.168,
+      "sign_agreement": 0.95
+     },
+     "sector_Water, Sanitation and Waste Management": {
+      "coef": -0.1509,
+      "sign_agreement": 0.95
+     },
+     "region_name_Europe and Central Asia": {
+      "coef": -0.1488,
+      "sign_agreement": 0.8
+     },
+     "procurement_method_Request for Bids": {
+      "coef": -0.1442,
+      "sign_agreement": 0.75
+     },
+     "has_positive_window": {
+      "coef": 0.1423,
+      "sign_agreement": 0.9
+     },
+     "country_grp_AM": {
+      "coef": 0.142,
+      "sign_agreement": 0.6
+     },
+     "country_grp_GH": {
+      "coef": -0.1416,
+      "sign_agreement": 0.45
+     },
+     "country_grp_NG": {
+      "coef": 0.1345,
+      "sign_agreement": 0.5
+     },
+     "region_name_Middle East, North Africa, Afghanistan, and Pakistan": {
+      "coef": -0.1271,
+      "sign_agreement": 0.8
+     },
+     "country_grp_CD": {
+      "coef": -0.1232,
+      "sign_agreement": 0.3
+     },
+     "region_name_East Asia and Pacific": {
+      "coef": -0.123,
+      "sign_agreement": 0.8
+     },
+     "sector_Transportation": {
+      "coef": -0.1204,
+      "sign_agreement": 1.0
+     },
+     "country_grp_CN": {
+      "coef": 0.1134,
+      "sign_agreement": 0.8
+     },
+     "sector_Agriculture, Fishing and Forestry": {
+      "coef": -0.1008,
+      "sign_agreement": 0.95
+     },
+     "country_grp_MG": {
+      "coef": 0.1002,
+      "sign_agreement": 0.8
+     },
+     "country_grp_infrequent_sklearn": {
+      "coef": -0.0965,
+      "sign_agreement": 0.75
+     },
+     "income_ordinal": {
+      "coef": -0.0949,
+      "sign_agreement": 1.0
+     },
+     "deadline_status_equals_publication_date_no_window": {
+      "coef": 0.0826,
+      "sign_agreement": 0.85
+     },
+     "country_grp_BD": {
+      "coef": 0.0815,
+      "sign_agreement": 0.7
+     },
+     "sector_Information and Communications Technologies": {
+      "coef": -0.0768,
+      "sign_agreement": 0.75
+     },
+     "country_grp_MZ": {
+      "coef": 0.0629,
+      "sign_agreement": 0.7
+     },
+     "country_grp_BI": {
+      "coef": -0.0476,
+      "sign_agreement": 0.75
+     },
+     "project_age_days": {
+      "coef": -0.0404,
+      "sign_agreement": 0.9
+     },
+     "country_grp_SO": {
+      "coef": -0.0402,
+      "sign_agreement": 0.55
+     },
+     "country_grp_REGIONAL": {
+      "coef": -0.0366,
+      "sign_agreement": 0.6
+     },
+     "region_name_South Asia": {
+      "coef": -0.0365,
+      "sign_agreement": 0.5
+     },
+     "sector_Health": {
+      "coef": 0.019,
+      "sign_agreement": 0.55
+     },
+     "country_grp_UZ": {
+      "coef": 0.0132,
+      "sign_agreement": 0.2
+     },
+     "window_days": {
+      "coef": -0.0057,
+      "sign_agreement": 0.45
+     },
+     "sector_Social Protection": {
+      "coef": 0.0018,
+      "sign_agreement": 0.35
+     }
+    },
+    "risk_bands": {
+     "medium_cutoff_q70": 0.08878,
+     "high_cutoff_q90": 0.10083,
+     "rule": "High >= q90 of refit out-of-fold probabilities, Medium q70..q90, Low < q70 (v2 rule)"
+    }
+   }
+  }
+ }
+}

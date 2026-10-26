@@ -1,0 +1,89 @@
+# Local environment files with real secrets – never commit. Only the blank template .env.example is tracked.
+.env
+.env.*
+!.env.example
+*.env
+*.env.bak
+*.env.backup
+*.secrets
+secrets/
+
+# Logfire SDK local data/credentials directory
+.logfire/
+
+# Isolated Python environment for the Structured Data MCP server (recreate with structured_agent/mcp_env/setup_mcp_env.sh)
+.venv-structured-mcp/
+
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Large public bulk files – reproducible via discovery/scripts (see MANIFEST.jsonl for checksums)
+discovery/data_cache/*
+!discovery/data_cache/MANIFEST.jsonl
+
+# Downloaded document files – reproducible via s04/s04b/p05; checksums in samples/MANIFEST.jsonl
+discovery/samples/documents/files/*.pdf
+discovery/samples/documents/files/*.txt
+discovery/samples/documents/pp_files/
+*.part
+discovery/samples/documents/isr_series/*.txt
+
+# Cohort-bounded Bronze inputs – reproducible via discovery/scripts/b01_extract_bronze_inputs.py
+# (checksums in databricks_upload/bronze_inputs/_manifest/)
+databricks_upload/bronze_inputs/*
+!databricks_upload/bronze_inputs/_manifest/
+
+# Staged country-level reference inputs – byte copies of discovery/country_indicators/raw and samples/indicators
+databricks_upload/ref_bronze_inputs/*
+!databricks_upload/ref_bronze_inputs/_manifest/
+
+# D-14 (approved 2026-10-23): raw procurement-notice text containing personal contact data – never commit.
+# Reproducible via discovery/scripts/s03_procnotices.py and discovery/project_deep_dive/d01_fetch_two_projects.py;
+# checksums in discovery/samples/MANIFEST.jsonl and discovery/project_deep_dive/raw/MANIFEST.json.
+discovery/samples/procnotices/*.jsonl.gz
+discovery/project_deep_dive/raw/*/procnotices_*.json
+
+# ---------------------------------------------------------------------------------------------------------------
+# Repository scope (2026-10-26): code, configuration, lock files, docs/reports, small manifests and the frozen ML
+# models are tracked. Environments, downloaded documents, extracted text, caches and run outputs stay local only:
+# they are reproducible from the pipelines and live in Unity Catalog / Lakebase.
+# ---------------------------------------------------------------------------------------------------------------
+# Python environments and tool caches (rebuilt from requirements / uv.lock)
+.venv/
+.mypy_cache/
+.DS_Store
+.*.lock
+
+# Never commit restricted document content
+**/restricted/
+
+# Downloaded documents and extracted text
+*.pdf
+*.txt
+!requirements*.txt
+!**/requirements*.txt
+rag/module1_discovery/**/plan_text/
+discovery/project_deep_dive/raw/*/docs_text/
+
+# Derived data: corpora, indexes, embeddings, tabular extracts
+*.npy
+*.npz
+*.parquet
+*.gz
+rag/corpus_v3/processed/
+rag/retrieval/index_cache/
+rag/embedding_cache/experimental_store/
+rag/embedding_cache/staging/
+rag/embedding_cache/releases/
+
+# Run outputs, logs and experiment scratch (final results are summarised in docs/reports and ml/reports)
+**/runs/
+*.log
+ml/eda/
+rag/module1_discovery/**/plan_coverage/PLAN_ACTIVITIES.csv
+rag/module1_discovery/**/plan_coverage/CONTRACT_PLAN_EVIDENCE_LINKS.csv
+**/fetch_log.jsonl
+**/access_log.jsonl
+discovery/country_indicators/raw/
+discovery/project_deep_dive/raw/*/

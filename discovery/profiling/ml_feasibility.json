@@ -1,0 +1,260 @@
+{
+ "ieg_outcome": {
+  "rows": 12629,
+  "rated": 12478,
+  "negative_rate_pct": 26.35,
+  "by_evaluation_type": {
+   "CSSR": {
+    "n": 1,
+    "neg_pct": 0.0
+   },
+   "EVM": {
+    "n": 466,
+    "neg_pct": 36.27
+   },
+   "ICRR": {
+    "n": 6828,
+    "neg_pct": 23.95
+   },
+   "PCM": {
+    "n": 2,
+    "neg_pct": 50.0
+   },
+   "PCN": {
+    "n": 11,
+    "neg_pct": 81.82
+   },
+   "PCR": {
+    "n": 1465,
+    "neg_pct": 31.47
+   },
+   "PPAR": {
+    "n": 3705,
+    "neg_pct": 27.34
+   }
+  },
+  "by_lending_instrument": {
+   "DPF": {
+    "n": 1798,
+    "neg_pct": 25.31
+   },
+   "IPF": {
+    "n": 10680,
+    "neg_pct": 26.53
+   }
+  },
+  "by_approval_decade": {
+   "1950s": {
+    "n": 2,
+    "neg_pct": 0.0
+   },
+   "1960s": {
+    "n": 238,
+    "neg_pct": 13.45
+   },
+   "1970s": {
+    "n": 1752,
+    "neg_pct": 24.54
+   },
+   "1980s": {
+    "n": 2322,
+    "neg_pct": 34.71
+   },
+   "1990s": {
+    "n": 2522,
+    "neg_pct": 26.61
+   },
+   "2000s": {
+    "n": 2762,
+    "neg_pct": 27.81
+   },
+   "2010s": {
+    "n": 2577,
+    "neg_pct": 20.1
+   },
+   "2020s": {
+    "n": 303,
+    "neg_pct": 20.79
+   }
+  },
+  "by_fcs_status": {
+   "FCS": {
+    "n": 1133,
+    "neg_pct": 28.07
+   },
+   "non-FCS": {
+    "n": 11345,
+    "neg_pct": 26.18
+   }
+  },
+  "evaluation_fy_range": [
+   "1973",
+   "2027"
+  ],
+  "ipf_rated_approved_fy2005plus": 3321,
+  "joined_to_v3_projects_pct": 100.0,
+  "feature_boardapprovaldate_populated_pct": 99.85,
+  "feature_curr_total_commitment_populated_pct": 64.2,
+  "feature_major_sector_name_populated_pct": 100.0,
+  "feature_impagency_populated_pct": 24.8,
+  "feature_milestones_populated_pct": 100.0
+ },
+ "governance_asof_join_for_ieg": {
+  "method": "IEG Project ID -> v3 projects.countrycode (WB code) -> curated WB->ISO2 crosswalk -> WGI/CPIA (year = approval FY - 1)",
+  "country_name_join_attempt_pct": 10.85,
+  "country_name_join_note": "IEG uses long official names ('Republic of India'); name joins are not viable",
+  "projects_single_country_code_pct": 100.0,
+  "projects_mapped_to_iso_pct": 97.42,
+  "cpia_available_at_approval_minus1_pct": 19.2,
+  "wgi_available_at_approval_minus1_pct": 43.71,
+  "wgi_available_approval_fy1998plus_pct": 83.66,
+  "cpia_available_approval_fy2006plus_pct": 58.64,
+  "note": "CPIA public series starts 2005 and covers IDA-eligible countries; WGI 1996-2025, biennial before 2002"
+ },
+ "isr_procurement_rating_latest": {
+  "projects_with_rating": 7088,
+  "values": {
+   "Satisfactory": 3679,
+   "Moderately Satisfactory": 2900,
+   "Moderately Unsatisfactory": 491,
+   "Unsatisfactory": 143,
+   "Highly Satisfactory": 50,
+   "Highly Unsatisfactory": 5
+  },
+  "negative_rate_pct": 8.79,
+  "isr_date_range": [
+   "2005-01-25",
+   "2026-10-15"
+  ],
+  "history_available_in_api": "No - one isr_date per project (latest ISR). Full history requires parsing ISR documents.",
+  "isr_documents_available_v3": "59,693 ISR documents in v3 wds (docty facet count)"
+ },
+ "project_dropped": {
+  "status_distribution": {
+   "Closed": 18319,
+   "Dropped": 6907,
+   "Active": 2624,
+   "Pipeline": 343
+  },
+  "dropped_share_of_closed_plus_dropped_pct": 27.38
+ },
+ "single_bidder": {
+  "award_notices": 23672,
+  "with_bidder_count": 23519,
+  "by_method": {
+   "CDS": {
+    "n": 1689,
+    "single_pct": 90.82,
+    "zero_parsed_pct": 8.05,
+    "median": 1.0
+   },
+   "CQS": {
+    "n": 1068,
+    "single_pct": 72.1,
+    "zero_parsed_pct": 7.3,
+    "median": 1.0
+   },
+   "DIR": {
+    "n": 3628,
+    "single_pct": 97.49,
+    "zero_parsed_pct": 1.16,
+    "median": 1.0
+   },
+   "ICB": {
+    "n": 163,
+    "single_pct": 0.0,
+    "zero_parsed_pct": 100.0,
+    "median": 0.0
+   },
+   "INDV": {
+    "n": 5122,
+    "single_pct": 3.77,
+    "zero_parsed_pct": 86.14,
+    "median": 0.0
+   },
+   "LCS": {
+    "n": 152,
+    "single_pct": 24.34,
+    "zero_parsed_pct": 1.97,
+    "median": 3.0
+   },
+   "QBS": {
+    "n": 31,
+    "single_pct": 25.81,
+    "zero_parsed_pct": 22.58,
+    "median": 2.0
+   },
+   "QCBS": {
+    "n": 703,
+    "single_pct": 12.38,
+    "zero_parsed_pct": 10.38,
+    "median": 4.0
+   },
+   "RFB": {
+    "n": 4744,
+    "single_pct": 23.1,
+    "zero_parsed_pct": 8.18,
+    "median": 3.0
+   },
+   "RFP": {
+    "n": 38,
+    "single_pct": 5.26,
+    "zero_parsed_pct": 18.42,
+    "median": 4.0
+   },
+   "RFQ": {
+    "n": 6105,
+    "single_pct": 30.32,
+    "zero_parsed_pct": 4.16,
+    "median": 3.0
+   },
+   "UN": {
+    "n": 36,
+    "single_pct": 77.78,
+    "zero_parsed_pct": 22.22,
+    "median": 1.0
+   }
+  },
+  "caveat": "Bidder count = distinct supplier ids in Awarded/Evaluated/Rejected sections; direct selection is single by design"
+ },
+ "amendment_evidence_in_award_notices": {
+  "mentions_amend_or_variation": 14,
+  "notice_version_gt0": 3707,
+  "interpretation": "Notice versions are revisions of the published notice, not contract amendments."
+ },
+ "rebid_signals_in_notices": {
+  "tender_notices": 7138,
+  "status_cancelled": 4,
+  "status_revised": 117,
+  "text_markers_rebid_retender_cancel": 106
+ },
+ "rejected_bidders": {
+  "award_notices_with_rejections": 3545,
+  "pct": 14.98
+ },
+ "amendment_documents_cluster": {
+  "documents_with_amendment_in_title": 312,
+  "by_docty": {
+   "Agreement": 267,
+   "Financing Agreement": 18,
+   "Disbursement Letter": 15,
+   "Letter": 7,
+   "Grant or Trust Fund Agreement": 2,
+   "Side Letter": 1,
+   "Project Agreement": 1,
+   "Loan Agreement": 1
+  },
+  "examples": [
+   "Official Documents- Amendment No. 2 to the Loan Agreement for Loan 7681-KZ (Closing Package)",
+   "Official Documents- Amendment to the Loan Agreement for Loan 7681-KZ",
+   "Official Documents- Second Amendment to Loan Agreement for Loan 8541-TR",
+   "Official Documents- Amendment to Loan Agreement for Loan 8541-TR",
+   "Official Documents- Amendment to the Loan Agreement for Loan 7537-TR"
+  ]
+ },
+ "restructuring_documents_cluster": {
+  "count": 553,
+  "projects": 214,
+  "pct_cluster_projects": 77.54
+ }
+}

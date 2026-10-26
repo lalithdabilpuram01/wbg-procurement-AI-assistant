@@ -1,0 +1,49 @@
+{
+ "store_manifest_sha256": "d224651c67cf24615c2e8cbeff78b2d4f27c1a4e150b55026af2ea72ddb50a61",
+ "p1_rows_sha256": "0f53241127436e060718213e6bf332e0f7a8c6ae8679d2ee76e9f923d25030e5",
+ "scopes": {
+  "C+tables": {
+   "manifest_id": "11c4ab8446d2a0fd0ea9f8dc37ca26537a34ff50c9a2817ae87436557d71179b",
+   "units_total": 2396,
+   "units_reused": 2387,
+   "units_to_generate": 9,
+   "to_generate": [
+    "24440102:t02201:w1-2",
+    "24440102:t10401:w1-2",
+    "24440102:t10401:w2-3",
+    "24440102:t10801:w2-4",
+    "24440102:t10801:w6-8",
+    "24440102:t10801:w8-10",
+    "24440102:t10901:w2-4",
+    "24440102:t10901:w4-6",
+    "24440102:t10901:w6-8"
+   ],
+   "recovered_value_units_not_manifested": [
+    "33761744:t00501:w1-2",
+    "40089196:t00501:w1-2"
+   ]
+  },
+  "A+tables": {
+   "manifest_id": "7d9e6e3c4df73b2603e4375c74c58f59197f6a0dc52a6085e509906f708ea1c9",
+   "units_total": 2288,
+   "units_reused": 2279,
+   "units_to_generate": 9,
+   "to_generate": [
+    "24440102:t02201:w1-2",
+    "24440102:t10401:w1-2",
+    "24440102:t10401:w2-3",
+    "24440102:t10801:w2-4",
+    "24440102:t10801:w6-8",
+    "24440102:t10801:w8-10",
+    "24440102:t10901:w2-4",
+    "24440102:t10901:w4-6",
+    "24440102:t10901:w6-8"
+   ],
+   "recovered_value_units_not_manifested": [
+    "33761744:t00501:w1-2",
+    "40089196:t00501:w1-2"
+   ]
+  }
+ },
+ "store_unchanged": true
+}

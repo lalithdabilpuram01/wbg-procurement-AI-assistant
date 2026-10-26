@@ -1,0 +1,192 @@
+{
+ "question": "What was the total cost of the Sri Lanka Transport Connectivity and Asset Management Project at approval, after restructurings, and actual?",
+ "status": "insufficient_evidence",
+ "answer": "The indexed documents and typed records do not contain enough evidence to answer this question.",
+ "citations": [],
+ "supporting_evidence_ids": [],
+ "conflicts": [],
+ "limitations": [
+  "Removed unsupported claim: The total cost of the Sri Lanka Transport Connectivity and Asset Management Project at approval, after restructurings, and actual was $125,000,000.",
+  "Removed unsupported claim: The total cost of the Sri Lanka Transport Connectivity and Asset Management Project at approval, after restructurings, and actual was $70,011,522.",
+  "Removed unsupported claim: The total cost of the Sri Lanka Transport Connectivity and Asset Management Project at approval, after restructurings, and actual was $68,140,885.",
+  "No generated claim could be verified against the cited evidence."
+ ],
+ "claims": [],
+ "removed_claims": [
+  {
+   "text": "The total cost of the Sri Lanka Transport Connectivity and Asset Management Project at approval, after restructurings, and actual was $125,000,000.",
+   "evidence_ids": [
+    "E1",
+    "E6",
+    "E8"
+   ],
+   "supported": false,
+   "checks": {
+    "ids_valid": true,
+    "unsupported_numbers": [],
+    "unsupported_dates": [],
+    "unsupported_refs": [],
+    "unsupported_quotes": [],
+    "privacy_violation": false,
+    "content_word_recall": 0.571,
+    "nli_entailment": 0.076,
+    "too_short": false,
+    "evidence_dump": false,
+    "supported": false
+   }
+  },
+  {
+   "text": "The total cost of the Sri Lanka Transport Connectivity and Asset Management Project at approval, after restructurings, and actual was $70,011,522.",
+   "evidence_ids": [
+    "E1",
+    "E6",
+    "E8"
+   ],
+   "supported": false,
+   "checks": {
+    "ids_valid": true,
+    "unsupported_numbers": [],
+    "unsupported_dates": [],
+    "unsupported_refs": [],
+    "unsupported_quotes": [],
+    "privacy_violation": false,
+    "content_word_recall": 0.571,
+    "nli_entailment": 0.088,
+    "too_short": false,
+    "evidence_dump": false,
+    "supported": false
+   }
+  },
+  {
+   "text": "The total cost of the Sri Lanka Transport Connectivity and Asset Management Project at approval, after restructurings, and actual was $68,140,885.",
+   "evidence_ids": [
+    "E1",
+    "E6",
+    "E8"
+   ],
+   "supported": false,
+   "checks": {
+    "ids_valid": true,
+    "unsupported_numbers": [],
+    "unsupported_dates": [],
+    "unsupported_refs": [],
+    "unsupported_quotes": [],
+    "privacy_violation": false,
+    "content_word_recall": 0.571,
+    "nli_entailment": 0.088,
+    "too_short": false,
+    "evidence_dump": false,
+    "supported": false
+   }
+  }
+ ],
+ "generator": "ollama:llama3.2:1b",
+ "generator_is_llm": true,
+ "timings_ms": {
+  "retrieval_and_selection": 154,
+  "generation": 4592,
+  "validation": 2624,
+  "total": 7370
+ },
+ "trace": {
+  "plan": {
+   "question": "What was the total cost of the Sri Lanka Transport Connectivity and Asset Management Project at approval, after restructurings, and actual?",
+   "comparison": false,
+   "doc_type_hints": [
+    "PAD"
+   ],
+   "required_fields": {}
+  },
+  "retrieval_status": "ok",
+  "retrieved_unit_ids": [
+   "34345370:t00601:w12-16",
+   "26256705:t02301:w2-4",
+   "34345370:t00601:w10-12",
+   "26256705:t04601:w8-9",
+   "26256705:t00801:w8-10",
+   "26256705:C:0030",
+   "34345370:t03901:w27-29",
+   "34345370:t05001:w6-8",
+   "34345370:t05001:w16-18",
+   "34345370:t05001:w1-2",
+   "26256705:t04601:w1-2",
+   "33761744:C:0003",
+   "34345370:t05001:w12-14",
+   "34345370:t05001:w4-6",
+   "34345370:C:0033",
+   "34345370:C:0031",
+   "26256705:t04601:w4-6",
+   "34407877:C:0034",
+   "34345370:C:0067",
+   "26256705:t04601:w6-8"
+  ],
+  "targeted": {},
+  "selected": [
+   [
+    "E1",
+    "34345370:t00601:w12-16",
+    "34345370",
+    "verified",
+    false
+   ],
+   [
+    "E2",
+    "26256705:t02301:w2-4",
+    "26256705",
+    "verified",
+    false
+   ],
+   [
+    "E3",
+    "26256705:t04601:w8-9",
+    "26256705",
+    "verified",
+    false
+   ],
+   [
+    "E4",
+    "26256705:t00801:w8-10",
+    "26256705",
+    "verified",
+    false
+   ],
+   [
+    "E5",
+    "34345370:t03901:w27-29",
+    "34345370",
+    "verified",
+    false
+   ],
+   [
+    "E6",
+    "34345370:t05001:w6-8",
+    "34345370",
+    "verified",
+    false
+   ],
+   [
+    "E7",
+    "33761744:C:0003",
+    "33761744",
+    "verified",
+    false
+   ],
+   [
+    "E8",
+    "34407877:C:0034",
+    "34407877",
+    "verified",
+    false
+   ]
+  ],
+  "projects_in_top10": [
+   "P132833"
+  ],
+  "generator_meta": {
+   "attempts": 1,
+   "latency_ms": 4589,
+   "prompt_tokens": 1135,
+   "output_tokens": 184
+  }
+ }
+}

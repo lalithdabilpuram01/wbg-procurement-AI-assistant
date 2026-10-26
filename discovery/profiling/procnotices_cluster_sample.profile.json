@@ -1,0 +1,846 @@
+{
+ "row_count": 30977,
+ "columns": {
+  "bid_description": {
+   "observed_kinds": {
+    "str": 30145,
+    "str:multiline": 601,
+    "null": 231
+   },
+   "null_pct": 0.75,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.25,
+   "distinct": 19653,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "5to REQUERIMIENTO DE RECURSOS HUMANOS EN SALUD PARA CHUQUISACA: 32 PARA UTI, 46 HOSPITALIZACION/URGENCIAS, 6 LABORATORIO",
+     110
+    ],
+    [
+     "2do REQUERIMIENTO DE RECURSOS HUMANOS EN SALUD ORURO: 192 PARA MONITOREO Y VIGILANCIA",
+     109
+    ],
+    [
+     "2do REQUERIMIENTO DE RECURSOS HUMANOS EN SALUD PANDO: 71 HOSPITALIZACION/URGENCIAS HOSPITAL HERNAN MESUTI Y 36 PARA CENT",
+     96
+    ],
+    [
+     "CONTRATACI\u00d3N DE 1ER REQUERIMIENTO DE RECURSOS HUMANOS EN SALUD PARA EL DEPARTAMENTO DE PANDO 64 PARA UNIDADES DE TERAPIA",
+     95
+    ],
+    [
+     "RR HH EN SALUD 56 PARA UTIs 39 PARA HOSPIT. URGENCIAS DE HOSPITALES DEL SUD, SOLOMON KLEIN Y VIEDMA y 4 PARA LABORATORIO",
+     95
+    ],
+    [
+     "RR.HH EN SALUD PARA UTIs, 157 PARA HOSPIT/ URGENCIAS DE LOS HOSPITALES SAN JUAN DE DIOS Y CIESO 2 PARA LABORATORIOS, PAR",
+     93
+    ],
+    [
+     "2do REQUERIMIENTO DE RECURSOS HUMANOS EN SALUD PARA TARIJA: 54 PARA UTI, 42 PARA HOSPITALIZACION/URGENCIAS DEL HOSPITAL ",
+     91
+    ],
+    [
+     "4to REQUERIMIENTO DE RECURSOS HUMANOS EN SALUD PARA EL SEDES LP INSTITUTO NACIONAL DEL TORAX LA PAZ: 1 PARA UTI, 79 PARA",
+     82
+    ]
+   ],
+   "max_len": 259
+  },
+  "bid_reference_no": {
+   "observed_kinds": {
+    "str": 30713,
+    "null": 231,
+    "str:decimal": 23,
+    "str:int": 10
+   },
+   "null_pct": 0.75,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.25,
+   "distinct": 20733,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "BM/AISEM/195/2020",
+     110
+    ],
+    [
+     "BM/AISEM/156/2020",
+     109
+    ],
+    [
+     "BM/AISEM/132/2020",
+     96
+    ],
+    [
+     "BM/AISEM/110/2020",
+     95
+    ],
+    [
+     "BM/AISEM/107/2020",
+     95
+    ],
+    [
+     "BM/AISEM/108/2020",
+     93
+    ],
+    [
+     "BM/AISEM/118/2020",
+     91
+    ],
+    [
+     "BM/AISEM/174/2020",
+     82
+    ]
+   ],
+   "max_len": 40
+  },
+  "contact_ctry_name": {
+   "observed_kinds": {
+    "null": 23703,
+    "str": 7274
+   },
+   "null_pct": 76.52,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 23.48,
+   "distinct": 110,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "India",
+     1037
+    ],
+    [
+     "Brazil",
+     562
+    ],
+    [
+     "Pakistan",
+     361
+    ],
+    [
+     "Mozambique",
+     351
+    ],
+    [
+     "Bangladesh",
+     324
+    ],
+    [
+     "Cote d'Ivoire",
+     238
+    ],
+    [
+     "China",
+     237
+    ],
+    [
+     "Kyrgyz Republic",
+     187
+    ]
+   ],
+   "max_len": 32
+  },
+  "contact_organization": {
+   "observed_kinds": {
+    "null": 23674,
+    "str": 7303
+   },
+   "null_pct": 76.42,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 23.58,
+   "distinct": 824,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "INTERNATIONAL CONSERVANCY",
+     322
+    ],
+    [
+     "Ministry of Health",
+     132
+    ],
+    [
+     "Getulio Vargas Foundation",
+     119
+    ],
+    [
+     "Ministry of Planning and International Cooperation",
+     103
+    ],
+    [
+     "DPMU Purulia",
+     98
+    ],
+    [
+     "Community Development and Investment Agency",
+     90
+    ],
+    [
+     "DPMU - Bankura",
+     89
+    ],
+    [
+     "Community Development Funds Support",
+     83
+    ]
+   ],
+   "max_len": 120
+  },
+  "id": {
+   "observed_kinds": {
+    "str": 30977
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 30977,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "OP00273941",
+     1
+    ],
+    [
+     "OP00264775",
+     1
+    ],
+    [
+     "OP00209847",
+     1
+    ],
+    [
+     "OP00209848",
+     1
+    ],
+    [
+     "OP00184865",
+     1
+    ],
+    [
+     "OP00168378",
+     1
+    ],
+    [
+     "OP00163287",
+     1
+    ],
+    [
+     "OP00157652",
+     1
+    ]
+   ],
+   "max_len": 10,
+   "unique_when_present": true
+  },
+  "notice_lang_name": {
+   "observed_kinds": {
+    "str": 30968,
+    "null": 9
+   },
+   "null_pct": 0.03,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.97,
+   "distinct": 4,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "English",
+     22056
+    ],
+    [
+     "Spanish; Castilian",
+     4091
+    ],
+    [
+     "French",
+     3470
+    ],
+    [
+     "Portuguese",
+     1351
+    ]
+   ],
+   "max_len": 18
+  },
+  "notice_status": {
+   "observed_kinds": {
+    "str": 30977
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 4,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Published",
+     30845
+    ],
+    [
+     "Revised",
+     117
+    ],
+    [
+     "Draft",
+     11
+    ],
+    [
+     "Cancelled",
+     4
+    ]
+   ],
+   "max_len": 9
+  },
+  "notice_text": {
+   "observed_kinds": {
+    "str": 23027,
+    "str:multiline": 7764,
+    "null": 186
+   },
+   "null_pct": 0.6,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.4,
+   "distinct": 30064,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "<p><strong>Government of West Bengal</strong></p><p><strong><u>WRDD e-TENDER NOTICE</u></strong></p><p>&nbsp;</p><p><str",
+     31
+    ],
+    [
+     "<p><strong>Sudurpashchim Province Government</strong></p><p><strong>Ministry of Physical Infrastructure Development</str",
+     27
+    ],
+    [
+     "<p><strong>HOW TO APPLY</strong></p><p>The terms of reference on the post can be accessed on the Ministry&rsquo;s websit",
+     27
+    ],
+    [
+     "<div class='row col-sm-12'><h4>Contract Award</h4><p><b>Project: </b>P174244-Guyana Education Sector Program Project<br/",
+     25
+    ],
+    [
+     "<p>Madhesh Province Government</p>\n\n<p>Ministry of Physical Infrastructure Development.</p>\n\n<p><strong>Infrastructure D",
+     24
+    ],
+    [
+     "<p>Executive Engineer, DPMU, Jhargram invites e-tender for Excavation of 56 nos. WDS at Binpur-I, Binpur-II, Gopiballavp",
+     24
+    ],
+    [
+     "<p>PERIOD OF AVAILABILITY OF BIDDING</p><p>DOCUMENT ON WEBSITE</p><p>https://wbtenders.gov.in&nbsp;&nbsp;&nbsp;&nbsp;&nb",
+     24
+    ],
+    [
+     "<p><strong><em>Government of West Bengal</em></strong></p>\n\n<p>ABRIDGED NOTICE INVITING e-TENDER</p>\n\n<p>&nbsp;</p>\n\n<p>",
+     20
+    ]
+   ],
+   "max_len": 674385
+  },
+  "notice_type": {
+   "observed_kinds": {
+    "str": 30977
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 5,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Contract Award",
+     23672
+    ],
+    [
+     "Request for Expression of Interest",
+     3956
+    ],
+    [
+     "Invitation for Bids",
+     3070
+    ],
+    [
+     "General Procurement Notice",
+     167
+    ],
+    [
+     "Invitation for Prequalification",
+     112
+    ]
+   ],
+   "max_len": 34
+  },
+  "noticedate": {
+   "observed_kinds": {
+    "str:date[DD-Mon-YYYY]": 30966,
+    "null": 11
+   },
+   "null_pct": 0.04,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.96,
+   "distinct": 3375,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "26-Jul-2021",
+     262
+    ],
+    [
+     "22-Jun-2021",
+     185
+    ],
+    [
+     "29-Oct-2020",
+     157
+    ],
+    [
+     "01-Sep-2023",
+     154
+    ],
+    [
+     "09-Jul-2021",
+     132
+    ],
+    [
+     "07-Feb-2023",
+     128
+    ],
+    [
+     "08-Jul-2021",
+     128
+    ],
+    [
+     "08-Jul-2022",
+     119
+    ]
+   ],
+   "max_len": 11,
+   "date_min": "2009-02-23",
+   "date_max": "2026-10-19"
+  },
+  "procurement_group": {
+   "observed_kinds": {
+    "str": 30253,
+    "null": 724
+   },
+   "null_pct": 2.34,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 97.66,
+   "distinct": 4,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "CS",
+     12598
+    ],
+    [
+     "GO",
+     8573
+    ],
+    [
+     "CW",
+     5001
+    ],
+    [
+     "NC",
+     4081
+    ]
+   ],
+   "max_len": 2
+  },
+  "procurement_method_code": {
+   "observed_kinds": {
+    "str": 30746,
+    "null": 231
+   },
+   "null_pct": 0.75,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.25,
+   "distinct": 17,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "INDV",
+     7211
+    ],
+    [
+     "RFB",
+     6943
+    ],
+    [
+     "RFQ",
+     6881
+    ],
+    [
+     "DIR",
+     3632
+    ],
+    [
+     "CQS",
+     1777
+    ],
+    [
+     "QCBS",
+     1726
+    ],
+    [
+     "CDS",
+     1695
+    ],
+    [
+     "ICB",
+     335
+    ]
+   ],
+   "max_len": 4
+  },
+  "procurement_method_name": {
+   "observed_kinds": {
+    "str": 30746,
+    "null": 231
+   },
+   "null_pct": 0.75,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.25,
+   "distinct": 16,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Individual Consultant Selection",
+     7211
+    ],
+    [
+     "Request for Bids",
+     6943
+    ],
+    [
+     "Request for Quotations",
+     6881
+    ],
+    [
+     "Direct Selection",
+     5327
+    ],
+    [
+     "Consultant Qualification  Selection",
+     1777
+    ],
+    [
+     "Quality And Cost-Based Selection",
+     1726
+    ],
+    [
+     "International Competitive Bidding",
+     335
+    ],
+    [
+     "Least Cost Selection",
+     275
+    ]
+   ],
+   "max_len": 35
+  },
+  "project_ctry_name": {
+   "observed_kinds": {
+    "str": 30964,
+    "null": 13
+   },
+   "null_pct": 0.04,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.96,
+   "distinct": 112,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "India",
+     3741
+    ],
+    [
+     "Bolivia",
+     2894
+    ],
+    [
+     "Mozambique",
+     1258
+    ],
+    [
+     "Pakistan",
+     1214
+    ],
+    [
+     "Brazil",
+     1203
+    ],
+    [
+     "Kyrgyz Republic",
+     1158
+    ],
+    [
+     "Bangladesh",
+     1138
+    ],
+    [
+     "Cote d'Ivoire",
+     1122
+    ]
+   ],
+   "max_len": 32
+  },
+  "project_id": {
+   "observed_kinds": {
+    "str": 30977
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 272,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "P164453",
+     2531
+    ],
+    [
+     "P152698",
+     1707
+    ],
+    [
+     "P177876",
+     1251
+    ],
+    [
+     "P158000",
+     804
+    ],
+    [
+     "P154778",
+     777
+    ],
+    [
+     "P148591",
+     708
+    ],
+    [
+     "P173820",
+     689
+    ],
+    [
+     "P174002",
+     568
+    ]
+   ],
+   "max_len": 7
+  },
+  "project_name": {
+   "observed_kinds": {
+    "str": 30977
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 281,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Health Service Delivery Network Project",
+     2531
+    ],
+    [
+     "National Hydrology Project",
+     1707
+    ],
+    [
+     "West Bengal Accelerated Development of Minor Irrigation Project - Phase II",
+     1027
+    ],
+    [
+     "Amazon Sustainable Landscapes Project",
+     804
+    ],
+    [
+     "Sustainable Rural Water Supply and Sanitation Project",
+     777
+    ],
+    [
+     "Second Agricultural Growth Project",
+     708
+    ],
+    [
+     "KENYA COVID-19 HEALTH EMERGENCY RESPONSE PROJECT",
+     689
+    ],
+    [
+     "Sustainable Rural Economy Program",
+     568
+    ]
+   ],
+   "max_len": 100
+  },
+  "submission_date": {
+   "observed_kinds": {
+    "str:date[ISO8601Z]": 30966,
+    "null": 11
+   },
+   "null_pct": 0.04,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.96,
+   "distinct": 3375,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2021-07-26T00:00:00Z",
+     262
+    ],
+    [
+     "2021-06-22T00:00:00Z",
+     185
+    ],
+    [
+     "2020-10-29T00:00:00Z",
+     157
+    ],
+    [
+     "2023-09-01T00:00:00Z",
+     154
+    ],
+    [
+     "2021-07-09T00:00:00Z",
+     132
+    ],
+    [
+     "2023-02-07T00:00:00Z",
+     128
+    ],
+    [
+     "2021-07-08T00:00:00Z",
+     128
+    ],
+    [
+     "2022-07-08T00:00:00Z",
+     119
+    ]
+   ],
+   "max_len": 20,
+   "date_min": "2009-02-23",
+   "date_max": "2026-10-19"
+  },
+  "submission_deadline_date": {
+   "observed_kinds": {
+    "null": 24267,
+    "str:date[ISO8601Z]": 6710
+   },
+   "null_pct": 78.34,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 21.66,
+   "distinct": 2211,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2024-10-21T00:00:00Z",
+     72
+    ],
+    [
+     "2023-03-24T00:00:00Z",
+     44
+    ],
+    [
+     "2023-03-10T00:00:00Z",
+     42
+    ],
+    [
+     "2023-04-13T00:00:00Z",
+     34
+    ],
+    [
+     "2023-03-13T00:00:00Z",
+     34
+    ],
+    [
+     "2026-07-23T00:00:00Z",
+     32
+    ],
+    [
+     "2024-12-02T00:00:00Z",
+     28
+    ],
+    [
+     "2023-03-23T00:00:00Z",
+     28
+    ]
+   ],
+   "max_len": 20,
+   "date_min": "2016-08-28",
+   "date_max": "2026-11-30"
+  },
+  "submission_deadline_time": {
+   "observed_kinds": {
+    "null": 24267,
+    "str": 6710
+   },
+   "null_pct": 78.34,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 21.66,
+   "distinct": 72,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "10:00",
+     770
+    ],
+    [
+     "17:00",
+     726
+    ],
+    [
+     "18:00",
+     647
+    ],
+    [
+     "15:00",
+     547
+    ],
+    [
+     "16:00",
+     506
+    ],
+    [
+     "14:00",
+     500
+    ],
+    [
+     "11:00",
+     493
+    ],
+    [
+     "00:00",
+     458
+    ]
+   ],
+   "max_len": 5
+  }
+ },
+ "dataset": "procnotices_cluster_sample",
+ "source": "search API procnotices (project cluster)"
+}

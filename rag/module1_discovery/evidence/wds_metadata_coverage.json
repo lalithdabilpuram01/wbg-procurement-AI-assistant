@@ -1,0 +1,1591 @@
+{
+ "summary": {
+  "source_files": [
+   "wds_v3_cluster_meta.jsonl.gz (retrieved 2026-10-21)",
+   "wds_cluster_meta.jsonl.gz (v2, for no_of_pages)"
+  ],
+  "cluster_projects": 276,
+  "cluster_projects_in_cohort": 184,
+  "documents_v3_all_cluster": 22337,
+  "documents_linked_to_cohort_projects": 14040,
+  "docs_by_type": {
+   "Other": 4454,
+   "ICRR": 58,
+   "ICR": 78,
+   "PP": 6896,
+   "ISR": 1981,
+   "Project Paper": 418,
+   "PAD": 155
+  },
+  "cohort_projects_with_type": {
+   "PAD": {
+    "projects": 142,
+    "pct": 77.2
+   },
+   "ISR": {
+    "projects": 182,
+    "pct": 98.9
+   },
+   "ICR": {
+    "projects": 77,
+    "pct": 41.8
+   },
+   "ICRR": {
+    "projects": 58,
+    "pct": 31.5
+   },
+   "PP": {
+    "projects": 184,
+    "pct": 100.0
+   },
+   "Project Paper": {
+    "projects": 158,
+    "pct": 85.9
+   }
+  },
+  "type_combinations_PAD_ISR_ICR_ICRR": {
+   "PAD+ISR": 82,
+   "PAD+ISR+ICR+ICRR": 52,
+   "ISR": 22,
+   "ISR+ICR": 13,
+   "PAD+ISR+ICR": 7,
+   "ISR+ICR+ICRR": 5,
+   "none": 2,
+   "PAD+ISR+ICRR": 1
+  },
+  "docs_per_project": {
+   "median": 64.5,
+   "p10": 24,
+   "p90": 125,
+   "max": 329,
+   "min": 10
+  },
+  "narrative_docs_per_project (PAD+ISR+ICR+ICRR+Project Paper)": {
+   "median": 14.0,
+   "min": 1,
+   "max": 47
+  },
+  "page_stats_by_type": {
+   "PAD": {
+    "n": 134,
+    "median": 77.0,
+    "p90": 125,
+    "max": 212,
+    "ge_100": 28
+   },
+   "ISR": {
+    "n": 1229,
+    "median": 8,
+    "p90": 12,
+    "max": 36,
+    "ge_100": 0
+   },
+   "ICR": {
+    "n": 34,
+    "median": 58.5,
+    "p90": 73,
+    "max": 106,
+    "ge_100": 1
+   },
+   "ICRR": {
+    "n": 27,
+    "median": 20,
+    "p90": 25,
+    "max": 30,
+    "ge_100": 0
+   },
+   "PP": {
+    "n": 3833,
+    "median": 8,
+    "p90": 18,
+    "max": 7287,
+    "ge_100": 65
+   },
+   "Project Paper": {
+    "n": 218,
+    "median": 14.0,
+    "p90": 51,
+    "max": 117,
+    "ge_100": 3
+   },
+   "PPAR": null,
+   "Other": {
+    "n": 2840,
+    "median": 15.0,
+    "p90": 131,
+    "max": 1180,
+    "ge_100": 393
+   }
+  },
+  "estimated_pages_cohort_cluster_narrative": 28660,
+  "languages": {
+   "English": 13398,
+   "French": 256,
+   "Spanish": 166,
+   "Portuguese": 71,
+   "Chinese": 29,
+   "Arabic": 23,
+   "": 11,
+   "Bengali": 10
+  },
+  "versiontyp": {
+   "Final": 6884,
+   "null": 5302,
+   "Buff cover": 1425,
+   "Buff Cover": 223,
+   "Revised": 84,
+   "Gray cover": 32,
+   "Initial appraisal": 25,
+   "Gray Cover": 25
+  },
+  "multi_project_docs_pct": 0.7,
+  "near_duplicate_groups (same projects,type,docdt,title)": 598,
+  "near_duplicate_extra_records": 771,
+  "same_document_id_under_several_seed_projects": 2,
+  "pdfurl_present_pct": 99.6,
+  "strata_of_cluster_cohort_projects": {
+   "region": {
+    "Europe and Central Asia": 24,
+    "Latin America and Caribbean": 23,
+    "Eastern and Southern Africa": 24,
+    "East Asia and Pacific": 22,
+    "Western and Central Africa": 30,
+    "South Asia": 23,
+    "Middle East, North Africa, Afghanistan, and Pakistan": 26,
+    "Other": 12
+   },
+   "status": {
+    "Closed": 100,
+    "Active": 84
+   },
+   "fy_band": {
+    "FY<=2014": 21,
+    "FY2015-2017": 38,
+    "FY2018-2020": 40,
+    "FY2021-2023": 57,
+    "FY2024+": 28
+   },
+   "has_pad_icr": {
+    "PAD=True,ICR=True": 59,
+    "PAD=True,ICR=False": 83,
+    "PAD=False,ICR=True": 18,
+    "PAD=False,ICR=False": 24
+   }
+  },
+  "v3_field_completeness_pct": {
+   "id": 100.0,
+   "docna": 100.0,
+   "projn": 100.0,
+   "subsc": 100.0,
+   "theme": 100.0,
+   "prdln": 100.0,
+   "seccl": 100.0,
+   "lndinstr": 100.0,
+   "lndinstr_exact": 100.0,
+   "sectr": 100.0,
+   "docdt": 100.0,
+   "datestored": 100.0,
+   "display_title": 100.0,
+   "projectid": 100.0,
+   "guid": 100.0,
+   "prdln_exact": 100.0,
+   "url": 100.0,
+   "_extract": 100.0,
+   "chronical_docm_id": 100.0,
+   "lang": 99.9,
+   "available_in": 99.9,
+   "count": 99.9,
+   "docty": 99.8,
+   "disclosure_date": 99.8,
+   "admreg": 99.6,
+   "pdfurl": 99.5,
+   "txturl": 99.5,
+   "majdocty": 99.5,
+   "disclstat": 97.9,
+   "majtheme": 96.0,
+   "authors": 94.0,
+   "repnb": 79.8,
+   "origu": 71.1,
+   "versiontyp": 61.1,
+   "EnvironmentalCategory": 60.6,
+   "entityids": 46.2,
+   "volnb": 45.2,
+   "keywd": 42.3,
+   "subtopic": 42.2,
+   "owner": 41.2,
+   "repnme": 40.8,
+   "totvolnb": 40.8,
+   "teratopic": 33.9,
+   "historic_topic": 33.9,
+   "last_modified_date": 26.3,
+   "trustfund": 21.5,
+   "geo_regions": 6.7,
+   "abstracts": 6.3,
+   "alt_title": 2.3,
+   "bdmdt": 1.3,
+   "closedt": 1.1,
+   "colti": 0.5,
+   "ml_abstracts": 0.1,
+   "disclosure_type": 0.1,
+   "unregnbr": 0.1,
+   "dois": 0.0,
+   "isbn": 0.0,
+   "virt_coll": 0.0
+  }
+ },
+ "per_project_counts": {
+  "P106284": {
+   "Other": 30,
+   "ICRR": 1,
+   "ICR": 1,
+   "PP": 17,
+   "ISR": 26,
+   "Project Paper": 5,
+   "PAD": 1
+  },
+  "P111996": {
+   "ICRR": 1,
+   "Other": 33,
+   "ICR": 1,
+   "ISR": 24,
+   "PP": 20,
+   "Project Paper": 10,
+   "PAD": 1
+  },
+  "P121019": {
+   "ICRR": 1,
+   "Other": 43,
+   "ICR": 1,
+   "ISR": 23,
+   "Project Paper": 5,
+   "PP": 37,
+   "PAD": 1
+  },
+  "P122319": {
+   "ICRR": 1,
+   "Other": 31,
+   "ICR": 1,
+   "ISR": 18,
+   "PP": 5,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P122320": {
+   "ICRR": 1,
+   "ICR": 1,
+   "Other": 31,
+   "ISR": 23,
+   "PP": 33,
+   "Project Paper": 5,
+   "PAD": 1
+  },
+  "P123513": {
+   "ICRR": 1,
+   "Other": 52,
+   "ICR": 1,
+   "PP": 105,
+   "Project Paper": 5,
+   "ISR": 12,
+   "PAD": 1
+  },
+  "P123828": {
+   "Other": 31,
+   "ICR": 1,
+   "ISR": 23,
+   "PP": 27,
+   "Project Paper": 3,
+   "PAD": 1
+  },
+  "P125597": {
+   "ICRR": 1,
+   "ICR": 1,
+   "ISR": 15,
+   "PP": 18,
+   "Other": 7,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P127086": {
+   "Other": 11,
+   "ICRR": 1,
+   "ICR": 1,
+   "ISR": 14,
+   "Project Paper": 2,
+   "PP": 20,
+   "PAD": 1
+  },
+  "P127676": {
+   "ICRR": 1,
+   "ICR": 1,
+   "Other": 22,
+   "PP": 16,
+   "ISR": 22,
+   "Project Paper": 2,
+   "PAD": 1
+  },
+  "P128307": {
+   "ICRR": 1,
+   "ICR": 1,
+   "Other": 24,
+   "ISR": 15,
+   "PP": 63,
+   "Project Paper": 3,
+   "PAD": 1
+  },
+  "P128909": {
+   "Other": 41,
+   "ICRR": 1,
+   "ICR": 1,
+   "PP": 42,
+   "ISR": 14,
+   "Project Paper": 6,
+   "PAD": 1
+  },
+  "P130174": {
+   "PP": 65,
+   "Other": 80,
+   "ISR": 29,
+   "Project Paper": 5,
+   "PAD": 1
+  },
+  "P130378": {
+   "Other": 13,
+   "ICR": 1,
+   "PP": 16,
+   "ISR": 7,
+   "Project Paper": 2
+  },
+  "P130682": {
+   "ICRR": 1,
+   "ICR": 1,
+   "Other": 45,
+   "ISR": 21,
+   "Project Paper": 3,
+   "PP": 51,
+   "PAD": 1
+  },
+  "P131049": {
+   "Other": 12,
+   "ICRR": 1,
+   "ICR": 1,
+   "ISR": 14,
+   "PP": 25,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P131864": {
+   "ICRR": 1,
+   "ICR": 1,
+   "Other": 12,
+   "PP": 17,
+   "ISR": 12,
+   "Project Paper": 1
+  },
+  "P132515": {
+   "ICRR": 1,
+   "ICR": 1,
+   "Other": 43,
+   "PP": 43,
+   "ISR": 15,
+   "Project Paper": 5,
+   "PAD": 1
+  },
+  "P132621": {
+   "ICRR": 1,
+   "ICR": 1,
+   "Other": 24,
+   "ISR": 15,
+   "PP": 34,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P132742": {
+   "ICRR": 1,
+   "ICR": 1,
+   "ISR": 19,
+   "PP": 17,
+   "Other": 29,
+   "Project Paper": 5
+  },
+  "P132748": {
+   "ICRR": 1,
+   "Other": 26,
+   "ICR": 1,
+   "ISR": 17,
+   "PP": 38,
+   "Project Paper": 2,
+   "PAD": 1
+  },
+  "P132833": {
+   "Other": 33,
+   "ICRR": 1,
+   "ICR": 1,
+   "PP": 58,
+   "ISR": 16,
+   "Project Paper": 5,
+   "PAD": 1
+  },
+  "P133116": {
+   "Other": 30,
+   "ICRR": 1,
+   "ICR": 1,
+   "ISR": 14,
+   "PP": 10,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P133531": {
+   "ICRR": 1,
+   "Other": 40,
+   "ICR": 1,
+   "ISR": 15,
+   "PP": 7,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P133731": {
+   "ICRR": 1,
+   "Other": 35,
+   "ICR": 1,
+   "PP": 62,
+   "ISR": 16,
+   "Project Paper": 3,
+   "PAD": 1
+  },
+  "P133780": {
+   "ICRR": 1,
+   "Other": 12,
+   "ICR": 1,
+   "ISR": 11,
+   "PP": 28,
+   "Project Paper": 2,
+   "PAD": 1
+  },
+  "P144893": {
+   "ICRR": 1,
+   "ICR": 1,
+   "Other": 37,
+   "ISR": 20,
+   "Project Paper": 7,
+   "PP": 82,
+   "PAD": 1
+  },
+  "P145054": {
+   "PP": 54,
+   "Other": 166,
+   "ISR": 24,
+   "Project Paper": 7,
+   "PAD": 1
+  },
+  "P145502": {
+   "ICRR": 1,
+   "Other": 21,
+   "ICR": 1,
+   "ISR": 14,
+   "Project Paper": 4,
+   "PP": 39,
+   "PAD": 1
+  },
+  "P145534": {
+   "ICRR": 1,
+   "ICR": 1,
+   "Other": 19,
+   "PP": 33,
+   "ISR": 13,
+   "Project Paper": 3,
+   "PAD": 1
+  },
+  "P145618": {
+   "ICRR": 1,
+   "ICR": 1,
+   "Other": 13,
+   "ISR": 11,
+   "PP": 10,
+   "Project Paper": 2,
+   "PAD": 1
+  },
+  "P146184": {
+   "ICR": 1,
+   "ICRR": 1,
+   "ISR": 12,
+   "PP": 22,
+   "Other": 20,
+   "Project Paper": 1
+  },
+  "P148591": {
+   "ICRR": 1,
+   "Other": 36,
+   "ICR": 1,
+   "PP": 270,
+   "ISR": 16,
+   "Project Paper": 4,
+   "PAD": 1
+  },
+  "P148850": {
+   "Other": 67,
+   "Project Paper": 7,
+   "PP": 65,
+   "ISR": 21,
+   "PAD": 1
+  },
+  "P150148": {
+   "Other": 19,
+   "ICRR": 1,
+   "ICR": 1,
+   "Project Paper": 2,
+   "PP": 38,
+   "ISR": 7,
+   "PAD": 1
+  },
+  "P150357": {
+   "ICRR": 1,
+   "ICR": 1,
+   "Other": 24,
+   "Project Paper": 4,
+   "ISR": 16,
+   "PP": 7,
+   "PAD": 1
+  },
+  "P150381": {
+   "ISR": 21,
+   "Other": 32,
+   "PP": 52,
+   "Project Paper": 4
+  },
+  "P151324": {
+   "Other": 32,
+   "ICRR": 1,
+   "ICR": 1,
+   "Project Paper": 3,
+   "ISR": 18,
+   "PP": 60
+  },
+  "P152096": {
+   "ICRR": 1,
+   "Other": 57,
+   "ICR": 1,
+   "ISR": 13,
+   "PP": 68,
+   "Project Paper": 4,
+   "PAD": 2
+  },
+  "P153420": {
+   "ICRR": 1,
+   "Other": 44,
+   "ICR": 1,
+   "ISR": 13,
+   "PP": 38,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P153588": {
+   "Other": 5,
+   "ICR": 1,
+   "PP": 3,
+   "Project Paper": 1,
+   "ISR": 2
+  },
+  "P154477": {
+   "ICR": 1,
+   "Other": 6,
+   "ISR": 8,
+   "Project Paper": 3,
+   "PP": 43
+  },
+  "P154623": {
+   "ICRR": 1,
+   "Other": 17,
+   "ICR": 1,
+   "PP": 45,
+   "ISR": 12,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P154778": {
+   "Other": 44,
+   "ISR": 23,
+   "PP": 116,
+   "Project Paper": 3,
+   "PAD": 1
+  },
+  "P154807": {
+   "ICRR": 1,
+   "Other": 81,
+   "ICR": 1,
+   "ISR": 14,
+   "Project Paper": 5,
+   "PP": 157,
+   "PAD": 1
+  },
+  "P155081": {
+   "Other": 10,
+   "ICR": 1,
+   "ISR": 5,
+   "PP": 7,
+   "Project Paper": 1
+  },
+  "P155198": {
+   "ICRR": 1,
+   "Other": 18,
+   "ICR": 1,
+   "ISR": 13,
+   "Project Paper": 3,
+   "PP": 12,
+   "PAD": 2
+  },
+  "P155293": {
+   "ICRR": 1,
+   "ICR": 1,
+   "Other": 17,
+   "ISR": 13,
+   "PP": 33,
+   "Project Paper": 6,
+   "PAD": 1
+  },
+  "P156241": {
+   "ICR": 1,
+   "Other": 19,
+   "ISR": 16,
+   "Project Paper": 4,
+   "PP": 3,
+   "PAD": 1
+  },
+  "P156679": {
+   "Other": 25,
+   "ICRR": 1,
+   "ICR": 1,
+   "Project Paper": 3,
+   "ISR": 13,
+   "PP": 58,
+   "PAD": 1
+  },
+  "P156869": {
+   "ICRR": 1,
+   "ICR": 1,
+   "Other": 17,
+   "ISR": 13,
+   "PP": 42,
+   "Project Paper": 3,
+   "PAD": 1
+  },
+  "P157117": {
+   "Other": 19,
+   "ICRR": 1,
+   "ICR": 1,
+   "PP": 65,
+   "ISR": 16,
+   "Project Paper": 4,
+   "PAD": 2
+  },
+  "P157206": {
+   "Other": 21,
+   "ICRR": 1,
+   "ICR": 1,
+   "ISR": 17,
+   "PP": 35,
+   "Project Paper": 3,
+   "PAD": 1
+  },
+  "P157473": {
+   "Other": 16,
+   "ICRR": 1,
+   "ICR": 1,
+   "ISR": 12,
+   "PP": 31,
+   "Project Paper": 2,
+   "PAD": 1
+  },
+  "P157782": {
+   "ICRR": 1,
+   "ICR": 1,
+   "Other": 27,
+   "ISR": 14,
+   "PP": 22,
+   "Project Paper": 3,
+   "PAD": 1
+  },
+  "P158091": {
+   "ICR": 1,
+   "Other": 9,
+   "PP": 27,
+   "Project Paper": 2,
+   "ISR": 4
+  },
+  "P158215": {
+   "ISR": 13,
+   "Other": 40,
+   "PP": 38,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P159292": {
+   "ICR": 1,
+   "Other": 18,
+   "ISR": 11,
+   "PP": 26,
+   "Project Paper": 3,
+   "PAD": 1
+  },
+  "P159303": {
+   "Other": 36,
+   "ICRR": 1,
+   "ICR": 1,
+   "ISR": 11,
+   "Project Paper": 2,
+   "PP": 44,
+   "PAD": 1
+  },
+  "P159931": {
+   "Other": 9,
+   "ICR": 1,
+   "ISR": 4,
+   "Project Paper": 2,
+   "PP": 5
+  },
+  "P159961": {
+   "Other": 14,
+   "ICRR": 1,
+   "ICR": 1,
+   "ISR": 14,
+   "PP": 60,
+   "Project Paper": 2,
+   "PAD": 1
+  },
+  "P160022": {
+   "Other": 6,
+   "ICR": 1,
+   "Project Paper": 5,
+   "PP": 5,
+   "ISR": 5
+  },
+  "P160379": {
+   "Other": 38,
+   "ISR": 16,
+   "Project Paper": 5,
+   "PP": 11,
+   "PAD": 1
+  },
+  "P160739": {
+   "ICR": 1,
+   "PP": 41,
+   "Other": 21,
+   "ISR": 17,
+   "Project Paper": 4,
+   "PAD": 1
+  },
+  "P160758": {
+   "Other": 19,
+   "ICRR": 1,
+   "ICR": 1,
+   "ISR": 12,
+   "Project Paper": 2,
+   "PP": 37,
+   "PAD": 1
+  },
+  "P160796": {
+   "Other": 15,
+   "ICRR": 1,
+   "ICR": 1,
+   "ISR": 10,
+   "Project Paper": 3,
+   "PP": 23,
+   "PAD": 1
+  },
+  "P161048": {
+   "Other": 15,
+   "ICRR": 1,
+   "ICR": 1,
+   "PP": 56,
+   "ISR": 8,
+   "Project Paper": 2,
+   "PAD": 1
+  },
+  "P161644": {
+   "Other": 7,
+   "PP": 12,
+   "ISR": 3
+  },
+  "P161996": {
+   "ICRR": 1,
+   "Other": 31,
+   "PP": 74,
+   "ISR": 14,
+   "Project Paper": 3,
+   "PAD": 1
+  },
+  "P162043": {
+   "ISR": 12,
+   "PP": 93,
+   "Other": 34,
+   "Project Paper": 2,
+   "PAD": 1
+  },
+  "P163115": {
+   "Other": 22,
+   "ICRR": 1,
+   "ICR": 1,
+   "ISR": 15,
+   "PP": 14,
+   "Project Paper": 3,
+   "PAD": 2
+  },
+  "P163345": {
+   "Other": 36,
+   "ICRR": 1,
+   "ICR": 1,
+   "ISR": 17,
+   "PP": 35,
+   "Project Paper": 4
+  },
+  "P163714": {
+   "ISR": 43,
+   "PP": 29,
+   "Other": 32,
+   "Project Paper": 3,
+   "PAD": 1
+  },
+  "P163818": {
+   "ICR": 1,
+   "Project Paper": 4,
+   "ISR": 12,
+   "PP": 71,
+   "Other": 22,
+   "PAD": 1
+  },
+  "P163923": {
+   "ICR": 1,
+   "Other": 6,
+   "ISR": 7,
+   "PP": 13,
+   "Project Paper": 1
+  },
+  "P163980": {
+   "Project Paper": 3,
+   "ISR": 13,
+   "PP": 100,
+   "Other": 44,
+   "PAD": 1
+  },
+  "P164424": {
+   "Other": 17,
+   "PP": 40,
+   "ISR": 16,
+   "Project Paper": 2,
+   "PAD": 1
+  },
+  "P164453": {
+   "Other": 53,
+   "ICRR": 1,
+   "ICR": 1,
+   "Project Paper": 5,
+   "PP": 223,
+   "ISR": 10,
+   "PAD": 2
+  },
+  "P164555": {
+   "ISR": 22,
+   "PP": 59,
+   "Other": 14,
+   "Project Paper": 3,
+   "PAD": 1
+  },
+  "P164625": {
+   "Other": 14,
+   "ISR": 14,
+   "Project Paper": 8,
+   "PP": 10,
+   "PAD": 2
+  },
+  "P165147": {
+   "ICRR": 1,
+   "ICR": 1,
+   "Other": 11,
+   "PP": 7,
+   "ISR": 7,
+   "PAD": 1
+  },
+  "P165782": {
+   "ISR": 17,
+   "PP": 34,
+   "Other": 28,
+   "Project Paper": 4,
+   "PAD": 1
+  },
+  "P166187": {
+   "Other": 27,
+   "PP": 62,
+   "ISR": 13,
+   "Project Paper": 2,
+   "PAD": 1
+  },
+  "P166327": {
+   "Other": 8,
+   "PP": 16,
+   "ISR": 3,
+   "Project Paper": 1
+  },
+  "P166672": {
+   "Other": 11,
+   "PP": 121,
+   "ISR": 10,
+   "PAD": 1
+  },
+  "P167380": {
+   "ISR": 16,
+   "Other": 21,
+   "PP": 30,
+   "Project Paper": 1,
+   "PAD": 2
+  },
+  "P167401": {
+   "PP": 63,
+   "Other": 28,
+   "ISR": 16,
+   "Project Paper": 2,
+   "PAD": 1
+  },
+  "P167996": {
+   "Project Paper": 4,
+   "PP": 79,
+   "Other": 18,
+   "ISR": 20,
+   "PAD": 2
+  },
+  "P168120": {
+   "PP": 51,
+   "ISR": 21,
+   "Other": 9,
+   "Project Paper": 2,
+   "PAD": 1
+  },
+  "P168185": {
+   "PP": 48,
+   "ISR": 12,
+   "Other": 32,
+   "Project Paper": 3,
+   "PAD": 1
+  },
+  "P168475": {
+   "ISR": 8,
+   "PP": 14,
+   "Other": 8,
+   "PAD": 1
+  },
+  "P168590": {
+   "Other": 27,
+   "ICRR": 1,
+   "ICR": 1,
+   "PP": 101,
+   "ISR": 11,
+   "Project Paper": 2,
+   "PAD": 1
+  },
+  "P169380": {
+   "ISR": 11,
+   "Other": 20,
+   "PP": 9,
+   "Project Paper": 2,
+   "PAD": 1
+  },
+  "P169629": {
+   "Other": 35,
+   "ISR": 15,
+   "Project Paper": 3,
+   "PP": 27,
+   "PAD": 1
+  },
+  "P169880": {
+   "ISR": 13,
+   "PP": 43,
+   "Project Paper": 1,
+   "Other": 58,
+   "PAD": 1
+  },
+  "P170854": {
+   "PP": 37,
+   "ISR": 9,
+   "Other": 15,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P170860": {
+   "PP": 29,
+   "Other": 28,
+   "ISR": 13,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P171037": {
+   "Other": 25,
+   "Project Paper": 4,
+   "ISR": 2,
+   "PP": 1
+  },
+  "P171040": {
+   "ISR": 16,
+   "Other": 56,
+   "Project Paper": 5,
+   "PP": 82,
+   "PAD": 1
+  },
+  "P171144": {
+   "PP": 22,
+   "ISR": 8,
+   "Other": 23,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P171836": {
+   "PP": 43,
+   "ISR": 5,
+   "Other": 28,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P171892": {
+   "ISR": 11,
+   "PP": 21,
+   "Other": 28,
+   "PAD": 1
+  },
+  "P172247": {
+   "Other": 11,
+   "PP": 3,
+   "ISR": 3,
+   "Project Paper": 1
+  },
+  "P172342": {
+   "Other": 23,
+   "ISR": 17,
+   "Project Paper": 2,
+   "PP": 11,
+   "PAD": 1
+  },
+  "P172425": {
+   "PP": 101,
+   "ISR": 17,
+   "Other": 49,
+   "Project Paper": 2,
+   "PAD": 1
+  },
+  "P172592": {
+   "Other": 34,
+   "PP": 37,
+   "ISR": 9,
+   "Project Paper": 2,
+   "PAD": 1
+  },
+  "P172605": {
+   "Other": 22,
+   "ICR": 1,
+   "Project Paper": 3,
+   "ISR": 11,
+   "PP": 20,
+   "PAD": 1
+  },
+  "P172707": {
+   "ISR": 12,
+   "Other": 36,
+   "Project Paper": 5,
+   "PP": 17,
+   "PAD": 1
+  },
+  "P173103": {
+   "ICR": 1,
+   "Other": 20,
+   "ISR": 9,
+   "PP": 15,
+   "PAD": 1
+  },
+  "P173367": {
+   "Other": 30,
+   "PP": 46,
+   "Project Paper": 7,
+   "ISR": 9,
+   "PAD": 2
+  },
+  "P173518": {
+   "PP": 129,
+   "ISR": 10,
+   "Other": 41,
+   "Project Paper": 2,
+   "PAD": 1
+  },
+  "P173820": {
+   "Other": 33,
+   "Project Paper": 5,
+   "ISR": 12,
+   "PP": 125,
+   "PAD": 1
+  },
+  "P173825": {
+   "Other": 22,
+   "ISR": 10,
+   "PP": 66,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P174002": {
+   "PP": 194,
+   "Other": 53,
+   "ISR": 19,
+   "Project Paper": 3,
+   "PAD": 1
+  },
+  "P174017": {
+   "ISR": 6,
+   "Other": 17,
+   "PP": 11,
+   "Project Paper": 3
+  },
+  "P174223": {
+   "ICRR": 1,
+   "ICR": 1,
+   "Other": 7,
+   "ISR": 5,
+   "PP": 25,
+   "Project Paper": 3,
+   "PAD": 1
+  },
+  "P174244": {
+   "ICRR": 1,
+   "ICR": 1,
+   "Other": 13,
+   "ISR": 9,
+   "PP": 33,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P174300": {
+   "Other": 43,
+   "PP": 29,
+   "Project Paper": 2,
+   "ISR": 7,
+   "PAD": 1
+  },
+  "P174401": {
+   "ICR": 1,
+   "Other": 10,
+   "ISR": 8,
+   "PP": 17,
+   "Project Paper": 1
+  },
+  "P174417": {
+   "ISR": 11,
+   "Other": 34,
+   "PP": 77,
+   "Project Paper": 2,
+   "PAD": 1
+  },
+  "P175025": {
+   "Other": 11,
+   "ICR": 1,
+   "PP": 30,
+   "ISR": 3,
+   "Project Paper": 2
+  },
+  "P175110": {
+   "PP": 60,
+   "Other": 32,
+   "ISR": 12,
+   "Project Paper": 2
+  },
+  "P175118": {
+   "Other": 7,
+   "ICR": 2,
+   "ISR": 1,
+   "PP": 2
+  },
+  "P175325": {
+   "PP": 57,
+   "ISR": 9,
+   "Other": 35,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P175587": {
+   "PP": 73,
+   "ISR": 13,
+   "Other": 23,
+   "Project Paper": 2,
+   "PAD": 1
+  },
+  "P175659": {
+   "ISR": 10,
+   "PP": 18,
+   "Other": 13,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P175768": {
+   "ISR": 9,
+   "PP": 47,
+   "Other": 23,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P175827": {
+   "Other": 5,
+   "ICR": 1,
+   "Project Paper": 3,
+   "PP": 3,
+   "ISR": 1
+  },
+  "P175928": {
+   "ICR": 1,
+   "Other": 12,
+   "PP": 9,
+   "Project Paper": 2,
+   "ISR": 1
+  },
+  "P176105": {
+   "PP": 88,
+   "ISR": 9,
+   "Other": 23,
+   "Project Paper": 1,
+   "PAD": 2
+  },
+  "P176272": {
+   "Other": 24,
+   "ISR": 9,
+   "PP": 37,
+   "Project Paper": 1,
+   "PAD": 2
+  },
+  "P176327": {
+   "PP": 50,
+   "Other": 21,
+   "ISR": 9,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P176589": {
+   "PP": 30,
+   "ISR": 10,
+   "Other": 20,
+   "Project Paper": 2,
+   "PAD": 2
+  },
+  "P176750": {
+   "Other": 7,
+   "Project Paper": 3,
+   "ISR": 5,
+   "PP": 9
+  },
+  "P176770": {
+   "PP": 33,
+   "Other": 18,
+   "ISR": 9,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P176905": {
+   "Other": 26,
+   "Project Paper": 3,
+   "ISR": 9,
+   "PP": 22,
+   "PAD": 1
+  },
+  "P176948": {
+   "PP": 22,
+   "Other": 30,
+   "ISR": 10,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P177004": {
+   "PP": 45,
+   "Other": 18,
+   "ISR": 9,
+   "PAD": 1
+  },
+  "P177038": {
+   "ISR": 5,
+   "Other": 12,
+   "PP": 6,
+   "PAD": 1
+  },
+  "P177041": {
+   "PP": 18,
+   "Other": 29,
+   "ISR": 7,
+   "Project Paper": 2,
+   "PAD": 1
+  },
+  "P177158": {
+   "PP": 29,
+   "ISR": 9,
+   "Other": 23,
+   "Project Paper": 3,
+   "PAD": 1
+  },
+  "P177179": {
+   "Project Paper": 1,
+   "PP": 35,
+   "Other": 26,
+   "ISR": 8,
+   "PAD": 1
+  },
+  "P177200": {
+   "PP": 3,
+   "Project Paper": 3,
+   "ISR": 2,
+   "Other": 3
+  },
+  "P177237": {
+   "Project Paper": 4,
+   "Other": 6,
+   "PP": 9,
+   "ISR": 5
+  },
+  "P177240": {
+   "PP": 29,
+   "Project Paper": 3,
+   "ISR": 9,
+   "Other": 22,
+   "PAD": 1
+  },
+  "P177397": {
+   "Other": 7,
+   "PP": 2,
+   "Project Paper": 1
+  },
+  "P177475": {
+   "PP": 26,
+   "Other": 15,
+   "ISR": 7,
+   "PAD": 1
+  },
+  "P178041": {
+   "Project Paper": 3,
+   "ISR": 6,
+   "Other": 5,
+   "PP": 7
+  },
+  "P178506": {
+   "Other": 9,
+   "Project Paper": 3,
+   "ISR": 5,
+   "PP": 6
+  },
+  "P178530": {
+   "PP": 28,
+   "Other": 14,
+   "Project Paper": 1,
+   "ISR": 12,
+   "PAD": 1
+  },
+  "P178545": {
+   "ISR": 7,
+   "PP": 23,
+   "Other": 18,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P178723": {
+   "PP": 25,
+   "ISR": 7,
+   "Other": 23,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P178992": {
+   "ICRR": 1,
+   "ICR": 1,
+   "Other": 14,
+   "ISR": 7,
+   "PP": 12,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P178996": {
+   "ISR": 9,
+   "PP": 9,
+   "Other": 16,
+   "PAD": 1
+  },
+  "P179046": {
+   "PP": 19,
+   "Other": 11,
+   "ISR": 6,
+   "PAD": 1
+  },
+  "P179227": {
+   "PP": 12,
+   "ISR": 3,
+   "Other": 14
+  },
+  "P179240": {
+   "Other": 29,
+   "PP": 8,
+   "ISR": 5,
+   "PAD": 1
+  },
+  "P179291": {
+   "PP": 41,
+   "Other": 30,
+   "Project Paper": 1,
+   "ISR": 9,
+   "PAD": 1
+  },
+  "P179665": {
+   "ISR": 8,
+   "PP": 20,
+   "Other": 11,
+   "Project Paper": 1,
+   "PAD": 2
+  },
+  "P180228": {
+   "ISR": 5,
+   "PP": 10,
+   "Other": 19,
+   "PAD": 1
+  },
+  "P180245": {
+   "Other": 27,
+   "PP": 81,
+   "ISR": 10,
+   "Project Paper": 2,
+   "PAD": 1
+  },
+  "P180260": {
+   "PP": 8,
+   "ISR": 3,
+   "Other": 27,
+   "PAD": 1
+  },
+  "P180456": {
+   "Other": 14,
+   "Project Paper": 2,
+   "ISR": 3,
+   "PP": 2,
+   "PAD": 1
+  },
+  "P180495": {
+   "PP": 18,
+   "ISR": 5,
+   "Other": 20,
+   "PAD": 1
+  },
+  "P180983": {
+   "PP": 4,
+   "ISR": 3,
+   "Other": 7,
+   "Project Paper": 2
+  },
+  "P181253": {
+   "PP": 18,
+   "ISR": 4,
+   "Other": 10,
+   "PAD": 1
+  },
+  "P181271": {
+   "ISR": 3,
+   "PP": 5,
+   "Project Paper": 1,
+   "Other": 11
+  },
+  "P181385": {
+   "Other": 33,
+   "ISR": 5,
+   "PP": 16,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P181560": {
+   "Other": 13,
+   "PP": 2,
+   "ISR": 4,
+   "Project Paper": 3
+  },
+  "P181602": {
+   "PP": 8,
+   "ISR": 2,
+   "Other": 10
+  },
+  "P181604": {
+   "PP": 21,
+   "Other": 6,
+   "ISR": 2,
+   "Project Paper": 1
+  },
+  "P500392": {
+   "Other": 19,
+   "PP": 9,
+   "Project Paper": 1,
+   "ISR": 5,
+   "PAD": 1
+  },
+  "P500628": {
+   "PP": 39,
+   "Other": 34,
+   "ISR": 1,
+   "PAD": 1
+  },
+  "P501274": {
+   "PP": 72,
+   "ISR": 5,
+   "Other": 17,
+   "Project Paper": 1,
+   "PAD": 1
+  },
+  "P502685": {
+   "PP": 11,
+   "Project Paper": 2,
+   "Other": 6,
+   "ISR": 2
+  },
+  "P504170": {
+   "PP": 12,
+   "ISR": 3,
+   "Other": 18,
+   "PAD": 1
+  },
+  "P506083": {
+   "PP": 23,
+   "Other": 31,
+   "ISR": 2,
+   "Project Paper": 1
+  },
+  "P506127": {
+   "PP": 28,
+   "Other": 12,
+   "ISR": 3,
+   "PAD": 1
+  },
+  "P506407": {
+   "PP": 7,
+   "Project Paper": 2,
+   "Other": 18
+  },
+  "P506438": {
+   "PP": 12,
+   "ISR": 2,
+   "Other": 10,
+   "PAD": 1
+  },
+  "P507190": {
+   "PP": 18,
+   "ISR": 2,
+   "Other": 12,
+   "PAD": 1
+  },
+  "P507451": {
+   "PP": 9,
+   "ISR": 2,
+   "Other": 11,
+   "PAD": 1
+  },
+  "P508182": {
+   "PP": 5,
+   "ISR": 3,
+   "Other": 32,
+   "Project Paper": 1
+  },
+  "P508222": {
+   "ISR": 4,
+   "PP": 30,
+   "Other": 19
+  }
+ }
+}

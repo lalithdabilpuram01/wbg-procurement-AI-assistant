@@ -1,0 +1,3976 @@
+{
+ "dataset": "projects_v2_allfields_sample",
+ "source": "search API v2 projects fl=*",
+ "rows_profiled": 500,
+ "columns": [
+  {
+   "name": "access_level",
+   "observed_kinds": {
+    "str": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "amount",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "amount_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "amount_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "amount_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "amount_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "amount_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "amount_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "amount_mil",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "amount_mil_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "amount_mil_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "amount_mil_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "amount_mil_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "amount_mil_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "amount_mil_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "approval_date1",
+   "observed_kinds": {
+    "null": 415,
+    "str:date[M/D/YYYY h:mm:ss AM]": 85
+   },
+   "populated_pct": 17.0
+  },
+  {
+   "name": "approval_date2",
+   "observed_kinds": {
+    "null": 470,
+    "str:date[M/D/YYYY h:mm:ss AM]": 30
+   },
+   "populated_pct": 6.0
+  },
+  {
+   "name": "approval_date3",
+   "observed_kinds": {
+    "null": 490,
+    "str:date[M/D/YYYY h:mm:ss AM]": 10
+   },
+   "populated_pct": 2.0
+  },
+  {
+   "name": "approval_date4",
+   "observed_kinds": {
+    "null": 498,
+    "str:date[M/D/YYYY h:mm:ss AM]": 2
+   },
+   "populated_pct": 0.4
+  },
+  {
+   "name": "approval_date5",
+   "observed_kinds": {
+    "null": 499,
+    "str:date[M/D/YYYY h:mm:ss AM]": 1
+   },
+   "populated_pct": 0.2
+  },
+  {
+   "name": "approvalfy",
+   "observed_kinds": {
+    "str:int": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "available",
+   "observed_kinds": {
+    "null": 370,
+    "list": 130
+   },
+   "populated_pct": 26.0
+  },
+  {
+   "name": "available_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "available_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "available_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "available_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "available_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "available_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "bankqualityatentry",
+   "observed_kinds": {
+    "null": 345,
+    "list": 155
+   },
+   "populated_pct": 31.0
+  },
+  {
+   "name": "bankqualityentry",
+   "observed_kinds": {
+    "null": 492,
+    "str": 8
+   },
+   "populated_pct": 1.6
+  },
+  {
+   "name": "bankqualityofsupervision",
+   "observed_kinds": {
+    "null": 345,
+    "list": 155
+   },
+   "populated_pct": 31.0
+  },
+  {
+   "name": "banksupervision",
+   "observed_kinds": {
+    "null": 492,
+    "str": 8
+   },
+   "populated_pct": 1.6
+  },
+  {
+   "name": "board_approval_month",
+   "observed_kinds": {
+    "str": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "board_approval_month_exact",
+   "observed_kinds": {
+    "str": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "board_approval_year",
+   "observed_kinds": {
+    "str:int": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "board_approval_year_exact",
+   "observed_kinds": {
+    "str:int": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "boardapprovaldate",
+   "observed_kinds": {
+    "str:date[ISO8601Z]": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "borrgovt",
+   "observed_kinds": {
+    "null": 492,
+    "str": 8
+   },
+   "populated_pct": 1.6
+  },
+  {
+   "name": "borrimplegency",
+   "observed_kinds": {
+    "null": 492,
+    "str": 8
+   },
+   "populated_pct": 1.6
+  },
+  {
+   "name": "borroverall",
+   "observed_kinds": {
+    "null": 491,
+    "str": 9
+   },
+   "populated_pct": 1.8
+  },
+  {
+   "name": "borrowcompliance",
+   "observed_kinds": {
+    "null": 379,
+    "list": 121
+   },
+   "populated_pct": 24.2
+  },
+  {
+   "name": "borrower",
+   "observed_kinds": {
+    "null": 353,
+    "str": 147
+   },
+   "populated_pct": 29.4
+  },
+  {
+   "name": "borrower_exact",
+   "observed_kinds": {
+    "null": 353,
+    "str": 147
+   },
+   "populated_pct": 29.4
+  },
+  {
+   "name": "borrowername",
+   "observed_kinds": {
+    "null": 373,
+    "str": 127
+   },
+   "populated_pct": 25.4
+  },
+  {
+   "name": "borrowimplementation",
+   "observed_kinds": {
+    "null": 380,
+    "list": 120
+   },
+   "populated_pct": 24.0
+  },
+  {
+   "name": "calendarmonth",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "calendarmonth_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "calendarmonth_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "calendarmonth_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "calendarmonth_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "calendarmonth_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "calendarmonth_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "calendarquarter",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "calendarquarter_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "calendarquarter_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "calendarquarter_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "calendarquarter_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "calendarquarter_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "calendarquarter_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "calendaryear",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "calendaryear_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "calendaryear_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "calendaryear_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "calendaryear_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "calendaryear_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "calendaryear_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "cancellations",
+   "observed_kinds": {
+    "null": 415,
+    "list": 85
+   },
+   "populated_pct": 17.0
+  },
+  {
+   "name": "categorycode",
+   "observed_kinds": {
+    "null": 445,
+    "str": 55
+   },
+   "populated_pct": 11.0
+  },
+  {
+   "name": "catname",
+   "observed_kinds": {
+    "null": 445,
+    "str": 55
+   },
+   "populated_pct": 11.0
+  },
+  {
+   "name": "ccsa_practice_code",
+   "observed_kinds": {
+    "null": 449,
+    "list": 51
+   },
+   "populated_pct": 10.2
+  },
+  {
+   "name": "ccsa_practice_name",
+   "observed_kinds": {
+    "null": 449,
+    "list": 51
+   },
+   "populated_pct": 10.2
+  },
+  {
+   "name": "closingdate",
+   "observed_kinds": {
+    "str:date[M/D/YYYY h:mm:ss AM]": 352,
+    "null": 148
+   },
+   "populated_pct": 70.4
+  },
+  {
+   "name": "cmt_usd_amt",
+   "observed_kinds": {
+    "str:decimal": 200,
+    "str": 176,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "cmt_usd_amt_mil",
+   "observed_kinds": {
+    "str:decimal": 200,
+    "str": 176,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "code",
+   "observed_kinds": {
+    "null": 408,
+    "list": 92
+   },
+   "populated_pct": 18.4
+  },
+  {
+   "name": "combined_practice_code",
+   "observed_kinds": {
+    "null": 449,
+    "list": 51
+   },
+   "populated_pct": 10.2
+  },
+  {
+   "name": "combined_practice_name",
+   "observed_kinds": {
+    "null": 449,
+    "list": 51
+   },
+   "populated_pct": 10.2
+  },
+  {
+   "name": "commitment",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "commitment_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "commitment_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "commitment_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "commitment_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "commitment_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "commitment_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "completion_riskdo",
+   "observed_kinds": {
+    "list": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "cons_serv_reqd_ind",
+   "observed_kinds": {
+    "null": 465,
+    "str": 35
+   },
+   "populated_pct": 7.0
+  },
+  {
+   "name": "cons_serv_reqd_ind_exact",
+   "observed_kinds": {
+    "null": 465,
+    "str": 35
+   },
+   "populated_pct": 7.0
+  },
+  {
+   "name": "country_namecode",
+   "observed_kinds": {
+    "str": 267,
+    "null": 233
+   },
+   "populated_pct": 53.4
+  },
+  {
+   "name": "countrycode",
+   "observed_kinds": {
+    "list": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "countrycode_exact",
+   "observed_kinds": {
+    "list": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "countryhomepageurl",
+   "observed_kinds": {
+    "str": 407,
+    "null": 93
+   },
+   "populated_pct": 81.4
+  },
+  {
+   "name": "countryid",
+   "observed_kinds": {
+    "list": 355,
+    "null": 145
+   },
+   "populated_pct": 71.0
+  },
+  {
+   "name": "countryid_exact",
+   "observed_kinds": {
+    "list": 355,
+    "null": 145
+   },
+   "populated_pct": 71.0
+  },
+  {
+   "name": "countryiddesc",
+   "observed_kinds": {
+    "list": 345,
+    "null": 155
+   },
+   "populated_pct": 69.0
+  },
+  {
+   "name": "countryiddesc_exact",
+   "observed_kinds": {
+    "list": 345,
+    "null": 155
+   },
+   "populated_pct": 69.0
+  },
+  {
+   "name": "countryname",
+   "observed_kinds": {
+    "list": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "countryname_exact",
+   "observed_kinds": {
+    "list": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "countryname_mdk",
+   "observed_kinds": {
+    "str:int": 414,
+    "null": 86
+   },
+   "populated_pct": 82.8
+  },
+  {
+   "name": "countryname_mdk_exact",
+   "observed_kinds": {
+    "str:int": 414,
+    "null": 86
+   },
+   "populated_pct": 82.8
+  },
+  {
+   "name": "countryshortname",
+   "observed_kinds": {
+    "str": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "countryshortname_exact",
+   "observed_kinds": {
+    "str": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "curr_ibrd_commitment",
+   "observed_kinds": {
+    "str:int": 403,
+    "null": 53,
+    "str:decimal": 44
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "curr_ida_commitment",
+   "observed_kinds": {
+    "str:int": 397,
+    "null": 53,
+    "str:decimal": 50
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "curr_project_cost",
+   "observed_kinds": {
+    "str:int": 263,
+    "null": 233,
+    "str:decimal": 4
+   },
+   "populated_pct": 53.4
+  },
+  {
+   "name": "curr_total_commitment",
+   "observed_kinds": {
+    "str:int": 288,
+    "str:decimal": 159,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "currency",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "currency_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "currency_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "currency_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "currency_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "currency_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "currency_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "disbursed1",
+   "observed_kinds": {
+    "null": 415,
+    "str:decimal": 62,
+    "str:int": 23
+   },
+   "populated_pct": 17.0
+  },
+  {
+   "name": "disbursed2",
+   "observed_kinds": {
+    "null": 470,
+    "str:decimal": 24,
+    "str:int": 6
+   },
+   "populated_pct": 6.0
+  },
+  {
+   "name": "disbursed3",
+   "observed_kinds": {
+    "null": 490,
+    "str:decimal": 8,
+    "str:int": 2
+   },
+   "populated_pct": 2.0
+  },
+  {
+   "name": "disbursed4",
+   "observed_kinds": {
+    "null": 498,
+    "str:decimal": 1,
+    "str:int": 1
+   },
+   "populated_pct": 0.4
+  },
+  {
+   "name": "disbursed5",
+   "observed_kinds": {
+    "null": 499,
+    "str:int": 1
+   },
+   "populated_pct": 0.2
+  },
+  {
+   "name": "disbursement",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "disbursement_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "disbursement_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "disbursement_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "disbursement_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "disbursement_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "disbursement_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "envassesmentcategorycode",
+   "observed_kinds": {
+    "null": 300,
+    "str": 200
+   },
+   "populated_pct": 40.0
+  },
+  {
+   "name": "esf_flag",
+   "observed_kinds": {
+    "null": 419,
+    "str": 81
+   },
+   "populated_pct": 16.2
+  },
+  {
+   "name": "esrc_env_risk_rate_name",
+   "observed_kinds": {
+    "null": 445,
+    "str": 55
+   },
+   "populated_pct": 11.0
+  },
+  {
+   "name": "esrc_ovrl_risk_rate",
+   "observed_kinds": {
+    "null": 444,
+    "str": 56
+   },
+   "populated_pct": 11.2
+  },
+  {
+   "name": "evaldate",
+   "observed_kinds": {
+    "null": 344,
+    "list": 156
+   },
+   "populated_pct": 31.2
+  },
+  {
+   "name": "evaltype",
+   "observed_kinds": {
+    "null": 344,
+    "list": 156
+   },
+   "populated_pct": 31.2
+  },
+  {
+   "name": "evaluation_riskdo",
+   "observed_kinds": {
+    "list": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "fees",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fees_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fees_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fees_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fees_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fees_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fees_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "finamtcurr",
+   "observed_kinds": {
+    "null": 290,
+    "str:thousands-separated-number": 210
+   },
+   "populated_pct": 42.0
+  },
+  {
+   "name": "financier1",
+   "observed_kinds": {
+    "null": 415,
+    "str": 85
+   },
+   "populated_pct": 17.0
+  },
+  {
+   "name": "financier2",
+   "observed_kinds": {
+    "null": 470,
+    "str": 30
+   },
+   "populated_pct": 6.0
+  },
+  {
+   "name": "financier3",
+   "observed_kinds": {
+    "null": 490,
+    "str": 10
+   },
+   "populated_pct": 2.0
+  },
+  {
+   "name": "financier4",
+   "observed_kinds": {
+    "null": 498,
+    "str": 2
+   },
+   "populated_pct": 0.4
+  },
+  {
+   "name": "financier5",
+   "observed_kinds": {
+    "null": 499,
+    "str": 1
+   },
+   "populated_pct": 0.2
+  },
+  {
+   "name": "financier_loan",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "financier_loan_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "financier_loan_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "financier_loan_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "financier_loan_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "financier_loan_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "financier_loan_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "financier_namecode",
+   "observed_kinds": {
+    "null": 415,
+    "str": 85
+   },
+   "populated_pct": 17.0
+  },
+  {
+   "name": "financierdesc",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "financierdesc_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "financierdesc_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "financierdesc_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "financierdesc_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "financierdesc_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "financierdesc_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "financiertype",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "financiertype_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "financiertype_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "financiertype_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "financiertype_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "financiertype_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "financiertype_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fincr_curr_amt",
+   "observed_kinds": {
+    "null": 290,
+    "list": 210
+   },
+   "populated_pct": 42.0
+  },
+  {
+   "name": "fincr_curr_id",
+   "observed_kinds": {
+    "null": 290,
+    "list": 210
+   },
+   "populated_pct": 42.0
+  },
+  {
+   "name": "fincr_id",
+   "observed_kinds": {
+    "null": 290,
+    "list": 210
+   },
+   "populated_pct": 42.0
+  },
+  {
+   "name": "fincr_usd_amt",
+   "observed_kinds": {
+    "null": 290,
+    "list": 210
+   },
+   "populated_pct": 42.0
+  },
+  {
+   "name": "fincrname",
+   "observed_kinds": {
+    "null": 290,
+    "list": 210
+   },
+   "populated_pct": 42.0
+  },
+  {
+   "name": "fingapcurr",
+   "observed_kinds": {
+    "null": 290,
+    "str": 180,
+    "str:thousands-separated-number": 30
+   },
+   "populated_pct": 42.0
+  },
+  {
+   "name": "fiscalmonth",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fiscalmonth_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fiscalmonth_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fiscalmonth_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fiscalmonth_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fiscalmonth_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fiscalmonth_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fiscalquarter",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fiscalquarter_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fiscalquarter_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fiscalquarter_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fiscalquarter_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fiscalquarter_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fiscalquarter_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fiscalyear",
+   "observed_kinds": {
+    "str:int": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "fiscalyear_budget",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fiscalyear_budget_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fiscalyear_budget_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fiscalyear_budget_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fiscalyear_budget_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fiscalyear_budget_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fiscalyear_budget_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fiscalyear_budget_exact",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "fiscalyear_exact",
+   "observed_kinds": {
+    "int": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "goal",
+   "observed_kinds": {
+    "null": 323,
+    "list": 177
+   },
+   "populated_pct": 35.4
+  },
+  {
+   "name": "goal1",
+   "observed_kinds": {
+    "null": 323,
+    "str": 177
+   },
+   "populated_pct": 35.4
+  },
+  {
+   "name": "goal1name_mdk",
+   "observed_kinds": {
+    "null": 390,
+    "str:int": 110
+   },
+   "populated_pct": 22.0
+  },
+  {
+   "name": "goal2",
+   "observed_kinds": {
+    "null": 358,
+    "str": 142
+   },
+   "populated_pct": 28.4
+  },
+  {
+   "name": "goal2name_mdk",
+   "observed_kinds": {
+    "null": 409,
+    "str:int": 91
+   },
+   "populated_pct": 18.2
+  },
+  {
+   "name": "goal3",
+   "observed_kinds": {
+    "null": 399,
+    "str": 101
+   },
+   "populated_pct": 20.2
+  },
+  {
+   "name": "goal3name_mdk",
+   "observed_kinds": {
+    "null": 442,
+    "str:int": 58
+   },
+   "populated_pct": 11.6
+  },
+  {
+   "name": "goal4",
+   "observed_kinds": {
+    "null": 431,
+    "str": 69
+   },
+   "populated_pct": 13.8
+  },
+  {
+   "name": "goal4name_mdk",
+   "observed_kinds": {
+    "null": 457,
+    "str:int": 43
+   },
+   "populated_pct": 8.6
+  },
+  {
+   "name": "goal5",
+   "observed_kinds": {
+    "null": 464,
+    "str": 36
+   },
+   "populated_pct": 7.2
+  },
+  {
+   "name": "goal5name_mdk",
+   "observed_kinds": {
+    "null": 475,
+    "str:int": 25
+   },
+   "populated_pct": 5.0
+  },
+  {
+   "name": "goal_and_mdk",
+   "observed_kinds": {
+    "null": 323,
+    "list": 177
+   },
+   "populated_pct": 35.4
+  },
+  {
+   "name": "goal_and_mdk_exact",
+   "observed_kinds": {
+    "null": 323,
+    "list": 177
+   },
+   "populated_pct": 35.4
+  },
+  {
+   "name": "grant_usd_amt",
+   "observed_kinds": {
+    "str:decimal": 200,
+    "str": 176,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "grant_usd_amt_mil",
+   "observed_kinds": {
+    "str:decimal": 200,
+    "str": 176,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "grantamt",
+   "observed_kinds": {
+    "null": 445,
+    "str:thousands-separated-number": 45,
+    "str:int": 10
+   },
+   "populated_pct": 11.0
+  },
+  {
+   "name": "ibrd_cmt_usd_amt",
+   "observed_kinds": {
+    "str:decimal": 200,
+    "str": 176,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "ibrd_cmt_usd_amt_mil",
+   "observed_kinds": {
+    "str:decimal": 200,
+    "str": 176,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "ibrd_ida_commits",
+   "observed_kinds": {
+    "str:decimal": 200,
+    "str": 176,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "ibrd_ida_commits_mil",
+   "observed_kinds": {
+    "str:decimal": 200,
+    "str": 176,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "ibrdcommamt",
+   "observed_kinds": {
+    "str:int": 292,
+    "str:thousands-separated-number": 155,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "icrdate",
+   "observed_kinds": {
+    "null": 498,
+    "str:date[M/D/YYYY h:mm:ss AM]": 2
+   },
+   "populated_pct": 0.4
+  },
+  {
+   "name": "icrquality",
+   "observed_kinds": {
+    "null": 344,
+    "list": 156
+   },
+   "populated_pct": 31.2
+  },
+  {
+   "name": "id",
+   "observed_kinds": {
+    "str": 500
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "ida_cmt_usd_amt",
+   "observed_kinds": {
+    "str:decimal": 200,
+    "str": 176,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "ida_cmt_usd_amt_mil",
+   "observed_kinds": {
+    "str:decimal": 200,
+    "str": 176,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "idacommamt",
+   "observed_kinds": {
+    "str:int": 236,
+    "str:thousands-separated-number": 211,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "impagency",
+   "observed_kinds": {
+    "null": 350,
+    "str": 150
+   },
+   "populated_pct": 30.0
+  },
+  {
+   "name": "impagency_exact",
+   "observed_kinds": {
+    "null": 350,
+    "str": 150
+   },
+   "populated_pct": 30.0
+  },
+  {
+   "name": "implementingname",
+   "observed_kinds": {
+    "null": 378,
+    "str": 122
+   },
+   "populated_pct": 24.4
+  },
+  {
+   "name": "indextype",
+   "observed_kinds": {
+    "str": 500
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "indicatormappingdata",
+   "observed_kinds": {
+    "null": 398,
+    "str": 102
+   },
+   "populated_pct": 20.4
+  },
+  {
+   "name": "interestandcharges",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "interestandcharges_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "interestandcharges_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "interestandcharges_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "interestandcharges_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "interestandcharges_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "interestandcharges_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "issuecode",
+   "observed_kinds": {
+    "null": 445,
+    "str": 55
+   },
+   "populated_pct": 11.0
+  },
+  {
+   "name": "keywords",
+   "observed_kinds": {
+    "object": 327,
+    "null": 173
+   },
+   "populated_pct": 65.4
+  },
+  {
+   "name": "lang",
+   "observed_kinds": {
+    "list": 500
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "lang_code",
+   "observed_kinds": {
+    "str": 500
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "lang_exact",
+   "observed_kinds": {
+    "list": 500
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "lang_url",
+   "observed_kinds": {
+    "str": 500
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "last_stage_reached_name",
+   "observed_kinds": {
+    "null": 262,
+    "str": 238
+   },
+   "populated_pct": 47.6
+  },
+  {
+   "name": "laststatusdate",
+   "observed_kinds": {
+    "str:date[M/D/YYYY h:mm:ss AM]": 200,
+    "sentinel": 163,
+    "null": 124,
+    "str": 13
+   },
+   "populated_pct": 42.6
+  },
+  {
+   "name": "lendinginstr",
+   "observed_kinds": {
+    "str": 446,
+    "null": 54
+   },
+   "populated_pct": 89.2
+  },
+  {
+   "name": "lendinginstr_exact",
+   "observed_kinds": {
+    "str": 446,
+    "null": 54
+   },
+   "populated_pct": 89.2
+  },
+  {
+   "name": "lendinginstrcode",
+   "observed_kinds": {
+    "str": 446,
+    "null": 54
+   },
+   "populated_pct": 89.2
+  },
+  {
+   "name": "lendinginstrcode_mdk",
+   "observed_kinds": {
+    "str:int": 446,
+    "null": 54
+   },
+   "populated_pct": 89.2
+  },
+  {
+   "name": "lendinginstrtype",
+   "observed_kinds": {
+    "str": 446,
+    "null": 54
+   },
+   "populated_pct": 89.2
+  },
+  {
+   "name": "lendinginstrtype_exact",
+   "observed_kinds": {
+    "str": 446,
+    "null": 54
+   },
+   "populated_pct": 89.2
+  },
+  {
+   "name": "lendinginstrtype_mdk",
+   "observed_kinds": {
+    "str:int": 435,
+    "null": 65
+   },
+   "populated_pct": 87.0
+  },
+  {
+   "name": "lendinginstrtype_mdk_exact",
+   "observed_kinds": {
+    "str:int": 435,
+    "null": 65
+   },
+   "populated_pct": 87.0
+  },
+  {
+   "name": "lendinginstrumenttypename",
+   "observed_kinds": {
+    "str": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "lendprojectcost",
+   "observed_kinds": {
+    "str:thousands-separated-number": 438,
+    "null": 57,
+    "str:int": 5
+   },
+   "populated_pct": 88.6
+  },
+  {
+   "name": "listing_relative_url",
+   "observed_kinds": {
+    "str": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "ln_country_id",
+   "observed_kinds": {
+    "list": 355,
+    "null": 145
+   },
+   "populated_pct": 71.0
+  },
+  {
+   "name": "ln_country_id_desc",
+   "observed_kinds": {
+    "list": 345,
+    "null": 155
+   },
+   "populated_pct": 69.0
+  },
+  {
+   "name": "ln_country_id_desc_exact",
+   "observed_kinds": {
+    "list": 345,
+    "null": 155
+   },
+   "populated_pct": 69.0
+  },
+  {
+   "name": "ln_country_id_exact",
+   "observed_kinds": {
+    "list": 355,
+    "null": 145
+   },
+   "populated_pct": 71.0
+  },
+  {
+   "name": "loanid",
+   "observed_kinds": {
+    "null": 319,
+    "list": 181
+   },
+   "populated_pct": 36.2
+  },
+  {
+   "name": "loanid_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "loanid_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "loanid_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "loanid_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "loanid_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "loanid_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "loantype",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "loantype_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "loantype_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "loantype_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "loantype_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "loantype_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "loantype_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "loantypedesc",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "loantypedesc_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "loantypedesc_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "loantypedesc_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "loantypedesc_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "loantypedesc_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "loantypedesc_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "locations",
+   "observed_kinds": {
+    "list": 500
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "mainloan",
+   "observed_kinds": {
+    "sentinel": 274,
+    "str:int": 141,
+    "null": 53,
+    "str": 32
+   },
+   "populated_pct": 34.6
+  },
+  {
+   "name": "mequality",
+   "observed_kinds": {
+    "list": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "mjsector",
+   "observed_kinds": {
+    "list": 408,
+    "null": 92
+   },
+   "populated_pct": 81.6
+  },
+  {
+   "name": "mjsector1name_mdk",
+   "observed_kinds": {
+    "str:int": 408,
+    "null": 92
+   },
+   "populated_pct": 81.6
+  },
+  {
+   "name": "mjsector2name_mdk",
+   "observed_kinds": {
+    "null": 324,
+    "str:int": 176
+   },
+   "populated_pct": 35.2
+  },
+  {
+   "name": "mjsector3name_mdk",
+   "observed_kinds": {
+    "null": 383,
+    "str:int": 117
+   },
+   "populated_pct": 23.4
+  },
+  {
+   "name": "mjsector4name_mdk",
+   "observed_kinds": {
+    "null": 427,
+    "str:int": 73
+   },
+   "populated_pct": 14.6
+  },
+  {
+   "name": "mjsector5name_mdk",
+   "observed_kinds": {
+    "null": 461,
+    "str:int": 39
+   },
+   "populated_pct": 7.8
+  },
+  {
+   "name": "mjsector_and_mdk",
+   "observed_kinds": {
+    "list": 408,
+    "null": 92
+   },
+   "populated_pct": 81.6
+  },
+  {
+   "name": "mjsector_and_mdk_exact",
+   "observed_kinds": {
+    "list": 408,
+    "null": 92
+   },
+   "populated_pct": 81.6
+  },
+  {
+   "name": "mjsector_exact",
+   "observed_kinds": {
+    "list": 408,
+    "null": 92
+   },
+   "populated_pct": 81.6
+  },
+  {
+   "name": "mjsector_namecode",
+   "observed_kinds": {
+    "list": 408,
+    "null": 92
+   },
+   "populated_pct": 81.6
+  },
+  {
+   "name": "mjsectorcode",
+   "observed_kinds": {
+    "list": 408,
+    "null": 92
+   },
+   "populated_pct": 81.6
+  },
+  {
+   "name": "mjsectorcode_exact",
+   "observed_kinds": {
+    "list": 408,
+    "null": 92
+   },
+   "populated_pct": 81.6
+  },
+  {
+   "name": "mjtheme",
+   "observed_kinds": {
+    "null": 323,
+    "list": 177
+   },
+   "populated_pct": 35.4
+  },
+  {
+   "name": "mjtheme1name_mdk",
+   "observed_kinds": {
+    "null": 323,
+    "str:int": 177
+   },
+   "populated_pct": 35.4
+  },
+  {
+   "name": "mjtheme2name_mdk",
+   "observed_kinds": {
+    "str:int": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "mjtheme3name_mdk",
+   "observed_kinds": {
+    "null": 399,
+    "str:int": 101
+   },
+   "populated_pct": 20.2
+  },
+  {
+   "name": "mjtheme4name_mdk",
+   "observed_kinds": {
+    "null": 431,
+    "str:int": 69
+   },
+   "populated_pct": 13.8
+  },
+  {
+   "name": "mjtheme5name_mdk",
+   "observed_kinds": {
+    "null": 464,
+    "str:int": 36
+   },
+   "populated_pct": 7.2
+  },
+  {
+   "name": "mjtheme_and_mdk",
+   "observed_kinds": {
+    "list": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "mjtheme_and_mdk_exact",
+   "observed_kinds": {
+    "list": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "mjtheme_namecode",
+   "observed_kinds": {
+    "list": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "mjthemecode",
+   "observed_kinds": {
+    "str:int": 270,
+    "str": 177,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "mjthemecode_exact",
+   "observed_kinds": {
+    "str:int": 270,
+    "str": 177,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "mjthemelist",
+   "observed_kinds": {
+    "null": 323,
+    "object": 177
+   },
+   "populated_pct": 35.4
+  },
+  {
+   "name": "mttheme1",
+   "observed_kinds": {
+    "null": 323,
+    "str:int": 110,
+    "str": 67
+   },
+   "populated_pct": 35.4
+  },
+  {
+   "name": "mttheme1name",
+   "observed_kinds": {
+    "str:int": 270,
+    "str": 119,
+    "sentinel": 58,
+    "null": 53
+   },
+   "populated_pct": 77.8
+  },
+  {
+   "name": "mttheme1name_mdk",
+   "observed_kinds": {
+    "null": 448,
+    "str:int": 52
+   },
+   "populated_pct": 10.4
+  },
+  {
+   "name": "mttheme2",
+   "observed_kinds": {
+    "null": 358,
+    "str:int": 91,
+    "str": 51
+   },
+   "populated_pct": 28.4
+  },
+  {
+   "name": "mttheme2name",
+   "observed_kinds": {
+    "null": 358,
+    "str": 88,
+    "sentinel": 54
+   },
+   "populated_pct": 17.6
+  },
+  {
+   "name": "mttheme2name_mdk",
+   "observed_kinds": {
+    "null": 463,
+    "str:int": 37
+   },
+   "populated_pct": 7.4
+  },
+  {
+   "name": "mttheme3",
+   "observed_kinds": {
+    "null": 399,
+    "str:int": 58,
+    "str": 43
+   },
+   "populated_pct": 20.2
+  },
+  {
+   "name": "mttheme3name",
+   "observed_kinds": {
+    "null": 399,
+    "str": 75,
+    "sentinel": 26
+   },
+   "populated_pct": 15.0
+  },
+  {
+   "name": "mttheme3name_mdk",
+   "observed_kinds": {
+    "null": 468,
+    "str:int": 32
+   },
+   "populated_pct": 6.4
+  },
+  {
+   "name": "mttheme4",
+   "observed_kinds": {
+    "null": 431,
+    "str:int": 43,
+    "str": 26
+   },
+   "populated_pct": 13.8
+  },
+  {
+   "name": "mttheme4name",
+   "observed_kinds": {
+    "null": 431,
+    "str": 43,
+    "sentinel": 26
+   },
+   "populated_pct": 8.6
+  },
+  {
+   "name": "mttheme4name_mdk",
+   "observed_kinds": {
+    "null": 483,
+    "str:int": 17
+   },
+   "populated_pct": 3.4
+  },
+  {
+   "name": "mttheme5",
+   "observed_kinds": {
+    "null": 464,
+    "str:int": 25,
+    "str": 11
+   },
+   "populated_pct": 7.2
+  },
+  {
+   "name": "mttheme5name",
+   "observed_kinds": {
+    "null": 464,
+    "str": 25,
+    "sentinel": 11
+   },
+   "populated_pct": 5.0
+  },
+  {
+   "name": "mttheme5name_mdk",
+   "observed_kinds": {
+    "null": 486,
+    "str:int": 14
+   },
+   "populated_pct": 2.8
+  },
+  {
+   "name": "mttheme_and_mdk",
+   "observed_kinds": {
+    "list": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "mttheme_and_mdk_exact",
+   "observed_kinds": {
+    "list": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "old_majorsector",
+   "observed_kinds": {
+    "null": 438,
+    "str": 62
+   },
+   "populated_pct": 12.4
+  },
+  {
+   "name": "old_sector",
+   "observed_kinds": {
+    "null": 438,
+    "str": 62
+   },
+   "populated_pct": 12.4
+  },
+  {
+   "name": "outcome",
+   "observed_kinds": {
+    "null": 344,
+    "list": 156
+   },
+   "populated_pct": 31.2
+  },
+  {
+   "name": "outratingind",
+   "observed_kinds": {
+    "null": 498,
+    "str": 2
+   },
+   "populated_pct": 0.4
+  },
+  {
+   "name": "overall_comments",
+   "observed_kinds": {
+    "list": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "overall_currentrating",
+   "observed_kinds": {
+    "list": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "overall_prevrating",
+   "observed_kinds": {
+    "list": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "overall_templatecode",
+   "observed_kinds": {
+    "list": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "overall_templatename",
+   "observed_kinds": {
+    "list": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "overallbankperf",
+   "observed_kinds": {
+    "null": 345,
+    "list": 155
+   },
+   "populated_pct": 31.0
+  },
+  {
+   "name": "overallborrowperf",
+   "observed_kinds": {
+    "null": 378,
+    "list": 122
+   },
+   "populated_pct": 24.4
+  },
+  {
+   "name": "overallrating",
+   "observed_kinds": {
+    "null": 498,
+    "str": 2
+   },
+   "populated_pct": 0.4
+  },
+  {
+   "name": "p2a_flag",
+   "observed_kinds": {
+    "str": 353,
+    "null": 147
+   },
+   "populated_pct": 70.6
+  },
+  {
+   "name": "p2a_updated_date",
+   "observed_kinds": {
+    "str:date[YYYY-MM-DD hh:mm:ss.f]": 353,
+    "null": 147
+   },
+   "populated_pct": 70.6
+  },
+  {
+   "name": "parentprojid",
+   "observed_kinds": {
+    "null": 441,
+    "list": 59
+   },
+   "populated_pct": 11.8
+  },
+  {
+   "name": "parentprojid_exact",
+   "observed_kinds": {
+    "null": 441,
+    "list": 59
+   },
+   "populated_pct": 11.8
+  },
+  {
+   "name": "pdo",
+   "observed_kinds": {
+    "null": 286,
+    "str": 201,
+    "str:multiline": 13
+   },
+   "populated_pct": 42.8
+  },
+  {
+   "name": "performance_comments",
+   "observed_kinds": {
+    "list": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "performance_currentrating",
+   "observed_kinds": {
+    "null": 216,
+    "str": 156,
+    "sentinel": 128
+   },
+   "populated_pct": 31.2
+  },
+  {
+   "name": "performance_currrating",
+   "observed_kinds": {
+    "null": 408,
+    "list": 92
+   },
+   "populated_pct": 18.4
+  },
+  {
+   "name": "performance_prevrating",
+   "observed_kinds": {
+    "list": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "performance_templatecode",
+   "observed_kinds": {
+    "list": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "performance_templatename",
+   "observed_kinds": {
+    "object": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "period",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "period_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "period_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "period_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "period_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "period_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "period_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "pidrecdbwind",
+   "observed_kinds": {
+    "str": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "principal1",
+   "observed_kinds": {
+    "null": 415,
+    "str:int": 83,
+    "str:decimal": 2
+   },
+   "populated_pct": 17.0
+  },
+  {
+   "name": "principal2",
+   "observed_kinds": {
+    "null": 470,
+    "str:int": 28,
+    "str:decimal": 2
+   },
+   "populated_pct": 6.0
+  },
+  {
+   "name": "principal3",
+   "observed_kinds": {
+    "null": 490,
+    "str:int": 8,
+    "str:decimal": 2
+   },
+   "populated_pct": 2.0
+  },
+  {
+   "name": "principal4",
+   "observed_kinds": {
+    "null": 498,
+    "str:int": 2
+   },
+   "populated_pct": 0.4
+  },
+  {
+   "name": "principal5",
+   "observed_kinds": {
+    "null": 499,
+    "str:int": 1
+   },
+   "populated_pct": 0.2
+  },
+  {
+   "name": "prodcode",
+   "observed_kinds": {
+    "str": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "prodline",
+   "observed_kinds": {
+    "str": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "prodline_exact",
+   "observed_kinds": {
+    "str": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "prodlinetext",
+   "observed_kinds": {
+    "str": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "prodlinetext_mdk",
+   "observed_kinds": {
+    "str:int": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "prodlinetext_mdk_exact",
+   "observed_kinds": {
+    "str:int": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "productlinetype",
+   "observed_kinds": {
+    "str": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "productlinetypename",
+   "observed_kinds": {
+    "str": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "proj_and_ln_country",
+   "observed_kinds": {
+    "list": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "proj_and_ln_country_exact",
+   "observed_kinds": {
+    "list": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "proj_last_upd_date",
+   "observed_kinds": {
+    "null": 256,
+    "str:date[ISO8601Z]": 244
+   },
+   "populated_pct": 48.8
+  },
+  {
+   "name": "projcostcurr",
+   "observed_kinds": {
+    "null": 290,
+    "str:thousands-separated-number": 201,
+    "str": 9
+   },
+   "populated_pct": 42.0
+  },
+  {
+   "name": "project_abstract",
+   "observed_kinds": {
+    "object": 279,
+    "null": 221
+   },
+   "populated_pct": 55.8
+  },
+  {
+   "name": "project_gp_info",
+   "observed_kinds": {
+    "null": 256,
+    "str": 244
+   },
+   "populated_pct": 48.8
+  },
+  {
+   "name": "project_name",
+   "observed_kinds": {
+    "str": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "project_name_FRE",
+   "observed_kinds": {
+    "null": 466,
+    "str": 34
+   },
+   "populated_pct": 6.8
+  },
+  {
+   "name": "project_name_POR",
+   "observed_kinds": {
+    "null": 465,
+    "str": 35
+   },
+   "populated_pct": 7.0
+  },
+  {
+   "name": "project_name_and_mdk",
+   "observed_kinds": {
+    "str": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "project_name_and_mdk_exact",
+   "observed_kinds": {
+    "str": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "project_name_exact",
+   "observed_kinds": {
+    "str": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "project_name_mdk",
+   "observed_kinds": {
+    "str:int": 352,
+    "null": 148
+   },
+   "populated_pct": 70.4
+  },
+  {
+   "name": "project_name_mdk_exact",
+   "observed_kinds": {
+    "str:int": 352,
+    "null": 148
+   },
+   "populated_pct": 70.4
+  },
+  {
+   "name": "project_name_srt",
+   "observed_kinds": {
+    "str": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "projectcost",
+   "observed_kinds": {
+    "list": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "projectdocs",
+   "observed_kinds": {
+    "list": 500
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "projectfinancialtype",
+   "observed_kinds": {
+    "null": 290,
+    "list": 210
+   },
+   "populated_pct": 42.0
+  },
+  {
+   "name": "projectfinancialtype_exact",
+   "observed_kinds": {
+    "null": 290,
+    "list": 210
+   },
+   "populated_pct": 42.0
+  },
+  {
+   "name": "projectid",
+   "observed_kinds": {
+    "str": 376,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "projectstatusdisplay",
+   "observed_kinds": {
+    "str": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "recent_close_date1",
+   "observed_kinds": {
+    "null": 415,
+    "str:date[M/D/YYYY h:mm:ss AM]": 85
+   },
+   "populated_pct": 17.0
+  },
+  {
+   "name": "recent_close_date2",
+   "observed_kinds": {
+    "null": 470,
+    "str:date[M/D/YYYY h:mm:ss AM]": 30
+   },
+   "populated_pct": 6.0
+  },
+  {
+   "name": "recent_close_date3",
+   "observed_kinds": {
+    "null": 490,
+    "str:date[M/D/YYYY h:mm:ss AM]": 10
+   },
+   "populated_pct": 2.0
+  },
+  {
+   "name": "recent_close_date4",
+   "observed_kinds": {
+    "null": 498,
+    "str:date[M/D/YYYY h:mm:ss AM]": 2
+   },
+   "populated_pct": 0.4
+  },
+  {
+   "name": "recent_close_date5",
+   "observed_kinds": {
+    "null": 499,
+    "str:date[M/D/YYYY h:mm:ss AM]": 1
+   },
+   "populated_pct": 0.2
+  },
+  {
+   "name": "region_code",
+   "observed_kinds": {
+    "str:int": 200,
+    "str": 176,
+    "null": 124
+   },
+   "populated_pct": 75.2
+  },
+  {
+   "name": "regionabbr",
+   "observed_kinds": {
+    "str": 298,
+    "null": 202
+   },
+   "populated_pct": 59.6
+  },
+  {
+   "name": "regionhomepageurl",
+   "observed_kinds": {
+    "str": 315,
+    "null": 185
+   },
+   "populated_pct": 63.0
+  },
+  {
+   "name": "regionlongname",
+   "observed_kinds": {
+    "str": 298,
+    "null": 202
+   },
+   "populated_pct": 59.6
+  },
+  {
+   "name": "regionlongname_exact",
+   "observed_kinds": {
+    "str": 298,
+    "null": 202
+   },
+   "populated_pct": 59.6
+  },
+  {
+   "name": "regionname",
+   "observed_kinds": {
+    "str": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "regionname_exact",
+   "observed_kinds": {
+    "str": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "rel_loan_ids",
+   "observed_kinds": {
+    "list": 355,
+    "null": 145
+   },
+   "populated_pct": 71.0
+  },
+  {
+   "name": "repayment",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "repayment_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "repayment_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "repayment_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "repayment_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "repayment_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "repayment_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "secboardcode",
+   "observed_kinds": {
+    "str": 258,
+    "null": 242
+   },
+   "populated_pct": 51.6
+  },
+  {
+   "name": "secboardcode_mdk",
+   "observed_kinds": {
+    "str:int": 258,
+    "null": 242
+   },
+   "populated_pct": 51.6
+  },
+  {
+   "name": "sector",
+   "observed_kinds": {
+    "list": 408,
+    "null": 92
+   },
+   "populated_pct": 81.6
+  },
+  {
+   "name": "sector1",
+   "observed_kinds": {
+    "object": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "sector1name_mdk",
+   "observed_kinds": {
+    "str:int": 408,
+    "null": 92
+   },
+   "populated_pct": 81.6
+  },
+  {
+   "name": "sector2",
+   "observed_kinds": {
+    "null": 324,
+    "object": 176
+   },
+   "populated_pct": 35.2
+  },
+  {
+   "name": "sector2name_mdk",
+   "observed_kinds": {
+    "null": 324,
+    "str:int": 176
+   },
+   "populated_pct": 35.2
+  },
+  {
+   "name": "sector3",
+   "observed_kinds": {
+    "null": 383,
+    "object": 117
+   },
+   "populated_pct": 23.4
+  },
+  {
+   "name": "sector3name_mdk",
+   "observed_kinds": {
+    "null": 383,
+    "str:int": 117
+   },
+   "populated_pct": 23.4
+  },
+  {
+   "name": "sector4",
+   "observed_kinds": {
+    "null": 427,
+    "object": 73
+   },
+   "populated_pct": 14.6
+  },
+  {
+   "name": "sector4name_mdk",
+   "observed_kinds": {
+    "null": 427,
+    "str:int": 73
+   },
+   "populated_pct": 14.6
+  },
+  {
+   "name": "sector5",
+   "observed_kinds": {
+    "null": 461,
+    "str": 39
+   },
+   "populated_pct": 7.8
+  },
+  {
+   "name": "sector5name_mdk",
+   "observed_kinds": {
+    "null": 461,
+    "str:int": 39
+   },
+   "populated_pct": 7.8
+  },
+  {
+   "name": "sector_and_mdk",
+   "observed_kinds": {
+    "list": 408,
+    "null": 92
+   },
+   "populated_pct": 81.6
+  },
+  {
+   "name": "sector_and_mdk_exact",
+   "observed_kinds": {
+    "list": 408,
+    "null": 92
+   },
+   "populated_pct": 81.6
+  },
+  {
+   "name": "sector_exact",
+   "observed_kinds": {
+    "list": 408,
+    "null": 92
+   },
+   "populated_pct": 81.6
+  },
+  {
+   "name": "sector_namecode",
+   "observed_kinds": {
+    "list": 408,
+    "null": 92
+   },
+   "populated_pct": 81.6
+  },
+  {
+   "name": "sectorcode",
+   "observed_kinds": {
+    "list": 408,
+    "null": 92
+   },
+   "populated_pct": 81.6
+  },
+  {
+   "name": "sectorcode_exact",
+   "observed_kinds": {
+    "list": 408,
+    "null": 92
+   },
+   "populated_pct": 81.6
+  },
+  {
+   "name": "sectordata",
+   "observed_kinds": {
+    "str": 371,
+    "null": 129
+   },
+   "populated_pct": 74.2
+  },
+  {
+   "name": "sectorlist",
+   "observed_kinds": {
+    "object": 408,
+    "null": 92
+   },
+   "populated_pct": 81.6
+  },
+  {
+   "name": "source",
+   "observed_kinds": {
+    "list": 500
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "status",
+   "observed_kinds": {
+    "str": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "status_exact",
+   "observed_kinds": {
+    "str": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "statusdate",
+   "observed_kinds": {
+    "str:date[M/D/YYYY h:mm:ss AM]": 200,
+    "sentinel": 156,
+    "null": 124,
+    "str": 20
+   },
+   "populated_pct": 44.0
+  },
+  {
+   "name": "supplementprojectflg",
+   "observed_kinds": {
+    "str": 446,
+    "null": 54
+   },
+   "populated_pct": 89.2
+  },
+  {
+   "name": "supplementprojectflg_exact",
+   "observed_kinds": {
+    "str": 446,
+    "null": 54
+   },
+   "populated_pct": 89.2
+  },
+  {
+   "name": "team_lead_details",
+   "observed_kinds": {
+    "list": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "team_leads",
+   "observed_kinds": {
+    "str": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "teamleademail",
+   "observed_kinds": {
+    "sentinel": 235,
+    "str": 212,
+    "null": 53
+   },
+   "populated_pct": 42.4
+  },
+  {
+   "name": "teamleademail_exact",
+   "observed_kinds": {
+    "list": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "teamleaderupi",
+   "observed_kinds": {
+    "str:int": 295,
+    "null": 205
+   },
+   "populated_pct": 59.0
+  },
+  {
+   "name": "teamleaderupi_exact",
+   "observed_kinds": {
+    "str:int": 295,
+    "null": 205
+   },
+   "populated_pct": 59.0
+  },
+  {
+   "name": "teamleadname",
+   "observed_kinds": {
+    "sentinel": 235,
+    "str": 212,
+    "null": 53
+   },
+   "populated_pct": 42.4
+  },
+  {
+   "name": "teamleadname_exact",
+   "observed_kinds": {
+    "list": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "teamleadupi",
+   "observed_kinds": {
+    "sentinel": 235,
+    "str:int": 110,
+    "str": 102,
+    "null": 53
+   },
+   "populated_pct": 42.4
+  },
+  {
+   "name": "teamleadupi_exact",
+   "observed_kinds": {
+    "list": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "teammemfullname",
+   "observed_kinds": {
+    "list": 447,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "theme",
+   "observed_kinds": {
+    "null": 323,
+    "list": 177
+   },
+   "populated_pct": 35.4
+  },
+  {
+   "name": "theme1",
+   "observed_kinds": {
+    "sentinel": 270,
+    "str": 177,
+    "null": 53
+   },
+   "populated_pct": 35.4
+  },
+  {
+   "name": "theme1name_mdk",
+   "observed_kinds": {
+    "null": 323,
+    "str:int": 177
+   },
+   "populated_pct": 35.4
+  },
+  {
+   "name": "theme2",
+   "observed_kinds": {
+    "null": 358,
+    "str": 142
+   },
+   "populated_pct": 28.4
+  },
+  {
+   "name": "theme2name_mdk",
+   "observed_kinds": {
+    "null": 358,
+    "str:int": 142
+   },
+   "populated_pct": 28.4
+  },
+  {
+   "name": "theme3",
+   "observed_kinds": {
+    "null": 399,
+    "str": 101
+   },
+   "populated_pct": 20.2
+  },
+  {
+   "name": "theme3name_mdk",
+   "observed_kinds": {
+    "null": 399,
+    "str:int": 101
+   },
+   "populated_pct": 20.2
+  },
+  {
+   "name": "theme4",
+   "observed_kinds": {
+    "null": 431,
+    "str": 69
+   },
+   "populated_pct": 13.8
+  },
+  {
+   "name": "theme4name_mdk",
+   "observed_kinds": {
+    "null": 431,
+    "str:int": 69
+   },
+   "populated_pct": 13.8
+  },
+  {
+   "name": "theme5",
+   "observed_kinds": {
+    "null": 464,
+    "str": 36
+   },
+   "populated_pct": 7.2
+  },
+  {
+   "name": "theme5name_mdk",
+   "observed_kinds": {
+    "null": 464,
+    "str:int": 36
+   },
+   "populated_pct": 7.2
+  },
+  {
+   "name": "theme_and_mdk",
+   "observed_kinds": {
+    "null": 323,
+    "list": 177
+   },
+   "populated_pct": 35.4
+  },
+  {
+   "name": "theme_and_mdk_exact",
+   "observed_kinds": {
+    "null": 323,
+    "list": 177
+   },
+   "populated_pct": 35.4
+  },
+  {
+   "name": "theme_exact",
+   "observed_kinds": {
+    "null": 323,
+    "list": 177
+   },
+   "populated_pct": 35.4
+  },
+  {
+   "name": "theme_level1data",
+   "observed_kinds": {
+    "null": 272,
+    "list": 228
+   },
+   "populated_pct": 45.6
+  },
+  {
+   "name": "theme_level1data_exact",
+   "observed_kinds": {
+    "null": 272,
+    "list": 228
+   },
+   "populated_pct": 45.6
+  },
+  {
+   "name": "theme_list",
+   "observed_kinds": {
+    "null": 272,
+    "list": 228
+   },
+   "populated_pct": 45.6
+  },
+  {
+   "name": "theme_namecode",
+   "observed_kinds": {
+    "null": 323,
+    "list": 177
+   },
+   "populated_pct": 35.4
+  },
+  {
+   "name": "theme_namecodelist",
+   "observed_kinds": {
+    "null": 272,
+    "list": 228
+   },
+   "populated_pct": 45.6
+  },
+  {
+   "name": "theme_namecodelist_exact",
+   "observed_kinds": {
+    "null": 272,
+    "list": 228
+   },
+   "populated_pct": 45.6
+  },
+  {
+   "name": "themecode",
+   "observed_kinds": {
+    "null": 323,
+    "str": 142,
+    "str:int": 35
+   },
+   "populated_pct": 35.4
+  },
+  {
+   "name": "themecode_exact",
+   "observed_kinds": {
+    "null": 323,
+    "list": 177
+   },
+   "populated_pct": 35.4
+  },
+  {
+   "name": "themecodev2",
+   "observed_kinds": {
+    "null": 272,
+    "str": 228
+   },
+   "populated_pct": 45.6
+  },
+  {
+   "name": "themedata",
+   "observed_kinds": {
+    "null": 296,
+    "str": 204
+   },
+   "populated_pct": 40.8
+  },
+  {
+   "name": "themelist",
+   "observed_kinds": {
+    "null": 323,
+    "object": 177
+   },
+   "populated_pct": 35.4
+  },
+  {
+   "name": "themev2_level1_exact",
+   "observed_kinds": {
+    "null": 272,
+    "list": 228
+   },
+   "populated_pct": 45.6
+  },
+  {
+   "name": "themev2_level2_exact",
+   "observed_kinds": {
+    "null": 272,
+    "list": 228
+   },
+   "populated_pct": 45.6
+  },
+  {
+   "name": "themev2_level3_exact",
+   "observed_kinds": {
+    "null": 272,
+    "list": 228
+   },
+   "populated_pct": 45.6
+  },
+  {
+   "name": "totalamt",
+   "observed_kinds": {
+    "str:thousands-separated-number": 360,
+    "str:int": 87,
+    "null": 53
+   },
+   "populated_pct": 89.4
+  },
+  {
+   "name": "totalcommamt",
+   "observed_kinds": {
+    "str:thousands-separated-number": 387,
+    "str:int": 113
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "totalcommamt_srt",
+   "observed_kinds": {
+    "str:decimal": 500
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "transactiontype",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "transactiontype_ARA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "transactiontype_CHI",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "transactiontype_FRE",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "transactiontype_POR",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "transactiontype_RUS",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "transactiontype_SPA",
+   "observed_kinds": {
+    "null": 377,
+    "list": 123
+   },
+   "populated_pct": 24.6
+  },
+  {
+   "name": "undisbursed1",
+   "observed_kinds": {
+    "null": 415,
+    "str:int": 53,
+    "str:decimal": 32
+   },
+   "populated_pct": 17.0
+  },
+  {
+   "name": "undisbursed2",
+   "observed_kinds": {
+    "null": 470,
+    "str:int": 21,
+    "str:decimal": 9
+   },
+   "populated_pct": 6.0
+  },
+  {
+   "name": "undisbursed3",
+   "observed_kinds": {
+    "null": 490,
+    "str:int": 7,
+    "str:decimal": 3
+   },
+   "populated_pct": 2.0
+  },
+  {
+   "name": "undisbursed4",
+   "observed_kinds": {
+    "null": 498,
+    "str:decimal": 1,
+    "str:int": 1
+   },
+   "populated_pct": 0.4
+  },
+  {
+   "name": "undisbursed5",
+   "observed_kinds": {
+    "null": 499,
+    "str:int": 1
+   },
+   "populated_pct": 0.2
+  },
+  {
+   "name": "url",
+   "observed_kinds": {
+    "str": 500
+   },
+   "populated_pct": 100.0
+  }
+ ]
+}

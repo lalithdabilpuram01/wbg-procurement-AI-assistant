@@ -1,0 +1,763 @@
+{
+ "row_count": 146802,
+ "columns": {
+  "As of Date": {
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 146802
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 1,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "03/11/2022",
+     146802
+    ]
+   ],
+   "max_len": 10,
+   "date_min": "2022-03-11",
+   "date_max": "2022-03-11"
+  },
+  "Borrower Contract Reference Number": {
+   "observed_kinds": {
+    "str": 137264,
+    "empty": 7769,
+    "str:int": 1535,
+    "str:decimal": 117,
+    "sentinel": 117
+   },
+   "null_pct": 0.0,
+   "empty_pct": 5.29,
+   "sentinel_pct": 0.08,
+   "populated_pct": 94.63,
+   "distinct": 126099,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "AF MHSIP-7819-ME-CS-IC-SSS-10- B",
+     88
+    ],
+    [
+     "BIRF-7969-PE",
+     71
+    ],
+    [
+     "1",
+     66
+    ],
+    [
+     "RS-DILS-7510YF-CS-IC-09-C.2.5.9.",
+     52
+    ],
+    [
+     "NONE",
+     50
+    ],
+    [
+     "CONSULTING SERVICES",
+     46
+    ],
+    [
+     "SRB-PARIP-4071YF-IC-CS-07-17-DB-",
+     45
+    ],
+    [
+     "SRB-PARIP-4071YF-IC-CS-09-17-DB-",
+     44
+    ]
+   ],
+   "max_len": 32
+  },
+  "Borrower Country / Economy": {
+   "observed_kinds": {
+    "str": 146802
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 174,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Vietnam",
+     7092
+    ],
+    [
+     "China",
+     6897
+    ],
+    [
+     "India",
+     5584
+    ],
+    [
+     "Afghanistan",
+     4460
+    ],
+    [
+     "Brazil",
+     4101
+    ],
+    [
+     "Bangladesh",
+     3946
+    ],
+    [
+     "Nicaragua",
+     3311
+    ],
+    [
+     "Russian Federation",
+     2591
+    ]
+   ],
+   "max_len": 35
+  },
+  "Contract Description": {
+   "observed_kinds": {
+    "str": 92559,
+    "str:multiline": 54229,
+    "empty": 9,
+    "str:decimal": 3,
+    "sentinel": 1,
+    "str:int": 1
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.01,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.99,
+   "distinct": 128296,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Procurement Specialist",
+     301
+    ],
+    [
+     "MEDICAL EQUIPMENT",
+     188
+    ],
+    [
+     "Project Coordinator",
+     147
+    ],
+    [
+     "Financial Management Specialist",
+     127
+    ],
+    [
+     "PROCUREMENT SPECIALIST",
+     127
+    ],
+    [
+     "PROJECT COORDINATOR",
+     101
+    ],
+    [
+     "Printing, binding and supplying of primary level textbooks for\n            classes I to V for the academic year 2014",
+     99
+    ],
+    [
+     "Procurement Officer",
+     97
+    ]
+   ],
+   "max_len": 656
+  },
+  "Contract Number": {
+   "observed_kinds": {
+    "str:int": 146802
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 146802,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "1512302",
+     1
+    ],
+    [
+     "1512306",
+     1
+    ],
+    [
+     "1512308",
+     1
+    ],
+    [
+     "1512361",
+     1
+    ],
+    [
+     "1512418",
+     1
+    ],
+    [
+     "1512419",
+     1
+    ],
+    [
+     "1512493",
+     1
+    ],
+    [
+     "1512504",
+     1
+    ]
+   ],
+   "max_len": 7,
+   "unique_when_present": true
+  },
+  "Contract Signing Date": {
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 146802
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 5774,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "01/04/2010",
+     208
+    ],
+    [
+     "07/01/2011",
+     190
+    ],
+    [
+     "04/01/2011",
+     190
+    ],
+    [
+     "06/01/2012",
+     190
+    ],
+    [
+     "12/31/2012",
+     183
+    ],
+    [
+     "12/31/2013",
+     171
+    ],
+    [
+     "12/31/2014",
+     170
+    ],
+    [
+     "01/02/2013",
+     167
+    ]
+   ],
+   "max_len": 10,
+   "date_min": "2000-07-01",
+   "date_max": "2016-06-30"
+  },
+  "Contract signed - Calendar year": {
+   "observed_kinds": {
+    "str:int": 146802
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 17,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2012",
+     12196
+    ],
+    [
+     "2013",
+     11854
+    ],
+    [
+     "2011",
+     11754
+    ],
+    [
+     "2010",
+     11001
+    ],
+    [
+     "2014",
+     10938
+    ],
+    [
+     "2009",
+     10314
+    ],
+    [
+     "2004",
+     8330
+    ],
+    [
+     "2015",
+     8277
+    ]
+   ],
+   "max_len": 4
+  },
+  "Fiscal Year": {
+   "observed_kinds": {
+    "str:int": 146802
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 16,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "2012",
+     12117
+    ],
+    [
+     "2014",
+     11753
+    ],
+    [
+     "2013",
+     11731
+    ],
+    [
+     "2011",
+     11432
+    ],
+    [
+     "2010",
+     10958
+    ],
+    [
+     "2015",
+     9778
+    ],
+    [
+     "2009",
+     8876
+    ],
+    [
+     "2002",
+     8322
+    ]
+   ],
+   "max_len": 4
+  },
+  "Procurement Category": {
+   "observed_kinds": {
+    "str": 146802
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 4,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Consultant Services",
+     76677
+    ],
+    [
+     "Goods",
+     40192
+    ],
+    [
+     "Civil Works",
+     28102
+    ],
+    [
+     "Non-consulting Services",
+     1831
+    ]
+   ],
+   "max_len": 23
+  },
+  "Procurement Method": {
+   "observed_kinds": {
+    "str": 146781,
+    "empty": 21
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.01,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.99,
+   "distinct": 21,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "International Competitive Bidding",
+     32395
+    ],
+    [
+     "Individual Consultant Selection",
+     25157
+    ],
+    [
+     "National Competitive Bidding",
+     24478
+    ],
+    [
+     "Single Source Selection",
+     18730
+    ],
+    [
+     "Quality And Cost-Based Selection",
+     18625
+    ],
+    [
+     "Consultant Qualification  Selection",
+     7393
+    ],
+    [
+     "Direct Selection",
+     6607
+    ],
+    [
+     "Shopping",
+     3878
+    ]
+   ],
+   "max_len": 45
+  },
+  "Project Global Practice": {
+   "observed_kinds": {
+    "str": 146773,
+    "empty": 29
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.02,
+   "sentinel_pct": 0.0,
+   "populated_pct": 99.98,
+   "distinct": 992,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Public Administration",
+     9998
+    ],
+    [
+     "Energy and Extractives",
+     8736
+    ],
+    [
+     "Education;Public Administration",
+     7110
+    ],
+    [
+     "Transportation",
+     6589
+    ],
+    [
+     "Transportation;Public Administration",
+     6193
+    ],
+    [
+     "Health;Public Administration",
+     5898
+    ],
+    [
+     "Education",
+     5574
+    ],
+    [
+     "Water, Sanitation and Waste Management",
+     4604
+    ]
+   ],
+   "max_len": 156
+  },
+  "Project ID": {
+   "observed_kinds": {
+    "str": 146802
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 5631,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "P074688",
+     882
+    ],
+    [
+     "P102172",
+     774
+    ],
+    [
+     "P106628",
+     635
+    ],
+    [
+     "P094321",
+     601
+    ],
+    [
+     "P117440",
+     508
+    ],
+    [
+     "P106259",
+     499
+    ],
+    [
+     "P066396",
+     496
+    ],
+    [
+     "P070995",
+     495
+    ]
+   ],
+   "max_len": 7
+  },
+  "Project Name": {
+   "observed_kinds": {
+    "str": 138962,
+    "str:multiline": 7840
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 5365,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "Second Rural Energy Project",
+     882
+    ],
+    [
+     "Project in Support of Restructuring of Health Sector",
+     774
+    ],
+    [
+     "Consolidation of National Public Management Information Systems",
+     635
+    ],
+    [
+     "Project to Support a Rural Economic Development Program",
+     601
+    ],
+    [
+     "Community Development Project",
+     548
+    ],
+    [
+     "Income Support and Employability Project",
+     508
+    ],
+    [
+     "Afghanistan - Second Education Quality Improvement Program",
+     499
+    ],
+    [
+     "System Efficiency Improvement, Equitization & Renewables Project",
+     496
+    ]
+   ],
+   "max_len": 147
+  },
+  "Region": {
+   "observed_kinds": {
+    "str": 146802
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 9,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "LATIN AMERICA AND CARIBBEAN",
+     31371
+    ],
+    [
+     "EUROPE AND CENTRAL ASIA",
+     28899
+    ],
+    [
+     "EAST ASIA AND PACIFIC",
+     23700
+    ],
+    [
+     "AFRICA EAST",
+     18563
+    ],
+    [
+     "SOUTH ASIA",
+     18005
+    ],
+    [
+     "AFRICA WEST",
+     17163
+    ],
+    [
+     "MIDDLE EAST AND NORTH AFRICA",
+     7908
+    ],
+    [
+     "AFRICA",
+     1127
+    ]
+   ],
+   "max_len": 28
+  },
+  "Supplier": {
+   "observed_kinds": {
+    "str": 132147,
+    "str:multiline": 14655
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 73236,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "INDIVIDUAL CONSULTANT",
+     25157
+    ],
+    [
+     "UNITED NATIONS CHILDREN'S FUND (UNICEF)",
+     217
+    ],
+    [
+     "UNITED NATIONS OFFICE PROJECT SERVICES (UNOPS)",
+     216
+    ],
+    [
+     "AGETIP-SENEGAL",
+     127
+    ],
+    [
+     "ERNST & YOUNG",
+     111
+    ],
+    [
+     "INTER-AGENCY PROCUREMENT SERVICES OFFICE (IAPSO)",
+     104
+    ],
+    [
+     "DELOITTE & TOUCHE",
+     96
+    ],
+    [
+     "KPMG",
+     89
+    ]
+   ],
+   "max_len": 92
+  },
+  "Supplier Contract Amount (US$)": {
+   "observed_kinds": {
+    "str:int": 146802
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 111080,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "30000",
+     282
+    ],
+    [
+     "12000",
+     232
+    ],
+    [
+     "36000",
+     225
+    ],
+    [
+     "60000",
+     221
+    ],
+    [
+     "24000",
+     217
+    ],
+    [
+     "18000",
+     212
+    ],
+    [
+     "100000",
+     196
+    ],
+    [
+     "50000",
+     168
+    ]
+   ],
+   "max_len": 10
+  },
+  "Supplier Country / Economy": {
+   "observed_kinds": {
+    "str": 146802
+   },
+   "null_pct": 0.0,
+   "empty_pct": 0.0,
+   "sentinel_pct": 0.0,
+   "populated_pct": 100.0,
+   "distinct": 201,
+   "distinct_capped": false,
+   "top_values": [
+    [
+     "World",
+     26024
+    ],
+    [
+     "China",
+     7468
+    ],
+    [
+     "India",
+     6352
+    ],
+    [
+     "Vietnam",
+     5714
+    ],
+    [
+     "Brazil",
+     3643
+    ],
+    [
+     "France",
+     2655
+    ],
+    [
+     "Bangladesh",
+     2606
+    ],
+    [
+     "United States",
+     2377
+    ]
+   ],
+   "max_len": 38
+  }
+ },
+ "dataset": "ds01004_contract_awards_legacy_population",
+ "source": "Finances One DS01004 bulk CSV"
+}

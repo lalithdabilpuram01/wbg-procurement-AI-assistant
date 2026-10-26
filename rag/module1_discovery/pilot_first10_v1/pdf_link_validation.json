@@ -1,0 +1,148 @@
+{
+ "identity": {
+  "33761744": {
+   "project_id_in_pdf": "P132833",
+   "original_plan_approval_date": "2019-02-19",
+   "plan_dates_in_header": [
+    "2019-02-19",
+    "2019-04-04",
+    "2019-04-05",
+    "2019-05-17",
+    "2019-05-30",
+    "2019-05-31"
+   ],
+   "plan_textual_date": null,
+   "project_matches": true,
+   "rows": 46
+  },
+  "34172790": {
+   "project_id_in_pdf": "P132833",
+   "original_plan_approval_date": null,
+   "plan_dates_in_header": [
+    "2018-02-21",
+    "2018-02-25",
+    "2018-03-15",
+    "2018-03-20",
+    "2018-04-02",
+    "2018-04-07"
+   ],
+   "plan_textual_date": null,
+   "project_matches": true,
+   "rows": 44
+  },
+  "40025990": {
+   "project_id_in_pdf": null,
+   "original_plan_approval_date": null,
+   "plan_dates_in_header": [],
+   "plan_textual_date": null,
+   "project_matches": false,
+   "rows": 30
+  },
+  "40009757": {
+   "project_id_in_pdf": "P175325",
+   "original_plan_approval_date": null,
+   "plan_dates_in_header": [
+    "2021-09-04",
+    "2021-09-15",
+    "2021-09-20",
+    "2021-09-27",
+    "2021-10-30",
+    "2021-11-10"
+   ],
+   "plan_textual_date": null,
+   "project_matches": true,
+   "rows": 28
+  }
+ },
+ "per_document": {
+  "33761744": {
+   "pdf_rows": 46,
+   "rows_with_step_reference": 44,
+   "rows_matched": 13,
+   "contracts_linked": 13,
+   "pdf_status": {
+    "candidate": 13
+   },
+   "text_status_for_same_contracts": {
+    "null": 12,
+    "candidate": 1
+   }
+  },
+  "34172790": {
+   "pdf_rows": 44,
+   "rows_with_step_reference": 44,
+   "rows_matched": 20,
+   "contracts_linked": 31,
+   "pdf_status": {
+    "verified_amount": 4,
+    "candidate": 19,
+    "conflicting": 2,
+    "verified_exact_date": 6
+   },
+   "text_status_for_same_contracts": {
+    "verified_amount": 4,
+    "candidate": 19,
+    "conflicting": 2,
+    "verified_exact_date": 6
+   }
+  },
+  "40025990": {
+   "pdf_rows": 30,
+   "rows_with_step_reference": 11,
+   "rows_matched": 6,
+   "contracts_linked": 6,
+   "pdf_status": {
+    "verified_amount": 4,
+    "verified_exact_date": 1,
+    "candidate": 1
+   },
+   "text_status_for_same_contracts": {
+    "candidate": 2,
+    "verified_amount": 3,
+    "verified_exact_date": 1
+   }
+  },
+  "40009757": {
+   "pdf_rows": 28,
+   "rows_with_step_reference": 28,
+   "rows_matched": 13,
+   "contracts_linked": 17,
+   "pdf_status": {
+    "verified_exact_date": 13,
+    "candidate": 4
+   },
+   "text_status_for_same_contracts": {
+    "verified_exact_date": 13,
+    "candidate": 4
+   }
+  }
+ },
+ "pdf_vs_text": {
+  "links": 67,
+  "with_text_link": 55,
+  "status_agrees": 54,
+  "page_agrees": 55,
+  "status_pairs_disagreeing": {
+   "text=candidate pdf=verified_amount": 1
+  },
+  "text_links_not_found_in_pdf_tables": 85
+ },
+ "date_differences_actual_minus_recorded": {
+  "5": 1,
+  "95": 4,
+  "109": 1,
+  "7": 1,
+  "46": 1,
+  "50": 1,
+  "2": 2,
+  "3": 3,
+  "4": 2,
+  "6": 1,
+  "0": 21,
+  "9": 1,
+  "10": 1,
+  "14": 1,
+  "23": 1,
+  "13": 1
+ }
+}

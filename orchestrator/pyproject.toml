@@ -1,0 +1,42 @@
+[project]
+name = "wbg-orchestrator"
+version = "0.1.0"
+description = "LangGraph supervisor-planner-executor engine over the existing WBG agents (Milestones A-B)"
+requires-python = "==3.12.*"
+# Pins match .venv-structured-mcp (structured_agent/mcp_env/requirements.lock.txt) and the project requirements, so the
+# existing agents run here unchanged. LangGraph is added, plus (Milestone B) its official Postgres checkpointer and
+# psycopg-pool for Lakebase checkpointing. Databricks Connect is absent: offline execution uses fakes.
+dependencies = [
+    "langgraph==1.1.10",
+    "pydantic==2.13.3",
+    "httpx==0.28.1",
+    "anyio==4.11.0",
+    "mcp==1.16.0",
+    "fastmcp==2.12.5",
+    "nemoguardrails==0.24.1",
+    "logfire==5.3.0",
+    "opentelemetry-sdk==1.45.1",
+    "sqlglot==30.24.0",
+    "psycopg[binary]==3.3.6",
+    "numpy==1.26.4",
+    "rank-bm25==0.2.2",
+    "sentence-transformers==5.4.1",
+    "torch==2.9.1",
+    "transformers==4.57.3",
+    "pymupdf==1.26.7",
+    "pandas==2.3.3",
+    "python-dotenv==1.2.4",
+    "langgraph-checkpoint-postgres==3.2.0",
+    "psycopg-pool==3.3.3",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.3,<9"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = [".", ".."]          # the orchestrator package and the existing project packages (read-only reuse)
+addopts = "-p no:cacheprovider"

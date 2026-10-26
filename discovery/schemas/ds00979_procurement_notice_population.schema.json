@@ -1,0 +1,121 @@
+{
+ "dataset": "ds00979_procurement_notice_population",
+ "source": "Finances One DS00979 bulk CSV",
+ "rows_profiled": 422557,
+ "columns": [
+  {
+   "name": "Bid Description",
+   "observed_kinds": {
+    "str": 405557,
+    "str:multiline": 10768,
+    "empty": 6229,
+    "str:int": 2,
+    "sentinel": 1
+   },
+   "populated_pct": 98.53
+  },
+  {
+   "name": "Country Code",
+   "observed_kinds": {
+    "str": 368198,
+    "empty": 54329,
+    "sentinel": 30
+   },
+   "populated_pct": 87.14
+  },
+  {
+   "name": "Country Name",
+   "observed_kinds": {
+    "str": 422557
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Deadline Date",
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 422557
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "ID",
+   "observed_kinds": {
+    "str:int": 422557
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Notice Type",
+   "observed_kinds": {
+    "str": 422557
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Procurement Category",
+   "observed_kinds": {
+    "str": 385693,
+    "empty": 36864
+   },
+   "populated_pct": 91.28
+  },
+  {
+   "name": "Procurement Method",
+   "observed_kinds": {
+    "str": 416329,
+    "empty": 6228
+   },
+   "populated_pct": 98.53
+  },
+  {
+   "name": "Project ID",
+   "observed_kinds": {
+    "str": 422557
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Publication - Calendar year",
+   "observed_kinds": {
+    "str:int": 422557
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Publication - Fiscal year",
+   "observed_kinds": {
+    "str:int": 422557
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Publication Date",
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 422557
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Region",
+   "observed_kinds": {
+    "str": 422557
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Sector",
+   "observed_kinds": {
+    "str": 413365,
+    "empty": 9192
+   },
+   "populated_pct": 97.82
+  },
+  {
+   "name": "URL",
+   "observed_kinds": {
+    "str": 422557
+   },
+   "populated_pct": 100.0
+  }
+ ]
+}

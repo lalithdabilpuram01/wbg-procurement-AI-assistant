@@ -1,0 +1,3 @@
+country_code,replace,replace_potential,replace_step_contracts,replace_has_icr,with,with_name,sector,status,approval_fy,with_contracts,with_step_contracts,with_step_share,with_shared_ref_contracts,with_verified_notice_links,with_has_icr,with_api_pp,keeps_icr_coverage
+ID,P096532,unknown,0,True,P154782,Indonesia National Slum Upgrading Project,"Water, Sanitation and Waste Management",Closed,2017.0,103,82,0.796,0,0,True,78,True
+ID,P096532,unknown,0,True,P156125,National Urban Water Supply Project,"Water, Sanitation and Waste Management",Closed,2018.0,90,82,0.911,0,0,True,101,True

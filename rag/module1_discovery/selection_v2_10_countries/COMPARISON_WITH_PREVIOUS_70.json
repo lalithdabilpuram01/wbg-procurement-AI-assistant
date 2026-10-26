@@ -1,0 +1,79 @@
+{
+ "previous_70": {
+  "projects": 70,
+  "countries": 70,
+  "max_projects_per_country": 1,
+  "regions": {
+   "South Asia": 6,
+   "Eastern and Southern Africa": 13,
+   "Western and Central Africa": 14,
+   "Middle East, North Africa, Afghanistan, and Pakistan": 7,
+   "East Asia and Pacific": 10,
+   "Europe and Central Asia": 10,
+   "Latin America and Caribbean": 9,
+   "Other": 1
+  },
+  "status": {
+   "Closed": 45,
+   "Active": 25
+  },
+  "sectors": 14,
+  "contracts": 7619,
+  "median_contracts_per_project": 44.5,
+  "documents": 510,
+  "documents_by_type": {
+   "PAD": 76,
+   "ISR": 203,
+   "ICR": 46,
+   "ICRR": 45,
+   "PP": 140
+  }
+ },
+ "v2_70": {
+  "projects": 70,
+  "countries": 10,
+  "max_projects_per_country": 7,
+  "regions": {
+   "South Asia": 7,
+   "Eastern and Southern Africa": 14,
+   "Western and Central Africa": 14,
+   "Middle East, North Africa, Afghanistan, and Pakistan": 14,
+   "Latin America and Caribbean": 7,
+   "East Asia and Pacific": 7,
+   "Europe and Central Asia": 7
+  },
+  "status": {
+   "Closed": 48,
+   "Active": 22
+  },
+  "sectors": 11,
+  "contracts": 9454,
+  "median_contracts_per_project": 80.0,
+  "documents": 382,
+  "documents_by_type": {
+   "PAD": 70,
+   "ISR": 140,
+   "ICR": 46,
+   "ICRR": 42,
+   "PP": 84
+  }
+ },
+ "previous_regional_projects": 6,
+ "overlap_project_ids": [
+  "P121019",
+  "P132833",
+  "P148850",
+  "P150357",
+  "P175325",
+  "P500392"
+ ],
+ "previous_countries_kept": [
+  "ET",
+  "ID",
+  "KE",
+  "LK",
+  "MD",
+  "PK",
+  "SN"
+ ]
+}

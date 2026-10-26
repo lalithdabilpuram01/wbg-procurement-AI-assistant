@@ -1,0 +1,101 @@
+{
+ "unlinked_records_in_extracted_sources": [
+  {
+   "source_file": "discovery/data_cache/projects_v3_population.jsonl.gz",
+   "records_key_not_a_project_id": 0,
+   "examples": [],
+   "records_near_match_not_selected": 0,
+   "near_match_examples": []
+  },
+  {
+   "source_file": "discovery/samples/projects/projects_v3_cluster_allfields.jsonl.gz",
+   "records_key_not_a_project_id": 0,
+   "examples": [],
+   "records_near_match_not_selected": 0,
+   "near_match_examples": []
+  },
+  {
+   "source_file": "discovery/data_cache/ds00005_contract_awards.csv",
+   "records_key_not_a_project_id": 0,
+   "examples": [],
+   "records_near_match_not_selected": 0,
+   "near_match_examples": []
+  },
+  {
+   "source_file": "discovery/data_cache/ds01004_contract_awards_legacy.csv",
+   "records_key_not_a_project_id": 0,
+   "examples": [],
+   "records_near_match_not_selected": 0,
+   "near_match_examples": []
+  },
+  {
+   "source_file": "discovery/data_cache/ds00979_procurement_notice.csv",
+   "records_key_not_a_project_id": 0,
+   "examples": [],
+   "records_near_match_not_selected": 0,
+   "near_match_examples": []
+  },
+  {
+   "source_file": "discovery/samples/procnotices/procnotices_cluster_sample.jsonl.gz",
+   "records_key_not_a_project_id": 0,
+   "examples": [],
+   "records_near_match_not_selected": 0,
+   "near_match_examples": []
+  },
+  {
+   "source_file": "discovery/data_cache/ds00053_ieg_ratings.csv",
+   "records_key_not_a_project_id": 0,
+   "examples": [],
+   "records_near_match_not_selected": 0,
+   "near_match_examples": []
+  },
+  {
+   "source_file": "discovery/data_cache/ds00047_ibrd_latest.csv",
+   "records_key_not_a_project_id": 0,
+   "examples": [],
+   "records_near_match_not_selected": 0,
+   "near_match_examples": []
+  },
+  {
+   "source_file": "discovery/data_cache/ds00001_ida_latest.csv",
+   "records_key_not_a_project_id": 4,
+   "examples": [
+    "89101556",
+    "89101556",
+    "89101556",
+    "89101556"
+   ],
+   "records_near_match_not_selected": 0,
+   "near_match_examples": []
+  }
+ ],
+ "sources_not_extracted": [
+  {
+   "source": "data_cache/projects_population.jsonl.gz",
+   "reason": "v2 projects index, frozen since ~Jan 2025; superseded by v3 (D-01). Linkable, not extracted.",
+   "cohort_records_available": 1969
+  },
+  {
+   "source": "samples/contract_awards/ds00005_api_sample.jsonl, ds00005_stratified_sample.csv, ds01004_stratified_sample.csv",
+   "reason": "Phase 1 samples drawn from DS00005/DS01004, which are extracted in full for the cohort; including them would duplicate source records."
+  },
+  {
+   "source": "samples/procnotices/procnotices_global_sample.jsonl.gz",
+   "reason": "800-record random API sample that still carries contact_name/email/phone fields (D-14); the cohort's notices with text come from the cluster pull.",
+   "cohort_records_available": 378
+  },
+  {
+   "source": "samples/finance/ds00975_history_sample.jsonl.gz, ds00976_history_sample.jsonl.gz",
+   "reason": "Probe samples of monthly loan history for a few loans; not a complete history for any cohort project. Full history is decision D-12.",
+   "cohort_records_available": 0
+  },
+  {
+   "source": "samples/indicators/*.jsonl.gz (WGI, CPIA)",
+   "reason": "Country-year indicators with no project key. Linking them to projects needs the country crosswalk (D-07), which is a Silver step. Not extracted; a decision is needed on whether to load them as unfiltered reference data."
+  },
+  {
+   "source": "samples/documents/* (WDS metadata, PDFs, text), profiling/procurement_plan_activities.csv",
+   "reason": "Outside the five requested domains. WDS projectid is multi-valued (151 multi-project documents in the cluster metadata); procurement_plan_activities.csv is parsed output, not a raw source."
+  }
+ ]
+}

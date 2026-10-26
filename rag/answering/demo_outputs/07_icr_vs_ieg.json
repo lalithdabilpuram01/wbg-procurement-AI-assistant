@@ -1,0 +1,138 @@
+{
+ "question": "What overall outcome rating did the Sri Lanka transport connectivity project receive in the ICR and in the IEG ICR Review?",
+ "status": "insufficient_evidence",
+ "answer": "The indexed documents and typed records do not contain enough evidence to answer this question.",
+ "citations": [],
+ "supporting_evidence_ids": [],
+ "conflicts": [],
+ "limitations": [
+  "Removed unsupported claim: E1: The overall outcome rating of the Sri Lanka transport connectivity project received in the ICR and in the IEG ICR Review is Satisfactory.",
+  "No generated claim could be verified against the cited evidence."
+ ],
+ "claims": [],
+ "removed_claims": [
+  {
+   "text": "E1: The overall outcome rating of the Sri Lanka transport connectivity project received in the ICR and in the IEG ICR Review is Satisfactory.",
+   "evidence_ids": [
+    "E1",
+    "E2",
+    "E3",
+    "E4",
+    "E5"
+   ],
+   "supported": false,
+   "checks": {
+    "ids_valid": true,
+    "unsupported_numbers": [],
+    "unsupported_dates": [],
+    "unsupported_refs": [],
+    "unsupported_quotes": [],
+    "privacy_violation": false,
+    "content_word_recall": 0.667,
+    "nli_entailment": 0.145,
+    "too_short": false,
+    "evidence_dump": false,
+    "supported": false
+   }
+  }
+ ],
+ "generator": "ollama:llama3.2:1b",
+ "generator_is_llm": true,
+ "timings_ms": {
+  "retrieval_and_selection": 283,
+  "generation": 2581,
+  "validation": 1548,
+  "total": 4412
+ },
+ "trace": {
+  "plan": {
+   "question": "What overall outcome rating did the Sri Lanka transport connectivity project receive in the ICR and in the IEG ICR Review?",
+   "comparison": true,
+   "doc_type_hints": [
+    "ICR",
+    "ICRR"
+   ],
+   "required_fields": {}
+  },
+  "retrieval_status": "ok",
+  "retrieved_unit_ids": [
+   "34407877:C:0054",
+   "34345370:C:0034",
+   "34345370:t04501:w6-7",
+   "34345370:t02501:w6-8",
+   "34345370:t04101:w6-8",
+   "34345370:t03801:w8-10",
+   "34345370:t02501:w4-6",
+   "34345370:t04101:w17-19",
+   "34345370:t02501:w1-2",
+   "34345370:t02501:w8-10",
+   "34345370:t04201:w1-2",
+   "34345370:t04301:w25-28",
+   "34345370:C:0037",
+   "34345370:t02501:w2-4",
+   "34345370:t02501:w10-12",
+   "34345370:t04301:w1-2",
+   "34345370:t04101:w4-6",
+   "34345370:t02302:w1-1",
+   "34345370:t02501:w12-14",
+   "34407877:C:0030"
+  ],
+  "targeted": {
+   "ICR": [
+    "34345370:t04501:w6-7",
+    "34345370:t04301:w1-2",
+    "34345370:C:0034"
+   ],
+   "ICRR": [
+    "34407877:C:0054",
+    "34407877:C:0030"
+   ]
+  },
+  "selected": [
+   [
+    "E1",
+    "34407877:C:0054",
+    "34407877",
+    "verified",
+    false
+   ],
+   [
+    "E2",
+    "34345370:C:0034",
+    "34345370",
+    "verified",
+    false
+   ],
+   [
+    "E3",
+    "34345370:t04501:w6-7",
+    "34345370",
+    "verified",
+    false
+   ],
+   [
+    "E4",
+    "34345370:t02501:w6-8",
+    "34345370",
+    "verified",
+    false
+   ],
+   [
+    "E5",
+    "34407877:C:0030",
+    "34407877",
+    "verified",
+    false
+   ]
+  ],
+  "projects_in_top10": [
+   "P132833"
+  ],
+  "generator_meta": {
+   "attempts": 1,
+   "latency_ms": 2579,
+   "prompt_tokens": 1034,
+   "output_tokens": 108
+  }
+ }
+}

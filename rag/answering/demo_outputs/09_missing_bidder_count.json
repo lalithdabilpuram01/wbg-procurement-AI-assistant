@@ -1,0 +1,88 @@
+{
+ "question": "How many bids were received for contract package LK-MIHAPCLG-109016-CW-RFB?",
+ "status": "insufficient_evidence",
+ "answer": "The indexed documents and typed records do not contain enough evidence to answer this question. Requested field not present in any retrieved evidence: bidder_count.",
+ "citations": [],
+ "supporting_evidence_ids": [],
+ "conflicts": [],
+ "limitations": [
+  "'bidder_count' is not recorded in the retrieved plans, contract records or documents; it is not inferred."
+ ],
+ "claims": [],
+ "removed_claims": [],
+ "generator": "none (stopped before generation by a guard or required-field check)",
+ "generator_is_llm": false,
+ "timings_ms": {
+  "retrieval": 74,
+  "total": 74
+ },
+ "trace": {
+  "plan": {
+   "question": "How many bids were received for contract package LK-MIHAPCLG-109016-CW-RFB?",
+   "comparison": false,
+   "doc_type_hints": [
+    "PP"
+   ],
+   "required_fields": {
+    "bidder_count": "\\b(\\d+|one|two|three|four|five|six|seven|eight|nine|ten)\\s+(bids|bidders|offers|proposals)\\s+(were\\s+)?(received|submitted)|number of (bids|bidders) received\\s*[:\\-]?\\s*\\d+"
+   }
+  },
+  "retrieval_status": "ok",
+  "retrieved_unit_ids": [
+   "act:33761744:p3t1r10",
+   "33761744:t00301:w10-12",
+   "33761744:t00301:w8-10",
+   "33761744:t00301:w6-8",
+   "33761744:t00301:w4-6",
+   "act:33761744:p3t1r11",
+   "act:33761744:p3t1r6",
+   "act:33761744:p3t1r7",
+   "act:33761744:p3t1r5",
+   "act:33761744:p3t1r8",
+   "act:33761744:p3t1r9",
+   "33761744:t00401:w4-6",
+   "33761744:t00401:w14-15",
+   "act:33761744:p3t1r4",
+   "33761744:t00401:w1-2",
+   "act:33761744:p4t1r3",
+   "act:33761744:p5t2r4",
+   "26256705:C:0097",
+   "33761744:t00401:w2-4",
+   "act:33761744:p4t1r2"
+  ],
+  "targeted": {},
+  "selected": [
+   [
+    "E1",
+    "act:33761744:p3t1r10",
+    "33761744",
+    "verified",
+    false
+   ],
+   [
+    "E2",
+    "33761744:t00301:w10-12",
+    "33761744",
+    "verified",
+    false
+   ],
+   [
+    "E3",
+    "33761744:t00301:w6-8",
+    "33761744",
+    "verified",
+    false
+   ],
+   [
+    "E4",
+    "26256705:C:0097",
+    "26256705",
+    "verified",
+    false
+   ]
+  ],
+  "projects_in_top10": [
+   "P132833"
+  ]
+ }
+}

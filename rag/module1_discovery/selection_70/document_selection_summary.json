@@ -1,0 +1,72 @@
+{
+ "projects": 70,
+ "documents_available_all_types": 6304,
+ "available_by_type": {
+  "ICRR": 45,
+  "Other": 2193,
+  "ICR": 46,
+  "ISR": 912,
+  "PP": 3030,
+  "PAD": 78
+ },
+ "selected_total": 510,
+ "selected_by_type": {
+  "PAD": 76,
+  "ISR": 203,
+  "ICR": 46,
+  "ICRR": 45,
+  "PP": 140
+ },
+ "selected_by_role": {
+  "PAD_original": 70,
+  "ISR_first": 70,
+  "ISR_middle": 63,
+  "ISR_latest": 70,
+  "ICR": 46,
+  "ICRR": 45,
+  "PP_latest": 70,
+  "PP_earliest": 70,
+  "PAD_translation": 6
+ },
+ "tier_counts": {
+  "1": 380,
+  "2": 130
+ },
+ "tier_est_bytes": {
+  "1": 164020055,
+  "2": 27722951
+ },
+ "minimal_301_option": 301,
+ "head_status": {
+  "200": 510
+ },
+ "with_content_length": 17,
+ "size_bytes_known": 444515,
+ "size_bytes_estimated_total": 191743006,
+ "local_type_median_bytes": {
+  "PAD": 870010,
+  "ISR": 209218,
+  "ICR": 1219665,
+  "ICRR": 154967,
+  "PP": 163655
+ },
+ "issues_by_type": {
+  "missing_metadata": 2382,
+  "duplicate_record": 201,
+  "no_pdf_url": 34,
+  "translation_of_primary_PAD": 6,
+  "isr_reupload_superseded": 9,
+  "additional_PAD_not_selected": 1
+ },
+ "languages_selected": {
+  "English": 498,
+  "Arabic": 3,
+  "null": 5,
+  "Spanish": 3,
+  "French": 1
+ },
+ "projects_with_pad": 70,
+ "projects_with_2plus_isr": 70,
+ "projects_with_icr": 45,
+ "projects_with_icrr": 45
+}

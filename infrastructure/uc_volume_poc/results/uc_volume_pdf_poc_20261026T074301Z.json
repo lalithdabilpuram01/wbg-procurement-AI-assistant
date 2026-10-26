@@ -1,0 +1,45 @@
+{
+ "run_at_utc": "2026-10-26T07:43:01+00:00",
+ "volume": {
+  "full_name": "workspace.default.wbg_rag_pdfs_poc",
+  "root": "/Volumes/workspace/default/wbg_rag_pdfs_poc",
+  "volume_type": "MANAGED",
+  "created_in_this_run": false,
+  "comment": "POC 2026-10-26: approved public World Bank RAG PDFs (35-project scope, D-32). One verification file only; metadata kept outside the Volume."
+ },
+ "document": {
+  "project_id": "P148850",
+  "country_code": "ET",
+  "document_id": "40089196",
+  "doc_type": "ISR",
+  "title": "Disclosable Version of the ISR - Ethiopia- Expressway Development Support Project - P148850 - Sequence No : 21",
+  "document_date": "2026-02-28",
+  "disclosure_date": "2026-02-28",
+  "source_url": "https://documents.worldbank.org/curated/en/099022826132018287/pdf/P148850-247dec36-9215-47c1-8348-e5eaac409aa2.pdf",
+  "local_path": "rag/corpus_v3/pdf/ET/P148850/ISR_2026-02-28_40089196.pdf",
+  "size_bytes": 164080,
+  "sha256": "c32be7ca2d3d1ce2ea8e2e017cd7ef2cedea0e9aad940711e6f5b4cb7e5a4d24",
+  "privacy_mask_events": 0,
+  "volume_path": "/Volumes/workspace/default/wbg_rag_pdfs_poc/ET/P148850/ISR_2026-02-28_40089196.pdf"
+ },
+ "upload": {
+  "uploaded_in_this_run": true,
+  "remote_listing_size": 164080
+ },
+ "verification": {
+  "download_sha256": "c32be7ca2d3d1ce2ea8e2e017cd7ef2cedea0e9aad940711e6f5b4cb7e5a4d24",
+  "workspace_read": {
+   "warehouse_name": "Serverless Starter Warehouse",
+   "path": "dbfs:/Volumes/workspace/default/wbg_rag_pdfs_poc/ET/P148850/ISR_2026-02-28_40089196.pdf",
+   "length": 164080,
+   "sha256": "c32be7ca2d3d1ce2ea8e2e017cd7ef2cedea0e9aad940711e6f5b4cb7e5a4d24",
+   "elapsed_seconds": 0.0
+  },
+  "listing_size_matches": true,
+  "download_size_matches": true,
+  "download_sha256_matches": true,
+  "workspace_length_matches": true,
+  "workspace_sha256_matches": true,
+  "all_passed": true
+ }
+}

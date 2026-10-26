@@ -1,0 +1,191 @@
+{
+ "plan_versions_listed": 2164,
+ "texts_available": 2111,
+ "texts_unavailable": {
+  "no txt_url in WDS metadata": 20,
+  "fetch error: <html>\r\n<head><title>403 Forbidden</title></head>\r\n<body>\r\n<center><h1>403 Forbidden</h1></center>\r\n</body>\r\n</html>\r\n": 30,
+  "fetch error: \n    \n\n\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n     \n\n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" />\n    <script defer=\"defer\" type=\"text/javascript\" src=\"https://rum.hlx.page/.rum/@adobe/he": 3
+ },
+ "text_forms": {
+  "no_step_table": 67,
+  "layout": 1994,
+  "flow": 50
+ },
+ "parse_errors": 0,
+ "plan_rows": 695461,
+ "unique_plan_activities": 19624,
+ "unique_activities_matched": 2580,
+ "rows_other_project_references": 500987,
+ "versions_mostly_other_projects": [
+  [
+   "P125565",
+   "33213550"
+  ],
+  [
+   "P133288",
+   "33217814"
+  ],
+  [
+   "P133288",
+   "33218774"
+  ],
+  [
+   "P143302",
+   "33217832"
+  ],
+  [
+   "P143302",
+   "33214878"
+  ],
+  [
+   "P148850",
+   "34274781"
+  ],
+  [
+   "P156186",
+   "33218102"
+  ],
+  [
+   "P156186",
+   "34106680"
+  ],
+  [
+   "P159929",
+   "33213285"
+  ],
+  [
+   "P159929",
+   "33218035"
+  ],
+  [
+   "P159929",
+   "34107060"
+  ],
+  [
+   "P159929",
+   "34274909"
+  ],
+  [
+   "P162042",
+   "33218007"
+  ],
+  [
+   "P163721",
+   "34106135"
+  ],
+  [
+   "P164336",
+   "34274438"
+  ],
+  [
+   "P165543",
+   "33211856"
+  ],
+  [
+   "P165543",
+   "34274468"
+  ],
+  [
+   "P165543",
+   "34107121"
+  ],
+  [
+   "P168076",
+   "33218099"
+  ],
+  [
+   "P168076",
+   "33214856"
+  ],
+  [
+   "P175325",
+   "33212834"
+  ],
+  [
+   "P175325",
+   "33218024"
+  ],
+  [
+   "P175325",
+   "33213334"
+  ],
+  [
+   "P175669",
+   "34107825"
+  ],
+  [
+   "P175669",
+   "34274943"
+  ],
+  [
+   "P179534",
+   "34107640"
+  ]
+ ],
+ "contracts": {
+  "DS00005": 5103,
+  "DS01004_legacy": 143
+ },
+ "best_evidence_status_per_contract": {
+  "text_reference_only": 427,
+  "verified_amount": 572,
+  "candidate": 2518,
+  "verified_exact_date": 420,
+  "conflicting": 22,
+  "ambiguous": 3
+ },
+ "contracts_with_any_conflicting_evidence": 315,
+ "totals": {
+  "contracts_ds00005": 5103,
+  "contracts_ds01004_legacy": 143,
+  "contracts_with_step_package": 4214,
+  "plan_versions_listed": 2164,
+  "plan_texts_available": 2111,
+  "texts_layout": 1994,
+  "texts_flow": 50,
+  "texts_without_step_table": 67,
+  "texts_unavailable": 53,
+  "unique_plan_activities": 19624,
+  "activities_matched_to_contracts": 2580,
+  "current_versions": 43,
+  "current_verified": 461,
+  "current_reference_matched": 2714,
+  "current_incl_text_only": 2887,
+  "all_versions_verified": 992,
+  "all_versions_reference_matched": 3535,
+  "all_versions_incl_text_only": 3962,
+  "recommended_versions": 126,
+  "recommended_verified": 992,
+  "recommended_reference_matched": 3535,
+  "recommended_incl_text_only": 3767,
+  "versions_added_vs_current": 91,
+  "versions_dropped_vs_current": 8,
+  "best_verified_amount": 572,
+  "best_verified_exact_date": 420,
+  "best_candidate": 2518,
+  "best_text_reference_only": 427,
+  "best_ambiguous": 3,
+  "best_conflicting": 22,
+  "contracts_with_any_conflicting_evidence": 315,
+  "contracts_without_any_document_reference": 1284
+ },
+ "dropped_v2_pp_rows": [],
+ "parser_validation_vs_pdf_tables": {
+  "form:layout": 2,
+  "rows_compared": 122,
+  "actual_amount_equal": 122,
+  "layout_signed_actual_compared": 79,
+  "layout_signed_actual_equal": 78,
+  "review_equal": 122,
+  "text_rows_not_in_pdf_table_rows": 146,
+  "pdf_table_rows_with_step_ref": 123,
+  "form:flow": 1
+ },
+ "proposed_manifest": {
+  "documents": 0,
+  "pp": 0,
+  "pp_added": 0,
+  "pp_added_already_local": 0,
+  "pp_estimate_bytes_each": null
+ }
+}

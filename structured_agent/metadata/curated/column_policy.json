@@ -1,0 +1,34 @@
+{
+ "_about": "Column classification, units and measure rules. Rules are applied in order; the first matching rule sets the classification. Columns not matched by a sensitive rule are 'public' (the Silver audit scanned every string column for e-mail/phone and lists all findings in §9).",
+ "classifications": {
+  "public": {"description": "May be selected, filtered and joined by any role authorized for the object.", "source": "Silver audit §9 (no findings); Gold build rule 5 (no personal or free-text fields in Gold)"},
+  "lineage": {"description": "Technical lineage (hashes, Bronze file names, run ids). Output only for data_steward.", "source": "Silver audit §8 (lineage columns are not features)"},
+  "restricted": {"description": "Internal identifiers and references: data_steward may filter or join on them, nobody may output them.", "source": "D-14b (supplier_id: internal joins only); Gold comments exclude references"},
+  "prohibited": {"description": "Personal, free-text or masked content: never selected, filtered or joined.", "source": "D-14 (notice text), D-14b and Silver audit §9 (supplier names, descriptions), Gold build rule 5 (raw records)"}
+ },
+ "rules": [
+  {"classification": "prohibited", "columns": ["notice_text"], "source": "D-14; column mask workspace.wbg_silver.mask_restricted_notice_text"},
+  {"classification": "prohibited", "columns": ["supplier_name", "supplier_names", "supplier_text", "supplier_text_normalized"], "source": "Silver audit §9; D-14b"},
+  {"classification": "prohibited", "columns": ["contract_description", "contract_description_normalized", "bid_description", "bid_description_normalized", "contact_organization", "footnote_text"], "source": "Silver audit §9 (free text; redaction required before display)"},
+  {"classification": "prohibited", "columns": ["bronze_raw_record"], "source": "Gold build rule 5 (no raw records)"},
+  {"classification": "restricted", "columns": ["supplier_id", "supplier_ids", "matched_supplier_ids", "awarded_supplier_ids"], "source": "D-14b (supplier_id pseudonymised in outputs; internal joins only)"},
+  {"classification": "restricted", "columns": ["borrower_contract_reference", "bid_reference_no", "bid_reference_normalized", "award_reference_in_text", "award_reference_in_text_normalized", "matched_reference_normalized"], "source": "Gold table comments (references excluded from Gold)"},
+  {"classification": "lineage", "pattern": "(_sha256$|^bronze_|^silver_.*run_id$|^silver_run_id$|^silver_source_versions$|^transform_version$|_processed_at$|^workbook_file_name$|^source_cell$)", "source": "Silver audit §8 lineage columns"}
+ ],
+ "units": [
+  {"pattern": "_usd(_snapshot)?$", "unit": "USD"},
+  {"pattern": "(_count|_contracts|_notices|_instruments|_projects|^projects|^contract_awards|^procurement_notices|_awards)$", "unit": "count"},
+  {"pattern": "_days$", "unit": "days"},
+  {"pattern": "_pct$", "unit": "percent"},
+  {"pattern": "fiscal_year$", "unit": "World Bank fiscal year (1 July to 30 June)"},
+  {"pattern": "_rate$", "unit": "rate (as published)"}
+ ],
+ "measure_families": [
+  {"family": "contract_award_value", "pattern": "^(contract_amount_usd|contract_award_value_usd|contract_award_amount_usd|total_contract_award_value_usd|(min|max|p25|p50|p75|p90)_contract_value_usd|supplier_amount_usd)$", "source": "SILVER_RELATIONSHIP_REPORT.md, Measures that must stay separate"},
+  {"family": "ibrd_ida_financing", "pattern": "^(original_principal_amount_usd|cancelled_amount_usd|undisbursed_amount_usd|disbursed_amount_usd|repaid_to_lender_usd|due_to_lender_usd|exchange_adjustment_usd|borrower_obligation_usd|sold_third_party_usd|repaid_third_party_usd|due_third_party_usd|held_amount_usd)$", "source": "same"},
+  {"family": "project_commitment", "pattern": "commitment_usd", "source": "same"},
+  {"family": "loan_transaction_amount", "pattern": "^amount$", "source": "same (currency unverified)"}
+ ],
+ "non_additive_pattern": "(^(min|max|p25|p50|p75|p90)_|_rate$|_pct$|_est$|^cpia_|^wgi_|^gdp_|^inflation_|_score$|_window_days$|year$|_date$)",
+ "non_additive_source": "Percentiles, rates, scores, indicator values, dates and years are not summable (kpi_queries.py; view comments)"
+}

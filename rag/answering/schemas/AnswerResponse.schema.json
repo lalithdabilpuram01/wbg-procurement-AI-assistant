@@ -1,0 +1,339 @@
+{
+ "$defs": {
+  "Citation": {
+   "properties": {
+    "evidence_id": {
+     "title": "Evidence Id",
+     "type": "string"
+    },
+    "unit_id": {
+     "title": "Unit Id",
+     "type": "string"
+    },
+    "unit_type": {
+     "title": "Unit Type",
+     "type": "string"
+    },
+    "project_id": {
+     "title": "Project Id",
+     "type": "string"
+    },
+    "project_name": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Project Name"
+    },
+    "document_id": {
+     "title": "Document Id",
+     "type": "string"
+    },
+    "title": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Title"
+    },
+    "doc_type": {
+     "title": "Doc Type",
+     "type": "string"
+    },
+    "document_date": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Document Date"
+    },
+    "document_version_id": {
+     "title": "Document Version Id",
+     "type": "string"
+    },
+    "physical_page_start": {
+     "title": "Physical Page Start",
+     "type": "integer"
+    },
+    "physical_page_end": {
+     "title": "Physical Page End",
+     "type": "integer"
+    },
+    "printed_page_label": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Printed Page Label"
+    },
+    "section": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Section"
+    },
+    "table_id": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Table Id"
+    },
+    "excerpt": {
+     "title": "Excerpt",
+     "type": "string"
+    },
+    "source_url": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Source Url"
+    },
+    "association": {
+     "title": "Association",
+     "type": "string"
+    },
+    "page_check": {
+     "title": "Page Check",
+     "type": "string"
+    },
+    "contract_links": {
+     "default": [],
+     "items": {
+      "additionalProperties": true,
+      "type": "object"
+     },
+     "title": "Contract Links",
+     "type": "array"
+    },
+    "plan_version_id": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Plan Version Id"
+    }
+   },
+   "required": [
+    "evidence_id",
+    "unit_id",
+    "unit_type",
+    "project_id",
+    "project_name",
+    "document_id",
+    "title",
+    "doc_type",
+    "document_date",
+    "document_version_id",
+    "physical_page_start",
+    "physical_page_end",
+    "printed_page_label",
+    "section",
+    "table_id",
+    "excerpt",
+    "source_url",
+    "association",
+    "page_check"
+   ],
+   "title": "Citation",
+   "type": "object"
+  },
+  "ClaimResult": {
+   "properties": {
+    "text": {
+     "title": "Text",
+     "type": "string"
+    },
+    "evidence_ids": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Evidence Ids",
+     "type": "array"
+    },
+    "supported": {
+     "title": "Supported",
+     "type": "boolean"
+    },
+    "checks": {
+     "additionalProperties": true,
+     "title": "Checks",
+     "type": "object"
+    }
+   },
+   "required": [
+    "text",
+    "evidence_ids",
+    "supported",
+    "checks"
+   ],
+   "title": "ClaimResult",
+   "type": "object"
+  },
+  "Conflict": {
+   "properties": {
+    "field": {
+     "title": "Field",
+     "type": "string"
+    },
+    "values": {
+     "items": {
+      "additionalProperties": true,
+      "type": "object"
+     },
+     "title": "Values",
+     "type": "array"
+    },
+    "source": {
+     "enum": [
+      "typed_record",
+      "generator_reported",
+      "deterministic"
+     ],
+     "title": "Source",
+     "type": "string"
+    }
+   },
+   "required": [
+    "field",
+    "values",
+    "source"
+   ],
+   "title": "Conflict",
+   "type": "object"
+  }
+ },
+ "properties": {
+  "question": {
+   "title": "Question",
+   "type": "string"
+  },
+  "status": {
+   "enum": [
+    "answered",
+    "partial",
+    "insufficient_evidence",
+    "conflicting_evidence",
+    "withheld"
+   ],
+   "title": "Status",
+   "type": "string"
+  },
+  "answer": {
+   "title": "Answer",
+   "type": "string"
+  },
+  "citations": {
+   "items": {
+    "$ref": "#/$defs/Citation"
+   },
+   "title": "Citations",
+   "type": "array"
+  },
+  "supporting_evidence_ids": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Supporting Evidence Ids",
+   "type": "array"
+  },
+  "conflicts": {
+   "items": {
+    "$ref": "#/$defs/Conflict"
+   },
+   "title": "Conflicts",
+   "type": "array"
+  },
+  "limitations": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Limitations",
+   "type": "array"
+  },
+  "claims": {
+   "default": [],
+   "items": {
+    "$ref": "#/$defs/ClaimResult"
+   },
+   "title": "Claims",
+   "type": "array"
+  },
+  "removed_claims": {
+   "default": [],
+   "items": {
+    "$ref": "#/$defs/ClaimResult"
+   },
+   "title": "Removed Claims",
+   "type": "array"
+  },
+  "generator": {
+   "title": "Generator",
+   "type": "string"
+  },
+  "generator_is_llm": {
+   "title": "Generator Is Llm",
+   "type": "boolean"
+  },
+  "timings_ms": {
+   "additionalProperties": true,
+   "default": {},
+   "title": "Timings Ms",
+   "type": "object"
+  },
+  "trace": {
+   "additionalProperties": true,
+   "default": {},
+   "title": "Trace",
+   "type": "object"
+  }
+ },
+ "required": [
+  "question",
+  "status",
+  "answer",
+  "citations",
+  "supporting_evidence_ids",
+  "conflicts",
+  "limitations",
+  "generator",
+  "generator_is_llm"
+ ],
+ "title": "AnswerResponse",
+ "type": "object"
+}

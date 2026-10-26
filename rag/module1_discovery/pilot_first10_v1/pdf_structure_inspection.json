@@ -1,0 +1,2597 @@
+[
+ {
+  "document_id": "26256705",
+  "project_id": "P132833",
+  "doc_type": "PAD",
+  "local_path": "rag/corpus_v3/pdf/LK/P132833/PAD_2016-04-18_26256705.pdf",
+  "pages": 78,
+  "pdf_metadata": {
+   "format": "PDF 1.4",
+   "creator": "PScript5.dll Version 5.2.2",
+   "producer": "PDF PT 3.40p (pdf-tools.com)",
+   "creationDate": "D:20160420123845-04'00'"
+  },
+  "text_pages": 78,
+  "low_text_pages": [],
+  "likely_scanned_pages": [],
+  "median_chars_per_page": 2835.5,
+  "landscape_pages": 6,
+  "outline_entries": 0,
+  "outline_sample": [],
+  "body_font_size": 12.0,
+  "heading_candidates": 76,
+  "heading_sample": [
+   [
+    1,
+    14.0,
+    "The World Bank"
+   ],
+   [
+    1,
+    12.0,
+    "FOR OFFICIAL USE ONLY"
+   ],
+   [
+    4,
+    12.0,
+    "THE DEMOCRATIC SOCIALIST REPUBLIC OF SRI LANKA"
+   ],
+   [
+    4,
+    12.0,
+    "Transport Connectivity and Asset Management Project"
+   ],
+   [
+    4,
+    12.0,
+    "Table of Contents"
+   ],
+   [
+    4,
+    12.0,
+    "Page"
+   ],
+   [
+    4,
+    12.0,
+    "II."
+   ],
+   [
+    4,
+    12.0,
+    "III."
+   ],
+   [
+    4,
+    12.0,
+    "IV."
+   ],
+   [
+    4,
+    12.0,
+    "VI."
+   ],
+   [
+    6,
+    12.0,
+    "PAD DATA SHEET"
+   ],
+   [
+    6,
+    12.0,
+    "PROJECT APPRAISAL DOCUMENT"
+   ],
+   [
+    6,
+    12.0,
+    "Basic Information"
+   ],
+   [
+    7,
+    12.0,
+    "Institutional Data"
+   ],
+   [
+    8,
+    12.0,
+    "OVERALL"
+   ],
+   [
+    8,
+    12.0,
+    "Compliance"
+   ],
+   [
+    11,
+    12.0,
+    "Team Composition"
+   ],
+   [
+    14,
+    12.0,
+    "STRATEGIC CONTEXT"
+   ],
+   [
+    14,
+    12.0,
+    "A. Country Context"
+   ],
+   [
+    15,
+    12.0,
+    "B. Sectorial and Institutional Context"
+   ],
+   [
+    18,
+    12.0,
+    "C. Higher Level Objectives to which the Project Contributes"
+   ],
+   [
+    18,
+    12.0,
+    "II."
+   ],
+   [
+    18,
+    12.0,
+    "PROJECT DEVELOPMENT OBJECTIVES"
+   ],
+   [
+    18,
+    12.0,
+    "A. PDO"
+   ],
+   [
+    18,
+    12.0,
+    "B. Project Beneficiaries"
+   ],
+   [
+    19,
+    12.0,
+    "C. PDO Level Results Indicators"
+   ],
+   [
+    19,
+    12.0,
+    "III."
+   ],
+   [
+    19,
+    12.0,
+    "PROJECT DESCRIPTION"
+   ],
+   [
+    21,
+    12.0,
+    "A. Project Components"
+   ],
+   [
+    22,
+    12.0,
+    "B. Project Financing"
+   ]
+  ],
+  "pages_with_tables": 25,
+  "tables": 31,
+  "largest_tables": [
+   [
+    7,
+    35,
+    17
+   ],
+   [
+    35,
+    43,
+    12
+   ],
+   [
+    36,
+    41,
+    12
+   ],
+   [
+    34,
+    29,
+    13
+   ],
+   [
+    6,
+    34,
+    11
+   ]
+  ],
+  "annex_pages": [
+   5,
+   34,
+   39,
+   47,
+   65,
+   68,
+   74,
+   78
+  ],
+  "page_labels_defined": false,
+  "printed_page_number_pages": 73,
+  "printed_minus_physical_offsets": {
+   "-13": 63,
+   "43": 1,
+   "47": 1,
+   "-65": 1
+  },
+  "printed_numbers_sample": [
+   [
+    6,
+    "i"
+   ],
+   [
+    7,
+    "50"
+   ],
+   [
+    8,
+    "X"
+   ],
+   [
+    9,
+    "iv"
+   ],
+   [
+    10,
+    "v"
+   ],
+   [
+    11,
+    "vi"
+   ],
+   [
+    12,
+    "vii"
+   ],
+   [
+    13,
+    "viii"
+   ]
+  ],
+  "project_ids_in_text": [
+   "P132833"
+  ],
+  "own_project_id_in_text": true,
+  "step_reference_pages": [],
+  "step_references": 0,
+  "legacy_reference_like": 0,
+  "sensitive": {
+   "email_pattern_pages": [
+    6
+   ],
+   "email_count": 1,
+   "phone_like_pages": [
+    7
+   ],
+   "phone_like_count": 1,
+   "staff_name_section_pages": [
+    3,
+    6,
+    11,
+    12,
+    24,
+    51,
+    53
+   ]
+  }
+ },
+ {
+  "document_id": "34345370",
+  "project_id": "P132833",
+  "doc_type": "ICR",
+  "local_path": "rag/corpus_v3/pdf/LK/P132833/ICR_2024-06-19_34345370.pdf",
+  "pages": 57,
+  "pdf_metadata": {
+   "format": "PDF 1.4",
+   "creator": "Microsoft\u00ae Word for Microsoft 365",
+   "producer": "Microsoft\u00ae Word for Microsoft 365 / PDF PT 4.7.24.2 (pdf-tools.com)",
+   "creationDate": "D:20240619102117+05'30'"
+  },
+  "text_pages": 57,
+  "low_text_pages": [],
+  "likely_scanned_pages": [],
+  "median_chars_per_page": 2162,
+  "landscape_pages": 12,
+  "outline_entries": 0,
+  "outline_sample": [],
+  "body_font_size": 11.0,
+  "heading_candidates": 254,
+  "heading_sample": [
+   [
+    1,
+    14.0,
+    "The World Bank"
+   ],
+   [
+    1,
+    12.0,
+    "FOR OFFICIAL USE ONLY"
+   ],
+   [
+    1,
+    14.0,
+    "IMPLEMENTATION COMPLETION AND RESULTS REPORT"
+   ],
+   [
+    3,
+    12.0,
+    "ABBREVIATIONS AND ACRONYMS"
+   ],
+   [
+    4,
+    12.0,
+    "II."
+   ],
+   [
+    4,
+    12.0,
+    "IV. BANK PERFORMANCE, COMPLIANCE ISSUES, AND RISK TO DEVELOPMENT OUTCOME .. 25"
+   ],
+   [
+    5,
+    12.0,
+    "The World Bank"
+   ],
+   [
+    5,
+    11.0,
+    "DATA SHEET"
+   ],
+   [
+    5,
+    12.0,
+    "BASIC INFORMATION"
+   ],
+   [
+    5,
+    11.0,
+    "Product Information"
+   ],
+   [
+    5,
+    11.0,
+    "Organizations"
+   ],
+   [
+    6,
+    12.0,
+    "The World Bank"
+   ],
+   [
+    6,
+    12.0,
+    "FINANCING"
+   ],
+   [
+    6,
+    11.0,
+    "World Bank Financing"
+   ],
+   [
+    6,
+    11.0,
+    "Total"
+   ],
+   [
+    6,
+    11.0,
+    "Non-World Bank Financing"
+   ],
+   [
+    6,
+    11.0,
+    "Total"
+   ],
+   [
+    6,
+    11.0,
+    "Total Project Cost"
+   ],
+   [
+    6,
+    12.0,
+    "KEY DATES"
+   ],
+   [
+    6,
+    11.0,
+    "Approval"
+   ],
+   [
+    6,
+    11.0,
+    "Effectiveness"
+   ],
+   [
+    6,
+    11.0,
+    "MTR Review"
+   ],
+   [
+    6,
+    11.0,
+    "Original Closing"
+   ],
+   [
+    6,
+    11.0,
+    "Actual Closing"
+   ],
+   [
+    7,
+    12.0,
+    "The World Bank"
+   ],
+   [
+    7,
+    12.0,
+    "RESTRUCTURING AND/OR ADDITIONAL FINANCING"
+   ],
+   [
+    7,
+    11.0,
+    "1.53 Change in Implementing Agency"
+   ],
+   [
+    7,
+    11.0,
+    "4.85 Change in Results Framework"
+   ],
+   [
+    7,
+    11.0,
+    "4.85"
+   ],
+   [
+    7,
+    11.0,
+    "50.63 Change in Results Framework"
+   ]
+  ],
+  "pages_with_tables": 35,
+  "tables": 46,
+  "largest_tables": [
+   [
+    7,
+    40,
+    16
+   ],
+   [
+    8,
+    29,
+    13
+   ],
+   [
+    50,
+    18,
+    18
+   ],
+   [
+    6,
+    19,
+    16
+   ],
+   [
+    39,
+    32,
+    8
+   ]
+  ],
+  "annex_pages": [
+   4,
+   36,
+   47,
+   50,
+   51,
+   52,
+   53,
+   54
+  ],
+  "page_labels_defined": false,
+  "printed_page_number_pages": 3,
+  "printed_minus_physical_offsets": {
+   "-7": 1,
+   "2": 1,
+   "73": 1
+  },
+  "printed_numbers_sample": [
+   [
+    7,
+    "0"
+   ],
+   [
+    8,
+    "10"
+   ],
+   [
+    22,
+    "95"
+   ]
+  ],
+  "project_ids_in_text": [
+   "P132833"
+  ],
+  "own_project_id_in_text": true,
+  "step_reference_pages": [],
+  "step_references": 0,
+  "legacy_reference_like": 0,
+  "sensitive": {
+   "email_pattern_pages": [],
+   "email_count": 0,
+   "phone_like_pages": [
+    10,
+    11,
+    17,
+    21,
+    53
+   ],
+   "phone_like_count": 7,
+   "staff_name_section_pages": [
+    2,
+    9,
+    33,
+    47,
+    48,
+    49
+   ]
+  }
+ },
+ {
+  "document_id": "34407877",
+  "project_id": "P132833",
+  "doc_type": "ICRR",
+  "local_path": "rag/corpus_v3/pdf/LK/P132833/ICRR_2024-10-18_34407877.pdf",
+  "pages": 25,
+  "pdf_metadata": {
+   "format": "PDF 1.4",
+   "creator": "",
+   "producer": "Aspose.Words for Java 17.7 / PDF PT 4.7.24.2 (pdf-tools.com)",
+   "creationDate": ""
+  },
+  "text_pages": 25,
+  "low_text_pages": [],
+  "likely_scanned_pages": [],
+  "median_chars_per_page": 3061,
+  "landscape_pages": 0,
+  "outline_entries": 0,
+  "outline_sample": [],
+  "body_font_size": 11.0,
+  "heading_candidates": 87,
+  "heading_sample": [
+   [
+    1,
+    11.5,
+    "1. Project Data"
+   ],
+   [
+    1,
+    12.0,
+    "Project ID"
+   ],
+   [
+    1,
+    12.0,
+    "Project Name"
+   ],
+   [
+    1,
+    12.0,
+    "Country"
+   ],
+   [
+    1,
+    12.0,
+    "Bank Approval Date"
+   ],
+   [
+    1,
+    12.0,
+    "Prepared by"
+   ],
+   [
+    1,
+    12.0,
+    "Reviewed by"
+   ],
+   [
+    1,
+    12.0,
+    "ICR Review Coordinator"
+   ],
+   [
+    1,
+    12.0,
+    "Group"
+   ],
+   [
+    1,
+    11.5,
+    "2. Project Objectives and Components"
+   ],
+   [
+    2,
+    12.0,
+    "Date of Board Approval"
+   ],
+   [
+    4,
+    11.5,
+    "3. Relevance of Objectives"
+   ],
+   [
+    4,
+    12.0,
+    "Rationale"
+   ],
+   [
+    5,
+    12.0,
+    "Rating"
+   ],
+   [
+    5,
+    11.5,
+    "4. Achievement of Objectives (Efficacy)"
+   ],
+   [
+    5,
+    13.0,
+    "OBJECTIVE 1"
+   ],
+   [
+    5,
+    12.0,
+    "Objective"
+   ],
+   [
+    5,
+    12.0,
+    "Rationale"
+   ],
+   [
+    6,
+    11.0,
+    "Outputs"
+   ],
+   [
+    7,
+    11.0,
+    "Outcomes"
+   ],
+   [
+    7,
+    12.0,
+    "Rating"
+   ],
+   [
+    7,
+    13.0,
+    "OBJECTIVE 1 REVISION 1"
+   ],
+   [
+    7,
+    12.0,
+    "Revised Objective"
+   ],
+   [
+    8,
+    12.0,
+    "Revised Rationale"
+   ],
+   [
+    8,
+    11.0,
+    "Outputs"
+   ],
+   [
+    8,
+    11.0,
+    "Outcomes"
+   ],
+   [
+    9,
+    12.0,
+    "Revised Rating"
+   ],
+   [
+    9,
+    13.0,
+    "OBJECTIVE 2"
+   ],
+   [
+    9,
+    12.0,
+    "Objective"
+   ],
+   [
+    9,
+    12.0,
+    "Rationale"
+   ]
+  ],
+  "pages_with_tables": 5,
+  "tables": 5,
+  "largest_tables": [
+   [
+    14,
+    24,
+    4
+   ],
+   [
+    16,
+    9,
+    4
+   ],
+   [
+    1,
+    5,
+    2
+   ],
+   [
+    13,
+    3,
+    1
+   ],
+   [
+    11,
+    2,
+    1
+   ]
+  ],
+  "annex_pages": [],
+  "page_labels_defined": false,
+  "printed_page_number_pages": 1,
+  "printed_minus_physical_offsets": {
+   "0": 1
+  },
+  "printed_numbers_sample": [
+   [
+    25,
+    "25"
+   ]
+  ],
+  "project_ids_in_text": [
+   "P132833"
+  ],
+  "own_project_id_in_text": true,
+  "step_reference_pages": [],
+  "step_references": 0,
+  "legacy_reference_like": 0,
+  "sensitive": {
+   "email_pattern_pages": [],
+   "email_count": 0,
+   "phone_like_pages": [
+    7,
+    13
+   ],
+   "phone_like_count": 3,
+   "staff_name_section_pages": [
+    1
+   ]
+  }
+ },
+ {
+  "document_id": "33761744",
+  "project_id": "P132833",
+  "doc_type": "PP",
+  "local_path": "rag/corpus_v3/pdf/LK/P132833/PP_2022-03-17_33761744.pdf",
+  "pages": 8,
+  "pdf_metadata": {
+   "format": "PDF 1.4",
+   "creator": "Aspose Ltd.",
+   "producer": "Aspose.Pdf for Java 17.2.0 / PDF PT 4.7.24.2 (pdf-tools.com)",
+   "creationDate": "D:20180109071700Z"
+  },
+  "text_pages": 8,
+  "low_text_pages": [],
+  "likely_scanned_pages": [],
+  "median_chars_per_page": 5402.0,
+  "landscape_pages": 6,
+  "outline_entries": 0,
+  "outline_sample": [],
+  "body_font_size": 3.0,
+  "heading_candidates": 124,
+  "heading_sample": [
+   [
+    1,
+    12.0,
+    "January 09, 2018"
+   ],
+   [
+    1,
+    14.0,
+    "Sample Procurement Plan"
+   ],
+   [
+    1,
+    12.0,
+    "Sri Lanka: Transport Connectivity and Asset Management Project -"
+   ],
+   [
+    1,
+    12.0,
+    "P132833 (TCAMP)"
+   ],
+   [
+    1,
+    12.0,
+    "I. General"
+   ],
+   [
+    1,
+    12.0,
+    "Bank\u2019s approval Date of the procurement Plan:"
+   ],
+   [
+    1,
+    12.0,
+    "Original:"
+   ],
+   [
+    1,
+    12.0,
+    "March 09, 2016"
+   ],
+   [
+    1,
+    12.0,
+    "Updated:"
+   ],
+   [
+    1,
+    12.0,
+    "January 2018"
+   ],
+   [
+    1,
+    12.0,
+    "Date of General Procurement Notice: March 11, 2016"
+   ],
+   [
+    1,
+    12.0,
+    "Period covered by this procurement plan: The procurement period"
+   ],
+   [
+    1,
+    12.0,
+    "of Project covered from January 2018 to June 2019"
+   ],
+   [
+    1,
+    12.0,
+    "Procurement Planning: The TCAMP will be using STEP (systematic"
+   ],
+   [
+    1,
+    12.0,
+    "tracking of exchanges in procurement \u2013 World Bank\u2019s online"
+   ],
+   [
+    1,
+    12.0,
+    "procurement management tool) for managing the project"
+   ],
+   [
+    1,
+    12.0,
+    "procurements."
+   ],
+   [
+    1,
+    11.0,
+    "II. Goods and Works and non-consulting services."
+   ],
+   [
+    1,
+    12.0,
+    "Prior Review Threshold: Procurement Decisions subject to Prior"
+   ],
+   [
+    1,
+    12.0,
+    "Review by the Bank as stated in Appendix 1 to the Guidelines for"
+   ],
+   [
+    1,
+    12.0,
+    "Procurement:"
+   ],
+   [
+    1,
+    10.0,
+    "Expenditure"
+   ],
+   [
+    1,
+    10.0,
+    "Category"
+   ],
+   [
+    1,
+    10.0,
+    "Contract Value"
+   ],
+   [
+    1,
+    10.0,
+    "(Threshold)"
+   ],
+   [
+    1,
+    10.0,
+    "Procurement"
+   ],
+   [
+    1,
+    10.0,
+    "Method"
+   ],
+   [
+    1,
+    10.0,
+    "Contracts/Pro"
+   ],
+   [
+    1,
+    10.0,
+    "cesses"
+   ],
+   [
+    1,
+    10.0,
+    "Subject to"
+   ]
+  ],
+  "pages_with_tables": 8,
+  "tables": 12,
+  "largest_tables": [
+   [
+    3,
+    22,
+    30
+   ],
+   [
+    7,
+    25,
+    19
+   ],
+   [
+    4,
+    15,
+    30
+   ],
+   [
+    5,
+    15,
+    28
+   ],
+   [
+    6,
+    18,
+    19
+   ]
+  ],
+  "annex_pages": [],
+  "page_labels_defined": false,
+  "printed_page_number_pages": 6,
+  "printed_minus_physical_offsets": {
+   "-2": 4,
+   "12": 1,
+   "19": 1
+  },
+  "printed_numbers_sample": [
+   [
+    3,
+    "15"
+   ],
+   [
+    4,
+    "23"
+   ],
+   [
+    5,
+    "3"
+   ],
+   [
+    6,
+    "4"
+   ],
+   [
+    7,
+    "5"
+   ],
+   [
+    8,
+    "6"
+   ]
+  ],
+  "project_ids_in_text": [
+   "P132833"
+  ],
+  "own_project_id_in_text": true,
+  "step_reference_pages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "step_references": 101,
+  "legacy_reference_like": 0,
+  "sensitive": {
+   "email_pattern_pages": [],
+   "email_count": 0,
+   "phone_like_pages": [],
+   "phone_like_count": 0,
+   "staff_name_section_pages": []
+  }
+ },
+ {
+  "document_id": "24440102",
+  "project_id": "P148850",
+  "doc_type": "PAD",
+  "local_path": "rag/corpus_v3/pdf/ET/P148850/PAD_2015-04-27_24440102.pdf",
+  "pages": 120,
+  "pdf_metadata": {
+   "format": "PDF 1.4",
+   "creator": "PScript5.dll Version 5.2.2",
+   "producer": "PDF PT 3.40p (pdf-tools.com)",
+   "creationDate": "D:20150518112500-04'00'"
+  },
+  "text_pages": 119,
+  "low_text_pages": [
+   120
+  ],
+  "likely_scanned_pages": [
+   120
+  ],
+  "median_chars_per_page": 2821.5,
+  "landscape_pages": 10,
+  "outline_entries": 0,
+  "outline_sample": [],
+  "body_font_size": 12.0,
+  "heading_candidates": 239,
+  "heading_sample": [
+   [
+    1,
+    12.0,
+    "Document of"
+   ],
+   [
+    1,
+    12.0,
+    "FOR OFFICIAL USE ONLY"
+   ],
+   [
+    5,
+    12.0,
+    "ETHIOPIA"
+   ],
+   [
+    5,
+    12.0,
+    "Expressway Development Support Project"
+   ],
+   [
+    5,
+    12.0,
+    "TABLE OF CONTENTS"
+   ],
+   [
+    5,
+    12.0,
+    "Page"
+   ],
+   [
+    7,
+    12.0,
+    "PAD DATA SHEET"
+   ],
+   [
+    7,
+    12.0,
+    "PROJECT APPRAISAL DOCUMENT"
+   ],
+   [
+    7,
+    12.0,
+    "Basic Information"
+   ],
+   [
+    8,
+    12.0,
+    "Financing Source"
+   ],
+   [
+    8,
+    12.0,
+    "Amount"
+   ],
+   [
+    8,
+    12.0,
+    "Institutional Data"
+   ],
+   [
+    8,
+    12.0,
+    "Practice Area / Cross Cutting Solution Area"
+   ],
+   [
+    8,
+    12.0,
+    "Cross Cutting Areas"
+   ],
+   [
+    8,
+    12.0,
+    "Sectors / Climate Change"
+   ],
+   [
+    9,
+    12.0,
+    "Themes"
+   ],
+   [
+    9,
+    12.0,
+    "Components"
+   ],
+   [
+    9,
+    12.0,
+    "Component Name"
+   ],
+   [
+    9,
+    12.0,
+    "Risk Category"
+   ],
+   [
+    9,
+    12.0,
+    "Rating"
+   ],
+   [
+    10,
+    12.0,
+    "OVERALL"
+   ],
+   [
+    10,
+    12.0,
+    "Compliance"
+   ],
+   [
+    10,
+    12.0,
+    "Policy"
+   ],
+   [
+    10,
+    12.0,
+    "Safeguard Policies Triggered by the Project"
+   ],
+   [
+    10,
+    12.0,
+    "Yes"
+   ],
+   [
+    10,
+    12.0,
+    "Conditions"
+   ],
+   [
+    10,
+    12.0,
+    "Legal Covenants"
+   ],
+   [
+    10,
+    12.0,
+    "Name"
+   ],
+   [
+    10,
+    12.0,
+    "Recurrent"
+   ],
+   [
+    10,
+    12.0,
+    "Due Date"
+   ]
+  ],
+  "pages_with_tables": 47,
+  "tables": 59,
+  "largest_tables": [
+   [
+    8,
+    35,
+    15
+   ],
+   [
+    40,
+    40,
+    12
+   ],
+   [
+    39,
+    39,
+    12
+   ],
+   [
+    38,
+    36,
+    12
+   ],
+   [
+    115,
+    27,
+    16
+   ]
+  ],
+  "annex_pages": [
+   6,
+   37,
+   47,
+   50,
+   67,
+   106,
+   110,
+   120
+  ],
+  "page_labels_defined": false,
+  "printed_page_number_pages": 114,
+  "printed_minus_physical_offsets": {
+   "-13": 105,
+   "17": 1,
+   "48": 1,
+   "-102": 1
+  },
+  "printed_numbers_sample": [
+   [
+    7,
+    "i"
+   ],
+   [
+    8,
+    "25"
+   ],
+   [
+    9,
+    "iii"
+   ],
+   [
+    10,
+    "iv"
+   ],
+   [
+    11,
+    "v"
+   ],
+   [
+    12,
+    "vi"
+   ],
+   [
+    13,
+    "vii"
+   ],
+   [
+    14,
+    "1"
+   ]
+  ],
+  "project_ids_in_text": [
+   "P082998",
+   "P148850"
+  ],
+  "own_project_id_in_text": true,
+  "step_reference_pages": [],
+  "step_references": 0,
+  "legacy_reference_like": 0,
+  "sensitive": {
+   "email_pattern_pages": [
+    7
+   ],
+   "email_count": 1,
+   "phone_like_pages": [
+    7,
+    17,
+    31,
+    99,
+    104,
+    112,
+    113,
+    114
+   ],
+   "phone_like_count": 24,
+   "staff_name_section_pages": [
+    4,
+    7,
+    12,
+    22,
+    30,
+    53,
+    76,
+    85,
+    104,
+    109,
+    113,
+    116
+   ]
+  }
+ },
+ {
+  "document_id": "40089196",
+  "project_id": "P148850",
+  "doc_type": "ISR",
+  "local_path": "rag/corpus_v3/pdf/ET/P148850/ISR_2026-02-28_40089196.pdf",
+  "pages": 8,
+  "pdf_metadata": {
+   "format": "PDF 1.7",
+   "creator": "Aspose Pty Ltd.",
+   "producer": "Aspose.PDF for Java 25.8",
+   "creationDate": "D:20241126092800Z"
+  },
+  "text_pages": 8,
+  "low_text_pages": [],
+  "likely_scanned_pages": [],
+  "median_chars_per_page": 1423.0,
+  "landscape_pages": 4,
+  "outline_entries": 0,
+  "outline_sample": [],
+  "body_font_size": 11.0,
+  "heading_candidates": 25,
+  "heading_sample": [
+   [
+    1,
+    12.0,
+    "The World Bank"
+   ],
+   [
+    1,
+    11.0,
+    "1. OBJECTIVE"
+   ],
+   [
+    1,
+    11.0,
+    "1.1 Development Objective"
+   ],
+   [
+    1,
+    11.0,
+    "2. COMPONENTS"
+   ],
+   [
+    1,
+    11.0,
+    "3. OVERALL RATINGS"
+   ],
+   [
+    1,
+    11.0,
+    "4.  KEY ISSUES & STATUS"
+   ],
+   [
+    1,
+    11.0,
+    "4.1 Implementation Status and Key Decisions"
+   ],
+   [
+    2,
+    12.0,
+    "The World Bank"
+   ],
+   [
+    2,
+    11.0,
+    "5.  SYSTEMATIC OPERATIONS RISK-RATING TOOL"
+   ],
+   [
+    3,
+    12.0,
+    "The World Bank"
+   ],
+   [
+    3,
+    11.0,
+    "6.  RESULTS"
+   ],
+   [
+    3,
+    11.0,
+    "6.1 PDO Indicators by PDO Outcomes"
+   ],
+   [
+    4,
+    12.0,
+    "The World Bank"
+   ],
+   [
+    4,
+    11.0,
+    "6.2 Intermediate Results Indicators by Components"
+   ],
+   [
+    5,
+    12.0,
+    "The World Bank"
+   ],
+   [
+    6,
+    12.0,
+    "The World Bank"
+   ],
+   [
+    7,
+    12.0,
+    "The World Bank"
+   ],
+   [
+    7,
+    11.0,
+    "7. DATA ON FINANCIAL PERFORMANCE"
+   ],
+   [
+    7,
+    11.0,
+    "7.1 Cumulative Disbursements"
+   ],
+   [
+    7,
+    11.0,
+    "7.2 Disbursements (by loan)"
+   ],
+   [
+    7,
+    11.0,
+    "7.3 Key Dates (by loan)"
+   ],
+   [
+    8,
+    12.0,
+    "The World Bank"
+   ],
+   [
+    8,
+    11.0,
+    "8.  KEY DATES"
+   ],
+   [
+    8,
+    11.0,
+    "9.  RESTRUCTURING HISTORY"
+   ],
+   [
+    8,
+    11.0,
+    "10.  ASSOCIATED OPERATION(S)"
+   ]
+  ],
+  "pages_with_tables": 4,
+  "tables": 5,
+  "largest_tables": [
+   [
+    3,
+    13,
+    9
+   ],
+   [
+    5,
+    10,
+    9
+   ],
+   [
+    4,
+    7,
+    9
+   ],
+   [
+    4,
+    6,
+    9
+   ],
+   [
+    6,
+    6,
+    9
+   ]
+  ],
+  "annex_pages": [],
+  "page_labels_defined": false,
+  "printed_page_number_pages": 0,
+  "printed_minus_physical_offsets": {},
+  "printed_numbers_sample": [],
+  "project_ids_in_text": [
+   "P148850"
+  ],
+  "own_project_id_in_text": true,
+  "step_reference_pages": [],
+  "step_references": 0,
+  "legacy_reference_like": 0,
+  "sensitive": {
+   "email_pattern_pages": [],
+   "email_count": 0,
+   "phone_like_pages": [
+    4,
+    6
+   ],
+   "phone_like_count": 4,
+   "staff_name_section_pages": []
+  }
+ },
+ {
+  "document_id": "40025990",
+  "project_id": "P148850",
+  "doc_type": "PP",
+  "local_path": "rag/corpus_v3/pdf/ET/P148850/PP_2025-06-27_40025990.pdf",
+  "pages": 6,
+  "pdf_metadata": {
+   "format": "PDF 1.4",
+   "creator": "Aspose Ltd.",
+   "producer": "Aspose.Pdf for Java 17.2.0 / PDF PT 4.7.24.2 (pdf-tools.com)",
+   "creationDate": "D:20170424070900Z"
+  },
+  "text_pages": 6,
+  "low_text_pages": [],
+  "likely_scanned_pages": [],
+  "median_chars_per_page": 1385.0,
+  "landscape_pages": 3,
+  "outline_entries": 0,
+  "outline_sample": [],
+  "body_font_size": 3.0,
+  "heading_candidates": 153,
+  "heading_sample": [
+   [
+    1,
+    12.0,
+    "April 21, 2017"
+   ],
+   [
+    1,
+    14.0,
+    "Procurement Plan for Eth Expressway Project ( P148850)"
+   ],
+   [
+    1,
+    12.0,
+    "I. General"
+   ],
+   [
+    1,
+    12.0,
+    "Bank\u2019s approval Date of the procurement Plan: Original: March"
+   ],
+   [
+    1,
+    12.0,
+    "25, 2015: Revision V1 of Updated Procurement Plan, April 21, 2017"
+   ],
+   [
+    1,
+    12.0,
+    "Date of General Procurement Notice: Feb.03, 2015"
+   ],
+   [
+    1,
+    12.0,
+    "Period covered by this procurement plan: The procurement period"
+   ],
+   [
+    1,
+    12.0,
+    "of project covered from year 2016-2017"
+   ],
+   [
+    1,
+    11.0,
+    "II. Goods and Works and non-consulting services."
+   ],
+   [
+    1,
+    12.0,
+    "Prior Review Threshold: Procurement Decisions subject to Prior"
+   ],
+   [
+    1,
+    12.0,
+    "Review by the Bank as stated in Appendix 1 to the Guidelines for"
+   ],
+   [
+    1,
+    12.0,
+    "Procurement:"
+   ],
+   [
+    1,
+    10.0,
+    "Procurement Method"
+   ],
+   [
+    1,
+    10.0,
+    "Prior Review"
+   ],
+   [
+    1,
+    10.0,
+    "Threshold"
+   ],
+   [
+    1,
+    10.0,
+    "US$"
+   ],
+   [
+    1,
+    10.0,
+    "Comments"
+   ],
+   [
+    1,
+    10.0,
+    "ICB / NCB (Goods)"
+   ],
+   [
+    1,
+    11.0,
+    "Above US$ 2,000,000"
+   ],
+   [
+    1,
+    11.0,
+    "All"
+   ],
+   [
+    1,
+    10.0,
+    "ICB / NCB (Works)"
+   ],
+   [
+    1,
+    11.0,
+    "Above US$ 10 million"
+   ],
+   [
+    1,
+    11.0,
+    "All"
+   ],
+   [
+    1,
+    10.0,
+    "Non-Consultant Services"
+   ],
+   [
+    1,
+    11.0,
+    "Above US$ 2,000,000"
+   ],
+   [
+    1,
+    11.0,
+    "First contract"
+   ],
+   [
+    1,
+    12.0,
+    "Pre-qualification. Bidders for Zeway Arsi Negele Highway Project_"
+   ],
+   [
+    1,
+    12.0,
+    "shall be prequalified in accordance with the provisions of paragraphs 2.9"
+   ],
+   [
+    1,
+    12.0,
+    "and 2.10 of the Guidelines."
+   ],
+   [
+    1,
+    12.0,
+    "Proposed Procedures for CDD Components (as per paragraph."
+   ]
+  ],
+  "pages_with_tables": 6,
+  "tables": 13,
+  "largest_tables": [
+   [
+    5,
+    13,
+    28
+   ],
+   [
+    4,
+    12,
+    29
+   ],
+   [
+    5,
+    10,
+    20
+   ],
+   [
+    4,
+    6,
+    30
+   ],
+   [
+    4,
+    4,
+    29
+   ]
+  ],
+  "annex_pages": [],
+  "page_labels_defined": false,
+  "printed_page_number_pages": 4,
+  "printed_minus_physical_offsets": {
+   "-3": 3,
+   "0": 1
+  },
+  "printed_numbers_sample": [
+   [
+    3,
+    "3"
+   ],
+   [
+    4,
+    "1"
+   ],
+   [
+    5,
+    "2"
+   ],
+   [
+    6,
+    "3"
+   ]
+  ],
+  "project_ids_in_text": [
+   "P148850"
+  ],
+  "own_project_id_in_text": true,
+  "step_reference_pages": [
+   4,
+   5,
+   6
+  ],
+  "step_references": 14,
+  "legacy_reference_like": 0,
+  "sensitive": {
+   "email_pattern_pages": [],
+   "email_count": 0,
+   "phone_like_pages": [
+    1
+   ],
+   "phone_like_count": 1,
+   "staff_name_section_pages": []
+  }
+ },
+ {
+  "document_id": "34455066",
+  "project_id": "P163452",
+  "doc_type": "ICR",
+  "local_path": "rag/corpus_v3/pdf/ET/P163452/ICR_2025-01-24_34455066.pdf",
+  "pages": 55,
+  "pdf_metadata": {
+   "format": "PDF 1.4",
+   "creator": "Acrobat PDFMaker 24 for Word",
+   "producer": "Adobe PDF Library 24.5.96 / PDF PT 4.7.24.2 (pdf-tools.com)",
+   "creationDate": "D:20250127171819+03'00'"
+  },
+  "text_pages": 55,
+  "low_text_pages": [],
+  "likely_scanned_pages": [],
+  "median_chars_per_page": 2191,
+  "landscape_pages": 18,
+  "outline_entries": 23,
+  "outline_sample": [
+   [
+    1,
+    "I. PROGRAM CONTEXT AND DEVELOPMENT OBJECTIVES 1",
+    4
+   ],
+   [
+    1,
+    "II. OUTCOME 5",
+    4
+   ],
+   [
+    1,
+    "III. KEY FACTORS AFFECTED IMPLEMENTATION AND OUTCOME 9",
+    4
+   ],
+   [
+    1,
+    "IV. BANK PERFORMANCE, COMPLIANCE ISSUES, AND RISK TO DEVELOPMENT OUTCO",
+    4
+   ],
+   [
+    1,
+    "V. LESSONS AND RECOMMENDATIONS 15",
+    4
+   ],
+   [
+    1,
+    "ANNEX 1. RESULTS FRAMEWORK, DISBURSEMENT LINKED INDICATORS, AND PROGRA",
+    4
+   ],
+   [
+    1,
+    "ANNEX 2. BANK LENDING AND IMPLEMENTATION SUPPORT/SUPERVISION 31",
+    4
+   ],
+   [
+    1,
+    "ANNEX 3. PROGRAM EXPENDITURE SUMMARY 34",
+    4
+   ],
+   [
+    1,
+    "ANNEX 4. BORROWER\u2019S COMMENTS 35",
+    4
+   ],
+   [
+    1,
+    "ANNEX 5. THEORY OF CHANGE 36",
+    4
+   ],
+   [
+    1,
+    "ANNEX 6. EFFICIENCY ANALYSIS 37",
+    4
+   ],
+   [
+    1,
+    "ANNEX 7. LIST OF UIIDP BENEFICIARY ULGS 44",
+    4
+   ],
+   [
+    1,
+    "I. PROGRAM CONTEXT AND DEVELOPMENT OBJECTIVES",
+    9
+   ],
+   [
+    1,
+    "II. OUTCOME",
+    13
+   ]
+  ],
+  "body_font_size": 11.0,
+  "heading_candidates": 184,
+  "heading_sample": [
+   [
+    2,
+    12.0,
+    "The World Bank"
+   ],
+   [
+    3,
+    12.0,
+    "The World Bank"
+   ],
+   [
+    3,
+    11.0,
+    "ABBREVIATIONS AND ACRONYMS"
+   ],
+   [
+    4,
+    12.0,
+    "The World Bank"
+   ],
+   [
+    4,
+    11.0,
+    "II."
+   ],
+   [
+    4,
+    11.0,
+    "III."
+   ],
+   [
+    4,
+    11.0,
+    "IV."
+   ],
+   [
+    5,
+    12.0,
+    "The World Bank"
+   ],
+   [
+    5,
+    11.0,
+    "DATA SHEET"
+   ],
+   [
+    5,
+    11.0,
+    "BASIC DATA"
+   ],
+   [
+    5,
+    11.0,
+    "Product Information"
+   ],
+   [
+    5,
+    11.0,
+    "Product"
+   ],
+   [
+    5,
+    11.0,
+    "Operation Short Name"
+   ],
+   [
+    5,
+    11.0,
+    "CLIENTS"
+   ],
+   [
+    5,
+    11.0,
+    "DEVELOPMENT OBJECTIVE"
+   ],
+   [
+    5,
+    11.0,
+    "FINANCING"
+   ],
+   [
+    6,
+    12.0,
+    "The World Bank"
+   ],
+   [
+    6,
+    11.0,
+    "Financing Source"
+   ],
+   [
+    6,
+    11.0,
+    "Total"
+   ],
+   [
+    6,
+    11.0,
+    "RESTRUCTURING AND/OR ADDITIONAL FINANCING"
+   ],
+   [
+    6,
+    11.0,
+    "KEY DATES"
+   ],
+   [
+    7,
+    12.0,
+    "The World Bank"
+   ],
+   [
+    7,
+    11.0,
+    "RATINGS SUMMARY"
+   ],
+   [
+    7,
+    11.0,
+    "Outcome"
+   ],
+   [
+    7,
+    11.0,
+    "Bank Performance"
+   ],
+   [
+    7,
+    11.0,
+    "M&E Quality"
+   ],
+   [
+    7,
+    11.0,
+    "ISR RATINGS"
+   ],
+   [
+    8,
+    12.0,
+    "The World Bank"
+   ],
+   [
+    8,
+    11.0,
+    "SECTORS AND THEMES"
+   ],
+   [
+    8,
+    11.0,
+    "Sectors"
+   ]
+  ],
+  "pages_with_tables": 46,
+  "tables": 74,
+  "largest_tables": [
+   [
+    6,
+    47,
+    19
+   ],
+   [
+    29,
+    37,
+    18
+   ],
+   [
+    26,
+    46,
+    10
+   ],
+   [
+    7,
+    35,
+    13
+   ],
+   [
+    28,
+    44,
+    10
+   ]
+  ],
+  "annex_pages": [
+   4,
+   25,
+   39,
+   42,
+   43,
+   44,
+   45,
+   52
+  ],
+  "page_labels_defined": false,
+  "printed_page_number_pages": 7,
+  "printed_minus_physical_offsets": {
+   "-44": 3,
+   "38": 1,
+   "-8": 1,
+   "-47": 1
+  },
+  "printed_numbers_sample": [
+   [
+    8,
+    "46"
+   ],
+   [
+    44,
+    "36"
+   ],
+   [
+    45,
+    "1"
+   ],
+   [
+    47,
+    "0"
+   ],
+   [
+    48,
+    "4"
+   ],
+   [
+    52,
+    "36"
+   ],
+   [
+    53,
+    "9"
+   ]
+  ],
+  "project_ids_in_text": [
+   "P163452"
+  ],
+  "own_project_id_in_text": true,
+  "step_reference_pages": [],
+  "step_references": 0,
+  "legacy_reference_like": 0,
+  "sensitive": {
+   "email_pattern_pages": [],
+   "email_count": 0,
+   "phone_like_pages": [
+    13,
+    14,
+    19,
+    50
+   ],
+   "phone_like_count": 10,
+   "staff_name_section_pages": [
+    2,
+    9,
+    41
+   ]
+  }
+ },
+ {
+  "document_id": "33851641",
+  "project_id": "P175325",
+  "doc_type": "ISR",
+  "local_path": "rag/corpus_v3/pdf/SN/P175325/ISR_2022-06-24_33851641.pdf",
+  "pages": 8,
+  "pdf_metadata": {
+   "format": "PDF 1.4",
+   "creator": "",
+   "producer": "Aspose.Words for Java 17.7 / PDF PT 4.7.24.2 (pdf-tools.com)",
+   "creationDate": ""
+  },
+  "text_pages": 8,
+  "low_text_pages": [],
+  "likely_scanned_pages": [],
+  "median_chars_per_page": 1757.5,
+  "landscape_pages": 0,
+  "outline_entries": 0,
+  "outline_sample": [],
+  "body_font_size": 8.5,
+  "heading_candidates": 28,
+  "heading_sample": [
+   [
+    1,
+    8.5,
+    "The World Bank"
+   ],
+   [
+    1,
+    8.5,
+    "Key Dates"
+   ],
+   [
+    1,
+    8.5,
+    "Key Project Dates"
+   ],
+   [
+    1,
+    8.5,
+    "Project Development Objectives"
+   ],
+   [
+    1,
+    8.5,
+    "Components Table"
+   ],
+   [
+    1,
+    8.5,
+    "Overall Ratings"
+   ],
+   [
+    1,
+    8.5,
+    "Implementation Status and Key Decisions"
+   ],
+   [
+    1,
+    10.0,
+    "Public Disclosure Authorized"
+   ],
+   [
+    1,
+    10.0,
+    "Public Disclosure Authorized"
+   ],
+   [
+    1,
+    10.0,
+    "Public Disclosure Authorized"
+   ],
+   [
+    1,
+    10.0,
+    "Public Disclosure Authorized"
+   ],
+   [
+    2,
+    8.5,
+    "The World Bank"
+   ],
+   [
+    2,
+    8.5,
+    "Risks"
+   ],
+   [
+    2,
+    8.5,
+    "Systematic Operations Risk-rating Tool"
+   ],
+   [
+    2,
+    8.5,
+    "Results"
+   ],
+   [
+    2,
+    8.5,
+    "PDO Indicators by Objectives / Outcomes"
+   ],
+   [
+    3,
+    8.5,
+    "The World Bank"
+   ],
+   [
+    4,
+    8.5,
+    "The World Bank"
+   ],
+   [
+    4,
+    8.5,
+    "Overall Comments PDO"
+   ],
+   [
+    4,
+    8.5,
+    "Intermediate Results Indicators by Components"
+   ],
+   [
+    5,
+    8.5,
+    "The World Bank"
+   ],
+   [
+    6,
+    8.5,
+    "The World Bank"
+   ],
+   [
+    7,
+    8.5,
+    "The World Bank"
+   ],
+   [
+    7,
+    8.5,
+    "Performance-Based Conditions"
+   ],
+   [
+    7,
+    8.5,
+    "Data on Financial Performance"
+   ],
+   [
+    7,
+    8.5,
+    "Cumulative Disbursements"
+   ],
+   [
+    8,
+    8.5,
+    "The World Bank"
+   ],
+   [
+    8,
+    8.5,
+    "Restructuring History"
+   ]
+  ],
+  "pages_with_tables": 8,
+  "tables": 16,
+  "largest_tables": [
+   [
+    3,
+    20,
+    1
+   ],
+   [
+    4,
+    20,
+    1
+   ],
+   [
+    6,
+    19,
+    1
+   ],
+   [
+    7,
+    9,
+    2
+   ],
+   [
+    5,
+    17,
+    1
+   ]
+  ],
+  "annex_pages": [],
+  "page_labels_defined": false,
+  "printed_page_number_pages": 0,
+  "printed_minus_physical_offsets": {},
+  "printed_numbers_sample": [],
+  "project_ids_in_text": [
+   "P175325"
+  ],
+  "own_project_id_in_text": true,
+  "step_reference_pages": [],
+  "step_references": 0,
+  "legacy_reference_like": 0,
+  "sensitive": {
+   "email_pattern_pages": [],
+   "email_count": 0,
+   "phone_like_pages": [],
+   "phone_like_count": 0,
+   "staff_name_section_pages": []
+  }
+ },
+ {
+  "document_id": "40009757",
+  "project_id": "P175325",
+  "doc_type": "PP",
+  "local_path": "rag/corpus_v3/pdf/SN/P175325/PP_2025-04-29_40009757.pdf",
+  "pages": 8,
+  "pdf_metadata": {
+   "format": "PDF 1.4",
+   "creator": "Aspose Ltd.",
+   "producer": "Aspose.Pdf for Java 17.2.0 / PDF PT 4.7.24.2 (pdf-tools.com)",
+   "creationDate": "D:20210525115900Z"
+  },
+  "text_pages": 8,
+  "low_text_pages": [],
+  "likely_scanned_pages": [],
+  "median_chars_per_page": 7033.0,
+  "landscape_pages": 6,
+  "outline_entries": 0,
+  "outline_sample": [],
+  "body_font_size": 3.0,
+  "heading_candidates": 73,
+  "heading_sample": [
+   [
+    1,
+    14.0,
+    "PROCUREMENT PLAN (Textual Part)"
+   ],
+   [
+    1,
+    12.0,
+    "Project information: Senegal Casamance Economic Development"
+   ],
+   [
+    1,
+    12.0,
+    "ProjectP175325"
+   ],
+   [
+    1,
+    12.0,
+    "Project Implementation agency: Project Implementation Unit Pole de"
+   ],
+   [
+    1,
+    12.0,
+    "D\u00e9veloppement de la Casamance ( PPDC)under Ministry of Territorial"
+   ],
+   [
+    1,
+    12.0,
+    "Collectivity, Management and Development"
+   ],
+   [
+    1,
+    12.0,
+    "Date of the Procurement Plan: April 18th,  2021"
+   ],
+   [
+    1,
+    12.0,
+    "Period covered by this Procurement Plan: April 30th 2021 \u2013 October 30"
+   ],
+   [
+    1,
+    12.0,
+    "th 2022"
+   ],
+   [
+    1,
+    12.0,
+    "Preamble"
+   ],
+   [
+    1,
+    12.0,
+    "In accordance with paragraph 5.9 of the \u201cWorld Bank Procurement Regulations"
+   ],
+   [
+    1,
+    12.0,
+    "for IPF Borrowers\u201d All goods, non-consulting services and consulting services"
+   ],
+   [
+    1,
+    12.0,
+    "required for the Activities and to be financed out of the proceeds of the"
+   ],
+   [
+    1,
+    12.0,
+    "Advance shall be procured in accordance with the requirements set forth or"
+   ],
+   [
+    1,
+    12.0,
+    "referred to in the \u201cWorld Bank Procurement Regulations for IPF Borrowers\u201d"
+   ],
+   [
+    1,
+    12.0,
+    "dated on July 2016 and updated on August 2018 and November 2020"
+   ],
+   [
+    1,
+    12.0,
+    "(\u201cProcurement"
+   ],
+   [
+    1,
+    12.0,
+    "Regulations\u201d)"
+   ],
+   [
+    1,
+    12.0,
+    "and"
+   ],
+   [
+    1,
+    12.0,
+    "the"
+   ],
+   [
+    1,
+    12.0,
+    "provisions"
+   ],
+   [
+    1,
+    12.0,
+    "the"
+   ],
+   [
+    1,
+    12.0,
+    "Recipient\u2019s"
+   ],
+   [
+    1,
+    12.0,
+    "procurement plan for the Activities dated November 15, 2020 (\u201cProcurement"
+   ],
+   [
+    1,
+    12.0,
+    "Plan\u201d) provided for under Section IV of the Procurement Regulations, as the"
+   ],
+   [
+    1,
+    12.0,
+    "same may be updated from time to time in agreement with the World Bank."
+   ],
+   [
+    1,
+    12.0,
+    "In addition, the Bank\u2019s Systematic Tracking and Exchanges in Procurement"
+   ],
+   [
+    1,
+    12.0,
+    "(STEP) system will be used to prepare, clear and update Procurement Plans"
+   ],
+   [
+    1,
+    12.0,
+    "and conduct all procurement transactions for the Project."
+   ],
+   [
+    1,
+    12.0,
+    "This textual part along with the Procurement Plan tables in STEP constitute the"
+   ]
+  ],
+  "pages_with_tables": 6,
+  "tables": 10,
+  "largest_tables": [
+   [
+    3,
+    14,
+    29
+   ],
+   [
+    6,
+    20,
+    20
+   ],
+   [
+    7,
+    19,
+    20
+   ],
+   [
+    5,
+    12,
+    28
+   ],
+   [
+    3,
+    10,
+    30
+   ]
+  ],
+  "annex_pages": [],
+  "page_labels_defined": false,
+  "printed_page_number_pages": 6,
+  "printed_minus_physical_offsets": {
+   "-2": 6
+  },
+  "printed_numbers_sample": [
+   [
+    3,
+    "1"
+   ],
+   [
+    4,
+    "2"
+   ],
+   [
+    5,
+    "3"
+   ],
+   [
+    6,
+    "4"
+   ],
+   [
+    7,
+    "5"
+   ],
+   [
+    8,
+    "6"
+   ]
+  ],
+  "project_ids_in_text": [
+   "P175325"
+  ],
+  "own_project_id_in_text": true,
+  "step_reference_pages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "step_references": 101,
+  "legacy_reference_like": 0,
+  "sensitive": {
+   "email_pattern_pages": [],
+   "email_count": 0,
+   "phone_like_pages": [
+    2
+   ],
+   "phone_like_count": 1,
+   "staff_name_section_pages": []
+  }
+ }
+]

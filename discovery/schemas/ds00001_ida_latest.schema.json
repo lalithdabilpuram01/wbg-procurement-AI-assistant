@@ -1,0 +1,238 @@
+{
+ "dataset": "ds00001_ida_latest",
+ "source": "Finances One DS00001 bulk CSV",
+ "rows_profiled": 11486,
+ "columns": [
+  {
+   "name": "Agreement Signing Date",
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Board Approval Date",
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Board approval - Calendar year",
+   "observed_kinds": {
+    "str:int": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Board approval - Fiscal year",
+   "observed_kinds": {
+    "str:int": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Borrower",
+   "observed_kinds": {
+    "str": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Borrowers Obligation (US$)",
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Cancelled Amount (US$)",
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Closed Date (Most Recent)",
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 11484,
+    "empty": 2
+   },
+   "populated_pct": 99.98
+  },
+  {
+   "name": "Country / Economy",
+   "observed_kinds": {
+    "str": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Country / Economy Code",
+   "observed_kinds": {
+    "str": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Credit Number",
+   "observed_kinds": {
+    "str": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Credit Status",
+   "observed_kinds": {
+    "str": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Credits Held (US$)",
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Currency of Commitment",
+   "observed_kinds": {
+    "str": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Disbursed Amount (US$)",
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Due 3rd Party (US$)",
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Due to IDA (US$)",
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Effective Date (Most Recent)",
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "End of Period",
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Exchange Adjustment (US$)",
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "First Repayment Date",
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 8751,
+    "empty": 2735
+   },
+   "populated_pct": 76.19
+  },
+  {
+   "name": "Last Disbursement Date",
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 9395,
+    "empty": 2091
+   },
+   "populated_pct": 81.8
+  },
+  {
+   "name": "Last Repayment Date",
+   "observed_kinds": {
+    "str:date[MM/DD/YYYY]": 8751,
+    "empty": 2735
+   },
+   "populated_pct": 76.19
+  },
+  {
+   "name": "Original Principal Amount (US$)",
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Project ID",
+   "observed_kinds": {
+    "str": 11482,
+    "str:int": 4
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Project Name",
+   "observed_kinds": {
+    "str": 11482,
+    "empty": 4
+   },
+   "populated_pct": 99.97
+  },
+  {
+   "name": "Region",
+   "observed_kinds": {
+    "str": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Repaid 3rd Party (US$)",
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Repaid to IDA (US$)",
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Service Charge Rate",
+   "observed_kinds": {
+    "str:decimal": 8756,
+    "empty": 2730
+   },
+   "populated_pct": 76.23
+  },
+  {
+   "name": "Sold 3rd Party (US$)",
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "populated_pct": 100.0
+  },
+  {
+   "name": "Undisbursed Amount (US$)",
+   "observed_kinds": {
+    "str:decimal": 11486
+   },
+   "populated_pct": 100.0
+  }
+ ]
+}

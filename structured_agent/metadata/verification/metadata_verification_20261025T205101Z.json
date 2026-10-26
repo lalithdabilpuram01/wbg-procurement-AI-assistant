@@ -1,0 +1,457 @@
+{
+ "verified_at": "20261025T205101Z",
+ "snapshot": "databricks_metadata_20261025T203808Z.json",
+ "grains": {
+  "workspace.wbg_gold.gold_contract_analytics": {
+   "columns": [
+    "wb_contract_number"
+   ],
+   "rows": 178921,
+   "distinct_keys": 178921,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_gold.gold_country_context": {
+   "columns": [
+    "country_code",
+    "year"
+   ],
+   "rows": 5642,
+   "distinct_keys": 5642,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_gold.gold_financing_analytics": {
+   "columns": [
+    "financing_number"
+   ],
+   "rows": 2685,
+   "distinct_keys": 2685,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_gold.gold_procurement_notices": {
+   "columns": [
+    "notice_op_id"
+   ],
+   "rows": 243533,
+   "distinct_keys": 243533,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_gold.gold_project_portfolio": {
+   "columns": [
+    "project_id"
+   ],
+   "rows": 2000,
+   "distinct_keys": 2000,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_gold.vw_kpi_contract_awards": {
+   "columns": [
+    "contract_fiscal_year",
+    "region_name",
+    "geography_type",
+    "wdi_country_code",
+    "procurement_category",
+    "procurement_method"
+   ],
+   "rows": 9204,
+   "distinct_keys": 9204,
+   "null_key_rows": 523,
+   "unique": true
+  },
+  "workspace.wbg_gold.vw_kpi_contract_value_distribution": {
+   "columns": [
+    "grouping_level",
+    "contract_fiscal_year",
+    "procurement_category"
+   ],
+   "rows": 45,
+   "distinct_keys": 45,
+   "null_key_rows": 13,
+   "unique": true
+  },
+  "workspace.wbg_gold.vw_kpi_country_comparison": {
+   "columns": [
+    "geography_type",
+    "wdi_country_code"
+   ],
+   "rows": 135,
+   "distinct_keys": 135,
+   "null_key_rows": 1,
+   "unique": true
+  },
+  "workspace.wbg_gold.vw_kpi_financing_instruments": {
+   "columns": [
+    "lender",
+    "board_approval_fiscal_year",
+    "region_name",
+    "geography_type",
+    "wdi_country_code",
+    "financing_status"
+   ],
+   "rows": 1478,
+   "distinct_keys": 1478,
+   "null_key_rows": 125,
+   "unique": true
+  },
+  "workspace.wbg_gold.vw_kpi_notice_activity": {
+   "columns": [
+    "publication_fiscal_year",
+    "notice_type",
+    "region_name",
+    "geography_type",
+    "wdi_country_code"
+   ],
+   "rows": 5145,
+   "distinct_keys": 5145,
+   "null_key_rows": 316,
+   "unique": true
+  },
+  "workspace.wbg_gold.vw_kpi_overview": {
+   "columns": [],
+   "rows": 1,
+   "distinct_keys": 1,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_gold.vw_kpi_response_windows": {
+   "columns": [
+    "grouping_level",
+    "notice_type",
+    "publication_fiscal_year",
+    "procurement_method"
+   ],
+   "rows": 302,
+   "distinct_keys": 302,
+   "null_key_rows": 104,
+   "unique": true
+  },
+  "workspace.wbg_silver.contract_award_lines": {
+   "columns": [
+    "line_key"
+   ],
+   "rows": 186907,
+   "distinct_keys": 186907,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_silver.contract_awards": {
+   "columns": [
+    "wb_contract_number"
+   ],
+   "rows": 178921,
+   "distinct_keys": 178921,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_silver.contract_awards_legacy": {
+   "columns": [
+    "contract_number"
+   ],
+   "rows": 6448,
+   "distinct_keys": 6448,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_silver.cpia_ratings": {
+   "columns": [
+    "country_code",
+    "indicator_code",
+    "year"
+   ],
+   "rows": 105336,
+   "distinct_keys": 105336,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_silver.ibrd_loans": {
+   "columns": [
+    "loan_number"
+   ],
+   "rows": 612,
+   "distinct_keys": 612,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_silver.ida_credits": {
+   "columns": [
+    "credit_number"
+   ],
+   "rows": 2073,
+   "distinct_keys": 2073,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_silver.ieg_project_ratings": {
+   "columns": [
+    "project_id"
+   ],
+   "rows": 750,
+   "distinct_keys": 750,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_silver.income_classification_history": {
+   "columns": [
+    "iso3_code",
+    "fiscal_year"
+   ],
+   "rows": 8736,
+   "distinct_keys": 8736,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_silver.notice_contract_link_candidates": {
+   "columns": [
+    "candidate_key"
+   ],
+   "rows": 57247,
+   "distinct_keys": 57247,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_silver.notice_contract_links": {
+   "columns": [
+    "link_key"
+   ],
+   "rows": 12039,
+   "distinct_keys": 12039,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_silver.procurement_notice_details": {
+   "columns": [
+    "notice_op_id"
+   ],
+   "rows": 20305,
+   "distinct_keys": 20305,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_silver.procurement_notices": {
+   "columns": [
+    "notice_op_id"
+   ],
+   "rows": 243533,
+   "distinct_keys": 243533,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_silver.project_details_v3": {
+   "columns": [
+    "project_id"
+   ],
+   "rows": 184,
+   "distinct_keys": 184,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_silver.project_loan_transactions": {
+   "columns": [
+    "transaction_key"
+   ],
+   "rows": 16643,
+   "distinct_keys": 16643,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_silver.projects": {
+   "columns": [
+    "project_id"
+   ],
+   "rows": 2000,
+   "distinct_keys": 2000,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_silver.wdi_country": {
+   "columns": [
+    "country_code"
+   ],
+   "rows": 296,
+   "distinct_keys": 296,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_silver.wdi_indicator_observations": {
+   "columns": [
+    "country_code",
+    "indicator_code",
+    "year"
+   ],
+   "rows": 20748,
+   "distinct_keys": 20748,
+   "null_key_rows": 0,
+   "unique": true
+  },
+  "workspace.wbg_silver.wgi_estimates": {
+   "columns": [
+    "entity_key",
+    "indicator_code",
+    "year"
+   ],
+   "rows": 34992,
+   "distinct_keys": 34992,
+   "null_key_rows": 0,
+   "unique": true
+  }
+ },
+ "relationships": {
+  "gold_contracts_to_portfolio": {
+   "from_null_keys": 0,
+   "orphans": 0,
+   "max_to_rows_per_key": 1,
+   "cardinality_holds": true,
+   "passed": true
+  },
+  "gold_notices_to_portfolio": {
+   "from_null_keys": 0,
+   "orphans": 0,
+   "max_to_rows_per_key": 1,
+   "cardinality_holds": true,
+   "passed": true
+  },
+  "gold_financing_to_portfolio": {
+   "from_null_keys": 0,
+   "orphans": 0,
+   "max_to_rows_per_key": 1,
+   "cardinality_holds": true,
+   "passed": true
+  },
+  "gold_portfolio_to_country_context": {
+   "from_null_keys": 139,
+   "orphans": 0,
+   "max_to_rows_per_key": 1,
+   "cardinality_holds": true,
+   "passed": true
+  },
+  "gold_contracts_to_country_context": {
+   "from_null_keys": 17230,
+   "orphans": 0,
+   "max_to_rows_per_key": 1,
+   "cardinality_holds": true,
+   "passed": true
+  },
+  "gold_notices_to_country_context": {
+   "from_null_keys": 24971,
+   "orphans": 0,
+   "max_to_rows_per_key": 1,
+   "cardinality_holds": true,
+   "passed": true
+  },
+  "gold_financing_to_country_context": {
+   "from_null_keys": 423,
+   "orphans": 0,
+   "max_to_rows_per_key": 1,
+   "cardinality_holds": true,
+   "passed": true
+  },
+  "silver_contracts_to_projects": {
+   "from_null_keys": 0,
+   "orphans": 0,
+   "max_to_rows_per_key": 1,
+   "cardinality_holds": true,
+   "passed": true
+  },
+  "silver_lines_to_contracts": {
+   "from_null_keys": 0,
+   "orphans": 0,
+   "max_to_rows_per_key": 1,
+   "cardinality_holds": true,
+   "passed": true
+  },
+  "silver_legacy_to_projects": {
+   "from_null_keys": 0,
+   "orphans": 0,
+   "max_to_rows_per_key": 1,
+   "cardinality_holds": true,
+   "passed": true
+  },
+  "silver_notices_to_projects": {
+   "from_null_keys": 0,
+   "orphans": 0,
+   "max_to_rows_per_key": 1,
+   "cardinality_holds": true,
+   "passed": true
+  },
+  "silver_notices_to_details": {
+   "from_null_keys": 0,
+   "max_to_rows_per_key": 1,
+   "max_from_rows_per_key": 1,
+   "cardinality_holds": true,
+   "unmatched_from_rows_coverage": 223237,
+   "reverse_orphans": 9,
+   "passed": true
+  },
+  "silver_candidates_to_details": {
+   "from_null_keys": 0,
+   "orphans": 0,
+   "max_to_rows_per_key": 1,
+   "cardinality_holds": true,
+   "passed": true
+  },
+  "silver_candidates_to_contracts": {
+   "from_null_keys": 0,
+   "orphans": 0,
+   "max_to_rows_per_key": 1,
+   "cardinality_holds": true,
+   "passed": true
+  },
+  "silver_links_to_details": {
+   "from_null_keys": 0,
+   "orphans": 0,
+   "max_to_rows_per_key": 1,
+   "cardinality_holds": true,
+   "passed": true
+  },
+  "silver_links_to_contracts": {
+   "from_null_keys": 0,
+   "orphans": 0,
+   "max_to_rows_per_key": 1,
+   "cardinality_holds": true,
+   "passed": true
+  },
+  "silver_ibrd_to_projects": {
+   "from_null_keys": 0,
+   "orphans": 0,
+   "max_to_rows_per_key": 1,
+   "cardinality_holds": true,
+   "passed": true
+  },
+  "silver_ida_to_projects": {
+   "from_null_keys": 0,
+   "orphans": 0,
+   "max_to_rows_per_key": 1,
+   "cardinality_holds": true,
+   "passed": true
+  },
+  "silver_projects_to_details_v3": {
+   "from_null_keys": 0,
+   "max_to_rows_per_key": 1,
+   "max_from_rows_per_key": 1,
+   "cardinality_holds": true,
+   "unmatched_from_rows_coverage": 1816,
+   "reverse_orphans": 0,
+   "passed": true
+  },
+  "silver_projects_to_ieg": {
+   "from_null_keys": 0,
+   "max_to_rows_per_key": 1,
+   "max_from_rows_per_key": 1,
+   "cardinality_holds": true,
+   "unmatched_from_rows_coverage": 1250,
+   "reverse_orphans": 0,
+   "passed": true
+  },
+  "silver_projects_to_wdi_country": {
+   "from_null_keys": 139,
+   "orphans": 0,
+   "max_to_rows_per_key": 1,
+   "cardinality_holds": true,
+   "passed": true
+  }
+ }
+}

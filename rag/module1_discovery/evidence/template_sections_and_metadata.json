@@ -1,0 +1,2147 @@
+{
+ "P131049_PAD_17555469.pdf": {
+  "template": "PAD",
+  "toc_pages": [
+   5,
+   6
+  ],
+  "section_first_pages": {
+   "STRATEGIC CONTEXT": [
+    11
+   ],
+   "PROJECT DEVELOPMENT OBJECTIVES": [
+    16
+   ],
+   "PROJECT DESCRIPTION": [
+    18
+   ],
+   "IMPLEMENTATION": [
+    14,
+    22,
+    29,
+    37
+   ],
+   "KEY RISKS": [
+    24
+   ],
+   "APPRAISAL SUMMARY": [
+    25
+   ],
+   "Procurement": [
+    3,
+    9,
+    21,
+    29
+   ],
+   "Financial Management": [
+    2,
+    9,
+    28,
+    54
+   ],
+   "Results Framework": [
+    23
+   ],
+   "Economic Analysis": [
+    25,
+    63
+   ]
+  },
+  "wds_metadata_found": true,
+  "wds_metadata_source": "wds_v3_cluster_meta.jsonl.gz",
+  "wds_record": {
+   "id": "17555469",
+   "admreg": "Eastern and Southern Africa",
+   "count": "Mozambique",
+   "docna": {
+    "0": {
+     "docna": "Mozambique - Climate Resilience : Transforming Hydro-Meteorological Services Project"
+    }
+   },
+   "docty": "Project Appraisal Document",
+   "owner": "Env., NRM, WRM & DRM Prac 3 (AFTN3)",
+   "projn": "MZ-Climate Resilience: Transforming Hydro-Meteorological Services -- P131049",
+   "subsc": "FY17 - Public Administration - Water, Sanitation and Waste Management",
+   "trustfund": "TF011055 - Mozambique: Transforming the hydro-meteorological services; TF014031 - Mozambique Climate Resilience: Transforming Hydro-Meteorological Servic",
+   "theme": "FY17 - Disaster Response and Recovery,FY17 - Disaster Risk Management,FY17 - Disaster Preparedness,FY17 - E-Government, incl. e-services,FY17 - Finance for Development,FY17 - Public Administration,FY17 - Disaster Risk Reduction,FY17 - Disaster Risk Finance",
+   "prdln": "Recipient Executed Activities",
+   "seccl": "Public",
+   "lang": "English",
+   "lndinstr": {
+    "0": {
+     "lndinstr": "Investment Project Financing"
+    }
+   },
+   "lndinstr_exact": "Investment Project Financing",
+   "entityids": {
+    "entityid": "000350881_20130409105132"
+   },
+   "majtheme": "FY17 - Public Sector Management,FY17 - Finance,FY17 - Urban and Rural Development",
+   "subtopic": "Climate Change Impacts,Climate Change and Environment,Climate Change and Health,Disaster Management,Hazard Risk Management,Hydrology,Natural Disasters,Science of Climate Change,Social Risk Management",
+   "teratopic": "Environment,Information and Communication Technologies,Private Sector Development,Water Supply and Sanitation",
+   "sectr": {
+    "0": {
+     "sector": "Water, Sanitation and Waste Management"
+    }
+   },
+   "repnb": "75939",
+   "docdt": "2013-04-01T04:00:00Z",
+   "datestored": "2013-04-09T04:00:00Z",
+   "keywd": {
+    "0": {
+     "keywd": "Strategic Program for Climate Resilience"
+    },
+    "1": {
+     "keywd": "Pilot Program for Climate Resilience"
+    },
+    "2": {
+     "keywd": "provision of water supply and sanitation"
+    },
+    "3": {
+     "keywd": "environment and natural resources management"
+    },
+    "4": {
+     "keywd": "negative impacts of climate change"
+    },
+    "5": {
+     "keywd": "early warning system"
+    },
+    "6": {
+     "keywd": "monitoring network"
+    },
+    "7": {
+     "keywd": "management of water resource"
+    },
+    "8": {
+     "keywd": "economic and financial analysis"
+    },
+    "9": {
+     "keywd": "Risks and Mitigation Measures"
+    },
+    "10": {
+     "keywd": "information and communication technology"
+    },
+    "11": {
+     "keywd": "Conta Unica do Tesouro"
+    },
+    "12": {
+     "keywd": "water quality monitoring equipment"
+    },
+    "13": {
+     "keywd": "average per capita income"
+    },
+    "14": {
+     "keywd": "meteorological information"
+    },
+    "15": {
+     "keywd": "access to information"
+    },
+    "16": {
+     "keywd": "quality management system"
+    },
+    "17": {
+     "keywd": "exchange rate"
+    },
+    "18": {
+     "keywd": "operations and maintenance"
+    },
+    "19": {
+     "keywd": "local community radio"
+    },
+    "20": {
+     "keywd": "loss of life"
+    },
+    "21": {
+     "keywd": "Exchange Rates"
+    },
+    "22": {
+     "keywd": "average life expectancy"
+    },
+    "23": {
+     "keywd": "government financial support"
+    },
+    "24": {
+     "keywd": "water resource planning"
+    },
+    "25": {
+     "keywd": "access to water"
+    },
+    "26": {
+     "keywd": "spatial data infrastructure"
+    },
+    "27": {
+     "keywd": "foreign direct investment"
+    },
+    "28": {
+     "keywd": "gdp growth rate"
+    },
+    "29": {
+     "keywd": "Safeguard Policies"
+    },
+    "30": {
+     "keywd": "safeguard policy"
+    },
+    "31": {
+     "keywd": "duplication of efforts"
+    },
+    "32": {
+     "keywd": "capacity for climate"
+    },
+    "33": {
+     "keywd": "remote sensing data"
+    },
+    "34": {
+     "keywd": "severe weather events"
+    },
+    "35": {
+     "keywd": "time per day"
+    },
+    "36": {
+     "keywd": "future climate change"
+    },
+    "37": {
+     "keywd": "river basin management"
+    },
+    "38": {
+     "keywd": "renewable water resource"
+    },
+    "39": {
+     "keywd": "digital elevation model"
+    },
+    "40": {
+     "keywd": "automatic weather stations"
+    },
+    "41": {
+     "keywd": "benefit cost analysis"
+    },
+    "42": {
+     "keywd": "upper air monitoring"
+    },
+    "43": {
+     "keywd": "national water resource"
+    },
+    "44": {
+     "keywd": "long-term climate change"
+    },
+    "45": {
+     "keywd": "risk of theft"
+    },
+    "46": {
+     "keywd": "integrated watershed management"
+    },
+    "47": {
+     "keywd": "climate change adaptation"
+    },
+    "48": {
+     "keywd": "food security issue"
+    },
+    "49": {
+     "keywd": "extreme weather event"
+    },
+    "50": {
+     "keywd": "growth and development"
+    },
+    "51": {
+     "keywd": "readiness for implementation"
+    },
+    "52": {
+     "keywd": "accessibility of data"
+    },
+    "53": {
+     "keywd": "national meteorological service"
+    },
+    "54": {
+     "keywd": "data sharing"
+    },
+    "55": {
+     "keywd": "monitoring stations"
+    },
+    "56": {
+     "keywd": "weather condition"
+    },
+    "57": {
+     "keywd": "discount rate"
+    },
+    "58": {
+     "keywd": "hydrological information"
+    },
+    "59": {
+     "keywd": "hydrological data"
+    },
+    "60": {
+     "keywd": "sensitivity analysis"
+    },
+    "61": {
+     "keywd": "financial sustainability"
+    },
+    "62": {
+     "keywd": "result indicator"
+    },
+    "63": {
+     "keywd": "data management"
+    },
+    "64": {
+     "keywd": "Extractive Industry"
+    },
+    "65": {
+     "keywd": "institutional strengthening"
+    },
+    "66": {
+     "keywd": "natural hazard"
+    },
+    "67": {
+     "keywd": "results framework"
+    },
+    "68": {
+     "keywd": "institutional context"
+    },
+    "69": {
+     "keywd": "water conditions"
+    },
+    "70": {
+     "keywd": "international donor"
+    },
+    "71": {
+     "keywd": "government budget"
+    },
+    "72": {
+     "keywd": "weather forecast"
+    },
+    "73": {
+     "keywd": "rural area"
+    },
+    "74": {
+     "keywd": "Institutional Sustainability"
+    },
+    "75": {
+     "keywd": "meteorological data"
+    },
+    "76": {
+     "keywd": "present value"
+    },
+    "77": {
+     "keywd": "hydromet services"
+    },
+    "78": {
+     "keywd": "rainy season"
+    },
+    "79": {
+     "keywd": "central regions"
+    },
+    "80": {
+     "keywd": "effectiveness condition"
+    },
+    "81": {
+     "keywd": "household benefit"
+    },
+    "82": {
+     "keywd": "climate information"
+    },
+    "83": {
+     "keywd": "water information"
+    },
+    "84": {
+     "keywd": "coastal area"
+    },
+    "85": {
+     "keywd": "flood monitoring"
+    },
+    "86": {
+     "keywd": "real value"
+    },
+    "87": {
+     "keywd": "web service"
+    },
+    "88": {
+     "keywd": "university training"
+    },
+    "89": {
+     "keywd": "information products"
+    },
+    "90": {
+     "keywd": "management framework"
+    },
+    "91": {
+     "keywd": "budget account"
+    },
+    "92": {
+     "keywd": "agricultural productivity"
+    },
+    "93": {
+     "keywd": "core indicator"
+    },
+    "94": {
+     "keywd": "international collaboration"
+    },
+    "95": {
+     "keywd": "anticipatory adaptation"
+    },
+    "96": {
+     "keywd": "reporting procedure"
+    },
+    "97": {
+     "keywd": "radio communication"
+    },
+    "98": {
+     "keywd": "political dialogue"
+    },
+    "99": {
+     "keywd": "project effectiveness"
+    },
+    "100": {
+     "keywd": "Shared activity"
+    },
+    "101": {
+     "keywd": "benefit approach"
+    },
+    "102": {
+     "keywd": "ongoing support"
+    },
+    "103": {
+     "keywd": "information service"
+    },
+    "104": {
+     "keywd": "mutual benefits"
+    },
+    "105": {
+     "keywd": "enhancing access"
+    },
+    "106": {
+     "keywd": "government support"
+    },
+    "107": {
+     "keywd": "Commercial Maritime"
+    },
+    "108": {
+     "keywd": "artisanal fishery"
+    },
+    "109": {
+     "keywd": "legal framework"
+    },
+    "110": {
+     "keywd": "Institutional data"
+    },
+    "111": {
+     "keywd": "geographic area"
+    },
+    "112": {
+     "keywd": "private agency"
+    },
+    "113": {
+     "keywd": "sectoral analysis"
+    },
+    "114": {
+     "keywd": "hydrological model"
+    },
+    "115": {
+     "keywd": "economic sector"
+    },
+    "116": {
+     "keywd": "long-term sustainability"
+    },
+    "117": {
+     "keywd": "fiduciary capacity"
+    },
+    "118": {
+     "keywd": "system design"
+    },
+    "119": {
+     "keywd": "professional capacity"
+    },
+    "120": {
+     "keywd": "reform process"
+    },
+    "121": {
+     "keywd": "water event"
+    },
+    "122": {
+     "keywd": "benefits transfer"
+    },
+    "123": {
+     "keywd": "civil works"
+    },
+    "124": {
+     "keywd": "project intervention"
+    },
+    "125": {
+     "keywd": "temporal resolution"
+    },
+    "126": {
+     "keywd": "fishing sector"
+    },
+    "127": {
+     "keywd": "future water"
+    },
+    "128": {
+     "keywd": "government institution"
+    },
+    "129": {
+     "keywd": "target beneficiary"
+    },
+    "130": {
+     "keywd": "gender dimension"
+    },
+    "131": {
+     "keywd": "social impact"
+    },
+    "132": {
+     "keywd": "drought-prone area"
+    },
+    "133": {
+     "keywd": "water collection"
+    },
+    "134": {
+     "keywd": "aviation industry"
+    },
+    "135": {
+     "keywd": "high river"
+    },
+    "136": {
+     "keywd": "adaptive capacity"
+    },
+    "137": {
+     "keywd": "daily operation"
+    },
+    "138": {
+     "keywd": "water infrastructure"
+    },
+    "139": {
+     "keywd": "commercial purpose"
+    },
+    "140": {
+     "keywd": "male migration"
+    },
+    "141": {
+     "keywd": "strategic objective"
+    },
+    "142": {
+     "keywd": "donor support"
+    },
+    "143": {
+     "keywd": "institutional responsibilities"
+    },
+    "144": {
+     "keywd": "interagency collaboration"
+    },
+    "145": {
+     "keywd": "raw data"
+    },
+    "146": {
+     "keywd": "staff capacity"
+    },
+    "147": {
+     "keywd": "meteorological stations"
+    },
+    "148": {
+     "keywd": "information collection"
+    },
+    "149": {
+     "keywd": "aviation sector"
+    },
+    "150": {
+     "keywd": "national budget"
+    },
+    "151": {
+     "keywd": "river stage"
+    },
+    "152": {
+     "keywd": "automatic station"
+    },
+    "153": {
+     "keywd": "negative effect"
+    },
+    "154": {
+     "keywd": "subsistence agriculture"
+    },
+    "155": {
+     "keywd": "cultivated land"
+    },
+    "156": {
+     "keywd": "commercial fishery"
+    },
+    "157": {
+     "keywd": "artisanal fishers"
+    },
+    "158": {
+     "keywd": "physical resources"
+    },
+    "159": {
+     "keywd": "foreign exchange"
+    },
+    "160": {
+     "keywd": "hydropower potential"
+    },
+    "161": {
+     "keywd": "future dam"
+    },
+    "162": {
+     "keywd": "drainage structure"
+    },
+    "163": {
+     "keywd": "river flow"
+    },
+    "164": {
+     "keywd": "tropical cyclone"
+    },
+    "165": {
+     "keywd": "wind gust"
+    },
+    "166": {
+     "keywd": "damage equivalent"
+    },
+    "167": {
+     "keywd": "upstream activity"
+    },
+    "168": {
+     "keywd": "rainfall extremes"
+    },
+    "169": {
+     "keywd": "road transportation"
+    },
+    "170": {
+     "keywd": "infrastructure planning"
+    },
+    "171": {
+     "keywd": "subsistence rain"
+    },
+    "172": {
+     "keywd": "sea level"
+    },
+    "173": {
+     "keywd": "winter season"
+    },
+    "174": {
+     "keywd": "climate pattern"
+    },
+    "175": {
+     "keywd": "rainfall pattern"
+    },
+    "176": {
+     "keywd": "temperature increase"
+    },
+    "177": {
+     "keywd": "expected growth"
+    },
+    "178": {
+     "keywd": "live birth"
+    },
+    "179": {
+     "keywd": "ICT Solutions"
+    },
+    "180": {
+     "keywd": "modern technology"
+    },
+    "181": {
+     "keywd": "monitoring progress"
+    },
+    "182": {
+     "keywd": "active partner"
+    },
+    "183": {
+     "keywd": "international engagement"
+    },
+    "184": {
+     "keywd": "retrospective assessment"
+    },
+    "185": {
+     "keywd": "unequal access"
+    },
+    "186": {
+     "keywd": "natural disaster"
+    },
+    "187": {
+     "keywd": "core operation"
+    },
+    "188": {
+     "keywd": "national climate"
+    },
+    "189": {
+     "keywd": "absolute poverty"
+    },
+    "190": {
+     "keywd": "Child Mortality"
+    },
+    "191": {
+     "keywd": "regional variation"
+    },
+    "192": {
+     "keywd": "food insecurity"
+    },
+    "193": {
+     "keywd": "risk exposure"
+    },
+    "194": {
+     "keywd": "mozambican metical"
+    },
+    "195": {
+     "keywd": "forestry sector"
+    },
+    "196": {
+     "keywd": "flood forecast"
+    },
+    "197": {
+     "keywd": "community participation"
+    },
+    "198": {
+     "keywd": "long-term adaptation"
+    },
+    "199": {
+     "keywd": "climate variability"
+    },
+    "200": {
+     "keywd": "project operation"
+    }
+   },
+   "volnb": "1",
+   "geo_regions": {
+    "0": {
+     "geo_region": "Southern Africa"
+    },
+    "1": {
+     "geo_region": "Sub-Saharan Africa"
+    },
+    "2": {
+     "geo_region": "World"
+    }
+   },
+   "majdocty": "Project Documents",
+   "repnme": {
+    "repnme": "Mozambique - Climate Resilience : Transforming Hydro-Meteorological Services Project"
+   },
+   "display_title": "Mozambique - Climate Resilience : Transforming Hydro-Meteorological Services Project",
+   "disclosure_date": "2013-04-09T04:00:00Z",
+   "closedt": "2013-04-25T00:00:00Z",
+   "disclosure_type": "Simultaneous Disclosure",
+   "pdfurl": "http://documents.worldbank.org/curated/en/506641468321881521/pdf/759390PAD0P1310040901300SIMULT0DISC.pdf",
+   "txturl": "http://documents.worldbank.org/curated/en/506641468321881521/text/759390PAD0P1310040901300SIMULT0DISC.txt",
+   "EnvironmentalCategory": "B",
+   "disclstat": "Disclosed",
+   "chronical_docm_id": "090224b0828b79ab",
+   "totvolnb": "1",
+   "versiontyp": "Buff cover",
+   "historic_topic": "Environment,Information and Communication Technologies,Private Sector Development,Water Supply and Sanitation",
+   "projectid": "P131049",
+   "guid": "506641468321881521",
+   "prdln_exact": "Recipient Executed Activities",
+   "available_in": "English",
+   "fullavailablein": [],
+   "url": "http://documents.worldbank.org/curated/en/506641468321881521",
+   "_extract": {
+    "filter_projectid": "P131049"
+   }
+  }
+ },
+ "P145502_PAD_19368603.pdf": {
+  "template": "PAD",
+  "toc_pages": [
+   4,
+   5
+  ],
+  "section_first_pages": {
+   "STRATEGIC CONTEXT": [
+    12
+   ],
+   "PROJECT DEVELOPMENT OBJECTIVES": [],
+   "PROJECT DESCRIPTION": [],
+   "IMPLEMENTATION": [
+    2,
+    8,
+    9,
+    21
+   ],
+   "KEY RISKS": [
+    28
+   ],
+   "APPRAISAL SUMMARY": [
+    29
+   ],
+   "Procurement": [
+    3,
+    11,
+    32,
+    33
+   ],
+   "Financial Management": [
+    11,
+    32,
+    42,
+    53
+   ],
+   "Results Framework": [
+    3,
+    60
+   ],
+   "Economic Analysis": [
+    29,
+    66,
+    69
+   ]
+  },
+  "wds_metadata_found": true,
+  "wds_metadata_source": "wds_v3_cluster_meta.jsonl.gz",
+  "wds_record": {
+   "id": "19368603",
+   "admreg": "South Asia",
+   "count": "India",
+   "docna": {
+    "0": {
+     "docna": "India - Technology Center Systems Program Project"
+    }
+   },
+   "docty": "Project Appraisal Document",
+   "owner": "Finance & PSD Unit (SASFP)",
+   "projn": "IN-Technology Center Systems Project (TCSP) -- P145502",
+   "subsc": "FY17 - Other Industry, Trade and Services,FY17 - Public Administration - Industry, Trade and Services",
+   "theme": "FY17 - Enterprise Development,FY17 - Financial Infrastructure and Access,FY17 - MSME Finance,FY17 - MSME Development",
+   "prdln": "IBRD/IDA",
+   "seccl": "Public",
+   "lang": "English",
+   "lndinstr": {
+    "0": {
+     "lndinstr": "Investment Project Financing"
+    }
+   },
+   "lndinstr_exact": "Investment Project Financing",
+   "entityids": {
+    "entityid": "000333037_20140410122720"
+   },
+   "majtheme": "FY17 - Private Sector Development,FY17 - Finance",
+   "subtopic": "Business Cycles and Stabilization Policies,Common Carriers Industry,Construction Industry,Food & Beverage Industry,General Manufacturing,Global Environment,Plastics & Rubber Industry,Pulp & Paper Industry,Vocational & Technical Education,Vocational Education & Technical Training",
+   "teratopic": "Environment,Finance and Financial Sector Development,Industry,Information and Communication Technologies,Private Sector Development",
+   "sectr": {
+    "0": {
+     "sector": "Industry, Trade and Services"
+    }
+   },
+   "repnb": "82484",
+   "docdt": "2014-04-02T04:00:00Z",
+   "datestored": "2014-04-10T04:00:00Z",
+   "keywd": {
+    "0": {
+     "keywd": "flexible loan"
+    },
+    "1": {
+     "keywd": "financial and private sector development"
+    },
+    "2": {
+     "keywd": "Micro"
+    },
+    "3": {
+     "keywd": " Small and Medium Enterprise"
+    },
+    "4": {
+     "keywd": "Risks and Mitigation Measures"
+    },
+    "5": {
+     "keywd": "skill base"
+    },
+    "6": {
+     "keywd": "access to technology"
+    },
+    "7": {
+     "keywd": "modern enterprise"
+    },
+    "8": {
+     "keywd": "private sector service providers"
+    },
+    "9": {
+     "keywd": "gross domestic product"
+    },
+    "10": {
+     "keywd": "labor force participation rate"
+    },
+    "11": {
+     "keywd": "small and medium size enterprise"
+    },
+    "12": {
+     "keywd": "international good practice"
+    },
+    "13": {
+     "keywd": "Vocational Training"
+    },
+    "14": {
+     "keywd": "sustainable technology"
+    },
+    "15": {
+     "keywd": "private sector representative"
+    },
+    "16": {
+     "keywd": "Manufacturing"
+    },
+    "17": {
+     "keywd": "Business Advisory Service"
+    },
+    "18": {
+     "keywd": "existing technology"
+    },
+    "19": {
+     "keywd": "system program"
+    },
+    "20": {
+     "keywd": "private sector client"
+    },
+    "21": {
+     "keywd": "readiness for implementation"
+    },
+    "22": {
+     "keywd": "private provider"
+    },
+    "23": {
+     "keywd": "environmentally friendly practices"
+    },
+    "24": {
+     "keywd": "cost financing"
+    },
+    "25": {
+     "keywd": "base case"
+    },
+    "26": {
+     "keywd": "manufacturing sector"
+    },
+    "27": {
+     "keywd": "Safeguard Policies"
+    },
+    "28": {
+     "keywd": "vocational training system"
+    },
+    "29": {
+     "keywd": "skill development"
+    },
+    "30": {
+     "keywd": "local business association"
+    },
+    "31": {
+     "keywd": "manufacturing industry"
+    },
+    "32": {
+     "keywd": "safeguard policy"
+    },
+    "33": {
+     "keywd": "vocational training program"
+    },
+    "34": {
+     "keywd": "quality and efficiency"
+    },
+    "35": {
+     "keywd": "dynamic emerging market"
+    },
+    "36": {
+     "keywd": "planning management systems"
+    },
+    "37": {
+     "keywd": "performance management system"
+    },
+    "38": {
+     "keywd": "vocational training course"
+    },
+    "39": {
+     "keywd": "adequate quality control"
+    },
+    "40": {
+     "keywd": "technical skill development"
+    },
+    "41": {
+     "keywd": "private sector association"
+    },
+    "42": {
+     "keywd": "private sector actors"
+    },
+    "43": {
+     "keywd": "private sector institutions"
+    },
+    "44": {
+     "keywd": "support for entrepreneur"
+    },
+    "45": {
+     "keywd": "limited international bidding"
+    },
+    "46": {
+     "keywd": "net present value"
+    },
+    "47": {
+     "keywd": "market development activity"
+    },
+    "48": {
+     "keywd": "operational risk assessment"
+    },
+    "49": {
+     "keywd": "result indicator"
+    },
+    "50": {
+     "keywd": "train service"
+    },
+    "51": {
+     "keywd": "downstream industry"
+    },
+    "52": {
+     "keywd": "Capital Investments"
+    },
+    "53": {
+     "keywd": "civil works"
+    },
+    "54": {
+     "keywd": "supplier network"
+    },
+    "55": {
+     "keywd": "advanced technology"
+    },
+    "56": {
+     "keywd": ""
+    }
+   },
+   "volnb": "1",
+   "geo_regions": {
+    "0": {
+     "geo_region": "Asia"
+    },
+    "1": {
+     "geo_region": "South Asia"
+    },
+    "2": {
+     "geo_region": "World"
+    }
+   },
+   "majdocty": "Project Documents",
+   "repnme": {
+    "repnme": "India - Technology Center Systems Program Project"
+   },
+   "display_title": "India - Technology Center Systems Program Project",
+   "disclosure_date": "2014-05-01T04:00:00Z",
+   "pdfurl": "http://documents.worldbank.org/curated/en/684821468041392038/pdf/824840PAD0P145010Box385177B00OUO090.pdf",
+   "txturl": "http://documents.worldbank.org/curated/en/684821468041392038/text/824840PAD0P145010Box385177B00OUO090.txt",
+   "EnvironmentalCategory": "B",
+   "disclstat": "Disclosed",
+   "chronical_docm_id": "090224b0828d8043",
+   "totvolnb": "1",
+   "versiontyp": "Buff cover",
+   "historic_topic": "Environment,Finance and Financial Sector Development,Industry,Information and Communication Technologies,Private Sector Development",
+   "projectid": "P145502",
+   "guid": "684821468041392038",
+   "prdln_exact": "IBRD/IDA",
+   "available_in": "English",
+   "fullavailablein": [],
+   "url": "http://documents.worldbank.org/curated/en/684821468041392038",
+   "_extract": {
+    "filter_projectid": "P145502"
+   }
+  }
+ },
+ "P131049_ISR_27391778.pdf": {
+  "template": "ISR",
+  "toc_pages": [],
+  "section_first_pages": {
+   "Key Dates": [
+    1,
+    11
+   ],
+   "Project Development Objectives": [
+    1
+   ],
+   "Overall Ratings": [
+    1
+   ],
+   "Implementation Status and Key Decisions": [],
+   "Risks": [
+    3
+   ],
+   "Results": [
+    3
+   ],
+   "Disbursements": [
+    11
+   ],
+   "Restructuring History": [
+    12
+   ]
+  },
+  "wds_metadata_found": true,
+  "wds_metadata_source": "wds_v3_cluster_meta.jsonl.gz",
+  "wds_record": {
+   "id": "27391778",
+   "admreg": "Eastern and Southern Africa",
+   "authors": {
+    "0": {
+     "author": "Mcmillan, Shelley"
+    }
+   },
+   "count": "Mozambique",
+   "docna": {
+    "0": {
+     "docna": "Mozambique - Climate Resilience: Transforming Hydro-Meteorological Services : P131049 - Implementation Status Results Report : Sequence 08"
+    }
+   },
+   "docty": "Implementation Status and Results Report",
+   "projn": "MZ-Climate Resilience: Transforming Hydro-Meteorological Services -- P131049",
+   "subsc": "FY17 - Public Administration - Water, Sanitation and Waste Management",
+   "theme": "FY17 - Disaster Response and Recovery,FY17 - Disaster Risk Management,FY17 - Disaster Preparedness,FY17 - E-Government, incl. e-services,FY17 - Finance for Development,FY17 - Public Administration,FY17 - Disaster Risk Reduction,FY17 - Disaster Risk Finance",
+   "prdln": "Recipient Executed Activities",
+   "seccl": "Public",
+   "lang": "English",
+   "lndinstr": {
+    "0": {
+     "lndinstr": "Investment Project Financing"
+    }
+   },
+   "lndinstr_exact": "Investment Project Financing",
+   "entityids": {
+    "entityid": "090224b084afc87b_1_0"
+   },
+   "majtheme": "FY17 - Public Sector Management,FY17 - Finance,FY17 - Urban and Rural Development",
+   "subtopic": "Climate Change Impacts,Climate Change and Agriculture,Climate Change and Environment,Climate Change and Health,Climate and Meteorology,Hydrology,Natural Disasters,Science of Climate Change",
+   "sectr": {
+    "0": {
+     "sector": "Water, Sanitation and Waste Management"
+    }
+   },
+   "repnb": "ISR27378",
+   "docdt": "2017-04-24T04:00:00Z",
+   "datestored": "2017-04-24T04:00:00Z",
+   "keywd": {
+    "0": {
+     "keywd": "effect of climate change"
+    },
+    "1": {
+     "keywd": "effect of climate variability"
+    },
+    "2": {
+     "keywd": "climate resilience"
+    },
+    "3": {
+     "keywd": "climate information"
+    },
+    "4": {
+     "keywd": "Recipient Executed Activities"
+    },
+    "5": {
+     "keywd": "early warning system"
+    },
+    "6": {
+     "keywd": "quality and quantity"
+    },
+    "7": {
+     "keywd": "beneficiary group"
+    },
+    "8": {
+     "keywd": "meteorological data"
+    },
+    "9": {
+     "keywd": "monitoring stations"
+    },
+    "10": {
+     "keywd": "data sharing"
+    },
+    "11": {
+     "keywd": "daily weather"
+    },
+    "12": {
+     "keywd": "monitoring network"
+    },
+    "13": {
+     "keywd": "weather station"
+    },
+    "14": {
+     "keywd": "hydrological data"
+    },
+    "15": {
+     "keywd": "government capacity"
+    },
+    "16": {
+     "keywd": "pilot program"
+    },
+    "17": {
+     "keywd": "resilient development"
+    },
+    "18": {
+     "keywd": "knowledge exchange"
+    },
+    "19": {
+     "keywd": "shared learning"
+    },
+    "20": {
+     "keywd": "climate services"
+    },
+    "21": {
+     "keywd": "budget allocation"
+    },
+    "22": {
+     "keywd": "dam operator"
+    },
+    "23": {
+     "keywd": "project duration"
+    },
+    "24": {
+     "keywd": "stakeholder consultation"
+    },
+    "25": {
+     "keywd": "water global"
+    },
+    "26": {
+     "keywd": "investment loan"
+    },
+    "27": {
+     "keywd": "meteorological information"
+    },
+    "28": {
+     "keywd": "hydrological information"
+    },
+    "29": {
+     "keywd": "weather forecast"
+    },
+    "30": {
+     "keywd": "train activity"
+    },
+    "31": {
+     "keywd": "coastal area"
+    },
+    "32": {
+     "keywd": "gender target"
+    },
+    "33": {
+     "keywd": "vulnerable household"
+    },
+    "34": {
+     "keywd": "effective information"
+    },
+    "35": {
+     "keywd": "meteorological institution"
+    },
+    "36": {
+     "keywd": ""
+    }
+   },
+   "volnb": "1",
+   "majdocty": "Project Documents",
+   "repnme": {
+    "repnme": "Mozambique - Climate Resilience: Transforming Hydro-Meteorological Services : P131049 - Implementation Status Results Report : Sequence 08"
+   },
+   "display_title": "Mozambique - Climate Resilience: Transforming Hydro-Meteorological Services : P131049 - Implementation Status Results Report : Sequence 08",
+   "disclosure_date": "2017-04-24T22:03:18Z",
+   "pdfurl": "http://documents.worldbank.org/curated/en/843631493071399430/pdf/ISR-Disclosable-P131049-04-24-2017-1493071389036.pdf",
+   "txturl": "http://documents.worldbank.org/curated/en/843631493071399430/text/ISR-Disclosable-P131049-04-24-2017-1493071389036.txt",
+   "EnvironmentalCategory": "B",
+   "disclstat": "Disclosed",
+   "chronical_docm_id": "090224b084afc87b",
+   "totvolnb": "1",
+   "projectid": "P131049",
+   "guid": "843631493071399430",
+   "origu": "Water East Africa Region (SAEW3)",
+   "prdln_exact": "Recipient Executed Activities",
+   "available_in": "English",
+   "fullavailablein": [],
+   "url": "http://documents.worldbank.org/curated/en/843631493071399430",
+   "_extract": {
+    "filter_projectid": "P131049"
+   }
+  }
+ },
+ "P131049_ICR_32160299.pdf": {
+  "template": "ICR",
+  "toc_pages": [
+   5
+  ],
+  "section_first_pages": {
+   "PROJECT CONTEXT AND DEVELOPMENT OBJECTIVES": [
+    10
+   ],
+   "OUTCOME": [
+    7,
+    13,
+    15,
+    19
+   ],
+   "KEY FACTORS THAT AFFECTED IMPLEMENTATION": [
+    23
+   ],
+   "BANK PERFORMANCE": [
+    7,
+    24,
+    26
+   ],
+   "Procurement": [
+    26,
+    43
+   ],
+   "LESSONS AND RECOMMENDATIONS": [
+    28
+   ],
+   "RESULTS FRAMEWORK": [
+    4,
+    13
+   ],
+   "BORROWER COMMENTS": []
+  },
+  "wds_metadata_found": true,
+  "wds_metadata_source": "wds_v3_cluster_meta.jsonl.gz",
+  "wds_record": {
+   "id": "32160299",
+   "admreg": "Eastern and Southern Africa",
+   "count": "Mozambique",
+   "docna": {
+    "0": {
+     "docna": "Mozambique - Climate Resilience : Transforming Hydro-Meteorological Service Project"
+    }
+   },
+   "docty": "Implementation Completion and Results Report",
+   "owner": "N/A",
+   "projn": "MZ-Climate Resilience: Transforming Hydro-Meteorological Services -- P131049",
+   "subsc": "FY17 - Public Administration - Water, Sanitation and Waste Management",
+   "trustfund": "TF011055 - Mozambique: Transforming the hydro-meteorological services; TF014031 - Mozambique Climate Resilience: Transforming Hydro-Meteorological Servic",
+   "theme": "FY17 - Disaster Response and Recovery,FY17 - Disaster Risk Management,FY17 - Disaster Preparedness,FY17 - E-Government, incl. e-services,FY17 - Finance for Development,FY17 - Public Administration,FY17 - Disaster Risk Reduction,FY17 - Disaster Risk Finance",
+   "prdln": "Recipient Executed Activities",
+   "seccl": "Public",
+   "lang": "English",
+   "lndinstr": {
+    "0": {
+     "lndinstr": "Investment Project Financing"
+    }
+   },
+   "lndinstr_exact": "Investment Project Financing",
+   "entityids": {
+    "entityid": "090224b087ab06dd_1_0"
+   },
+   "majtheme": "FY17 - Public Sector Management,FY17 - Finance,FY17 - Urban and Rural Development",
+   "subtopic": "Climate Change Impacts,Climate Change and Agriculture,Climate and Meteorology,Hydrology,Natural Disasters",
+   "teratopic": "Agriculture,Environment,Science and Technology Development,Water Resources",
+   "sectr": {
+    "0": {
+     "sector": "Water, Sanitation and Waste Management"
+    }
+   },
+   "repnb": "ICR5203",
+   "docdt": "2020-06-15T04:00:00Z",
+   "datestored": "2020-06-22T04:00:00Z",
+   "keywd": {
+    "0": {
+     "keywd": "southern african development community"
+    },
+    "1": {
+     "keywd": " Water"
+    },
+    "2": {
+     "keywd": " Sanitation and Waste Management"
+    },
+    "3": {
+     "keywd": " integrated water resources management"
+    },
+    "4": {
+     "keywd": " Pilot Program for Climate Resilience"
+    },
+    "5": {
+     "keywd": " poverty reduction action"
+    },
+    "6": {
+     "keywd": " disaster risk management"
+    },
+    "7": {
+     "keywd": " Management of Natural Resources"
+    },
+    "8": {
+     "keywd": " digital elevation model"
+    },
+    "9": {
+     "keywd": " Urban and Rural Development"
+    },
+    "10": {
+     "keywd": " effect of climate variability"
+    },
+    "11": {
+     "keywd": " Disaster Response and Recovery"
+    },
+    "12": {
+     "keywd": " quality management system"
+    },
+    "13": {
+     "keywd": " millennium development goal"
+    },
+    "14": {
+     "keywd": " Adaptation to Climate Change"
+    },
+    "15": {
+     "keywd": " early warning system"
+    },
+    "16": {
+     "keywd": " data management"
+    },
+    "17": {
+     "keywd": " numerical weather prediction"
+    },
+    "18": {
+     "keywd": " loss of life"
+    },
+    "19": {
+     "keywd": " assessment of achievement"
+    },
+    "20": {
+     "keywd": " not statistically significant"
+    },
+    "21": {
+     "keywd": " hydrologic engineering"
+    },
+    "22": {
+     "keywd": " operational risk assessment"
+    },
+    "23": {
+     "keywd": " future climate change"
+    },
+    "24": {
+     "keywd": " growth and development"
+    },
+    "25": {
+     "keywd": " accessibility of data"
+    },
+    "26": {
+     "keywd": " present value estimate"
+    },
+    "27": {
+     "keywd": " Disaster Risk Reduction"
+    },
+    "28": {
+     "keywd": " global positioning system"
+    },
+    "29": {
+     "keywd": " efficiency of investment"
+    },
+    "30": {
+     "keywd": " future climate scenarios"
+    },
+    "31": {
+     "keywd": " air traffic control"
+    },
+    "32": {
+     "keywd": " capacity for climate"
+    },
+    "33": {
+     "keywd": " transfer of data"
+    },
+    "34": {
+     "keywd": " Water Resource Management"
+    },
+    "35": {
+     "keywd": " Finance for Development"
+    },
+    "36": {
+     "keywd": " Disaster Risk Finance"
+    },
+    "37": {
+     "keywd": " export of goods"
+    },
+    "38": {
+     "keywd": " change in temperature"
+    },
+    "39": {
+     "keywd": " meteorological information"
+    },
+    "40": {
+     "keywd": " flood forecast"
+    }
+   },
+   "volnb": "1",
+   "geo_regions": {
+    "0": {
+     "geo_region": "Southern Africa"
+    },
+    "1": {
+     "geo_region": "Sub-Saharan Africa"
+    },
+    "2": {
+     "geo_region": "World"
+    }
+   },
+   "majdocty": "Project Documents",
+   "repnme": {
+    "repnme": "Mozambique - Climate Resilience : Transforming Hydro-Meteorological Service Project"
+   },
+   "display_title": "Mozambique - Climate Resilience : Transforming Hydro-Meteorological Service Project",
+   "disclosure_date": "2020-06-22T21:17:58Z",
+   "pdfurl": "http://documents.worldbank.org/curated/en/367671592860765715/pdf/Mozambique-Climate-Resilience-Transforming-Hydro-Meteorological-Service-Project.pdf",
+   "txturl": "http://documents.worldbank.org/curated/en/367671592860765715/text/Mozambique-Climate-Resilience-Transforming-Hydro-Meteorological-Service-Project.txt",
+   "EnvironmentalCategory": "B",
+   "disclstat": "Disclosed",
+   "chronical_docm_id": "090224b087ab06dd",
+   "totvolnb": "1",
+   "versiontyp": "Gray cover",
+   "historic_topic": "Agriculture,Environment,Science and Technology Development,Water Resources",
+   "projectid": "P131049",
+   "guid": "367671592860765715",
+   "prdln_exact": "Recipient Executed Activities",
+   "available_in": "English",
+   "fullavailablein": [],
+   "url": "http://documents.worldbank.org/curated/en/367671592860765715",
+   "_extract": {
+    "filter_projectid": "P131049"
+   }
+  }
+ },
+ "P131049_ICRR_32800471.pdf": {
+  "template": "ICRR",
+  "toc_pages": [],
+  "section_first_pages": {
+   "Project Data": [
+    1
+   ],
+   "Project Objectives and Components": [
+    1
+   ],
+   "Relevance of Objectives": [
+    4
+   ],
+   "Efficacy": [
+    5,
+    7,
+    8
+   ],
+   "Efficiency": [
+    8,
+    9
+   ],
+   "Outcome": [
+    5,
+    7,
+    8,
+    9
+   ],
+   "Risk to Development Outcome": [
+    10
+   ],
+   "Bank Performance": [
+    14
+   ],
+   "Quality of Monitoring and Evaluation": [],
+   "Lessons": [
+    14
+   ],
+   "Quality of ICR": [
+    14,
+    15
+   ]
+  },
+  "wds_metadata_found": true,
+  "wds_metadata_source": "wds_v3_cluster_meta.jsonl.gz",
+  "wds_record": {
+   "id": "32800471",
+   "admreg": "Eastern and Southern Africa",
+   "authors": {
+    "0": {
+     "author": "IEG Review Team"
+    }
+   },
+   "count": "Mozambique",
+   "docna": {
+    "0": {
+     "docna": "Mozambique - MZ-Hydro-Met PPCR"
+    }
+   },
+   "docty": "Implementation Completion Report Review",
+   "projn": "MZ-Climate Resilience: Transforming Hydro-Meteorological Services -- P131049",
+   "subsc": "FY17 - Public Administration - Water, Sanitation and Waste Management",
+   "theme": "FY17 - Disaster Response and Recovery,FY17 - Disaster Risk Management,FY17 - Disaster Preparedness,FY17 - E-Government, incl. e-services,FY17 - Finance for Development,FY17 - Public Administration,FY17 - Disaster Risk Reduction,FY17 - Disaster Risk Finance",
+   "prdln": "Recipient Executed Activities",
+   "seccl": "Public",
+   "lang": "English",
+   "lndinstr": {
+    "0": {
+     "lndinstr": "Investment Project Financing"
+    }
+   },
+   "lndinstr_exact": "Investment Project Financing",
+   "entityids": {
+    "entityid": "090224b088259ffc_1_0"
+   },
+   "majtheme": "FY17 - Public Sector Management,FY17 - Finance,FY17 - Urban and Rural Development",
+   "subtopic": "Financial Sector Policy,Hydrology,Natural Disasters",
+   "teratopic": "Environment,Water Resources",
+   "sectr": {
+    "0": {
+     "sector": "Water, Sanitation and Waste Management"
+    }
+   },
+   "repnb": "ICRR0022203",
+   "docdt": "2021-02-02T05:00:00Z",
+   "datestored": "2021-02-02T05:00:00Z",
+   "keywd": {
+    "0": {
+     "keywd": "integrated water resources management"
+    },
+    "1": {
+     "keywd": " Environmental and Social Management Plan"
+    },
+    "2": {
+     "keywd": " Pilot Program for Climate Resilience"
+    },
+    "3": {
+     "keywd": " Management of Natural Resources"
+    },
+    "4": {
+     "keywd": " poverty reduction action"
+    },
+    "5": {
+     "keywd": " meteorological information"
+    },
+    "6": {
+     "keywd": " hydrological information"
+    },
+    "7": {
+     "keywd": " theory of change"
+    },
+    "8": {
+     "keywd": " early warning system"
+    },
+    "9": {
+     "keywd": " source of funding"
+    },
+    "10": {
+     "keywd": " project time frame"
+    },
+    "11": {
+     "keywd": " real time information"
+    },
+    "12": {
+     "keywd": " national meteorological service"
+    },
+    "13": {
+     "keywd": " lack of consistency"
+    },
+    "14": {
+     "keywd": " investment in water"
+    },
+    "15": {
+     "keywd": " losses from flood"
+    },
+    "16": {
+     "keywd": " maintenance of infrastructure"
+    },
+    "17": {
+     "keywd": " growth and development"
+    },
+    "18": {
+     "keywd": " impact of weather"
+    },
+    "19": {
+     "keywd": " national water resource"
+    },
+    "20": {
+     "keywd": " displacement of people"
+    },
+    "21": {
+     "keywd": " disaster risk management"
+    },
+    "22": {
+     "keywd": " adverse environmental impact"
+    },
+    "23": {
+     "keywd": " gross domestic product"
+    },
+    "24": {
+     "keywd": " reduction of hazard"
+    },
+    "25": {
+     "keywd": " net present value"
+    },
+    "26": {
+     "keywd": " duplication of efforts"
+    },
+    "27": {
+     "keywd": " hydraulic engineering"
+    },
+    "28": {
+     "keywd": " combination of factor"
+    },
+    "29": {
+     "keywd": " social discount rate"
+    },
+    "30": {
+     "keywd": " change in temperature"
+    },
+    "31": {
+     "keywd": " capacity for climate"
+    },
+    "32": {
+     "keywd": " quality of audit"
+    },
+    "33": {
+     "keywd": " natural habitat"
+    },
+    "34": {
+     "keywd": " climate information"
+    },
+    "35": {
+     "keywd": " procurement delay"
+    },
+    "36": {
+     "keywd": " natural disaster"
+    },
+    "37": {
+     "keywd": " flood forecast"
+    },
+    "38": {
+     "keywd": " involuntary resettlement"
+    },
+    "39": {
+     "keywd": " civil works"
+    },
+    "40": {
+     "keywd": " monitoring stations"
+    },
+    "41": {
+     "keywd": " project costing"
+    },
+    "42": {
+     "keywd": " good monitoring"
+    },
+    "43": {
+     "keywd": " results framework"
+    },
+    "44": {
+     "keywd": " user surveys"
+    },
+    "45": {
+     "keywd": " institutional strengthening"
+    },
+    "46": {
+     "keywd": " climate variability"
+    },
+    "47": {
+     "keywd": " safeguard policy"
+    },
+    "48": {
+     "keywd": " Safeguard Policies"
+    },
+    "49": {
+     "keywd": " Environmental Assessment"
+    },
+    "50": {
+     "keywd": " hydrological data"
+    },
+    "51": {
+     "keywd": " Climate Risk"
+    },
+    "52": {
+     "keywd": " monitoring network"
+    },
+    "53": {
+     "keywd": " hydrological model"
+    },
+    "54": {
+     "keywd": " government strategy"
+    },
+    "55": {
+     "keywd": " daily weather"
+    },
+    "56": {
+     "keywd": " government's strategy"
+    },
+    "57": {
+     "keywd": " fiduciary capacity"
+    },
+    "58": {
+     "keywd": " mitigation measure"
+    },
+    "59": {
+     "keywd": " outcome targets"
+    },
+    "60": {
+     "keywd": " land acquisition"
+    },
+    "61": {
+     "keywd": " data sharing"
+    },
+    "62": {
+     "keywd": " emergency response"
+    },
+    "63": {
+     "keywd": " project execution"
+    },
+    "64": {
+     "keywd": " political risk"
+    },
+    "65": {
+     "keywd": " technological development"
+    },
+    "66": {
+     "keywd": " infrastructure planning"
+    },
+    "67": {
+     "keywd": " government commitment"
+    },
+    "68": {
+     "keywd": " management position"
+    },
+    "69": {
+     "keywd": " maritime activity"
+    },
+    "70": {
+     "keywd": " site visits"
+    },
+    "71": {
+     "keywd": " broadband connection"
+    },
+    "72": {
+     "keywd": " water use"
+    },
+    "73": {
+     "keywd": " rainfall stations"
+    },
+    "74": {
+     "keywd": " best practice"
+    },
+    "75": {
+     "keywd": " international event"
+    },
+    "76": {
+     "keywd": " temperature increase"
+    },
+    "77": {
+     "keywd": " global scale"
+    },
+    "78": {
+     "keywd": " meteorological observation"
+    },
+    "79": {
+     "keywd": " extreme weather"
+    },
+    "80": {
+     "keywd": " coordinate system"
+    },
+    "81": {
+     "keywd": " government representative"
+    },
+    "82": {
+     "keywd": " weather station"
+    },
+    "83": {
+     "keywd": " air control"
+    },
+    "84": {
+     "keywd": " government authority"
+    },
+    "85": {
+     "keywd": " technological improvement"
+    },
+    "86": {
+     "keywd": " maritime navigation"
+    },
+    "87": {
+     "keywd": " related shock"
+    },
+    "88": {
+     "keywd": " negative effect"
+    },
+    "89": {
+     "keywd": " weather radar"
+    },
+    "90": {
+     "keywd": " corrective action"
+    },
+    "91": {
+     "keywd": " project financing"
+    },
+    "92": {
+     "keywd": " monitoring equipment"
+    },
+    "93": {
+     "keywd": " coastal area"
+    },
+    "94": {
+     "keywd": " artisanal fishery"
+    },
+    "95": {
+     "keywd": " financial arrangement"
+    },
+    "96": {
+     "keywd": " procurement issue"
+    },
+    "97": {
+     "keywd": " weather forecast"
+    },
+    "98": {
+     "keywd": " pilot activities"
+    },
+    "99": {
+     "keywd": " procurement arrangement"
+    },
+    "100": {
+     "keywd": " data management"
+    },
+    "101": {
+     "keywd": " delay in procurement"
+    },
+    "102": {
+     "keywd": " enhancing access"
+    },
+    "103": {
+     "keywd": " corrective measure"
+    },
+    "104": {
+     "keywd": " proactive engagement"
+    },
+    "105": {
+     "keywd": " monitoring data"
+    },
+    "106": {
+     "keywd": " management framework"
+    },
+    "107": {
+     "keywd": " government entity"
+    },
+    "108": {
+     "keywd": " effective systems"
+    },
+    "109": {
+     "keywd": " local reality"
+    },
+    "110": {
+     "keywd": " financial sustainability"
+    },
+    "111": {
+     "keywd": " new technology"
+    },
+    "112": {
+     "keywd": " good information"
+    },
+    "113": {
+     "keywd": " evaluation framework"
+    },
+    "114": {
+     "keywd": " project datum"
+    },
+    "115": {
+     "keywd": " environmental risk"
+    },
+    "116": {
+     "keywd": " several challenges"
+    },
+    "117": {
+     "keywd": " monitoring standard"
+    },
+    "118": {
+     "keywd": " hydrological regime"
+    },
+    "119": {
+     "keywd": " climate scenario"
+    },
+    "120": {
+     "keywd": " maize production"
+    },
+    "121": {
+     "keywd": " road damage"
+    },
+    "122": {
+     "keywd": " budget allocation"
+    },
+    "123": {
+     "keywd": " subnational levels"
+    },
+    "124": {
+     "keywd": " in institution"
+    },
+    "125": {
+     "keywd": " institutional risk"
+    },
+    "126": {
+     "keywd": " staff capacity"
+    },
+    "127": {
+     "keywd": " entry rate"
+    },
+    "128": {
+     "keywd": " effective monitoring"
+    },
+    "129": {
+     "keywd": " reporting procedure"
+    }
+   },
+   "volnb": "1",
+   "majdocty": "Project Documents",
+   "repnme": {
+    "repnme": "Mozambique - MZ-Hydro-Met PPCR"
+   },
+   "display_title": "Mozambique - MZ-Hydro-Met PPCR",
+   "disclosure_date": "2021-02-02T15:54:31Z",
+   "pdfurl": "http://documents.worldbank.org/curated/en/696181612281273732/pdf/Mozambique-MZ-Hydro-Met-PPCR.pdf",
+   "txturl": "http://documents.worldbank.org/curated/en/696181612281273732/text/Mozambique-MZ-Hydro-Met-PPCR.txt",
+   "EnvironmentalCategory": "B",
+   "disclstat": "Disclosed",
+   "chronical_docm_id": "090224b088259ffc",
+   "totvolnb": "1",
+   "historic_topic": "Environment,Water Resources",
+   "projectid": "P131049",
+   "guid": "696181612281273732",
+   "origu": "OPS2DATASHEET",
+   "prdln_exact": "Recipient Executed Activities",
+   "available_in": "English",
+   "fullavailablein": [],
+   "url": "http://documents.worldbank.org/curated/en/696181612281273732",
+   "_extract": {
+    "filter_projectid": "P131049"
+   }
+  }
+ },
+ "P145502_PP_31837484.pdf": {
+  "template": "PP",
+  "toc_pages": [],
+  "section_first_pages": {
+   "General": [
+    1,
+    29
+   ],
+   "Goods and Works": [
+    1
+   ],
+   "Selection of Consultants": [
+    4
+   ],
+   "Activity Reference": [
+    29,
+    31,
+    37,
+    39
+   ],
+   "Procurement Method": [],
+   "Signed Contract": [
+    29,
+    31,
+    37,
+    39
+   ]
+  },
+  "wds_metadata_found": true,
+  "wds_metadata_source": "wds_v3_cluster_meta.jsonl.gz",
+  "wds_record": {
+   "id": "31837484",
+   "admreg": "South Asia",
+   "authors": {
+    "0": {
+     "author": "Virinder  Sharma"
+    }
+   },
+   "count": "India",
+   "docna": {
+    "0": {
+     "docna": "India - SOUTH ASIA- P145502- Technology Center Systems Project (TCSP) - Procurement Plan"
+    }
+   },
+   "docty": "Procurement Plan",
+   "projn": "IN-Technology Center Systems Project (TCSP) -- P145502",
+   "subsc": "FY17 - Other Industry, Trade and Services,FY17 - Public Administration - Industry, Trade and Services",
+   "theme": "FY17 - Enterprise Development,FY17 - Financial Infrastructure and Access,FY17 - MSME Finance,FY17 - MSME Development",
+   "prdln": "IBRD/IDA",
+   "seccl": "Public",
+   "lang": "English",
+   "lndinstr": {
+    "0": {
+     "lndinstr": "Investment Project Financing"
+    }
+   },
+   "lndinstr_exact": "Investment Project Financing",
+   "entityids": {
+    "entityid": "090224b0876a3f6d_1_0"
+   },
+   "majtheme": "FY17 - Private Sector Development,FY17 - Finance",
+   "subtopic": "Business Cycles and Stabilization Policies,Common Carriers Industry,Construction Industry,De Facto Governments,Democratic Government,Economics and Finance of Public Institution Development,Food & Beverage Industry,General Manufacturing,Information Technology,Judicial System Reform,Legal Products,Legal Reform,Legislation,Macroeconomic Management,Plastics & Rubber Industry,Public Finance Decentralization and Poverty Reduction,Public Sector Administrative & Civil Service Reform,Public Sector Administrative and Civil Service Reform,Public Sector Economics,Pulp & Paper Industry,Regulatory Regimes,Social Policy,State Owned Enterprise Reform,Textiles, Apparel & Leather Industry",
+   "teratopic": "Governance,Industry,Information and Communication Technologies,Law and Development,Macroeconomics and Economic Growth,Public Sector Development,Social Development",
+   "sectr": {
+    "0": {
+     "sector": "Industry, Trade and Services"
+    }
+   },
+   "repnb": "STEP30706",
+   "docdt": "2020-03-03T05:00:00Z",
+   "datestored": "2020-03-03T05:00:00Z",
+   "keywd": {
+    "0": {
+     "keywd": "new information technology"
+    },
+    "1": {
+     "keywd": " evaluation activity"
+    }
+   },
+   "volnb": "1",
+   "majdocty": "Project Documents",
+   "repnme": {
+    "repnme": "India - SOUTH ASIA- P145502- Technology Center Systems Project (TCSP) - Procurement Plan"
+   },
+   "display_title": "India - SOUTH ASIA- P145502- Technology Center Systems Project (TCSP) - Procurement Plan",
+   "disclosure_date": "2020-03-03T22:06:15Z",
+   "pdfurl": "http://documents.worldbank.org/curated/en/117851583273178956/pdf/India-SOUTH-ASIA-P145502-Technology-Center-Systems-Project-TCSP-Procurement-Plan.pdf",
+   "txturl": "http://documents.worldbank.org/curated/en/117851583273178956/text/India-SOUTH-ASIA-P145502-Technology-Center-Systems-Project-TCSP-Procurement-Plan.txt",
+   "EnvironmentalCategory": "B",
+   "disclstat": "Disclosed",
+   "chronical_docm_id": "090224b0876a3f6d",
+   "totvolnb": "1",
+   "historic_topic": "Governance,Industry,Information and Communication Technologies,Law and Development,Macroeconomics and Economic Growth,Public Sector Development,Social Development",
+   "projectid": "P145502",
+   "guid": "117851583273178956",
+   "origu": "EFI-SAR-FCI-Finance-1 (ESAF1)",
+   "prdln_exact": "IBRD/IDA",
+   "available_in": "English",
+   "fullavailablein": [],
+   "url": "http://documents.worldbank.org/curated/en/117851583273178956",
+   "_extract": {
+    "filter_projectid": "P145502"
+   }
+  }
+ },
+ "P127203_ICRFR_33407968.pdf": {
+  "template": "ICR_FR",
+  "toc_pages": [
+   6
+  ],
+  "section_first_pages": {
+   "CONTEXTE DU PROJET": [
+    13
+   ],
+   "RÉSULTATS": [
+    16,
+    18,
+    31,
+    32
+   ],
+   "FACTEURS": [],
+   "PERFORMANCE DE LA BANQUE": [
+    10,
+    52
+   ],
+   "Passation des marchés": [
+    51
+   ],
+   "ENSEIGNEMENTS": []
+  },
+  "wds_metadata_found": false,
+  "wds_metadata_source": null,
+  "wds_record": {}
+ },
+ "P039892_SAR1990_696824.pdf": {
+  "template": "PAD",
+  "toc_pages": [
+   3,
+   4
+  ],
+  "section_first_pages": {
+   "STRATEGIC CONTEXT": [],
+   "PROJECT DEVELOPMENT OBJECTIVES": [],
+   "PROJECT DESCRIPTION": [],
+   "IMPLEMENTATION": [
+    2,
+    26,
+    29,
+    32
+   ],
+   "KEY RISKS": [],
+   "APPRAISAL SUMMARY": [],
+   "Procurement": [
+    27,
+    28,
+    29,
+    30
+   ],
+   "Financial Management": [
+    87
+   ],
+   "Results Framework": [],
+   "Economic Analysis": []
+  },
+  "wds_metadata_found": false,
+  "wds_metadata_source": null,
+  "wds_record": {}
+ }
+}

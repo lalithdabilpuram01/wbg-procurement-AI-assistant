@@ -1,0 +1,128 @@
+{
+ "snapshot": "2026-10-20",
+ "inputs_sha256": {
+  "contract_keys.parquet": "504452fecbc1db0ff9acbe49f88155f0bd8868d961ce1091b322b70d3551026a",
+  "gold_contract_analytics.parquet": "a916fe8493bb1150fcca751d93dece35629ffddcf22b4725b6d84714315d39a7",
+  "gold_procurement_notices.parquet": "22751ac533e06e796a8f45fed07b295dc8814e94392d0546ca8d7865406dd4b4",
+  "notice_details_keys.parquet": "61828350ddfd974234f14842c1a5b1268824fc47ba25e79cbf33654bd5341c1e",
+  "silver_projects.parquet": "4ec93d280310d10b5bd530f7b04208aec0cf45ae68a5ac927bfb4821ef8dfd80"
+ },
+ "m2": {
+  "rows_all": 178921,
+  "rows_by_split": {
+   "train": 73998,
+   "out_of_window": 51115,
+   "test": 28949,
+   "validation": 24859
+  },
+  "fiscal_year_windows": {
+   "train": [
+    2020,
+    2022
+   ],
+   "validation": [
+    2023,
+    2023
+   ],
+   "test": [
+    2024,
+    2024
+   ]
+  },
+  "unit_id_unique": true,
+  "projects_by_split": {
+   "train": 1401,
+   "validation": 1060,
+   "test": 1053
+  },
+  "project_overlap": {
+   "train_validation": 900,
+   "train_test": 734,
+   "validation_rows_in_train_projects": 22815
+  },
+  "packages_crossing_splits": 196,
+  "packages_with_key": 111740,
+  "missing_pct_in_window": {
+   "unit_id": 0.0,
+   "project_id": 0.0,
+   "package_key": 0.0,
+   "prediction_date": 0.0,
+   "fiscal_year": 0.0,
+   "procurement_method": 0.0,
+   "procurement_category": 0.0,
+   "review_type": 0.0,
+   "region_name": 0.0,
+   "country_grp": 0.0,
+   "sector": 0.0,
+   "income_ordinal": 8.2,
+   "days_from_approval": 0.0,
+   "signed_before_approval": 0.0,
+   "approval_fiscal_year": 0.0
+  }
+ },
+ "m3": {
+  "rows_all": 54751,
+  "rows_by_split": {
+   "test": 20954,
+   "train": 17253,
+   "out_of_window": 10871,
+   "validation": 5673
+  },
+  "fiscal_year_windows": {
+   "train": [
+    2016,
+    2021
+   ],
+   "validation": [
+    2022,
+    2022
+   ],
+   "test": [
+    2023,
+    2025
+   ]
+  },
+  "unit_id_unique": true,
+  "projects_by_split": {
+   "train": 1118,
+   "validation": 793,
+   "test": 1192
+  },
+  "project_overlap": {
+   "train_validation": 645,
+   "train_test": 611,
+   "validation_rows_in_train_projects": 4913
+  },
+  "packages_crossing_splits": 0,
+  "packages_with_key": 3151,
+  "missing_pct_in_window": {
+   "unit_id": 0.0,
+   "project_id": 0.0,
+   "package_key": 92.82,
+   "prediction_date": 0.0,
+   "fiscal_year": 0.0,
+   "notice_type": 0.0,
+   "procurement_method": 0.0,
+   "procurement_category": 0.0,
+   "region_name": 0.0,
+   "country_grp": 0.0,
+   "sector": 0.0,
+   "income_ordinal": 11.64,
+   "deadline_status": 0.0,
+   "window_days": 15.65,
+   "has_positive_window": 0.0,
+   "project_age_days": 0.01
+  },
+  "deduplication": {
+   "tender_notices_input": 55223,
+   "dropped_identical_metadata_rows": 460,
+   "dropped_later_notices_of_same_package": 12,
+   "units_after": 54751,
+   "note": "DS00979 has no reference number outside the 184 API projects, so later notices of the same tender elsewhere cannot be collapsed; residual dependence is handled by project-grouped CV."
+  }
+ },
+ "outputs_sha256": {
+  "m2_contract_features_v1.parquet": "ea0d1ae252d3fd14e1e602a4c93f75aa245b68c725e900a72d653f08a3b96fa1",
+  "m3_tender_features_v1.parquet": "856b4565cb8ff28f1a421b4ca1c6891d708d0e9515d36e2bbd10273f910e8b2c"
+ }
+}

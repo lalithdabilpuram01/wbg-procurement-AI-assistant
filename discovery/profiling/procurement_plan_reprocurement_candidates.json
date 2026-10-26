@@ -1,0 +1,40 @@
+{
+ "plans": 38,
+ "activities": 1137,
+ "cancelled": 350,
+ "exact_ref_successor": 3,
+ "exact_ref_successor_signed_or_completed": 2,
+ "similar_description_successor": 41,
+ "similar_successor_signed_or_completed": 30,
+ "ambiguous_multiple_similar": 7,
+ "examples": [
+  {
+   "cancelled": "2018-L-1 / Install 1472 street lamp facilities",
+   "candidate": "2018-L-1 / Install 1472 street lamp facilities",
+   "candidate_status": "signed"
+  },
+  {
+   "cancelled": "NCB-AB- 30028/37/2016/WORKS/TC- ROHTAK / Construction of new Technology Center at Rohtak, ",
+   "candidate": "NCB/AB/30028/37/2016/WORK S/ROHTAK / Construction of new Technology Center at Rohtak, Hary",
+   "candidate_status": "signed"
+  },
+  {
+   "cancelled": "G1-3-4 / Drive Test, Quality of Service and Benchmarking System for Mobile Networks",
+   "candidate": "G 1-3-4 / Drive Test, Quality of Service and Benchmarking Test System for Mobile Network",
+   "candidate_status": "completed"
+  },
+  {
+   "cancelled": "G 1-3-7 / Radio & Transmission Planning Tool (Software) & Digital Map Data (Software)",
+   "candidate": "MM-PTD-118272-GO-RFQ / Radio & Transmission Planning Tool ( Software ) & Digital Map Data ",
+   "candidate_status": "completed"
+  },
+  {
+   "cancelled": "G 1-3-6 / .mm domain name system",
+   "candidate": "G 1.3.6 A / .mm domain name system",
+   "candidate_status": "signed"
+  }
+ ],
+ "exact_ref_successor_pct": 0.9,
+ "similar_description_successor_pct": 11.7,
+ "note": "Within-plan only (latest plan version per project). Successors on other plan versions or in later plans are not captured, so these are lower bounds. Labels are candidates (EN / P), not verified re-bids."
+}
