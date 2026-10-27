@@ -25,7 +25,8 @@ from conversation.service import ConversationReply, ConversationService
 from conversation.store import ConversationStore
 
 from .authorization import AppAuthorizationContext
-from .contracts import EvidenceKind, InvestigationRequest, InvestigationStatus, OwnerRef, ValidationStatus, new_id
+from .contracts import (EvidenceKind, InvestigationRequest, InvestigationStatus, OwnerRef, ValidationStatus, investigation_id_for,
+                        new_id)
 from .engine import EngineOutcome, InvestigationEngine
 
 COMBINABLE = {Route.STRUCTURED_DATA.value, Route.DOCUMENT_RAG.value}
@@ -91,7 +92,7 @@ class ConversationRunner:
         if binding is None:
             raise MissingTrustedOwner("no trusted owner bound to this request")
         request = InvestigationRequest(
-            investigation_id=new_id("inv"), request_id=request_id, conversation_thread_id=binding.thread_id,
+            investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=binding.thread_id,
             owner=owner_ref(binding.owner), question=question, route_hint=self._route.value, execute_requested=execute,
             rag_release=self._release, authorization=self._authorization_for((self._route,)))
         return to_outcome(self._engine.start(request, memory_block=conversation_context or None))
@@ -141,8 +142,10 @@ class ConversationFrontDoor:
     def _investigate(self, owner: Owner, thread_id: str, reply: ConversationReply, execute: bool) -> EngineOutcome:
         question = next(t.text for t in self._store.turns(owner, thread_id) if t.seq == reply.user_turn_seq)   # redacted text
         routes = (Route.STRUCTURED_DATA, Route.DOCUMENT_RAG)
+        request_id = new_id("req")
         request = InvestigationRequest(
-            investigation_id=new_id("inv"), request_id=new_id("req"), conversation_thread_id=thread_id, owner=owner_ref(owner),
+            investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=thread_id,
+            owner=owner_ref(owner),
             question=question, mode="investigation", execute_requested=execute, rag_release=self._release,
             authorization=self._authorization_for(routes))
         outcome = self._engine.start(request)

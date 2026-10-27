@@ -37,6 +37,11 @@ def stable_id(prefix: str, *parts: str) -> str:
     return f"{prefix}_{hashlib.sha256(chr(0).join(parts).encode()).hexdigest()[:20]}"
 
 
+def investigation_id_for(request_id: str) -> str:
+    """The investigation started by one conversation request (recomputable from the stored turn after a restart)."""
+    return stable_id("inv", request_id)
+
+
 class Record(BaseModel):
     """Base of every application record: frozen, closed, versioned, hashable."""
 
@@ -109,6 +114,7 @@ class ErrorCategory(str, Enum):
     NO_EVIDENCE = "no_evidence"
     CLARIFICATION = "clarification"
     APPROVAL = "approval"
+    CANCELLED = "cancelled"                  # the user cancelled the investigation
     INTERNAL = "internal"
 
 

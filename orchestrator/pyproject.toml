@@ -5,7 +5,8 @@ description = "LangGraph supervisor-planner-executor engine over the existing WB
 requires-python = "==3.12.*"
 # Pins match .venv-structured-mcp (structured_agent/mcp_env/requirements.lock.txt) and the project requirements, so the
 # existing agents run here unchanged. LangGraph is added, plus (Milestone B) its official Postgres checkpointer and
-# psycopg-pool for Lakebase checkpointing. Databricks Connect is absent: offline execution uses fakes.
+# psycopg-pool for Lakebase checkpointing. Milestone C3 adds FastAPI (the local web API) and Databricks Connect
+# 17.3.14 (the version .venv-structured-mcp uses) so the structured worker can run real read-only SQL.
 dependencies = [
     "langgraph==1.1.10",
     "pydantic==2.13.3",
@@ -28,6 +29,8 @@ dependencies = [
     "python-dotenv==1.2.4",
     "langgraph-checkpoint-postgres==3.2.0",
     "psycopg-pool==3.3.3",
+    "databricks-connect==17.3.14",
+    "fastapi==0.162.0",
 ]
 
 [dependency-groups]

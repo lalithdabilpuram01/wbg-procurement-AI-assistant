@@ -39,6 +39,7 @@ class EngineOutcome:
     evidence: tuple[EvidenceRecord, ...]
     task_states: dict[str, str]
     values: dict[str, Any]
+    unfinished: bool = False          # the workflow has steps left and is not waiting for an approval
 
 
 def checkpoint_thread_id(owner: OwnerRef, conversation_thread_id: str, investigation_id: str) -> str:
@@ -48,7 +49,9 @@ def checkpoint_thread_id(owner: OwnerRef, conversation_thread_id: str, investiga
 class InvestigationEngine:
     def __init__(self, deps: EngineDeps, checkpointer: Any | None = None):
         self._memory: dict[str, str] = {}
+        self._cancelled: set[str] = set()
         deps.memory = self._memory.get
+        deps.cancel_requested = self._cancelled.__contains__
         self.deps = deps
         self.checkpointer = checkpointer or InMemorySaver()
         self.graph = build_graph(deps).compile(checkpointer=self.checkpointer)
@@ -70,6 +73,19 @@ class InvestigationEngine:
                                     decided_by=owner, reason=reason)
         self._checkpoint_event("orchestrator.checkpoint_resumed", snapshot, thread_id)
         self._invoke(Command(resume=decision.to_state()), thread_id)
+        return self.outcome(owner, thread_id)
+
+    def cancel(self, owner: OwnerRef, thread_id: str) -> EngineOutcome:
+        """Cancel an investigation: a pending approval is rejected; a running one stops before its next task.
+
+        The task already running finishes (cooperative cancellation). A finished investigation is left unchanged.
+        """
+        snapshot = self._owned_snapshot(owner, thread_id)
+        pending = _pending_approval(snapshot)
+        if pending is not None:
+            return self.resume(owner, thread_id, pending.approval_id, approved=False, reason="cancelled by the user")
+        if snapshot.next:
+            self._cancelled.add(snapshot.values["request"]["investigation_id"])
         return self.outcome(owner, thread_id)
 
     def recover(self, owner: OwnerRef, thread_id: str) -> EngineOutcome:
@@ -94,7 +110,8 @@ class InvestigationEngine:
                 message=f"Approval needed before running: {pending.summary}", pending_approval_id=pending.approval_id)
         status = response.status if response else InvestigationStatus.FAILED
         evidence = tuple(EvidenceRecord.from_state(e) for e in values.get("evidence", []))
-        return EngineOutcome(thread_id, status, response, pending, evidence, dict(values.get("task_states", {})), values)
+        return EngineOutcome(thread_id, status, response, pending, evidence, dict(values.get("task_states", {})), values,
+                             unfinished=bool(snapshot.next) and pending is None)
 
     # ------------------------------------------------------------------------------------------- internals
     def _invoke(self, payload: Any, thread_id: str) -> None:

@@ -56,6 +56,7 @@ class EngineDeps:
     now: Callable[[], dt.datetime] = utc_now
     memory: Callable[[str], str | None] = lambda investigation_id: None   # request-scoped memory (never in state)
     prices: PriceTable | None = None                                       # cost only from a configured price table
+    cancel_requested: Callable[[str], bool] = lambda investigation_id: False   # user cancellation (checked between tasks)
 
 
 def build_graph(deps: EngineDeps) -> StateGraph:
@@ -285,6 +286,9 @@ class _Nodes:
             states.update(new)
         errors = []
         refusal = check_budget(state.get("usage", {}), request.budget, investigation_id=request.investigation_id, node="dispatch")
+        if self.d.cancel_requested(request.investigation_id):
+            refusal = self._error(request, "dispatch", ErrorCategory.CANCELLED, "cancelled_by_user",
+                                  "The investigation was cancelled; remaining tasks were not run.")
         if refusal:
             stop = {t.task_id: TaskState.CANCELLED.value for t in plan.tasks if states.get(t.task_id) == TaskState.PENDING.value}
             cancelled.update(stop)
