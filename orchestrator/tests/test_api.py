@@ -158,6 +158,8 @@ def test_approval_through_the_api_runs_once(tmp_path):
     answer = {"approval_id": view["pending_approval"]["approval_id"], "approved": True, "client_message_id": "msg-approve-1"}
     done = stack.wait(stack.call("POST", f"/conversations/{cid}/investigations/{rid}/decision", json=answer).json()["job_id"])
     assert done["status"] == "answered" and [c["execute"] for c in stack.parts["workflow"].calls] == [True]
+    last = stack.call("GET", f"/conversations/{cid}").json()["turns"][-1]
+    assert last["role"] == "assistant" and last["status"] == "answered" and last["request_id"] == rid   # answer in history
     replay = stack.wait(stack.call("POST", f"/conversations/{cid}/investigations/{rid}/decision",
                                    json={**answer, "client_message_id": "msg-approve-2"}).json()["job_id"])
     assert replay["state"] == "failed" and replay["error"] == "ApprovalNotPending"

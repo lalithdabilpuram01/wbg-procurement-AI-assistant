@@ -131,6 +131,7 @@ class ConversationFrontDoor:
         outcome = self._engine.resume(owner_ref(owner), checkpoint_thread_id, approval_id, approved, reason)
         self._service.record_decision(owner, thread_id, "decision",
                                       f"Investigation approval {approval_id}: {'approved' if approved else 'rejected'}")
+        self._record_answer(owner, thread_id, outcome.values["request"]["request_id"], outcome)    # history shows the result
         return outcome
 
     # ------------------------------------------------------------------------------------------- internals
@@ -149,6 +150,11 @@ class ConversationFrontDoor:
             question=question, mode="investigation", execute_requested=execute, rag_release=self._release,
             authorization=self._authorization_for(routes))
         outcome = self._engine.start(request)
+        self._record_answer(owner, thread_id, request_id, outcome)
+        return outcome
+
+    def _record_answer(self, owner: Owner, thread_id: str, request_id: str, outcome: EngineOutcome) -> None:
+        """Append the investigation's answer as an assistant turn (safe metadata only: no SQL, no rows)."""
         thread = self._store.get_thread(owner, thread_id)
         evidence = [EvidenceReference(
             source_type="structured_result" if e.kind == EvidenceKind.STRUCTURED_RESULT else "rag_document",
@@ -158,7 +164,6 @@ class ConversationFrontDoor:
         self._store.append_turn(owner, Turn(
             thread_id=thread_id, seq=self._store.next_seq(owner, thread_id), role="assistant", kind=TurnKind.ANSWER,
             text=redact_secrets(outcome.response.message if outcome.response else ""), topic_epoch=thread.topic_epoch,
-            metadata=TurnMetadata(request_id=request.request_id, status=outcome.status.value, route="investigation",
+            metadata=TurnMetadata(request_id=request_id, status=outcome.status.value, route="investigation",
                                   source_objects=sorted({o for e in outcome.evidence for o in e.source_objects}),
                                   evidence=evidence[:20])))
-        return outcome
