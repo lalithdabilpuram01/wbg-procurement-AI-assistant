@@ -56,6 +56,24 @@ def test_input_rails_attribute_decisions_correctly(nemo, connection_attempts):
     assert connection_attempts == []
 
 
+
+@pytest.mark.parametrize("text, reason", [
+    ("Sing me a song", ReasonCategory.OFF_TOPIC), ("Tell me a joke", ReasonCategory.OFF_TOPIC),
+    ("What is the weather in Addis Ababa today?", ReasonCategory.OFF_TOPIC),
+    ("Is the contractor on the Expressway corrupt?", ReasonCategory.MISCONDUCT_ACCUSATION),
+    ("Which suppliers took bribes in Ethiopia?", ReasonCategory.MISCONDUCT_ACCUSATION)])
+def test_the_topic_rail_answers_off_topic_and_misconduct_requests(nemo, connection_attempts, text, reason):
+    decision = nemo.check_input(text)
+    assert not decision.allowed and decision.reason_category == reason and decision.policy_id == "nemo.custom.topic_policy"
+    assert connection_attempts == []
+
+
+@pytest.mark.parametrize("text", ["Which contracts were flagged for fraud in the completion reports?",
+                                  "What fraud and corruption risks were identified at appraisal?",
+                                  "Translate the procurement plan for P156186", "Hello", "Thanks!", "What can you do?"])
+def test_the_topic_rail_lets_procurement_and_conversational_messages_through(nemo, text):
+    assert nemo.check_input(text).allowed
+
 @pytest.mark.parametrize("reply, enforced_by, reason", [
     (dict(VALID_DRAFT), "nemo_rails", None),
     ({**VALID_DRAFT, "explanation": "I ran the query and found 7 contracts."}, "nemo_custom_action",

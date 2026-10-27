@@ -34,7 +34,8 @@ BUILTIN_BLOCKS = {
     "regex check input": ("nemo.regex.input.credential_request", ReasonCategory.CREDENTIAL_EXFILTRATION),
     "regex check output": ("nemo.regex.output.secret_value", ReasonCategory.SENSITIVE_VALUE_IN_OUTPUT),
 }
-CUSTOM_FLOWS = {"wbg input policy": "nemo.custom.input_policy", "wbg output policy": "nemo.custom.output_policy"}
+CUSTOM_FLOWS = {"wbg input policy": "nemo.custom.input_policy", "wbg topic policy": "nemo.custom.topic_policy",
+                "wbg output policy": "nemo.custom.output_policy"}
 
 
 def _as_dict(result: PolicyResult) -> dict[str, Any]:
@@ -52,12 +53,17 @@ class NemoGuardrails:
         if self._rails.llm is not None:
             raise ConfigurationError("NeMo created an LLM; these rails must run without one")
         self._rails.register_action(self._input_policy, "wbg_input_policy")
+        self._rails.register_action(self._topic_policy, "wbg_topic_policy")
         self._rails.register_action(self._output_policy, "wbg_output_policy")
 
     # ------------------------------------------------------------------------------------- custom actions (NeMo)
     @staticmethod
     async def _input_policy(text: str) -> dict[str, Any]:
         return _as_dict(policies.evaluate_user_input(text or ""))
+
+    @staticmethod
+    async def _topic_policy(text: str) -> dict[str, Any]:
+        return _as_dict(policies.evaluate_topic(text or ""))
 
     @staticmethod
     async def _output_policy(text: str, stage: str | None, context: dict | None = None) -> dict[str, Any]:

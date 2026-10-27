@@ -20,6 +20,9 @@ from typing import Any, Callable
 
 from conversation.models import EvidenceReference, Owner, Turn, TurnKind, TurnMetadata
 from conversation.redaction import redact_secrets
+from conversation.replies import SCOPE
+from conversation.routing.rules import mentions_entities, normalize
+from structured_agent.guardrails.policies import mentions_domain
 from conversation.routing.routes import ReasonCategory, Route, RoutingDecision
 from conversation.service import DEFAULT_TITLE, TITLE_CHARS, ConversationReply, ConversationService
 from conversation.store import ConversationStore
@@ -154,6 +157,8 @@ class ConversationFrontDoor:
             return self._ask_for_fields(owner, thread_id, text, Route.ML_PREDICTION.value, PACKAGE_FIELDS_MESSAGE)
         if routing is not None and routing.route == Route.PROCUREMENT_PLANNING:
             return self._ask_for_fields(owner, thread_id, text, BRIEF_ROUTE, PLANNING_FIELDS_MESSAGE)
+        if routing is not None and routing.reason in UNCLEAR and not (mentions_domain(text) or mentions_entities(normalize(text))):
+            return self._scope_reply(owner, thread_id, text)                  # nothing procurement-related to investigate
         planning = self._planning_context(owner, thread_id) if routing is not None else None
         if routing is not None and (self._opens_investigation(routing) or (planning and self._follows_brief(routing))):
             outcome = self._open_investigation(owner, thread_id, text, execute, on_start, planning)
@@ -252,6 +257,15 @@ class ConversationFrontDoor:
             thread_id=thread_id, seq=self._store.next_seq(owner, thread_id), role="assistant", kind=TurnKind.ANSWER,
             text=message, topic_epoch=thread.topic_epoch, metadata=TurnMetadata(request_id=request_id, status=status, route=route)))
         return FrontDoorReply(status, request_id)
+
+    def _scope_reply(self, owner: Owner, thread_id: str, text: str) -> FrontDoorReply:
+        request_id = self._user_turn(owner, thread_id, text, Route.CONVERSATION.value)
+        thread = self._store.get_thread(owner, thread_id)
+        self._store.append_turn(owner, Turn(
+            thread_id=thread_id, seq=self._store.next_seq(owner, thread_id), role="assistant", kind=TurnKind.ANSWER,
+            text=SCOPE, topic_epoch=thread.topic_epoch,
+            metadata=TurnMetadata(request_id=request_id, status="out_of_scope", route=Route.CONVERSATION.value)))
+        return FrontDoorReply("out_of_scope", request_id)
 
     def _planning_context(self, owner: Owner, thread_id: str) -> str | None:
         """The latest brief of this conversation as planner context: the project profile and its similar projects."""

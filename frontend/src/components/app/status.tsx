@@ -1,4 +1,4 @@
-import { AlertTriangle, CheckCircle2, CircleHelp, CircleStop, ClipboardList, Clock, ShieldAlert, XCircle } from "lucide-react";
+import { AlertTriangle, CheckCircle2, CircleHelp, CircleStop, ClipboardList, Clock, Compass, Scale, ShieldAlert, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/primitives";
 
 type Tone = "success" | "warning" | "danger" | "info" | "neutral";
@@ -16,6 +16,8 @@ const STATUS: Record<string, { label: string; tone: Tone; icon: React.ElementTyp
   stopped: { label: "Stopped", tone: "neutral", icon: CircleStop },
   needs_package_details: { label: "Package details needed", tone: "info", icon: ClipboardList },
   needs_project_details: { label: "Project details needed", tone: "info", icon: ClipboardList },
+  out_of_scope: { label: "Outside my scope", tone: "info", icon: Compass },
+  declined: { label: "Not something I can judge", tone: "neutral", icon: Scale },
 };
 
 export function StatusBadge({ status }: { status: string | null }) {

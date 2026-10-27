@@ -101,6 +101,38 @@ def evaluate_user_input(text: str) -> PolicyResult:
     return PolicyResult.allow()
 
 
+# ---------------------------------------------------------------------------------------------- topic control
+# Deliberately narrow: a message is off-topic only when it asks for something clearly outside the platform AND has no
+# procurement vocabulary; anything else goes on to routing (unclear procurement questions are investigated).
+DOMAIN = _compile([
+    r"\b(procure\w*|tender\w*|bid(s|ding|der|ders)?|contract\w*|award\w*|supplier\w*|vendor\w*|consultan\w*|works|goods|"
+    r"projects?|programs?|programmes?|operations?|world bank|ida|ibrd|loans?|credits?|grants?|financ\w*|disburse\w*|budgets?|"
+    r"costs?|sectors?|ministr\w*|agenc\w*|government|countr\w*|regions?|risks?|lessons?|delay\w*|amend\w*|re-?bid\w*|"
+    r"re-?tender\w*|schedul\w*|timelines?|plans?|planning|apprais\w*|completion|implementation|isrs?|icrs?|icrrs?|pads?|ieg|"
+    r"evaluation\w*|kpis?|notices?|rfb|rfq|rfp|qcbs|ppsd|data|documents?|reports?|metrics?|p\d{6})\b"])
+OFF_TOPIC_REQUEST = _compile([
+    r"\b(sing|songs?|lyrics|poems?|poetry|jokes?|riddles?|bedtime story|fairy tale|recipes?|cook(ing)?|weather|horoscope|"
+    r"movies?|films?|tv shows?|music|celebrit\w*|football|soccer|cricket|basketball|tennis|video games?|play a game|"
+    r"dating|girlfriend|boyfriend|homework|write (me )?(an? )?(essay|cover letter|love letter)|python code|javascript|"
+    r"write (some )?code|debug my|stock tips?|crypto(currency)?)\b"])
+MISCONDUCT_ACCUSATION = _compile([
+    r"\b(is|are|was|were)\s+(\S+\s+){0,6}(corrupt|fraudulent|criminals?|crooks?|scammers?|thie(f|ves))\b",
+    r"\b(which|who|name|list)\b[^.?!\n]{0,60}\b(corrupt|fraudulent|committed fraud|took bribes|paid bribes|bribed|crooks?)\b"])
+
+
+def evaluate_topic(text: str) -> PolicyResult:
+    """Topic control: judgments of misconduct are declined; clearly off-topic requests get the scope answer."""
+    if _matches(MISCONDUCT_ACCUSATION, text):
+        return PolicyResult.block(ReasonCategory.MISCONDUCT_ACCUSATION)
+    if _matches(OFF_TOPIC_REQUEST, text) and not mentions_domain(text):
+        return PolicyResult.block(ReasonCategory.OFF_TOPIC)
+    return PolicyResult.allow()
+
+
+def mentions_domain(text: str) -> bool:
+    return _matches(DOMAIN, text)
+
+
 def _has_hidden_or_control_characters(text: str) -> bool:
     """Control characters (other than newline/tab) or invisible format characters often used to hide instructions."""
     return any((unicodedata.category(ch) == "Cc" and ch not in "\n\t") or unicodedata.category(ch) == "Cf" for ch in text)

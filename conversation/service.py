@@ -26,6 +26,7 @@ from conversation.compression import Compressor, DeterministicSummarizer, stale_
 from conversation.context_builder import ContextBuilder, ContextPackage
 from conversation.followups import FollowUpResolver, Resolution, strip_reset_phrase
 from conversation.models import ActiveContext, Decision, Owner, ThreadInfo, Turn, TurnKind, TurnMetadata
+from conversation.replies import guard_reply
 from conversation.redaction import redact_secrets, result_metadata
 from conversation.responder import (ConversationRequest, ConversationResponder, ConversationResponse, OfflineResponder,
                                     recall_memory)
@@ -303,16 +304,13 @@ class ConversationService:
     def _blocked(self, owner: Owner, thread: ThreadInfo, stored_text: str, active: ActiveContext, request_id: str,
                  decision: Any) -> ConversationReply:
         reason = decision.reason_category.value if decision.reason_category else "blocked"
-        # The blocked text is stored (redacted) for audit, flagged, and never used as memory; the active context is unchanged.
-        user_turn = self._append(owner, thread, "user", TurnKind.QUESTION, stored_text, active,
-                                 TurnMetadata(request_id=request_id, blocked=True, guardrail_reason=reason,
-                                              status="blocked_by_guardrail"))
-        message = "The request was blocked by a guardrail policy and was not sent to any agent."
-        assistant = self._append(owner, thread, "assistant", TurnKind.ANSWER, message, active,
-                                 TurnMetadata(request_id=request_id, blocked=True, guardrail_reason=reason,
-                                              status="blocked_by_guardrail"))
-        return ConversationReply(thread.thread_id, "blocked_by_guardrail", message, TurnKind.QUESTION, user_turn.seq,
-                                 assistant.seq)
+        reply = guard_reply(reason)                      # a plain answer for every reason, never a bare refusal
+        # The text is stored (redacted) for audit, flagged when it was a policy block, and never used as memory; the
+        # active context is unchanged. No agent runs.
+        metadata = TurnMetadata(request_id=request_id, blocked=reply.blocked, guardrail_reason=reason, status=reply.status)
+        user_turn = self._append(owner, thread, "user", TurnKind.QUESTION, stored_text, active, metadata)
+        assistant = self._append(owner, thread, "assistant", TurnKind.ANSWER, reply.message, active, metadata)
+        return ConversationReply(thread.thread_id, reply.status, reply.message, TurnKind.QUESTION, user_turn.seq, assistant.seq)
 
     def _reply_without_agent(self, owner: Owner, thread: ThreadInfo, user_turn: Turn, routing: RoutingDecision,
                              resolution: Resolution, status: str, message: str, request_id: str) -> ConversationReply:

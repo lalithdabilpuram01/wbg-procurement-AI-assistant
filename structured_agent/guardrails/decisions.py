@@ -45,6 +45,8 @@ class ReasonCategory(str, Enum):
     PRIOR_POLICY_FAILURE = "prior_policy_failure"
     INCONSISTENT_RESULT = "inconsistent_result"
     GUARDRAIL_ERROR = "guardrail_error"   # the guardrail itself failed: fail closed
+    OFF_TOPIC = "off_topic"               # not about procurement: answered with what the assistant can do
+    MISCONDUCT_ACCUSATION = "misconduct_accusation"   # asks to judge a party corrupt or fraudulent
 
 
 class PolicyResult(BaseModel):

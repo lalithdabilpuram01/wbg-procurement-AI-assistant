@@ -157,3 +157,25 @@ def test_compression_preserves_constraints_approvals_projects_evidence_and_unres
     final = build_digest(done.values, done.thread_id, store.decisions(ALICE, thread.thread_id))
     assert final.unresolved_task_ids == () and len(final.evidence_ids) == 2 and final.status == "answered"
     assert owner_ref(ALICE).user_hash != "alice"
+
+
+# ------------------------------------------------------------------------------------- off-topic and conduct
+def nemo_front_door(planner):
+    from structured_agent.guardrails.nemo_rails import NemoGuardrails
+    engine, _ = build_engine(planner=planner)
+    store = InMemoryConversationStore()
+    runners = {route: ConversationRunner(engine, route, AUTH) for route in (Route.STRUCTURED_DATA, Route.DOCUMENT_RAG)}
+    service = ConversationService(store, runners, NemoGuardrails())
+    return ConversationFrontDoor(service, store, engine, AUTH), service, store
+
+
+@pytest.mark.parametrize("text, status", [("Sing me a song", "out_of_scope"), ("Tell me something fun", "out_of_scope"),
+                                          ("Is the contractor on the Expressway corrupt?", "declined")])
+def test_off_topic_and_misconduct_requests_get_a_plain_answer_and_run_nothing(text, status):
+    planner = FakePlanner()
+    door, service, store = nemo_front_door(planner)
+    thread = service.start_thread(ALICE)
+    reply = door.handle_message(ALICE, thread.thread_id, text)
+    answer = store.turns(ALICE, thread.thread_id)[-1]
+    assert reply.status == status and answer.role == "assistant" and planner.calls == []
+    assert "procurement" in answer.text and "guardrail" not in answer.text

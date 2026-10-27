@@ -26,6 +26,7 @@ rails:
     flows:
       - regex check input
       - wbg input policy
+      - wbg topic policy
 
   output:
     flows:
