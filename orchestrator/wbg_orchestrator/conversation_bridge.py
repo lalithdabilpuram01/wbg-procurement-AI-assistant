@@ -188,6 +188,7 @@ class ConversationFrontDoor:
         profile = spec.profile.model_copy(update={"description": self._service.text_filter(spec.profile.description)})
         spec = spec.model_copy(update={"profile": profile})                      # the free text is filtered once, here
         text = describe_plan(spec)
+        memory = self._service.memory_for(owner, thread_id, text)                 # before this request's own turn
         request_id = self._user_turn(owner, thread_id, text, BRIEF_ROUTE)
         request = InvestigationRequest(
             investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=thread_id,
@@ -196,14 +197,16 @@ class ConversationFrontDoor:
             authorization=self._authorization_for((Route.PROCUREMENT_PLANNING, Route.ML_PREDICTION, Route.DOCUMENT_RAG)))
         if on_start:
             on_start(request_id)
-        outcome = self._engine.start(request)
+        outcome = self._engine.start(request, memory_block=memory)
         self._record_answer(owner, thread_id, request_id, outcome)
+        self._service.compact(owner, thread_id)                                    # summarize older turns when needed
         return outcome
 
     def assess_package(self, owner: Owner, thread_id: str, package: PackageSpec,
                        on_start: Callable[[str], None] | None = None) -> EngineOutcome:
         """A structured package assessment: recorded as a user turn, run with the fixed prediction + lessons plan."""
         text = describe_package(package)
+        memory = self._service.memory_for(owner, thread_id, text)
         request_id = self._user_turn(owner, thread_id, text, Route.ML_PREDICTION.value)
         request = InvestigationRequest(
             investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=thread_id,
@@ -211,8 +214,9 @@ class ConversationFrontDoor:
             authorization=self._authorization_for((Route.ML_PREDICTION, Route.DOCUMENT_RAG)))
         if on_start:
             on_start(request_id)
-        outcome = self._engine.start(request)
+        outcome = self._engine.start(request, memory_block=memory)
         self._record_answer(owner, thread_id, request_id, outcome)
+        self._service.compact(owner, thread_id)                                    # summarize older turns when needed
         return outcome
 
     # ------------------------------------------------------------------------------------------- internals
@@ -238,6 +242,7 @@ class ConversationFrontDoor:
 
     def _open_investigation(self, owner: Owner, thread_id: str, text: str, execute: bool,
                             on_start: Callable[[str], None] | None, planning_context: str | None = None) -> EngineOutcome:
+        memory = self._service.memory_for(owner, thread_id, text)
         request_id = self._user_turn(owner, thread_id, text, "investigation")
         request = InvestigationRequest(
             investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=thread_id,
@@ -246,8 +251,9 @@ class ConversationFrontDoor:
             authorization=self._authorization_for((Route.STRUCTURED_DATA, Route.DOCUMENT_RAG)))
         if on_start:
             on_start(request_id)
-        outcome = self._engine.start(request)
+        outcome = self._engine.start(request, memory_block=memory)
         self._record_answer(owner, thread_id, request_id, outcome)
+        self._service.compact(owner, thread_id)                                    # summarize older turns when needed
         return outcome
 
     def _ask_for_fields(self, owner: Owner, thread_id: str, text: str, route: str, message: str) -> FrontDoorReply:

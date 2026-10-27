@@ -54,7 +54,8 @@ class SpendLimitReached(RuntimeError):
 
 
 def input_token_bound(request: ClaudeRequest) -> int:
-    sent = request.system + request.user + (json.dumps(request.json_schema) if request.json_schema else "")
+    sent = (request.system + (request.cache_prefix or "") + request.user
+            + (json.dumps(request.json_schema) if request.json_schema else ""))
     return len(sent.encode("utf-8")) + FRAMING_TOKENS
 
 
@@ -97,7 +98,8 @@ class SpendLedger:
         return self.limits.max_attempts - len(self.attempts)
 
     def reserve(self, *, purpose: str, trace_id: str, model: str, max_tokens: int, input_bound: int) -> int:
-        worst = (self.prices.cost(input_bound, max_tokens) * GEO_MULTIPLIER).quantize(Decimal("0.000001"))
+        # worst case: every input token written to the prompt cache (1.25x), at the regional multiplier
+        worst = (self.prices.cost(input_bound, max_tokens, cache_write_tokens=input_bound) * GEO_MULTIPLIER).quantize(Decimal("0.000001"))
         if self.locked:
             raise SpendLimitReached(f"ledger_locked:{self.locked}")
         if len(self.attempts) >= self.limits.max_attempts:
@@ -112,10 +114,12 @@ class SpendLedger:
 
     def settle(self, index: int, *, status: str, input_tokens: int = 0, output_tokens: int = 0,
                http_status: int | None = None, provider_error_type: str | None = None,
-               gateway_retry_count: str | None = None, duration_ms: int = 0) -> dict[str, Any]:
+               gateway_retry_count: str | None = None, duration_ms: int = 0, cache_read_tokens: int = 0,
+               cache_write_tokens: int = 0) -> dict[str, Any]:
         attempt = self.attempts[index]
-        estimated = self.prices.cost(input_tokens, output_tokens) if status == "ok" else None
+        estimated = self.prices.cost(input_tokens, output_tokens, cache_read_tokens, cache_write_tokens) if status == "ok" else None
         attempt.update(status=status, input_tokens=input_tokens, output_tokens=output_tokens, http_status=http_status,
+                       cache_read_tokens=cache_read_tokens, cache_write_tokens=cache_write_tokens,
                        provider_error_type=provider_error_type, gateway_retry_count=gateway_retry_count,
                        duration_ms=duration_ms, settled_at=_now(),
                        estimated_usd=str(estimated.quantize(Decimal("0.000001"))) if estimated is not None else None,
@@ -189,8 +193,10 @@ class BudgetedClaudeClient(PortkeyClaudeClient):
                 raise
             attempt = self._ledger.settle(index, status="ok", input_tokens=response.input_tokens,
                                           output_tokens=response.output_tokens, gateway_retry_count=self._gateway_retry_count,
-                                          duration_ms=response.duration_ms)
+                                          duration_ms=response.duration_ms, cache_read_tokens=response.cache_read_tokens,
+                                          cache_write_tokens=response.cache_write_tokens)
             span(status="ok", input_tokens=response.input_tokens, output_tokens=response.output_tokens,
+                 cache_read_tokens=response.cache_read_tokens, cache_write_tokens=response.cache_write_tokens,
                  cost_usd=float(attempt["estimated_usd"]), gateway_retry_count=self._gateway_retry_count,
                  committed_usd=float(self._ledger.committed_usd()), attempts_used=len(self._ledger.attempts),
                  duration_ms=response.duration_ms)

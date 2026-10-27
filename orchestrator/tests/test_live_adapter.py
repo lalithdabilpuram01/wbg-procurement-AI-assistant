@@ -93,7 +93,8 @@ def test_worst_case_is_reserved_before_the_request_and_settled_after(tmp_path):
     expected_bound = len(("Return JSON." + "Which metric counts bid invitations?" +
                           json.dumps(strict_output_schema(DraftPlan.model_json_schema()))).encode()) + FRAMING_TOKENS
     assert reserved["input_bound"] == expected_bound
-    worst = (SONNET_5_5_PRICES.cost(expected_bound, 3000) * GEO_MULTIPLIER).quantize(Decimal("0.000001"))
+    worst = (SONNET_5_5_PRICES.cost(expected_bound, 3000, cache_write_tokens=expected_bound)       # all input cached at 1.25x
+             * GEO_MULTIPLIER).quantize(Decimal("0.000001"))
     assert Decimal(reserved["worst_case_usd"]) == worst
     settled = ledger.attempts[0]
     assert settled["status"] == "ok" and settled["gateway_retry_count"] == "0"
@@ -190,3 +191,28 @@ def test_planner_and_responder_calls_are_budgeted_priced_and_traced(tmp_path):
         assert parent.name in ("orchestrator.node.plan", "orchestrator.node.respond")
         assert parent.attributes["investigation_id"] == out.values["request"]["investigation_id"]
         assert parent.attributes["conversation_id"] == "conv-1"
+
+
+
+def test_prompt_caching_marks_the_system_prompt_and_the_stable_prefix_and_prices_cached_tokens(tmp_path):
+    from structured_agent.nl2sql.llm_client import ClaudeRequest
+    seen = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen["body"] = json.loads(request.content)
+        reply = completion(plan(task("a")))
+        payload = json.loads(reply.content)
+        payload["usage"].update({"prompt_tokens": 5000, "cache_read_input_tokens": 4000, "cache_creation_input_tokens": 0})
+        return with_retry_header(httpx.Response(200, json=payload))
+
+    ledger = SpendLedger(tmp_path / "ledger.json")
+    client = BudgetedClaudeClient(claude_settings(), ledger, output_caps=CAPS, transport=httpx.MockTransport(handler))
+    response = client.complete(ClaudeRequest(system="Return JSON.", user="QUESTION: q", cache_prefix="SCHEMA " * 600,
+                                             trace_id="req_cache", json_schema={"type": "object"}, schema_name="investigation_plan"))
+    system, user = seen["body"]["messages"]
+    assert system["content"][0]["cache_control"] == {"type": "ephemeral"}
+    assert user["content"][0]["cache_control"] == {"type": "ephemeral"} and user["content"][1]["text"] == "QUESTION: q"
+    assert response.cache_read_tokens == 4000
+    settled = ledger.attempts[0]
+    full_price = SONNET_5_5_PRICES.cost(5000, response.output_tokens)
+    assert Decimal(settled["estimated_usd"]) == SONNET_5_5_PRICES.cost(5000, response.output_tokens, 4000, 0) < full_price

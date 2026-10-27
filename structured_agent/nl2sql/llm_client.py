@@ -71,6 +71,8 @@ class LlmError(Exception):
         return self.failure in TRANSIENT_FAILURES
 
 
+CACHE_CONTROL = {"type": "ephemeral"}               # Anthropic prompt cache, 5-minute lifetime
+
 @dataclass(frozen=True)
 class ClaudeRequest:
     system: str
@@ -79,6 +81,7 @@ class ClaudeRequest:
     json_schema: dict[str, Any] | None = None      # requested output structure
     schema_name: str = "structured_output"
     timeout_seconds: float | None = None           # overrides the settings default (e.g. remaining deadline)
+    cache_prefix: str | None = None                # stable text sent before `user` and marked for prompt caching
 
 
 @dataclass(frozen=True)
@@ -86,9 +89,11 @@ class ClaudeResponse:
     content: str
     parsed: dict[str, Any] | None
     model: str
-    input_tokens: int
+    input_tokens: int                              # all input tokens, cached ones included (Portkey's prompt_tokens)
     output_tokens: int
     duration_ms: int
+    cache_read_tokens: int = 0                     # of input_tokens: read from the prompt cache (0.1x price)
+    cache_write_tokens: int = 0                    # of input_tokens: written to the prompt cache (1.25x price)
 
 
 class PortkeyClaudeClient:
@@ -141,9 +146,16 @@ class PortkeyClaudeClient:
                 "x-portkey-request-timeout": str(int(timeout_seconds * 1000))}
 
     def _body(self, request: ClaudeRequest) -> dict[str, Any]:
+        # Prompt caching (Anthropic, through Portkey): the system prompt and the stable prefix are cache breakpoints;
+        # a prefix shorter than the model's minimum (about 1,024 tokens) is simply not cached.
+        user: Any = request.user
+        if request.cache_prefix:
+            user = [{"type": "text", "text": request.cache_prefix, "cache_control": CACHE_CONTROL},
+                    {"type": "text", "text": request.user}]
         body: dict[str, Any] = {
             "model": self._settings.model,
-            "messages": [{"role": "system", "content": request.system}, {"role": "user", "content": request.user}],
+            "messages": [{"role": "system", "content": [{"type": "text", "text": request.system, "cache_control": CACHE_CONTROL}]},
+                         {"role": "user", "content": user}],
             "max_tokens": self._settings.max_output_tokens,
             # No temperature/top_p/top_k: Claude Sonnet 5.5 returns HTTP 400 for non-default sampling values.
         }
@@ -184,7 +196,8 @@ class PortkeyClaudeClient:
         usage = payload.get("usage") or {}
         return ClaudeResponse(content=content, parsed=parsed, model=model,
                               input_tokens=int(usage.get("prompt_tokens", 0)), output_tokens=int(usage.get("completion_tokens", 0)),
-                              duration_ms=duration_ms)
+                              duration_ms=duration_ms, cache_read_tokens=int(usage.get("cache_read_input_tokens") or 0),
+                              cache_write_tokens=int(usage.get("cache_creation_input_tokens") or 0))
 
 
 def _parse_json_object(content: str) -> dict[str, Any]:

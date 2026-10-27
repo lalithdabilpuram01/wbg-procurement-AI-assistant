@@ -27,7 +27,7 @@ from structured_agent.nl2sql.tools import InProcessToolCaller  # noqa: E402
 from structured_agent.nl2sql.tracing import LogfireSettings, configure_logfire  # noqa: E402
 from structured_agent.nl2sql.workflow import NlToSqlWorkflow  # noqa: E402
 from structured_agent.observability import Telemetry  # noqa: E402
-from structured_agent.tests.nl2sql_fakes import (TEST_API_KEY, EchoColumnsExecutor, FakePortkey,  # noqa: E402
+from structured_agent.tests.nl2sql_fakes import (TEST_API_KEY, EchoColumnsExecutor, FakePortkey, message_text,  # noqa: E402
                                                  offline_claude_client, sql_draft)
 from structured_agent.tests.test_nl2sql_workflow import BID_QUESTION, BID_SQL, ListSink, make_service  # noqa: E402
 from structured_agent.tests.test_registry_and_mcp import registry_available  # noqa: E402
@@ -172,7 +172,7 @@ def test_injected_registry_text_never_reaches_the_prompt_or_changes_permissions(
     portkey = FakePortkey(sql_draft(BID_SQL, {"fiscal_year": 2024}))
     tools = PoisonedTools(InProcessToolCaller(service, "analyst-demo", "wbg-procurement-poc"))
     result, tools, _ = run(service, guardrails, portkey, tools=tools)
-    prompt = portkey.bodies()[0]["messages"][1]["content"]
+    prompt = message_text(portkey.bodies()[0]["messages"][1])
     assert INJECTION not in prompt and "UNTRUSTED REGISTRY METADATA" in prompt
     context_decision = next(d for d in result.guardrail_decisions if d["stage"] == "retrieved_context")
     assert context_decision["allowed"] and context_decision["reason_category"] == "context_instruction_removed"

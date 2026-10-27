@@ -213,3 +213,26 @@ def test_a_brief_description_is_masked_before_it_is_stored_or_run():
     outcome = door.plan_project(ALICE, thread.thread_id, spec)
     assert "lead@example.org" not in outcome.values["request"]["planning"]["profile"]["description"]
     assert all("lead@example.org" not in t.text for t in store.turns(ALICE, thread.thread_id))
+
+
+# ------------------------------------------------------------------------------------------- memory everywhere
+def test_investigations_started_by_the_front_door_get_the_conversation_memory():
+    planner = FakePlanner(plan(task("docs", worker="document_intelligence", operation="answer_document_question",
+                                    question="What does the appraisal say about the Expressway?")))
+    door, service, store, engine, parts = front_door(planner=planner)
+    thread = service.start_thread(ALICE)
+    door.handle_message(ALICE, thread.thread_id, DATA_QUESTION, execute=True)              # an earlier exchange
+    door.handle_message(ALICE, thread.thread_id, "Tell me about the Ethiopia Expressway")    # planner investigation
+    memory = planner.calls[0].memory_block
+    assert memory and "CONVERSATION MEMORY" in memory and "fiscal year 2024" in memory
+
+
+def test_turns_added_by_the_front_door_are_compressed_like_any_other():
+    door, service, store, engine, parts = front_door(planner=FakePlanner(*[plan(task(
+        "docs", worker="document_intelligence", operation="answer_document_question", question=f"Expressway question {i}?"))
+        for i in range(6)]))
+    thread = service.start_thread(ALICE)
+    for i in range(6):
+        door.handle_message(ALICE, thread.thread_id, f"Tell me about the Ethiopia Expressway, point {i}")
+    summary = store.latest_summary(ALICE, thread.thread_id)
+    assert summary is not None and summary.covers_through_seq >= 4

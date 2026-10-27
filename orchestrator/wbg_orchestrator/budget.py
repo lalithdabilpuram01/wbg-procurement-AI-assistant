@@ -13,6 +13,8 @@ from pydantic import BaseModel, ConfigDict
 from .contracts import ErrorCategory, ExecutionError, InvestigationBudget, Usage, new_id
 
 
+CACHE_READ, CACHE_WRITE = Decimal("0.1"), Decimal("1.25")      # Anthropic prompt-cache price multipliers
+
 class PriceTable(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
     model: str
@@ -20,9 +22,11 @@ class PriceTable(BaseModel):
     output_usd_per_million: Decimal
     source: str                                  # where the prices come from (contract, price list, date)
 
-    def cost(self, input_tokens: int, output_tokens: int) -> Decimal:
-        return (Decimal(input_tokens) * self.input_usd_per_million + Decimal(output_tokens) * self.output_usd_per_million) \
-            / Decimal(1_000_000)
+    def cost(self, input_tokens: int, output_tokens: int, cache_read_tokens: int = 0, cache_write_tokens: int = 0) -> Decimal:
+        """`input_tokens` includes cached tokens; cache reads cost 0.1x and cache writes 1.25x the input price."""
+        base = Decimal(input_tokens - cache_read_tokens - cache_write_tokens)
+        weighted = base + Decimal(cache_read_tokens) * CACHE_READ + Decimal(cache_write_tokens) * CACHE_WRITE
+        return (weighted * self.input_usd_per_million + Decimal(output_tokens) * self.output_usd_per_million) / Decimal(1_000_000)
 
 
 def priced(usage: Usage, prices: PriceTable | None) -> Usage:

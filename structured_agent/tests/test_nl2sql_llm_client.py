@@ -44,7 +44,8 @@ def test_exact_request_headers_and_body():
     }                                                     # in particular: no x-portkey-config (no fallback Config)
     assert portkey.bodies()[0] == {
         "model": TEST_MODEL,
-        "messages": [{"role": "system", "content": "system text"}, {"role": "user", "content": "user text"}],
+        "messages": [{"role": "system", "content": [{"type": "text", "text": "system text", "cache_control": {"type": "ephemeral"}}]},
+                     {"role": "user", "content": "user text"}],
         "max_tokens": 16000,
         "response_format": {"type": "json_schema", "json_schema": {"name": "answer", "strict": True, "schema": SCHEMA}},
     }                                                     # in particular: no temperature / top_p / top_k

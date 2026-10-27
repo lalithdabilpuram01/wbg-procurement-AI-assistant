@@ -49,6 +49,12 @@ def completion(content: dict[str, Any] | str, model: str = "claude-test-model", 
                                      "usage": {"prompt_tokens": 1200, "completion_tokens": 80}})
 
 
+def message_text(message: dict[str, Any]) -> str:
+    """The text of a chat message whose content is a string or a list of text blocks (prompt caching)."""
+    content = message["content"]
+    return content if isinstance(content, str) else "\n".join(block["text"] for block in content)
+
+
 class FakePortkey:
     """Scripted replies: each item is an httpx.Response, an exception to raise, or a SQL-draft dict."""
 

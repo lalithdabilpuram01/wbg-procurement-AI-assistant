@@ -29,7 +29,7 @@ SAFE_ATTRIBUTES = frozenset({
     "conversation_id", "owner_hash", "model", "worst_case_usd", "committed_usd", "attempts_used", "http_status",
     "provider_error_type", "gateway_retry_count", "checkpoint_id", "checkpoint_thread", "checkpointer", "step",
     # audit timeline: trace link, guardrail decisions, error lists
-    "trace_id", "error_codes", "guard_policy", "guard_reason",
+    "trace_id", "error_codes", "guard_policy", "guard_reason", "cache_read_tokens", "cache_write_tokens",
 })
 SAFE_STRING = re.compile(r"^[A-Za-z0-9_.:@,\-]{0,200}$")
 

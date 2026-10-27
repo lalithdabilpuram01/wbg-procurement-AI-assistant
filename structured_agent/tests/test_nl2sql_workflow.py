@@ -19,7 +19,7 @@ from structured_agent.nl2sql.settings import BreakerSettings, RuntimeSettings
 from structured_agent.nl2sql.tools import InProcessToolCaller
 from structured_agent.nl2sql.workflow import NlToSqlWorkflow
 from structured_agent.observability import AuditEvent, Telemetry
-from structured_agent.tests.nl2sql_fakes import (TEST_API_KEY, EchoColumnsExecutor, FakePortkey, completion,
+from structured_agent.tests.nl2sql_fakes import (TEST_API_KEY, EchoColumnsExecutor, FakePortkey, completion, message_text,
                                                  offline_claude_client, sql_draft)
 from structured_agent.tests.test_registry_and_mcp import registry_available
 
@@ -107,7 +107,7 @@ def test_sql_generation_request_is_grounded_and_claude_only(service):
     sent, body = portkey.requests[0], portkey.bodies()[0]
     assert "x-portkey-config" not in sent.headers and body["model"].startswith("@wbg-anthropic/")
     assert body["response_format"]["json_schema"]["name"] == "sql_draft"
-    user_message = body["messages"][1]["content"]
+    user_message = message_text(body["messages"][1])
     assert BID_QUESTION in user_message and f"{GOLD}." in user_message and SILVER not in user_message
 
 
@@ -135,7 +135,7 @@ def test_one_correction_after_a_hallucinated_column(service, read_only_executor)
     flow, _ = workflow(service, portkey)
     result = flow.run(BID_QUESTION, execute=True)
     assert result.status == WorkflowStatus.ANSWERED and result.llm_calls == 2
-    feedback = portkey.bodies()[1]["messages"][1]["content"]
+    feedback = message_text(portkey.bodies()[1]["messages"][1])
     assert "UNKNOWN_COLUMN" in feedback and "previous SQL" in feedback
     assert len(read_only_executor.calls) == 1
 

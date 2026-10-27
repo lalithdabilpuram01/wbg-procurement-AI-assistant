@@ -80,10 +80,11 @@ class SqlDraft(BaseModel):
 
 def build_user_message(context: SchemaContext, feedback: list[str] | None, previous_sql: str | None,
                        conversation_context: str | None = None) -> str:
-    parts = [render_context(context)]
+    """The changing part of the prompt; the schema context goes first as the cached prefix (`render_context`)."""
+    parts: list[str] = []
     if conversation_context:
-        parts += ["", conversation_context]          # already labelled and sanitised by the conversation service
-    parts += ["", f"QUESTION: {context.question}"]
+        parts += [conversation_context, ""]          # already labelled and sanitised by the conversation service
+    parts += [f"QUESTION: {context.question}"]
     if feedback:
         parts += ["", "Your previous SQL was rejected by the validator. Fix only these problems and reply again:",
                   f"previous SQL: {previous_sql}"] + [f"- {item}" for item in feedback]
@@ -95,7 +96,7 @@ def generate_sql(client: PortkeyClaudeClient, context: SchemaContext, trace_id: 
                  conversation_context: str | None = None) -> tuple[SqlDraft, dict[str, int]]:
     """One Claude call. Returns the draft and token usage; raises LlmError on provider or output problems."""
     user = build_user_message(context, feedback, previous_sql, conversation_context)
-    response = client.complete(ClaudeRequest(system=SYSTEM_PROMPT, user=user,
+    response = client.complete(ClaudeRequest(system=SYSTEM_PROMPT, user=user, cache_prefix=render_context(context),
                                              trace_id=trace_id, json_schema=SQL_DRAFT_SCHEMA, schema_name="sql_draft",
                                              timeout_seconds=timeout_seconds))
     try:
@@ -103,5 +104,6 @@ def generate_sql(client: PortkeyClaudeClient, context: SchemaContext, trace_id: 
     except ValidationError:
         raise LlmError(LlmFailure.INVALID_OUTPUT) from None
     usage = {"input_tokens": response.input_tokens, "output_tokens": response.output_tokens,
-             "duration_ms": response.duration_ms}
+             "duration_ms": response.duration_ms, "cache_read_tokens": response.cache_read_tokens,
+             "cache_write_tokens": response.cache_write_tokens}
     return draft, usage

@@ -148,6 +148,27 @@ class ConversationService:
         return self._router.route(RouteRequest(stored_text, self._resolver.resolve(stored_text, state.active),
                                                state.previous_task_route))
 
+    def memory_for(self, owner: Owner, thread_id: str, question: str) -> str | None:
+        """The budgeted conversation-memory block for a request handled outside handle_message (investigations,
+        briefs, assessments started by the host): recent turns, active filters, approved decisions and the latest
+        usable summary. Call it before the request's own user turn is stored. None when there is nothing to add."""
+        thread = self._store.get_thread(owner, thread_id)
+        epoch_turns = self._store.turns(owner, thread.thread_id, topic_epoch=thread.topic_epoch)
+        decisions = self._store.decisions(owner, thread.thread_id, include_revoked=True)
+        summary, problem = self._usable_summary(owner, thread, epoch_turns, decisions)
+        active = self._conversation_state(owner, thread).active or ActiveContext()
+        package = self._builder.build(self.text_filter(question), active, epoch_turns, [d for d in decisions if d.active],
+                                      self._compressor.policy.recent_window_turns, summary, problem)
+        self._event("conversation.memory_built", thread_id=thread.thread_id, tokens_used=package.tokens_used,
+                    summary_status=package.summary_status, over_budget=package.over_budget)
+        if package.over_budget:
+            return None
+        return package.text or None
+
+    def compact(self, owner: Owner, thread_id: str) -> None:
+        """Summarize older turns of the current topic when needed (after a host-handled request)."""
+        self._compress(owner, self._store.get_thread(owner, thread_id))
+
     def handle_message(self, owner: Owner, thread_id: str, text: str, execute: bool = False) -> ConversationReply:
         """User message -> input guardrails -> intent router -> exactly one permitted handler."""
         started = time.perf_counter()
