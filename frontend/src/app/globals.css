@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Azure palette (Fluent): brand blues, neutral greys, status colours. Dark mode has its own steps. */
+:root {
+  --background: #f4f7fb;
+  --foreground: #1b1a19;
+  --card: #ffffff;
+  --card-foreground: #1b1a19;
+  --muted: #f3f2f1;
+  --muted-foreground: #605e5c;
+  --border: #e1e6ee;
+  --input: #c8d1dc;
+  --primary: #0078d4;
+  --primary-hover: #106ebe;
+  --primary-strong: #005a9e;
+  --primary-soft: #deecf9;
+  --primary-foreground: #ffffff;
+  --ring: #0078d4;
+  --sidebar: #0b2545;
+  --sidebar-hover: #13315c;
+  --sidebar-active: #1b4b8a;
+  --sidebar-foreground: #e8f1fb;
+  --sidebar-muted: #9fb7d4;
+  --success: #107c10;
+  --success-soft: #dff6dd;
+  --warning: #8a5300;
+  --warning-soft: #fff4ce;
+  --danger: #a4262c;
+  --danger-soft: #fde7e9;
+  --synthetic: #6b3fa0;
+  --synthetic-soft: #efe6fa;
+}
+
+.dark {
+  --background: #0e1621;
+  --foreground: #e6edf5;
+  --card: #152131;
+  --card-foreground: #e6edf5;
+  --muted: #1b2a3d;
+  --muted-foreground: #9aabbf;
+  --border: #233650;
+  --input: #2d4563;
+  --primary: #2b88d8;
+  --primary-hover: #479ef5;
+  --primary-strong: #6cb8f6;
+  --primary-soft: #0f2d4d;
+  --primary-foreground: #ffffff;
+  --ring: #479ef5;
+  --sidebar: #08111d;
+  --sidebar-hover: #102236;
+  --sidebar-active: #173659;
+  --sidebar-foreground: #dce8f5;
+  --sidebar-muted: #7f95b0;
+  --success: #6ccb5f;
+  --success-soft: #12301a;
+  --warning: #f2c661;
+  --warning-soft: #33290d;
+  --danger: #f1707b;
+  --danger-soft: #3b1418;
+  --synthetic: #c5a3f0;
+  --synthetic-soft: #2a1b3d;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-strong: var(--primary-strong);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-hover: var(--sidebar-hover);
+  --color-sidebar-active: var(--sidebar-active);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-muted: var(--sidebar-muted);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-synthetic: var(--synthetic);
+  --color-synthetic-soft: var(--synthetic-soft);
+  --font-sans: "Segoe UI Variable", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --radius-xl: 0.875rem;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  border-color: var(--border);
+}
+
+::selection {
+  background: var(--primary-soft);
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--input) transparent;
+}

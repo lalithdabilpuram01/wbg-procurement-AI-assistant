@@ -24,6 +24,7 @@ from typing import Any, Callable, Literal
 from conversation.models import Owner, ThreadInfo, Turn
 from conversation.service import ConversationService
 from conversation.store import ConversationStore
+from conversation.workspace import Bookmark, Folder, InMemoryWorkspaceStore, WorkspaceItemNotFound, WorkspaceStore
 
 from .contracts import PackageSpec, investigation_id_for, new_id
 from .conversation_bridge import ConversationFrontDoor, owner_ref
@@ -45,7 +46,7 @@ class Job:
     job_id: str
     owner: Owner
     conversation_id: str
-    kind: Literal["message", "approval", "recover"]
+    kind: Literal["message", "approval", "recover", "package"]
     state: JobState = "running"
     request_id: str | None = None             # the investigation's request, once known
     status: str | None = None                 # conversation or investigation status at the end
@@ -62,8 +63,9 @@ class InvestigationRef:
 
 class AppService:
     def __init__(self, conversations: ConversationService, store: ConversationStore, engine: InvestigationEngine,
-                 front_door: ConversationFrontDoor, *, max_workers: int = 2):
+                 front_door: ConversationFrontDoor, *, workspace: WorkspaceStore | None = None, max_workers: int = 2):
         self._conversations, self._store, self._engine, self._front_door = conversations, store, engine, front_door
+        self._workspace = workspace or InMemoryWorkspaceStore()
         self._pool = ThreadPoolExecutor(max_workers=max_workers, thread_name_prefix="wbg-job")
         self._lock = threading.Lock()
         self._jobs: dict[str, Job] = {}
@@ -73,8 +75,49 @@ class AppService:
     def start_conversation(self, owner: Owner, title: str | None = None) -> ThreadInfo:
         return self._conversations.start_thread(owner, title)
 
-    def list_conversations(self, owner: Owner) -> list[ThreadInfo]:
-        return self._store.list_threads(owner)
+    def list_conversations(self, owner: Owner, limit: int = 100) -> list[tuple[ThreadInfo, str | None]]:
+        """Conversations, newest first, each with its folder id (None = not filed)."""
+        filed = self._workspace.thread_folders(owner)
+        return [(t, filed.get(t.thread_id)) for t in self._store.list_threads(owner, limit)]
+
+    def rename_conversation(self, owner: Owner, conversation_id: str, title: str) -> None:
+        self._store.get_thread(owner, conversation_id)
+        self._store.set_title(owner, conversation_id, title)
+
+    # ------------------------------------------------------------------------------------------ workspace
+    def folders(self, owner: Owner) -> list[Folder]:
+        return self._workspace.list_folders(owner)
+
+    def create_folder(self, owner: Owner, name: str) -> Folder:
+        return self._workspace.create_folder(owner, name)
+
+    def rename_folder(self, owner: Owner, folder_id: str, name: str) -> Folder:
+        return self._workspace.rename_folder(owner, folder_id, name)
+
+    def delete_folder(self, owner: Owner, folder_id: str) -> None:
+        self._workspace.delete_folder(owner, folder_id)
+
+    def file_conversation(self, owner: Owner, conversation_id: str, folder_id: str | None) -> None:
+        self._store.get_thread(owner, conversation_id)                         # ownership of the conversation
+        self._workspace.file_thread(owner, conversation_id, folder_id)
+
+    def bookmarks(self, owner: Owner) -> list[tuple[Bookmark, str, str]]:
+        """Bookmarks with their conversation title and a short excerpt of the bookmarked answer."""
+        titles = {t.thread_id: t.title for t in self._store.list_threads(owner, 500)}
+        out = []
+        for bookmark in self._workspace.list_bookmarks(owner):
+            turn = next((t for t in self._store.turns(owner, bookmark.thread_id) if t.seq == bookmark.turn_seq), None)
+            out.append((bookmark, titles.get(bookmark.thread_id, ""), (turn.text if turn else "")[:240]))
+        return out
+
+    def add_bookmark(self, owner: Owner, conversation_id: str, turn_seq: int, note: str) -> Bookmark:
+        turns = self._store.turns(owner, conversation_id)                       # ownership of the conversation
+        if not any(t.seq == turn_seq and t.role == "assistant" for t in turns):
+            raise WorkspaceItemNotFound("only answers can be bookmarked")
+        return self._workspace.add_bookmark(owner, conversation_id, turn_seq, note)
+
+    def delete_bookmark(self, owner: Owner, bookmark_id: str) -> None:
+        self._workspace.delete_bookmark(owner, bookmark_id)
 
     def history(self, owner: Owner, conversation_id: str) -> list[Turn]:
         return self._conversations.history(owner, conversation_id)
@@ -196,6 +239,8 @@ def summarize(outcome: EngineOutcome) -> dict[str, Any]:
                    "state": outcome.task_states.get(t["task_id"], "pending")} for t in plan.get("tasks", [])],
         "evidence": [{"evidence_id": e.evidence_id, "kind": e.kind.value, "citation": e.citation, "numeric_use": e.numeric_use.value,
                       "validation_status": e.validation_status.value, "warnings": list(e.quality_warnings),
-                      "facts": [{"name": f.name, "value": f.value} for f in e.facts]} for e in outcome.evidence],
+                      "summary": e.summary, "document_id": e.document_id, "pages": list(e.pages) if e.pages else None,
+                      "project_ids": list(e.project_ids), "source_url": e.provenance_value("source_url"),
+                      "facts": [{"name": f.name, "value": f.value, "unit": f.unit} for f in e.facts]} for e in outcome.evidence],
         "usage": {k: values.get("usage", {}).get(k) for k in ("llm_calls", "input_tokens", "output_tokens", "cost_usd", "executions")},
     }

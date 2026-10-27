@@ -33,6 +33,7 @@ from pydantic import BaseModel, Field
 
 from conversation.models import Owner
 from conversation.store import ThreadNotFound
+from conversation.workspace import WorkspaceItemNotFound
 
 from .app_service import AppService, ConversationBusy, Job, JobNotFound, summarize
 from .contracts import PackageSpec
@@ -44,16 +45,23 @@ CLIENT_ID = r"^[A-Za-z0-9_-]{8,64}$"
 
 # --------------------------------------------------------------------------------------------------- users
 class UserDirectory:
-    """Local app users: SHA-256 of a bearer token -> (tenant, user)."""
+    """Local app users: SHA-256 of a bearer token -> (tenant, user). Re-reads its file when it changes, so a user added
+    (or a token replaced) with `add-user` takes effect without restarting the API."""
 
-    def __init__(self, entries: list[dict[str, str]]):
-        self._entries = entries
+    def __init__(self, entries: list[dict[str, str]], path: Path | None = None):
+        self._entries, self._path = entries, path
+        self._mtime = path.stat().st_mtime_ns if path and path.is_file() else None
 
     @classmethod
     def load(cls, path: Path = DEFAULT_USERS_FILE) -> "UserDirectory":
-        return cls(json.loads(path.read_text())["users"] if path.is_file() else [])
+        return cls(json.loads(path.read_text())["users"] if path.is_file() else [], path)
+
+    def _refresh(self) -> None:
+        if self._path and self._path.is_file() and self._path.stat().st_mtime_ns != self._mtime:
+            self._entries, self._mtime = json.loads(self._path.read_text())["users"], self._path.stat().st_mtime_ns
 
     def authenticate(self, token: str) -> Owner | None:
+        self._refresh()
         digest = hashlib.sha256(token.encode()).hexdigest()
         for entry in self._entries:
             if hmac.compare_digest(entry["token_sha256"], digest):
@@ -76,6 +84,24 @@ class UserDirectory:
 # ------------------------------------------------------------------------------------------------- requests
 class NewConversation(BaseModel):
     title: str | None = Field(default=None, max_length=120)
+
+
+class Rename(BaseModel):
+    title: str = Field(min_length=1, max_length=120)
+
+
+class FolderName(BaseModel):
+    name: str = Field(min_length=1, max_length=80)
+
+
+class Filing(BaseModel):
+    folder_id: str | None = None                       # None takes the conversation out of its folder
+
+
+class NewBookmark(BaseModel):
+    conversation_id: str = Field(min_length=1, max_length=64)
+    turn_seq: int = Field(gt=0)
+    note: str = Field(default="", max_length=200)
 
 
 class NewMessage(BaseModel):
@@ -118,6 +144,7 @@ def create_app(service: AppService, users: UserDirectory) -> FastAPI:
     @app.exception_handler(ThreadNotFound)
     @app.exception_handler(InvestigationNotFound)
     @app.exception_handler(JobNotFound)
+    @app.exception_handler(WorkspaceItemNotFound)
     def not_found(request: Request, error: Exception) -> JSONResponse:
         return JSONResponse({"detail": "not found"}, status_code=404)
 
@@ -138,8 +165,46 @@ def create_app(service: AppService, users: UserDirectory) -> FastAPI:
 
     @app.get("/conversations")
     def list_conversations(owner: Owner = Depends(current_owner)) -> list[dict[str, Any]]:
-        return [{"conversation_id": t.thread_id, "title": t.title, "updated_at": t.updated_at.isoformat()}
-                for t in service.list_conversations(owner)]
+        return [{"conversation_id": t.thread_id, "title": t.title, "updated_at": t.updated_at.isoformat(), "folder_id": folder}
+                for t, folder in service.list_conversations(owner)]
+
+    @app.patch("/conversations/{conversation_id}", status_code=204)
+    def rename_conversation(conversation_id: str, body: Rename, owner: Owner = Depends(current_owner)) -> None:
+        service.rename_conversation(owner, conversation_id, body.title)
+
+    @app.put("/conversations/{conversation_id}/folder", status_code=204)
+    def file_conversation(conversation_id: str, body: Filing, owner: Owner = Depends(current_owner)) -> None:
+        service.file_conversation(owner, conversation_id, body.folder_id)
+
+    # ---------------------------------------------------------------------------------------- workspace
+    @app.get("/folders")
+    def list_folders(owner: Owner = Depends(current_owner)) -> list[dict[str, Any]]:
+        return [f.model_dump(mode="json") for f in service.folders(owner)]
+
+    @app.post("/folders", status_code=201)
+    def create_folder(body: FolderName, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
+        return service.create_folder(owner, body.name).model_dump(mode="json")
+
+    @app.patch("/folders/{folder_id}")
+    def rename_folder(folder_id: str, body: FolderName, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
+        return service.rename_folder(owner, folder_id, body.name).model_dump(mode="json")
+
+    @app.delete("/folders/{folder_id}", status_code=204)
+    def delete_folder(folder_id: str, owner: Owner = Depends(current_owner)) -> None:
+        service.delete_folder(owner, folder_id)
+
+    @app.get("/bookmarks")
+    def list_bookmarks(owner: Owner = Depends(current_owner)) -> list[dict[str, Any]]:
+        return [{**b.model_dump(mode="json"), "conversation_title": title, "excerpt": excerpt}
+                for b, title, excerpt in service.bookmarks(owner)]
+
+    @app.post("/bookmarks", status_code=201)
+    def add_bookmark(body: NewBookmark, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
+        return service.add_bookmark(owner, body.conversation_id, body.turn_seq, body.note).model_dump(mode="json")
+
+    @app.delete("/bookmarks/{bookmark_id}", status_code=204)
+    def delete_bookmark(bookmark_id: str, owner: Owner = Depends(current_owner)) -> None:
+        service.delete_bookmark(owner, bookmark_id)
 
     @app.get("/conversations/{conversation_id}")
     def read_conversation(conversation_id: str, owner: Owner = Depends(current_owner)) -> dict[str, Any]:

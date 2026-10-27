@@ -88,3 +88,48 @@ GRANT SELECT, INSERT ON {schema}.threads, {schema}.turns, {schema}.decisions, {s
 GRANT UPDATE (title, topic_epoch, updated_at) ON {schema}.threads TO wbg_conversation_app;
 GRANT UPDATE (revoked_at, revoked_reason) ON {schema}.decisions TO wbg_conversation_app;
 GRANT UPDATE (invalidated_at, invalidation_reason) ON {schema}.summaries TO wbg_conversation_app;
+
+-- Workspace (Milestone F): folders that group conversations, and bookmarks on answers. Owner-scoped like the threads.
+CREATE TABLE IF NOT EXISTS {schema}.folders (
+    folder_id   uuid PRIMARY KEY,
+    tenant_id   text NOT NULL CHECK (length(tenant_id) BETWEEN 1 AND 100),
+    user_id     text NOT NULL CHECK (length(user_id) BETWEEN 1 AND 100),
+    name        text NOT NULL CHECK (length(name) BETWEEN 1 AND 80),
+    created_at  timestamptz NOT NULL
+);
+CREATE INDEX IF NOT EXISTS folders_owner_idx ON {schema}.folders (tenant_id, user_id);
+
+CREATE TABLE IF NOT EXISTS {schema}.thread_folders (
+    thread_id  uuid PRIMARY KEY REFERENCES {schema}.threads (thread_id),
+    folder_id  uuid NOT NULL REFERENCES {schema}.folders (folder_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS {schema}.bookmarks (
+    bookmark_id  uuid PRIMARY KEY,
+    thread_id    uuid NOT NULL REFERENCES {schema}.threads (thread_id),
+    turn_seq     integer NOT NULL CHECK (turn_seq > 0),
+    note         text NOT NULL DEFAULT '' CHECK (length(note) <= 200),
+    created_at   timestamptz NOT NULL,
+    UNIQUE (thread_id, turn_seq)
+);
+
+ALTER TABLE {schema}.folders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE {schema}.thread_folders ENABLE ROW LEVEL SECURITY;
+ALTER TABLE {schema}.bookmarks ENABLE ROW LEVEL SECURITY;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = '{schema_literal}' AND policyname = 'owner_folders') THEN
+        CREATE POLICY owner_folders ON {schema}.folders
+            USING (tenant_id = current_setting('wbg.tenant_id', true) AND user_id = current_setting('wbg.user_id', true));
+        CREATE POLICY owner_thread_folders ON {schema}.thread_folders
+            USING (thread_id IN (SELECT thread_id FROM {schema}.threads));
+        CREATE POLICY owner_bookmarks ON {schema}.bookmarks
+            USING (thread_id IN (SELECT thread_id FROM {schema}.threads));
+    END IF;
+END
+$$;
+
+GRANT SELECT, INSERT, DELETE ON {schema}.folders, {schema}.thread_folders, {schema}.bookmarks TO wbg_conversation_app;
+GRANT UPDATE (name) ON {schema}.folders TO wbg_conversation_app;
+GRANT UPDATE (folder_id) ON {schema}.thread_folders TO wbg_conversation_app;

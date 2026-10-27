@@ -27,6 +27,7 @@ from typing import Callable
 from conversation.postgres_store import PostgresConversationStore
 from conversation.routing.routes import Route
 from conversation.service import ConversationService
+from conversation.workspace import PostgresWorkspaceStore
 from structured_agent.config import Settings
 from structured_agent.guardrails.pipeline import build_guardrails
 from structured_agent.nl2sql.live_guard import authorize_live_access
@@ -100,7 +101,8 @@ def build_runtime(config: RuntimeConfig, operator_confirmed: bool) -> tuple[AppS
                for route in (Route.STRUCTURED_DATA, Route.DOCUMENT_RAG)}
     conversations = ConversationService(store, runners, guardrails)
     service = AppService(conversations, store, engine,
-                         ConversationFrontDoor(conversations, store, engine, authorization_for, rag_release=config.rag_release))
+                         ConversationFrontDoor(conversations, store, engine, authorization_for, rag_release=config.rag_release),
+                         workspace=PostgresWorkspaceStore())
 
     def close() -> None:
         service.shutdown()

@@ -268,3 +268,52 @@ def test_invalid_packages_are_rejected_before_anything_runs(stack, change):
     cid = stack.conversation()
     response = stack.call("POST", f"/conversations/{cid}/packages", json={**PACKAGE, **change, "client_message_id": "pkg-0002"})
     assert response.status_code == 422
+
+
+# ---------------------------------------------------------------------------------------- folders and bookmarks
+def answered_conversation(stack) -> str:
+    cid = stack.conversation()
+    stack.wait(stack.send(cid, DATA_QUESTION, "msg-ws-01", execute=True).json()["job_id"])
+    return cid
+
+
+def test_conversations_can_be_renamed_and_filed_into_folders(stack):
+    cid = stack.conversation()
+    assert stack.call("PATCH", f"/conversations/{cid}", json={"title": "Bid invitations FY24"}).status_code == 204
+    folder = stack.call("POST", "/folders", json={"name": "Ethiopia"}).json()
+    assert stack.call("PUT", f"/conversations/{cid}/folder", json={"folder_id": folder["folder_id"]}).status_code == 204
+    listed = {c["conversation_id"]: c for c in stack.call("GET", "/conversations").json()}
+    assert listed[cid]["title"] == "Bid invitations FY24" and listed[cid]["folder_id"] == folder["folder_id"]
+    assert stack.call("PATCH", f"/folders/{folder['folder_id']}", json={"name": "Ethiopia roads"}).json()["name"] == "Ethiopia roads"
+    assert stack.call("DELETE", f"/folders/{folder['folder_id']}").status_code == 204
+    assert {c["conversation_id"]: c for c in stack.call("GET", "/conversations").json()}[cid]["folder_id"] is None
+
+
+def test_answers_can_be_bookmarked_with_their_conversation_and_excerpt(stack):
+    cid = answered_conversation(stack)
+    created = stack.call("POST", "/bookmarks", json={"conversation_id": cid, "turn_seq": 2, "note": "FY24 count"})
+    assert created.status_code == 201
+    listed = stack.call("GET", "/bookmarks").json()
+    assert [(b["turn_seq"], b["note"]) for b in listed] == [(2, "FY24 count")] and listed[0]["excerpt"]
+    assert stack.call("POST", "/bookmarks", json={"conversation_id": cid, "turn_seq": 1}).status_code == 404   # a question
+    assert stack.call("DELETE", f"/bookmarks/{created.json()['bookmark_id']}").status_code == 204
+    assert stack.call("GET", "/bookmarks").json() == []
+
+
+def test_folders_and_bookmarks_are_private(stack):
+    cid = answered_conversation(stack)
+    folder = stack.call("POST", "/folders", json={"name": "Alice"}).json()
+    bookmark = stack.call("POST", "/bookmarks", json={"conversation_id": cid, "turn_seq": 2}).json()
+    assert stack.call("GET", "/folders", "bob").json() == [] and stack.call("GET", "/bookmarks", "bob").json() == []
+    assert stack.call("DELETE", f"/folders/{folder['folder_id']}", "bob").status_code == 404
+    assert stack.call("DELETE", f"/bookmarks/{bookmark['bookmark_id']}", "bob").status_code == 404
+    assert stack.call("POST", "/bookmarks", "bob", json={"conversation_id": cid, "turn_seq": 2}).status_code == 404
+    assert stack.call("PUT", f"/conversations/{cid}/folder", "bob", json={"folder_id": None}).status_code == 404
+
+
+def test_a_user_added_while_the_api_runs_can_sign_in_at_once(tmp_path):
+    users_file = tmp_path / "users.json"
+    UserDirectory.add_user(users_file, "alice")
+    directory = UserDirectory.load(users_file)
+    token = UserDirectory.add_user(users_file, "carol")
+    assert directory.authenticate(token) == Owner(tenant_id="local", user_id="carol")
