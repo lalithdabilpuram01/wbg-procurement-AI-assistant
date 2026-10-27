@@ -28,8 +28,17 @@ SAFE_ATTRIBUTES = frozenset({
     # Milestone B: correlation, provider calls and checkpoints
     "conversation_id", "owner_hash", "model", "worst_case_usd", "committed_usd", "attempts_used", "http_status",
     "provider_error_type", "gateway_retry_count", "checkpoint_id", "checkpoint_thread", "checkpointer", "step",
+    # audit timeline: trace link, guardrail decisions, error lists
+    "trace_id", "error_codes", "guard_policy", "guard_reason",
 })
-SAFE_STRING = re.compile(r"^[A-Za-z0-9_.:@\-]{0,100}$")
+SAFE_STRING = re.compile(r"^[A-Za-z0-9_.:@,\-]{0,200}$")
+
+
+def current_trace_id() -> str | None:
+    """The OpenTelemetry (Logfire) trace id of the running span, to link an audit line to its trace."""
+    from opentelemetry import trace
+    context = trace.get_current_span().get_span_context()
+    return format(context.trace_id, "032x") if context.is_valid else None
 
 
 def safe_attributes(attributes: dict[str, Any]) -> dict[str, Any]:

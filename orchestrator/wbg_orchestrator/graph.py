@@ -31,7 +31,7 @@ from .contracts import (TERMINAL_TASK_STATES, ApprovalDecision, ApprovalRequest,
                         utc_now)
 from .controller import ExecutionController
 from .hitl import ApprovalPolicy, approval_needed, build_approval, decision_problem
-from .observability import AuditTrail, OrchestratorTracer
+from .observability import AuditTrail, OrchestratorTracer, current_trace_id
 from .planner import Planner, PlannerError, PlanningContext, brief_plan, build_plan, fast_path_plan, package_plan
 from .response import ResponseGenerator, validate_response
 from .state import InvestigationState, add_counters
@@ -113,6 +113,11 @@ class _Nodes:
     def _event(self, name: str, state, **attributes) -> None:
         self.d.tracer.event(name, **{**self._correlation(state), **attributes})
 
+    def _audit(self, event: str, state, **attributes) -> None:
+        """One audit line: the event, its correlation ids and the Logfire trace it belongs to (metadata only)."""
+        self.d.audit.record(event, request_id=state["request"]["request_id"], trace_id=current_trace_id(),
+                            **{**self._correlation(state), **attributes})
+
     @staticmethod
     def _error(request: InvestigationRequest, node: str, category: ErrorCategory, code: str, message: str,
                task_id: str | None = None) -> ExecutionError:
@@ -130,13 +135,15 @@ class _Nodes:
         with self._span("intake", state, mode=request.mode, rag_release=request.rag_release) as span:
             decision = self.d.guard.check_input(request.question)
             span(status="allowed" if decision.allowed else "blocked")
+            self._audit("guard.input", state, status="allowed" if decision.allowed else "blocked",
+                        guard_policy=getattr(decision, "policy_id", None),
+                        guard_reason=str(getattr(decision.reason_category, "value", decision.reason_category or "")) or None)
             if not decision.allowed:
                 error = self._error(request, "intake", ErrorCategory.GUARDRAIL, str(getattr(decision.reason_category, "value",
                                     decision.reason_category)), "The request was blocked by an input guardrail.")
                 return self._respond_now(request, InvestigationStatus.BLOCKED,
                                          "This request cannot be processed because it was blocked by a safety check.", errors=[error])
-        self.d.audit.record("investigation.started", investigation_id=request.investigation_id, mode=request.mode,
-                            rag_release=request.rag_release)
+        self._audit("investigation.started", state, mode=request.mode, rag_release=request.rag_release)
         return {"phase": "intake_ok", "replans": 0}
 
     # ------------------------------------------------------------------------------------------ supervise
@@ -148,9 +155,13 @@ class _Nodes:
         update = {"supervisor": decision.model_dump(mode="json")}
         if decision.mode == "fast":
             plan = fast_path_plan(request, decision.worker, decision.operation, decision.requires_execution)
+            self._audit("plan.created", state, plan_id=plan.plan_id, produced_by=plan.produced_by, mode=decision.mode,
+                        task_count=len(plan.tasks))
             return {**update, "plan": plan.to_state(), "plans": [plan.to_state()], "phase": "planned"}
         if decision.mode in ("package", "brief"):
             plan = package_plan(request) if decision.mode == "package" else brief_plan(request)
+            self._audit("plan.created", state, plan_id=plan.plan_id, produced_by=plan.produced_by, mode=decision.mode,
+                        task_count=len(plan.tasks))
             return {**update, "plan": plan.to_state(), "plans": [plan.to_state()], "phase": "planned"}
         if decision.mode == "plan":
             return {**update, "phase": "needs_plan"}
@@ -211,6 +222,8 @@ class _Nodes:
                 return {**update, "usage": usage, "plan_errors": [failure.to_state()], "errors": [failure.to_state()],
                         "phase": "plan_failed"}
             span(status="proposed", plan_id=plan.plan_id, task_count=len(plan.tasks))
+        self._audit("plan.created", state, plan_id=plan.plan_id, produced_by=plan.produced_by, mode="plan",
+                    plan_version=plan.version, task_count=len(plan.tasks))
         return {**update, "usage": usage, "plan": plan.to_state(), "plans": [plan.to_state()], "phase": "planned"}
 
     def after_plan(self, state: InvestigationState) -> str:
@@ -248,8 +261,7 @@ class _Nodes:
         approval = build_approval(plan, request, needed[0], needed[1], self.d.approval_policy, self.d.now())
         self._event("orchestrator.approval_requested", state, approval_id=approval.approval_id, approval_kind=approval.kind,
                     plan_id=plan.plan_id)
-        self.d.audit.record("approval.requested", investigation_id=request.investigation_id, approval_id=approval.approval_id,
-                            approval_kind=approval.kind)
+        self._audit("approval.requested", state, approval_id=approval.approval_id, approval_kind=approval.kind)
         return {"approvals": [approval.to_state()], "phase": "awaiting_approval"}
 
     def await_approval(self, state: InvestigationState) -> dict:
@@ -264,8 +276,7 @@ class _Nodes:
             decision, problem = None, "malformed_decision"
         outcome = problem or ("approved" if decision.approved else "rejected")
         self._event("orchestrator.approval_decision", state, approval_id=approval.approval_id, approval_decision=outcome)
-        self.d.audit.record("approval.decided", investigation_id=request.investigation_id, approval_id=approval.approval_id,
-                            approval_decision=outcome)
+        self._audit("approval.decided", state, approval_id=approval.approval_id, approval_decision=outcome)
         if problem:
             error = self._error(request, "await_approval", ErrorCategory.APPROVAL, problem, "The approval could not be applied.")
             return {"errors": [error.to_state()], "phase": "approval_invalid"}
@@ -323,6 +334,10 @@ class _Nodes:
                 update[key] += values
                 view[key] = view.get(key, []) + values
             update["task_states"][task_id] = run.final_state.value
+            self._audit("task.finished", state, task_id=task.local_id, worker=task.worker.value, operation=task.operation,
+                        status=run.final_state.value, attempt=run.attempts, retries=run.retries, duration_ms=run.elapsed_ms,
+                        evidence_count=len(run.evidence), llm_calls=run.usage.llm_calls,
+                        error_codes=",".join(e.code for e in run.errors) or None)
             counters = usage_update(run.usage, run.elapsed_ms, tasks_executed=0 if run.final_state == TaskState.SKIPPED else 1,
                                     attempts=run.attempts, retries=run.retries)
             update["usage"] = add_counters(update["usage"], counters)
@@ -386,6 +401,9 @@ class _Nodes:
             if errors:
                 response = response.model_copy(update={"error_codes": response.error_codes + tuple(e.code for e in errors)})
             span(status=response.status.value, claims_kept=len(response.claims), claims_removed=len(response.removed_claims))
+            self._audit("answer.composed", state, status=response.status.value, claims_kept=len(response.claims),
+                        claims_removed=len(response.removed_claims), evidence_count=len(used),
+                        error_codes=",".join(response.error_codes) or None)
         update = {"response": response.to_state(), "phase": "done", "errors": [e.to_state() for e in errors]}
         if usage is not None:
             update["usage"] = usage_update(priced(usage, self.d.prices))
@@ -421,8 +439,10 @@ class _Nodes:
                     task_count=len(state.get("task_states", {})), llm_calls=usage.get("llm_calls", 0),
                     input_tokens=usage.get("input_tokens", 0), output_tokens=usage.get("output_tokens", 0),
                     executions=usage.get("executions", 0), cost_usd=usage.get("cost_usd"), replans=state.get("replans", 0))
-        self.d.audit.record("investigation.finished", investigation_id=request.investigation_id, status=response.get("status"),
-                            task_count=len(state.get("task_states", {})), unmet_count=len(unfinished))
+        self._audit("investigation.finished", state, status=response.get("status"), task_count=len(state.get("task_states", {})),
+                    unmet_count=len(unfinished), llm_calls=usage.get("llm_calls", 0), input_tokens=usage.get("input_tokens", 0),
+                    output_tokens=usage.get("output_tokens", 0), cost_usd=usage.get("cost_usd"),
+                    error_codes=",".join(sorted({e["code"] for e in state.get("errors", [])})) or None)
         return {"phase": "finished"}
 
 

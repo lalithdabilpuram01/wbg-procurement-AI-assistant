@@ -77,7 +77,7 @@ def test_traces_are_metadata_only(traced):
 
 
 def test_attribute_filter_drops_free_text_and_unknown_keys():
-    assert safe_attributes({"task_id": "t1", "status": "a b", "question": "x", "error_code": "x" * 101, "latency_ms": 3}) == \
+    assert safe_attributes({"task_id": "t1", "status": "a b", "question": "x", "error_code": "x" * 201, "latency_ms": 3}) == \
         {"task_id": "t1", "latency_ms": 3}
 
 
@@ -124,3 +124,17 @@ def test_every_span_and_event_correlates_investigation_conversation_plan_and_tas
         dump = json.dumps({k: str(v) for k, v in attributes.items()})
         assert not any(secret in dump for secret in SYNTHETIC_SECRETS)
     assert {"orchestrator.checkpoint_saved", "orchestrator.checkpoint_resumed"} <= {s.name for s in spans}
+
+
+def test_the_audit_timeline_reads_one_investigation_step_by_step():
+    from tests.helpers import build_engine, request
+    from wbg_orchestrator.audit import investigations, timeline
+    engine, parts = build_engine()
+    out = engine.start(request("How many bid invitations were published in fiscal year 2024?", execute=True))
+    events = parts["audit"].events
+    rid = out.values["request"]["request_id"]
+    lines = timeline(events, rid)
+    text = "\n".join(lines)
+    assert "input guardrail   allowed" in text and "plan " in text and "task " in text and "finished" in text
+    assert "bid invitations" not in text                                            # metadata only
+    assert investigations(events)[0]["request_id"] == rid

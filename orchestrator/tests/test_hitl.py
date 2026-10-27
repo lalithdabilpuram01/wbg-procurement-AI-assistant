@@ -97,7 +97,8 @@ def test_approval_audit_metadata_contains_no_question_text():
     engine.resume(ALICE, out.thread_id, out.pending_approval.approval_id, approved=True)
     events = parts["audit"].events
     names = [e["event"] for e in events]
-    assert names[:2] == ["investigation.started", "approval.requested"] and "approval.decided" in names
+    order = [n for n in names if n in ("investigation.started", "plan.created", "approval.requested", "approval.decided")]
+    assert order[:3] == ["investigation.started", "plan.created", "approval.requested"] and "approval.decided" in order
     decided = next(e for e in events if e["event"] == "approval.decided")
     assert decided["approval_decision"] == "approved" and decided["approval_id"] == out.pending_approval.approval_id
     assert "bid invitations" not in str(events) and "fiscal" not in str(events)
