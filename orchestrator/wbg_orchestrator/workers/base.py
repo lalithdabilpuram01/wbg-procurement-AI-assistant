@@ -97,6 +97,7 @@ class WorkerContext:
     upstream_evidence: tuple[EvidenceRecord, ...] = ()     # verified evidence of the task's dependencies
     memory_block: str | None = None                        # untrusted conversation memory (never in state)
     cancel_event: threading.Event = field(default_factory=threading.Event)
+    package: Any = None                                    # PackageSpec of a package assessment (from the request)
 
 
 @dataclass(frozen=True)

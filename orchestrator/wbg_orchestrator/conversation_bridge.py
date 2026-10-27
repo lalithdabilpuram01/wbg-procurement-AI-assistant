@@ -25,11 +25,17 @@ from conversation.service import ConversationReply, ConversationService
 from conversation.store import ConversationStore
 
 from .authorization import AppAuthorizationContext
-from .contracts import (EvidenceKind, InvestigationRequest, InvestigationStatus, OwnerRef, ValidationStatus, investigation_id_for,
-                        new_id)
+from .contracts import (EvidenceKind, InvestigationRequest, InvestigationStatus, OwnerRef, PackageSpec, ValidationStatus,
+                        investigation_id_for, new_id)
 from .engine import EngineOutcome, InvestigationEngine
 
 COMBINABLE = {Route.STRUCTURED_DATA.value, Route.DOCUMENT_RAG.value}
+SOURCE_TYPES = {EvidenceKind.STRUCTURED_RESULT: "structured_result", EvidenceKind.MODEL_PREDICTION: "ml_prediction"}
+
+
+def describe_package(package: PackageSpec) -> str:
+    return (f"Assess a {package.procurement_category} package for project {package.project_id}: {package.procurement_method}, "
+            f"{package.review_type} review, {package.bid_window_days}-day bid window, tender on {package.tender_date.isoformat()}.")
 
 
 @dataclass(frozen=True)
@@ -134,6 +140,21 @@ class ConversationFrontDoor:
         self._record_answer(owner, thread_id, outcome.values["request"]["request_id"], outcome)    # history shows the result
         return outcome
 
+    def assess_package(self, owner: Owner, thread_id: str, package: PackageSpec) -> EngineOutcome:
+        """A structured package assessment: recorded as a user turn, run with the fixed prediction + lessons plan."""
+        thread = self._store.get_thread(owner, thread_id)                           # ownership of the conversation
+        text, request_id = describe_package(package), new_id("req")
+        self._store.append_turn(owner, Turn(
+            thread_id=thread_id, seq=self._store.next_seq(owner, thread_id), role="user", kind=TurnKind.QUESTION, text=text,
+            topic_epoch=thread.topic_epoch, metadata=TurnMetadata(request_id=request_id, route=Route.ML_PREDICTION.value)))
+        request = InvestigationRequest(
+            investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=thread_id,
+            owner=owner_ref(owner), question=text, mode="investigation", package=package, rag_release=self._release,
+            authorization=self._authorization_for((Route.ML_PREDICTION, Route.DOCUMENT_RAG)))
+        outcome = self._engine.start(request)
+        self._record_answer(owner, thread_id, request_id, outcome)
+        return outcome
+
     # ------------------------------------------------------------------------------------------- internals
     def _is_combined(self, reply: ConversationReply) -> bool:
         routing = reply.routing
@@ -157,7 +178,7 @@ class ConversationFrontDoor:
         """Append the investigation's answer as an assistant turn (safe metadata only: no SQL, no rows)."""
         thread = self._store.get_thread(owner, thread_id)
         evidence = [EvidenceReference(
-            source_type="structured_result" if e.kind == EvidenceKind.STRUCTURED_RESULT else "rag_document",
+            source_type=SOURCE_TYPES.get(e.kind, "rag_document"),
             source_id=e.provenance_value("validation_id") or e.document_id or e.evidence_id, objects=list(e.source_objects),
             citation=e.citation, verified_by="orchestrator_evidence_ledger")
             for e in outcome.evidence if e.validation_status == ValidationStatus.VERIFIED]

@@ -63,6 +63,7 @@ class Record(BaseModel):
 class WorkerName(str, Enum):
     STRUCTURED = "structured_data"
     DOCUMENT = "document_intelligence"
+    PREDICTION = "ml_prediction"
 
 
 class TaskState(str, Enum):
@@ -128,6 +129,7 @@ class NumericUse(str, Enum):
     APPROVED = "approved"                    # validated dataset values (structured results through the gateway)
     DOCUMENT_STATEMENT = "document_statement"  # a figure stated in narrative document text: quotable with its citation
     NOT_APPROVED = "not_approved"            # e.g. PDF table values: never approved numerical evidence
+    MODEL_ESTIMATE = "model_estimate"        # output of a frozen, hash-verified model: quotable as an estimate only
 
 
 class SourceSystem(str, Enum):
@@ -135,6 +137,7 @@ class SourceSystem(str, Enum):
     STRUCTURED_REGISTRY = "structured_registry"           # registry metadata (metric definitions, tables)
     RAG_PDF_CORPUS = "rag_pdf_corpus"                     # sanitised PDF corpus (narrative chunks, table windows)
     TYPED_PLAN_RECORDS = "typed_plan_records"             # procurement-plan activities extracted from PDFs
+    FROZEN_ML_MODELS = "frozen_ml_models"                 # Module 2 models (ml/final, ml/final23), hash-verified
 
 
 class EvidenceKind(str, Enum):
@@ -145,6 +148,7 @@ class EvidenceKind(str, Enum):
     DOCUMENT_PASSAGE = "document_passage"
     DOCUMENT_TABLE = "document_table"
     TYPED_PLAN_RECORD = "typed_plan_record"
+    MODEL_PREDICTION = "model_prediction"
 
 
 # ------------------------------------------------------------------------------------------------------- owners
@@ -184,6 +188,17 @@ class Usage(Record):
 
 
 # ------------------------------------------------------------------------------------------------------ requests
+class PackageSpec(Record):
+    """A procurement package to assess (mode B: project ID + package basics; the rest is looked up in Gold)."""
+
+    project_id: str = Field(pattern=r"^P\d{6}$")
+    procurement_method: str = Field(min_length=1, max_length=100)
+    procurement_category: str = Field(min_length=1, max_length=60)
+    review_type: str = Field(min_length=1, max_length=20)
+    bid_window_days: int = Field(ge=0, le=365)
+    tender_date: dt.date
+
+
 class InvestigationRequest(Record):
     investigation_id: str
     request_id: str
@@ -194,6 +209,7 @@ class InvestigationRequest(Record):
     mode: Literal["auto", "fast", "investigation"] = "auto"
     rag_release: Literal["pilot_v2", "pilot_v2_1", "pilot_v3"] = "pilot_v3"   # default: 237 docs, Lakebase pgvector
     execute_requested: bool = False                                      # the user asked to run validated SQL
+    package: PackageSpec | None = None                                   # a package assessment (ML predictions)
     context_ref: str | None = None                                       # memory block id (text is not in state)
     authorization: "AppAuthorizationContext"
     budget: InvestigationBudget = InvestigationBudget()
@@ -226,6 +242,7 @@ OPERATION_EVIDENCE = {
     "find_tables": EvidenceSpec(kinds=(EvidenceKind.TABLE_CANDIDATE,), verifiable=True),
     "answer_document_question": EvidenceSpec(kinds=DOCUMENT_KINDS, verifiable=True),   # page-checked citations
     "retrieve_passages": EvidenceSpec(kinds=DOCUMENT_KINDS, verifiable=False),         # raw search hits: never page-checked
+    "predict_package": EvidenceSpec(kinds=(EvidenceKind.MODEL_PREDICTION,), verifiable=True),  # hash-checked frozen models
 }
 
 

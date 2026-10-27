@@ -32,6 +32,7 @@ dependencies = [
     "databricks-connect==17.3.14",
     "fastapi==0.162.0",
     "pgvector==0.5.1",
+    "scikit-learn==1.5.1",
 ]
 
 [dependency-groups]

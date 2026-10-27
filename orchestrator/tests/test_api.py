@@ -243,3 +243,28 @@ def test_workflow_result_text_is_redacted_before_it_is_stored(tmp_path):
     cid = stack.conversation()
     rid = stack.wait(stack.send(cid, DATA_QUESTION, "msg-0001", execute=True).json()["job_id"])["request_id"]
     assert secret not in json.dumps(stack.call("GET", f"/conversations/{cid}/investigations/{rid}").json())
+
+
+# ------------------------------------------------------------------------------------------ package assessments
+PACKAGE = {"project_id": "P148850", "procurement_method": "Request for Bids", "procurement_category": "Works",
+           "review_type": "Prior", "bid_window_days": 60, "tender_date": "2026-12-01"}
+
+
+def test_a_package_assessment_runs_as_a_job_and_shows_three_predictions(stack):
+    cid = stack.conversation()
+    accepted = stack.call("POST", f"/conversations/{cid}/packages", json={**PACKAGE, "client_message_id": "pkg-0001"})
+    assert accepted.status_code == 202
+    job = stack.wait(accepted.json()["job_id"])
+    assert job["state"] == "succeeded" and job["request_id"]
+    investigation = stack.call("GET", f"/conversations/{cid}/investigations/{job['request_id']}").json()
+    assert sum(e["kind"] == "model_prediction" for e in investigation["evidence"]) == 3
+    turns = stack.call("GET", f"/conversations/{cid}").json()["turns"]
+    assert [t["role"] for t in turns] == ["user", "assistant"] and "P148850" in turns[0]["text"]
+
+
+@pytest.mark.parametrize("change", [{"project_id": "148850"}, {"bid_window_days": -1}, {"tender_date": "soon"},
+                                    {"unexpected": "field"}])
+def test_invalid_packages_are_rejected_before_anything_runs(stack, change):
+    cid = stack.conversation()
+    response = stack.call("POST", f"/conversations/{cid}/packages", json={**PACKAGE, **change, "client_message_id": "pkg-0002"})
+    assert response.status_code == 422

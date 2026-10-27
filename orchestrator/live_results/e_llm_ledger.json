@@ -1,0 +1,58 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "conservative_usd": "0.011777",
+      "duration_ms": 6743,
+      "estimated_usd": "0.010706",
+      "gateway_retry_count": "0",
+      "http_status": null,
+      "input_bound": 6311,
+      "input_tokens": 1928,
+      "max_tokens": 4000,
+      "model": "@wbg-anthropic/claude-sonnet-5-5",
+      "output_tokens": 685,
+      "provider_error_type": null,
+      "purpose": "investigation_answer",
+      "reserved_at": "2026-10-27T18:57:12.775+00:00",
+      "settled_at": "2026-10-27T18:57:19.520+00:00",
+      "status": "ok",
+      "trace_id": "req_0eb31962b10540b8b25a",
+      "worst_case_usd": "0.057884"
+    },
+    {
+      "attempt": 2,
+      "conservative_usd": "0.012329",
+      "duration_ms": 7183,
+      "estimated_usd": "0.011208",
+      "gateway_retry_count": "0",
+      "http_status": null,
+      "input_bound": 5901,
+      "input_tokens": 1744,
+      "max_tokens": 4000,
+      "model": "@wbg-anthropic/claude-sonnet-5-5",
+      "output_tokens": 772,
+      "provider_error_type": null,
+      "purpose": "investigation_answer",
+      "reserved_at": "2026-10-27T18:59:33.264+00:00",
+      "settled_at": "2026-10-27T18:59:40.449+00:00",
+      "status": "ok",
+      "trace_id": "req_8e464cf30a9d434fb59b",
+      "worst_case_usd": "0.056982"
+    }
+  ],
+  "attempts_used": 2,
+  "committed_usd": "0.024106",
+  "estimated_usd": "0.021914",
+  "limits": {
+    "max_attempts": 10,
+    "max_usd": "2.00"
+  },
+  "locked": null,
+  "prices": {
+    "input_usd_per_million": "2",
+    "model": "claude-sonnet-5-5",
+    "output_usd_per_million": "10",
+    "source": "platform.claude.com/docs/en/about-claude/pricing, verified 2026-10-26"
+  }
+}

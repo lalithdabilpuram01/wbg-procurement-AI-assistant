@@ -1,0 +1,2001 @@
+project_id,sector
+P074191,Energy and Extractives
+P075941,Energy and Extractives
+P079736,Transportation
+P084302,"Agriculture, Fishing and Forestry"
+P086592,"Agriculture, Fishing and Forestry"
+P088799,"Agriculture, Fishing and Forestry"
+P088966,"Water, Sanitation and Waste Management"
+P091092,"Water, Sanitation and Waste Management"
+P093775,"Water, Sanitation and Waste Management"
+P094183,"Agriculture, Fishing and Forestry"
+P095003,Transportation
+P095129,Transportation
+P096532,"Water, Sanitation and Waste Management"
+P096572,"Agriculture, Fishing and Forestry"
+P098538,"Agriculture, Fishing and Forestry"
+P101103,Transportation
+P101209,"Industry, Trade and Services"
+P101415,Transportation
+P102368,Transportation
+P102459,"Agriculture, Fishing and Forestry"
+P104164,"Agriculture, Fishing and Forestry"
+P104687,"Agriculture, Fishing and Forestry"
+P105101,Public Administration
+P105269,Public Administration
+P105311,"Agriculture, Fishing and Forestry"
+P106284,Public Administration
+P106685,"Industry, Trade and Services"
+P106735,Health
+P107146,Education
+P107343,"Agriculture, Fishing and Forestry"
+P110693,Education
+P111996,Transportation
+P112074,"Water, Sanitation and Waste Management"
+P112158,Energy and Extractives
+P112526,"Agriculture, Fishing and Forestry"
+P112719,"Water, Sanitation and Waste Management"
+P113266,Energy and Extractives
+P113542,"Water, Sanitation and Waste Management"
+P114236,"Agriculture, Fishing and Forestry"
+P114264,"Agriculture, Fishing and Forestry"
+P114294,"Agriculture, Fishing and Forestry"
+P116230,"Industry, Trade and Services"
+P116748,Energy and Extractives
+P117082,"Water, Sanitation and Waste Management"
+P117449,"Water, Sanitation and Waste Management"
+P117871,"Water, Sanitation and Waste Management"
+P118023,Transportation
+P118109,Energy and Extractives
+P118196,"Water, Sanitation and Waste Management"
+P118197,"Water, Sanitation and Waste Management"
+P118213,Information and Communications Technologies
+P118518,"Agriculture, Fishing and Forestry"
+P118737,Energy and Extractives
+P118826,Social Protection
+P119063,"Water, Sanitation and Waste Management"
+P119343,Transportation
+P119432,"Agriculture, Fishing and Forestry"
+P119471,Transportation
+P120026,"Water, Sanitation and Waste Management"
+P120198,Transportation
+P120219,Social Protection
+P120304,Energy and Extractives
+P120338,Financial Sector
+P120417,"Agriculture, Fishing and Forestry"
+P120517,Public Administration
+P120583,"Agriculture, Fishing and Forestry"
+P120657,"Agriculture, Fishing and Forestry"
+P120788,"Water, Sanitation and Waste Management"
+P120798,Health
+P120899,"Agriculture, Fishing and Forestry"
+P121019,Financial Sector
+P121152,Public Administration
+P121186,"Agriculture, Fishing and Forestry"
+P121492,Public Administration
+P121495,Transportation
+P121507,"Water, Sanitation and Waste Management"
+P121774,"Water, Sanitation and Waste Management"
+P122039,Social Protection
+P122065,"Agriculture, Fishing and Forestry"
+P122124,Education
+P122219,Information and Communications Technologies
+P122229,Public Administration
+P122235,"Agriculture, Fishing and Forestry"
+P122319,Transportation
+P122320,Energy and Extractives
+P122329,Energy and Extractives
+P122402,Information and Communications Technologies
+P122476,Public Administration
+P122486,"Agriculture, Fishing and Forestry"
+P122540,Energy and Extractives
+P122546,Education
+P122629,Health
+P122735,"Water, Sanitation and Waste Management"
+P122826,"Water, Sanitation and Waste Management"
+P122841,"Water, Sanitation and Waste Management"
+P122916,Energy and Extractives
+P122950,Social Protection
+P123093,Information and Communications Technologies
+P123112,"Agriculture, Fishing and Forestry"
+P123146,Education
+P123513,"Water, Sanitation and Waste Management"
+P123531,Health
+P123702,"Agriculture, Fishing and Forestry"
+P123706,Health
+P123828,Transportation
+P123879,Public Administration
+P123961,Transportation
+P123974,"Industry, Trade and Services"
+P124015,Social Protection
+P124018,"Agriculture, Fishing and Forestry"
+P124073,"Agriculture, Fishing and Forestry"
+P124085,"Agriculture, Fishing and Forestry"
+P124181,"Agriculture, Fishing and Forestry"
+P124268,Financial Sector
+P124614,"Agriculture, Fishing and Forestry"
+P124639,Transportation
+P124655,"Agriculture, Fishing and Forestry"
+P124720,"Industry, Trade and Services"
+P124908,"Agriculture, Fishing and Forestry"
+P125032,Transportation
+P125082,"Agriculture, Fishing and Forestry"
+P125120,"Water, Sanitation and Waste Management"
+P125127,Education
+P125151,"Water, Sanitation and Waste Management"
+P125229,Health
+P125232,Public Administration
+P125565,Energy and Extractives
+P125590,Transportation
+P125597,Public Administration
+P125669,"Agriculture, Fishing and Forestry"
+P125689,Financial Sector
+P125890,Public Administration
+P125999,"Agriculture, Fishing and Forestry"
+P126130,Health
+P126361,"Agriculture, Fishing and Forestry"
+P126452,"Agriculture, Fishing and Forestry"
+P126498,Transportation
+P126504,Transportation
+P126507,Transportation
+P126516,Transportation
+P126579,Energy and Extractives
+P126661,Energy and Extractives
+P126663,Public Administration
+P126744,"Agriculture, Fishing and Forestry"
+P126773,"Agriculture, Fishing and Forestry"
+P126782,Transportation
+P126813,"Water, Sanitation and Waste Management"
+P126848,Public Administration
+P126964,Social Protection
+P127086,"Water, Sanitation and Waste Management"
+P127204,"Industry, Trade and Services"
+P127254,Transportation
+P127303,"Industry, Trade and Services"
+P127306,Financial Sector
+P127338,Transportation
+P127388,Education
+P127508,"Water, Sanitation and Waste Management"
+P127676,"Water, Sanitation and Waste Management"
+P127723,Transportation
+P127734,Public Administration
+P127741,Public Administration
+P127743,"Agriculture, Fishing and Forestry"
+P127759,"Agriculture, Fishing and Forestry"
+P127764,"Agriculture, Fishing and Forestry"
+P127813,"Agriculture, Fishing and Forestry"
+P127867,Transportation
+P127966,Education
+P127974,Energy and Extractives
+P127978,"Water, Sanitation and Waste Management"
+P128050,Transportation
+P128276,"Water, Sanitation and Waste Management"
+P128307,"Agriculture, Fishing and Forestry"
+P128344,Social Protection
+P128412,"Agriculture, Fishing and Forestry"
+P128516,Education
+P128904,Information and Communications Technologies
+P128909,Health
+P128921,Energy and Extractives
+P128939,Transportation
+P129156,"Agriculture, Fishing and Forestry"
+P129401,Transportation
+P129524,Social Protection
+P129791,"Water, Sanitation and Waste Management"
+P129861,Education
+P130013,Energy and Extractives
+P130115,"Agriculture, Fishing and Forestry"
+P130174,"Agriculture, Fishing and Forestry"
+P130299,Health
+P130378,Energy and Extractives
+P130474,"Agriculture, Fishing and Forestry"
+P130544,"Water, Sanitation and Waste Management"
+P130548,Transportation
+P130682,"Water, Sanitation and Waste Management"
+P130694,"Water, Sanitation and Waste Management"
+P130710,"Industry, Trade and Services"
+P130865,Health
+P130871,Information and Communications Technologies
+P131013,"Agriculture, Fishing and Forestry"
+P131049,"Water, Sanitation and Waste Management"
+P131084,Energy and Extractives
+P131094,"Water, Sanitation and Waste Management"
+P131118,Transportation
+P131194,Health
+P131228,Energy and Extractives
+P131263,Energy and Extractives
+P131290,Health
+P131324,"Water, Sanitation and Waste Management"
+P131592,Energy and Extractives
+P131825,Education
+P131864,"Water, Sanitation and Waste Management"
+P132123,"Agriculture, Fishing and Forestry"
+P132173,"Water, Sanitation and Waste Management"
+P132277,Transportation
+P132308,Health
+P132386,"Water, Sanitation and Waste Management"
+P132418,Transportation
+P132515,Transportation
+P132621,Transportation
+P132623,"Agriculture, Fishing and Forestry"
+P132634,Social Protection
+P132652,Financial Sector
+P132742,Education
+P132748,Energy and Extractives
+P132750,Transportation
+P132754,"Agriculture, Fishing and Forestry"
+P132775,Transportation
+P132821,Information and Communications Technologies
+P132824,Health
+P132833,Transportation
+P132846,"Agriculture, Fishing and Forestry"
+P132873,Energy and Extractives
+P133018,"Water, Sanitation and Waste Management"
+P133116,"Water, Sanitation and Waste Management"
+P133129,Social Protection
+P133193,Health
+P133288,Energy and Extractives
+P133305,Energy and Extractives
+P133326,"Industry, Trade and Services"
+P133333,Education
+P133424,Public Administration
+P133531,Energy and Extractives
+P133590,Transportation
+P133610,Energy and Extractives
+P133620,Social Protection
+P133705,"Agriculture, Fishing and Forestry"
+P133731,Public Administration
+P133780,Education
+P133803,"Agriculture, Fishing and Forestry"
+P133828,"Agriculture, Fishing and Forestry"
+P133829,"Water, Sanitation and Waste Management"
+P143036,"Water, Sanitation and Waste Management"
+P143064,Public Administration
+P143185,"Agriculture, Fishing and Forestry"
+P143274,Public Administration
+P143302,"Industry, Trade and Services"
+P143307,"Agriculture, Fishing and Forestry"
+P143334,"Agriculture, Fishing and Forestry"
+P143382,"Agriculture, Fishing and Forestry"
+P143492,"Agriculture, Fishing and Forestry"
+P143580,Energy and Extractives
+P143650,Health
+P143751,Transportation
+P143801,Transportation
+P143940,"Water, Sanitation and Waste Management"
+P143979,Public Administration
+P143993,"Agriculture, Fishing and Forestry"
+P143995,Social Protection
+P143996,Transportation
+P144103,"Industry, Trade and Services"
+P144135,Energy and Extractives
+P144140,Information and Communications Technologies
+P144183,"Agriculture, Fishing and Forestry"
+P144269,"Agriculture, Fishing and Forestry"
+P144271,"Agriculture, Fishing and Forestry"
+P144335,Transportation
+P144442,"Agriculture, Fishing and Forestry"
+P144454,Education
+P144489,Transportation
+P144497,"Agriculture, Fishing and Forestry"
+P144573,Energy and Extractives
+P144614,Social Protection
+P144726,Transportation
+P144856,Education
+P144892,Health
+P144893,Health
+P144952,Public Administration
+P145037,"Agriculture, Fishing and Forestry"
+P145048,"Water, Sanitation and Waste Management"
+P145054,Energy and Extractives
+P145055,"Agriculture, Fishing and Forestry"
+P145057,Transportation
+P145101,Transportation
+P145234,Energy and Extractives
+P145261,Public Administration
+P145263,Social Protection
+P145268,"Water, Sanitation and Waste Management"
+P145309,Education
+P145335,Health
+P145347,Transportation
+P145468,Social Protection
+P145502,"Industry, Trade and Services"
+P145529,"Water, Sanitation and Waste Management"
+P145533,Public Administration
+P145534,Information and Communications Technologies
+P145544,Education
+P145545,Transportation
+P145554,Financial Sector
+P145566,Transportation
+P145585,Education
+P145586,Public Administration
+P145617,Public Administration
+P145618,Energy and Extractives
+P145686,"Water, Sanitation and Waste Management"
+P145699,Social Protection
+P145747,Public Administration
+P145765,Financial Sector
+P145778,Transportation
+P145813,"Agriculture, Fishing and Forestry"
+P145861,Education
+P145897,"Water, Sanitation and Waste Management"
+P145965,Health
+P146184,Education
+P146199,Energy and Extractives
+P146250,"Industry, Trade and Services"
+P146294,Education
+P146314,"Water, Sanitation and Waste Management"
+P146318,Social Protection
+P146319,Financial Sector
+P146334,Transportation
+P146344,Energy and Extractives
+P146460,Social Protection
+P146464,"Water, Sanitation and Waste Management"
+P146474,Education
+P146515,"Water, Sanitation and Waste Management"
+P146696,Energy and Extractives
+P146788,Energy and Extractives
+P146797,Education
+P146804,Public Administration
+P146827,Social Protection
+P146933,Social Protection
+P146936,Public Administration
+P146965,Public Administration
+P146970,Public Administration
+P146994,"Industry, Trade and Services"
+P147005,Public Administration
+P147009,"Industry, Trade and Services"
+P147050,Information and Communications Technologies
+P147147,Public Administration
+P147212,Social Protection
+P147213,Social Protection
+P147272,Transportation
+P147278,Transportation
+P147280,Transportation
+P147342,Public Administration
+P147381,"Industry, Trade and Services"
+P147402,Health
+P147438,Financial Sector
+P147489,Health
+P147499,Transportation
+P147629,"Agriculture, Fishing and Forestry"
+P147665,"Industry, Trade and Services"
+P147689,"Water, Sanitation and Waste Management"
+P147740,Health
+P147758,Health
+P147839,"Water, Sanitation and Waste Management"
+P147864,Transportation
+P147921,Energy and Extractives
+P147924,Education
+P148013,Information and Communications Technologies
+P148052,Health
+P148062,Education
+P148110,Education
+P148127,Education
+P148129,Transportation
+P148181,Education
+P148183,"Agriculture, Fishing and Forestry"
+P148238,Information and Communications Technologies
+P148259,"Water, Sanitation and Waste Management"
+P148349,Social Protection
+P148447,Financial Sector
+P148499,"Agriculture, Fishing and Forestry"
+P148523,"Water, Sanitation and Waste Management"
+P148531,Health
+P148552,Social Protection
+P148585,Education
+P148591,"Agriculture, Fishing and Forestry"
+P148599,Energy and Extractives
+P148600,Energy and Extractives
+P148616,"Industry, Trade and Services"
+P148809,"Agriculture, Fishing and Forestry"
+P148836,Social Protection
+P148850,Transportation
+P149117,"Industry, Trade and Services"
+P149130,Education
+P149182,Public Administration
+P149233,Education
+P149242,Social Protection
+P149277,Energy and Extractives
+P149279,Transportation
+P149323,Social Protection
+P149410,Energy and Extractives
+P149434,"Agriculture, Fishing and Forestry"
+P149521,Energy and Extractives
+P149522,Energy and Extractives
+P149553,"Agriculture, Fishing and Forestry"
+P149599,Energy and Extractives
+P149605,"Agriculture, Fishing and Forestry"
+P149670,Financial Sector
+P149683,Energy and Extractives
+P149690,Social Protection
+P149697,Transportation
+P149743,Public Administration
+P149827,"Agriculture, Fishing and Forestry"
+P149913,Public Administration
+P149942,"Agriculture, Fishing and Forestry"
+P149952,Transportation
+P149953,Transportation
+P149965,Social Protection
+P149971,Public Administration
+P149990,Energy and Extractives
+P150058,Education
+P150064,Social Protection
+P150148,Public Administration
+P150158,Transportation
+P150177,"Agriculture, Fishing and Forestry"
+P150183,Education
+P150327,Health
+P150357,Transportation
+P150361,"Water, Sanitation and Waste Management"
+P150369,"Agriculture, Fishing and Forestry"
+P150374,Transportation
+P150381,Public Administration
+P150395,"Water, Sanitation and Waste Management"
+P150520,"Water, Sanitation and Waste Management"
+P150523,"Industry, Trade and Services"
+P150572,Transportation
+P150576,Education
+P150631,"Agriculture, Fishing and Forestry"
+P150634,Energy and Extractives
+P150696,Social Protection
+P150816,Energy and Extractives
+P150844,Transportation
+P150922,Public Administration
+P150930,"Agriculture, Fishing and Forestry"
+P150937,Transportation
+P150938,Financial Sector
+P150991,Public Administration
+P150999,Transportation
+P151030,"Agriculture, Fishing and Forestry"
+P151058,"Agriculture, Fishing and Forestry"
+P151072,"Agriculture, Fishing and Forestry"
+P151075,Public Administration
+P151077,Transportation
+P151155,Public Administration
+P151169,Education
+P151224,"Water, Sanitation and Waste Management"
+P151281,Public Administration
+P151294,"Agriculture, Fishing and Forestry"
+P151318,Education
+P151324,Transportation
+P151357,Public Administration
+P151416,"Water, Sanitation and Waste Management"
+P151439,"Water, Sanitation and Waste Management"
+P151442,Social Protection
+P151447,Public Administration
+P151451,Social Protection
+P151492,Public Administration
+P151712,Social Protection
+P151744,"Agriculture, Fishing and Forestry"
+P151752,"Agriculture, Fishing and Forestry"
+P151760,"Agriculture, Fishing and Forestry"
+P151785,Energy and Extractives
+P151816,Financial Sector
+P151819,Transportation
+P151831,Social Protection
+P151832,Transportation
+P151835,Social Protection
+P151963,"Agriculture, Fishing and Forestry"
+P151972,Public Administration
+P152018,Energy and Extractives
+P152023,Health
+P152096,Education
+P152210,"Agriculture, Fishing and Forestry"
+P152232,"Industry, Trade and Services"
+P152276,Financial Sector
+P152322,"Agriculture, Fishing and Forestry"
+P152343,Energy and Extractives
+P152358,Information and Communications Technologies
+P152394,Health
+P152406,Transportation
+P152441,"Industry, Trade and Services"
+P152460,"Water, Sanitation and Waste Management"
+P152625,Health
+P152653,Energy and Extractives
+P152755,Energy and Extractives
+P152797,"Agriculture, Fishing and Forestry"
+P152799,Health
+P152860,Education
+P152881,"Industry, Trade and Services"
+P152910,Education
+P152932,Financial Sector
+P153012,Public Administration
+P153085,Transportation
+P153115,"Agriculture, Fishing and Forestry"
+P153173,Transportation
+P153268,Energy and Extractives
+P153277,Education
+P153349,"Agriculture, Fishing and Forestry"
+P153370,"Agriculture, Fishing and Forestry"
+P153420,"Agriculture, Fishing and Forestry"
+P153437,"Industry, Trade and Services"
+P153473,"Industry, Trade and Services"
+P153487,"Industry, Trade and Services"
+P153496,Education
+P153548,"Water, Sanitation and Waste Management"
+P153588,"Agriculture, Fishing and Forestry"
+P153613,"Agriculture, Fishing and Forestry"
+P153702,Public Administration
+P153721,"Agriculture, Fishing and Forestry"
+P153732,"Agriculture, Fishing and Forestry"
+P153743,Energy and Extractives
+P153863,"Water, Sanitation and Waste Management"
+P153864,Energy and Extractives
+P153892,"Industry, Trade and Services"
+P153986,Social Protection
+P154253,Education
+P154278,Social Protection
+P154351,Energy and Extractives
+P154387,"Agriculture, Fishing and Forestry"
+P154389,Financial Sector
+P154477,Information and Communications Technologies
+P154482,"Agriculture, Fishing and Forestry"
+P154511,Transportation
+P154525,Education
+P154548,Social Protection
+P154577,Education
+P154580,"Industry, Trade and Services"
+P154623,Education
+P154698,"Agriculture, Fishing and Forestry"
+P154716,Social Protection
+P154778,"Water, Sanitation and Waste Management"
+P154782,"Water, Sanitation and Waste Management"
+P154803,"Agriculture, Fishing and Forestry"
+P154807,Health
+P154839,"Water, Sanitation and Waste Management"
+P154840,"Water, Sanitation and Waste Management"
+P154847,Transportation
+P154862,Financial Sector
+P154875,Public Administration
+P154908,"Agriculture, Fishing and Forestry"
+P154943,Public Administration
+P154947,"Water, Sanitation and Waste Management"
+P154987,Energy and Extractives
+P154990,Transportation
+P155047,Energy and Extractives
+P155060,Public Administration
+P155081,"Agriculture, Fishing and Forestry"
+P155121,Public Administration
+P155186,Health
+P155191,Education
+P155198,Social Protection
+P155201,Public Administration
+P155203,Transportation
+P155293,Social Protection
+P155350,"Water, Sanitation and Waste Management"
+P155513,"Agriculture, Fishing and Forestry"
+P155522,Transportation
+P155541,"Agriculture, Fishing and Forestry"
+P155542,"Water, Sanitation and Waste Management"
+P155630,Public Administration
+P155642,"Agriculture, Fishing and Forestry"
+P155658,Health
+P155732,Transportation
+P155759,Public Administration
+P155842,Transportation
+P155859,Public Administration
+P155875,"Industry, Trade and Services"
+P155876,Information and Communications Technologies
+P155902,"Agriculture, Fishing and Forestry"
+P155969,"Industry, Trade and Services"
+P155978,"Agriculture, Fishing and Forestry"
+P156012,Health
+P156019,"Agriculture, Fishing and Forestry"
+P156021,"Agriculture, Fishing and Forestry"
+P156056,Social Protection
+P156113,"Industry, Trade and Services"
+P156124,Energy and Extractives
+P156125,"Water, Sanitation and Waste Management"
+P156143,"Water, Sanitation and Waste Management"
+P156186,Transportation
+P156241,"Industry, Trade and Services"
+P156250,Education
+P156397,"Industry, Trade and Services"
+P156410,Public Administration
+P156411,Public Administration
+P156433,"Water, Sanitation and Waste Management"
+P156473,"Agriculture, Fishing and Forestry"
+P156559,"Water, Sanitation and Waste Management"
+P156584,Energy and Extractives
+P156590,"Industry, Trade and Services"
+P156679,Health
+P156719,Energy and Extractives
+P156738,"Water, Sanitation and Waste Management"
+P156739,"Water, Sanitation and Waste Management"
+P156750,Public Administration
+P156759,"Agriculture, Fishing and Forestry"
+P156778,Health
+P156837,Financial Sector
+P156849,Education
+P156867,Education
+P156869,Public Administration
+P156894,Information and Communications Technologies
+P156900,Transportation
+P157036,Social Protection
+P157043,"Water, Sanitation and Waste Management"
+P157054,Transportation
+P157079,Energy and Extractives
+P157117,Education
+P157127,"Agriculture, Fishing and Forestry"
+P157141,Transportation
+P157198,Public Administration
+P157206,"Agriculture, Fishing and Forestry"
+P157473,Public Administration
+P157531,Public Administration
+P157585,"Agriculture, Fishing and Forestry"
+P157599,"Industry, Trade and Services"
+P157671,Public Administration
+P157683,Education
+P157702,"Industry, Trade and Services"
+P157715,Financial Sector
+P157733,Energy and Extractives
+P157782,"Water, Sanitation and Waste Management"
+P157809,Education
+P157836,"Agriculture, Fishing and Forestry"
+P157858,Education
+P157891,"Water, Sanitation and Waste Management"
+P157909,"Agriculture, Fishing and Forestry"
+P157922,Education
+P157993,Health
+P158066,"Agriculture, Fishing and Forestry"
+P158078,Public Administration
+P158091,Social Protection
+P158099,"Industry, Trade and Services"
+P158194,Transportation
+P158215,"Industry, Trade and Services"
+P158249,Energy and Extractives
+P158298,"Agriculture, Fishing and Forestry"
+P158363,Health
+P158364,"Agriculture, Fishing and Forestry"
+P158434,"Industry, Trade and Services"
+P158435,Education
+P158504,Transportation
+P158570,Education
+P158622,"Water, Sanitation and Waste Management"
+P158643,Social Protection
+P158717,Transportation
+P158760,"Water, Sanitation and Waste Management"
+P158769,"Water, Sanitation and Waste Management"
+P158791,Social Protection
+P158798,"Agriculture, Fishing and Forestry"
+P158805,"Agriculture, Fishing and Forestry"
+P158816,Public Administration
+P158836,Education
+P159040,Health
+P159215,Social Protection
+P159217,"Water, Sanitation and Waste Management"
+P159220,"Industry, Trade and Services"
+P159238,Transportation
+P159258,Public Administration
+P159291,Social Protection
+P159292,Social Protection
+P159303,Financial Sector
+P159330,Transportation
+P159382,"Agriculture, Fishing and Forestry"
+P159397,Transportation
+P159428,Financial Sector
+P159434,Public Administration
+P159437,Public Administration
+P159512,Financial Sector
+P159519,Education
+P159544,Health
+P159577,Transportation
+P159632,Information and Communications Technologies
+P159653,Public Administration
+P159683,Public Administration
+P159697,Transportation
+P159712,Energy and Extractives
+P159717,Energy and Extractives
+P159735,Health
+P159756,"Water, Sanitation and Waste Management"
+P159760,"Agriculture, Fishing and Forestry"
+P159761,Energy and Extractives
+P159771,Education
+P159807,Energy and Extractives
+P159835,"Agriculture, Fishing and Forestry"
+P159843,"Industry, Trade and Services"
+P159870,"Agriculture, Fishing and Forestry"
+P159883,Transportation
+P159929,Public Administration
+P159931,Public Administration
+P159954,Public Administration
+P159961,"Water, Sanitation and Waste Management"
+P159974,Energy and Extractives
+P159976,"Agriculture, Fishing and Forestry"
+P159979,"Industry, Trade and Services"
+P159995,Education
+P160005,"Water, Sanitation and Waste Management"
+P160009,Energy and Extractives
+P160022,Energy and Extractives
+P160033,"Agriculture, Fishing and Forestry"
+P160071,Public Administration
+P160090,Education
+P160096,"Water, Sanitation and Waste Management"
+P160114,Public Administration
+P160162,"Water, Sanitation and Waste Management"
+P160182,"Agriculture, Fishing and Forestry"
+P160223,Transportation
+P160224,Transportation
+P160230,Information and Communications Technologies
+P160245,"Agriculture, Fishing and Forestry"
+P160272,Social Protection
+P160295,"Industry, Trade and Services"
+P160331,Education
+P160359,Transportation
+P160377,Energy and Extractives
+P160379,Energy and Extractives
+P160408,"Agriculture, Fishing and Forestry"
+P160427,Energy and Extractives
+P160488,Transportation
+P160500,Transportation
+P160505,Transportation
+P160533,Information and Communications Technologies
+P160552,Public Administration
+P160613,"Agriculture, Fishing and Forestry"
+P160615,Health
+P160619,Public Administration
+P160641,"Agriculture, Fishing and Forestry"
+P160642,Education
+P160652,Energy and Extractives
+P160678,Education
+P160680,"Agriculture, Fishing and Forestry"
+P160696,Social Protection
+P160708,Energy and Extractives
+P160717,Public Administration
+P160739,"Water, Sanitation and Waste Management"
+P160751,Public Administration
+P160758,Information and Communications Technologies
+P160796,Public Administration
+P160801,Public Administration
+P160829,Energy and Extractives
+P160848,Health
+P160865,"Industry, Trade and Services"
+P160911,"Water, Sanitation and Waste Management"
+P160926,Education
+P160929,Transportation
+P160930,"Water, Sanitation and Waste Management"
+P160931,"Water, Sanitation and Waste Management"
+P160948,Health
+P160977,Public Administration
+P161029,Education
+P161048,Public Administration
+P161086,Information and Communications Technologies
+P161122,Transportation
+P161227,"Water, Sanitation and Waste Management"
+P161238,Public Administration
+P161283,Health
+P161305,Transportation
+P161312,Education
+P161316,Energy and Extractives
+P161317,"Industry, Trade and Services"
+P161319,Energy and Extractives
+P161320,Transportation
+P161329,Social Protection
+P161332,Education
+P161348,Financial Sector
+P161368,Financial Sector
+P161386,Education
+P161402,Public Administration
+P161406,"Water, Sanitation and Waste Management"
+P161432,"Water, Sanitation and Waste Management"
+P161435,Education
+P161463,Public Administration
+P161473,"Agriculture, Fishing and Forestry"
+P161477,"Water, Sanitation and Waste Management"
+P161491,Financial Sector
+P161539,Transportation
+P161540,Transportation
+P161568,"Agriculture, Fishing and Forestry"
+P161590,"Industry, Trade and Services"
+P161618,Public Administration
+P161624,Health
+P161644,Energy and Extractives
+P161658,Financial Sector
+P161670,Social Protection
+P161730,Public Administration
+P161757,"Water, Sanitation and Waste Management"
+P161777,"Water, Sanitation and Waste Management"
+P161781,"Agriculture, Fishing and Forestry"
+P161787,Financial Sector
+P161798,"Water, Sanitation and Waste Management"
+P161869,Energy and Extractives
+P161885,Energy and Extractives
+P161915,"Water, Sanitation and Waste Management"
+P161928,Transportation
+P161929,Transportation
+P161980,Transportation
+P161989,Information and Communications Technologies
+P161996,"Agriculture, Fishing and Forestry"
+P162004,Public Administration
+P162009,Public Administration
+P162033,Social Protection
+P162042,Health
+P162043,Transportation
+P162067,Social Protection
+P162089,Education
+P162129,Public Administration
+P162149,Energy and Extractives
+P162168,Education
+P162170,Public Administration
+P162178,"Industry, Trade and Services"
+P162196,Public Administration
+P162245,Energy and Extractives
+P162263,"Water, Sanitation and Waste Management"
+P162297,Education
+P162299,Energy and Extractives
+P162302,Public Administration
+P162407,Education
+P162454,Energy and Extractives
+P162485,Public Administration
+P162594,Public Administration
+P162619,Education
+P162621,Public Administration
+P162623,Public Administration
+P162635,Education
+P162637,"Water, Sanitation and Waste Management"
+P162666,"Agriculture, Fishing and Forestry"
+P162675,Health
+P162679,"Agriculture, Fishing and Forestry"
+P162760,Energy and Extractives
+P162762,Energy and Extractives
+P162783,Energy and Extractives
+P162789,"Agriculture, Fishing and Forestry"
+P162792,"Agriculture, Fishing and Forestry"
+P162833,Public Administration
+P162850,Public Administration
+P162893,Public Administration
+P162901,Public Administration
+P162908,"Agriculture, Fishing and Forestry"
+P162916,Social Protection
+P162933,Energy and Extractives
+P162938,"Water, Sanitation and Waste Management"
+P162956,"Agriculture, Fishing and Forestry"
+P162957,"Water, Sanitation and Waste Management"
+P163015,Financial Sector
+P163018,Education
+P163035,Transportation
+P163108,Social Protection
+P163115,Transportation
+P163131,Public Administration
+P163143,Education
+P163157,Social Protection
+P163181,Public Administration
+P163241,Social Protection
+P163245,Public Administration
+P163255,Health
+P163260,"Water, Sanitation and Waste Management"
+P163264,"Agriculture, Fishing and Forestry"
+P163267,"Agriculture, Fishing and Forestry"
+P163305,Public Administration
+P163328,Transportation
+P163345,Health
+P163353,Transportation
+P163387,Health
+P163399,Education
+P163431,Public Administration
+P163452,Public Administration
+P163476,Health
+P163486,Public Administration
+P163490,Transportation
+P163531,Public Administration
+P163533,"Agriculture, Fishing and Forestry"
+P163540,Public Administration
+P163560,Social Protection
+P163562,"Industry, Trade and Services"
+P163592,Public Administration
+P163699,"Water, Sanitation and Waste Management"
+P163714,Education
+P163721,Health
+P163723,Education
+P163730,Transportation
+P163734,"Water, Sanitation and Waste Management"
+P163782,"Water, Sanitation and Waste Management"
+P163797,Energy and Extractives
+P163818,Education
+P163829,Social Protection
+P163836,"Agriculture, Fishing and Forestry"
+P163857,Social Protection
+P163870,Energy and Extractives
+P163876,"Water, Sanitation and Waste Management"
+P163881,Energy and Extractives
+P163896,Public Administration
+P163922,Transportation
+P163923,"Agriculture, Fishing and Forestry"
+P163924,Public Administration
+P163954,Health
+P163957,Public Administration
+P163980,"Agriculture, Fishing and Forestry"
+P164019,Social Protection
+P164031,"Industry, Trade and Services"
+P164044,Energy and Extractives
+P164134,"Agriculture, Fishing and Forestry"
+P164164,Health
+P164184,"Industry, Trade and Services"
+P164211,"Industry, Trade and Services"
+P164212,"Industry, Trade and Services"
+P164225,Energy and Extractives
+P164243,Public Administration
+P164257,"Agriculture, Fishing and Forestry"
+P164283,Financial Sector
+P164293,Education
+P164294,Education
+P164297,Education
+P164302,Public Administration
+P164326,"Agriculture, Fishing and Forestry"
+P164330,"Water, Sanitation and Waste Management"
+P164336,"Agriculture, Fishing and Forestry"
+P164353,Transportation
+P164389,"Water, Sanitation and Waste Management"
+P164410,Public Administration
+P164412,"Industry, Trade and Services"
+P164416,Education
+P164424,"Agriculture, Fishing and Forestry"
+P164435,Energy and Extractives
+P164443,Social Protection
+P164445,Transportation
+P164453,Health
+P164486,"Agriculture, Fishing and Forestry"
+P164509,"Industry, Trade and Services"
+P164520,"Agriculture, Fishing and Forestry"
+P164529,Public Administration
+P164546,Education
+P164551,"Agriculture, Fishing and Forestry"
+P164555,Information and Communications Technologies
+P164561,Public Administration
+P164563,Social Protection
+P164584,"Industry, Trade and Services"
+P164602,"Agriculture, Fishing and Forestry"
+P164603,Social Protection
+P164625,Energy and Extractives
+P164654,Social Protection
+P164660,Public Administration
+P164661,"Industry, Trade and Services"
+P164686,Health
+P164704,"Water, Sanitation and Waste Management"
+P164762,"Agriculture, Fishing and Forestry"
+P164764,"Agriculture, Fishing and Forestry"
+P164765,Education
+P164771,Health
+P164786,Financial Sector
+P164807,Public Administration
+P164813,"Industry, Trade and Services"
+P164845,Health
+P164885,Energy and Extractives
+P164901,"Water, Sanitation and Waste Management"
+P164920,Transportation
+P164938,Financial Sector
+P164941,"Agriculture, Fishing and Forestry"
+P164953,Health
+P164961,Public Administration
+P165000,Public Administration
+P165034,"Industry, Trade and Services"
+P165062,Public Administration
+P165128,Public Administration
+P165129,"Agriculture, Fishing and Forestry"
+P165147,Financial Sector
+P165183,Energy and Extractives
+P165218,Public Administration
+P165228,"Agriculture, Fishing and Forestry"
+P165235,Public Administration
+P165253,Health
+P165267,Social Protection
+P165286,"Industry, Trade and Services"
+P165310,Education
+P165314,Social Protection
+P165453,Energy and Extractives
+P165477,Public Administration
+P165485,Public Administration
+P165497,Energy and Extractives
+P165534,Health
+P165543,Public Administration
+P165558,"Industry, Trade and Services"
+P165581,Education
+P165649,Financial Sector
+P165651,Energy and Extractives
+P165660,Transportation
+P165695,"Water, Sanitation and Waste Management"
+P165704,Energy and Mineral Resources
+P165737,Education
+P165782,Transportation
+P165821,"Agriculture, Fishing and Forestry"
+P165855,"Agriculture, Fishing and Forestry"
+P165861,Public Administration
+P165870,Public Administration
+P165945,"Agriculture, Fishing and Forestry"
+P165973,"Agriculture, Fishing and Forestry"
+P165982,Information and Communications Technologies
+P166020,Transportation
+P166100,Social Protection
+P166165,Health
+P166170,Energy and Extractives
+P166187,"Industry, Trade and Services"
+P166189,"Agriculture, Fishing and Forestry"
+P166211,Education
+P166220,Social Protection
+P166222,"Agriculture, Fishing and Forestry"
+P166239,Education
+P166274,Energy and Extractives
+P166279,"Agriculture, Fishing and Forestry"
+P166302,Public Administration
+P166305,"Industry, Trade and Services"
+P166308,Education
+P166327,Social Protection
+P166328,"Agriculture, Fishing and Forestry"
+P166415,Education
+P166420,Social Protection
+P166447,Social Protection
+P166526,Transportation
+P166538,Public Administration
+P166539,"Industry, Trade and Services"
+P166596,Education
+P166601,Information and Communications Technologies
+P166672,"Agriculture, Fishing and Forestry"
+P166685,Energy and Extractives
+P166693,Social Protection
+P166695,Public Administration
+P166697,"Water, Sanitation and Waste Management"
+P166730,Energy and Extractives
+P166785,Energy and Extractives
+P166796,Energy and Extractives
+P166800,Health
+P166802,"Agriculture, Fishing and Forestry"
+P166805,Energy and Extractives
+P166814,Public Administration
+P166820,Transportation
+P166865,"Water, Sanitation and Waste Management"
+P166978,Public Administration
+P166996,Social Protection
+P167054,Education
+P167156,Health
+P167183,Social Protection
+P167216,Education
+P167328,"Water, Sanitation and Waste Management"
+P167347,"Water, Sanitation and Waste Management"
+P167368,Social Protection
+P167380,"Industry, Trade and Services"
+P167382,Transportation
+P167401,Transportation
+P167432,Education
+P167455,"Industry, Trade and Services"
+P167478,Education
+P167512,Health
+P167532,Health
+P167583,Public Administration
+P167588,Public Administration
+P167596,"Agriculture, Fishing and Forestry"
+P167597,Public Administration
+P167598,Health
+P167634,"Industry, Trade and Services"
+P167661,Public Administration
+P167678,"Agriculture, Fishing and Forestry"
+P167681,Education
+P167767,Social Protection
+P167790,Education
+P167817,Health
+P167820,Energy and Extractives
+P167830,"Agriculture, Fishing and Forestry"
+P167860,"Water, Sanitation and Waste Management"
+P167884,Public Administration
+P167886,Financial Sector
+P167890,Health
+P167900,Transportation
+P167916,Health
+P167945,"Agriculture, Fishing and Forestry"
+P167946,"Agriculture, Fishing and Forestry"
+P167958,Education
+P167959,Health
+P167992,Education
+P167996,Health
+P168076,Education
+P168115,Financial Sector
+P168120,Public Administration
+P168122,Public Administration
+P168153,"Industry, Trade and Services"
+P168180,Public Administration
+P168185,Energy and Extractives
+P168248,Public Administration
+P168273,Energy and Extractives
+P168290,"Water, Sanitation and Waste Management"
+P168295,Education
+P168310,"Industry, Trade and Services"
+P168385,"Industry, Trade and Services"
+P168386,Transportation
+P168425,Education
+P168475,"Agriculture, Fishing and Forestry"
+P168539,Health
+P168551,Education
+P168577,Financial Sector
+P168590,"Industry, Trade and Services"
+P168608,Public Administration
+P168634,Health
+P168666,Public Administration
+P168730,Energy and Extractives
+P168731,"Industry, Trade and Services"
+P168756,Health
+P168772,"Agriculture, Fishing and Forestry"
+P168777,Social Protection
+P168812,Social Protection
+P168847,"Agriculture, Fishing and Forestry"
+P168862,"Water, Sanitation and Waste Management"
+P168943,"Water, Sanitation and Waste Management"
+P168961,Education
+P169021,"Agriculture, Fishing and Forestry"
+P169064,Education
+P169071,"Water, Sanitation and Waste Management"
+P169117,Energy and Extractives
+P169120,"Agriculture, Fishing and Forestry"
+P169125,Public Administration
+P169134,Transportation
+P169150,"Water, Sanitation and Waste Management"
+P169161,Education
+P169165,Social Protection
+P169168,Education
+P169194,Financial Sector
+P169198,Social Protection
+P169267,Public Administration
+P169272,Transportation
+P169280,Energy and Extractives
+P169315,Social Protection
+P169332,Public Administration
+P169342,"Water, Sanitation and Waste Management"
+P169380,Education
+P169425,Public Administration
+P169428,Public Administration
+P169548,Transportation
+P169594,Social Protection
+P169599,Information and Communications Technologies
+P169610,"Agriculture, Fishing and Forestry"
+P169629,Health
+P169669,Public Administration
+P169677,Health
+P169698,Information and Communications Technologies
+P169742,Financial Sector
+P169880,Transportation
+P169916,Education
+P169921,Education
+P169930,Transportation
+P169954,Transportation
+P169970,"Water, Sanitation and Waste Management"
+P169996,"Water, Sanitation and Waste Management"
+P170001,Education
+P170014,Health
+P170035,"Agriculture, Fishing and Forestry"
+P170132,Energy and Extractives
+P170185,"Industry, Trade and Services"
+P170206,"Industry, Trade and Services"
+P170213,"Agriculture, Fishing and Forestry"
+P170215,"Industry, Trade and Services"
+P170230,Energy and Extractives
+P170236,Energy and Extractives
+P170278,Health
+P170329,Social Protection
+P170343,Social Protection
+P170391,"Agriculture, Fishing and Forestry"
+P170425,Social Protection
+P170445,Education
+P170469,"Water, Sanitation and Waste Management"
+P170476,"Agriculture, Fishing and Forestry"
+P170480,Education
+P170532,Transportation
+P170542,Education
+P170561,Education
+P170595,Transportation
+P170669,Social Protection
+P170676,Energy and Extractives
+P170704,Public Administration
+P170706,"Industry, Trade and Services"
+P170718,Information and Communications Technologies
+P170732,Public Administration
+P170798,"Agriculture, Fishing and Forestry"
+P170811,"Water, Sanitation and Waste Management"
+P170850,Energy and Extractives
+P170854,"Agriculture, Fishing and Forestry"
+P170860,Transportation
+P170868,Transportation
+P170873,"Water, Sanitation and Waste Management"
+P170891,"Water, Sanitation and Waste Management"
+P170907,Transportation
+P170913,Financial Sector
+P170922,Public Administration
+P170941,Information and Communications Technologies
+P171030,Health
+P171034,Information and Communications Technologies
+P171037,Energy and Extractives
+P171040,Public Administration
+P171054,Public Administration
+P171063,Education
+P171099,Information and Communications Technologies
+P171125,Social Protection
+P171144,Health
+P171150,Health
+P171189,Public Administration
+P171266,"Agriculture, Fishing and Forestry"
+P171269,"Water, Sanitation and Waste Management"
+P171331,Public Administration
+P171346,Social Protection
+P171361,Public Administration
+P171362,Health
+P171377,"Industry, Trade and Services"
+P171417,Public Administration
+P171419,Public Administration
+P171433,Social Protection
+P171471,Social Protection
+P171489,Social Protection
+P171516,Education
+P171517,Information and Communications Technologies
+P171528,Information and Communications Technologies
+P171543,Social Protection
+P171577,"Agriculture, Fishing and Forestry"
+P171611,"Agriculture, Fishing and Forestry"
+P171613,"Industry, Trade and Services"
+P171627,Financial Sector
+P171658,"Water, Sanitation and Waste Management"
+P171664,"Industry, Trade and Services"
+P171681,Education
+P171700,"Water, Sanitation and Waste Management"
+P171720,"Agriculture, Fishing and Forestry"
+P171760,"Agriculture, Fishing and Forestry"
+P171762,Public Administration
+P171766,Social Protection
+P171767,Health
+P171777,Public Administration
+P171778,"Water, Sanitation and Waste Management"
+P171793,Transportation
+P171836,Transportation
+P171892,Public Administration
+P171924,Education
+P171967,Public Administration
+P171976,Information and Communications Technologies
+P171997,Financial Sector
+P172012,"Agriculture, Fishing and Forestry"
+P172102,Health
+P172109,Energy and Extractives
+P172153,"Agriculture, Fishing and Forestry"
+P172176,Public Administration
+P172213,Education
+P172225,Transportation
+P172247,Health
+P172256,Energy and Extractives
+P172339,Social Protection
+P172342,Transportation
+P172348,Transportation
+P172350,Information and Communications Technologies
+P172352,Information and Communications Technologies
+P172392,Public Administration
+P172399,Public Administration
+P172422,Public Administration
+P172425,Public Administration
+P172426,Health
+P172442,Public Administration
+P172497,"Agriculture, Fishing and Forestry"
+P172499,"Water, Sanitation and Waste Management"
+P172524,Information and Communications Technologies
+P172535,"Industry, Trade and Services"
+P172548,"Water, Sanitation and Waste Management"
+P172562,"Agriculture, Fishing and Forestry"
+P172571,Information and Communications Technologies
+P172578,"Water, Sanitation and Waste Management"
+P172582,Social Protection
+P172592,"Agriculture, Fishing and Forestry"
+P172594,Energy and Extractives
+P172605,Health
+P172611,Public Administration
+P172615,Health
+P172627,Education
+P172657,Education
+P172668,Energy and Extractives
+P172674,Education
+P172707,Health
+P172753,Education
+P172769,"Agriculture, Fishing and Forestry"
+P172800,Social Protection
+P172809,Social Protection
+P172812,Education
+P172817,Public Administration
+P172834,Education
+P172848,"Water, Sanitation and Waste Management"
+P172893,"Agriculture, Fishing and Forestry"
+P172899,Financial Sector
+P172980,"Agriculture, Fishing and Forestry"
+P172988,Transportation
+P173001,Public Administration
+P173017,Public Administration
+P173019,Transportation
+P173021,"Water, Sanitation and Waste Management"
+P173025,"Industry, Trade and Services"
+P173065,Public Administration
+P173070,"Industry, Trade and Services"
+P173088,Energy and Extractives
+P173103,Education
+P173114,Transportation
+P173119,Transportation
+P173151,Education
+P173168,Health
+P173178,Public Administration
+P173194,Energy and Mineral Resources
+P173197,"Agriculture, Fishing and Forestry"
+P173247,Energy and Extractives
+P173249,Public Administration
+P173258,Energy and Extractives
+P173296,"Agriculture, Fishing and Forestry"
+P173316,Public Administration
+P173367,Social Protection
+P173368,Health
+P173373,Information and Communications Technologies
+P173391,"Agriculture, Fishing and Forestry"
+P173399,Education
+P173407,Education
+P173450,Public Administration
+P173464,Public Administration
+P173472,Education
+P173484,Public Administration
+P173506,Energy and Extractives
+P173518,"Water, Sanitation and Waste Management"
+P173589,Health
+P173601,Education
+P173620,Transportation
+P173671,Public Administration
+P173677,"Agriculture, Fishing and Forestry"
+P173686,Energy and Extractives
+P173706,Public Administration
+P173711,Transportation
+P173716,"Water, Sanitation and Waste Management"
+P173731,Public Administration
+P173743,Financial Sector
+P173757,Health
+P173760,Health
+P173763,Energy and Extractives
+P173765,Health
+P173767,Health
+P173776,Health
+P173782,Transportation
+P173783,Health
+P173788,Health
+P173798,Health
+P173804,Energy and Extractives
+P173807,Health
+P173812,Health
+P173813,Health
+P173815,Health
+P173816,Health
+P173819,Social Protection
+P173820,Health
+P173825,Health
+P173827,Social Protection
+P173834,Health
+P173839,Health
+P173845,Health
+P173846,Health
+P173851,Health
+P173855,Health
+P173858,Health
+P173861,Health
+P173866,"Industry, Trade and Services"
+P173867,Health
+P173880,Health
+P173881,Health
+P173883,Health
+P173887,Health
+P173890,"Water, Sanitation and Waste Management"
+P173892,Health
+P173894,Health
+P173902,Health
+P173903,Health
+P173911,Social Protection
+P173916,Social Protection
+P173920,Health
+P173933,Health
+P173939,Health
+P173945,Health
+P173972,Health
+P173974,Social Protection
+P173975,Financial Sector
+P173978,Education
+P173980,Health
+P173989,Health
+P173994,Health
+P173997,Education
+P173998,"Industry, Trade and Services"
+P174002,"Agriculture, Fishing and Forestry"
+P174012,Education
+P174017,"Industry, Trade and Services"
+P174032,Health
+P174033,Education
+P174034,Energy and Extractives
+P174035,Education
+P174059,Education
+P174065,Social Protection
+P174067,Public Administration
+P174085,Social Protection
+P174097,"Industry, Trade and Services"
+P174101,Health
+P174114,Social Protection
+P174116,Social Protection
+P174128,Education
+P174137,"Agriculture, Fishing and Forestry"
+P174144,Public Administration
+P174169,Financial Sector
+P174171,Public Administration
+P174178,Social Protection
+P174185,Health
+P174214,Education
+P174219,Health
+P174220,Education
+P174223,Education
+P174244,Education
+P174251,Transportation
+P174259,Health
+P174267,"Water, Sanitation and Waste Management"
+P174268,Education
+P174300,Transportation
+P174327,Energy and Extractives
+P174329,Education
+P174335,Education
+P174337,"Agriculture, Fishing and Forestry"
+P174352,Health
+P174366,Health
+P174389,Health
+P174401,Health
+P174402,Information and Communications Technologies
+P174417,Social Protection
+P174422,Social Protection
+P174434,Education
+P174452,Health
+P174485,Transportation
+P174546,"Agriculture, Fishing and Forestry"
+P174555,Public Administration
+P174576,Energy and Extractives
+P174594,Social Protection
+P174595,Transportation
+P174620,Public Administration
+P174637,Social Protection
+P174707,Education
+P174730,Social Protection
+P174733,"Agriculture, Fishing and Forestry"
+P174812,Energy and Extractives
+P174814,"Industry, Trade and Services"
+P174822,Health
+P174867,"Water, Sanitation and Waste Management"
+P174875,Public Administration
+P174902,Social Protection
+P174903,Health
+P174915,"Agriculture, Fishing and Forestry"
+P174937,Health
+P174986,Public Administration
+P175011,"Agriculture, Fishing and Forestry"
+P175017,Financial Sector
+P175025,Public Administration
+P175036,Education
+P175043,Social Protection
+P175110,Health
+P175118,Transportation
+P175137,Transportation
+P175138,Transportation
+P175167,Health
+P175170,Health
+P175192,"Water, Sanitation and Waste Management"
+P175206,Social Protection
+P175235,Transportation
+P175237,"Agriculture, Fishing and Forestry"
+P175266,Transportation
+P175269,"Agriculture, Fishing and Forestry"
+P175273,Financial Sector
+P175298,Social Protection
+P175322,Transportation
+P175325,Social Protection
+P175327,Social Protection
+P175355,"Water, Sanitation and Waste Management"
+P175382,Social Protection
+P175483,Education
+P175523,Public Administration
+P175587,Public Administration
+P175588,Social Protection
+P175629,"Agriculture, Fishing and Forestry"
+P175645,"Industry, Trade and Services"
+P175659,"Water, Sanitation and Waste Management"
+P175669,"Agriculture, Fishing and Forestry"
+P175672,"Agriculture, Fishing and Forestry"
+P175720,Transportation
+P175749,Public Administration
+P175768,Education
+P175792,Public Administration
+P175803,Education
+P175820,"Agriculture, Fishing and Forestry"
+P175827,Education
+P175828,Social Protection
+P175830,Public Administration
+P175834,Public Administration
+P175840,Health
+P175846,Public Administration
+P175857,Public Administration
+P175864,Energy and Extractives
+P175878,Public Administration
+P175894,Public Administration
+P175928,Social Protection
+P175977,Public Administration
+P175982,"Agriculture, Fishing and Forestry"
+P175988,Public Administration
+P176013,Financial Sector
+P176017,"Industry, Trade and Services"
+P176025,"Water, Sanitation and Waste Management"
+P176040,Energy and Extractives
+P176060,Energy and Extractives
+P176069,Financial Sector
+P176074,Financial Sector
+P176088,Transportation
+P176105,Education
+P176126,Information and Communications Technologies
+P176141,Health
+P176157,Social Protection
+P176163,"Water, Sanitation and Waste Management"
+P176164,Transportation
+P176181,Information and Communications Technologies
+P176232,"Agriculture, Fishing and Forestry"
+P176263,Education
+P176272,Transportation
+P176274,"Industry, Trade and Services"
+P176297,Education
+P176300,Health
+P176303,Transportation
+P176306,Health
+P176317,Digital Development
+P176327,Public Administration
+P176366,Public Administration
+P176371,Public Administration
+P176404,Social Protection
+P176419,Transportation
+P176444,Social Protection
+P176445,Public Administration
+P176450,Transportation
+P176478,"Water, Sanitation and Waste Management"
+P176532,Health
+P176548,Transportation
+P176549,"Industry, Trade and Services"
+P176575,"Agriculture, Fishing and Forestry"
+P176589,"Water, Sanitation and Waste Management"
+P176590,Public Administration
+P176594,Education
+P176615,"Agriculture, Fishing and Forestry"
+P176619,"Water, Sanitation and Waste Management"
+P176623,Transportation
+P176690,"Industry, Trade and Services"
+P176697,Education
+P176700,"Agriculture, Fishing and Forestry"
+P176702,Public Administration
+P176721,Health
+P176731,Energy and Extractives
+P176733,Information and Communications Technologies
+P176749,Education
+P176750,Public Administration
+P176754,"Agriculture, Fishing and Forestry"
+P176758,"Agriculture, Fishing and Forestry"
+P176761,Public Administration
+P176763,Public Administration
+P176767,Health
+P176769,Energy and Extractives
+P176770,Energy and Extractives
+P176772,Financial Sector
+P176776,Energy and Extractives
+P176780,Public Administration
+P176789,Social Protection
+P176811,Transportation
+P176841,Health
+P176874,Energy and Extractives
+P176883,Public Administration
+P176898,Education
+P176900,Social Protection
+P176902,"Water, Sanitation and Waste Management"
+P176905,"Agriculture, Fishing and Forestry"
+P176932,Information and Communications Technologies
+P176935,Social Protection
+P176948,Transportation
+P176956,Health
+P176981,Transportation
+P176982,"Water, Sanitation and Waste Management"
+P177004,"Water, Sanitation and Waste Management"
+P177022,Information and Communications Technologies
+P177038,Health
+P177040,Information and Communications Technologies
+P177041,"Agriculture, Fishing and Forestry"
+P177044,Public Administration
+P177048,Public Administration
+P177073,Transportation
+P177077,Information and Communications Technologies
+P177093,Public Administration
+P177099,Energy and Extractives
+P177100,Transportation
+P177118,"Water, Sanitation and Waste Management"
+P177124,Public Administration
+P177146,"Water, Sanitation and Waste Management"
+P177158,Information and Communications Technologies
+P177163,Public Administration
+P177179,"Industry, Trade and Services"
+P177185,Transportation
+P177191,Social Protection
+P177200,Public Administration
+P177233,Social Protection
+P177237,Public Administration
+P177239,"Agriculture, Fishing and Forestry"
+P177240,Social Protection
+P177298,Public Administration
+P177299,Education
+P177305,"Agriculture, Fishing and Forestry"
+P177325,"Water, Sanitation and Waste Management"
+P177328,Energy and Extractives
+P177370,Health
+P177372,Public Administration
+P177397,Public Administration
+P177398,Energy and Extractives
+P177468,Public Administration
+P177475,Education
+P177492,Social Protection
+P177646,Energy and Extractives
+P177661,"Agriculture, Fishing and Forestry"
+P177663,Social Protection
+P177741,Education
+P177742,Public Administration
+P177768,Education
+P177779,Public Administration
+P177782,"Agriculture, Fishing and Forestry"
+P177785,Energy and Extractives
+P177786,Public Administration
+P177800,Education
+P177816,"Agriculture, Fishing and Forestry"
+P177895,Information and Communications Technologies
+P177918,Transportation
+P177932,Transportation
+P177940,Social Protection
+P177941,Social Protection
+P177947,Financial Sector
+P177959,Education
+P177987,Health
+P178009,"Agriculture, Fishing and Forestry"
+P178040,Public Administration
+P178041,Public Administration
+P178063,"Agriculture, Fishing and Forestry"
+P178072,Public Administration
+P178077,Education
+P178120,"Industry, Trade and Services"
+P178125,Education
+P178132,"Agriculture, Fishing and Forestry"
+P178133,Social Protection
+P178157,Education
+P178159,Public Administration
+P178161,Social Protection
+P178162,Information and Communications Technologies
+P178207,Transportation
+P178253,"Agriculture, Fishing and Forestry"
+P178254,"Industry, Trade and Services"
+P178272,Energy and Extractives
+P178362,Transportation
+P178380,Financial Sector
+P178389,"Water, Sanitation and Waste Management"
+P178417,"Water, Sanitation and Waste Management"
+P178418,"Industry, Trade and Services"
+P178432,Public Administration
+P178477,Energy and Extractives
+P178486,Social Sustainability and Inclusion
+P178506,Public Administration
+P178530,Health
+P178532,Social Protection
+P178544,"Agriculture, Fishing and Forestry"
+P178545,Public Administration
+P178564,Public Administration
+P178566,"Agriculture, Fishing and Forestry"
+P178567,Health
+P178582,Social Protection
+P178592,Education
+P178598,"Agriculture, Fishing and Forestry"
+P178633,Health
+P178642,"Agriculture, Fishing and Forestry"
+P178658,Financial Sector
+P178663,Public Administration
+P178673,"Water, Sanitation and Waste Management"
+P178683,Transportation
+P178694,"Industry, Trade and Services"
+P178699,Public Administration
+P178701,Energy and Extractives
+P178715,"Agriculture, Fishing and Forestry"
+P178723,Public Administration
+P178750,Education
+P178770,Social Protection
+P178774,Public Administration
+P178819,Energy and Extractives
+P178831,Health
+P178836,"Industry, Trade and Services"
+P178861,"Agriculture, Fishing and Forestry"
+P178866,"Agriculture, Fishing and Forestry"
+P178883,Social Protection
+P178923,Energy and Mineral Resources
+P178935,Public Administration
+P178985,Public Administration
+P178992,Social Protection
+P178993,Education
+P178996,Financial Sector
+P179003,"Agriculture, Fishing and Forestry"
+P179008,"Agriculture, Fishing and Forestry"
+P179009,Energy and Extractives
+P179010,"Agriculture, Fishing and Forestry"
+P179012,"Water, Sanitation and Waste Management"
+P179016,Public Administration
+P179024,Social Protection
+P179046,Public Administration
+P179067,"Water, Sanitation and Waste Management"
+P179084,Public Administration
+P179095,Social Protection
+P179138,Digital Development
+P179154,Education
+P179190,Public Administration
+P179204,Information and Communications Technologies
+P179211,Social Protection
+P179227,"Water, Sanitation and Waste Management"
+P179235,Energy and Extractives
+P179240,Energy and Extractives
+P179242,"Agriculture, Fishing and Forestry"
+P179267,Energy and Extractives
+P179278,Financial Sector
+P179284,Transportation
+P179291,Social Protection
+P179292,Public Administration
+P179293,Social Protection
+P179313,Public Administration
+P179345,"Agriculture, Fishing and Forestry"
+P179363,Education
+P179381,Financial Sector
+P179383,Energy and Mineral Resources
+P179398,Public Administration
+P179410,Education
+P179440,Social Protection
+P179447,Social Protection
+P179466,Social Protection
+P179509,Health
+P179520,Energy and Mineral Resources
+P179534,Health
+P179554,Public Administration
+P179599,"Agriculture, Fishing and Forestry"
+P179612,Public Administration
+P179656,Education
+P179665,Social Protection
+P179684,"Agriculture, Fishing and Forestry"
+P179687,Energy and Extractives
+P179703,Transportation
+P179737,"Agriculture, Fishing and Forestry"
+P179746,Energy and Extractives
+P179749,Public Administration
+P179786,"Agriculture, Fishing and Forestry"
+P179797,Energy and Extractives
+P179804,Education
+P179818,"Agriculture, Fishing and Forestry"
+P179829,Social Protection
+P179831,Health
+P179845,Energy and Extractives
+P179867,Energy and Extractives
+P179913,Health
+P179923,Social Protection
+P179935,"Agriculture, Fishing and Forestry"
+P179950,Energy and Extractives
+P179988,"Agriculture, Fishing and Forestry"
+P179990,Energy and Mineral Resources
+P180000,Digital Development
+P180008,"Industry, Trade and Services"
+P180015,Education
+P180059,Digital Development
+P180076,"Agriculture, Fishing and Forestry"
+P180085,Public Administration
+P180098,Public Administration
+P180153,Transportation
+P180163,Public Administration
+P180171,"Water, Sanitation and Waste Management"
+P180173,Social Protection
+P180220,Social Protection
+P180228,Transportation
+P180231,Health
+P180245,Health
+P180248,Energy and Extractives
+P180260,Education
+P180263,Health
+P180266,Transportation
+P180298,Public Administration
+P180302,Public Administration
+P180306,Health
+P180318,Transportation
+P180320,Social Protection
+P180323,"Industry, Trade and Services"
+P180325,Social Protection
+P180332,Energy and Extractives
+P180337,"Industry, Trade and Services"
+P180349,Health
+P180361,"Industry, Trade and Services"
+P180379,"Agriculture, Fishing and Forestry"
+P180384,Public Administration
+P180409,Public Administration
+P180429,"Agriculture, Fishing and Forestry"
+P180430,"Water, Sanitation and Waste Management"
+P180456,Financial Sector
+P180491,Health
+P180495,Information and Communications Technologies
+P180498,Energy and Extractives
+P180501,Energy and Mineral Resources
+P180512,Energy and Extractives
+P180547,Energy and Extractives
+P180555,Transportation
+P180575,Energy and Extractives
+P180605,Public Administration
+P180619,Health
+P180631,Health
+P180634,Social Protection
+P180664,Education
+P180665,Social Protection
+P180693,Information and Communications Technologies
+P180707,Health
+P180723,Public Administration
+P180742,Public Administration
+P180755,"Industry, Trade and Services"
+P180799,Social Protection
+P180807,Digital Development
+P180811,Health
+P180849,Public Administration
+P180860,Public Administration
+P180861,Financial Sector
+P180864,Public Administration
+P180872,Public Administration
+P180884,Public Administration
+P180905,Social Protection
+P180906,"Agriculture, Fishing and Forestry"
+P180909,Social Sustainability and Inclusion
+P180935,Public Administration
+P180982,"Industry, Trade and Services"
+P180983,Public Administration
+P180999,Social Protection
+P181007,Social Sustainability and Inclusion
+P181014,Public Administration
+P181029,Energy and Mineral Resources
+P181063,Education
+P181068,Financial Sector
+P181079,Transportation
+P181086,Energy and Extractives
+P181123,Social Protection
+P181166,Transportation
+P181200,"Industry, Trade and Services"
+P181237,Public Administration
+P181243,"Water, Sanitation and Waste Management"
+P181250,Energy and Mineral Resources
+P181253,Energy and Mineral Resources
+P181271,Public Administration
+P181278,Transportation
+P181308,Public Administration
+P181328,Energy and Extractives
+P181341,Energy and Extractives
+P181371,Public Administration
+P181385,Health
+P181391,Social Protection
+P181494,Energy and Extractives
+P181495,Social Protection
+P181538,"Water, Sanitation and Waste Management"
+P181555,Energy and Mineral Resources
+P181560,Public Administration
+P181563,"Agriculture, Fishing and Forestry"
+P181587,"Agriculture, Fishing and Forestry"
+P181602,Education
+P181604,Public Administration
+P500392,"Water, Sanitation and Waste Management"
+P500488,Transportation
+P500553,"Agriculture, Fishing and Forestry"
+P500560,Energy and Extractives
+P500588,Public Administration
+P500611,Public Administration
+P500625,Transportation
+P500628,Digital Development
+P501017,Education
+P501271,Energy and Mineral Resources
+P501274,Public Administration
+P501648,Education
+P501662,Financial Sector
+P502125,Transportation
+P502142,Social Protection
+P502471,Information and Communications Technologies
+P502472,Education
+P502536,Social Sustainability and Inclusion
+P502685,Public Administration
+P503369,Education
+P503393,Public Administration
+P503776,Health
+P504170,"Water, Sanitation and Waste Management"
+P504220,Financial Sector
+P504222,"Agriculture, Fishing and Forestry"
+P504276,Transportation
+P504278,Public Administration
+P504282,"Industry, Trade and Services"
+P504398,Social Protection
+P504420,Social Protection
+P504421,Energy and Extractives
+P504531,Health
+P504532,Health
+P504691,"Water, Sanitation and Waste Management"
+P504999,Transportation
+P505094,Digital Development
+P505095,Information and Communications Technologies
+P505173,Energy and Mineral Resources
+P505179,Education
+P505187,Health
+P505226,Public Administration
+P505271,"Agriculture, Fishing and Forestry"
+P505616,Financial Sector
+P505643,Financial Sector
+P506072,Health
+P506083,Health
+P506127,Social Sustainability and Inclusion
+P506142,"Industry, Trade and Services"
+P506269,Education
+P506340,Public Administration
+P506407,Digital Development
+P506425,Transportation
+P506438,Energy and Mineral Resources
+P506439,"Water, Sanitation and Waste Management"
+P506443,Public Administration
+P506476,Public Administration
+P506486,Health
+P506528,Health
+P506611,Digital Development
+P506846,Transportation
+P506969,Social Sustainability and Inclusion
+P506976,Health
+P507033,Energy and Mineral Resources
+P507066,Education
+P507190,"Agriculture, Fishing and Forestry"
+P507260,Energy and Mineral Resources
+P507271,Public Administration
+P507278,Social Protection
+P507316,Public Administration
+P507360,Social Protection
+P507373,Social Protection
+P507433,"Agriculture, Fishing and Forestry"
+P507451,Education
+P507512,Education
+P507588,"Water, Sanitation and Waste Management"
+P507698,"Agriculture, Fishing and Forestry"
+P507921,Transportation
+P507935,Health
+P507971,Public Administration
+P508170,Public Administration
+P508182,"Agriculture, Fishing and Forestry"
+P508191,Social Protection
+P508222,Transportation
+P508313,Education
+P508354,Energy and Mineral Resources
+P508383,Digital Development
+P508408,Social Sustainability and Inclusion
+P508537,"Industry, Trade and Services"
+P508550,Health
+P508559,Education
+P508693,Health
+P508781,Health
+P508910,Unknown
+P508917,Health
+P508948,Digital Development
+P509405,Financial Sector
+P509460,Transportation
+P509487,Transportation
+P509550,"Water, Sanitation and Waste Management"
+P509601,Health
+P509666,Public Administration
+P509738,"Agriculture, Fishing and Forestry"
+P509852,Education
+P509890,"Water, Sanitation and Waste Management"
+P510002,Transportation
+P510027,Education
+P510072,Public Administration
+P510187,"Water, Sanitation and Waste Management"
+P510198,"Water, Sanitation and Waste Management"
+P510381,Education
+P510429,"Agriculture, Fishing and Forestry"
+P510773,Financial Sector
+P512328,Public Administration
+P512635,Social Protection
+P513248,"Agriculture, Fishing and Forestry"
+P513815,Transportation
+P513939,Energy and Mineral Resources
+P514166,"Water, Sanitation and Waste Management"
+P516182,Energy and Mineral Resources
+P516627,Unknown

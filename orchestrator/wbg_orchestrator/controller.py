@@ -200,7 +200,8 @@ class ExecutionController:
                 return self._finish(run, task, attempt, TaskState.FAILED, error)
             context = WorkerContext(ticket=self._authority.issue(task, attempt), authorization=request.authorization,
                                     request_id=request.request_id, rag_release=request.rag_release, remaining_seconds=remaining,
-                                    execution_approved=execution_approved, upstream_evidence=upstream, memory_block=memory_block)
+                                    execution_approved=execution_approved, upstream_evidence=upstream, memory_block=memory_block,
+                                    package=request.package)
             started = self._clock()
             run.attempts = attempt
             with self._tracer.span("orchestrator.task_attempt", investigation_id=request.investigation_id, plan_id=task.plan_id,

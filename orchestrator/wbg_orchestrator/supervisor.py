@@ -27,7 +27,7 @@ COMPLEX = re.compile(r"\b(investigat\w*|root causes?|explain why|step by step|an
 
 class SupervisorDecision(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
-    mode: Literal["fast", "plan", "clarify", "refuse"]
+    mode: Literal["fast", "plan", "package", "clarify", "refuse"]
     worker: WorkerName | None = None
     operation: str | None = None
     requires_execution: bool = False
@@ -37,6 +37,8 @@ class SupervisorDecision(BaseModel):
 
 class Supervisor:
     def decide(self, request: InvestigationRequest) -> SupervisorDecision:
+        if request.package is not None:
+            return self._package(request)
         text = rules.normalize(request.question)
         if rules.is_tool_directive(text):
             return SupervisorDecision(mode="refuse", reasons=("tool_directive_refused",))
@@ -62,3 +64,11 @@ class Supervisor:
             return SupervisorDecision(mode="fast", worker=worker, operation=operation, routes=(route.value,), reasons=reasons,
                                       requires_execution=worker == WorkerName.STRUCTURED and request.execute_requested)
         return SupervisorDecision(mode="clarify", reasons=("no_clear_intent",))
+
+    @staticmethod
+    def _package(request: InvestigationRequest) -> SupervisorDecision:
+        """A structured package request (from the API, never from message text) gets the fixed assessment plan."""
+        routes = (Route.ML_PREDICTION.value, Route.DOCUMENT_RAG.value)
+        if Route.ML_PREDICTION not in {Route(r) for r in request.authorization.routes}:
+            return SupervisorDecision(mode="refuse", routes=routes, reasons=("route_not_authorized",))
+        return SupervisorDecision(mode="package", routes=routes, reasons=("package_assessment",))

@@ -29,6 +29,9 @@ OPERATIONS: dict[str, dict[str, frozenset[str]]] = {
         "answer_document_question": frozenset({"document_retrieval", "grounded_answering"}),
         "retrieve_passages": frozenset({"document_retrieval"}),
     },
+    "ml_prediction": {
+        "predict_package": frozenset({"ml_prediction"}),
+    },
 }
 EXECUTION_CAPABILITY = "databricks_execution"
 READ_ONLY_OPERATIONS = frozenset(f"{w}:{op}" for w, ops in OPERATIONS.items() for op in ops)

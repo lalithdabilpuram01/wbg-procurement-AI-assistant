@@ -51,6 +51,7 @@ from .rag_modules import answering
 from .response import ClaudeResponseGenerator
 from .supervisor import Supervisor
 from .workers.base import ResultCache, TicketAuthority
+from .workers.prediction import PredictionWorker, gateway_sql
 
 ORCHESTRATOR_DIR = Path(__file__).resolve().parents[1]
 DEV_CHECKPOINT_ENDPOINT = "projects/wbg-procurement-dev/branches/dev-orchestrator/endpoints/primary"
@@ -82,10 +83,11 @@ def build_runtime(config: RuntimeConfig, operator_confirmed: bool) -> tuple[AppS
     tracer = _tracer()
     claude = _claude_client(config, operator_confirmed, tracer)
     authority, guardrails = TicketAuthority(), build_guardrails()
-    structured = _structured_worker(config, claude, guardrails, authority)
+    service, structured = _structured_worker(config, claude, guardrails, authority)
     document = document_worker(authority, generator_factory=answering("generator").EvidenceOnlyGenerator)
-    controller = ExecutionController({WorkerName.STRUCTURED: structured, WorkerName.DOCUMENT: document}, authority, tracer=tracer,
-                                     prices=SONNET_5_5_PRICES)
+    prediction = PredictionWorker(gateway_sql(service, REGISTRY_PRINCIPAL, WORKSPACE), authority)
+    controller = ExecutionController({WorkerName.STRUCTURED: structured, WorkerName.DOCUMENT: document,
+                                      WorkerName.PREDICTION: prediction}, authority, tracer=tracer, prices=SONNET_5_5_PRICES)
     json_client = PortkeyJsonClient(claude)
     deps = EngineDeps(controller=controller, supervisor=Supervisor(), planner=ClaudePlanner(json_client),
                       responder=ClaudeResponseGenerator(json_client), guard=guardrails, llm_breaker=llm_breaker(), tracer=tracer,
@@ -126,7 +128,7 @@ def _structured_worker(config: RuntimeConfig, claude: BudgetedClaudeClient, guar
                                    audit_log_path=config.audit_path.with_name("structured_audit.jsonl"))
     service = StructuredDataService.from_environment(settings)
     telemetry = Telemetry(AgentAuditSink(settings.audit_log_path))
-    return structured_worker_for_service(service, claude, telemetry, authority, ResultCache(), guardrails=guardrails)
+    return service, structured_worker_for_service(service, claude, telemetry, authority, ResultCache(), guardrails=guardrails)
 
 
 def _checkpoint_pool(config: RuntimeConfig):

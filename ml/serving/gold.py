@@ -1,0 +1,53 @@
+"""Project context for mode B, from the Gold tables through an injected read-only `run_sql(sql, parameters)`.
+
+The SQL is fixed and parameterised (no generated SQL). Project sector is not in the Gold objects the read-only
+principal can see, so it comes from `project_sector.csv`: the same Silver snapshot the models were trained on.
+"""
+from __future__ import annotations
+
+import csv
+import datetime as dt
+from collections.abc import Callable
+from pathlib import Path
+from typing import Any
+
+from .features import InvalidRequest, ProjectContext
+
+RunSql = Callable[[str, dict[str, Any]], list[dict[str, Any]]]
+GOLD = "workspace.wbg_gold"
+SECTORS = Path(__file__).resolve().parent / "project_sector.csv"
+TENDER_TYPES = ("Invitation for Bids", "Request for Expression of Interest", "Invitation for Prequalification")
+
+PROJECT_SQL = (f"SELECT project_id, region_name, wdi_country_code, board_approval_date, approval_fiscal_year "
+               f"FROM {GOLD}.gold_project_portfolio WHERE project_id = :project_id LIMIT 1")
+INCOME_SQL = (f"SELECT year, income_group_fy_starting_in_year FROM {GOLD}.gold_country_context "
+              f"WHERE country_code = :country_code AND income_group_fy_starting_in_year IS NOT NULL LIMIT 100")
+PRIOR_TENDERS_SQL = (f"SELECT COUNT(*) AS prior_tender_notices FROM {GOLD}.gold_procurement_notices "
+                     f"WHERE project_id = :project_id AND publication_date < :tender_date "
+                     f"AND notice_type IN ('{TENDER_TYPES[0]}', '{TENDER_TYPES[1]}', '{TENDER_TYPES[2]}') LIMIT 1")
+
+
+def project_sector(project_id: str, path: Path = SECTORS) -> str:
+    with path.open(newline="") as handle:
+        return next((r["sector"] for r in csv.DictReader(handle) if r["project_id"] == project_id), "Unknown")
+
+
+def _date(value: Any) -> dt.date:
+    return value if isinstance(value, dt.date) and not isinstance(value, dt.datetime) else dt.date.fromisoformat(str(value)[:10])
+
+
+def project_context(project_id: str, tender_date: dt.date, run_sql: RunSql) -> ProjectContext:
+    rows = run_sql(PROJECT_SQL, {"project_id": project_id})
+    if not rows:
+        raise InvalidRequest(f"project {project_id} is not in the project portfolio")
+    project = rows[0]
+    if not project.get("board_approval_date"):
+        raise InvalidRequest(f"project {project_id} has no board approval date; the models need it")
+    country = project.get("wdi_country_code") or None
+    income = {int(r["year"]): r["income_group_fy_starting_in_year"]
+              for r in (run_sql(INCOME_SQL, {"country_code": country}) if country else [])}
+    prior = run_sql(PRIOR_TENDERS_SQL, {"project_id": project_id, "tender_date": tender_date.isoformat()})
+    return ProjectContext(project_id=project_id, region_name=project["region_name"], country_code=country,
+                          sector=project_sector(project_id), board_approval_date=_date(project["board_approval_date"]),
+                          approval_fiscal_year=int(project["approval_fiscal_year"]), income_by_year=income,
+                          prior_tender_notices=int(prior[0]["prior_tender_notices"]) if prior else 0)

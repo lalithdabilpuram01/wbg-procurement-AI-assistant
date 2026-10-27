@@ -1,0 +1,102 @@
+[
+ {
+  "features": {
+   "procurement_method": "Request for Bids",
+   "procurement_category": "Works",
+   "review_type": "Post",
+   "region_name": "Eastern and Southern Africa",
+   "country_grp": "MZ",
+   "sector": "Agriculture, Fishing and Forestry",
+   "api_window_days": 21.0,
+   "project_prior_tender_notices": 113.0,
+   "project_age_days_at_tender": 954.0,
+   "approval_fiscal_year": 2021.0,
+   "income_ordinal": 1.0
+  },
+  "pred_ridge": 138.5286188151384,
+  "lo_ridge": 63.90773972494408,
+  "hi_ridge": 307.71380828304217,
+  "score_ridge": 0.0855282730249853,
+  "alert_ridge": false
+ },
+ {
+  "features": {
+   "procurement_method": "Consultant Qualification Selection",
+   "procurement_category": "Consultant Services",
+   "review_type": "Post",
+   "region_name": "Western and Central Africa",
+   "country_grp": "CI",
+   "sector": "Public Administration",
+   "api_window_days": 20.0,
+   "project_prior_tender_notices": 34.0,
+   "project_age_days_at_tender": 867.0,
+   "approval_fiscal_year": 2021.0,
+   "income_ordinal": 2.0
+  },
+  "pred_ridge": 112.70528907349404,
+  "lo_ridge": 51.99460112531151,
+  "hi_ridge": 250.3524110113779,
+  "score_ridge": 0.0484278005510503,
+  "alert_ridge": false
+ },
+ {
+  "features": {
+   "procurement_method": "Individual Consultant Selection",
+   "procurement_category": "Consultant Services",
+   "review_type": "Post",
+   "region_name": "Eastern and Southern Africa",
+   "country_grp": "MG",
+   "sector": "Health",
+   "api_window_days": 21.0,
+   "project_prior_tender_notices": 42.0,
+   "project_age_days_at_tender": 795.0,
+   "approval_fiscal_year": 2022.0,
+   "income_ordinal": 1.0
+  },
+  "pred_ridge": 156.35894829018443,
+  "lo_ridge": 72.13344835502771,
+  "hi_ridge": 347.3203432549209,
+  "score_ridge": 0.1155071252268529,
+  "alert_ridge": false
+ },
+ {
+  "features": {
+   "procurement_method": "Individual Consultant Selection",
+   "procurement_category": "Consultant Services",
+   "review_type": "Post",
+   "region_name": "Eastern and Southern Africa",
+   "country_grp": "KE",
+   "sector": "Agriculture, Fishing and Forestry",
+   "api_window_days": 15.0,
+   "project_prior_tender_notices": 47.0,
+   "project_age_days_at_tender": 1533.0,
+   "approval_fiscal_year": 2020.0,
+   "income_ordinal": 2.0
+  },
+  "pred_ridge": 107.88378938802734,
+  "lo_ridge": 49.77028711988642,
+  "hi_ridge": 239.6424072407468,
+  "score_ridge": 0.0425288082080519,
+  "alert_ridge": false
+ },
+ {
+  "features": {
+   "procurement_method": "Quality And Cost-Based Selection",
+   "procurement_category": "Consultant Services",
+   "review_type": "Post",
+   "region_name": "Eastern and Southern Africa",
+   "country_grp": "AO",
+   "sector": "Water, Sanitation and Waste Management",
+   "api_window_days": 21.0,
+   "project_prior_tender_notices": 9.0,
+   "project_age_days_at_tender": 554.0,
+   "approval_fiscal_year": 2022.0,
+   "income_ordinal": 2.0
+  },
+  "pred_ridge": 217.520618621723,
+  "lo_ridge": 100.34930831322755,
+  "hi_ridge": 483.17884426101745,
+  "score_ridge": 0.2322959839195142,
+  "alert_ridge": false
+ }
+]

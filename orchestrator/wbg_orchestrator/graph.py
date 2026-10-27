@@ -32,7 +32,7 @@ from .contracts import (TERMINAL_TASK_STATES, ApprovalDecision, ApprovalRequest,
 from .controller import ExecutionController
 from .hitl import ApprovalPolicy, approval_needed, build_approval, decision_problem
 from .observability import AuditTrail, OrchestratorTracer
-from .planner import Planner, PlannerError, PlanningContext, build_plan, fast_path_plan
+from .planner import Planner, PlannerError, PlanningContext, build_plan, fast_path_plan, package_plan
 from .response import ResponseGenerator, validate_response
 from .state import InvestigationState, add_counters
 from .supervisor import Supervisor
@@ -148,6 +148,9 @@ class _Nodes:
         update = {"supervisor": decision.model_dump(mode="json")}
         if decision.mode == "fast":
             plan = fast_path_plan(request, decision.worker, decision.operation, decision.requires_execution)
+            return {**update, "plan": plan.to_state(), "plans": [plan.to_state()], "phase": "planned"}
+        if decision.mode == "package":
+            plan = package_plan(request)
             return {**update, "plan": plan.to_state(), "plans": [plan.to_state()], "phase": "planned"}
         if decision.mode == "plan":
             return {**update, "phase": "needs_plan"}

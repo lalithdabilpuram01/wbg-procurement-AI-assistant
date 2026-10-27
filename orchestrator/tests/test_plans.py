@@ -72,7 +72,7 @@ def test_unauthorized_plan_never_reaches_a_worker():
 
 def test_a_worker_worker_name_unknown_to_the_schema_is_a_planner_error():
     with pytest.raises(PlannerError):
-        build_plan(plan(task("a", worker="ml_prediction")), request("x"), produced_by="fake_planner")
+        build_plan(plan(task("a", worker="email_sender")), request("x"), produced_by="fake_planner")
 
 
 # ------------------------------------------------------------------------------------------------ acceptance 7

@@ -34,7 +34,7 @@ class PlannerError(Exception):
 class DraftTask(BaseModel):
     model_config = ConfigDict(extra="forbid")
     id: str = Field(pattern=r"^[A-Za-z][A-Za-z0-9_-]{0,15}$")
-    worker: Literal["structured_data", "document_intelligence"]
+    worker: Literal["structured_data", "document_intelligence", "ml_prediction"]
     operation: str = Field(min_length=1, max_length=40)
     question: str = Field(min_length=1, max_length=1000)
     depends_on: list[str] = Field(default_factory=list, max_length=6)
@@ -110,6 +110,21 @@ def fast_path_plan(request: InvestigationRequest, worker: WorkerName, operation:
     raw = {"tasks": [{"id": "t1", "worker": worker.value, "operation": operation, "question": request.question[:1000],
                       "requires_execution": requires_execution}],
            "partial_allowed": True, "rationale": "single-intent request (fast path)"}
+    return build_plan(raw, request, produced_by="fast_path")
+
+
+def package_plan(request: InvestigationRequest) -> InvestigationPlan:
+    """A package assessment (no LLM planning): the three model predictions, plus the project's documented delays,
+    risks and lessons (optional: the predictions stand on their own if the documents yield nothing)."""
+    package = request.package
+    raw = {"tasks": [
+        {"id": "predict", "worker": WorkerName.PREDICTION.value, "operation": "predict_package",
+         "question": f"Predict tender duration, amendment risk and re-bidding risk for a {package.procurement_category} package "
+                     f"({package.procurement_method}, {package.review_type} review) in project {package.project_id}."},
+        {"id": "lessons", "worker": WorkerName.DOCUMENT.value, "operation": "answer_document_question", "optional": True,
+         "question": f"What caused delays in the {package.procurement_category.lower()} contracts of project "
+                     f"{package.project_id} and what lessons were learned?"}],
+        "required": ["predict"], "partial_allowed": True, "rationale": "package assessment (fixed plan)"}
     return build_plan(raw, request, produced_by="fast_path")
 
 

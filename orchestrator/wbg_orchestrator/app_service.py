@@ -25,7 +25,7 @@ from conversation.models import Owner, ThreadInfo, Turn
 from conversation.service import ConversationService
 from conversation.store import ConversationStore
 
-from .contracts import investigation_id_for, new_id
+from .contracts import PackageSpec, investigation_id_for, new_id
 from .conversation_bridge import ConversationFrontDoor, owner_ref
 from .engine import EngineOutcome, InvestigationEngine, InvestigationNotFound, checkpoint_thread_id
 
@@ -83,6 +83,11 @@ class AppService:
         self._store.get_thread(owner, conversation_id)                         # ownership before anything runs
         return self._submit(owner, conversation_id, "message", client_message_id,
                             lambda job: self._run_message(job, text, execute))
+
+    def submit_package(self, owner: Owner, conversation_id: str, package: PackageSpec, client_message_id: str) -> Job:
+        self._store.get_thread(owner, conversation_id)                         # ownership before anything runs
+        return self._submit(owner, conversation_id, "package", client_message_id,
+                            lambda job: self._finish_outcome(job, self._front_door.assess_package(owner, conversation_id, package)))
 
     # ------------------------------------------------------------------------------------------ investigations
     def investigations(self, owner: Owner, conversation_id: str) -> list[InvestigationRef]:
@@ -150,6 +155,10 @@ class AppService:
         if reply.investigation is not None:
             job.request_id = reply.investigation.values["request"]["request_id"]
         job.status = reply.status
+
+    @staticmethod
+    def _finish_outcome(job: Job, outcome: EngineOutcome) -> None:
+        job.request_id, job.status = outcome.values["request"]["request_id"], outcome.status.value
 
     @staticmethod
     def _finish(job: Job, request_id: str, outcome: EngineOutcome) -> None:

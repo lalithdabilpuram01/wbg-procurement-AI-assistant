@@ -35,6 +35,7 @@ from conversation.models import Owner
 from conversation.store import ThreadNotFound
 
 from .app_service import AppService, ConversationBusy, Job, JobNotFound, summarize
+from .contracts import PackageSpec
 from .engine import ApprovalNotPending, InvestigationNotFound
 
 DEFAULT_USERS_FILE = Path.home() / ".wbg" / "api_users.json"
@@ -80,6 +81,10 @@ class NewConversation(BaseModel):
 class NewMessage(BaseModel):
     text: str = Field(min_length=1, max_length=2000)
     execute: bool = False                       # the user asks to run the validated, read-only SQL
+    client_message_id: str = Field(pattern=CLIENT_ID)
+
+
+class NewPackage(PackageSpec):
     client_message_id: str = Field(pattern=CLIENT_ID)
 
 
@@ -148,6 +153,11 @@ def create_app(service: AppService, users: UserDirectory) -> FastAPI:
     @app.post("/conversations/{conversation_id}/messages", status_code=202)
     def submit_message(conversation_id: str, body: NewMessage, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
         return job_view(service.submit_message(owner, conversation_id, body.text, body.execute, body.client_message_id))
+
+    @app.post("/conversations/{conversation_id}/packages", status_code=202)
+    def submit_package(conversation_id: str, body: NewPackage, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
+        package = PackageSpec(**body.model_dump(exclude={"client_message_id"}))
+        return job_view(service.submit_package(owner, conversation_id, package, body.client_message_id))
 
     @app.get("/jobs/{job_id}")
     def read_job(job_id: str, owner: Owner = Depends(current_owner)) -> dict[str, Any]:

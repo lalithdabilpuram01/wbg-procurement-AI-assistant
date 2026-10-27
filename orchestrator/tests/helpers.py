@@ -25,6 +25,7 @@ from wbg_orchestrator.response import DeterministicResponseGenerator
 from wbg_orchestrator.supervisor import Supervisor
 from wbg_orchestrator.workers.base import ResultCache, TicketAuthority
 from wbg_orchestrator.workers.document import DocumentIntelligenceWorker
+from wbg_orchestrator.workers.prediction import PredictionWorker
 from wbg_orchestrator.workers.structured import StructuredDataWorker
 
 WORKSPACE, PRINCIPAL = "wbg-procurement-poc", "analyst-demo"
@@ -163,9 +164,20 @@ class Clock:
         return self.now
 
 
+def fake_gold_sql(sql: str, parameters: dict) -> list[dict]:
+    """The prediction worker's three Gold lookups for P148850 (offline)."""
+    from ml.serving.gold import INCOME_SQL, PROJECT_SQL
+    if sql == PROJECT_SQL:
+        return [{"project_id": parameters["project_id"], "region_name": "Eastern and Southern Africa", "wdi_country_code": "ET",
+                 "board_approval_date": "2016-06-28", "approval_fiscal_year": 2016}] if parameters["project_id"] == "P148850" else []
+    if sql == INCOME_SQL:
+        return [{"year": 2025, "income_group_fy_starting_in_year": "L"}]
+    return [{"prior_tender_notices": 34}]
+
+
 def build_engine(*, workflow=None, tools=None, pipeline=None, retriever=None, planner=None, responder=None, guard=None, policy=None,
                  checkpointer=None, tracer=None, audit_sink=None, now=None, releases: list[str] | None = None, prices=None,
-                 breaker_settings=DEFAULT_BREAKER, backoff=RetryBackoff(base_seconds=0.0, max_seconds=0.0)):
+                 breaker_settings=DEFAULT_BREAKER, backoff=RetryBackoff(base_seconds=0.0, max_seconds=0.0), run_sql=fake_gold_sql):
     authority, cache = TicketAuthority(), ResultCache()
     workflow = workflow or FakeWorkflow()
     tools = tools or FakeTools()
@@ -177,7 +189,9 @@ def build_engine(*, workflow=None, tools=None, pipeline=None, retriever=None, pl
                                           authority)
     sleeps: list[float] = []
     tracer = tracer or OrchestratorTracer.disabled()
-    controller = ExecutionController({WorkerName.STRUCTURED: structured, WorkerName.DOCUMENT: document}, authority, tracer=tracer,
+    prediction = PredictionWorker(run_sql, authority)
+    controller = ExecutionController({WorkerName.STRUCTURED: structured, WorkerName.DOCUMENT: document,
+                                      WorkerName.PREDICTION: prediction}, authority, tracer=tracer,
                                      backoff=backoff, sleep=sleeps.append, prices=prices,
                                      breaker_settings=breaker_settings)
     audit_sink = audit_sink or MemoryAuditSink()

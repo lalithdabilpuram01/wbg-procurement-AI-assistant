@@ -68,13 +68,17 @@ class ClaudeResponseGenerator:
     name, is_llm = "claude", True
     SYSTEM = ("Write a short answer to the question using ONLY the evidence records provided. Every claim must cite the "
               "evidence ids it relies on. Do not state any number, date or confidence that is not in the cited evidence. "
-              "Values marked NOT_APPROVED must not be stated as figures. Return only JSON matching the schema.")
+              "Values marked NOT_APPROVED must not be stated as figures. Values marked MODEL_ESTIMATE are model "
+              "predictions: present them as estimates, never as recorded facts. For records warned synthetic_training_data, "
+              "say in plain words that the model was trained on synthetic data; never write warning codes or evidence ids "
+              "in the text. Return only JSON matching the schema.")
 
     def __init__(self, client: PortkeyJsonClient):
         self._client = client
 
     def compose(self, request, evidence, report):
-        blocks = [f"[{e.evidence_id}] {e.kind.value}; numeric_use={e.numeric_use.value}; citation: {e.citation}\n"
+        blocks = [f"[{e.evidence_id}] {e.kind.value}; numeric_use={e.numeric_use.value}; "
+                  f"warnings={','.join(e.quality_warnings) or 'none'}; citation: {e.citation}\n"
                   f"facts: {'; '.join(f'{f.name}={f.value}' for f in e.facts)}\nsummary: {e.summary[:800]}" for e in evidence]
         user = f"QUESTION:\n{request.question}\n\nEVIDENCE:\n" + "\n\n".join(blocks)
         parsed, content, usage = self._client.complete(system=self.SYSTEM, user=user, schema=DraftResponse.model_json_schema(),
@@ -97,6 +101,8 @@ def _restatement(record: EvidenceRecord) -> str:
         return f"{record.citation}: {record.summary[:400]}"
     if record.kind == EvidenceKind.TABLE_CANDIDATE:
         return f"Relevant approved table: {', '.join(record.source_objects)}."
+    if record.kind == EvidenceKind.MODEL_PREDICTION:
+        return record.summary[:600]
     return ""
 
 
@@ -145,6 +151,9 @@ def validate_response(request: InvestigationRequest, plan: InvestigationPlan | N
         limitations += [f"Missing verified evidence for task {u.split(':')[0].split('.')[-1]} ({u.split(':')[1]})." for u in report.unmet]
         if "pdf_table_value_unverified" in report.quality_warnings:
             limitations.append("PDF table values are cited for context only; they are not verified figures.")
+        if "synthetic_training_data" in report.quality_warnings:
+            limitations.append("Amendment and re-bidding risks come from models trained on synthetic data; they are not "
+                               "validated World Bank risk estimates.")
         if "dev_owner_credentials" in report.quality_warnings:
             limitations.append("Data was read with development credentials (not a production read-only identity).")
         if any(w in report.quality_warnings for w in ("stacked_values_needs_review", "lost_page_break_values_flagged")):
@@ -168,7 +177,9 @@ def validate_response(request: InvestigationRequest, plan: InvestigationPlan | N
 
 
 def _status(kept, report, partial_tasks, cancelled_tasks, removed) -> InvestigationStatus:
-    if report and report.conflicts:
+    cited = {i for claim in kept for i in claim.evidence_ids}
+    # a conflict decides the status only when the answer relies on it (or nothing else could be said)
+    if report and any(not kept or cited & set(c.evidence_ids) for c in report.conflicts):
         return InvestigationStatus.CONFLICTING_EVIDENCE
     if not kept:
         return InvestigationStatus.INSUFFICIENT_EVIDENCE
