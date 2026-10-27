@@ -179,3 +179,37 @@ def test_off_topic_and_misconduct_requests_get_a_plain_answer_and_run_nothing(te
     answer = store.turns(ALICE, thread.thread_id)[-1]
     assert reply.status == status and answer.role == "assistant" and planner.calls == []
     assert "procurement" in answer.text and "guardrail" not in answer.text
+
+
+# ------------------------------------------------------------------------------------------------- personal data
+def masked_front_door():
+    from conversation.pii import redact_personal_data
+    engine, _ = build_engine()
+    store = InMemoryConversationStore()
+    runners = {route: ConversationRunner(engine, route, AUTH) for route in (Route.STRUCTURED_DATA, Route.DOCUMENT_RAG)}
+    service = ConversationService(store, runners, PolicyGuard(), text_filter=redact_personal_data)
+    return ConversationFrontDoor(service, store, engine, AUTH), service, store
+
+
+def test_personal_data_is_masked_before_it_is_stored_or_sent_to_an_agent():
+    door, service, store = masked_front_door()
+    thread = service.start_thread(ALICE)
+    reply = door.handle_message(ALICE, thread.thread_id, "I am abebe@example.org, phone +251 911 234 567. What lessons were "
+                                                         "learned about road works procurement in Ethiopia?")
+    stored = store.turns(ALICE, thread.thread_id)[0].text
+    assert "abebe@example.org" not in stored and "<EMAIL_ADDRESS>" in stored and "<PHONE_NUMBER>" in stored
+    assert "abebe@example.org" not in reply.investigation.values["request"]["question"]
+
+
+def test_a_brief_description_is_masked_before_it_is_stored_or_run():
+    import datetime as dt
+    from wbg_orchestrator.contracts import PlannedPackage, PlanningSpec, ProjectProfile
+    door, service, store = masked_front_door()
+    thread = service.start_thread(ALICE)
+    spec = PlanningSpec(profile=ProjectProfile(country_code="ET", sector="Transportation", approval_date=dt.date(2027, 6, 30),
+                                               description="Rural roads in Oromia; coordinator reachable at lead@example.org"),
+                        packages=(PlannedPackage(name="Works", procurement_category="Works", bid_window_days=45,
+                                                 tender_date=dt.date(2027, 10, 1)),))
+    outcome = door.plan_project(ALICE, thread.thread_id, spec)
+    assert "lead@example.org" not in outcome.values["request"]["planning"]["profile"]["description"]
+    assert all("lead@example.org" not in t.text for t in store.turns(ALICE, thread.thread_id))

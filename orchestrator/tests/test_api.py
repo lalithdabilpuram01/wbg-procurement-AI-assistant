@@ -357,3 +357,27 @@ def test_a_planning_brief_runs_as_a_job_without_an_approval_click(stack):
 def test_invalid_plans_are_rejected_before_anything_runs(stack, change):
     cid = stack.conversation()
     assert stack.call("POST", f"/conversations/{cid}/plans", json={**PLAN, **change, "client_message_id": "plan-0002"}).status_code == 422
+
+
+# ------------------------------------------------------------------------------------------------- rate limits
+def test_work_requests_are_limited_per_user_with_a_clear_retry_message(tmp_path):
+    from wbg_orchestrator.rate_limit import RateLimiter
+    stack = Stack(tmp_path)
+    stack.client = TestClient(create_app(stack.service, UserDirectory.load(tmp_path / "users.json"), RateLimiter(per_minute=3)))
+    cid = stack.conversation()
+    codes = [stack.send(cid, DATA_QUESTION, f"msg-rate-{i:02d}").status_code for i in range(4)]
+    assert codes[:3] != [429, 429, 429] and codes[3] == 429
+    refused = stack.send(cid, DATA_QUESTION, "msg-rate-99")
+    assert "3 per minute" in refused.json()["detail"] and int(refused.headers["Retry-After"]) > 0
+    assert stack.call("GET", "/conversations").status_code == 200                 # reading is never limited
+    bob_cid = stack.conversation("bob")
+    assert stack.send(bob_cid, DATA_QUESTION, "msg-rate-bob1", user="bob").status_code != 429   # per user
+
+
+def test_the_limiter_counts_a_sliding_minute_and_day():
+    from wbg_orchestrator.rate_limit import RateLimiter
+    now = [0.0]
+    limiter = RateLimiter(per_minute=2, per_day=3, clock=lambda: now[0])
+    assert limiter.check("u") is None and limiter.check("u") is None and limiter.check("u").limit == "per_minute"
+    now[0] = 61.0
+    assert limiter.check("u") is None and limiter.check("u").limit == "per_day"

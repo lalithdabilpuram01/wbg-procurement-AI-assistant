@@ -20,7 +20,7 @@ from __future__ import annotations
 import time
 import uuid
 from dataclasses import dataclass, field
-from typing import Any, Literal, Protocol
+from typing import Any, Callable, Literal, Protocol
 
 from conversation.compression import Compressor, DeterministicSummarizer, stale_reason
 from conversation.context_builder import ContextBuilder, ContextPackage
@@ -91,7 +91,8 @@ class ConversationService:
                  resolver: FollowUpResolver | None = None, builder: ContextBuilder | None = None,
                  compressor: Compressor | None = None, telemetry: Any = None, tracer: EventSink | None = None,
                  registry_build_id: str | None = None, router: IntentRouter | None = None,
-                 responder: ConversationResponder | None = None, live_access: LiveAccess | None = None):
+                 responder: ConversationResponder | None = None, live_access: LiveAccess | None = None,
+                 text_filter: Callable[[str], str] | None = None):
         if guard is None:
             raise ValueError("the conversation service requires guardrails (fail closed)")
         if any(Route(route) not in TASK_ROUTES for route in runners):
@@ -100,6 +101,9 @@ class ConversationService:
         if self._responder.uses_live_model and not isinstance(live_access, LiveAccess):
             raise LiveCallsDisabled("a model-backed conversation responder needs the existing live-call approval")
         self._store = store
+        # applied to every text that is stored or forwarded: secrets redacted (and personal data masked when the host
+        # passes conversation.pii.redact_personal_data)
+        self.text_filter = text_filter or redact_secrets
         self._runners = {Route(route): runner for route, runner in runners.items()}
         self._router = router or IntentRouter()
         self._guard = guard
@@ -112,7 +116,7 @@ class ConversationService:
 
     # ------------------------------------------------------------------------------------------------ threads
     def start_thread(self, owner: Owner, title: str | None = None) -> ThreadInfo:
-        return self._store.create_thread(owner, redact_secrets(title or DEFAULT_TITLE)[:TITLE_CHARS])
+        return self._store.create_thread(owner, self.text_filter(title or DEFAULT_TITLE)[:TITLE_CHARS])
 
     def reset_topic(self, owner: Owner, thread_id: str) -> ThreadInfo:
         return self._store.start_new_topic(owner, thread_id)
@@ -125,7 +129,7 @@ class ConversationService:
         """Record an explicit, user-approved decision or constraint. Instruction-like statements are refused."""
         if contains_instruction_like_text(statement):
             raise ValueError("a decision cannot change rules, permissions or tools")
-        decision = Decision(thread_id=thread_id, kind=kind, statement=redact_secrets(statement),
+        decision = Decision(thread_id=thread_id, kind=kind, statement=self.text_filter(statement),
                             approved_by=owner.user_id, source_turn_seq=source_turn_seq)
         return self._store.add_decision(owner, decision)
 
@@ -139,7 +143,7 @@ class ConversationService:
         thread = self._store.get_thread(owner, thread_id)                     # ownership check first
         if not self._guard.check_input(text).allowed:
             return None
-        stored_text = redact_secrets(text)
+        stored_text = self.text_filter(text)
         state = self._conversation_state(owner, thread)
         return self._router.route(RouteRequest(stored_text, self._resolver.resolve(stored_text, state.active),
                                                state.previous_task_route))
@@ -149,7 +153,7 @@ class ConversationService:
         started = time.perf_counter()
         request_id = "req_" + uuid.uuid4().hex[:16]
         thread = self._store.get_thread(owner, thread_id)                     # ownership check first
-        stored_text = redact_secrets(text)
+        stored_text = self.text_filter(text)
         state = self._conversation_state(owner, thread)
 
         guard_decision = self._guard.check_input(text)
@@ -199,7 +203,7 @@ class ConversationService:
         response = self._responder.respond(ConversationRequest(message=stored_text, route=routing.route, reason=routing.reason,
                                                                memory_context=package.text, recall=recall))
         status = "topic_reset" if routing.reset_topic else "responded"
-        assistant = self._append(owner, thread, "assistant", TurnKind.ANSWER, redact_secrets(response.text), context,
+        assistant = self._append(owner, thread, "assistant", TurnKind.ANSWER, self.text_filter(response.text), context,
                                  self._metadata(request_id, routing, status=status))
         return ConversationReply(thread.thread_id, status, response.text, kind, user_turn.seq, assistant.seq,
                                  context=package, response=response)
@@ -232,7 +236,7 @@ class ConversationService:
         result = runner(resolution.standalone_question, package.text, execute, request_id)
         metadata = result_metadata(result, route=routing.route.value)
         metadata.request_id, metadata.registry_build_id = request_id, self._registry_build_id
-        assistant = self._append(owner, thread, "assistant", TurnKind.ANSWER, redact_secrets(result.message),
+        assistant = self._append(owner, thread, "assistant", TurnKind.ANSWER, self.text_filter(result.message),
                                  resolution.context, metadata)
         self._compress(owner, thread)
         return ConversationReply(thread.thread_id, result.status.value, result.message, resolution.kind, user_turn.seq,

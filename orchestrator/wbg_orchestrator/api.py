@@ -37,6 +37,7 @@ from conversation.workspace import WorkspaceItemNotFound
 
 from .app_service import AppService, ConversationBusy, Job, JobNotFound, summarize
 from .contracts import PackageSpec, PlanningSpec
+from .rate_limit import RateLimiter
 from .engine import ApprovalNotPending, InvestigationNotFound
 
 DEFAULT_USERS_FILE = Path.home() / ".wbg" / "api_users.json"
@@ -135,7 +136,7 @@ def job_view(job: Job) -> dict[str, Any]:
 
 
 # ------------------------------------------------------------------------------------------------------ app
-def create_app(service: AppService, users: UserDirectory) -> FastAPI:
+def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter | None = None) -> FastAPI:
     app = FastAPI(title="WBG Procurement Intelligence API", version="0.1.0")
 
     def current_owner(authorization: str = Header(default="")) -> Owner:
@@ -143,6 +144,19 @@ def create_app(service: AppService, users: UserDirectory) -> FastAPI:
         owner = users.authenticate(token) if scheme.lower() == "bearer" and token else None
         if owner is None:
             raise HTTPException(status.HTTP_401_UNAUTHORIZED, "authentication required", {"WWW-Authenticate": "Bearer"})
+        return owner
+
+    limits = limiter or RateLimiter.from_env()
+
+    def limited_owner(owner: Owner = Depends(current_owner)) -> Owner:
+        """The owner of a request that starts work, within that user's request limits."""
+        refusal = limits.check(f"{owner.tenant_id}\x00{owner.user_id}")
+        if refusal:
+            window = "minute" if refusal.limit == "per_minute" else "day"
+            raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS,
+                                f"Too many requests: the limit is {refusal.allowed} per {window}. "
+                                f"Please try again in {refusal.retry_after_seconds} seconds.",
+                                {"Retry-After": str(refusal.retry_after_seconds)})
         return owner
 
     @app.exception_handler(ThreadNotFound)
@@ -220,16 +234,16 @@ def create_app(service: AppService, users: UserDirectory) -> FastAPI:
                                    for r in service.investigations(owner, conversation_id)]}
 
     @app.post("/conversations/{conversation_id}/messages", status_code=202)
-    def submit_message(conversation_id: str, body: NewMessage, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
+    def submit_message(conversation_id: str, body: NewMessage, owner: Owner = Depends(limited_owner)) -> dict[str, Any]:
         return job_view(service.submit_message(owner, conversation_id, body.text, body.execute, body.client_message_id))
 
     @app.post("/conversations/{conversation_id}/packages", status_code=202)
-    def submit_package(conversation_id: str, body: NewPackage, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
+    def submit_package(conversation_id: str, body: NewPackage, owner: Owner = Depends(limited_owner)) -> dict[str, Any]:
         package = PackageSpec(**body.model_dump(exclude={"client_message_id"}))
         return job_view(service.submit_package(owner, conversation_id, package, body.client_message_id))
 
     @app.post("/conversations/{conversation_id}/plans", status_code=202)
-    def submit_plan(conversation_id: str, body: NewPlan, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
+    def submit_plan(conversation_id: str, body: NewPlan, owner: Owner = Depends(limited_owner)) -> dict[str, Any]:
         spec = PlanningSpec(**body.model_dump(exclude={"client_message_id"}))
         return job_view(service.submit_plan(owner, conversation_id, spec, body.client_message_id))
 
@@ -250,12 +264,12 @@ def create_app(service: AppService, users: UserDirectory) -> FastAPI:
         return {"request_id": request_id, **view}
 
     @app.post("/conversations/{conversation_id}/investigations/{request_id}/decision", status_code=202)
-    def decide(conversation_id: str, request_id: str, body: ApprovalAnswer, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
+    def decide(conversation_id: str, request_id: str, body: ApprovalAnswer, owner: Owner = Depends(limited_owner)) -> dict[str, Any]:
         return job_view(service.decide(owner, conversation_id, request_id, body.approval_id, body.approved, body.reason,
                                        body.client_message_id))
 
     @app.post("/conversations/{conversation_id}/investigations/{request_id}/recover", status_code=202)
-    def recover(conversation_id: str, request_id: str, body: Retry, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
+    def recover(conversation_id: str, request_id: str, body: Retry, owner: Owner = Depends(limited_owner)) -> dict[str, Any]:
         return job_view(service.recover(owner, conversation_id, request_id, body.client_message_id))
 
     @app.post("/conversations/{conversation_id}/investigations/{request_id}/cancel")

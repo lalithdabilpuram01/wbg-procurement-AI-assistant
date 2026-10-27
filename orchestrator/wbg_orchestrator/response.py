@@ -17,6 +17,7 @@ from typing import Protocol
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
+from conversation.pii import mask_pii
 from conversation.redaction import redact_secrets
 
 from .claude import PortkeyJsonClient
@@ -178,6 +179,7 @@ def validate_response(request: InvestigationRequest, plan: InvestigationPlan | N
         limitations.append(f"{len(cancelled_tasks)} task(s) were not run because an earlier task failed.")
     if removed:
         limitations.append(f"{len(removed)} statement(s) were removed because the evidence did not support them.")
+    kept = [c.model_copy(update={"text": mask_pii(c.text)}) for c in kept]          # personal data never leaves in answers
     status = _status(kept, report, partial_tasks + failed_tasks, cancelled_tasks, removed)
     message = " ".join(c.text for c in kept) if kept else "The available evidence is not sufficient to answer this question."
     if status == InvestigationStatus.CONFLICTING_EVIDENCE:

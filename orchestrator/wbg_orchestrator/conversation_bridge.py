@@ -185,11 +185,13 @@ class ConversationFrontDoor:
     def plan_project(self, owner: Owner, thread_id: str, spec: PlanningSpec,
                      on_start: Callable[[str], None] | None = None) -> EngineOutcome:
         """A Planning Brief for a new project: recorded as a user turn, run with the fixed brief plan."""
+        profile = spec.profile.model_copy(update={"description": self._service.text_filter(spec.profile.description)})
+        spec = spec.model_copy(update={"profile": profile})                      # the free text is filtered once, here
         text = describe_plan(spec)
         request_id = self._user_turn(owner, thread_id, text, BRIEF_ROUTE)
         request = InvestigationRequest(
             investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=thread_id,
-            owner=owner_ref(owner), question=redact_secrets(text), mode="investigation", planning=spec, budget=BRIEF_BUDGET,
+            owner=owner_ref(owner), question=self._service.text_filter(text), mode="investigation", planning=spec, budget=BRIEF_BUDGET,
             rag_release=self._release,
             authorization=self._authorization_for((Route.PROCUREMENT_PLANNING, Route.ML_PREDICTION, Route.DOCUMENT_RAG)))
         if on_start:
@@ -229,9 +231,9 @@ class ConversationFrontDoor:
         request_id = new_id("req")
         self._store.append_turn(owner, Turn(
             thread_id=thread_id, seq=self._store.next_seq(owner, thread_id), role="user", kind=TurnKind.QUESTION,
-            text=redact_secrets(text), topic_epoch=thread.topic_epoch, metadata=TurnMetadata(request_id=request_id, route=route)))
+            text=self._service.text_filter(text), topic_epoch=thread.topic_epoch, metadata=TurnMetadata(request_id=request_id, route=route)))
         if thread.title == DEFAULT_TITLE:
-            self._store.set_title(owner, thread_id, redact_secrets(text)[:TITLE_CHARS])
+            self._store.set_title(owner, thread_id, self._service.text_filter(text)[:TITLE_CHARS])
         return request_id
 
     def _open_investigation(self, owner: Owner, thread_id: str, text: str, execute: bool,
@@ -239,7 +241,7 @@ class ConversationFrontDoor:
         request_id = self._user_turn(owner, thread_id, text, "investigation")
         request = InvestigationRequest(
             investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=thread_id,
-            owner=owner_ref(owner), question=redact_secrets(text), mode="investigation", execute_requested=execute,
+            owner=owner_ref(owner), question=self._service.text_filter(text), mode="investigation", execute_requested=execute,
             rag_release=self._release, planning_context=planning_context,
             authorization=self._authorization_for((Route.STRUCTURED_DATA, Route.DOCUMENT_RAG)))
         if on_start:
@@ -284,7 +286,7 @@ class ConversationFrontDoor:
         listed = "; ".join(f"{e.project_ids[0]} {e.citation.split(': ', 1)[-1]}"
                            + (" [documents]" if any(f.name == "document_scope" and f.value == "yes" for f in e.facts) else "")
                            for e in similar if e.project_ids)
-        return redact_secrets(f"{describe_plan(spec)} Similar past projects: {listed or 'none found'}.")[:3000]
+        return self._service.text_filter(f"{describe_plan(spec)} Similar past projects: {listed or 'none found'}.")[:3000]
 
     def _record_answer(self, owner: Owner, thread_id: str, request_id: str, outcome: EngineOutcome) -> None:
         """Append the investigation's answer as an assistant turn (safe metadata only: no SQL, no rows)."""
