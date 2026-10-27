@@ -132,6 +132,17 @@ class ConversationService:
         return self._store.revoke_decision(owner, thread_id, decision_id, reason[:200])
 
     # ------------------------------------------------------------------------------------------------ messages
+    def route_message(self, owner: Owner, thread_id: str, text: str) -> RoutingDecision | None:
+        """The routing decision a message would get, without storing anything; None when the input guard blocks it
+        (handle_message then records the block)."""
+        thread = self._store.get_thread(owner, thread_id)                     # ownership check first
+        if not self._guard.check_input(text).allowed:
+            return None
+        stored_text = redact_secrets(text)
+        state = self._conversation_state(owner, thread)
+        return self._router.route(RouteRequest(stored_text, self._resolver.resolve(stored_text, state.active),
+                                               state.previous_task_route))
+
     def handle_message(self, owner: Owner, thread_id: str, text: str, execute: bool = False) -> ConversationReply:
         """User message -> input guardrails -> intent router -> exactly one permitted handler."""
         started = time.perf_counter()

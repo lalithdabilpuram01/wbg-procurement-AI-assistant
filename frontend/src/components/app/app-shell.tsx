@@ -26,6 +26,7 @@ export function AppShell() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [packageOpen, setPackageOpen] = useState(false);
   const [scrollToSeq, setScrollToSeq] = useState<number | null>(null);
+  const [jobId, setJobId] = useState<string | null>(null);
 
   const report = (e: unknown) => setError(e instanceof Error ? e.message : String(e));
 
@@ -73,7 +74,9 @@ export function AppShell() {
       });
     }
     try {
-      const job = await waitForJob(await start());
+      const started = await start();
+      setJobId(started.job_id);
+      const job = await waitForJob(started);
       if (job.state === "failed") setError(FAILED_JOB);
       await openConversation(id, null, job.request_id ? [...reload, job.request_id] : reload);
       await refreshLists();
@@ -81,7 +84,14 @@ export function AppShell() {
       report(e);
     } finally {
       setPending(null);
+      setJobId(null);
     }
+  };
+
+  const stop = async () => {
+    if (!jobId) return;
+    setPending("Stopping after the current step…");
+    try { await api.cancelJob(jobId); } catch (e) { report(e); }
   };
 
   const send = async (text: string, execute: boolean) => {
@@ -146,7 +156,7 @@ export function AppShell() {
         ) : (
           <ChatView title={active?.title ?? null} detail={detail} investigations={investigations} pending={pending}
             bookmarkedSeqs={bookmarkedSeqs} sidebarOpen={sidebarOpen} scrollToSeq={scrollToSeq}
-            onOpenSidebar={() => setSidebarOpen(true)} onSend={send} onAssess={() => setPackageOpen(true)}
+            onOpenSidebar={() => setSidebarOpen(true)} onSend={send} onStop={stop} onAssess={() => setPackageOpen(true)}
             onToggleBookmark={toggleBookmark} onDecide={decide} />
         )}
         {error && (

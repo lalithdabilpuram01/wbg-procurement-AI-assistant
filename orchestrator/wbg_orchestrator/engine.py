@@ -88,6 +88,11 @@ class InvestigationEngine:
             self._cancelled.add(snapshot.values["request"]["investigation_id"])
         return self.outcome(owner, thread_id)
 
+    def request_cancel(self, investigation_id: str) -> None:
+        """Flag an investigation to stop before its next task, also before its first checkpoint exists. The caller has
+        already checked ownership (the app service owns the job that started it)."""
+        self._cancelled.add(investigation_id)
+
     def recover(self, owner: OwnerRef, thread_id: str) -> EngineOutcome:
         """Continue an investigation stopped by a crash or restart from its last checkpoint.
 

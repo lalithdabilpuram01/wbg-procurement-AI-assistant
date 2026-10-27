@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowUp, Calculator, Database, FileSearch, Landmark, PanelLeftOpen, ShieldCheck, TableProperties } from "lucide-react";
+import { ArrowUp, Calculator, Database, FileSearch, Landmark, PanelLeftOpen, ShieldCheck, Square, TableProperties } from "lucide-react";
 import type { ConversationDetail, Investigation } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/primitives";
@@ -26,6 +26,7 @@ type ChatProps = {
   scrollToSeq: number | null;
   onOpenSidebar: () => void;
   onSend: (text: string, execute: boolean) => void;
+  onStop: () => void;
   onAssess: () => void;
   onToggleBookmark: (seq: number) => void;
   onDecide: (requestId: string, approvalId: string, approved: boolean) => Promise<void>;
@@ -79,7 +80,8 @@ export function ChatView(props: ChatProps) {
                 <AnswerCard key={turn.seq} turn={turn}
                   investigation={turn.request_id ? investigations[turn.request_id] : undefined}
                   bookmarked={props.bookmarkedSeqs.has(turn.seq)} onToggleBookmark={() => props.onToggleBookmark(turn.seq)}
-                  onDecide={(approvalId, approved) => props.onDecide(turn.request_id!, approvalId, approved)} />
+                  onDecide={(approvalId, approved) => props.onDecide(turn.request_id!, approvalId, approved)}
+                  onAssess={props.onAssess} />
               ),
             )}
             {pending && <PendingAnswer label={pending} />}
@@ -88,18 +90,19 @@ export function ChatView(props: ChatProps) {
         )}
       </div>
 
-      <Composer disabled={pending !== null} onSend={props.onSend} />
+      <Composer running={pending !== null} onSend={props.onSend} onStop={props.onStop} />
     </div>
   );
 }
 
-function Composer({ disabled, onSend }: { disabled: boolean; onSend: (text: string, execute: boolean) => void }) {
+function Composer({ running, onSend, onStop }:
+  { running: boolean; onSend: (text: string, execute: boolean) => void; onStop: () => void }) {
   const [text, setText] = useState("");
   const [execute, setExecute] = useState(false);
   const area = useRef<HTMLTextAreaElement>(null);
 
   const send = () => {
-    if (!text.trim() || disabled) return;
+    if (!text.trim() || running) return;
     onSend(text.trim(), execute);
     setText("");
   };
@@ -113,7 +116,7 @@ function Composer({ disabled, onSend }: { disabled: boolean; onSend: (text: stri
   return (
     <div className="shrink-0 px-4 pb-4 pt-2">
       <div className="mx-auto max-w-4xl rounded-2xl border border-input bg-card shadow-sm focus-within:ring-2 focus-within:ring-ring/40">
-        <textarea ref={area} value={text} rows={1} disabled={disabled} onChange={(e) => setText(e.target.value)}
+        <textarea ref={area} value={text} rows={1} onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
           placeholder="Ask about procurement data or project documents…"
           className="block w-full resize-none bg-transparent px-4 pt-3.5 text-[15px] placeholder:text-muted-foreground/70 focus:outline-none" />
@@ -128,9 +131,17 @@ function Composer({ disabled, onSend }: { disabled: boolean; onSend: (text: stri
           <span className="hidden items-center gap-1 text-[11px] text-muted-foreground sm:flex">
             <ShieldCheck className="size-3.5" /> Answers cite their sources
           </span>
-          <Button size="icon" className="ml-auto rounded-full" onClick={send} disabled={disabled || !text.trim()} aria-label="Send">
-            <ArrowUp />
-          </Button>
+          {running ? (
+            <Tooltip content="Stop – the answer stops after the step that is running">
+              <Button size="icon" variant="outline" className="ml-auto rounded-full" onClick={onStop} aria-label="Stop">
+                <Square className="fill-current" />
+              </Button>
+            </Tooltip>
+          ) : (
+            <Button size="icon" className="ml-auto rounded-full" onClick={send} disabled={!text.trim()} aria-label="Send">
+              <ArrowUp />
+            </Button>
+          )}
         </div>
       </div>
     </div>

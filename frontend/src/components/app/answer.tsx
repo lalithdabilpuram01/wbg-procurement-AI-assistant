@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Bookmark, BookmarkCheck, ChevronDown, Copy, Info, Library, ShieldQuestion, Sparkles } from "lucide-react";
+import { Bookmark, BookmarkCheck, Calculator, ChevronDown, Copy, Info, Library, ShieldQuestion, Sparkles } from "lucide-react";
 import type { Investigation, Turn } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card, Spinner } from "@/components/ui/primitives";
@@ -17,16 +17,18 @@ type Props = {
   bookmarked: boolean;
   onToggleBookmark: () => void;
   onDecide: (approvalId: string, approved: boolean) => Promise<void>;
+  onAssess: () => void;
 };
 
-export function AnswerCard({ turn, investigation, bookmarked, onToggleBookmark, onDecide }: Props) {
+export function AnswerCard({ turn, investigation, bookmarked, onToggleBookmark, onDecide, onAssess }: Props) {
   const [sourcesOpen, setSourcesOpen] = useState(false);
   const [focus, setFocus] = useState<string | null>(null);
   const [notesOpen, setNotesOpen] = useState(false);
   const [deciding, setDeciding] = useState(false);
   const evidence = investigation?.evidence ?? [];
   const number = (id: string) => evidence.findIndex((e) => e.evidence_id === id) + 1;
-  const status = investigation?.status ?? turn.status;
+  const stopped = investigation?.error_codes.includes("cancelled_by_user");
+  const status = stopped ? "stopped" : investigation?.status ?? turn.status;
 
   const openSource = (id: string | null) => {
     setFocus(id);
@@ -77,6 +79,10 @@ export function AnswerCard({ turn, investigation, bookmarked, onToggleBookmark, 
         </div>
 
         {investigation && <PredictionCards evidence={evidence} />}
+
+        {turn.status === "needs_package_details" && (
+          <Button size="sm" className="mt-4" onClick={onAssess}><Calculator /> Assess package</Button>
+        )}
 
         {investigation?.pending_approval && (
           <div className="mt-4 rounded-xl border border-primary/30 bg-primary-soft/60 p-4">

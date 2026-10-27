@@ -224,6 +224,10 @@ def create_app(service: AppService, users: UserDirectory) -> FastAPI:
         package = PackageSpec(**body.model_dump(exclude={"client_message_id"}))
         return job_view(service.submit_package(owner, conversation_id, package, body.client_message_id))
 
+    @app.post("/jobs/{job_id}/cancel")
+    def cancel_job(job_id: str, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
+        return job_view(service.cancel_job(owner, job_id))
+
     @app.get("/jobs/{job_id}")
     def read_job(job_id: str, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
         return job_view(service.job(owner, job_id))

@@ -59,6 +59,7 @@ export const api = {
   assessPackage: (id: string, input: PackageInput) =>
     call<Job>(`conversations/${id}/packages`, json("POST", { ...input, client_message_id: clientId() })),
   job: (id: string) => call<Job>(`jobs/${id}`),
+  cancelJob: (id: string) => call<Job>(`jobs/${id}/cancel`, { method: "POST" }),
   investigation: (conversationId: string, requestId: string) =>
     call<Investigation>(`conversations/${conversationId}/investigations/${requestId}`),
   decide: (conversationId: string, requestId: string, approvalId: string, approved: boolean) =>

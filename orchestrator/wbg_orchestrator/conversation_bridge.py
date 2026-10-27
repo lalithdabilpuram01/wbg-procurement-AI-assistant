@@ -20,8 +20,8 @@ from typing import Any, Callable
 
 from conversation.models import EvidenceReference, Owner, Turn, TurnKind, TurnMetadata
 from conversation.redaction import redact_secrets
-from conversation.routing.routes import ReasonCategory, Route
-from conversation.service import ConversationReply, ConversationService
+from conversation.routing.routes import ReasonCategory, Route, RoutingDecision
+from conversation.service import DEFAULT_TITLE, TITLE_CHARS, ConversationReply, ConversationService
 from conversation.store import ConversationStore
 
 from .authorization import AppAuthorizationContext
@@ -30,6 +30,13 @@ from .contracts import (EvidenceKind, InvestigationRequest, InvestigationStatus,
 from .engine import EngineOutcome, InvestigationEngine
 
 COMBINABLE = {Route.STRUCTURED_DATA.value, Route.DOCUMENT_RAG.value}
+UNCLEAR = {ReasonCategory.NO_CLEAR_INTENT, ReasonCategory.CLASSIFIER_LOW_SCORE, ReasonCategory.CLASSIFIER_ERROR}
+PACKAGE_FIELDS_MESSAGE = (
+    "I can estimate the tender duration and the amendment and re-bidding risks for a procurement package. "
+    "Please use “Assess package” and give: 1) the project ID (P + 6 digits, e.g. P148850); 2) the procurement method "
+    "(e.g. Request for Bids); 3) the category (Works, Goods, Consultant Services or Non-consulting Services); 4) the review "
+    "type (Prior or Post); 5) the bid window in days; 6) the planned tender date. Region, country, sector, income group and "
+    "earlier tenders are looked up from the project records.")
 SOURCE_TYPES = {EvidenceKind.STRUCTURED_RESULT: "structured_result", EvidenceKind.MODEL_PREDICTION: "ml_prediction"}
 
 
@@ -42,6 +49,7 @@ def describe_package(package: PackageSpec) -> str:
 class OwnerBinding:
     owner: Owner
     thread_id: str
+    on_start: Callable[[str], None] | None = None          # told the request id before the engine starts (to cancel)
 
 
 CURRENT_OWNER: contextvars.ContextVar[OwnerBinding | None] = contextvars.ContextVar("wbg_current_owner", default=None)
@@ -101,17 +109,17 @@ class ConversationRunner:
             investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=binding.thread_id,
             owner=owner_ref(binding.owner), question=question, route_hint=self._route.value, execute_requested=execute,
             rag_release=self._release, authorization=self._authorization_for((self._route,)))
+        if binding.on_start:
+            binding.on_start(request_id)
         return to_outcome(self._engine.start(request, memory_block=conversation_context or None))
 
 
 @dataclass
 class FrontDoorReply:
-    conversation: ConversationReply
+    status: str
+    request_id: str | None
+    conversation: ConversationReply | None = None           # set when the conversation service handled the message
     investigation: EngineOutcome | None = None
-
-    @property
-    def status(self) -> str:
-        return self.investigation.status.value if self.investigation else self.conversation.status
 
 
 class ConversationFrontDoor:
@@ -120,16 +128,26 @@ class ConversationFrontDoor:
         self._service, self._store, self._engine = service, store, engine
         self._authorization_for, self._allow_combined, self._release = authorization_for, allow_combined, rag_release
 
-    def handle_message(self, owner: Owner, thread_id: str, text: str, execute: bool = False) -> FrontDoorReply:
-        token = CURRENT_OWNER.set(OwnerBinding(owner, thread_id))
+    def handle_message(self, owner: Owner, thread_id: str, text: str, execute: bool = False,
+                       on_start: Callable[[str], None] | None = None) -> FrontDoorReply:
+        """Questions for both agents, and questions whose intent the rules cannot place, go straight to an
+        investigation (its planner chooses the agents) instead of a clarifying question. Prediction requests ask for
+        the package fields. Everything else is handled by the conversation service as before."""
+        routing = self._service.route_message(owner, thread_id, text)
+        if routing is not None and routing.route == Route.ML_PREDICTION:
+            return self._ask_for_package(owner, thread_id, text)
+        if routing is not None and self._opens_investigation(routing):
+            outcome = self._open_investigation(owner, thread_id, text, execute, on_start)
+            return FrontDoorReply(outcome.status.value, outcome.values["request"]["request_id"], investigation=outcome)
+        token = CURRENT_OWNER.set(OwnerBinding(owner, thread_id, on_start))
         try:
             reply = self._service.handle_message(owner, thread_id, text, execute=execute)
         finally:
             CURRENT_OWNER.reset(token)
-        if not self._is_combined(reply):
-            outcome = reply.agent_result.investigation if isinstance(reply.agent_result, ConversationOutcome) else None
-            return FrontDoorReply(reply, outcome)
-        return FrontDoorReply(reply, self._investigate(owner, thread_id, reply, execute))
+        outcome = reply.agent_result.investigation if isinstance(reply.agent_result, ConversationOutcome) else None
+        user_turn = next((t for t in self._store.turns(owner, thread_id) if t.seq == reply.user_turn_seq), None)
+        request_id = outcome.values["request"]["request_id"] if outcome else (user_turn.metadata.request_id if user_turn else None)
+        return FrontDoorReply(outcome.status.value if outcome else reply.status, request_id, reply, outcome)
 
     def approve(self, owner: Owner, thread_id: str, checkpoint_thread_id: str, approval_id: str, approved: bool,
                 reason: str | None = None) -> EngineOutcome:
@@ -140,39 +158,59 @@ class ConversationFrontDoor:
         self._record_answer(owner, thread_id, outcome.values["request"]["request_id"], outcome)    # history shows the result
         return outcome
 
-    def assess_package(self, owner: Owner, thread_id: str, package: PackageSpec) -> EngineOutcome:
+    def assess_package(self, owner: Owner, thread_id: str, package: PackageSpec,
+                       on_start: Callable[[str], None] | None = None) -> EngineOutcome:
         """A structured package assessment: recorded as a user turn, run with the fixed prediction + lessons plan."""
-        thread = self._store.get_thread(owner, thread_id)                           # ownership of the conversation
-        text, request_id = describe_package(package), new_id("req")
-        self._store.append_turn(owner, Turn(
-            thread_id=thread_id, seq=self._store.next_seq(owner, thread_id), role="user", kind=TurnKind.QUESTION, text=text,
-            topic_epoch=thread.topic_epoch, metadata=TurnMetadata(request_id=request_id, route=Route.ML_PREDICTION.value)))
+        text = describe_package(package)
+        request_id = self._user_turn(owner, thread_id, text, Route.ML_PREDICTION.value)
         request = InvestigationRequest(
             investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=thread_id,
             owner=owner_ref(owner), question=text, mode="investigation", package=package, rag_release=self._release,
             authorization=self._authorization_for((Route.ML_PREDICTION, Route.DOCUMENT_RAG)))
+        if on_start:
+            on_start(request_id)
         outcome = self._engine.start(request)
         self._record_answer(owner, thread_id, request_id, outcome)
         return outcome
 
     # ------------------------------------------------------------------------------------------- internals
-    def _is_combined(self, reply: ConversationReply) -> bool:
-        routing = reply.routing
-        return bool(self._allow_combined and routing is not None and routing.reason == ReasonCategory.MIXED_INTENT
-                    and set(routing.matched_signals) == COMBINABLE)
+    def _opens_investigation(self, routing: RoutingDecision) -> bool:
+        combined = routing.reason == ReasonCategory.MIXED_INTENT and set(routing.matched_signals) == COMBINABLE
+        return self._allow_combined and (combined or routing.reason in UNCLEAR)
 
-    def _investigate(self, owner: Owner, thread_id: str, reply: ConversationReply, execute: bool) -> EngineOutcome:
-        question = next(t.text for t in self._store.turns(owner, thread_id) if t.seq == reply.user_turn_seq)   # redacted text
-        routes = (Route.STRUCTURED_DATA, Route.DOCUMENT_RAG)
+    def _user_turn(self, owner: Owner, thread_id: str, text: str, route: str) -> str:
+        """Records the (redacted) user message with a new request id; names a new conversation after it."""
+        thread = self._store.get_thread(owner, thread_id)                           # ownership of the conversation
         request_id = new_id("req")
+        self._store.append_turn(owner, Turn(
+            thread_id=thread_id, seq=self._store.next_seq(owner, thread_id), role="user", kind=TurnKind.QUESTION,
+            text=redact_secrets(text), topic_epoch=thread.topic_epoch, metadata=TurnMetadata(request_id=request_id, route=route)))
+        if thread.title == DEFAULT_TITLE:
+            self._store.set_title(owner, thread_id, redact_secrets(text)[:TITLE_CHARS])
+        return request_id
+
+    def _open_investigation(self, owner: Owner, thread_id: str, text: str, execute: bool,
+                            on_start: Callable[[str], None] | None) -> EngineOutcome:
+        request_id = self._user_turn(owner, thread_id, text, "investigation")
         request = InvestigationRequest(
             investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=thread_id,
-            owner=owner_ref(owner),
-            question=question, mode="investigation", execute_requested=execute, rag_release=self._release,
-            authorization=self._authorization_for(routes))
+            owner=owner_ref(owner), question=redact_secrets(text), mode="investigation", execute_requested=execute,
+            rag_release=self._release, authorization=self._authorization_for((Route.STRUCTURED_DATA, Route.DOCUMENT_RAG)))
+        if on_start:
+            on_start(request_id)
         outcome = self._engine.start(request)
         self._record_answer(owner, thread_id, request_id, outcome)
         return outcome
+
+    def _ask_for_package(self, owner: Owner, thread_id: str, text: str) -> FrontDoorReply:
+        """Predictions need structured package fields: say exactly which ones (no agent runs)."""
+        request_id = self._user_turn(owner, thread_id, text, Route.ML_PREDICTION.value)
+        thread = self._store.get_thread(owner, thread_id)
+        self._store.append_turn(owner, Turn(
+            thread_id=thread_id, seq=self._store.next_seq(owner, thread_id), role="assistant", kind=TurnKind.ANSWER,
+            text=PACKAGE_FIELDS_MESSAGE, topic_epoch=thread.topic_epoch,
+            metadata=TurnMetadata(request_id=request_id, status="needs_package_details", route=Route.ML_PREDICTION.value)))
+        return FrontDoorReply("needs_package_details", request_id)
 
     def _record_answer(self, owner: Owner, thread_id: str, request_id: str, outcome: EngineOutcome) -> None:
         """Append the investigation's answer as an assistant turn (safe metadata only: no SQL, no rows)."""

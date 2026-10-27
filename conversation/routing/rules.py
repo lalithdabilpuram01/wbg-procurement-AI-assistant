@@ -81,6 +81,9 @@ TASK_SIGNALS: dict[Route, dict[str, re.Pattern]] = {
                              r"state|states|report|reports)\b"),
         "why_event": _rx(r"\bwhy (was|were|did|do|is|are)\b.{0,60}\b(delayed|cancell?ed|re-?bid|re-?tendered|amended|slow|"
                          r"late|failed|fail)\b"),
+        "project_narrative": _rx(r"\b(risks?|(development|project) objectives?|challenges|implementation (status|progress|"
+                                 r"arrangements|problems|issues)|procurement arrangements|safeguards?)\b.{0,80}"
+                                 r"\b(projects?|programs?|operations?|P\d{6})\b"),
     },
     Route.ML_PREDICTION: {
         "predict": _rx(r"\b(predict|predicted|prediction|forecast|forecasting)\b"),

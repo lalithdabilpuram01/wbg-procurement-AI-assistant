@@ -55,12 +55,34 @@ def test_combined_data_and_document_question_becomes_one_investigation():
     door, service, store, engine, parts = front_door(planner=planner)
     thread = service.start_thread(ALICE)
     reply = door.handle_message(ALICE, thread.thread_id, COMBINED)
-    assert reply.conversation.status == "clarification_required"                      # the existing router: mixed intent
+    assert reply.conversation is None                                                  # no "which first?" question
     assert reply.investigation is not None and len(planner.calls) == 1
     request = reply.investigation.values["request"]
     assert request["mode"] == "investigation" and set(request["authorization"]["routes"]) == {"structured_data", "document_rag"}
-    last = store.turns(ALICE, thread.thread_id)[-1]
-    assert last.metadata.route == "investigation" and last.role == "assistant"
+    turns = store.turns(ALICE, thread.thread_id)
+    assert [(t.role, t.metadata.route) for t in turns] == [("user", "investigation"), ("assistant", "investigation")]
+
+
+def test_a_question_without_clear_intent_is_investigated_not_answered_with_a_question():
+    planner = FakePlanner(plan(task("docs", worker="document_intelligence", operation="answer_document_question",
+                                    question="What does the appraisal say about the Expressway?")))
+    door, service, store, engine, parts = front_door(planner=planner)
+    thread = service.start_thread(ALICE)
+    reply = door.handle_message(ALICE, thread.thread_id, "Tell me about the Ethiopia Expressway")
+    assert reply.investigation is not None and len(planner.calls) == 1
+    assert all(t.metadata.status != "clarification_required" for t in store.turns(ALICE, thread.thread_id))
+
+
+def test_a_prediction_request_asks_for_the_package_fields_and_runs_nothing():
+    door, service, store, engine, parts = front_door()
+    thread = service.start_thread(ALICE)
+    seen: list[str] = []
+    reply = door.handle_message(ALICE, thread.thread_id, "Predict the tender duration for a works contract in P148850",
+                                on_start=seen.append)
+    assert reply.status == "needs_package_details" and reply.investigation is None and seen == []
+    answer = store.turns(ALICE, thread.thread_id)[-1].text
+    for field in ("project ID", "procurement method", "category", "review type", "bid window", "tender date"):
+        assert field in answer
 
 
 def test_combined_escalation_can_be_disabled():

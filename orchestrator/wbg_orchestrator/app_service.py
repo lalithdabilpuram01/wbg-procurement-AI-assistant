@@ -51,6 +51,7 @@ class Job:
     request_id: str | None = None             # the investigation's request, once known
     status: str | None = None                 # conversation or investigation status at the end
     error: str | None = None                  # error class only (never a message that could contain data)
+    cancel_requested: bool = False            # the owner pressed stop (applied as soon as the investigation id is known)
     created_at: dt.datetime = field(default_factory=lambda: dt.datetime.now(dt.timezone.utc))
 
 
@@ -130,7 +131,8 @@ class AppService:
     def submit_package(self, owner: Owner, conversation_id: str, package: PackageSpec, client_message_id: str) -> Job:
         self._store.get_thread(owner, conversation_id)                         # ownership before anything runs
         return self._submit(owner, conversation_id, "package", client_message_id,
-                            lambda job: self._finish_outcome(job, self._front_door.assess_package(owner, conversation_id, package)))
+                            lambda job: self._finish_outcome(job, self._front_door.assess_package(
+                                owner, conversation_id, package, on_start=lambda rid: self._started(job, rid))))
 
     # ------------------------------------------------------------------------------------------ investigations
     def investigations(self, owner: Owner, conversation_id: str) -> list[InvestigationRef]:
@@ -154,6 +156,15 @@ class AppService:
 
     def cancel(self, owner: Owner, conversation_id: str, request_id: str) -> EngineOutcome:
         return self._engine.cancel(owner_ref(owner), self._checkpoint_thread(owner, conversation_id, request_id))
+
+    def cancel_job(self, owner: Owner, job_id: str) -> Job:
+        """Stop a running job: its investigation stops before its next step (a step already running finishes)."""
+        job = self.job(owner, job_id)                                           # ownership of the job
+        if job.state == "running":
+            job.cancel_requested = True
+            if job.request_id:
+                self._engine.request_cancel(investigation_id_for(job.request_id))
+        return job
 
     def job(self, owner: Owner, job_id: str) -> Job:
         job = self._jobs.get(job_id)
@@ -192,12 +203,14 @@ class AppService:
             job.state, job.error = "failed", type(error).__name__
 
     def _run_message(self, job: Job, text: str, execute: bool) -> None:
-        reply = self._front_door.handle_message(job.owner, job.conversation_id, text, execute=execute)
-        user_turn = next((t for t in self._store.turns(job.owner, job.conversation_id) if t.seq == reply.conversation.user_turn_seq), None)
-        job.request_id = user_turn.metadata.request_id if user_turn else None
-        if reply.investigation is not None:
-            job.request_id = reply.investigation.values["request"]["request_id"]
-        job.status = reply.status
+        reply = self._front_door.handle_message(job.owner, job.conversation_id, text, execute=execute,
+                                                on_start=lambda rid: self._started(job, rid))
+        job.request_id, job.status = reply.request_id, reply.status
+
+    def _started(self, job: Job, request_id: str) -> None:
+        job.request_id = request_id
+        if job.cancel_requested:                                                # stop was pressed before the id existed
+            self._engine.request_cancel(investigation_id_for(request_id))
 
     @staticmethod
     def _finish_outcome(job: Job, outcome: EngineOutcome) -> None:

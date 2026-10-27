@@ -317,3 +317,19 @@ def test_a_user_added_while_the_api_runs_can_sign_in_at_once(tmp_path):
     directory = UserDirectory.load(users_file)
     token = UserDirectory.add_user(users_file, "carol")
     assert directory.authenticate(token) == Owner(tenant_id="local", user_id="carol")
+
+
+def test_the_stop_button_cancels_the_running_job_immediately(tmp_path):
+    no_approval = ApprovalPolicy(execution_requires_approval="never")
+    two_tasks = FakePlanner(plan(task("a", execute=True, question="Bid invitations in fiscal year 2023?"),
+                                 task("b", deps=("a",), execute=True, question="Bid invitations in fiscal year 2024?")))
+    stack = Stack(tmp_path, planner=two_tasks, policy=no_approval, workflow=FakeWorkflow(delay_seconds=0.5))
+    cid = stack.conversation()
+    job = stack.send(cid, "Investigate how many bid invitations were published in fiscal year 2023 and then 2024", "msg-stop1").json()
+    stopped = stack.call("POST", f"/jobs/{job['job_id']}/cancel")             # pressed at once: no investigation id yet
+    assert stopped.status_code == 200
+    done = stack.wait(job["job_id"])
+    view = stack.call("GET", f"/conversations/{cid}/investigations/{done['request_id']}").json()
+    assert "cancelled" in [t["state"] for t in view["tasks"]] and "cancelled_by_user" in view["error_codes"]
+    assert len(stack.parts["workflow"].calls) <= 1
+    assert stack.call("POST", f"/jobs/{job['job_id']}/cancel", "bob").status_code == 404      # only its owner can stop it
