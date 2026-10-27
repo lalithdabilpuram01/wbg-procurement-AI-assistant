@@ -1,0 +1,136 @@
+{
+ "question_sets": {
+  "v1": 31,
+  "v3": 117,
+  "fr_v3": 112,
+  "cross": 15
+ },
+ "models": {
+  "gte-base-en (current)": {
+   "v1": {
+    "questions": 31,
+    "recall@5": 0.815,
+    "recall@10": 0.926,
+    "MRR": 0.629,
+    "project_precision@5": null,
+    "abstained_correctly": "2/4",
+    "answerable_wrongly_refused": 0,
+    "by_type_recall@5": {
+     "conflicting": 0.75,
+     "contract_lookup": 1.0,
+     "dates_milestones": 1.0,
+     "narrative": 0.6,
+     "plan_activity": 1.0,
+     "project_fact": 0.75,
+     "table": 0.75
+    }
+   },
+   "v3": {
+    "questions": 117,
+    "recall@5": 0.473,
+    "recall@10": 0.58,
+    "MRR": 0.335,
+    "project_precision@5": 0.986,
+    "abstained_correctly": "5/5",
+    "answerable_wrongly_refused": 0,
+    "by_type_recall@5": {
+     "lessons": 0.375,
+     "objective": 0.5,
+     "procurement": 0.3,
+     "risks": 0.618
+    }
+   },
+   "fr_v3": {
+    "questions": 112,
+    "recall@5": 0.205,
+    "recall@10": 0.259,
+    "MRR": 0.117,
+    "project_precision@5": 0.961,
+    "abstained_correctly": "0/0",
+    "answerable_wrongly_refused": 0,
+    "by_type_recall@5": {
+     "lessons": 0.042,
+     "objective": 0.529,
+     "procurement": 0.05,
+     "risks": 0.088
+    }
+   },
+   "cross": {
+    "questions": 15,
+    "recall@5": 0.067,
+    "recall@10": 0.2,
+    "MRR": 0.032,
+    "project_precision@5": null,
+    "abstained_correctly": "0/0",
+    "answerable_wrongly_refused": 0,
+    "by_type_recall@5": {
+     "cross_en": 0.091,
+     "cross_fr": 0.0
+    }
+   }
+  },
+  "bge-m3": {
+   "v1": {
+    "questions": 31,
+    "recall@5": 0.889,
+    "recall@10": 0.926,
+    "MRR": 0.753,
+    "project_precision@5": null,
+    "abstained_correctly": "2/4",
+    "answerable_wrongly_refused": 0,
+    "by_type_recall@5": {
+     "conflicting": 0.75,
+     "contract_lookup": 1.0,
+     "dates_milestones": 1.0,
+     "narrative": 0.8,
+     "plan_activity": 1.0,
+     "project_fact": 0.75,
+     "table": 1.0
+    }
+   },
+   "v3": {
+    "questions": 117,
+    "recall@5": 0.429,
+    "recall@10": 0.661,
+    "MRR": 0.276,
+    "project_precision@5": 0.977,
+    "abstained_correctly": "5/5",
+    "answerable_wrongly_refused": 0,
+    "by_type_recall@5": {
+     "lessons": 0.333,
+     "objective": 0.5,
+     "procurement": 0.2,
+     "risks": 0.559
+    }
+   },
+   "fr_v3": {
+    "questions": 112,
+    "recall@5": 0.125,
+    "recall@10": 0.205,
+    "MRR": 0.083,
+    "project_precision@5": 0.971,
+    "abstained_correctly": "0/0",
+    "answerable_wrongly_refused": 0,
+    "by_type_recall@5": {
+     "lessons": 0.083,
+     "objective": 0.118,
+     "procurement": 0.0,
+     "risks": 0.235
+    }
+   },
+   "cross": {
+    "questions": 15,
+    "recall@5": 0.467,
+    "recall@10": 0.6,
+    "MRR": 0.241,
+    "project_precision@5": null,
+    "abstained_correctly": "0/0",
+    "answerable_wrongly_refused": 0,
+    "by_type_recall@5": {
+     "cross_en": 0.273,
+     "cross_fr": 1.0
+    }
+   }
+  }
+ }
+}

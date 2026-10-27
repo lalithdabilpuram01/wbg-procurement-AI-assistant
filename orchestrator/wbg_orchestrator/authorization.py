@@ -40,7 +40,7 @@ class PublicDataScope(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
     name: Literal["wbg_public_procurement"] = "wbg_public_procurement"
     structured_schemas: tuple[str, ...] = ("workspace.wbg_gold", "workspace.wbg_silver")
-    rag_releases: tuple[str, ...] = ("pilot_v2", "pilot_v2_1")
+    rag_releases: tuple[str, ...] = ("pilot_v2", "pilot_v2_1", "pilot_v3")
     allow_sql_execution: bool = True              # read-only gateway execution, still subject to HITL policy
     writes_allowed: Literal[False] = False        # no database modification or external action, ever
 

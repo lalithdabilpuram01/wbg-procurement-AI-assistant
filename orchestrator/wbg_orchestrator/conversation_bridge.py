@@ -82,7 +82,7 @@ def to_outcome(result: EngineOutcome) -> ConversationOutcome:
 
 class ConversationRunner:
     def __init__(self, engine: InvestigationEngine, route: Route, authorization_for: AuthorizationFactory,
-                 rag_release: str = "pilot_v2"):
+                 rag_release: str = "pilot_v3"):
         if route.value not in COMBINABLE:
             raise ValueError("the orchestrator runs only the structured_data and document_rag routes")
         self._engine, self._route, self._authorization_for, self._release = engine, route, authorization_for, rag_release
@@ -110,7 +110,7 @@ class FrontDoorReply:
 
 class ConversationFrontDoor:
     def __init__(self, service: ConversationService, store: ConversationStore, engine: InvestigationEngine,
-                 authorization_for: AuthorizationFactory, *, allow_combined: bool = True, rag_release: str = "pilot_v2"):
+                 authorization_for: AuthorizationFactory, *, allow_combined: bool = True, rag_release: str = "pilot_v3"):
         self._service, self._store, self._engine = service, store, engine
         self._authorization_for, self._allow_combined, self._release = authorization_for, allow_combined, rag_release
 

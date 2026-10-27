@@ -4,7 +4,8 @@ Operations (read-only):
   answer_document_question -> AnswerPipeline(generator, retriever=build_retriever(release)).answer(question)
                               (guarded retrieval, evidence selection, page checks, generation, claim validation)
   retrieve_passages        -> build_retriever(release).search(question, method="hybrid", k=5, guarded=True)
-The RAG release is explicit per investigation: "pilot_v2" (current default) or "pilot_v2_1" (opt-in). Every citation
+The RAG release is explicit per investigation: "pilot_v3" (default; 237 documents, bge-m3 vectors in Lakebase),
+"pilot_v2" or "pilot_v2_1". Every citation
 becomes a ledger record with its document, version, pages, page check and corpus release. PDF table values are never
 approved numerical evidence; extraction flags of pilot_v2_1 rows become quality warnings.
 """

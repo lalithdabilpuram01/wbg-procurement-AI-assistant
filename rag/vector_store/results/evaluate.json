@@ -1,0 +1,58 @@
+{
+ "v1": {
+  "recall@5": {
+   "lakebase": 0.889,
+   "in_memory": 0.889
+  },
+  "recall@10": {
+   "lakebase": 0.926,
+   "in_memory": 0.926
+  },
+  "MRR": {
+   "lakebase": 0.753,
+   "in_memory": 0.753
+  }
+ },
+ "v3": {
+  "recall@5": {
+   "lakebase": 0.429,
+   "in_memory": 0.429
+  },
+  "recall@10": {
+   "lakebase": 0.661,
+   "in_memory": 0.661
+  },
+  "MRR": {
+   "lakebase": 0.277,
+   "in_memory": 0.276
+  }
+ },
+ "fr_v3": {
+  "recall@5": {
+   "lakebase": 0.125,
+   "in_memory": 0.125
+  },
+  "recall@10": {
+   "lakebase": 0.205,
+   "in_memory": 0.205
+  },
+  "MRR": {
+   "lakebase": 0.081,
+   "in_memory": 0.083
+  }
+ },
+ "cross": {
+  "recall@5": {
+   "lakebase": 0.467,
+   "in_memory": 0.467
+  },
+  "recall@10": {
+   "lakebase": 0.6,
+   "in_memory": 0.6
+  },
+  "MRR": {
+   "lakebase": 0.241,
+   "in_memory": 0.241
+  }
+ }
+}

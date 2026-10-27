@@ -70,8 +70,12 @@ def load_cached_model(loader, model_id: str, **kwargs):
 RRF_K = 60
 STEP_REF = re.compile(r"\b[A-Z]{2}-[A-Z0-9]{2,}-\d{5,7}-[A-Z]{2}-[A-Z]{2,}\b")
 LEGACY_REF = re.compile(r"\b[A-Z]{1,2}[/-]\d{1,3}[/-](?:ICB|NCB|NS|LCB|QCBS|CQS|RFB|RFQ)[A-Z0-9/ .-]{3,40}?(?:EFY|EYY|\d{4})\b")
-CONTRACT_NO = re.compile(r"\b(?:contract(?: number| no\.?)?\s*)(1\d{6})\b", re.I)
+CONTRACT_NO = re.compile(r"\b(?:contract(?: number| no\.?)?\s*)(\d{6,8})\b", re.I)   # any number written as a contract number is checked
 PROJECT_ID = re.compile(r"\bP\d{6}\b")
+# title words too common to identify one project ("Ethiopia Expressway" -> "expressway" identifies P148850)
+GENERIC_TITLE_WORDS = {"project", "program", "programme", "development", "support", "national", "improvement", "additional",
+                       "financing", "phase", "second", "third", "sector", "services", "service", "system", "systems",
+                       "management", "investment", "operation", "public", "rural", "urban", "and", "for", "the", "of", "in"}
 PRIVACY = re.compile(r"\b(phone|telephone|e-?mail|contact details|mobile number|home address|personal address)\b|\bwho (is|was) the (task team leader|ttl|procurement specialist|coordinator)\b", re.I)
 COUNTRIES = {"ethiopia": "ET", "sri lanka": "LK", "senegal": "SN", "indonesia": "ID", "argentina": "AR", "kenya": "KE", "india": "IN",
              "nigeria": "NG", "bangladesh": "BD", "brazil": "BR", "pakistan": "PK", "mozambique": "MZ", "nepal": "NP", "viet nam": "VN", "vietnam": "VN"}
@@ -126,6 +130,28 @@ class Corpus:
         self.by_id = {u.unit_id: u for u in self.units}
         self.corpus_projects = set(self.projects) | {d["project_id"] for d in self.docs.values()}
         self.corpus_countries = {d["country_code"] for d in self.docs.values()}
+
+    def project_name_index(self, min_owner_share: float = 0.8) -> dict[str, str]:
+        """Title words that identify one project -> that project.
+
+        A word qualifies when it is in exactly one corpus project's title (len >= 5, not generic) AND at least
+        `min_owner_share` of the indexed units mentioning it belong to that project, so ordinary words ("economic",
+        "transport") that appear across the corpus never narrow a search.
+        """
+        owners: dict[str, set[str]] = {}
+        for pid, project in self.projects.items():
+            for word in set(re.findall(r"[a-z]{5,}", (project.get("api", {}).get("project_title") or "").lower())):
+                if word not in GENERIC_TITLE_WORDS:
+                    owners.setdefault(word, set()).add(pid)
+        candidates = {word: next(iter(pids)) for word, pids in owners.items() if len(pids) == 1}
+        mentions: dict[str, list[int]] = {word: [0, 0] for word in candidates}          # [owner units, all units]
+        for unit in self.units:
+            words = set(re.findall(r"[a-z]{5,}", unit.text.lower())) & candidates.keys()
+            for word in words:
+                mentions[word][1] += 1
+                mentions[word][0] += unit.project_id == candidates[word]
+        return {word: pid for word, pid in candidates.items()
+                if mentions[word][1] and mentions[word][0] / mentions[word][1] >= min_owner_share}
 
     def header(self, doc_id: str) -> str:
         d = self.docs[doc_id]
@@ -216,9 +242,18 @@ EMBEDDING_CACHE_MODES = ("legacy", "unit")   # legacy = whole-index .npy (defaul
 
 
 class Retriever:
-    def __init__(self, corpus: Corpus, embedding_cache: str | None = None):
+    def __init__(self, corpus: Corpus, embedding_cache: str | None = None, resolve_project_names: bool = False,
+                 dense_index=None, query_encoder=None):
+        """dense_index (opt-in): an external vector index with `nearest(query, scope_projects)`, e.g. the Lakebase
+        store; it replaces the in-memory embedding matrix and needs `query_encoder` (question -> unit vector)."""
         from rank_bm25 import BM25Okapi
+        if (dense_index is None) != (query_encoder is None):
+            raise ValueError("dense_index and query_encoder are given together")
         self.c = corpus
+        self.dense_index, self._encode_query = dense_index, query_encoder
+        self._position = {u.unit_id: i for i, u in enumerate(corpus.units)} if dense_index is not None else {}
+        # opt-in (pilot_v3): a distinctive project-title word in the question narrows the search to that project
+        self._project_names = corpus.project_name_index() if resolve_project_names else {}
         self.bm25 = BM25Okapi([tok(u.text) for u in corpus.units])
         self._emb = None
         self._model = None
@@ -261,9 +296,19 @@ class Retriever:
         s[~mask] = -np.inf
         return s
 
-    def rank_dense(self, q: str, mask: np.ndarray) -> np.ndarray:
+    def rank_dense(self, q: str, mask: np.ndarray, scope: set[str] | None = None) -> np.ndarray:
+        if self.dense_index is not None:
+            return self._rank_dense_index(q, mask, scope)
         qv = self.model().encode([q], normalize_embeddings=True)[0]
         s = self.embeddings() @ qv
+        s[~mask] = -np.inf
+        return s
+
+    def _rank_dense_index(self, q: str, mask: np.ndarray, scope: set[str] | None) -> np.ndarray:
+        """Scores for the external index's nearest neighbours (within the scope); every other unit ranks last."""
+        s = np.full(len(self.c.units), -np.inf)
+        for unit_id, score in self.dense_index.nearest(self._encode_query(q), scope):
+            s[self._position[unit_id]] = score
         s[~mask] = -np.inf
         return s
 
@@ -283,6 +328,11 @@ class Retriever:
         if pids - self.c.corpus_projects or (named and not named & self.c.corpus_countries):
             return {**out, "status": "insufficient_evidence", "notes": [f"Out of the pilot corpus scope (projects {sorted(pids - self.c.corpus_projects) or '-'}, countries {sorted(named - self.c.corpus_countries) or '-'})."]}
         scope = set(pids) or {p for p in self.c.corpus_projects if self.c.docs and any(d['project_id'] == p and d['country_code'] in named for d in self.c.docs.values())}
+        if not pids and self._project_names:
+            by_name = {pid for word, pid in self._project_names.items() if re.search(rf"\b{word}\b", q, re.I)}
+            if by_name:
+                scope = (scope & by_name) or by_name
+                out["notes"].append(f"Project named in the question: {sorted(by_name)}.")
         out["scope_projects"] = scope or None
         refs = [normalize_ref(m) for m in STEP_REF.findall(q) + LEGACY_REF.findall(q)]
         nums = CONTRACT_NO.findall(q)
@@ -314,10 +364,10 @@ class Retriever:
             s = self.rank_bm25(q, mask)
             order, scores = np.argsort(-s), {"bm25": s}
         elif method == "dense":
-            s = self.rank_dense(q, mask)
+            s = self.rank_dense(q, mask, g["scope_projects"])
             order, scores = np.argsort(-s), {"dense": s}
         else:
-            b, dn = self.rank_bm25(q, mask), self.rank_dense(q, mask)
+            b, dn = self.rank_bm25(q, mask), self.rank_dense(q, mask, g["scope_projects"])
             rb, rd = np.empty(len(b)), np.empty(len(dn))
             rb[np.argsort(-b)] = np.arange(1, len(b) + 1)
             rd[np.argsort(-dn)] = np.arange(1, len(dn) + 1)

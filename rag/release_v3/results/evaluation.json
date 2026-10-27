@@ -1,0 +1,133 @@
+{
+ "benchmark_v3": {
+  "questions": 117,
+  "gold_rule": "pages of the document sections whose heading matches the topic (not hand-verified)"
+ },
+ "configs": {
+  "pilot_v2": {
+   "v1": {
+    "questions": 31,
+    "recall@5": 0.889,
+    "recall@10": 0.963,
+    "MRR": 0.777,
+    "project_precision@5": null,
+    "abstained_correctly": "3/4",
+    "answerable_wrongly_refused": 0,
+    "by_type_recall@5": {
+     "conflicting": 1.0,
+     "contract_lookup": 1.0,
+     "dates_milestones": 1.0,
+     "narrative": 0.8,
+     "plan_activity": 1.0,
+     "project_fact": 0.75,
+     "table": 0.75
+    }
+   }
+  },
+  "pilot_v3": {
+   "v1": {
+    "questions": 31,
+    "recall@5": 0.815,
+    "recall@10": 0.926,
+    "MRR": 0.638,
+    "project_precision@5": null,
+    "abstained_correctly": "2/4",
+    "answerable_wrongly_refused": 0,
+    "by_type_recall@5": {
+     "conflicting": 0.75,
+     "contract_lookup": 1.0,
+     "dates_milestones": 1.0,
+     "narrative": 0.6,
+     "plan_activity": 1.0,
+     "project_fact": 0.75,
+     "table": 0.75
+    }
+   },
+   "v3": {
+    "questions": 117,
+    "recall@5": 0.473,
+    "recall@10": 0.58,
+    "MRR": 0.336,
+    "project_precision@5": 0.986,
+    "abstained_correctly": "5/5",
+    "answerable_wrongly_refused": 0,
+    "by_type_recall@5": {
+     "lessons": 0.375,
+     "objective": 0.5,
+     "procurement": 0.3,
+     "risks": 0.618
+    }
+   }
+  },
+  "pilot_v3+names": {
+   "v1": {
+    "questions": 31,
+    "recall@5": 0.815,
+    "recall@10": 0.926,
+    "MRR": 0.629,
+    "project_precision@5": null,
+    "abstained_correctly": "2/4",
+    "answerable_wrongly_refused": 0,
+    "by_type_recall@5": {
+     "conflicting": 0.75,
+     "contract_lookup": 1.0,
+     "dates_milestones": 1.0,
+     "narrative": 0.6,
+     "plan_activity": 1.0,
+     "project_fact": 0.75,
+     "table": 0.75
+    }
+   },
+   "v3": {
+    "questions": 117,
+    "recall@5": 0.473,
+    "recall@10": 0.58,
+    "MRR": 0.335,
+    "project_precision@5": 0.986,
+    "abstained_correctly": "5/5",
+    "answerable_wrongly_refused": 0,
+    "by_type_recall@5": {
+     "lessons": 0.375,
+     "objective": 0.5,
+     "procurement": 0.3,
+     "risks": 0.618
+    }
+   }
+  },
+  "pilot_v3+names+rerank": {
+   "v1": {
+    "questions": 31,
+    "recall@5": 0.815,
+    "recall@10": 0.926,
+    "MRR": 0.699,
+    "project_precision@5": null,
+    "abstained_correctly": "2/4",
+    "answerable_wrongly_refused": 0,
+    "by_type_recall@5": {
+     "conflicting": 1.0,
+     "contract_lookup": 1.0,
+     "dates_milestones": 0.75,
+     "narrative": 0.6,
+     "plan_activity": 1.0,
+     "project_fact": 0.75,
+     "table": 0.75
+    }
+   },
+   "v3": {
+    "questions": 117,
+    "recall@5": 0.375,
+    "recall@10": 0.527,
+    "MRR": 0.205,
+    "project_precision@5": 0.97,
+    "abstained_correctly": "5/5",
+    "answerable_wrongly_refused": 0,
+    "by_type_recall@5": {
+     "lessons": 0.125,
+     "objective": 0.559,
+     "procurement": 0.1,
+     "risks": 0.529
+    }
+   }
+  }
+ }
+}

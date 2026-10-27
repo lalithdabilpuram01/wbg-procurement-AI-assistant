@@ -3,6 +3,7 @@
   python -m rag.ingestion.pipeline_v2            # reuses the per-document cache when nothing changed
   python -m rag.ingestion.pipeline_v2 --force
   python -m rag.ingestion.pipeline_v2 --profile 2.1.0   # stacked-value cells -> rag/corpus_v3/processed/pilot_v2_1/
+  python -m rag.ingestion.pipeline_v2 --profile 3.0.0   # 2.1.0 extraction over the approved 35-project scope -> pilot_v3/
 
 Writes rag/corpus_v3/processed/pilot_v2/ (pilot_v1 is left untouched):
   shared/       projects, documents, document_versions, pages, sections, paragraphs, tables, table_rows,
@@ -38,7 +39,9 @@ from .sanitize import PERSONNEL, mask_intervals, sanitize
 EXTRACTION_VERSION = "ingest-pilot-2.0.0"
 # profile -> (extraction version, default output directory, stacked_cells). 2.0.0 is the default and writes pilot_v2.
 PROFILES = {"2.0.0": (EXTRACTION_VERSION, config.OUTPUT_V2, False),
-            "2.1.0": ("ingest-pilot-2.1.0", config.OUTPUT_V2_1, True)}
+            "2.1.0": ("ingest-pilot-2.1.0", config.OUTPUT_V2_1, True),
+            "3.0.0": ("ingest-v3-2.1.0", config.OUTPUT_V3, True)}
+V3_PROFILES = {"3.0.0"}              # these read the 35-project corpus manifest and contracts snapshot
 SHARED = ("projects", "documents", "document_versions", "pages", "sections", "paragraphs", "tables", "table_rows", "table_descriptions",
           "plan_versions", "plan_activities", "evidence_links")
 RESTRICTED = ("page_text", "table_cells_original", "activity_cells_original", "mask_events")
@@ -266,13 +269,14 @@ def run(force: bool = False, out_dir: Path | None = None, profile: str = "2.0.0"
     extraction_version, default_out, stacked_cells = PROFILES[profile]
     out_dir = out_dir or default_out
     started = datetime.now(timezone.utc).isoformat(timespec="seconds")
-    with config.CORPUS_MANIFEST.open(newline="") as fh:
+    corpus_manifest, _, _ = contracts_snapshot.paths(v3=profile in V3_PROFILES)
+    with corpus_manifest.open(newline="") as fh:
         corpus = list(csv.DictReader(fh))
     with config.SCOPE_MANIFEST.open(newline="") as fh:
         scope = {r["document_id"]: r for r in csv.DictReader(fh)}
     with config.PROJECT_MANIFEST.open(newline="") as fh:
         projects = {r["project_id"]: r for r in csv.DictReader(fh)}
-    contracts, snap = contracts_snapshot.load()
+    contracts, snap = contracts_snapshot.load(v3=profile in V3_PROFILES)
     codes = evidence.method_codes(contracts)
     idx = evidence.index_contracts(contracts, codes)
     vocab, lower_vocab, vocab_sha = vocabulary(corpus, out_dir, extraction_version)

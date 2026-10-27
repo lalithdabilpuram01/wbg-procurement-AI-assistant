@@ -65,7 +65,7 @@ class RuntimeConfig:
     max_usd: Decimal
     databricks_profile: str = "wbg-readonly"
     checkpoint_endpoint: str = DEV_CHECKPOINT_ENDPOINT
-    rag_release: str = "pilot_v2"
+    rag_release: str = "pilot_v3"
     audit_path: Path = ORCHESTRATOR_DIR / "runs" / "app_audit.jsonl"
 
     @classmethod

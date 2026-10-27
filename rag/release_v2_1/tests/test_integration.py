@@ -72,7 +72,7 @@ def test_switching_back_is_immediate_and_leaves_no_state():
     lambda: versions.build_retriever("pilot_v2_1", strategy="B"),
     lambda: versions.build_retriever("pilot_v2", strategy="B"),
     lambda: versions.build_retriever("pilot_v2_1", include_tables=False),
-    lambda: versions.build_retriever("pilot_v3"),
+    lambda: versions.build_retriever("pilot_v9"),
 ])
 def test_versions_and_strategies_that_are_not_offered_are_rejected(call):
     with pytest.raises(versions.UnknownRagVersionError):

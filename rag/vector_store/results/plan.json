@@ -1,0 +1,21 @@
+{
+ "target": "wbg_rag.units (production branch)",
+ "release": {
+  "release": "pilot_v3",
+  "model_id": "BAAI/bge-m3",
+  "model_revision": "5617a9f61b028005a4858fdac845db406aefb181",
+  "dimension": 1024,
+  "max_sequence_tokens": 1024,
+  "units": 45908,
+  "indexed_text_sha256": "bee673f901c2efeeefb7b67e4a77b5d036aa7351b5a45a8ca0fc08faa46d2652",
+  "vectors_sha256": "1d8eda98b21d7c43307ac268b295f52c94129b3a5b26b689506944ba1a5e1779",
+  "corpus_dir": "rag/corpus_v3/processed/pilot_v3"
+ },
+ "units_by_type": {
+  "chunk": 10929,
+  "table": 28142,
+  "activity": 6837
+ },
+ "vector_megabytes": 188.0,
+ "text_megabytes": 37.3
+}

@@ -1,0 +1,7 @@
+{
+ "model": "BAAI/bge-m3",
+ "units": 45908,
+ "dimension": 1024,
+ "indexed_text_sha256": "bee673f901c2efeeefb7b67e4a77b5d036aa7351b5a45a8ca0fc08faa46d2652",
+ "max_sequence_tokens": 1024
+}

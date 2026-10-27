@@ -1,4 +1,8 @@
-"""Download ONLY the 10 approved PDFs in rag_scope_v3_35_projects/FIRST_BATCH_10_v3.csv (pilot, approved 2026-10-25).
+"""Download approved PDFs of the 35-project RAG scope.
+
+Default: ONLY the 10 PDFs in rag_scope_v3_35_projects/FIRST_BATCH_10_v3.csv (pilot, approved 2026-10-25).
+`--all`: all 237 documents of DOCUMENT_DOWNLOAD_MANIFEST_v3_35.csv (Milestone D, approved 2026-10-27), written to
+rag/corpus_v3/CORPUS_MANIFEST_V3_35.csv.
 
 Each file goes to its expected_local_path under rag/corpus_v3/pdf/<country>/<project_id>/ via wbdisc.http.download
 (retry/backoff, polite delay, every request in discovery/evidence/access_log.jsonl). Existing files are not re-downloaded.
@@ -7,6 +11,7 @@ count (PyMuPDF) and download timestamp. Unavailable values are left empty (NULL)
 """
 from __future__ import annotations
 
+import argparse
 import csv
 import hashlib
 import sys
@@ -22,14 +27,24 @@ from wbdisc.http import FetchError, download, utcnow  # noqa: E402
 BATCH = HERE / "rag_scope_v3_35_projects" / "FIRST_BATCH_10_v3.csv"
 MANIFEST = HERE / "rag_scope_v3_35_projects" / "DOCUMENT_DOWNLOAD_MANIFEST_v3_35.csv"
 OUT = ROOT / "rag" / "corpus_v3" / "CORPUS_MANIFEST_FIRST10.csv"
+OUT_ALL = ROOT / "rag" / "corpus_v3" / "CORPUS_MANIFEST_V3_35.csv"
 
 
-def main() -> None:
-    with BATCH.open(newline="") as fh:
-        batch = list(csv.DictReader(fh))
-    assert len(batch) == 10
+def main(argv: list[str] | None = None) -> None:
+    parser = argparse.ArgumentParser(description="Download approved PDFs of the 35-project RAG scope")
+    parser.add_argument("--all", action="store_true", help="all 237 documents of the approved v3 manifest")
+    options = parser.parse_args(argv)
     with MANIFEST.open(newline="") as fh:
         man = {r["document_id"]: r for r in csv.DictReader(fh)}
+    if options.all:
+        batch = [{**m, "batch_no": str(n)} for n, m in enumerate(man.values(), start=1)]
+        assert len(batch) == 237
+        out, purpose = OUT_ALL, "module1 milestone D v3_35"
+    else:
+        with BATCH.open(newline="") as fh:
+            batch = list(csv.DictReader(fh))
+        assert len(batch) == 10
+        out, purpose = OUT, "module1 pilot first-10"
     rows = []
     for b in batch:
         m = man[b["document_id"]]
@@ -44,7 +59,7 @@ def main() -> None:
             if dest.exists():
                 rec["download_status"] = "already_present"
             else:
-                download(b["pdf_url"], dest, purpose=f"module1 pilot first-10 {b['project_id']} {b['doc_type']} {b['document_id']}")
+                download(b["pdf_url"], dest, purpose=f"{purpose} {b['project_id']} {b['doc_type']} {b['document_id']}")
                 rec["download_status"] = "downloaded"
                 rec["downloaded_at"] = utcnow()
             data = dest.read_bytes()
@@ -58,8 +73,8 @@ def main() -> None:
             rec.update(download_status="failed", error=f"{e.status} {e.message[:150]}")
         rows.append(rec)
         print(rec["batch_no"], rec["project_id"], rec["doc_type"], rec["download_status"], rec["size_bytes"], rec["page_count"], flush=True)
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    with OUT.open("w", newline="") as fh:
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with out.open("w", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=list(rows[0]))
         w.writeheader()
         w.writerows(rows)

@@ -16,6 +16,12 @@ REFERENCE = CORPUS / "processed" / "reference"
 CONTRACTS_SNAPSHOT = REFERENCE / "contracts_snapshot.jsonl"
 CONTRACTS_SNAPSHOT_META = REFERENCE / "contracts_snapshot.meta.json"
 
+# Milestone D: the approved 35-project scope (237 documents), extraction 2.1.0, with its own inputs and outputs
+CORPUS_MANIFEST_V3 = CORPUS / "CORPUS_MANIFEST_V3_35.csv"
+OUTPUT_V3 = CORPUS / "processed" / "pilot_v3"
+CONTRACTS_SNAPSHOT_V3 = REFERENCE / "contracts_snapshot_v3_35.jsonl"
+CONTRACTS_SNAPSHOT_V3_META = REFERENCE / "contracts_snapshot_v3_35.meta.json"
+
 CHUNK_TARGET_TOKENS = 500
 CHUNK_MAX_TOKENS = 650
 CHUNK_MIN_TOKENS = 80

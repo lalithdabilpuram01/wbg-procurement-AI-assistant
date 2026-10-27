@@ -1,0 +1,34 @@
+{
+ "contracts_snapshot": {
+  "rows": 5103,
+  "sha256": "edaf5c3ca54ed03428d21edc4b1b8d3c3bcfb59a837b89c2c6e83b6e9e24e5e4",
+  "source": "workspace.wbg_silver.contract_awards (read-only SELECT)",
+  "source_as_of_dates": [
+   "2026-10-20"
+  ]
+ },
+ "directory": "rag/corpus_v3/processed/pilot_v3",
+ "documents": 237,
+ "extraction_version": "ingest-v3-2.1.0",
+ "failed": {},
+ "outputs": {
+  "shared/document_versions.jsonl": 237,
+  "shared/documents.jsonl": 237,
+  "shared/evidence_links.jsonl": 8136,
+  "shared/pages.jsonl": 7331,
+  "shared/paragraphs.jsonl": 45128,
+  "shared/plan_activities.jsonl": 6837,
+  "shared/plan_versions.jsonl": 85,
+  "shared/projects.jsonl": 35,
+  "shared/sections.jsonl": 4481,
+  "shared/table_descriptions.jsonl": 3141,
+  "shared/table_rows.jsonl": 60560,
+  "shared/tables.jsonl": 4487,
+  "strategies/A/chunks.jsonl": 8798,
+  "strategies/B/chunks.jsonl": 10874,
+  "strategies/C/chunks.jsonl": 10929,
+  "strategies/C/parents.jsonl": 3649
+ },
+ "processed_or_cached": 237,
+ "tokenizer": "tiktoken:cl100k_base"
+}

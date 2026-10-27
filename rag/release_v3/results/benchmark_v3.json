@@ -1,0 +1,2487 @@
+{
+ "version": "v3-generated-1",
+ "corpus": "rag/corpus_v3/processed/pilot_v3",
+ "gold_rule": "pages of the document sections whose heading matches the topic (not hand-verified)",
+ "questions": [
+  {
+   "id": "V3-objective-P096532",
+   "type": "objective",
+   "project_id": "P096532",
+   "question": "What is the project development objective of the Dam Operational Improvement and Safety?",
+   "gold": [
+    {
+     "document_id": "10318493",
+     "pages": [
+      16,
+      17
+     ]
+    },
+    {
+     "document_id": "10318493",
+     "pages": [
+      5
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P106685",
+   "type": "objective",
+   "project_id": "P106685",
+   "question": "What is the project development objective of the AR Socio-Economic Inclusion In Rural Areas?",
+   "gold": [
+    {
+     "document_id": "24534312",
+     "pages": [
+      36
+     ]
+    },
+    {
+     "document_id": "24534312",
+     "pages": [
+      16
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P122841",
+   "type": "objective",
+   "project_id": "P122841",
+   "question": "What is the project development objective of the Stormwater Mgt. and Climate Change Adaptation Project?",
+   "gold": [
+    {
+     "document_id": "16238760",
+     "pages": [
+      8,
+      9,
+      10,
+      11
+     ]
+    },
+    {
+     "document_id": "16238760",
+     "pages": [
+      17
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P123531",
+   "type": "objective",
+   "project_id": "P123531",
+   "question": "What is the project development objective of the Health Sustainable Development Goals Program-for-Results?",
+   "gold": [
+    {
+     "document_id": "17278398",
+     "pages": [
+      17
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P124018",
+   "type": "objective",
+   "project_id": "P124018",
+   "question": "What is the project development objective of the SENEGAL - Sustainable and Inclusive Agribusiness Development Project?",
+   "gold": [
+    {
+     "document_id": "18593995",
+     "pages": [
+      54,
+      55,
+      56,
+      57,
+      58,
+      59
+     ]
+    },
+    {
+     "document_id": "18593995",
+     "pages": [
+      23
+     ]
+    },
+    {
+     "document_id": "18593995",
+     "pages": [
+      23,
+      24
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P125151",
+   "type": "objective",
+   "project_id": "P125151",
+   "question": "What is the project development objective of the Plan Belgrano Water Supply and Sanitation Services Development Project?",
+   "gold": [
+    {
+     "document_id": "13923829",
+     "pages": [
+      50,
+      51,
+      52,
+      53,
+      54,
+      55
+     ]
+    },
+    {
+     "document_id": "13923829",
+     "pages": [
+      16
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P125565",
+   "type": "objective",
+   "project_id": "P125565",
+   "question": "What is the project development objective of the Electricity Sector Support Project?",
+   "gold": [
+    {
+     "document_id": "16484528",
+     "pages": [
+      23
+     ]
+    },
+    {
+     "document_id": "16484528",
+     "pages": [
+      23,
+      24
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P132833",
+   "type": "objective",
+   "project_id": "P132833",
+   "question": "What is the project development objective of the Transport Connectivity and Asset Management Project?",
+   "gold": [
+    {
+     "document_id": "26256705",
+     "pages": [
+      18
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P143302",
+   "type": "objective",
+   "project_id": "P143302",
+   "question": "What is the project development objective of the Ethiopia Competitiveness and Job Creation Project?",
+   "gold": [
+    {
+     "document_id": "19443845",
+     "pages": [
+      44
+     ]
+    },
+    {
+     "document_id": "19443845",
+     "pages": [
+      44,
+      45,
+      46,
+      47,
+      48,
+      49
+     ]
+    },
+    {
+     "document_id": "19443845",
+     "pages": [
+      23
+     ]
+    },
+    {
+     "document_id": "19443845",
+     "pages": [
+      23
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P144269",
+   "type": "objective",
+   "project_id": "P144269",
+   "question": "What is the project development objective of the PROMOTING SUSTAINABLE CBNRM AND INSTITUTIONAL DEVELOPMENT?",
+   "gold": [
+    {
+     "document_id": "26369737",
+     "pages": [
+      38
+     ]
+    },
+    {
+     "document_id": "26369737",
+     "pages": [
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+     ]
+    },
+    {
+     "document_id": "26369737",
+     "pages": [
+      20
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P146314",
+   "type": "objective",
+   "project_id": "P146314",
+   "question": "What is the project development objective of the Climate Resilience Improvement Project (CRIP)?",
+   "gold": [
+    {
+     "document_id": "19329400",
+     "pages": [
+      8,
+      9
+     ]
+    },
+    {
+     "document_id": "19329400",
+     "pages": [
+      16
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P148850",
+   "type": "objective",
+   "project_id": "P148850",
+   "question": "What is the project development objective of the Ethiopia- Expressway Development Support Project?",
+   "gold": [
+    {
+     "document_id": "24440102",
+     "pages": [
+      37,
+      38,
+      39,
+      40,
+      41,
+      42
+     ]
+    },
+    {
+     "document_id": "24440102",
+     "pages": [
+      18
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P156019",
+   "type": "objective",
+   "project_id": "P156019",
+   "question": "What is the project development objective of the Sri Lanka Agriculture Sector Modernization Project?",
+   "gold": [
+    {
+     "document_id": "26481621",
+     "pages": [
+      42,
+      43,
+      44,
+      45,
+      46,
+      47
+     ]
+    },
+    {
+     "document_id": "26481621",
+     "pages": [
+      20
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P156186",
+   "type": "objective",
+   "project_id": "P156186",
+   "question": "What is the project development objective of the Dakar Bus Rapid Transit Pilot Project?",
+   "gold": [
+    {
+     "document_id": "27448007",
+     "pages": [
+      17
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P157599",
+   "type": "objective",
+   "project_id": "P157599",
+   "question": "What is the project development objective of the Integrated Infrastructure Development for National Tourism Strategic Areas (Indonesia Tourism Development Project)?",
+   "gold": [
+    {
+     "document_id": "29890606",
+     "pages": [
+      20
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P159303",
+   "type": "objective",
+   "project_id": "P159303",
+   "question": "What is the project development objective of the Sri Lanka Financial Sector Modernization Project?",
+   "gold": [
+    {
+     "document_id": "27287617",
+     "pages": [
+      24
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P159929",
+   "type": "objective",
+   "project_id": "P159929",
+   "question": "What is the project development objective of the Integrated Habitat and Housing Project?",
+   "gold": [
+    {
+     "document_id": "27180184",
+     "pages": [
+      18
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P162042",
+   "type": "objective",
+   "project_id": "P162042",
+   "question": "What is the project development objective of the Investing in Maternal, Child and Adolescent Health?",
+   "gold": [
+    {
+     "document_id": "31396317",
+     "pages": [
+      23
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P163452",
+   "type": "objective",
+   "project_id": "P163452",
+   "question": "What is the project development objective of the Ethiopia Urban Institutional and Infrastructure Development Program?",
+   "gold": [
+    {
+     "document_id": "29670109",
+     "pages": [
+      19,
+      20
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P163714",
+   "type": "objective",
+   "project_id": "P163714",
+   "question": "What is the project development objective of the General Education Modernization Project?",
+   "gold": [
+    {
+     "document_id": "29802458",
+     "pages": [
+      18
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P163721",
+   "type": "objective",
+   "project_id": "P163721",
+   "question": "What is the project development objective of the Sri Lanka: Primary Health Care System Strengthening Project?",
+   "gold": [
+    {
+     "document_id": "29981117",
+     "pages": [
+      20
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P164336",
+   "type": "objective",
+   "project_id": "P164336",
+   "question": "What is the project development objective of the Lowlands Livelihood Resilience Project?",
+   "gold": [
+    {
+     "document_id": "31061540",
+     "pages": [
+      17,
+      18,
+      19,
+      20
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P165543",
+   "type": "objective",
+   "project_id": "P165543",
+   "question": "What is the project development objective of the Institutional Strengthening for Improved Village Service Delivery?",
+   "gold": [
+    {
+     "document_id": "31144526",
+     "pages": [
+      26,
+      27
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P167681",
+   "type": "objective",
+   "project_id": "P167681",
+   "question": "What is the project development objective of the Improving Youth Employability Through Informal Apprenticeship?",
+   "gold": [
+    {
+     "document_id": "30588595",
+     "pages": [
+      17
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P168076",
+   "type": "objective",
+   "project_id": "P168076",
+   "question": "What is the project development objective of the Realizing  Education's  Promise:  Support to Indonesia's Ministry of Religious Affairs for Improved Quality of Education?",
+   "gold": [
+    {
+     "document_id": "31144673",
+     "pages": [
+      39
+     ]
+    },
+    {
+     "document_id": "31144673",
+     "pages": [
+      39,
+      40,
+      41,
+      42,
+      43,
+      44
+     ]
+    },
+    {
+     "document_id": "31144673",
+     "pages": [
+      20
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P169548",
+   "type": "objective",
+   "project_id": "P169548",
+   "question": "What is the project development objective of the Indonesia Mass Transit Project?",
+   "gold": [
+    {
+     "document_id": "33811956",
+     "pages": [
+      21,
+      22
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P170329",
+   "type": "objective",
+   "project_id": "P170329",
+   "question": "What is the project development objective of the Social Safety Nets for Vulnerable Populations in the Province of Buenos Aires?",
+   "gold": [
+    {
+     "document_id": "31330658",
+     "pages": [
+      18
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P175325",
+   "type": "objective",
+   "project_id": "P175325",
+   "question": "What is the project development objective of the Casamance Economic Development Project?",
+   "gold": [
+    {
+     "document_id": "33725374",
+     "pages": [
+      20,
+      21,
+      22
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P175669",
+   "type": "objective",
+   "project_id": "P175669",
+   "question": "What is the project development objective of the Sustainable Recovery of Landscapes and Livelihoods in Argentina Project?",
+   "gold": [
+    {
+     "document_id": "33723506",
+     "pages": [
+      18
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P176731",
+   "type": "objective",
+   "project_id": "P176731",
+   "question": "What is the project development objective of the Power Sector Reform, Investment and Modernization in Ethiopia (PRIME-1)?",
+   "gold": [
+    {
+     "document_id": "34276649",
+     "pages": [
+      22
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P177233",
+   "type": "objective",
+   "project_id": "P177233",
+   "question": "What is the project development objective of the Response - Recovery - Resilience for Conflict-Affected Communities in Ethiopia Project?",
+   "gold": [
+    {
+     "document_id": "33768342",
+     "pages": [
+      24
+     ]
+    },
+    {
+     "document_id": "33768342",
+     "pages": [
+      24,
+      25
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P178432",
+   "type": "objective",
+   "project_id": "P178432",
+   "question": "What is the project development objective of the Sri Lanka Public Financial Management Strengthening Project?",
+   "gold": [
+    {
+     "document_id": "34112390",
+     "pages": [
+      12
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P179534",
+   "type": "objective",
+   "project_id": "P179534",
+   "question": "What is the project development objective of the Strengthening the Digital Health Agenda in the Province of Buenos Aires?",
+   "gold": [
+    {
+     "document_id": "34091647",
+     "pages": [
+      22
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-objective-P180811",
+   "type": "objective",
+   "project_id": "P180811",
+   "question": "What is the project development objective of the Indonesia Health Systems Strengthening Project?",
+   "gold": [
+    {
+     "document_id": "34199714",
+     "pages": [
+      19
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P096532",
+   "type": "risks",
+   "project_id": "P096532",
+   "question": "What are the key risks identified for the Dam Operational Improvement and Safety in Republic of Indonesia?",
+   "gold": [
+    {
+     "document_id": "10318493",
+     "pages": [
+      25,
+      26,
+      27
+     ]
+    },
+    {
+     "document_id": "10318493",
+     "pages": [
+      135
+     ]
+    },
+    {
+     "document_id": "10318493",
+     "pages": [
+      135,
+      136,
+      137,
+      138,
+      139
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P106685",
+   "type": "risks",
+   "project_id": "P106685",
+   "question": "What are the key risks identified for the AR Socio-Economic Inclusion In Rural Areas in Argentine Republic?",
+   "gold": [
+    {
+     "document_id": "24534312",
+     "pages": [
+      23
+     ]
+    },
+    {
+     "document_id": "24534312",
+     "pages": [
+      23
+     ]
+    },
+    {
+     "document_id": "24534312",
+     "pages": [
+      23
+     ]
+    },
+    {
+     "document_id": "24534312",
+     "pages": [
+      61,
+      62,
+      63
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P122841",
+   "type": "risks",
+   "project_id": "P122841",
+   "question": "What are the key risks identified for the Stormwater Mgt. and Climate Change Adaptation Project in Republic of Senegal?",
+   "gold": [
+    {
+     "document_id": "16238760",
+     "pages": [
+      22
+     ]
+    },
+    {
+     "document_id": "16238760",
+     "pages": [
+      22
+     ]
+    },
+    {
+     "document_id": "16238760",
+     "pages": [
+      28,
+      29,
+      30
+     ]
+    },
+    {
+     "document_id": "16238760",
+     "pages": [
+      72,
+      73,
+      74,
+      75
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P123531",
+   "type": "risks",
+   "project_id": "P123531",
+   "question": "What are the key risks identified for the Health Sustainable Development Goals Program-for-Results in Federal Democratic Republic of Ethiopia?",
+   "gold": [
+    {
+     "document_id": "17278398",
+     "pages": [
+      30,
+      31
+     ]
+    },
+    {
+     "document_id": "17278398",
+     "pages": [
+      58
+     ]
+    },
+    {
+     "document_id": "17278398",
+     "pages": [
+      80,
+      81,
+      82,
+      83
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P124018",
+   "type": "risks",
+   "project_id": "P124018",
+   "question": "What are the key risks identified for the SENEGAL - Sustainable and Inclusive Agribusiness Development Project in Republic of Senegal?",
+   "gold": [
+    {
+     "document_id": "18593995",
+     "pages": [
+      41
+     ]
+    },
+    {
+     "document_id": "18593995",
+     "pages": [
+      41
+     ]
+    },
+    {
+     "document_id": "18593995",
+     "pages": [
+      42,
+      43
+     ]
+    },
+    {
+     "document_id": "18593995",
+     "pages": [
+      94,
+      95,
+      96
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P125151",
+   "type": "risks",
+   "project_id": "P125151",
+   "question": "What are the key risks identified for the Plan Belgrano Water Supply and Sanitation Services Development Project in Argentine Republic?",
+   "gold": [
+    {
+     "document_id": "13923829",
+     "pages": [
+      22
+     ]
+    },
+    {
+     "document_id": "13923829",
+     "pages": [
+      50
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P125565",
+   "type": "risks",
+   "project_id": "P125565",
+   "question": "What are the key risks identified for the Electricity Sector Support Project in Republic of Senegal?",
+   "gold": [
+    {
+     "document_id": "16484528",
+     "pages": [
+      33
+     ]
+    },
+    {
+     "document_id": "16484528",
+     "pages": [
+      33
+     ]
+    },
+    {
+     "document_id": "16484528",
+     "pages": [
+      34
+     ]
+    },
+    {
+     "document_id": "16484528",
+     "pages": [
+      89,
+      90,
+      91
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P132833",
+   "type": "risks",
+   "project_id": "P132833",
+   "question": "What are the key risks identified for the Transport Connectivity and Asset Management Project in Democratic Socialist Republic of Sri Lanka?",
+   "gold": [
+    {
+     "document_id": "26256705",
+     "pages": [
+      26
+     ]
+    },
+    {
+     "document_id": "26256705",
+     "pages": [
+      26
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P143302",
+   "type": "risks",
+   "project_id": "P143302",
+   "question": "What are the key risks identified for the Ethiopia Competitiveness and Job Creation Project in Federal Democratic Republic of Ethiopia?",
+   "gold": [
+    {
+     "document_id": "19443845",
+     "pages": [
+      35
+     ]
+    },
+    {
+     "document_id": "19443845",
+     "pages": [
+      35
+     ]
+    },
+    {
+     "document_id": "19443845",
+     "pages": [
+      36
+     ]
+    },
+    {
+     "document_id": "19443845",
+     "pages": [
+      87,
+      88,
+      89
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P144269",
+   "type": "risks",
+   "project_id": "P144269",
+   "question": "What are the key risks identified for the PROMOTING SUSTAINABLE CBNRM AND INSTITUTIONAL DEVELOPMENT in Republic of Indonesia?",
+   "gold": [
+    {
+     "document_id": "26369737",
+     "pages": [
+      28
+     ]
+    },
+    {
+     "document_id": "26369737",
+     "pages": [
+      28
+     ]
+    },
+    {
+     "document_id": "26369737",
+     "pages": [
+      28
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P146314",
+   "type": "risks",
+   "project_id": "P146314",
+   "question": "What are the key risks identified for the Climate Resilience Improvement Project (CRIP) in Democratic Socialist Republic of Sri Lanka?",
+   "gold": [
+    {
+     "document_id": "19329400",
+     "pages": [
+      23
+     ]
+    },
+    {
+     "document_id": "19329400",
+     "pages": [
+      23,
+      24
+     ]
+    },
+    {
+     "document_id": "19329400",
+     "pages": [
+      59,
+      60,
+      61,
+      62,
+      63
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P148850",
+   "type": "risks",
+   "project_id": "P148850",
+   "question": "What are the key risks identified for the Ethiopia- Expressway Development Support Project in Federal Democratic Republic of Ethiopia?",
+   "gold": [
+    {
+     "document_id": "24440102",
+     "pages": [
+      24
+     ]
+    },
+    {
+     "document_id": "24440102",
+     "pages": [
+      24,
+      25
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P156019",
+   "type": "risks",
+   "project_id": "P156019",
+   "question": "What are the key risks identified for the Sri Lanka Agriculture Sector Modernization Project in Democratic Socialist Republic of Sri Lanka?",
+   "gold": [
+    {
+     "document_id": "26481621",
+     "pages": [
+      32
+     ]
+    },
+    {
+     "document_id": "26481621",
+     "pages": [
+      32
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P156186",
+   "type": "risks",
+   "project_id": "P156186",
+   "question": "What are the key risks identified for the Dakar Bus Rapid Transit Pilot Project in Republic of Senegal?",
+   "gold": [
+    {
+     "document_id": "27448007",
+     "pages": [
+      25
+     ]
+    },
+    {
+     "document_id": "27448007",
+     "pages": [
+      25,
+      26
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P157599",
+   "type": "risks",
+   "project_id": "P157599",
+   "question": "What are the key risks identified for the Integrated Infrastructure Development for National Tourism Strategic Areas (Indonesia Tourism Development Project) in Republic of Indonesia?",
+   "gold": [
+    {
+     "document_id": "29890606",
+     "pages": [
+      31
+     ]
+    },
+    {
+     "document_id": "29890606",
+     "pages": [
+      31,
+      32
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P159303",
+   "type": "risks",
+   "project_id": "P159303",
+   "question": "What are the key risks identified for the Sri Lanka Financial Sector Modernization Project in Democratic Socialist Republic of Sri Lanka?",
+   "gold": [
+    {
+     "document_id": "27287617",
+     "pages": [
+      34
+     ]
+    },
+    {
+     "document_id": "27287617",
+     "pages": [
+      34
+     ]
+    },
+    {
+     "document_id": "27287617",
+     "pages": [
+      34,
+      35
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P159929",
+   "type": "risks",
+   "project_id": "P159929",
+   "question": "What are the key risks identified for the Integrated Habitat and Housing Project in Argentine Republic?",
+   "gold": [
+    {
+     "document_id": "27180184",
+     "pages": [
+      25
+     ]
+    },
+    {
+     "document_id": "27180184",
+     "pages": [
+      25,
+      26
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P162042",
+   "type": "risks",
+   "project_id": "P162042",
+   "question": "What are the key risks identified for the Investing in Maternal, Child and Adolescent Health in Republic of Senegal?",
+   "gold": [
+    {
+     "document_id": "31396317",
+     "pages": [
+      48
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P163452",
+   "type": "risks",
+   "project_id": "P163452",
+   "question": "What are the key risks identified for the Ethiopia Urban Institutional and Infrastructure Development Program in Federal Democratic Republic of Ethiopia?",
+   "gold": [
+    {
+     "document_id": "29670109",
+     "pages": [
+      44,
+      45
+     ]
+    },
+    {
+     "document_id": "29670109",
+     "pages": [
+      157
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P163714",
+   "type": "risks",
+   "project_id": "P163714",
+   "question": "What are the key risks identified for the General Education Modernization Project in Democratic Socialist Republic of Sri Lanka?",
+   "gold": [
+    {
+     "document_id": "29802458",
+     "pages": [
+      36
+     ]
+    },
+    {
+     "document_id": "29802458",
+     "pages": [
+      36
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P163721",
+   "type": "risks",
+   "project_id": "P163721",
+   "question": "What are the key risks identified for the Sri Lanka: Primary Health Care System Strengthening Project in Democratic Socialist Republic of Sri Lanka?",
+   "gold": [
+    {
+     "document_id": "29981117",
+     "pages": [
+      40
+     ]
+    },
+    {
+     "document_id": "29981117",
+     "pages": [
+      40,
+      41
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P164336",
+   "type": "risks",
+   "project_id": "P164336",
+   "question": "What are the key risks identified for the Lowlands Livelihood Resilience Project in Federal Democratic Republic of Ethiopia?",
+   "gold": [
+    {
+     "document_id": "31061540",
+     "pages": [
+      44,
+      45,
+      46,
+      47,
+      48,
+      49
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P165543",
+   "type": "risks",
+   "project_id": "P165543",
+   "question": "What are the key risks identified for the Institutional Strengthening for Improved Village Service Delivery in Republic of Indonesia?",
+   "gold": [
+    {
+     "document_id": "31144526",
+     "pages": [
+      46,
+      47,
+      48
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P167681",
+   "type": "risks",
+   "project_id": "P167681",
+   "question": "What are the key risks identified for the Improving Youth Employability Through Informal Apprenticeship in Republic of Senegal?",
+   "gold": [
+    {
+     "document_id": "30588595",
+     "pages": [
+      33,
+      34,
+      35,
+      36,
+      37,
+      38
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P168076",
+   "type": "risks",
+   "project_id": "P168076",
+   "question": "What are the key risks identified for the Realizing  Education's  Promise:  Support to Indonesia's Ministry of Religious Affairs for Improved Quality of Education in Republic of Indonesia?",
+   "gold": [
+    {
+     "document_id": "31144673",
+     "pages": [
+      34,
+      35,
+      36
+     ]
+    },
+    {
+     "document_id": "31144673",
+     "pages": [
+      36,
+      37,
+      38,
+      39
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P169548",
+   "type": "risks",
+   "project_id": "P169548",
+   "question": "What are the key risks identified for the Indonesia Mass Transit Project in Republic of Indonesia?",
+   "gold": [
+    {
+     "document_id": "33811956",
+     "pages": [
+      44
+     ]
+    },
+    {
+     "document_id": "33811956",
+     "pages": [
+      44
+     ]
+    },
+    {
+     "document_id": "33811956",
+     "pages": [
+      45,
+      46
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P170329",
+   "type": "risks",
+   "project_id": "P170329",
+   "question": "What are the key risks identified for the Social Safety Nets for Vulnerable Populations in the Province of Buenos Aires in Argentine Republic?",
+   "gold": [
+    {
+     "document_id": "31330658",
+     "pages": [
+      30,
+      31
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P175325",
+   "type": "risks",
+   "project_id": "P175325",
+   "question": "What are the key risks identified for the Casamance Economic Development Project in Republic of Senegal?",
+   "gold": [
+    {
+     "document_id": "33725374",
+     "pages": [
+      44,
+      45
+     ]
+    },
+    {
+     "document_id": "33725374",
+     "pages": [
+      75,
+      76,
+      77
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P175669",
+   "type": "risks",
+   "project_id": "P175669",
+   "question": "What are the key risks identified for the Sustainable Recovery of Landscapes and Livelihoods in Argentina Project in Argentine Republic?",
+   "gold": [
+    {
+     "document_id": "33723506",
+     "pages": [
+      33,
+      34
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P176731",
+   "type": "risks",
+   "project_id": "P176731",
+   "question": "What are the key risks identified for the Power Sector Reform, Investment and Modernization in Ethiopia (PRIME-1) in Federal Democratic Republic of Ethiopia?",
+   "gold": [
+    {
+     "document_id": "34276649",
+     "pages": [
+      33,
+      34,
+      35,
+      36
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P177233",
+   "type": "risks",
+   "project_id": "P177233",
+   "question": "What are the key risks identified for the Response - Recovery - Resilience for Conflict-Affected Communities in Ethiopia Project in Federal Democratic Republic of Ethiopia?",
+   "gold": [
+    {
+     "document_id": "33768342",
+     "pages": [
+      51,
+      52,
+      53,
+      54,
+      55
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P178432",
+   "type": "risks",
+   "project_id": "P178432",
+   "question": "What are the key risks identified for the Sri Lanka Public Financial Management Strengthening Project in Democratic Socialist Republic of Sri Lanka?",
+   "gold": [
+    {
+     "document_id": "34112390",
+     "pages": [
+      22
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P179534",
+   "type": "risks",
+   "project_id": "P179534",
+   "question": "What are the key risks identified for the Strengthening the Digital Health Agenda in the Province of Buenos Aires in Argentine Republic?",
+   "gold": [
+    {
+     "document_id": "34091647",
+     "pages": [
+      41,
+      42
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-risks-P180811",
+   "type": "risks",
+   "project_id": "P180811",
+   "question": "What are the key risks identified for the Indonesia Health Systems Strengthening Project in Republic of Indonesia?",
+   "gold": [
+    {
+     "document_id": "34199714",
+     "pages": [
+      37,
+      38
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P096532",
+   "type": "lessons",
+   "project_id": "P096532",
+   "question": "What lessons were learned from the Dam Operational Improvement and Safety?",
+   "gold": [
+    {
+     "document_id": "28869414",
+     "pages": [
+      11,
+      12
+     ]
+    },
+    {
+     "document_id": "34422882",
+     "pages": [
+      18
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P106685",
+   "type": "lessons",
+   "project_id": "P106685",
+   "question": "What lessons were learned from the AR Socio-Economic Inclusion In Rural Areas?",
+   "gold": [
+    {
+     "document_id": "34153964",
+     "pages": [
+      39,
+      40,
+      41
+     ]
+    },
+    {
+     "document_id": "34257666",
+     "pages": [
+      21,
+      22
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P122841",
+   "type": "lessons",
+   "project_id": "P122841",
+   "question": "What lessons were learned from the Stormwater Mgt. and Climate Change Adaptation Project?",
+   "gold": [
+    {
+     "document_id": "32633457",
+     "pages": [
+      31,
+      32,
+      33
+     ]
+    },
+    {
+     "document_id": "33107319",
+     "pages": [
+      19
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P123531",
+   "type": "lessons",
+   "project_id": "P123531",
+   "question": "What lessons were learned from the Health Sustainable Development Goals Program-for-Results?",
+   "gold": [
+    {
+     "document_id": "33973960",
+     "pages": [
+      37,
+      38,
+      39
+     ]
+    },
+    {
+     "document_id": "33973960",
+     "pages": [
+      93
+     ]
+    },
+    {
+     "document_id": "34045373",
+     "pages": [
+      19
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P124018",
+   "type": "lessons",
+   "project_id": "P124018",
+   "question": "What lessons were learned from the SENEGAL - Sustainable and Inclusive Agribusiness Development Project?",
+   "gold": [
+    {
+     "document_id": "33691943",
+     "pages": [
+      29
+     ]
+    },
+    {
+     "document_id": "33898287",
+     "pages": [
+      20,
+      21
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P125151",
+   "type": "lessons",
+   "project_id": "P125151",
+   "question": "What lessons were learned from the Plan Belgrano Water Supply and Sanitation Services Development Project?",
+   "gold": [
+    {
+     "document_id": "34237163",
+     "pages": [
+      35
+     ]
+    },
+    {
+     "document_id": "34347742",
+     "pages": [
+      16
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P125565",
+   "type": "lessons",
+   "project_id": "P125565",
+   "question": "What lessons were learned from the Electricity Sector Support Project?",
+   "gold": [
+    {
+     "document_id": "34219519",
+     "pages": [
+      38,
+      39
+     ]
+    },
+    {
+     "document_id": "34339791",
+     "pages": [
+      17,
+      18
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P132833",
+   "type": "lessons",
+   "project_id": "P132833",
+   "question": "What lessons were learned from the Transport Connectivity and Asset Management Project?",
+   "gold": [
+    {
+     "document_id": "34345370",
+     "pages": [
+      34,
+      35
+     ]
+    },
+    {
+     "document_id": "34407877",
+     "pages": [
+      22,
+      23
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P133288",
+   "type": "lessons",
+   "project_id": "P133288",
+   "question": "What lessons were learned from the Argentina Renewable Energy for Rural Areas Project?",
+   "gold": [
+    {
+     "document_id": "34358036",
+     "pages": [
+      29,
+      30
+     ]
+    },
+    {
+     "document_id": "34436087",
+     "pages": [
+      19,
+      20
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P143302",
+   "type": "lessons",
+   "project_id": "P143302",
+   "question": "What lessons were learned from the Ethiopia Competitiveness and Job Creation Project?",
+   "gold": [
+    {
+     "document_id": "34210715",
+     "pages": [
+      42,
+      43
+     ]
+    },
+    {
+     "document_id": "34327693",
+     "pages": [
+      22,
+      23
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P144269",
+   "type": "lessons",
+   "project_id": "P144269",
+   "question": "What lessons were learned from the PROMOTING SUSTAINABLE CBNRM AND INSTITUTIONAL DEVELOPMENT?",
+   "gold": [
+    {
+     "document_id": "34130229",
+     "pages": [
+      34,
+      35
+     ]
+    },
+    {
+     "document_id": "34218556",
+     "pages": [
+      20,
+      21
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P146314",
+   "type": "lessons",
+   "project_id": "P146314",
+   "question": "What lessons were learned from the Climate Resilience Improvement Project (CRIP)?",
+   "gold": [
+    {
+     "document_id": "33700836",
+     "pages": [
+      31,
+      32
+     ]
+    },
+    {
+     "document_id": "33824498",
+     "pages": [
+      20,
+      21
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P156019",
+   "type": "lessons",
+   "project_id": "P156019",
+   "question": "What lessons were learned from the Sri Lanka Agriculture Sector Modernization Project?",
+   "gold": [
+    {
+     "document_id": "40026339",
+     "pages": [
+      28
+     ]
+    },
+    {
+     "document_id": "40075819",
+     "pages": [
+      19
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P157599",
+   "type": "lessons",
+   "project_id": "P157599",
+   "question": "What lessons were learned from the Integrated Infrastructure Development for National Tourism Strategic Areas (Indonesia Tourism Development Project)?",
+   "gold": [
+    {
+     "document_id": "40033980",
+     "pages": [
+      33,
+      34,
+      35
+     ]
+    },
+    {
+     "document_id": "40056265",
+     "pages": [
+      17,
+      18
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P159303",
+   "type": "lessons",
+   "project_id": "P159303",
+   "question": "What lessons were learned from the Sri Lanka Financial Sector Modernization Project?",
+   "gold": [
+    {
+     "document_id": "34240692",
+     "pages": [
+      24,
+      25,
+      26
+     ]
+    },
+    {
+     "document_id": "34313049",
+     "pages": [
+      19,
+      20
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P159929",
+   "type": "lessons",
+   "project_id": "P159929",
+   "question": "What lessons were learned from the Integrated Habitat and Housing Project?",
+   "gold": [
+    {
+     "document_id": "34455485",
+     "pages": [
+      41,
+      42
+     ]
+    },
+    {
+     "document_id": "40015454",
+     "pages": [
+      14
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P162042",
+   "type": "lessons",
+   "project_id": "P162042",
+   "question": "What lessons were learned from the Investing in Maternal, Child and Adolescent Health?",
+   "gold": [
+    {
+     "document_id": "40112358",
+     "pages": [
+      29,
+      30
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P163452",
+   "type": "lessons",
+   "project_id": "P163452",
+   "question": "What lessons were learned from the Ethiopia Urban Institutional and Infrastructure Development Program?",
+   "gold": [
+    {
+     "document_id": "34455066",
+     "pages": [
+      23,
+      24
+     ]
+    },
+    {
+     "document_id": "40029978",
+     "pages": [
+      16
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P163721",
+   "type": "lessons",
+   "project_id": "P163721",
+   "question": "What lessons were learned from the Sri Lanka: Primary Health Care System Strengthening Project?",
+   "gold": [
+    {
+     "document_id": "34442660",
+     "pages": [
+      25,
+      26
+     ]
+    },
+    {
+     "document_id": "40017857",
+     "pages": [
+      15
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P164336",
+   "type": "lessons",
+   "project_id": "P164336",
+   "question": "What lessons were learned from the Lowlands Livelihood Resilience Project?",
+   "gold": [
+    {
+     "document_id": "40108844",
+     "pages": [
+      24,
+      25
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P165543",
+   "type": "lessons",
+   "project_id": "P165543",
+   "question": "What lessons were learned from the Institutional Strengthening for Improved Village Service Delivery?",
+   "gold": [
+    {
+     "document_id": "40094424",
+     "pages": [
+      25,
+      26
+     ]
+    },
+    {
+     "document_id": "40110156",
+     "pages": [
+      11
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P167681",
+   "type": "lessons",
+   "project_id": "P167681",
+   "question": "What lessons were learned from the Improving Youth Employability Through Informal Apprenticeship?",
+   "gold": [
+    {
+     "document_id": "34463484",
+     "pages": [
+      37,
+      38,
+      39
+     ]
+    },
+    {
+     "document_id": "40038930",
+     "pages": [
+      19,
+      20
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P168076",
+   "type": "lessons",
+   "project_id": "P168076",
+   "question": "What lessons were learned from the Realizing  Education's  Promise:  Support to Indonesia's Ministry of Religious Affairs for Improved Quality of Education?",
+   "gold": [
+    {
+     "document_id": "40030724",
+     "pages": [
+      27,
+      28,
+      29,
+      30
+     ]
+    },
+    {
+     "document_id": "40078752",
+     "pages": [
+      21,
+      22
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-lessons-P170329",
+   "type": "lessons",
+   "project_id": "P170329",
+   "question": "What lessons were learned from the Social Safety Nets for Vulnerable Populations in the Province of Buenos Aires?",
+   "gold": [
+    {
+     "document_id": "40125174",
+     "pages": [
+      32,
+      33,
+      34
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-procurement-P096532",
+   "type": "procurement",
+   "project_id": "P096532",
+   "question": "How is procurement organized and managed for the Dam Operational Improvement and Safety?",
+   "gold": [
+    {
+     "document_id": "10318493",
+     "pages": [
+      103
+     ]
+    },
+    {
+     "document_id": "10318493",
+     "pages": [
+      105,
+      106,
+      107,
+      108
+     ]
+    },
+    {
+     "document_id": "10318493",
+     "pages": [
+      108
+     ]
+    },
+    {
+     "document_id": "10318493",
+     "pages": [
+      108
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-procurement-P106685",
+   "type": "procurement",
+   "project_id": "P106685",
+   "question": "How is procurement organized and managed for the AR Socio-Economic Inclusion In Rural Areas?",
+   "gold": [
+    {
+     "document_id": "24534312",
+     "pages": [
+      25,
+      26
+     ]
+    },
+    {
+     "document_id": "24534312",
+     "pages": [
+      46,
+      47,
+      48,
+      49,
+      50,
+      51
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-procurement-P122841",
+   "type": "procurement",
+   "project_id": "P122841",
+   "question": "How is procurement organized and managed for the Stormwater Mgt. and Climate Change Adaptation Project?",
+   "gold": [
+    {
+     "document_id": "16238760",
+     "pages": [
+      33,
+      34
+     ]
+    },
+    {
+     "document_id": "16238760",
+     "pages": [
+      58,
+      59,
+      60,
+      61,
+      62,
+      63
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-procurement-P124018",
+   "type": "procurement",
+   "project_id": "P124018",
+   "question": "How is procurement organized and managed for the SENEGAL - Sustainable and Inclusive Agribusiness Development Project?",
+   "gold": [
+    {
+     "document_id": "18593995",
+     "pages": [
+      47,
+      48
+     ]
+    },
+    {
+     "document_id": "18593995",
+     "pages": [
+      86,
+      87,
+      88,
+      89,
+      90
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-procurement-P125151",
+   "type": "procurement",
+   "project_id": "P125151",
+   "question": "How is procurement organized and managed for the Plan Belgrano Water Supply and Sanitation Services Development Project?",
+   "gold": [
+    {
+     "document_id": "13923829",
+     "pages": [
+      23,
+      24
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-procurement-P125565",
+   "type": "procurement",
+   "project_id": "P125565",
+   "question": "How is procurement organized and managed for the Electricity Sector Support Project?",
+   "gold": [
+    {
+     "document_id": "16484528",
+     "pages": [
+      39,
+      40
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-procurement-P132833",
+   "type": "procurement",
+   "project_id": "P132833",
+   "question": "How is procurement organized and managed for the Transport Connectivity and Asset Management Project?",
+   "gold": [
+    {
+     "document_id": "26256705",
+     "pages": [
+      29
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-procurement-P143302",
+   "type": "procurement",
+   "project_id": "P143302",
+   "question": "How is procurement organized and managed for the Ethiopia Competitiveness and Job Creation Project?",
+   "gold": [
+    {
+     "document_id": "19443845",
+     "pages": [
+      40,
+      41,
+      42
+     ]
+    },
+    {
+     "document_id": "19443845",
+     "pages": [
+      82
+     ]
+    },
+    {
+     "document_id": "19443845",
+     "pages": [
+      82,
+      83,
+      84
+     ]
+    },
+    {
+     "document_id": "19443845",
+     "pages": [
+      84,
+      85,
+      86
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-procurement-P144269",
+   "type": "procurement",
+   "project_id": "P144269",
+   "question": "How is procurement organized and managed for the PROMOTING SUSTAINABLE CBNRM AND INSTITUTIONAL DEVELOPMENT?",
+   "gold": [
+    {
+     "document_id": "26369737",
+     "pages": [
+      33,
+      34
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-procurement-P146314",
+   "type": "procurement",
+   "project_id": "P146314",
+   "question": "How is procurement organized and managed for the Climate Resilience Improvement Project (CRIP)?",
+   "gold": [
+    {
+     "document_id": "19329400",
+     "pages": [
+      26,
+      27
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-procurement-P148850",
+   "type": "procurement",
+   "project_id": "P148850",
+   "question": "How is procurement organized and managed for the Ethiopia- Expressway Development Support Project?",
+   "gold": [
+    {
+     "document_id": "24440102",
+     "pages": [
+      29,
+      30
+     ]
+    },
+    {
+     "document_id": "24440102",
+     "pages": [
+      70,
+      71,
+      72,
+      73,
+      74,
+      75
+     ]
+    },
+    {
+     "document_id": "24440102",
+     "pages": [
+      106
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-procurement-P156019",
+   "type": "procurement",
+   "project_id": "P156019",
+   "question": "How is procurement organized and managed for the Sri Lanka Agriculture Sector Modernization Project?",
+   "gold": [
+    {
+     "document_id": "26481621",
+     "pages": [
+      36
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-procurement-P156186",
+   "type": "procurement",
+   "project_id": "P156186",
+   "question": "How is procurement organized and managed for the Dakar Bus Rapid Transit Pilot Project?",
+   "gold": [
+    {
+     "document_id": "27448007",
+     "pages": [
+      31,
+      32
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-procurement-P157599",
+   "type": "procurement",
+   "project_id": "P157599",
+   "question": "How is procurement organized and managed for the Integrated Infrastructure Development for National Tourism Strategic Areas (Indonesia Tourism Development Project)?",
+   "gold": [
+    {
+     "document_id": "29890606",
+     "pages": [
+      36,
+      37
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-procurement-P159303",
+   "type": "procurement",
+   "project_id": "P159303",
+   "question": "How is procurement organized and managed for the Sri Lanka Financial Sector Modernization Project?",
+   "gold": [
+    {
+     "document_id": "27287617",
+     "pages": [
+      37,
+      38
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-procurement-P159929",
+   "type": "procurement",
+   "project_id": "P159929",
+   "question": "How is procurement organized and managed for the Integrated Habitat and Housing Project?",
+   "gold": [
+    {
+     "document_id": "27180184",
+     "pages": [
+      28
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-procurement-P163714",
+   "type": "procurement",
+   "project_id": "P163714",
+   "question": "How is procurement organized and managed for the General Education Modernization Project?",
+   "gold": [
+    {
+     "document_id": "29802458",
+     "pages": [
+      41,
+      42,
+      43
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-procurement-P164336",
+   "type": "procurement",
+   "project_id": "P164336",
+   "question": "How is procurement organized and managed for the Lowlands Livelihood Resilience Project?",
+   "gold": [
+    {
+     "document_id": "31061540",
+     "pages": [
+      86
+     ]
+    },
+    {
+     "document_id": "31061540",
+     "pages": [
+      94,
+      95,
+      96,
+      97,
+      98,
+      99
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-procurement-P175325",
+   "type": "procurement",
+   "project_id": "P175325",
+   "question": "How is procurement organized and managed for the Casamance Economic Development Project?",
+   "gold": [
+    {
+     "document_id": "33725374",
+     "pages": [
+      59,
+      60,
+      61
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-procurement-P180811",
+   "type": "procurement",
+   "project_id": "P180811",
+   "question": "How is procurement organized and managed for the Indonesia Health Systems Strengthening Project?",
+   "gold": [
+    {
+     "document_id": "34199714",
+     "pages": [
+      76,
+      77,
+      78,
+      79,
+      80,
+      81
+     ]
+    }
+   ],
+   "require_all": false
+  },
+  {
+   "id": "V3-abstain-out_of_scope_project",
+   "type": "insufficient",
+   "project_id": null,
+   "question": "What is the development objective of project P999999?",
+   "gold": [],
+   "require_all": false
+  },
+  {
+   "id": "V3-abstain-out_of_scope_country",
+   "type": "insufficient",
+   "project_id": null,
+   "question": "What lessons were learned from road projects in Kenya?",
+   "gold": [],
+   "require_all": false
+  },
+  {
+   "id": "V3-abstain-unknown_reference",
+   "type": "insufficient",
+   "project_id": null,
+   "question": "What is the planned signing date for activity ET-ERA-999999-CW-RFB?",
+   "gold": [],
+   "require_all": false
+  },
+  {
+   "id": "V3-abstain-unknown_contract",
+   "type": "insufficient",
+   "project_id": null,
+   "question": "Which supplier won contract number 9999999?",
+   "gold": [],
+   "require_all": false
+  },
+  {
+   "id": "V3-abstain-personal_data",
+   "type": "insufficient",
+   "project_id": null,
+   "question": "What is the email address and phone number of the project procurement specialist?",
+   "gold": [],
+   "require_all": false
+  }
+ ]
+}

@@ -1,0 +1,8 @@
+{
+ "release_verified": true,
+ "questions": 20,
+ "candidates_per_query": 300,
+ "recall@10_vs_exact_unscoped": 1.0,
+ "recall@10_vs_exact_project_scoped": 1.0,
+ "median_query_ms": 668.4
+}

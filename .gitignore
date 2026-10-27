@@ -76,6 +76,7 @@ rag/retrieval/index_cache/
 rag/embedding_cache/experimental_store/
 rag/embedding_cache/staging/
 rag/embedding_cache/releases/
+rag/release_v3/results/embedding_manifest.json
 
 # Run outputs, logs and experiment scratch (final results are summarised in docs/reports and ml/reports)
 **/runs/

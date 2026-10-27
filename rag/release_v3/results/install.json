@@ -1,0 +1,5 @@
+{
+ "matrix_rows": 45908,
+ "release_json": "rag/embedding_cache/releases/pilot_v3/release.json",
+ "verified_retriever_units": 45908
+}
