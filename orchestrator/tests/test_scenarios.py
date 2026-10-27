@@ -247,3 +247,12 @@ def test_unverified_document_citations_leave_the_investigation_partial():
 def test_a_partial_document_answer_stays_partial():
     out, _ = run_live_plan(FakePipeline(answer_response(status="partial")))
     assert out.status == InvestigationStatus.PARTIAL
+
+
+# --------------------------------------------------------------------------- A: answers can state the query scope
+def test_structured_evidence_states_its_filters_without_the_sql():
+    engine, _ = build_engine()
+    out = engine.start(request("How many bid invitations were published in fiscal year 2024?", execute=True))
+    [record] = out.evidence
+    assert "Filters applied: notice_class = 'tender_invitation' AND publication_fiscal_year = 2024" in record.summary
+    assert "SELECT" not in record.summary and "FROM" not in record.summary

@@ -15,6 +15,9 @@ import hashlib
 import json
 from typing import Any, Callable, Protocol
 
+import sqlglot
+from sqlglot import exp
+
 from conversation.redaction import redact_secrets
 from structured_agent.guardrails.policies import contains_instruction_like_text
 from structured_agent.nl2sql.result import FailureClass, WorkflowResult, WorkflowStatus
@@ -118,7 +121,7 @@ class StructuredDataWorker:
                 ("row_count", str(result.row_count)), *((k, str(provenance[k])) for k in PROVENANCE_KEYS if k in provenance))
                 if v),
             validation_status=ValidationStatus.VERIFIED, numeric_use=NumericUse.APPROVED, quality_warnings=tuple(warnings),
-            facts=facts, summary=_safe_text(result.message))
+            facts=facts, summary=_safe_text(_with_filters(result.message, result.executed_sql, result.parameters)))
 
     # ------------------------------------------------------------------------------------------- registry tools
     def _describe_metric(self, task: AgentTask, context: WorkerContext) -> WorkerOutput:
@@ -220,6 +223,29 @@ def _error(task: AgentTask, category: ErrorCategory, code: str, message: str, re
     return ExecutionError(error_id=new_id("err"), investigation_id=task.investigation_id, task_id=task.task_id,
                           node="execute", category=category, code=str(code)[:80], retry_after_seconds=retry_after,
                           safe_message=message)
+
+
+def _with_filters(message: str, sql: str | None, parameters: dict[str, Any]) -> str:
+    """The result message plus the query's filter conditions, so an answer can state its scope (no full SQL text)."""
+    filters = applied_filters(sql, parameters)
+    return f"{message} Filters applied: {filters}." if filters else message
+
+
+def applied_filters(sql: str | None, parameters: dict[str, Any]) -> str:
+    """WHERE and HAVING conditions of an executed query with parameters filled in, e.g. "country_name = 'Ethiopia'"."""
+    if not sql:
+        return ""
+    try:
+        tree = sqlglot.parse_one(sql, read="databricks")
+    except sqlglot.errors.ParseError:
+        return ""
+    conditions = []
+    for clause in tree.find_all(exp.Where, exp.Having):
+        text = clause.this.sql(dialect="databricks")
+        for name, value in parameters.items():
+            text = text.replace(f":{name}", f"'{value}'" if isinstance(value, str) else str(value))
+        conditions.append(text)
+    return "; ".join(conditions)[:300]
 
 
 def _safe_text(text: str) -> str:

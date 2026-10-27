@@ -53,6 +53,10 @@ FIRST_MESSAGES = [
     ("What technical specifications were used for water treatment plants?", Route.DOCUMENT_RAG,
      ReasonCategory.EXPLICIT_TASK_REQUEST),
     ("Why were contracts in Kenya delayed?", Route.DOCUMENT_RAG, ReasonCategory.EXPLICIT_TASK_REQUEST),
+    ("Which contractors received the largest awards in Kenya?", Route.STRUCTURED_DATA, ReasonCategory.EXPLICIT_TASK_REQUEST),
+    ("Show contract awards per procurement method in Kenya", Route.STRUCTURED_DATA, ReasonCategory.EXPLICIT_TASK_REQUEST),
+    ("What does the project appraisal document say about risks in Kenya?", Route.DOCUMENT_RAG,
+     ReasonCategory.EXPLICIT_TASK_REQUEST),
     ("Predict tender completion time", Route.ML_PREDICTION, ReasonCategory.EXPLICIT_TASK_REQUEST),
     ("What is the probability of re-bidding for a road works tender in Kenya?", Route.ML_PREDICTION,
      ReasonCategory.EXPLICIT_TASK_REQUEST),
@@ -80,6 +84,8 @@ AMBIGUOUS = [
     ("   ", ReasonCategory.EMPTY_MESSAGE),
     ("Show contract counts in Kenya and predict tender completion time", ReasonCategory.MIXED_INTENT),
     ("How many contracts were signed in Kenya and what lessons were learned?", ReasonCategory.MIXED_INTENT),
+    ("Which procurement methods were used most for contract awards in Ethiopia, and what do the project documents say "
+     "about procurement delays?", ReasonCategory.MIXED_INTENT),
     ("Summarize what we discussed and forecast delays for Kenya", ReasonCategory.MIXED_INTENT),
 ]
 

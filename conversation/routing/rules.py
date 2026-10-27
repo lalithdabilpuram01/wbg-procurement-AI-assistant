@@ -61,8 +61,11 @@ TASK_SIGNALS: dict[Route, dict[str, re.Pattern]] = {
     Route.STRUCTURED_DATA: {
         "aggregate_metric": _rx(r"\b(how many|number of|count of|total|sum of|average|mean|median|share of|percentage of|"
                                 r"proportion of|top \d+|ranking of)\b.{0,60}\b" + DATA_NOUN + r"\b"),
-        "metric_after_noun": _rx(r"\b" + DATA_NOUN + r"\b.{0,30}\b(counts?|totals?|average|trend|breakdown|by (country|year|"
-                                 r"fiscal year|method|sector|region))\b"),
+        "metric_after_noun": _rx(r"\b" + DATA_NOUN + r"\b.{0,30}\b(counts?|totals?|average|trend|breakdown|(by|per) (country|year|"
+                                 r"fiscal year|(procurement )?method|sector|region|(procurement )?category))\b"),
+        # "which methods were used most for contract awards": a ranking question that names a data noun
+        "ranking_question": _rx(r"\b(which|what)\b(?=.{0,120}\b" + DATA_NOUN + r"\b).{0,80}\b(most|least|largest|smallest|"
+                                r"highest|lowest|biggest|fewest|top)\b"),
         "data_listing": _rx(r"^(please )?(show|list|give me|display|get|retrieve|tabulate|break down)\b.{0,40}\b" + DATA_NOUN + r"\b"),
         "compare_data": _rx(r"\bcompare\b.{0,40}\b" + DATA_NOUN + r"\b"),
     },
@@ -72,8 +75,10 @@ TASK_SIGNALS: dict[Route, dict[str, re.Pattern]] = {
         "similar_projects": _rx(r"\bsimilar (projects?|operations?|contracts?|procurements?)\b"),
         "precedents": _rx(r"\b(precedents?|historical (cases|examples|experience))\b"),
         "specifications": _rx(r"\b(technical specifications?|technical requirements|terms of reference)\b"),
-        "documents": _rx(r"\b(in|from|according to) (the )?(documents?|pdfs?|reports?|icrs?|pads?|implementation "
+        "documents": _rx(r"\b(in|from|according to) (the )?([\w-]+ ){0,3}(documents?|pdfs?|reports?|icrs?|pads?|implementation "
                          r"completion reports?|project appraisal documents?)\b"),
+        "documents_say": _rx(r"\b(documents?|pdfs?|icrs?|pads?)\b.{0,40}\b(say|says|said|mention|mentions|describe|describes|"
+                             r"state|states|report|reports)\b"),
         "why_event": _rx(r"\bwhy (was|were|did|do|is|are)\b.{0,60}\b(delayed|cancell?ed|re-?bid|re-?tendered|amended|slow|"
                          r"late|failed|fail)\b"),
     },
