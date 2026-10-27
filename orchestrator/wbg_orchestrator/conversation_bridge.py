@@ -25,9 +25,10 @@ from conversation.service import DEFAULT_TITLE, TITLE_CHARS, ConversationReply, 
 from conversation.store import ConversationStore
 
 from .authorization import AppAuthorizationContext
-from .contracts import (EvidenceKind, InvestigationRequest, InvestigationStatus, OwnerRef, PackageSpec, ValidationStatus,
-                        investigation_id_for, new_id)
-from .engine import EngineOutcome, InvestigationEngine
+from .contracts import (EvidenceKind, InvestigationRequest, InvestigationStatus, OwnerRef, PackageSpec, PlanningSpec,
+                        ValidationStatus, investigation_id_for, new_id)
+from .engine import EngineOutcome, InvestigationEngine, InvestigationNotFound, checkpoint_thread_id
+from .planner import BRIEF_BUDGET
 
 COMBINABLE = {Route.STRUCTURED_DATA.value, Route.DOCUMENT_RAG.value}
 UNCLEAR = {ReasonCategory.NO_CLEAR_INTENT, ReasonCategory.CLASSIFIER_LOW_SCORE, ReasonCategory.CLASSIFIER_ERROR}
@@ -37,7 +38,22 @@ PACKAGE_FIELDS_MESSAGE = (
     "(e.g. Request for Bids); 3) the category (Works, Goods, Consultant Services or Non-consulting Services); 4) the review "
     "type (Prior or Post); 5) the bid window in days; 6) the planned tender date. Region, country, sector, income group and "
     "earlier tenders are looked up from the project records.")
-SOURCE_TYPES = {EvidenceKind.STRUCTURED_RESULT: "structured_result", EvidenceKind.MODEL_PREDICTION: "ml_prediction"}
+SOURCE_TYPES = {EvidenceKind.STRUCTURED_RESULT: "structured_result", EvidenceKind.MODEL_PREDICTION: "ml_prediction",
+                EvidenceKind.SIMILAR_PROJECT: "structured_result"}
+BRIEF_ROUTE = "planning_brief"
+PLANNING_FIELDS_MESSAGE = (
+    "I can prepare a Planning Brief for a new project from past similar projects. Please use “Plan a new project” and "
+    "give: the country, the sector, a short description of what the project will do, the planned Board approval date "
+    "(and the estimated cost if known), and for each planned package its name, category, method (or leave it for me to "
+    "suggest), review type, bid window and planned tender date.")
+
+
+def describe_plan(spec: PlanningSpec) -> str:
+    profile = spec.profile
+    packages = "; ".join(f"{p.name} ({p.procurement_category}, {p.procurement_method or 'method to suggest'}, "
+                         f"{p.review_type} review, tender {p.tender_date.isoformat()})" for p in spec.packages)
+    return (f"Plan a new {profile.sector} project in {profile.country_code}, Board approval planned for "
+            f"{profile.approval_date.isoformat()}: {profile.description} Packages: {packages}.")[:2000]
 
 
 def describe_package(package: PackageSpec) -> str:
@@ -135,9 +151,12 @@ class ConversationFrontDoor:
         the package fields. Everything else is handled by the conversation service as before."""
         routing = self._service.route_message(owner, thread_id, text)
         if routing is not None and routing.route == Route.ML_PREDICTION:
-            return self._ask_for_package(owner, thread_id, text)
-        if routing is not None and self._opens_investigation(routing):
-            outcome = self._open_investigation(owner, thread_id, text, execute, on_start)
+            return self._ask_for_fields(owner, thread_id, text, Route.ML_PREDICTION.value, PACKAGE_FIELDS_MESSAGE)
+        if routing is not None and routing.route == Route.PROCUREMENT_PLANNING:
+            return self._ask_for_fields(owner, thread_id, text, BRIEF_ROUTE, PLANNING_FIELDS_MESSAGE)
+        planning = self._planning_context(owner, thread_id) if routing is not None else None
+        if routing is not None and (self._opens_investigation(routing) or (planning and self._follows_brief(routing))):
+            outcome = self._open_investigation(owner, thread_id, text, execute, on_start, planning)
             return FrontDoorReply(outcome.status.value, outcome.values["request"]["request_id"], investigation=outcome)
         token = CURRENT_OWNER.set(OwnerBinding(owner, thread_id, on_start))
         try:
@@ -158,6 +177,22 @@ class ConversationFrontDoor:
         self._record_answer(owner, thread_id, outcome.values["request"]["request_id"], outcome)    # history shows the result
         return outcome
 
+    def plan_project(self, owner: Owner, thread_id: str, spec: PlanningSpec,
+                     on_start: Callable[[str], None] | None = None) -> EngineOutcome:
+        """A Planning Brief for a new project: recorded as a user turn, run with the fixed brief plan."""
+        text = describe_plan(spec)
+        request_id = self._user_turn(owner, thread_id, text, BRIEF_ROUTE)
+        request = InvestigationRequest(
+            investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=thread_id,
+            owner=owner_ref(owner), question=redact_secrets(text), mode="investigation", planning=spec, budget=BRIEF_BUDGET,
+            rag_release=self._release,
+            authorization=self._authorization_for((Route.PROCUREMENT_PLANNING, Route.ML_PREDICTION, Route.DOCUMENT_RAG)))
+        if on_start:
+            on_start(request_id)
+        outcome = self._engine.start(request)
+        self._record_answer(owner, thread_id, request_id, outcome)
+        return outcome
+
     def assess_package(self, owner: Owner, thread_id: str, package: PackageSpec,
                        on_start: Callable[[str], None] | None = None) -> EngineOutcome:
         """A structured package assessment: recorded as a user turn, run with the fixed prediction + lessons plan."""
@@ -174,6 +209,11 @@ class ConversationFrontDoor:
         return outcome
 
     # ------------------------------------------------------------------------------------------- internals
+    @staticmethod
+    def _follows_brief(routing: RoutingDecision) -> bool:
+        """After a brief, task questions and references ("these projects") go to the planner with the brief's context."""
+        return routing.is_task or routing.reason in UNCLEAR | {ReasonCategory.AMBIGUOUS_REFERENT}
+
     def _opens_investigation(self, routing: RoutingDecision) -> bool:
         combined = routing.reason == ReasonCategory.MIXED_INTENT and set(routing.matched_signals) == COMBINABLE
         return self._allow_combined and (combined or routing.reason in UNCLEAR)
@@ -190,27 +230,47 @@ class ConversationFrontDoor:
         return request_id
 
     def _open_investigation(self, owner: Owner, thread_id: str, text: str, execute: bool,
-                            on_start: Callable[[str], None] | None) -> EngineOutcome:
+                            on_start: Callable[[str], None] | None, planning_context: str | None = None) -> EngineOutcome:
         request_id = self._user_turn(owner, thread_id, text, "investigation")
         request = InvestigationRequest(
             investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=thread_id,
             owner=owner_ref(owner), question=redact_secrets(text), mode="investigation", execute_requested=execute,
-            rag_release=self._release, authorization=self._authorization_for((Route.STRUCTURED_DATA, Route.DOCUMENT_RAG)))
+            rag_release=self._release, planning_context=planning_context,
+            authorization=self._authorization_for((Route.STRUCTURED_DATA, Route.DOCUMENT_RAG)))
         if on_start:
             on_start(request_id)
         outcome = self._engine.start(request)
         self._record_answer(owner, thread_id, request_id, outcome)
         return outcome
 
-    def _ask_for_package(self, owner: Owner, thread_id: str, text: str) -> FrontDoorReply:
-        """Predictions need structured package fields: say exactly which ones (no agent runs)."""
-        request_id = self._user_turn(owner, thread_id, text, Route.ML_PREDICTION.value)
+    def _ask_for_fields(self, owner: Owner, thread_id: str, text: str, route: str, message: str) -> FrontDoorReply:
+        """Predictions and briefs need structured fields: say exactly which ones (no agent runs)."""
+        status = "needs_package_details" if route == Route.ML_PREDICTION.value else "needs_project_details"
+        request_id = self._user_turn(owner, thread_id, text, route)
         thread = self._store.get_thread(owner, thread_id)
         self._store.append_turn(owner, Turn(
             thread_id=thread_id, seq=self._store.next_seq(owner, thread_id), role="assistant", kind=TurnKind.ANSWER,
-            text=PACKAGE_FIELDS_MESSAGE, topic_epoch=thread.topic_epoch,
-            metadata=TurnMetadata(request_id=request_id, status="needs_package_details", route=Route.ML_PREDICTION.value)))
-        return FrontDoorReply("needs_package_details", request_id)
+            text=message, topic_epoch=thread.topic_epoch, metadata=TurnMetadata(request_id=request_id, status=status, route=route)))
+        return FrontDoorReply(status, request_id)
+
+    def _planning_context(self, owner: Owner, thread_id: str) -> str | None:
+        """The latest brief of this conversation as planner context: the project profile and its similar projects."""
+        brief = next((t for t in reversed(self._store.turns(owner, thread_id))
+                      if t.role == "user" and t.metadata.route == BRIEF_ROUTE and t.metadata.request_id), None)
+        if brief is None:
+            return None
+        owner_key = owner_ref(owner)
+        try:
+            outcome = self._engine.outcome(owner_key, checkpoint_thread_id(owner_key, thread_id,
+                                                                           investigation_id_for(brief.metadata.request_id)))
+        except InvestigationNotFound:
+            return None
+        spec = PlanningSpec.model_validate(outcome.values["request"]["planning"])
+        similar = [e for e in outcome.evidence if e.kind == EvidenceKind.SIMILAR_PROJECT]
+        listed = "; ".join(f"{e.project_ids[0]} {e.citation.split(': ', 1)[-1]}"
+                           + (" [documents]" if any(f.name == "document_scope" and f.value == "yes" for f in e.facts) else "")
+                           for e in similar if e.project_ids)
+        return redact_secrets(f"{describe_plan(spec)} Similar past projects: {listed or 'none found'}.")[:3000]
 
     def _record_answer(self, owner: Owner, thread_id: str, request_id: str, outcome: EngineOutcome) -> None:
         """Append the investigation's answer as an assistant turn (safe metadata only: no SQL, no rows)."""

@@ -1,0 +1,2182 @@
+{
+  "run": {
+    "brief": {
+      "job": {
+        "job_id": "job_e68417c0b37548f5b4e3",
+        "kind": "plan",
+        "state": "succeeded",
+        "conversation_id": "b7fecd2c-1b71-44d9-af38-99bd38d8b645",
+        "request_id": "req_f53e46d88629461fbe19",
+        "status": "partial",
+        "error": null
+      },
+      "seconds": 98.9,
+      "view": {
+        "request_id": "req_f53e46d88629461fbe19",
+        "status": "partial",
+        "message": "Ethiopia- Expressway Development Support Project (P148850) is the closest comparable: same country, same sector, similar description and size. It is closed, with commitment of USD 297,920,032 and 43 contract awards, and has no outcome rating. Ethiopia: Transport Systems Improvement Project (TRANSIP, P151819), Road Sector Support Project (P131118) and Ethiopia Rural Connectivity to Support Food Security Program (P176303) match on country, sector and size. P151819 was rated Moderately Unsatisfactory. Lowlands Livelihood Resilience Project (P164336) is comparable by description and size but sits in agriculture, not transport. It had 719 contract awards, so it is a weaker comparator for road works. Road rehabilitation works: the model estimates 211 days from tender to signing (likely range 97-468), with a 22% chance of exceeding a year. Estimated signing date is 2028-04-29. This is a model estimate, not a recorded fact. Construction supervision (Individual Consultant Selection suggested): the model estimates 190 days (likely range 88-423), with an 18% chance of exceeding a year. Estimated signing date is 2028-02-07. This is a model estimate. Estimated drivers for the works package: approval year shortens the tender, while the 45-day bid window and project age at tender lengthen it. The procurement plan should treat the signing dates as estimates and allow for the upper range, with supervision signing before works. For Works in ET since FY2016, Request for Bids was used in 556 awards (median USD 377,350) and Request for Quotations in 488 (median USD 114,353). Review was Post in 1041 awards and Prior in 22. For Consultant Services in ET since FY2016, Individual Consultant Selection had 349 awards (median USD 12,923) and Quality And Cost-Based Selection 132 (median USD 427,853). Review was Post in 480 awards and Prior in 122. Supplier origin: 1034 Works awards went entirely to suppliers from the same country and 20 included another country. For Consultant Services, 482 awards were all same-country and 118 included other-country suppliers. Contract amendment risk for Road rehabilitation works is simulated at 31.6%, placing it on the demonstration review list; the model was trained on synthetic data. Mitigation: put an experienced consultant on contract design and monitoring, as a past appraisal proposed. Simulated re-bidding risk is low: 7.1% for Road rehabilitation works and 2.7% for Construction supervision. Simulated amendment risk for supervision is 14.9%, not on the review list. These models were trained on synthetic data. Governance context is moderate: 2025 CPIA overall 3.25, transparency and corruption 3.0, WGI government effectiveness -0.62. A past appraisal rated transport ministry staff capacity as a high risk, mitigated by assigning a qualified full-time procurement specialist experienced in Bank procurement. Ethiopian procurement plans report that gaps in standard performance and compliance specifications caused many clarifications and addenda, delaying procedures. Do differently: finalise specifications and bidding documents before the tender dates. An appraisal of Ethiopian power utility projects recorded poor quality specifications, designs and bidding documents, with higher costs and reduced competition. Do differently: complete designs before bidding and check the roads authority's procurement staffing. A completed Ethiopian program credited structured, systematic capacity building across government levels, with well-trained staff and focal persons. Do the same for the regional roads authority's maintenance capacity building. A prior hybrid operation's design lessons were to include capacity building for the agencies and to rely on consultation with central, regional and local governments. Do differently: consult regional and local bodies in Oromia during preparation. The 45-day bid window is a modelled driver lengthening the works tender. Prior review is rare for Works in ET (22 awards), so allow time for reviews. C",
+        "claims": [
+          {
+            "text": "Ethiopia- Expressway Development Support Project (P148850) is the closest comparable: same country, same sector, similar description and size. It is closed, with commitment of USD 297,920,032 and 43 contract awards, and has no outcome rating.",
+            "evidence_ids": [
+              "ev_bb399c5edc974b25bca1"
+            ],
+            "section": "similar_projects"
+          },
+          {
+            "text": "Ethiopia: Transport Systems Improvement Project (TRANSIP, P151819), Road Sector Support Project (P131118) and Ethiopia Rural Connectivity to Support Food Security Program (P176303) match on country, sector and size. P151819 was rated Moderately Unsatisfactory.",
+            "evidence_ids": [
+              "ev_48d087afd0804a35bbb1",
+              "ev_0b3bd828096547b8a4f2",
+              "ev_01c1b8926dc04a1698fd"
+            ],
+            "section": "similar_projects"
+          },
+          {
+            "text": "Lowlands Livelihood Resilience Project (P164336) is comparable by description and size but sits in agriculture, not transport. It had 719 contract awards, so it is a weaker comparator for road works.",
+            "evidence_ids": [
+              "ev_02a9acb4e5514d1f83b1"
+            ],
+            "section": "similar_projects"
+          },
+          {
+            "text": "Road rehabilitation works: the model estimates 211 days from tender to signing (likely range 97-468), with a 22% chance of exceeding a year. Estimated signing date is 2028-04-29. This is a model estimate, not a recorded fact.",
+            "evidence_ids": [
+              "ev_cef1a2692ec744b88eb2"
+            ],
+            "section": "schedule"
+          },
+          {
+            "text": "Construction supervision (Individual Consultant Selection suggested): the model estimates 190 days (likely range 88-423), with an 18% chance of exceeding a year. Estimated signing date is 2028-02-07. This is a model estimate.",
+            "evidence_ids": [
+              "ev_fca4b39ecc604a50944f"
+            ],
+            "section": "schedule"
+          },
+          {
+            "text": "Estimated drivers for the works package: approval year shortens the tender, while the 45-day bid window and project age at tender lengthen it. The procurement plan should treat the signing dates as estimates and allow for the upper range, with supervision signing before works.",
+            "evidence_ids": [
+              "ev_cef1a2692ec744b88eb2",
+              "ev_fca4b39ecc604a50944f"
+            ],
+            "section": "schedule"
+          },
+          {
+            "text": "For Works in ET since FY2016, Request for Bids was used in 556 awards (median USD 377,350) and Request for Quotations in 488 (median USD 114,353). Review was Post in 1041 awards and Prior in 22.",
+            "evidence_ids": [
+              "ev_609ff2a94d014a698e57",
+              "ev_020fb019b2b544359aa4"
+            ],
+            "section": "market_approach"
+          },
+          {
+            "text": "For Consultant Services in ET since FY2016, Individual Consultant Selection had 349 awards (median USD 12,923) and Quality And Cost-Based Selection 132 (median USD 427,853). Review was Post in 480 awards and Prior in 122.",
+            "evidence_ids": [
+              "ev_fe19d93992f44ebdb2a9",
+              "ev_2023589da074484f99d8"
+            ],
+            "section": "market_approach"
+          },
+          {
+            "text": "Supplier origin: 1034 Works awards went entirely to suppliers from the same country and 20 included another country. For Consultant Services, 482 awards were all same-country and 118 included other-country suppliers.",
+            "evidence_ids": [
+              "ev_17f83ef87222456fa430",
+              "ev_79a21587f95f40d9b868"
+            ],
+            "section": "market_approach"
+          },
+          {
+            "text": "Contract amendment risk for Road rehabilitation works is simulated at 31.6%, placing it on the demonstration review list; the model was trained on synthetic data. Mitigation: put an experienced consultant on contract design and monitoring, as a past appraisal proposed.",
+            "evidence_ids": [
+              "ev_23aa30d250b1479799d1",
+              "ev_2d3bf11b471a459e9126"
+            ],
+            "section": "risks"
+          },
+          {
+            "text": "Simulated re-bidding risk is low: 7.1% for Road rehabilitation works and 2.7% for Construction supervision. Simulated amendment risk for supervision is 14.9%, not on the review list. These models were trained on synthetic data.",
+            "evidence_ids": [
+              "ev_700e233e39cd4aaea5c9",
+              "ev_395e3a14a2ec42318f44",
+              "ev_47bc5487a28c466eb2e8"
+            ],
+            "section": "risks"
+          },
+          {
+            "text": "Governance context is moderate: 2025 CPIA overall 3.25, transparency and corruption 3.0, WGI government effectiveness -0.62. A past appraisal rated transport ministry staff capacity as a high risk, mitigated by assigning a qualified full-time procurement specialist experienced in Bank procurement.",
+            "evidence_ids": [
+              "ev_d217187ab51741a99c5c",
+              "ev_2d3bf11b471a459e9126"
+            ],
+            "section": "risks"
+          },
+          {
+            "text": "Ethiopian procurement plans report that gaps in standard performance and compliance specifications caused many clarifications and addenda, delaying procedures. Do differently: finalise specifications and bidding documents before the tender dates.",
+            "evidence_ids": [
+              "ev_60b95bb9dac246eab520",
+              "ev_a2dec75be65c41a3b540"
+            ],
+            "section": "lessons"
+          },
+          {
+            "text": "An appraisal of Ethiopian power utility projects recorded poor quality specifications, designs and bidding documents, with higher costs and reduced competition. Do differently: complete designs before bidding and check the roads authority's procurement staffing.",
+            "evidence_ids": [
+              "ev_d827a08aadcb4b76992a",
+              "ev_bb1b66078c734eca966e"
+            ],
+            "section": "lessons"
+          },
+          {
+            "text": "A completed Ethiopian program credited structured, systematic capacity building across government levels, with well-trained staff and focal persons. Do the same for the regional roads authority's maintenance capacity building.",
+            "evidence_ids": [
+              "ev_c1bd73cec2fa44d6ba6c"
+            ],
+            "section": "lessons"
+          },
+          {
+            "text": "A prior hybrid operation's design lessons were to include capacity building for the agencies and to rely on consultation with central, regional and local governments. Do differently: consult regional and local bodies in Oromia during preparation.",
+            "evidence_ids": [
+              "ev_cc5283a072a2462d9442"
+            ],
+            "section": "lessons"
+          },
+          {
+            "text": "The 45-day bid window is a modelled driver lengthening the works tender. Prior review is rare for Works in ET (22 awards), so allow time for reviews. Check the bid window against how complete the bidding documents are.",
+            "evidence_ids": [
+              "ev_cef1a2692ec744b88eb2",
+              "ev_020fb019b2b544359aa4"
+            ],
+            "section": "tender_design"
+          },
+          {
+            "text": "Confirm the supervision selection method before finalising: the model assumed Individual Consultant Selection (median USD 12,923), while Quality And Cost-Based Selection has a median of USD 427,853. Match the method to the scope.",
+            "evidence_ids": [
+              "ev_fca4b39ecc604a50944f",
+              "ev_fe19d93992f44ebdb2a9"
+            ],
+            "section": "tender_design"
+          },
+          {
+            "text": "For the Road Authority's procurement experience, a past appraisal noted most of 29 design-and-build contracts used open tender, most under US$70 million. Use this when setting qualification thresholds for rehabilitation lots and bridges.",
+            "evidence_ids": [
+              "ev_d442a6437e824c29b0e9"
+            ],
+            "section": "tender_design"
+          },
+          {
+            "text": "Track tender durations against the model estimates: works 211 days and supervision 190 days. Treat movement toward the upper likely bounds (468 and 423 days) as an early warning to revise the procurement plan signing dates.",
+            "evidence_ids": [
+              "ev_cef1a2692ec744b88eb2",
+              "ev_fca4b39ecc604a50944f"
+            ],
+            "section": "monitoring"
+          },
+          {
+            "text": "Watch for bidder clarification requests and addenda on specifications, and for variations, weak dispute resolution and staff turnover. Past appraisals link these to delays and corruption risk.",
+            "evidence_ids": [
+              "ev_60b95bb9dac246eab520",
+              "ev_2d3bf11b471a459e9126"
+            ],
+            "section": "monitoring"
+          }
+        ],
+        "limitations": [
+          "Tender duration figures are model estimates, not recorded outcomes; test error is about 77 days.",
+          "Amendment and re-bidding risk models were trained on synthetic data and are not validated World Bank risk accuracy.",
+          "Country-level medians from approval to signing are much longer than the model's tender-to-signing estimates and measure a different interval.",
+          "Several document passages are truncated, and some appraisal tables are unverified, so only qualitative points were used from them.",
+          "Only a few similar projects have documents available; no evidence covers Oromia roads or bridges specifically.",
+          "PDF table values are cited for context only; they are not verified figures.",
+          "Amendment and re-bidding risks come from models trained on synthetic data; they are not validated World Bank risk estimates.",
+          "2 task(s) returned partial results.",
+          "1 statement(s) were removed because the evidence did not support them."
+        ],
+        "error_codes": [],
+        "pending_approval": null,
+        "tasks": [
+          {
+            "task": "similar",
+            "worker": "procurement_planning",
+            "operation": "match_similar_projects",
+            "question": "Find similar past projects.",
+            "state": "succeeded"
+          },
+          {
+            "task": "market",
+            "worker": "procurement_planning",
+            "operation": "market_benchmarks",
+            "question": "Benchmark procurement methods, review types and supplier origin for the planned categories.",
+            "state": "succeeded"
+          },
+          {
+            "task": "governance",
+            "worker": "procurement_planning",
+            "operation": "governance_context",
+            "question": "Country governance and institutional context.",
+            "state": "succeeded"
+          },
+          {
+            "task": "predict",
+            "worker": "ml_prediction",
+            "operation": "predict_planned_packages",
+            "question": "Estimate duration and risks for each planned package.",
+            "state": "succeeded"
+          },
+          {
+            "task": "risks",
+            "worker": "document_intelligence",
+            "operation": "answer_document_question",
+            "question": "What key risks were identified at appraisal for transportation projects, and what mitigation measures were planned?",
+            "state": "succeeded"
+          },
+          {
+            "task": "issues",
+            "worker": "document_intelligence",
+            "operation": "answer_document_question",
+            "question": "What implementation and procurement problems were reported during implementation of transportation projects?",
+            "state": "partial"
+          },
+          {
+            "task": "lessons",
+            "worker": "document_intelligence",
+            "operation": "answer_document_question",
+            "question": "What lessons were learned about procurement and implementation in transportation projects?",
+            "state": "partial"
+          },
+          {
+            "task": "packaging",
+            "worker": "document_intelligence",
+            "operation": "answer_document_question",
+            "question": "How were works and consultant services contracts packaged and procured, and what specification, qualification or contractor performance problems occurred?",
+            "state": "succeeded"
+          }
+        ],
+        "evidence": [
+          {
+            "evidence_id": "ev_bb399c5edc974b25bca1",
+            "kind": "similar_project",
+            "citation": "Similar project P148850: Ethiopia- Expressway Development Support Project",
+            "numeric_use": "approved",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "Ethiopia- Expressway Development Support Project (P148850, ET, Transportation): same country; same sector; similar description; similar size.",
+            "document_id": null,
+            "pages": null,
+            "project_ids": [
+              "P148850"
+            ],
+            "source_url": null,
+            "facts": [
+              {
+                "name": "project_id",
+                "value": "P148850",
+                "unit": null
+              },
+              {
+                "name": "project_name",
+                "value": "Ethiopia- Expressway Development Support Project",
+                "unit": null
+              },
+              {
+                "name": "country",
+                "value": "ET",
+                "unit": null
+              },
+              {
+                "name": "sector",
+                "value": "Transportation",
+                "unit": null
+              },
+              {
+                "name": "approval_fiscal_year",
+                "value": "2015",
+                "unit": null
+              },
+              {
+                "name": "status",
+                "value": "Closed",
+                "unit": null
+              },
+              {
+                "name": "commitment_usd",
+                "value": "297920032",
+                "unit": "USD"
+              },
+              {
+                "name": "contract_awards",
+                "value": "43",
+                "unit": null
+              },
+              {
+                "name": "ieg_outcome_rating",
+                "value": "not rated",
+                "unit": null
+              },
+              {
+                "name": "similarity",
+                "value": "99",
+                "unit": "%"
+              },
+              {
+                "name": "match",
+                "value": "same country; same sector; similar description; similar size",
+                "unit": null
+              },
+              {
+                "name": "documents",
+                "value": "yes",
+                "unit": null
+              },
+              {
+                "name": "document_scope",
+                "value": "yes",
+                "unit": null
+              }
+            ]
+          },
+          {
+            "evidence_id": "ev_48d087afd0804a35bbb1",
+            "kind": "similar_project",
+            "citation": "Similar project P151819: Ethiopia: Transport Systems Improvement Project (TRANSIP)",
+            "numeric_use": "approved",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "Ethiopia: Transport Systems Improvement Project (TRANSIP) (P151819, ET, Transportation): same country; same sector; similar size.",
+            "document_id": null,
+            "pages": null,
+            "project_ids": [
+              "P151819"
+            ],
+            "source_url": null,
+            "facts": [
+              {
+                "name": "project_id",
+                "value": "P151819",
+                "unit": null
+              },
+              {
+                "name": "project_name",
+                "value": "Ethiopia: Transport Systems Improvement Project (TRANSIP)",
+                "unit": null
+              },
+              {
+                "name": "country",
+                "value": "ET",
+                "unit": null
+              },
+              {
+                "name": "sector",
+                "value": "Transportation",
+                "unit": null
+              },
+              {
+                "name": "approval_fiscal_year",
+                "value": "2016",
+                "unit": null
+              },
+              {
+                "name": "status",
+                "value": "Closed",
+                "unit": null
+              },
+              {
+                "name": "commitment_usd",
+                "value": "300000000",
+                "unit": "USD"
+              },
+              {
+                "name": "contract_awards",
+                "value": "36",
+                "unit": null
+              },
+              {
+                "name": "ieg_outcome_rating",
+                "value": "Moderately Unsatisfactory",
+                "unit": null
+              },
+              {
+                "name": "similarity",
+                "value": "75",
+                "unit": "%"
+              },
+              {
+                "name": "match",
+                "value": "same country; same sector; similar size",
+                "unit": null
+              },
+              {
+                "name": "documents",
+                "value": "no",
+                "unit": null
+              },
+              {
+                "name": "document_scope",
+                "value": "no",
+                "unit": null
+              }
+            ]
+          },
+          {
+            "evidence_id": "ev_01c1b8926dc04a1698fd",
+            "kind": "similar_project",
+            "citation": "Similar project P176303: Ethiopia Rural Connectivity to Support Food Security Program",
+            "numeric_use": "approved",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "Ethiopia Rural Connectivity to Support Food Security Program (P176303, ET, Transportation): same country; same sector; similar size.",
+            "document_id": null,
+            "pages": null,
+            "project_ids": [
+              "P176303"
+            ],
+            "source_url": null,
+            "facts": [
+              {
+                "name": "project_id",
+                "value": "P176303",
+                "unit": null
+              },
+              {
+                "name": "project_name",
+                "value": "Ethiopia Rural Connectivity to Support Food Security Program",
+                "unit": null
+              },
+              {
+                "name": "country",
+                "value": "ET",
+                "unit": null
+              },
+              {
+                "name": "sector",
+                "value": "Transportation",
+                "unit": null
+              },
+              {
+                "name": "approval_fiscal_year",
+                "value": "2024",
+                "unit": null
+              },
+              {
+                "name": "status",
+                "value": "Active",
+                "unit": null
+              },
+              {
+                "name": "commitment_usd",
+                "value": "300000000",
+                "unit": "USD"
+              },
+              {
+                "name": "contract_awards",
+                "value": "24",
+                "unit": null
+              },
+              {
+                "name": "ieg_outcome_rating",
+                "value": "not rated",
+                "unit": null
+              },
+              {
+                "name": "similarity",
+                "value": "75",
+                "unit": "%"
+              },
+              {
+                "name": "match",
+                "value": "same country; same sector; similar size",
+                "unit": null
+              },
+              {
+                "name": "documents",
+                "value": "no",
+                "unit": null
+              },
+              {
+                "name": "document_scope",
+                "value": "no",
+                "unit": null
+              }
+            ]
+          },
+          {
+            "evidence_id": "ev_0b3bd828096547b8a4f2",
+            "kind": "similar_project",
+            "citation": "Similar project P131118: Road Sector Support Project",
+            "numeric_use": "approved",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "Road Sector Support Project (P131118, ET, Transportation): same country; same sector; similar size.",
+            "document_id": null,
+            "pages": null,
+            "project_ids": [
+              "P131118"
+            ],
+            "source_url": null,
+            "facts": [
+              {
+                "name": "project_id",
+                "value": "P131118",
+                "unit": null
+              },
+              {
+                "name": "project_name",
+                "value": "Road Sector Support Project",
+                "unit": null
+              },
+              {
+                "name": "country",
+                "value": "ET",
+                "unit": null
+              },
+              {
+                "name": "sector",
+                "value": "Transportation",
+                "unit": null
+              },
+              {
+                "name": "approval_fiscal_year",
+                "value": "2014",
+                "unit": null
+              },
+              {
+                "name": "status",
+                "value": "Active",
+                "unit": null
+              },
+              {
+                "name": "commitment_usd",
+                "value": "320000000",
+                "unit": "USD"
+              },
+              {
+                "name": "contract_awards",
+                "value": "19",
+                "unit": null
+              },
+              {
+                "name": "ieg_outcome_rating",
+                "value": "not rated",
+                "unit": null
+              },
+              {
+                "name": "similarity",
+                "value": "75",
+                "unit": "%"
+              },
+              {
+                "name": "match",
+                "value": "same country; same sector; similar size",
+                "unit": null
+              },
+              {
+                "name": "documents",
+                "value": "no",
+                "unit": null
+              },
+              {
+                "name": "document_scope",
+                "value": "no",
+                "unit": null
+              }
+            ]
+          },
+          {
+            "evidence_id": "ev_02a9acb4e5514d1f83b1",
+            "kind": "similar_project",
+            "citation": "Similar project P164336: Lowlands Livelihood Resilience Project",
+            "numeric_use": "approved",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "Lowlands Livelihood Resilience Project (P164336, ET, Agriculture, Fishing and Forestry): same country; similar description; similar size.",
+            "document_id": null,
+            "pages": null,
+            "project_ids": [
+              "P164336"
+            ],
+            "source_url": null,
+            "facts": [
+              {
+                "name": "project_id",
+                "value": "P164336",
+                "unit": null
+              },
+              {
+                "name": "project_name",
+                "value": "Lowlands Livelihood Resilience Project",
+                "unit": null
+              },
+              {
+                "name": "country",
+                "value": "ET",
+                "unit": null
+              },
+              {
+                "name": "sector",
+                "value": "Agriculture, Fishing and Forestry",
+                "unit": null
+              },
+              {
+                "name": "approval_fiscal_year",
+                "value": "2019",
+                "unit": null
+              },
+              {
+                "name": "status",
+                "value": "Closed",
+                "unit": null
+              },
+              {
+                "name": "commitment_usd",
+                "value": "312694624",
+                "unit": "USD"
+              },
+              {
+                "name": "contract_awards",
+                "value": "719",
+                "unit": null
+              },
+              {
+                "name": "ieg_outcome_rating",
+                "value": "not rated",
+                "unit": null
+              },
+              {
+                "name": "similarity",
+                "value": "70",
+                "unit": "%"
+              },
+              {
+                "name": "match",
+                "value": "same country; similar description; similar size",
+                "unit": null
+              },
+              {
+                "name": "documents",
+                "value": "yes",
+                "unit": null
+              },
+              {
+                "name": "document_scope",
+                "value": "yes",
+                "unit": null
+              }
+            ]
+          },
+          {
+            "evidence_id": "ev_50be113b182147e6b1f2",
+            "kind": "similar_project",
+            "citation": "Similar project P176731: Power Sector Reform, Investment and Modernization in Ethiopia (PRIME-1)",
+            "numeric_use": "approved",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "Power Sector Reform, Investment and Modernization in Ethiopia (PRIME-1) (P176731, ET, Energy and Extractives): same country; similar description; similar size.",
+            "document_id": null,
+            "pages": null,
+            "project_ids": [
+              "P176731"
+            ],
+            "source_url": null,
+            "facts": [
+              {
+                "name": "project_id",
+                "value": "P176731",
+                "unit": null
+              },
+              {
+                "name": "project_name",
+                "value": "Power Sector Reform, Investment and Modernization in Ethiopia (PRIME-1)",
+                "unit": null
+              },
+              {
+                "name": "country",
+                "value": "ET",
+                "unit": null
+              },
+              {
+                "name": "sector",
+                "value": "Energy and Extractives",
+                "unit": null
+              },
+              {
+                "name": "approval_fiscal_year",
+                "value": "2024",
+                "unit": null
+              },
+              {
+                "name": "status",
+                "value": "Active",
+                "unit": null
+              },
+              {
+                "name": "commitment_usd",
+                "value": "589630020",
+                "unit": "USD"
+              },
+              {
+                "name": "contract_awards",
+                "value": "11",
+                "unit": null
+              },
+              {
+                "name": "ieg_outcome_rating",
+                "value": "not rated",
+                "unit": null
+              },
+              {
+                "name": "similarity",
+                "value": "68",
+                "unit": "%"
+              },
+              {
+                "name": "match",
+                "value": "same country; similar description; similar size",
+                "unit": null
+              },
+              {
+                "name": "documents",
+                "value": "yes",
+                "unit": null
+              },
+              {
+                "name": "document_scope",
+                "value": "yes",
+                "unit": null
+              }
+            ]
+          },
+          {
+            "evidence_id": "ev_d41d95b6e05b43ecb6ab",
+            "kind": "similar_project",
+            "citation": "Similar project P177233: Response - Recovery - Resilience for Conflict-Affected Communities in Ethiopia Project",
+            "numeric_use": "approved",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "Response - Recovery - Resilience for Conflict-Affected Communities in Ethiopia Project (P177233, ET, Social Protection): same country; similar size.",
+            "document_id": null,
+            "pages": null,
+            "project_ids": [
+              "P177233"
+            ],
+            "source_url": null,
+            "facts": [
+              {
+                "name": "project_id",
+                "value": "P177233",
+                "unit": null
+              },
+              {
+                "name": "project_name",
+                "value": "Response - Recovery - Resilience for Conflict-Affected Communities in Ethiopia Project",
+                "unit": null
+              },
+              {
+                "name": "country",
+                "value": "ET",
+                "unit": null
+              },
+              {
+                "name": "sector",
+                "value": "Social Protection",
+                "unit": null
+              },
+              {
+                "name": "approval_fiscal_year",
+                "value": "2022",
+                "unit": null
+              },
+              {
+                "name": "status",
+                "value": "Active",
+                "unit": null
+              },
+              {
+                "name": "commitment_usd",
+                "value": "300000000",
+                "unit": "USD"
+              },
+              {
+                "name": "contract_awards",
+                "value": "312",
+                "unit": null
+              },
+              {
+                "name": "ieg_outcome_rating",
+                "value": "not rated",
+                "unit": null
+              },
+              {
+                "name": "similarity",
+                "value": "67",
+                "unit": "%"
+              },
+              {
+                "name": "match",
+                "value": "same country; similar size",
+                "unit": null
+              },
+              {
+                "name": "documents",
+                "value": "yes",
+                "unit": null
+              },
+              {
+                "name": "document_scope",
+                "value": "yes",
+                "unit": null
+              }
+            ]
+          },
+          {
+            "evidence_id": "ev_31a3f0223b2844a3997c",
+            "kind": "similar_project",
+            "citation": "Similar project P163452: Ethiopia Urban Institutional and Infrastructure Development Program",
+            "numeric_use": "approved",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "Ethiopia Urban Institutional and Infrastructure Development Program (P163452, ET, Public Administration): same country; similar size.",
+            "document_id": null,
+            "pages": null,
+            "project_ids": [
+              "P163452"
+            ],
+            "source_url": null,
+            "facts": [
+              {
+                "name": "project_id",
+                "value": "P163452",
+                "unit": null
+              },
+              {
+                "name": "project_name",
+                "value": "Ethiopia Urban Institutional and Infrastructure Development Program",
+                "unit": null
+              },
+              {
+                "name": "country",
+                "value": "ET",
+                "unit": null
+              },
+              {
+                "name": "sector",
+                "value": "Public Administration",
+                "unit": null
+              },
+              {
+                "name": "approval_fiscal_year",
+                "value": "2018",
+                "unit": null
+              },
+              {
+                "name": "status",
+                "value": "Closed",
+                "unit": null
+              },
+              {
+                "name": "commitment_usd",
+                "value": "610800000",
+                "unit": "USD"
+              },
+              {
+                "name": "contract_awards",
+                "value": "66",
+                "unit": null
+              },
+              {
+                "name": "ieg_outcome_rating",
+                "value": "not rated",
+                "unit": null
+              },
+              {
+                "name": "similarity",
+                "value": "66",
+                "unit": "%"
+              },
+              {
+                "name": "match",
+                "value": "same country; similar size",
+                "unit": null
+              },
+              {
+                "name": "documents",
+                "value": "yes",
+                "unit": null
+              },
+              {
+                "name": "document_scope",
+                "value": "yes",
+                "unit": null
+              }
+            ]
+          },
+          {
+            "evidence_id": "ev_609ff2a94d014a698e57",
+            "kind": "structured_result",
+            "citation": "Procurement methods used for Works contracts in ET since FY2016 (country level, gold_contract_analytics)",
+            "numeric_use": "approved",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "Procurement methods used for Works contracts in ET since FY2016 (country level, gold_contract_analytics): Request for Bids: contract awards 556; median contract amount usd 377350; median days from approval to signing 1770 | Request for Quotations: contract awards 488; median contract amount usd 114353; median days from approval to signing 1314 | Direct Selection: contract awards 15; median contract amount usd 699256; median days from approval to signing 1924 | Force Account: contract awards 3; median contract amount usd 22845; median days from approval to signing 1650 | Request for Proposals: contract awards 1; median contract amount usd 140302171; median days from approval to signing 2525",
+            "document_id": null,
+            "pages": null,
+            "project_ids": [],
+            "source_url": null,
+            "facts": [
+              {
+                "name": "Request for Bids",
+                "value": "contract awards 556; median contract amount usd 377350; median days from approval to signing 1770",
+                "unit": null
+              },
+              {
+                "name": "Request for Quotations",
+                "value": "contract awards 488; median contract amount usd 114353; median days from approval to signing 1314",
+                "unit": null
+              },
+              {
+                "name": "Direct Selection",
+                "value": "contract awards 15; median contract amount usd 699256; median days from approval to signing 1924",
+                "unit": null
+              },
+              {
+                "name": "Force Account",
+                "value": "contract awards 3; median contract amount usd 22845; median days from approval to signing 1650",
+                "unit": null
+              },
+              {
+                "name": "Request for Proposals",
+                "value": "contract awards 1; median contract amount usd 140302171; median days from approval to signing 2525",
+                "unit": null
+              }
+            ]
+          },
+          {
+            "evidence_id": "ev_020fb019b2b544359aa4",
+            "kind": "structured_result",
+            "citation": "Review types for Works contracts in ET since FY2016 (country level, gold_contract_analytics)",
+            "numeric_use": "approved",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "Review types for Works contracts in ET since FY2016 (country level, gold_contract_analytics): Post: contract awards 1041 | Prior: contract awards 22",
+            "document_id": null,
+            "pages": null,
+            "project_ids": [],
+            "source_url": null,
+            "facts": [
+              {
+                "name": "Post",
+                "value": "contract awards 1041",
+                "unit": null
+              },
+              {
+                "name": "Prior",
+                "value": "contract awards 22",
+                "unit": null
+              }
+            ]
+          },
+          {
+            "evidence_id": "ev_17f83ef87222456fa430",
+            "kind": "structured_result",
+            "citation": "Supplier origin for Works contracts in ET since FY2016 (country level, gold_contract_analytics)",
+            "numeric_use": "approved",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "Supplier origin for Works contracts in ET since FY2016 (country level, gold_contract_analytics): all_suppliers_same_country: contract awards 1034 | includes_other_country: contract awards 20 | undetermined: contract awards 9",
+            "document_id": null,
+            "pages": null,
+            "project_ids": [],
+            "source_url": null,
+            "facts": [
+              {
+                "name": "all_suppliers_same_country",
+                "value": "contract awards 1034",
+                "unit": null
+              },
+              {
+                "name": "includes_other_country",
+                "value": "contract awards 20",
+                "unit": null
+              },
+              {
+                "name": "undetermined",
+                "value": "contract awards 9",
+                "unit": null
+              }
+            ]
+          },
+          {
+            "evidence_id": "ev_fe19d93992f44ebdb2a9",
+            "kind": "structured_result",
+            "citation": "Procurement methods used for Consultant Services contracts in ET since FY2016 (country level, gold_contract_analytics)",
+            "numeric_use": "approved",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "Procurement methods used for Consultant Services contracts in ET since FY2016 (country level, gold_contract_analytics): Individual Consultant Selection: contract awards 349; median contract amount usd 12923; median days from approval to signing 1106 | Quality And Cost-Based Selection: contract awards 132; median contract amount usd 427853; median days from approval to signing 1594 | Consultant Qualification  Selection: contract awards 47; median contract amount usd 79107; median days from approval to signing 1308 | Direct Selection: contract awards 47; median contract amount usd 71302; median days from approval to signing 1505 | Least Cost Selection: contract awards 25; median contract amount usd 15361; median days from approval to signing 1161 | Non-Profit Organizations: contract awards 1; median contract amount usd 556000; median days from approval to signing 723 | UN Agencies (Direct): contract awards 1; median contract amount usd 7094374; median days from approval to signing 1134",
+            "document_id": null,
+            "pages": null,
+            "project_ids": [],
+            "source_url": null,
+            "facts": [
+              {
+                "name": "Individual Consultant Selection",
+                "value": "contract awards 349; median contract amount usd 12923; median days from approval to signing 1106",
+                "unit": null
+              },
+              {
+                "name": "Quality And Cost-Based Selection",
+                "value": "contract awards 132; median contract amount usd 427853; median days from approval to signing 1594",
+                "unit": null
+              },
+              {
+                "name": "Consultant Qualification  Selection",
+                "value": "contract awards 47; median contract amount usd 79107; median days from approval to signing 1308",
+                "unit": null
+              },
+              {
+                "name": "Direct Selection",
+                "value": "contract awards 47; median contract amount usd 71302; median days from approval to signing 1505",
+                "unit": null
+              },
+              {
+                "name": "Least Cost Selection",
+                "value": "contract awards 25; median contract amount usd 15361; median days from approval to signing 1161",
+                "unit": null
+              },
+              {
+                "name": "Non-Profit Organizations",
+                "value": "contract awards 1; median contract amount usd 556000; median days from approval to signing 723",
+                "unit": null
+              },
+              {
+                "name": "UN Agencies (Direct)",
+                "value": "contract awards 1; median contract amount usd 7094374; median days from approval to signing 1134",
+                "unit": null
+              }
+            ]
+          },
+          {
+            "evidence_id": "ev_2023589da074484f99d8",
+            "kind": "structured_result",
+            "citation": "Review types for Consultant Services contracts in ET since FY2016 (country level, gold_contract_analytics)",
+            "numeric_use": "approved",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "Review types for Consultant Services contracts in ET since FY2016 (country level, gold_contract_analytics): Post: contract awards 480 | Prior: contract awards 122",
+            "document_id": null,
+            "pages": null,
+            "project_ids": [],
+            "source_url": null,
+            "facts": [
+              {
+                "name": "Post",
+                "value": "contract awards 480",
+                "unit": null
+              },
+              {
+                "name": "Prior",
+                "value": "contract awards 122",
+                "unit": null
+              }
+            ]
+          },
+          {
+            "evidence_id": "ev_79a21587f95f40d9b868",
+            "kind": "structured_result",
+            "citation": "Supplier origin for Consultant Services contracts in ET since FY2016 (country level, gold_contract_analytics)",
+            "numeric_use": "approved",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "Supplier origin for Consultant Services contracts in ET since FY2016 (country level, gold_contract_analytics): all_suppliers_same_country: contract awards 482 | includes_other_country: contract awards 118 | undetermined: contract awards 2",
+            "document_id": null,
+            "pages": null,
+            "project_ids": [],
+            "source_url": null,
+            "facts": [
+              {
+                "name": "all_suppliers_same_country",
+                "value": "contract awards 482",
+                "unit": null
+              },
+              {
+                "name": "includes_other_country",
+                "value": "contract awards 118",
+                "unit": null
+              },
+              {
+                "name": "undetermined",
+                "value": "contract awards 2",
+                "unit": null
+              }
+            ]
+          },
+          {
+            "evidence_id": "ev_d217187ab51741a99c5c",
+            "kind": "structured_result",
+            "citation": "Governance context of ET, 2025 (gold_country_context)",
+            "numeric_use": "approved",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "Country Policy and Institutional Assessment (CPIA, 1-6) and Worldwide Governance Indicators (WGI, about -2.5 to 2.5): year 2025; cpia_irai_overall 3.25; cpia_public_sector_mgmt_cluster 3.1; cpia_transparency_corruption 3.0; wgi_government_effectiveness_est -0.62; wgi_regulatory_quality_est -0.73; wgi_control_of_corruption_est -0.37.",
+            "document_id": null,
+            "pages": null,
+            "project_ids": [],
+            "source_url": null,
+            "facts": [
+              {
+                "name": "year",
+                "value": "2025",
+                "unit": null
+              },
+              {
+                "name": "cpia_irai_overall",
+                "value": "3.25",
+                "unit": null
+              },
+              {
+                "name": "cpia_public_sector_mgmt_cluster",
+                "value": "3.1",
+                "unit": null
+              },
+              {
+                "name": "cpia_transparency_corruption",
+                "value": "3.0",
+                "unit": null
+              },
+              {
+                "name": "wgi_government_effectiveness_est",
+                "value": "-0.62",
+                "unit": null
+              },
+              {
+                "name": "wgi_regulatory_quality_est",
+                "value": "-0.73",
+                "unit": null
+              },
+              {
+                "name": "wgi_control_of_corruption_est",
+                "value": "-0.37",
+                "unit": null
+              }
+            ]
+          },
+          {
+            "evidence_id": "ev_cef1a2692ec744b88eb2",
+            "kind": "model_prediction",
+            "citation": "Model 1 tender duration (ridge_final, real data); inputs: package 'Road rehabilitation works': new ET Transportation project, Request for Bids, Works, Prior review, 45-day bid window, tender 2027-10-01",
+            "numeric_use": "model_estimate",
+            "validation_status": "verified",
+            "warnings": [
+              "model_input_note"
+            ],
+            "summary": "Model 1 \u2013 tender duration (Ridge, real data; test MAE \u2248 77 days). Estimated 211 days from first tender to contract signing (likely 97-468 days); probability over 365 days 22%. Drivers: Project approval year: -42% shorter than average; Bid window: +32% longer than average; Project age at tender: +28% longer than average.",
+            "document_id": null,
+            "pages": null,
+            "project_ids": [],
+            "source_url": null,
+            "facts": [
+              {
+                "name": "estimated_duration",
+                "value": "211",
+                "unit": "days"
+              },
+              {
+                "name": "likely_range_p10",
+                "value": "97",
+                "unit": "days"
+              },
+              {
+                "name": "likely_range_p90",
+                "value": "468",
+                "unit": "days"
+              },
+              {
+                "name": "probability_over_365_days",
+                "value": "22",
+                "unit": "%"
+              },
+              {
+                "name": "long_tender_alert",
+                "value": "no",
+                "unit": null
+              },
+              {
+                "name": "estimated_signing_date",
+                "value": "2028-04-29",
+                "unit": null
+              },
+              {
+                "name": "input_region",
+                "value": "Eastern and Southern Africa",
+                "unit": null
+              },
+              {
+                "name": "input_country",
+                "value": "ET",
+                "unit": null
+              },
+              {
+                "name": "input_sector",
+                "value": "Transportation",
+                "unit": null
+              },
+              {
+                "name": "input_board_approval_date",
+                "value": "2027-06-30",
+                "unit": null
+              },
+              {
+                "name": "input_approval_fiscal_year",
+                "value": "2027",
+                "unit": null
+              },
+              {
+                "name": "input_prior_tender_notices",
+                "value": "1",
+                "unit": null
+              }
+            ]
+          },
+          {
+            "evidence_id": "ev_23aa30d250b1479799d1",
+            "kind": "model_prediction",
+            "citation": "Model 2 amendment risk (m2_S2_l2_final, SYNTHETIC); inputs: package 'Road rehabilitation works': new ET Transportation project, Request for Bids, Works, Prior review, 45-day bid window, tender 2027-10-01",
+            "numeric_use": "model_estimate",
+            "validation_status": "verified",
+            "warnings": [
+              "model_input_note",
+              "synthetic_training_data"
+            ],
+            "summary": "Model 2 \u2013 contract amendment risk (L2 logistic, SYNTHETIC outcomes): simulated probability 31.6% (on the demonstration review list). Simulated drivers: Procurement category: raises the simulated risk; Review type: raises the simulated risk; Procurement method: raises the simulated risk. Trained on synthetic data \u2013 not validated World Bank risk accuracy.",
+            "document_id": null,
+            "pages": null,
+            "project_ids": [],
+            "source_url": null,
+            "facts": [
+              {
+                "name": "simulated_probability",
+                "value": "31.6",
+                "unit": "%"
+              },
+              {
+                "name": "assessment",
+                "value": "on the demonstration review list",
+                "unit": null
+              }
+            ]
+          },
+          {
+            "evidence_id": "ev_700e233e39cd4aaea5c9",
+            "kind": "model_prediction",
+            "citation": "Model 3 re-bidding risk (m3_S2_l2_final, SYNTHETIC); inputs: package 'Road rehabilitation works': new ET Transportation project, Request for Bids, Works, Prior review, 45-day bid window, tender 2027-10-01",
+            "numeric_use": "model_estimate",
+            "validation_status": "verified",
+            "warnings": [
+              "model_input_note",
+              "synthetic_training_data"
+            ],
+            "summary": "Model 3 \u2013 re-bidding risk (L2 logistic, SYNTHETIC outcomes): simulated probability 7.1% (Low (relative to the simulated population)). Simulated drivers: Procurement method: raises the simulated risk; Procurement category: raises the simulated risk; Country income group: raises the simulated risk. Trained on synthetic data \u2013 not validated World Bank risk accuracy.",
+            "document_id": null,
+            "pages": null,
+            "project_ids": [],
+            "source_url": null,
+            "facts": [
+              {
+                "name": "simulated_probability",
+                "value": "7.1",
+                "unit": "%"
+              },
+              {
+                "name": "assessment",
+                "value": "Low (relative to the simulated population)",
+                "unit": null
+              }
+            ]
+          },
+          {
+            "evidence_id": "ev_fca4b39ecc604a50944f",
+            "kind": "model_prediction",
+            "citation": "Model 1 tender duration (ridge_final, real data); inputs: package 'Construction supervision' (method suggested: Individual Consultant Selection): new ET Transportation project, Individual Consultant Selection, Consultant Services, Prior review, 30-day bid window, tender 2027-08-01",
+            "numeric_use": "model_estimate",
+            "validation_status": "verified",
+            "warnings": [
+              "model_input_note"
+            ],
+            "summary": "Model 1 \u2013 tender duration (Ridge, real data; test MAE \u2248 77 days). Estimated 190 days from first tender to contract signing (likely 88-423 days); probability over 365 days 18%. Drivers: Project approval year: -42% shorter than average; Project age at tender: +30% longer than average; Procurement category: +27% longer than average.",
+            "document_id": null,
+            "pages": null,
+            "project_ids": [],
+            "source_url": null,
+            "facts": [
+              {
+                "name": "estimated_duration",
+                "value": "190",
+                "unit": "days"
+              },
+              {
+                "name": "likely_range_p10",
+                "value": "88",
+                "unit": "days"
+              },
+              {
+                "name": "likely_range_p90",
+                "value": "423",
+                "unit": "days"
+              },
+              {
+                "name": "probability_over_365_days",
+                "value": "18",
+                "unit": "%"
+              },
+              {
+                "name": "long_tender_alert",
+                "value": "no",
+                "unit": null
+              },
+              {
+                "name": "estimated_signing_date",
+                "value": "2028-02-07",
+                "unit": null
+              },
+              {
+                "name": "input_region",
+                "value": "Eastern and Southern Africa",
+                "unit": null
+              },
+              {
+                "name": "input_country",
+                "value": "ET",
+                "unit": null
+              },
+              {
+                "name": "input_sector",
+                "value": "Transportation",
+                "unit": null
+              },
+              {
+                "name": "input_board_approval_date",
+                "value": "2027-06-30",
+                "unit": null
+              },
+              {
+                "name": "input_approval_fiscal_year",
+                "value": "2027",
+                "unit": null
+              },
+              {
+                "name": "input_prior_tender_notices",
+                "value": "0",
+                "unit": null
+              }
+            ]
+          },
+          {
+            "evidence_id": "ev_47bc5487a28c466eb2e8",
+            "kind": "model_prediction",
+            "citation": "Model 2 amendment risk (m2_S2_l2_final, SYNTHETIC); inputs: package 'Construction supervision' (method suggested: Individual Consultant Selection): new ET Transportation project, Individual Consultant Selection, Consultant Services, Prior review, 30-day bid window, tender 2027-08-01",
+            "numeric_use": "model_estimate",
+            "validation_status": "verified",
+            "warnings": [
+              "model_input_note",
+              "synthetic_training_data"
+            ],
+            "summary": "Model 2 \u2013 contract amendment risk (L2 logistic, SYNTHETIC outcomes): simulated probability 14.9% (not on the review list). Simulated drivers: Review type: raises the simulated risk; Procurement method: raises the simulated risk; Country income group: raises the simulated risk. Trained on synthetic data \u2013 not validated World Bank risk accuracy.",
+            "document_id": null,
+            "pages": null,
+            "project_ids": [],
+            "source_url": null,
+            "facts": [
+              {
+                "name": "simulated_probability",
+                "value": "14.9",
+                "unit": "%"
+              },
+              {
+                "name": "assessment",
+                "value": "not on the review list",
+                "unit": null
+              }
+            ]
+          },
+          {
+            "evidence_id": "ev_395e3a14a2ec42318f44",
+            "kind": "model_prediction",
+            "citation": "Model 3 re-bidding risk (m3_S2_l2_final, SYNTHETIC); inputs: package 'Construction supervision' (method suggested: Individual Consultant Selection): new ET Transportation project, Individual Consultant Selection, Consultant Services, Prior review, 30-day bid window, tender 2027-08-01",
+            "numeric_use": "model_estimate",
+            "validation_status": "verified",
+            "warnings": [
+              "model_input_note",
+              "synthetic_training_data"
+            ],
+            "summary": "Model 3 \u2013 re-bidding risk (L2 logistic, SYNTHETIC outcomes): simulated probability 2.7% (Low (relative to the simulated population)). Simulated drivers: Country income group: raises the simulated risk; Project age at tender: raises the simulated risk. Trained on synthetic data \u2013 not validated World Bank risk accuracy.",
+            "document_id": null,
+            "pages": null,
+            "project_ids": [],
+            "source_url": null,
+            "facts": [
+              {
+                "name": "simulated_probability",
+                "value": "2.7",
+                "unit": "%"
+              },
+              {
+                "name": "assessment",
+                "value": "Low (relative to the simulated population)",
+                "unit": null
+              }
+            ]
+          },
+          {
+            "evidence_id": "ev_d5a819a389474be2927a",
+            "kind": "document_passage",
+            "citation": "PAD 31061540, p. 44-44, printed p. 38",
+            "numeric_use": "document_statement",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "V. KEY RISKS\n\n101. The overall risk to achieving the PDO of the proposed operation is Substantial. Possible individual risks are identified, and their ratings listed in the following paragraphs, along with proposed measures to mitigate their impacts during project preparation and/or implementation. The experiences gained, challenges encountered, and lessons learned during the preparation and subsequent implementation of other projects have been instrumental to identifying these risks and mitigation measures23.\n\n102. Political and governance risk is High. The political and governance situation ",
+            "document_id": "31061540",
+            "pages": [
+              44,
+              44
+            ],
+            "project_ids": [
+              "P164336"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/631541558922443947/pdf/Ethiopia-Lowlands-Livelihood-Resilience-Project.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_cc5283a072a2462d9442",
+            "kind": "document_passage",
+            "citation": "ICRR 40029978, p. 13-13, printed p. 13",
+            "numeric_use": "document_statement",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "a. Quality-at-Entry\n\nThe Bank prepared this hybrid operation based on the experiences from the previously Bank financed ULGDP phase one and two. The key lessons incorporated at design included: (i) designing the project as a hybrid one with a PforR and IPF component, given the need for capacity building of the respective agencies; and (ii) using an incentive-based system for grant provision, that was proven to be effective in the previously financed Bank operation. The Bank prepared this operation based on extensive consultation with central, regional and local governments.\n\nThe Bank identifie",
+            "document_id": "40029978",
+            "pages": [
+              13,
+              13
+            ],
+            "project_ids": [
+              "P163452"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/099071525092030425/pdf/P163452-83802955-781e-43bf-9d9e-b9fd30370551.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_bb1b66078c734eca966e",
+            "kind": "document_passage",
+            "citation": "PAD 34276649, p. 34-34, printed p. 23",
+            "numeric_use": "document_statement",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "81. Institutional Capacity for Implementation and Sustainability: Substantial. EEP and EEU have substantially increased their staff capacity from implementing similar projects and provided training to regional staff on areas such as transmission and distribution expansion and rehabilitation, geothermal upstream explorative drilling activities, environmental and social, and stakeholder engagement. While EEP/EEU are experienced in implementing programs financed by the World Bank and other development partners, their capacity is overstretched. Additional dedicated and experienced staff to support",
+            "document_id": "34276649",
+            "pages": [
+              34,
+              34
+            ],
+            "project_ids": [
+              "P176731"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/099030624153526642/pdf/BOSIB-1e226c28-af86-42ae-afbc-9ce86c730ea1.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_212094d99049486296c1",
+            "kind": "document_passage",
+            "citation": "PAD 24440102, p. 103-103, printed p. 90",
+            "numeric_use": "document_statement",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "As a result, the proposed route has minimized direct impact on the community and in the National Park. The adverse impacts of the project have been assessed and mitigation measures were included in the ESIAs and RAPs prepared for the project. The ESIA and RAP for the section to be financed by the World Bank were disclosed locally on January 15, 2015 and at the Infoshop on January 16, 2015. The updated ESIAs and RAPs for sections 1, 2 and 4 have also been disclosed. 95. Main safeguards related risks: The potential adverse environmental and social impacts related to the civil works will include ",
+            "document_id": "24440102",
+            "pages": [
+              103,
+              103
+            ],
+            "project_ids": [
+              "P148850"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/882371468000596899/pdf/PAD1135-UPLOAD-NEW-VERSION-REVISED-Box391445B-OUO-9-UPDATE-BOARD-NUMBERS-IDA-R2015-0093-3.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_760ef61cfde740238421",
+            "kind": "document_table",
+            "citation": "PP 40102923, p. 4-4, printed p. 1",
+            "numeric_use": "not_approved",
+            "validation_status": "verified",
+            "warnings": [
+              "pdf_table_value_unverified"
+            ],
+            "summary": "ET-RSIDP-121356-GO-RFB / Supply of Equipment for the Advisers to the Ministers,Piu and NRSC project staff | IDA / 56250 | Component 3: Road Safety and Institutional Development Support to the Transport Sector | Post | Request for Bids | Open - National | Single Stage - One Envelope | 70,000.00 | 0.00 | Pending Implementation | 2019-07-26 | 2019-07-31 | 2019-09-11 | 2019-10-11 | 2019-11-15 | 2020-05-13 || ET-RSIDP-285543-GO-UN-DI R / Procurement of Traffic enforcement equipment (15 units of motor bicycles, 12 units post-crash care Ambulances, and 12 units of 4x4 Rescue Vehicles) for piloting pr",
+            "document_id": "40102923",
+            "pages": [
+              4,
+              4
+            ],
+            "project_ids": [
+              "P148850"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/099051426032538734/pdf/P148850-6ce33dd8-a66f-4c88-9e1f-f883f293e345.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_c1bd73cec2fa44d6ba6c",
+            "kind": "document_passage",
+            "citation": "ICR 34455066, p. 18-18, printed p. 10",
+            "numeric_use": "document_statement",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "B. KEY FACTORS DURING IMPLEMENTATION\n\nFactors subject to the control of government and/or implementing entities \u2022 Commitment and Leadership: The program received strong support from all three levels of government: federal, regional, and city. Issues raised during implementation were promptly addressed, and officials were highly responsive, ensuring smooth progress. \u2022 Capacity Building: A structured and systematic approach was adopted for capacity building to support all three levels of government. Key staff were well-trained in program requirements and reporting formats. Focal persons were mai",
+            "document_id": "34455066",
+            "pages": [
+              18,
+              18
+            ],
+            "project_ids": [
+              "P163452"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/099021025131529538/pdf/BOSIB-3b7498cf-62c5-4f55-ba9b-4a44f5588373.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_d827a08aadcb4b76992a",
+            "kind": "document_passage",
+            "citation": "PAD 34276649, p. 30-30, printed p. 19",
+            "numeric_use": "document_statement",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "68. EEP and EEU have a wealth of experience on implementation of World Bank financed projects. However, the organization, skill, and number of procurement and project management staff were not commensurate with the number and complexity of the projects implemented. The projects implemented by both EEP and EEU have shown delays at all stages of the project management process. Poor quality specifications, designs, and bidding documents; increased costs and reduced competition; and complaints and allegations of corruption were among the problems encountered. EEP\u2019s procurement department has four ",
+            "document_id": "34276649",
+            "pages": [
+              30,
+              30
+            ],
+            "project_ids": [
+              "P176731"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/099030624153526642/pdf/BOSIB-1e226c28-af86-42ae-afbc-9ce86c730ea1.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_07b9a1c3cf454c57bd37",
+            "kind": "document_passage",
+            "citation": "PAD 24440102, p. 22-23, printed p. 9",
+            "numeric_use": "document_statement",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "C. Lessons Learned and Reflected in the Project Design\n\n39. In reviewing projects implemented under the RSDP, including the newly inaugurated expressway, a number of lessons can be learned: (a) The planning and development of expressways is currently done in a piecemeal way. A preliminary master plan for expressway development prepared by ERA requires enhancement, using traffic modeling, to prioritize the proposed expressway projects. There are no overall tolling strategies and mechanisms for attracting the private sector to participate in the development, operation and maintenance of expressw",
+            "document_id": "24440102",
+            "pages": [
+              22,
+              23
+            ],
+            "project_ids": [
+              "P148850"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/882371468000596899/pdf/PAD1135-UPLOAD-NEW-VERSION-REVISED-Box391445B-OUO-9-UPDATE-BOARD-NUMBERS-IDA-R2015-0093-3.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_a31c9dd610204a5591e2",
+            "kind": "document_passage",
+            "citation": "PAD 34276649, p. 26-26, printed p. 15",
+            "numeric_use": "document_statement",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "E. Lessons Learned\n\n44. Comprehensive sector reforms require long term engagement supported by technical assistance and capacity building. A broad sector reform roadmap with specific reform and investment actions will be identified through implementation and lessons learned, including identifying decrees, policies, cabinet decisions, and other directives needed to improve the sector\u2019s financial viability, efficiency, and adequacy. A high-level reform task force will spearhead the government\u2019s efforts to develop the reform roadmap and facilitate its final adoption, which will inform the design ",
+            "document_id": "34276649",
+            "pages": [
+              26,
+              26
+            ],
+            "project_ids": [
+              "P176731"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/099030624153526642/pdf/BOSIB-1e226c28-af86-42ae-afbc-9ce86c730ea1.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_60b95bb9dac246eab520",
+            "kind": "document_passage",
+            "citation": "PP 40102009, p. 46-48, printed p. 11",
+            "numeric_use": "document_statement",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "\uf0a7 Lack of adequately defined Standard Performance and Compliance\n\nSpecifications: Standard performance and compliance specification gaps that results in many technical explanations and addenda are asked from suppliers and bidders, which causes frustration and further delays in the procedures.\n\n2.3.Market Research and Analysis\n\na) Procurement Packages Based on the identified specific contracts to be procured, a market research and analysis is conducted based on relative Risk and Value of each package that is given in Table-6 below. The market Research and Analysis for each package is given on A",
+            "document_id": "40102009",
+            "pages": [
+              46,
+              48
+            ],
+            "project_ids": [
+              "P176731"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/099050926195514961/pdf/P176731-71217c4d-2a58-4735-8d05-ed8ad9658973.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_a2dec75be65c41a3b540",
+            "kind": "document_passage",
+            "citation": "PP 40133023, p. 46-48, printed p. 11",
+            "numeric_use": "document_statement",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "\uf0a7 Lack of adequately defined Standard Performance and Compliance\n\nSpecifications: Standard performance and compliance specification gaps that results in many technical explanations and addenda are asked from suppliers and bidders, which causes frustration and further delays in the procedures.\n\n2.3.Market Research and Analysis\n\na) Procurement Packages Based on the identified specific contracts to be procured, a market research and analysis is conducted based on relative Risk and Value of each package that is given in Table-6 below. The market Research and Analysis for each package is given on A",
+            "document_id": "40133023",
+            "pages": [
+              46,
+              48
+            ],
+            "project_ids": [
+              "P176731"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/099101426045527588/pdf/P176731-c600358d-7dd7-4d1c-9f61-e38b767c396d.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_2d3bf11b471a459e9126",
+            "kind": "document_table",
+            "citation": "PAD 24440102, p. 91-91, printed p. 78",
+            "numeric_use": "not_approved",
+            "validation_status": "verified",
+            "warnings": [
+              "pdf_table_value_unverified"
+            ],
+            "summary": "Governance | Corruption risks from amicable settlements, variations, staff turnover, weak dispute resolution mechanism, and weak enforcement of contractual provisions. | Moderate | Output based delivery system limits contractual claims and gives more risk to contractor. Engagement of experienced consultant to help with contract design and monitoring will strengthen monitoring system. || MOT | Capacity | Inadequate quality and number of staff. | High | Assign at least one qualified staff on full time basis with experience in Bank procurement. || Systems | Substantial | Strengthen procedures and",
+            "document_id": "24440102",
+            "pages": [
+              91,
+              91
+            ],
+            "project_ids": [
+              "P148850"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/882371468000596899/pdf/PAD1135-UPLOAD-NEW-VERSION-REVISED-Box391445B-OUO-9-UPDATE-BOARD-NUMBERS-IDA-R2015-0093-3.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_d442a6437e824c29b0e9",
+            "kind": "document_passage",
+            "citation": "PAD 24440102, p. 88-89, printed p. 75",
+            "numeric_use": "document_statement",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "The directorate has sufficient procurement engineers with adequate experience in carrying out procurement based on Bank Procurement Guidelines. ERA has experience in implementing Design and Build contract with 29 contracts under implementation. The majority of these contracts were procured through open tender, with four procured through direct contracting and restricted bidding. The highest of the contracts carried out so far was approximately US$800 million. The majority of other contracts were less than US$70 million. The Engineering Operations Department will be responsible for preparation ",
+            "document_id": "24440102",
+            "pages": [
+              88,
+              89
+            ],
+            "project_ids": [
+              "P148850"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/882371468000596899/pdf/PAD1135-UPLOAD-NEW-VERSION-REVISED-Box391445B-OUO-9-UPDATE-BOARD-NUMBERS-IDA-R2015-0093-3.pdf",
+            "facts": []
+          }
+        ],
+        "usage": {
+          "llm_calls": 1,
+          "input_tokens": 10990,
+          "output_tokens": 6265,
+          "cost_usd": "0.08463",
+          "executions": 0
+        }
+      },
+      "evidence_kinds": {
+        "similar_project": 8,
+        "structured_result": 7,
+        "model_prediction": 6,
+        "document_passage": 11,
+        "document_table": 2
+      },
+      "sections": {
+        "similar_projects": 3,
+        "schedule": 3,
+        "market_approach": 3,
+        "risks": 3,
+        "lessons": 4,
+        "tender_design": 3,
+        "monitoring": 2
+      }
+    },
+    "investigation": {
+      "job": {
+        "job_id": "job_dc1ba711c1654cc4856e",
+        "kind": "approval",
+        "state": "succeeded",
+        "conversation_id": "b7fecd2c-1b71-44d9-af38-99bd38d8b645",
+        "request_id": "req_146b9dcff8284569b9bf",
+        "status": "partial",
+        "error": null
+      },
+      "seconds": 46.300000000000004,
+      "view": {
+        "request_id": "req_146b9dcff8284569b9bf",
+        "status": "partial",
+        "message": "The project appraisal document for the road project records that many road construction projects experience delays and cost overruns because of poor design work and contract administration by consultants, and because contractors are slow to mobilize. The same document identifies procurement delays at the roads agency as a key risk. The stated causes are non-standard bidding documents, a long evaluation caused by the two-envelope system, and slow approvals from a long iterative process. A risk table in the document adds that there were no standard bidding documents for Design and Build works. This led to protracted preparation and approval and to many clarification requests from bidders. It also notes that bids were evaluated slowly because of the two-envelope system and differences between design-and-build bids, and that report quality was below standard. The recorded lesson is to adopt a Design and Build contract format to address delays and cost overruns from poor design, weak contract administration and late mobilization. The agreed response to procurement delays was for the roads agency to strengthen its internal quality assurance so that it submits quality procurement documents. The agency and the Bank also agreed business standards for responding to comments and agreed to meet to resolve outstanding issues after the agency's second submission. The proposed mitigation was to customise bid documents from pre-approved Output Performance Road Contract documents, prepared and agreed before negotiations. It also included training the evaluation team and providing technical assistance support. In a water supply and sanitation works procurement plan for the Afar region, the contract was signed later than planned, on 2023-04-04 against a planned date of 2023-03-06. The record gives no cause for the difference.",
+        "claims": [
+          {
+            "text": "The project appraisal document for the road project records that many road construction projects experience delays and cost overruns because of poor design work and contract administration by consultants, and because contractors are slow to mobilize.",
+            "evidence_ids": [
+              "ev_b0254283e535424fbe8e",
+              "ev_76b5f902e0604b4099d7"
+            ],
+            "section": "risks"
+          },
+          {
+            "text": "The same document identifies procurement delays at the roads agency as a key risk. The stated causes are non-standard bidding documents, a long evaluation caused by the two-envelope system, and slow approvals from a long iterative process.",
+            "evidence_ids": [
+              "ev_41e2a5c329084bc0af98",
+              "ev_4d927d8e2e4c4a15b1f7"
+            ],
+            "section": "risks"
+          },
+          {
+            "text": "A risk table in the document adds that there were no standard bidding documents for Design and Build works. This led to protracted preparation and approval and to many clarification requests from bidders. It also notes that bids were evaluated slowly because of the two-envelope system and differences between design-and-build bids, and that report quality was below standard.",
+            "evidence_ids": [
+              "ev_f8b40cafc89a4135b954",
+              "ev_df372aad6a6d4d629bdc"
+            ],
+            "section": "risks"
+          },
+          {
+            "text": "The recorded lesson is to adopt a Design and Build contract format to address delays and cost overruns from poor design, weak contract administration and late mobilization.",
+            "evidence_ids": [
+              "ev_b0254283e535424fbe8e",
+              "ev_76b5f902e0604b4099d7"
+            ],
+            "section": "lessons"
+          },
+          {
+            "text": "The agreed response to procurement delays was for the roads agency to strengthen its internal quality assurance so that it submits quality procurement documents. The agency and the Bank also agreed business standards for responding to comments and agreed to meet to resolve outstanding issues after the agency's second submission.",
+            "evidence_ids": [
+              "ev_41e2a5c329084bc0af98",
+              "ev_4d927d8e2e4c4a15b1f7"
+            ],
+            "section": "lessons"
+          },
+          {
+            "text": "The proposed mitigation was to customise bid documents from pre-approved Output Performance Road Contract documents, prepared and agreed before negotiations. It also included training the evaluation team and providing technical assistance support.",
+            "evidence_ids": [
+              "ev_f8b40cafc89a4135b954",
+              "ev_df372aad6a6d4d629bdc"
+            ],
+            "section": "lessons"
+          },
+          {
+            "text": "In a water supply and sanitation works procurement plan for the Afar region, the contract was signed later than planned, on 2023-04-04 against a planned date of 2023-03-06. The record gives no cause for the difference.",
+            "evidence_ids": [
+              "ev_08b44647f7a64029863b"
+            ],
+            "section": "schedule"
+          }
+        ],
+        "limitations": [
+          "The evidence gives explicit delay causes and lessons only for the road project's procurement and contracting. It records no causes of delay for the works contracts of the other projects.",
+          "The risk tables are marked as unverified extractions, so no figures or risk ratings from them are stated.",
+          "The water supply procurement plan shows planned and actual signing dates but does not explain the gap.",
+          "The implementation status report only says that bidding documents for works were being prepared. It records no delay cause.",
+          "Several other records, including the power sector procurement plan headers and the rural infrastructure results table, contain no information on delay causes or lessons.",
+          "Missing verified evidence for task t1 (structured_result).",
+          "Missing verified evidence for task t3 (document_passage).",
+          "Missing verified evidence for task t4 (document_passage).",
+          "Missing verified evidence for task t5 (structured_result).",
+          "PDF table values are cited for context only; they are not verified figures.",
+          "2 task(s) failed or were blocked; their evidence is missing.",
+          "4 task(s) were not run because an earlier task failed."
+        ],
+        "error_codes": [
+          "cannot_answer",
+          "task_limit"
+        ],
+        "pending_approval": null,
+        "tasks": [
+          {
+            "task": "t1",
+            "worker": "structured_data",
+            "operation": "answer_data_question",
+            "question": "For works contracts in Ethiopia projects P148850, P151819, P176303, P131118, P164336, P176731, P177233 and P163452, list each contract with its planned versus actual signing or completion dates, the calculated delay in days, and the contract value, ordered by delay descending.",
+            "state": "failed"
+          },
+          {
+            "task": "t2",
+            "worker": "document_intelligence",
+            "operation": "answer_document_question",
+            "question": "In project P148850 (Ethiopia Expressway Development Support Project), what caused delays in works contracts (for example procurement, contractor performance, land acquisition or right of way, design changes, payments, or security), and what lessons learned were recorded?",
+            "state": "succeeded"
+          },
+          {
+            "task": "t3",
+            "worker": "document_intelligence",
+            "operation": "answer_document_question",
+            "question": "In projects P164336 (Lowlands Livelihood Resilience Project) and P163452 (Ethiopia Urban Institutional and Infrastructure Development Program), what caused delays in works contracts and civil works implementation, and what lessons learned were recorded?",
+            "state": "cancelled"
+          },
+          {
+            "task": "t4",
+            "worker": "document_intelligence",
+            "operation": "answer_document_question",
+            "question": "In projects P176731 (PRIME-1) and P177233 (Response - Recovery - Resilience for Conflict-Affected Communities in Ethiopia Project), what caused delays in works contracts and construction, and what lessons learned were recorded about procurement, contract management or implementation?",
+            "state": "cancelled"
+          },
+          {
+            "task": "t5",
+            "worker": "structured_data",
+            "operation": "answer_data_question",
+            "question": "For Ethiopia projects P151819, P176303 and P131118, which have no project documents available, summarize works contract procurement details such as procurement method, review type, award dates and contract status, to indicate where delays may have occurred.",
+            "state": "cancelled"
+          }
+        ],
+        "evidence": [
+          {
+            "evidence_id": "ev_f8b40cafc89a4135b954",
+            "kind": "document_table",
+            "citation": "PAD 24440102, p. 90-90, printed p. 77",
+            "numeric_use": "not_approved",
+            "validation_status": "verified",
+            "warnings": [
+              "pdf_table_value_unverified"
+            ],
+            "summary": "Agency | Risk Summary | Potential sources of risk | Risk Level | Proposed Mitigation Measures || ERA | Procurement process delays | No standard bidding documents for Design and Build works resulting in protracted preparation and approval and many clarification requests by bidders. | Substantial | Customise bid documents based on pre-approved Output Performance Road Contract (OPRC) documents. Bidding documents have been prepared and agreed prior to Negotiations.",
+            "document_id": "24440102",
+            "pages": [
+              90,
+              90
+            ],
+            "project_ids": [
+              "P148850"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/882371468000596899/pdf/PAD1135-UPLOAD-NEW-VERSION-REVISED-Box391445B-OUO-9-UPDATE-BOARD-NUMBERS-IDA-R2015-0093-3.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_b0254283e535424fbe8e",
+            "kind": "document_passage",
+            "citation": "PAD 24440102, p. 23-23, printed p. 10",
+            "numeric_use": "document_statement",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "The decision to introduce segregated dual carriageway highways along a new alignment is appropriate on the grounds of safety and efficient transport. The project includes a standalone Road Safety component to introduce \u201cThe Safe System\u201d along the expressways and critical accident-prone corridors; (d) Many road construction projects experience delays and cost overruns due to poor design work and contract administration by consultants, and delayed mobilization by contractors. These issues are to be addressed through the adoption of a Design and Build contract format, which is being used successf",
+            "document_id": "24440102",
+            "pages": [
+              23,
+              23
+            ],
+            "project_ids": [
+              "P148850"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/882371468000596899/pdf/PAD1135-UPLOAD-NEW-VERSION-REVISED-Box391445B-OUO-9-UPDATE-BOARD-NUMBERS-IDA-R2015-0093-3.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_41e2a5c329084bc0af98",
+            "kind": "document_passage",
+            "citation": "PAD 24440102, p. 89-89, printed p. 76",
+            "numeric_use": "document_statement",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "To achieve this, it agreed that ERA will strengthen its internal quality assurance system so as to submit quality procurement documents, agreed on business standards for response/comments for both Bank and ERA and meet to resolve any outstanding issues after second submission by ERA. 61. Based on the above assessments, the key risks relating to ERA are: (a) procurement process delays due to: (i) use of non-standard bidding documents and elongated evaluation as a result of the use of the two envelope system, and (ii) delays in approval processes due to long iterative process to ensure required ",
+            "document_id": "24440102",
+            "pages": [
+              89,
+              89
+            ],
+            "project_ids": [
+              "P148850"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/882371468000596899/pdf/PAD1135-UPLOAD-NEW-VERSION-REVISED-Box391445B-OUO-9-UPDATE-BOARD-NUMBERS-IDA-R2015-0093-3.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_21161d293d934eba816c",
+            "kind": "document_passage",
+            "citation": "ISR 24871317, p. 2-2, printed p. 2",
+            "numeric_use": "document_statement",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "Implementation Status and Key Decisions\n\nPreparation of bidding document for works contract, ToR/ RFP for monitoring of the works and other technical assistance is in progress with a plan to initiate procurement process inQ1 of FY16.",
+            "document_id": "24871317",
+            "pages": [
+              2,
+              2
+            ],
+            "project_ids": [
+              "P148850"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/128821468247862717/pdf/ISR-Disclosable-P148850-08-04-2015-1438742038388.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_99e5923a79f244e1b512",
+            "kind": "document_table",
+            "citation": "ICR 40108844, p. 27-27, printed p. 17",
+            "numeric_use": "not_approved",
+            "validation_status": "verified",
+            "warnings": [
+              "pdf_table_value_unverified"
+            ],
+            "summary": "project. It includes infrastructure works build or rehabilitated that are composed of rural roads and bridges, || operational (Number) || small scale irrigation schemes, number of water supply facilities and other strategic investment subprojects.",
+            "document_id": "40108844",
+            "pages": [
+              27,
+              27
+            ],
+            "project_ids": [
+              "P164336"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/099061226093523735/pdf/BOSIB-8c59b3bc-b5ec-4178-ae59-7116ee38cd9b.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_08b44647f7a64029863b",
+            "kind": "typed_plan_record",
+            "citation": "PP 40036460, p. 3-3, printed p. 1",
+            "numeric_use": "document_statement",
+            "validation_status": "verified",
+            "warnings": [
+              "pdf_extracted_typed_record"
+            ],
+            "summary": "Procurement plan row (typed record). Plan version P164336:document:40036460:2025-08-05 (stream P164336:document:40036460). Reference ET-AFAR,LLRP-324798-CW-RFB. Description: Water supply and sanitation schemes (civil works, supply & installation of pipes & fittings and EM works) three (3) in no. (planned for EFY 2015). Method: Request for Bids. Market approach: Open - National. Review: post. Process status: Signed. Estimated amount US$ 1420500.0. Actual amount US$ 0.0. Signed contract planned 2023-03-06, actual 2023-04-04. Stage dates: Bid Evaluation Report and Recommendation for Award: actual",
+            "document_id": "40036460",
+            "pages": [
+              3,
+              3
+            ],
+            "project_ids": [
+              "P164336"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/099080525130012103/pdf/P164336-36341511-6050-4cea-920a-aebe2b663543.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_cf9682cc9dd8434daa63",
+            "kind": "document_table",
+            "citation": "PP 40036460, p. 3-3, printed p. 1",
+            "numeric_use": "not_approved",
+            "validation_status": "verified",
+            "warnings": [
+              "pdf_table_value_unverified"
+            ],
+            "summary": "ET-AFAR, LLRP-324798-CW-RFB / Water supply and sanitation schemes (civil works, supply & installation of pipes & fittings and EM works) three (3) in no. (planned for EFY 2015) | IDA / 64120 | Integrated Rangeland Devel opment and Management | Post | Request for Bids | Open - National | Single Stage - One Envelope | Request for Bids -Small Works SPD (1 envelope process) | 1,420,500.00 | 0.00 | Signed | 2022-11-14 | 2022-12-11 | 2022-11-19 | 2023-09-01 | 2022-12-31 | 2023-01-24 | 2023-01-30 | 2023-02-23 | 2023-03-06 | 2023-04-04 | 2023-09-02 || ET-AFAR, LLRP-335412-CW-RFB / Construction of two b",
+            "document_id": "40036460",
+            "pages": [
+              3,
+              3
+            ],
+            "project_ids": [
+              "P164336"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/099080525130012103/pdf/P164336-36341511-6050-4cea-920a-aebe2b663543.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_835521aa2acc4d01b8b1",
+            "kind": "document_passage",
+            "citation": "ICR 40108844, p. 11-11, printed p. 1",
+            "numeric_use": "document_statement",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "A. CONTEXT AT APPRAISAL\n\nContext\n\n1. Ethiopia was just emerging from civil unrest when the Lowlands Livelihood Resilience Project (LLRP) was prepared. Climate change was the main challenge facing the arid and semi-arid lowlands (the geographic target of the project). Resource scarcity and conflicts, limited access to services (both social and economic), and other layers of challenges resulted in the high vulnerability in the lowlands exposing the population to multiple and self-reenforcing chains of shocks.\n\n2. A volatile geopolitical environment, insecurity in some regions, and local conflict",
+            "document_id": "40108844",
+            "pages": [
+              11,
+              11
+            ],
+            "project_ids": [
+              "P164336"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/099061226093523735/pdf/BOSIB-8c59b3bc-b5ec-4178-ae59-7116ee38cd9b.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_8731b48bdace4c009711",
+            "kind": "document_table",
+            "citation": "PP 40133023, p. 67-67, printed p. 1",
+            "numeric_use": "not_approved",
+            "validation_status": "verified",
+            "warnings": [
+              "pdf_table_value_unverified"
+            ],
+            "summary": "FIRST POWER SECTOR REFORM INVESTMENT AND MODERNIZATION IN ETHIOPIA (PRIME-1) PROJECT || PROJECT PREPARATION ADVANCE - EEP",
+            "document_id": "40133023",
+            "pages": [
+              67,
+              67
+            ],
+            "project_ids": [
+              "P176731"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/099101426045527588/pdf/P176731-c600358d-7dd7-4d1c-9f61-e38b767c396d.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_1b51a8c2dde54d089f31",
+            "kind": "document_table",
+            "citation": "PP 40102009, p. 67-67, printed p. 1",
+            "numeric_use": "not_approved",
+            "validation_status": "verified",
+            "warnings": [
+              "pdf_table_value_unverified"
+            ],
+            "summary": "FIRST POWER SECTOR REFORM INVESTMENT AND MODERNIZATION IN ETHIOPIA (PRIME-1) PROJECT || PROJECT PREPARATION ADVANCE - EEP",
+            "document_id": "40102009",
+            "pages": [
+              67,
+              67
+            ],
+            "project_ids": [
+              "P176731"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/099050926195514961/pdf/P176731-71217c4d-2a58-4735-8d05-ed8ad9658973.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_2a318be42034450bb874",
+            "kind": "document_table",
+            "citation": "PP 40102009, p. 66-66, printed p. 0",
+            "numeric_use": "not_approved",
+            "validation_status": "verified",
+            "warnings": [
+              "pdf_table_value_unverified"
+            ],
+            "summary": "FIRST POWER SECTOR REFORM INVESTMENT AND MODERNIZATION IN ETHIOPIA (PRIME-1) PROJECTS || Procuremetn Plan for Consultancy Services",
+            "document_id": "40102009",
+            "pages": [
+              66,
+              66
+            ],
+            "project_ids": [
+              "P176731"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/099050926195514961/pdf/P176731-71217c4d-2a58-4735-8d05-ed8ad9658973.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_8169d0bc241244d6872d",
+            "kind": "document_table",
+            "citation": "PP 40133023, p. 66-66, printed p. 0",
+            "numeric_use": "not_approved",
+            "validation_status": "verified",
+            "warnings": [
+              "pdf_table_value_unverified"
+            ],
+            "summary": "FIRST POWER SECTOR REFORM INVESTMENT AND MODERNIZATION IN ETHIOPIA (PRIME-1) PROJECTS || Procuremetn Plan for Consultancy Services",
+            "document_id": "40133023",
+            "pages": [
+              66,
+              66
+            ],
+            "project_ids": [
+              "P176731"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/099101426045527588/pdf/P176731-c600358d-7dd7-4d1c-9f61-e38b767c396d.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_76b5f902e0604b4099d7",
+            "kind": "document_passage",
+            "citation": "PAD 24440102, p. 23-23, printed p. 10",
+            "numeric_use": "document_statement",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "The decision to introduce segregated dual carriageway highways along a new alignment is appropriate on the grounds of safety and efficient transport. The project includes a standalone Road Safety component to introduce \u201cThe Safe System\u201d along the expressways and critical accident-prone corridors; (d) Many road construction projects experience delays and cost overruns due to poor design work and contract administration by consultants, and delayed mobilization by contractors. These issues are to be addressed through the adoption of a Design and Build contract format, which is being used successf",
+            "document_id": "24440102",
+            "pages": [
+              23,
+              23
+            ],
+            "project_ids": [
+              "P148850"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/882371468000596899/pdf/PAD1135-UPLOAD-NEW-VERSION-REVISED-Box391445B-OUO-9-UPDATE-BOARD-NUMBERS-IDA-R2015-0093-3.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_df372aad6a6d4d629bdc",
+            "kind": "document_table",
+            "citation": "PAD 24440102, p. 90-90, printed p. 77",
+            "numeric_use": "not_approved",
+            "validation_status": "verified",
+            "warnings": [
+              "pdf_table_value_unverified"
+            ],
+            "summary": "ERA | Procurement process delays | No standard bidding documents for Design and Build works resulting in protracted preparation and approval and many clarification requests by bidders. | Substantial | Customise bid documents based on pre-approved Output Performance Road Contract (OPRC) documents. Bidding documents have been prepared and agreed prior to Negotiations. || Protracted evaluation of bids due to use of two envelope system and disparities between bids from design and build approach. Quality of reports not to standard. | Moderate | Training of evaluation team and TA support and Bank ha",
+            "document_id": "24440102",
+            "pages": [
+              90,
+              90
+            ],
+            "project_ids": [
+              "P148850"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/882371468000596899/pdf/PAD1135-UPLOAD-NEW-VERSION-REVISED-Box391445B-OUO-9-UPDATE-BOARD-NUMBERS-IDA-R2015-0093-3.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_4d927d8e2e4c4a15b1f7",
+            "kind": "document_passage",
+            "citation": "PAD 24440102, p. 89-89, printed p. 76",
+            "numeric_use": "document_statement",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "To achieve this, it agreed that ERA will strengthen its internal quality assurance system so as to submit quality procurement documents, agreed on business standards for response/comments for both Bank and ERA and meet to resolve any outstanding issues after second submission by ERA. 61. Based on the above assessments, the key risks relating to ERA are: (a) procurement process delays due to: (i) use of non-standard bidding documents and elongated evaluation as a result of the use of the two envelope system, and (ii) delays in approval processes due to long iterative process to ensure required ",
+            "document_id": "24440102",
+            "pages": [
+              89,
+              89
+            ],
+            "project_ids": [
+              "P148850"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/882371468000596899/pdf/PAD1135-UPLOAD-NEW-VERSION-REVISED-Box391445B-OUO-9-UPDATE-BOARD-NUMBERS-IDA-R2015-0093-3.pdf",
+            "facts": []
+          },
+          {
+            "evidence_id": "ev_aa8953b67d0d4211a944",
+            "kind": "document_passage",
+            "citation": "ISR 24871317, p. 2-2, printed p. 2",
+            "numeric_use": "document_statement",
+            "validation_status": "verified",
+            "warnings": [],
+            "summary": "Implementation Status and Key Decisions\n\nPreparation of bidding document for works contract, ToR/ RFP for monitoring of the works and other technical assistance is in progress with a plan to initiate procurement process inQ1 of FY16.",
+            "document_id": "24871317",
+            "pages": [
+              2,
+              2
+            ],
+            "project_ids": [
+              "P148850"
+            ],
+            "source_url": "https://documents1.worldbank.org/curated/en/128821468247862717/pdf/ISR-Disclosable-P148850-08-04-2015-1438742038388.pdf",
+            "facts": []
+          }
+        ],
+        "usage": {
+          "llm_calls": 5,
+          "input_tokens": 7800,
+          "output_tokens": 3523,
+          "cost_usd": "0.050830",
+          "executions": 0
+        }
+      }
+    }
+  },
+  "ledger": {
+    "limits": {
+      "max_attempts": 10,
+      "max_usd": "1.00"
+    },
+    "prices": {
+      "model": "claude-sonnet-5-5",
+      "input_usd_per_million": "2",
+      "output_usd_per_million": "10",
+      "source": "platform.claude.com/docs/en/about-claude/pricing, verified 2026-10-26"
+    },
+    "attempts_used": 6,
+    "estimated_usd": "0.162166",
+    "committed_usd": "0.178383",
+    "locked": null
+  }
+}

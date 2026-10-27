@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Bookmark, BookmarkCheck, Calculator, ChevronDown, Copy, Info, Library, ShieldQuestion, Sparkles } from "lucide-react";
+import { Bookmark, BookmarkCheck, Calculator, ChevronDown, ClipboardList, Copy, Info, Library, ShieldQuestion, Sparkles } from "lucide-react";
 import type { Investigation, Turn } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card, Spinner } from "@/components/ui/primitives";
 import { Tooltip } from "@/components/ui/overlays";
 import { StatusBadge } from "./status";
 import { PredictionCards } from "./prediction-cards";
+import { BriefView } from "./brief";
 import { EvidencePanel } from "./evidence-panel";
 import { cn, relativeTime } from "@/lib/utils";
 
@@ -18,9 +19,11 @@ type Props = {
   onToggleBookmark: () => void;
   onDecide: (approvalId: string, approved: boolean) => Promise<void>;
   onAssess: () => void;
+  onPlan: () => void;
+  onInvestigate: (question: string) => void;
 };
 
-export function AnswerCard({ turn, investigation, bookmarked, onToggleBookmark, onDecide, onAssess }: Props) {
+export function AnswerCard({ turn, investigation, bookmarked, onToggleBookmark, onDecide, onAssess, onPlan, onInvestigate }: Props) {
   const [sourcesOpen, setSourcesOpen] = useState(false);
   const [focus, setFocus] = useState<string | null>(null);
   const [notesOpen, setNotesOpen] = useState(false);
@@ -29,6 +32,13 @@ export function AnswerCard({ turn, investigation, bookmarked, onToggleBookmark, 
   const number = (id: string) => evidence.findIndex((e) => e.evidence_id === id) + 1;
   const stopped = investigation?.error_codes.includes("cancelled_by_user");
   const status = stopped ? "stopped" : investigation?.status ?? turn.status;
+  const brief = investigation?.claims.some((c) => c.section) ?? false;
+  const cite = (id: string) => number(id) > 0 && (
+    <button key={id} onClick={() => openSource(id)}
+      className="ml-1 inline-grid h-[18px] min-w-[18px] place-items-center rounded-md bg-primary-soft px-1 align-text-top text-[10px] font-bold text-primary-strong hover:bg-primary hover:text-white">
+      {number(id)}
+    </button>
+  );
 
   const openSource = (id: string | null) => {
     setFocus(id);
@@ -60,25 +70,23 @@ export function AnswerCard({ turn, investigation, bookmarked, onToggleBookmark, 
           <span className="ml-auto text-[11px] text-muted-foreground">{relativeTime(turn.created_at)}</span>
         </div>
 
-        <div className="mt-3 space-y-2.5 text-[15px] leading-relaxed">
-          {investigation && investigation.claims.length > 0 ? (
-            investigation.claims.map((claim, i) => (
-              <p key={i}>
-                {claim.text}
-                {claim.evidence_ids.map((id) => number(id) > 0 && (
-                  <button key={id} onClick={() => openSource(id)}
-                    className="ml-1 inline-grid h-[18px] min-w-[18px] place-items-center rounded-md bg-primary-soft px-1 align-text-top text-[10px] font-bold text-primary-strong hover:bg-primary hover:text-white">
-                    {number(id)}
-                  </button>
-                ))}
-              </p>
-            ))
-          ) : (
-            <p className="whitespace-pre-line">{investigation?.message || turn.text}</p>
-          )}
-        </div>
+        {investigation && brief ? (
+          <BriefView investigation={investigation} citation={cite} onInvestigate={onInvestigate} />
+        ) : (
+          <div className="mt-3 space-y-2.5 text-[15px] leading-relaxed">
+            {investigation && investigation.claims.length > 0 ? (
+              investigation.claims.map((claim, i) => <p key={i}>{claim.text}{claim.evidence_ids.map(cite)}</p>)
+            ) : (
+              <p className="whitespace-pre-line">{investigation?.message || turn.text}</p>
+            )}
+          </div>
+        )}
 
-        {investigation && <PredictionCards evidence={evidence} />}
+        {investigation && !brief && <PredictionCards evidence={evidence} />}
+
+        {turn.status === "needs_project_details" && (
+          <Button size="sm" className="mt-4" onClick={onPlan}><ClipboardList /> Plan a new project</Button>
+        )}
 
         {turn.status === "needs_package_details" && (
           <Button size="sm" className="mt-4" onClick={onAssess}><Calculator /> Assess package</Button>

@@ -31,6 +31,12 @@ OPERATIONS: dict[str, dict[str, frozenset[str]]] = {
     },
     "ml_prediction": {
         "predict_package": frozenset({"ml_prediction"}),
+        "predict_planned_packages": frozenset({"ml_prediction"}),
+    },
+    "procurement_planning": {
+        "match_similar_projects": frozenset({"planning_drafter"}),
+        "market_benchmarks": frozenset({"planning_drafter"}),
+        "governance_context": frozenset({"planning_drafter"}),
     },
 }
 EXECUTION_CAPABILITY = "databricks_execution"

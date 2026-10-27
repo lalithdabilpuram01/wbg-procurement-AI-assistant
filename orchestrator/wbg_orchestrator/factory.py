@@ -67,6 +67,22 @@ def document_worker(authority: TicketAuthority, generator_factory: Callable[[], 
     return DocumentIntelligenceWorker(pipeline_for, retriever_for, authority, flags_for)
 
 
+def semantic_project_scores(document: DocumentIntelligenceWorker, release: str) -> Callable[[str], dict[str, float]]:
+    """Description -> best passage similarity per project that has documents (every such project gets a score)."""
+    import numpy as np
+
+    def scores(text: str) -> dict[str, float]:
+        retriever = document.retriever(release)
+        units = retriever.c.units
+        dense = retriever.rank_dense(text, np.array([u.unit_type == "chunk" for u in units]))
+        best = {project: 0.0 for project in retriever.c.corpus_projects}
+        for unit, score in zip(units, dense):
+            if np.isfinite(score) and score > best[unit.project_id]:
+                best[unit.project_id] = float(score)
+        return best
+    return scores
+
+
 def controller_for(workers: dict[WorkerName, Any], authority: TicketAuthority, tracer=None, **options) -> ExecutionController:
     return ExecutionController(workers, authority, tracer=tracer, **options)
 

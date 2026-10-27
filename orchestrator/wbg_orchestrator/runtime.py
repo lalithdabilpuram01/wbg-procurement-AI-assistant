@@ -43,7 +43,8 @@ from .controller import ExecutionController
 from .contracts import WorkerName
 from .conversation_bridge import ConversationFrontDoor, ConversationRunner
 from .engine import InvestigationEngine
-from .factory import authorization_factory, document_worker, llm_breaker, structured_worker_for_service
+from .factory import (authorization_factory, document_worker, llm_breaker, semantic_project_scores,
+                      structured_worker_for_service)
 from .graph import EngineDeps
 from .live_llm import SONNET_5_5_PRICES, BudgetedClaudeClient, LedgerLimits, SpendLedger
 from .observability import AuditTrail, JsonlAuditSink, OrchestratorTracer
@@ -52,11 +53,12 @@ from .rag_modules import answering
 from .response import ClaudeResponseGenerator
 from .supervisor import Supervisor
 from .workers.base import ResultCache, TicketAuthority
+from .workers.planning import PlanningWorker
 from .workers.prediction import PredictionWorker, gateway_sql
 
 ORCHESTRATOR_DIR = Path(__file__).resolve().parents[1]
 DEV_CHECKPOINT_ENDPOINT = "projects/wbg-procurement-dev/branches/dev-orchestrator/endpoints/primary"
-OUTPUT_CAPS = {"investigation_plan": 8000, "investigation_answer": 4000, "sql_draft": 4000}
+OUTPUT_CAPS = {"investigation_plan": 8000, "investigation_answer": 9000, "sql_draft": 4000}
 REGISTRY_PRINCIPAL, WORKSPACE = "analyst-demo", "wbg-procurement-poc"
 
 
@@ -86,9 +88,11 @@ def build_runtime(config: RuntimeConfig, operator_confirmed: bool) -> tuple[AppS
     authority, guardrails = TicketAuthority(), build_guardrails()
     service, structured = _structured_worker(config, claude, guardrails, authority)
     document = document_worker(authority, generator_factory=answering("generator").EvidenceOnlyGenerator)
-    prediction = PredictionWorker(gateway_sql(service, REGISTRY_PRINCIPAL, WORKSPACE), authority)
+    gold = gateway_sql(service, REGISTRY_PRINCIPAL, WORKSPACE)
+    planning = PlanningWorker(gold, authority, semantic_project_scores(document, config.rag_release))
     controller = ExecutionController({WorkerName.STRUCTURED: structured, WorkerName.DOCUMENT: document,
-                                      WorkerName.PREDICTION: prediction}, authority, tracer=tracer, prices=SONNET_5_5_PRICES)
+                                      WorkerName.PREDICTION: PredictionWorker(gold, authority), WorkerName.PLANNING: planning},
+                                     authority, tracer=tracer, prices=SONNET_5_5_PRICES)
     json_client = PortkeyJsonClient(claude)
     deps = EngineDeps(controller=controller, supervisor=Supervisor(), planner=ClaudePlanner(json_client),
                       responder=ClaudeResponseGenerator(json_client), guard=guardrails, llm_breaker=llm_breaker(), tracer=tracer,

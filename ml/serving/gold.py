@@ -11,13 +11,15 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from .features import InvalidRequest, ProjectContext
+from .features import InvalidRequest, ProjectContext, fiscal_year
 
 RunSql = Callable[[str, dict[str, Any]], list[dict[str, Any]]]
 GOLD = "workspace.wbg_gold"
 SECTORS = Path(__file__).resolve().parent / "project_sector.csv"
 TENDER_TYPES = ("Invitation for Bids", "Request for Expression of Interest", "Invitation for Prequalification")
 
+REGION_SQL = (f"SELECT region_name, COUNT(*) AS projects FROM {GOLD}.gold_project_portfolio "
+              f"WHERE wdi_country_code = :country_code GROUP BY region_name ORDER BY projects DESC LIMIT 1")
 PROJECT_SQL = (f"SELECT project_id, region_name, wdi_country_code, board_approval_date, approval_fiscal_year "
                f"FROM {GOLD}.gold_project_portfolio WHERE project_id = :project_id LIMIT 1")
 INCOME_SQL = (f"SELECT year, income_group_fy_starting_in_year FROM {GOLD}.gold_country_context "
@@ -36,6 +38,25 @@ def _date(value: Any) -> dt.date:
     return value if isinstance(value, dt.date) and not isinstance(value, dt.datetime) else dt.date.fromisoformat(str(value)[:10])
 
 
+def country_region(country_code: str, run_sql: RunSql) -> str:
+    rows = run_sql(REGION_SQL, {"country_code": country_code})
+    if not rows:
+        raise InvalidRequest(f"no projects are recorded for country {country_code}")
+    return rows[0]["region_name"]
+
+
+def income_history(country_code: str, run_sql: RunSql) -> dict[int, str]:
+    return {int(r["year"]): r["income_group_fy_starting_in_year"] for r in run_sql(INCOME_SQL, {"country_code": country_code})}
+
+
+def new_project_context(country_code: str, sector: str, approval_date: dt.date, prior_tenders: int,
+                        run_sql: RunSql) -> ProjectContext:
+    """Context of a project that has no ID yet: region and income from the country, the rest from the plan."""
+    return ProjectContext(project_id="new", region_name=country_region(country_code, run_sql), country_code=country_code,
+                          sector=sector, board_approval_date=approval_date, approval_fiscal_year=fiscal_year(approval_date),
+                          income_by_year=income_history(country_code, run_sql), prior_tender_notices=prior_tenders)
+
+
 def project_context(project_id: str, tender_date: dt.date, run_sql: RunSql) -> ProjectContext:
     rows = run_sql(PROJECT_SQL, {"project_id": project_id})
     if not rows:
@@ -44,8 +65,7 @@ def project_context(project_id: str, tender_date: dt.date, run_sql: RunSql) -> P
     if not project.get("board_approval_date"):
         raise InvalidRequest(f"project {project_id} has no board approval date; the models need it")
     country = project.get("wdi_country_code") or None
-    income = {int(r["year"]): r["income_group_fy_starting_in_year"]
-              for r in (run_sql(INCOME_SQL, {"country_code": country}) if country else [])}
+    income = income_history(country, run_sql) if country else {}
     prior = run_sql(PRIOR_TENDERS_SQL, {"project_id": project_id, "tender_date": tender_date.isoformat()})
     return ProjectContext(project_id=project_id, region_name=project["region_name"], country_code=country,
                           sector=project_sector(project_id), board_approval_date=_date(project["board_approval_date"]),

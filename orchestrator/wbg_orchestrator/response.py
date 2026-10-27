@@ -20,8 +20,8 @@ from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from conversation.redaction import redact_secrets
 
 from .claude import PortkeyJsonClient
-from .contracts import (EvidenceKind, EvidenceRecord, InvestigationPlan, InvestigationRequest, InvestigationResponse,
-                        InvestigationStatus, NumericUse, ResponseClaim, Usage)
+from .contracts import (BriefSection, EvidenceKind, EvidenceRecord, InvestigationPlan, InvestigationRequest,
+                        InvestigationResponse, InvestigationStatus, NumericUse, ResponseClaim, Usage)
 from .rag_modules import answering
 from .verification import VerificationReport
 
@@ -32,11 +32,12 @@ class DraftClaim(BaseModel):
     model_config = ConfigDict(extra="forbid")
     text: str = Field(min_length=1, max_length=600)
     evidence_ids: list[str] = Field(min_length=1, max_length=8)
+    section: BriefSection | None = None
 
 
 class DraftResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    claims: list[DraftClaim] = Field(default_factory=list, max_length=12)
+    claims: list[DraftClaim] = Field(default_factory=list, max_length=28)
     limitations: list[str] = Field(default_factory=list, max_length=8)
 
 
@@ -73,6 +74,16 @@ class ClaudeResponseGenerator:
               "say in plain words that the model was trained on synthetic data; never write warning codes or evidence ids "
               "in the text. Return only JSON matching the schema.")
 
+    BRIEF = ("This is a PLANNING BRIEF for a new project described in the question. Group claims by section: "
+             "similar_projects (which past projects are comparable and why); schedule (per package: estimated tender-to-signing "
+             "time and range, chance of exceeding a year, the drivers, and what this means for the procurement plan dates); "
+             "market_approach (which methods, review types and supplier origins were used, with contract values); risks (risks "
+             "from similar appraisals and governance context, each with a mitigation); lessons (the main section: specific, "
+             "actionable lessons from similar projects, each saying what to do differently); tender_design (packaging, "
+             "specification and qualification points); monitoring (early-warning signs to watch during execution). Write at "
+             "most 22 claims in total: 2-3 per section, up to 5 for lessons; omit a section without evidence. Each claim is "
+             "1-2 sentences and under 50 words. Name packages by their names. Refer to past projects by name and ID.")
+
     def __init__(self, client: PortkeyJsonClient):
         self._client = client
 
@@ -81,7 +92,8 @@ class ClaudeResponseGenerator:
                   f"warnings={','.join(e.quality_warnings) or 'none'}; citation: {e.citation}\n"
                   f"facts: {'; '.join(f'{f.name}={f.value}' for f in e.facts)}\nsummary: {e.summary[:800]}" for e in evidence]
         user = f"QUESTION:\n{request.question}\n\nEVIDENCE:\n" + "\n\n".join(blocks)
-        parsed, content, usage = self._client.complete(system=self.SYSTEM, user=user, schema=DraftResponse.model_json_schema(),
+        system = self.SYSTEM + (" " + self.BRIEF if request.planning else "")
+        parsed, content, usage = self._client.complete(system=system, user=user, schema=DraftResponse.model_json_schema(),
                                                        schema_name="investigation_answer", trace_id=request.request_id)
         try:
             return DraftResponse.model_validate(parsed if parsed is not None else content), usage
@@ -101,7 +113,7 @@ def _restatement(record: EvidenceRecord) -> str:
         return f"{record.citation}: {record.summary[:400]}"
     if record.kind == EvidenceKind.TABLE_CANDIDATE:
         return f"Relevant approved table: {', '.join(record.source_objects)}."
-    if record.kind == EvidenceKind.MODEL_PREDICTION:
+    if record.kind in (EvidenceKind.MODEL_PREDICTION, EvidenceKind.SIMILAR_PROJECT):
         return record.summary[:600]
     return ""
 
@@ -145,7 +157,7 @@ def validate_response(request: InvestigationRequest, plan: InvestigationPlan | N
         if reason:
             removed.append(reason)
         else:
-            kept.append(ResponseClaim(text=claim.text, evidence_ids=tuple(claim.evidence_ids)))
+            kept.append(ResponseClaim(text=claim.text, evidence_ids=tuple(claim.evidence_ids), section=claim.section))
     limitations = list(draft.limitations if draft else [])[:8]
     if report:
         limitations += [f"Missing verified evidence for task {u.split(':')[0].split('.')[-1]} ({u.split(':')[1]})." for u in report.unmet]

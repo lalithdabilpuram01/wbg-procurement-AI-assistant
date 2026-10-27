@@ -32,7 +32,7 @@ from .contracts import (TERMINAL_TASK_STATES, ApprovalDecision, ApprovalRequest,
 from .controller import ExecutionController
 from .hitl import ApprovalPolicy, approval_needed, build_approval, decision_problem
 from .observability import AuditTrail, OrchestratorTracer
-from .planner import Planner, PlannerError, PlanningContext, build_plan, fast_path_plan, package_plan
+from .planner import Planner, PlannerError, PlanningContext, brief_plan, build_plan, fast_path_plan, package_plan
 from .response import ResponseGenerator, validate_response
 from .state import InvestigationState, add_counters
 from .supervisor import Supervisor
@@ -149,8 +149,8 @@ class _Nodes:
         if decision.mode == "fast":
             plan = fast_path_plan(request, decision.worker, decision.operation, decision.requires_execution)
             return {**update, "plan": plan.to_state(), "plans": [plan.to_state()], "phase": "planned"}
-        if decision.mode == "package":
-            plan = package_plan(request)
+        if decision.mode in ("package", "brief"):
+            plan = package_plan(request) if decision.mode == "package" else brief_plan(request)
             return {**update, "plan": plan.to_state(), "plans": [plan.to_state()], "phase": "planned"}
         if decision.mode == "plan":
             return {**update, "phase": "needs_plan"}
@@ -365,7 +365,7 @@ class _Nodes:
             try:
                 if self.d.responder.is_llm:
                     refusal = check_budget(state.get("usage", {}), request.budget, investigation_id=request.investigation_id,
-                                           node="respond", needs_llm=True)
+                                           node="respond", needs_llm=True, starts_task=False)
                     if refusal:
                         raise _Stop(refusal)
                     self.d.llm_breaker.before_call()

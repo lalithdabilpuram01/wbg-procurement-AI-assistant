@@ -1,11 +1,11 @@
-"""predict_package: one procurement package (mode B) -> the three frozen models' outputs with their context."""
+"""One procurement package -> the three frozen models' outputs, for an existing project (by ID) or a new one."""
 from __future__ import annotations
 
 import datetime as dt
 from dataclasses import asdict, dataclass
 
 from . import features
-from .features import PackageRequest
+from .features import PackageRequest, ProjectContext
 from .gold import RunSql, project_context
 from .models import DurationPrediction, FrozenModels, RiskPrediction
 
@@ -25,8 +25,14 @@ class PackagePrediction:
 
 
 def predict_package(request: PackageRequest, run_sql: RunSql, models: FrozenModels) -> PackagePrediction:
+    """An existing project's package: the project context is looked up by its ID."""
     request.validate()
-    context = project_context(request.project_id, request.tender_date, run_sql)
+    return predict_for_context(request, project_context(request.project_id, request.tender_date, run_sql), models)
+
+
+def predict_for_context(request: PackageRequest, context: ProjectContext, models: FrozenModels) -> PackagePrediction:
+    """The three models for one package in a given project context (existing or new project)."""
+    request.validate()
     notes: list[str] = []
 
     row, row_notes = features.model1_row(request, context)

@@ -36,7 +36,7 @@ from conversation.store import ThreadNotFound
 from conversation.workspace import WorkspaceItemNotFound
 
 from .app_service import AppService, ConversationBusy, Job, JobNotFound, summarize
-from .contracts import PackageSpec
+from .contracts import PackageSpec, PlanningSpec
 from .engine import ApprovalNotPending, InvestigationNotFound
 
 DEFAULT_USERS_FILE = Path.home() / ".wbg" / "api_users.json"
@@ -111,6 +111,10 @@ class NewMessage(BaseModel):
 
 
 class NewPackage(PackageSpec):
+    client_message_id: str = Field(pattern=CLIENT_ID)
+
+
+class NewPlan(PlanningSpec):
     client_message_id: str = Field(pattern=CLIENT_ID)
 
 
@@ -223,6 +227,11 @@ def create_app(service: AppService, users: UserDirectory) -> FastAPI:
     def submit_package(conversation_id: str, body: NewPackage, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
         package = PackageSpec(**body.model_dump(exclude={"client_message_id"}))
         return job_view(service.submit_package(owner, conversation_id, package, body.client_message_id))
+
+    @app.post("/conversations/{conversation_id}/plans", status_code=202)
+    def submit_plan(conversation_id: str, body: NewPlan, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
+        spec = PlanningSpec(**body.model_dump(exclude={"client_message_id"}))
+        return job_view(service.submit_plan(owner, conversation_id, spec, body.client_message_id))
 
     @app.post("/jobs/{job_id}/cancel")
     def cancel_job(job_id: str, owner: Owner = Depends(current_owner)) -> dict[str, Any]:

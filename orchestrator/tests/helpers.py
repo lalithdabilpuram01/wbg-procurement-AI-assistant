@@ -25,6 +25,7 @@ from wbg_orchestrator.response import DeterministicResponseGenerator
 from wbg_orchestrator.supervisor import Supervisor
 from wbg_orchestrator.workers.base import ResultCache, TicketAuthority
 from wbg_orchestrator.workers.document import DocumentIntelligenceWorker
+from wbg_orchestrator.workers.planning import PlanningWorker
 from wbg_orchestrator.workers.prediction import PredictionWorker
 from wbg_orchestrator.workers.structured import StructuredDataWorker
 
@@ -164,15 +165,46 @@ class Clock:
         return self.now
 
 
+GOLD_PROJECTS = [  # (project_id, name, country, commitment) in Eastern and Southern Africa
+    ("P148850", "Ethiopia Expressway Development Support Project", "ET", 300e6),
+    ("P163452", "Ethiopia Urban Institutional and Infrastructure Development", "ET", 650e6),
+    ("P143302", "Ethiopia Competitiveness and Job Creation Project", "ET", 250e6),
+    ("P111111", "Kenya Roads Project", "KE", 200e6),
+]
+
+
 def fake_gold_sql(sql: str, parameters: dict) -> list[dict]:
-    """The prediction worker's three Gold lookups for P148850 (offline)."""
-    from ml.serving.gold import INCOME_SQL, PROJECT_SQL
+    """The prediction and planning workers' fixed Gold lookups (offline)."""
+    from ml.serving.gold import INCOME_SQL, PROJECT_SQL, REGION_SQL
+    from wbg_orchestrator.workers.planning import CANDIDATES_SQL, GOVERNANCE_SQL
     if sql == PROJECT_SQL:
         return [{"project_id": parameters["project_id"], "region_name": "Eastern and Southern Africa", "wdi_country_code": "ET",
                  "board_approval_date": "2016-06-28", "approval_fiscal_year": 2016}] if parameters["project_id"] == "P148850" else []
     if sql == INCOME_SQL:
         return [{"year": 2025, "income_group_fy_starting_in_year": "L"}]
+    if sql == REGION_SQL:
+        return [{"region_name": "Eastern and Southern Africa", "projects": 120}]
+    if sql == CANDIDATES_SQL:
+        return [{"project_id": pid, "project_name": name, "wdi_country_code": country, "region_name": parameters["region_name"],
+                 "approval_fiscal_year": 2016, "project_status_snapshot": "Active", "current_total_commitment_usd_snapshot": size,
+                 "contract_award_count": 40, "ieg_outcome_rating": None} for pid, name, country, size in GOLD_PROJECTS]
+    if sql == GOVERNANCE_SQL:
+        return [{"year": 2023, "cpia_irai_overall": 3.2, "wgi_government_effectiveness_est": -0.6, "income_group_fy_starting_in_year": "L"}]
+    if "GROUP BY procurement_method" in sql:
+        return [{"procurement_method": "Request for Bids", "contract_awards": 120, "median_contract_amount_usd": 2400000.0,
+                 "median_days_from_approval_to_signing": 640.0},
+                {"procurement_method": "Request for Quotations", "contract_awards": 45, "median_contract_amount_usd": 150000.0,
+                 "median_days_from_approval_to_signing": 410.0}]
+    if "GROUP BY review_type" in sql:
+        return [{"review_type": "Prior", "contract_awards": 90}, {"review_type": "Post", "contract_awards": 75}]
+    if "GROUP BY supplier_country_relation" in sql:
+        return [{"supplier_country_relation": "domestic", "contract_awards": 110}, {"supplier_country_relation": "foreign", "contract_awards": 55}]
     return [{"prior_tender_notices": 34}]
+
+
+def fake_semantic(text: str) -> dict[str, float]:
+    """Description similarity for the projects that have documents (offline)."""
+    return {"P148850": 0.71, "P163452": 0.52, "P143302": 0.40}
 
 
 def build_engine(*, workflow=None, tools=None, pipeline=None, retriever=None, planner=None, responder=None, guard=None, policy=None,
@@ -190,8 +222,10 @@ def build_engine(*, workflow=None, tools=None, pipeline=None, retriever=None, pl
     sleeps: list[float] = []
     tracer = tracer or OrchestratorTracer.disabled()
     prediction = PredictionWorker(run_sql, authority)
+    planning = PlanningWorker(run_sql, authority, fake_semantic, sector_of=lambda pid: "Transportation" if pid in
+                              ("P148850", "P111111") else "Urban Development")
     controller = ExecutionController({WorkerName.STRUCTURED: structured, WorkerName.DOCUMENT: document,
-                                      WorkerName.PREDICTION: prediction}, authority, tracer=tracer,
+                                      WorkerName.PREDICTION: prediction, WorkerName.PLANNING: planning}, authority, tracer=tracer,
                                      backoff=backoff, sleep=sleeps.append, prices=prices,
                                      breaker_settings=breaker_settings)
     audit_sink = audit_sink or MemoryAuditSink()

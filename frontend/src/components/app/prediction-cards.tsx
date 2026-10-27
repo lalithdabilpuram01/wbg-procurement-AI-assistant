@@ -78,16 +78,39 @@ function RiskCard({ e, title, icon: Icon }: { e: Evidence; title: string; icon: 
   );
 }
 
+const packageOf = (e: Evidence) => e.citation.match(/package '([^']+)'(?: \(method suggested: ([^)]+)\))?/);
+
+/** Three cards per package: one group for a single package, a labelled group per package in a Planning Brief. */
 export function PredictionCards({ evidence }: { evidence: Evidence[] }) {
   const models = evidence.filter((e) => e.kind === "model_prediction");
   if (!models.length) return null;
-  const byModel = (n: number) => models.find((e) => e.citation.startsWith(`Model ${n}`));
-  const [duration, amendment, rebid] = [byModel(1), byModel(2), byModel(3)];
+  const groups = new Map<string, Evidence[]>();
+  for (const e of models) {
+    const key = packageOf(e)?.[1] ?? "";
+    groups.set(key, [...(groups.get(key) ?? []), e]);
+  }
   return (
-    <div className="mt-4 grid gap-3 md:grid-cols-3">
-      {duration && <DurationCard e={duration} />}
-      {amendment && <RiskCard e={amendment} title="Amendment risk" icon={RefreshCcw} />}
-      {rebid && <RiskCard e={rebid} title="Re-bidding risk" icon={RefreshCcw} />}
+    <div className="mt-4 space-y-4">
+      {[...groups.entries()].map(([name, items]) => {
+        const byModel = (n: number) => items.find((e) => e.citation.startsWith(`Model ${n}`));
+        const [duration, amendment, rebid] = [byModel(1), byModel(2), byModel(3)];
+        const suggested = packageOf(items[0])?.[2];
+        return (
+          <div key={name || "package"}>
+            {name && (
+              <p className="mb-2 text-sm font-semibold">
+                {name}
+                {suggested && <span className="ml-2 text-xs font-normal text-muted-foreground">method suggested from history: {suggested}</span>}
+              </p>
+            )}
+            <div className="grid gap-3 md:grid-cols-3">
+              {duration && <DurationCard e={duration} />}
+              {amendment && <RiskCard e={amendment} title="Amendment risk" icon={RefreshCcw} />}
+              {rebid && <RiskCard e={rebid} title="Re-bidding risk" icon={RefreshCcw} />}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

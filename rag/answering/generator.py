@@ -71,13 +71,26 @@ class OllamaGenerator:
         return None, meta
 
 
+EXCERPT_CHARS = 340      # below the validator's evidence-dump length (350): a longer excerpt is removed as a dump
+
+
+def excerpt(text: str, limit: int = EXCERPT_CHARS) -> str:
+    """The opening of a passage, cut at a sentence (or clause) boundary when one is close enough to the limit."""
+    text = " ".join(text.split())
+    if len(text) <= limit:
+        return text
+    cut = text[:limit]
+    end = max(cut.rfind(". "), cut.rfind("; "))
+    return cut[:end + 1] if end >= limit // 3 else cut.rsplit(" ", 1)[0] + " …"
+
+
 class EvidenceOnlyGenerator:
     """Deterministic baseline (no language model): the answer is the top evidence excerpts, each cited."""
     is_llm = False
     name = "evidence_only (no LLM; verbatim excerpts)"
 
     def generate(self, question: str, items) -> tuple[DraftAnswer, dict]:
-        claims = [{"text": e.text[:400], "evidence_ids": [e.eid]} for e in items[:3]]
+        claims = [{"text": excerpt(e.record.get("excerpt") or e.text), "evidence_ids": [e.eid]} for e in items[:4]]
         return DraftAnswer(status="answered" if claims else "insufficient_evidence",
                            answer=" … ".join(c["text"] for c in claims) or "No evidence retrieved.",
                            claims=claims, conflicts=[], limitations=["Evidence-only baseline: verbatim excerpts, no synthesis."]), {"latency_ms": 0}

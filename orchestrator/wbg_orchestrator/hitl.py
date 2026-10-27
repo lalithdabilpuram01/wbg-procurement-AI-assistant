@@ -33,7 +33,7 @@ def approval_needed(plan: InvestigationPlan, policy: ApprovalPolicy) -> tuple[st
         reasons.append("read_only_sql_execution")
     if planned and policy.llm_plans_require_approval:
         reasons.append("llm_generated_plan")
-    if len(plan.tasks) >= policy.large_plan_tasks:
+    if planned and len(plan.tasks) >= policy.large_plan_tasks:              # fixed system plans (brief) are reviewed in code
         reasons.append("large_plan")
     if not reasons:
         return None

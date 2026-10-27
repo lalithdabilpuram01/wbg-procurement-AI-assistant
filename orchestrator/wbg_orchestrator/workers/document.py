@@ -73,6 +73,10 @@ class DocumentIntelligenceWorker:
         self._authority = authority
         self._table_flags = table_flags or (lambda release: None)
 
+    def retriever(self, release: str) -> RetrieverLike:
+        """The release's (cached) retriever, shared with the planning worker's description similarity."""
+        return self._retriever_for(release)
+
     def run(self, task: AgentTask, context: WorkerContext) -> WorkerOutput:
         self._authority.verify(context.ticket, task)
         if context.rag_release not in context.authorization.scope.rag_releases:
@@ -91,7 +95,7 @@ class DocumentIntelligenceWorker:
                                                              "The operation is not offered by this worker."))
 
     def _answer(self, task: AgentTask, context: WorkerContext) -> WorkerOutput:
-        response = self._pipeline_for(context.rag_release).answer(task.question)
+        response = self._pipeline_for(context.rag_release).answer(scoped_question(task.question, context.upstream_evidence))
         usage = _usage(response)
         if response.status == "withheld":
             return WorkerOutput(TaskState.BLOCKED, usage=usage, error=_error(
@@ -108,7 +112,8 @@ class DocumentIntelligenceWorker:
         return WorkerOutput(STATUS_MAP.get(response.status, TaskState.PARTIAL), evidence, usage, notes=notes)
 
     def _retrieve(self, task: AgentTask, context: WorkerContext) -> WorkerOutput:
-        result = self._retriever_for(context.rag_release).search(task.question, method="hybrid", k=5, guarded=True)
+        result = self._retriever_for(context.rag_release).search(scoped_question(task.question, context.upstream_evidence),
+                                                                 method="hybrid", k=5, guarded=True)
         if result["status"] == "withheld_personal_data":
             return WorkerOutput(TaskState.BLOCKED, error=_error(task, ErrorCategory.GUARDRAIL, "personal_data_withheld",
                                                                   "Personal contact data is not returned."))
@@ -161,6 +166,14 @@ def _usage(response: Any) -> Usage:
         return Usage()
     return Usage(llm_calls=int(meta.get("attempts", 1) or 1), input_tokens=int(meta.get("prompt_tokens") or 0),
                  output_tokens=int(meta.get("output_tokens") or 0))
+
+
+def scoped_question(question: str, upstream: tuple[EvidenceRecord, ...]) -> str:
+    """When an upstream step chose similar projects (Planning Brief), name them: the retrieval guard then searches only
+    their documents."""
+    projects = [e.project_ids[0] for e in upstream if e.kind == EvidenceKind.SIMILAR_PROJECT and e.project_ids
+                and any(f.name == "document_scope" and f.value == "yes" for f in e.facts)]
+    return f"{question} (projects {', '.join(projects)})" if projects else question
 
 
 def _error(task: AgentTask, category: ErrorCategory, code: str, message: str) -> ExecutionError:

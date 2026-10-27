@@ -19,7 +19,7 @@ class InvalidRequest(ValueError):
 
 @dataclass(frozen=True)
 class PackageRequest:
-    project_id: str
+    project_id: str | None                    # None for a new project (context comes from its profile)
     procurement_method: str
     procurement_category: str
     review_type: str
@@ -27,7 +27,7 @@ class PackageRequest:
     tender_date: dt.date
 
     def validate(self) -> None:
-        if not (self.project_id.startswith("P") and self.project_id[1:].isdigit()):
+        if self.project_id is not None and not (self.project_id.startswith("P") and self.project_id[1:].isdigit()):
             raise InvalidRequest("project_id must look like P123456")
         if self.bid_window_days < 0 or self.bid_window_days > 365:
             raise InvalidRequest("bid_window_days must be between 0 and 365")

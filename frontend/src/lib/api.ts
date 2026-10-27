@@ -18,7 +18,7 @@ export type Evidence = {
   facts: Fact[];
 };
 export type Investigation = {
-  status: string; message: string; claims: { text: string; evidence_ids: string[] }[]; limitations: string[];
+  status: string; message: string; claims: { text: string; evidence_ids: string[]; section: string | null }[]; limitations: string[];
   error_codes: string[]; tasks: { task: string; worker: string; operation: string; state: string }[];
   pending_approval: { approval_id: string; kind: string; summary: string; expires_at: string } | null;
   evidence: Evidence[]; usage: Record<string, number | string | null>;
@@ -28,6 +28,15 @@ export type PackageInput = {
   project_id: string; procurement_method: string; procurement_category: string; review_type: string;
   bid_window_days: number; tender_date: string;
 };
+
+export type ProjectProfile = {
+  country_code: string; sector: string; description: string; approval_date: string; total_cost_usd: number | null;
+};
+export type PlannedPackage = {
+  name: string; procurement_category: string; procurement_method: string | null; estimated_amount_usd: number | null;
+  review_type: string; bid_window_days: number; tender_date: string;
+};
+export type PlanInput = { profile: ProjectProfile; packages: PlannedPackage[] };
 
 export class ApiError extends Error {
   constructor(public status: number, message: string) {
@@ -58,6 +67,8 @@ export const api = {
     call<Job>(`conversations/${id}/messages`, json("POST", { text, execute, client_message_id: clientId() })),
   assessPackage: (id: string, input: PackageInput) =>
     call<Job>(`conversations/${id}/packages`, json("POST", { ...input, client_message_id: clientId() })),
+  planProject: (id: string, input: PlanInput) =>
+    call<Job>(`conversations/${id}/plans`, json("POST", { ...input, client_message_id: clientId() })),
   job: (id: string) => call<Job>(`jobs/${id}`),
   cancelJob: (id: string) => call<Job>(`jobs/${id}/cancel`, { method: "POST" }),
   investigation: (conversationId: string, requestId: string) =>

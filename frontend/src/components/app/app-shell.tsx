@@ -4,12 +4,13 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { X } from "lucide-react";
 import {
   api, waitForJob, type Bookmark, type Conversation, type ConversationDetail, type Folder, type Investigation, type Job,
-  type PackageInput,
+  type PackageInput, type PlanInput,
 } from "@/lib/api";
 import { Sidebar } from "./sidebar";
 import { ChatView } from "./chat";
 import { BookmarksView } from "./bookmarks";
 import { PackageDialog } from "./package-dialog";
+import { PlanDialog } from "./plan-dialog";
 
 const FAILED_JOB = "The request could not be completed. Please try again.";
 
@@ -25,6 +26,7 @@ export function AppShell() {
   const [error, setError] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [packageOpen, setPackageOpen] = useState(false);
+  const [planOpen, setPlanOpen] = useState(false);
   const [scrollToSeq, setScrollToSeq] = useState<number | null>(null);
   const [jobId, setJobId] = useState<string | null>(null);
 
@@ -109,6 +111,13 @@ export function AppShell() {
       () => api.assessPackage(id, input), text);
   };
 
+  const planProject = async (input: PlanInput) => {
+    const id = await ensureConversation(`Plan · ${input.profile.sector} · ${input.profile.country_code}`);
+    const text = `Plan a new ${input.profile.sector} project in ${input.profile.country_code}: ${input.profile.description}`;
+    void runJob(id, "Finding similar past projects, reading their reports and data, and running the models…",
+      () => api.planProject(id, input), text);
+  };
+
   const decide = async (requestId: string, approvalId: string, approved: boolean) => {
     if (!activeId) return;
     await runJob(activeId, approved ? "Running the approved query…" : "Recording your decision…",
@@ -157,6 +166,7 @@ export function AppShell() {
           <ChatView title={active?.title ?? null} detail={detail} investigations={investigations} pending={pending}
             bookmarkedSeqs={bookmarkedSeqs} sidebarOpen={sidebarOpen} scrollToSeq={scrollToSeq}
             onOpenSidebar={() => setSidebarOpen(true)} onSend={send} onStop={stop} onAssess={() => setPackageOpen(true)}
+            onPlan={() => setPlanOpen(true)}
             onToggleBookmark={toggleBookmark} onDecide={decide} />
         )}
         {error && (
@@ -167,6 +177,7 @@ export function AppShell() {
         )}
       </main>
       <PackageDialog open={packageOpen} onOpenChange={setPackageOpen} onSubmit={assess} />
+      <PlanDialog open={planOpen} onOpenChange={setPlanOpen} onSubmit={planProject} />
     </div>
   );
 }

@@ -64,6 +64,7 @@ class WorkerName(str, Enum):
     STRUCTURED = "structured_data"
     DOCUMENT = "document_intelligence"
     PREDICTION = "ml_prediction"
+    PLANNING = "procurement_planning"
 
 
 class TaskState(str, Enum):
@@ -149,6 +150,7 @@ class EvidenceKind(str, Enum):
     DOCUMENT_TABLE = "document_table"
     TYPED_PLAN_RECORD = "typed_plan_record"
     MODEL_PREDICTION = "model_prediction"
+    SIMILAR_PROJECT = "similar_project"
 
 
 # ------------------------------------------------------------------------------------------------------- owners
@@ -199,6 +201,33 @@ class PackageSpec(Record):
     tender_date: dt.date
 
 
+class ProjectProfile(Record):
+    """A new project being planned (no project ID yet)."""
+
+    country_code: str = Field(pattern=r"^[A-Z]{2}$")                     # WDI two-letter code, e.g. ET
+    sector: str = Field(min_length=1, max_length=80)
+    description: str = Field(min_length=20, max_length=1500)            # what the project will do (untrusted text)
+    approval_date: dt.date                                              # planned Board approval
+    total_cost_usd: float | None = Field(default=None, gt=0)
+
+
+class PlannedPackage(Record):
+    name: str = Field(min_length=1, max_length=80)
+    procurement_category: str = Field(min_length=1, max_length=60)
+    procurement_method: str | None = Field(default=None, max_length=100)  # None: suggested from historical practice
+    estimated_amount_usd: float | None = Field(default=None, gt=0)
+    review_type: str = Field(default="Prior", min_length=1, max_length=20)
+    bid_window_days: int = Field(ge=0, le=365)
+    tender_date: dt.date
+
+
+class PlanningSpec(Record):
+    """A Planning Brief request: the new project and its planned packages."""
+
+    profile: ProjectProfile
+    packages: tuple[PlannedPackage, ...] = Field(min_length=1, max_length=5)
+
+
 class InvestigationRequest(Record):
     investigation_id: str
     request_id: str
@@ -210,6 +239,8 @@ class InvestigationRequest(Record):
     rag_release: Literal["pilot_v2", "pilot_v2_1", "pilot_v3"] = "pilot_v3"   # default: 237 docs, Lakebase pgvector
     execute_requested: bool = False                                      # the user asked to run validated SQL
     package: PackageSpec | None = None                                   # a package assessment (ML predictions)
+    planning: PlanningSpec | None = None                                 # a Planning Brief for a new project
+    planning_context: str | None = Field(default=None, max_length=3000)  # the brief's profile + similar projects
     context_ref: str | None = None                                       # memory block id (text is not in state)
     authorization: "AppAuthorizationContext"
     budget: InvestigationBudget = InvestigationBudget()
@@ -243,6 +274,10 @@ OPERATION_EVIDENCE = {
     "answer_document_question": EvidenceSpec(kinds=DOCUMENT_KINDS, verifiable=True),   # page-checked citations
     "retrieve_passages": EvidenceSpec(kinds=DOCUMENT_KINDS, verifiable=False),         # raw search hits: never page-checked
     "predict_package": EvidenceSpec(kinds=(EvidenceKind.MODEL_PREDICTION,), verifiable=True),  # hash-checked frozen models
+    "predict_planned_packages": EvidenceSpec(kinds=(EvidenceKind.MODEL_PREDICTION,), verifiable=True),
+    "match_similar_projects": EvidenceSpec(kinds=(EvidenceKind.SIMILAR_PROJECT,), verifiable=True),
+    "market_benchmarks": EvidenceSpec(kinds=(EvidenceKind.STRUCTURED_RESULT,), verifiable=True),   # fixed read-only SQL
+    "governance_context": EvidenceSpec(kinds=(EvidenceKind.STRUCTURED_RESULT,), verifiable=True),
 }
 
 
@@ -398,9 +433,13 @@ class ApprovalDecision(Record):
 
 
 # ------------------------------------------------------------------------------------------------------ response
+BriefSection = Literal["similar_projects", "schedule", "market_approach", "risks", "lessons", "tender_design", "monitoring"]
+
+
 class ResponseClaim(Record):
     text: str = Field(min_length=1, max_length=600)
     evidence_ids: tuple[str, ...] = Field(min_length=1)
+    section: BriefSection | None = None                 # Planning Brief section (None for ordinary answers)
 
 
 class InvestigationResponse(Record):

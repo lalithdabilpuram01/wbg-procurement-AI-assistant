@@ -333,3 +333,27 @@ def test_the_stop_button_cancels_the_running_job_immediately(tmp_path):
     assert "cancelled" in [t["state"] for t in view["tasks"]] and "cancelled_by_user" in view["error_codes"]
     assert len(stack.parts["workflow"].calls) <= 1
     assert stack.call("POST", f"/jobs/{job['job_id']}/cancel", "bob").status_code == 404      # only its owner can stop it
+
+
+# --------------------------------------------------------------------------------------------- planning brief
+PLAN = {"profile": {"country_code": "ET", "sector": "Transportation", "approval_date": "2027-06-30",
+                    "description": "Rehabilitate 120 km of rural roads and build three bridges in Oromia region."},
+        "packages": [{"name": "Road works lot 1", "procurement_category": "Works", "procurement_method": "Request for Bids",
+                      "bid_window_days": 45, "tender_date": "2027-10-01"}]}
+
+
+def test_a_planning_brief_runs_as_a_job_without_an_approval_click(stack):
+    cid = stack.conversation()
+    accepted = stack.call("POST", f"/conversations/{cid}/plans", json={**PLAN, "client_message_id": "plan-0001"})
+    assert accepted.status_code == 202
+    job = stack.wait(accepted.json()["job_id"])
+    view = stack.call("GET", f"/conversations/{cid}/investigations/{job['request_id']}").json()
+    assert view["pending_approval"] is None
+    assert {"similar_project", "model_prediction", "structured_result"} <= {e["kind"] for e in view["evidence"]}
+
+
+@pytest.mark.parametrize("change", [{"profile": {**PLAN["profile"], "country_code": "Ethiopia"}},
+                                    {"profile": {**PLAN["profile"], "description": "roads"}}, {"packages": []}])
+def test_invalid_plans_are_rejected_before_anything_runs(stack, change):
+    cid = stack.conversation()
+    assert stack.call("POST", f"/conversations/{cid}/plans", json={**PLAN, **change, "client_message_id": "plan-0002"}).status_code == 422

@@ -26,7 +26,7 @@ from conversation.service import ConversationService
 from conversation.store import ConversationStore
 from conversation.workspace import Bookmark, Folder, InMemoryWorkspaceStore, WorkspaceItemNotFound, WorkspaceStore
 
-from .contracts import PackageSpec, investigation_id_for, new_id
+from .contracts import PackageSpec, PlanningSpec, investigation_id_for, new_id
 from .conversation_bridge import ConversationFrontDoor, owner_ref
 from .engine import EngineOutcome, InvestigationEngine, InvestigationNotFound, checkpoint_thread_id
 
@@ -46,7 +46,7 @@ class Job:
     job_id: str
     owner: Owner
     conversation_id: str
-    kind: Literal["message", "approval", "recover", "package"]
+    kind: Literal["message", "approval", "recover", "package", "plan"]
     state: JobState = "running"
     request_id: str | None = None             # the investigation's request, once known
     status: str | None = None                 # conversation or investigation status at the end
@@ -133,6 +133,12 @@ class AppService:
         return self._submit(owner, conversation_id, "package", client_message_id,
                             lambda job: self._finish_outcome(job, self._front_door.assess_package(
                                 owner, conversation_id, package, on_start=lambda rid: self._started(job, rid))))
+
+    def submit_plan(self, owner: Owner, conversation_id: str, spec: PlanningSpec, client_message_id: str) -> Job:
+        self._store.get_thread(owner, conversation_id)                         # ownership before anything runs
+        return self._submit(owner, conversation_id, "plan", client_message_id,
+                            lambda job: self._finish_outcome(job, self._front_door.plan_project(
+                                owner, conversation_id, spec, on_start=lambda rid: self._started(job, rid))))
 
     # ------------------------------------------------------------------------------------------ investigations
     def investigations(self, owner: Owner, conversation_id: str) -> list[InvestigationRef]:
@@ -242,7 +248,8 @@ def summarize(outcome: EngineOutcome) -> dict[str, Any]:
     return {
         "status": outcome.status.value,
         "message": response.message if response else "",
-        "claims": [{"text": c.text, "evidence_ids": list(c.evidence_ids)} for c in response.claims] if response else [],
+        "claims": [{"text": c.text, "evidence_ids": list(c.evidence_ids), "section": c.section} for c in response.claims]
+        if response else [],
         "limitations": list(response.limitations) if response else [],
         "error_codes": sorted({e["code"] for e in values.get("errors", [])} | set(response.error_codes if response else ())),
         "pending_approval": None if approval is None else {

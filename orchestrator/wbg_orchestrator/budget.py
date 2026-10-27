@@ -45,10 +45,12 @@ def budget_error(investigation_id: str, node: str, code: str, message: str, task
 
 
 def check_budget(used: dict[str, Any], budget: InvestigationBudget, *, investigation_id: str, node: str,
-                 task_id: str | None = None, needs_llm: bool = False, needs_execution: bool = False) -> ExecutionError | None:
-    """Refuse the next step when it would exceed a limit (checked before the call, never after)."""
+                 task_id: str | None = None, needs_llm: bool = False, needs_execution: bool = False,
+                 starts_task: bool = True) -> ExecutionError | None:
+    """Refuse the next step when it would exceed a limit (checked before the call, never after). Writing the final
+    answer is not a task (`starts_task=False`): it is limited by the call, token, time and cost budgets only."""
     checks = [
-        (used.get("tasks_executed", 0) >= budget.max_tasks, "task_limit", "The investigation reached its task limit."),
+        (starts_task and used.get("tasks_executed", 0) >= budget.max_tasks, "task_limit", "The investigation reached its task limit."),
         (used.get("elapsed_ms", 0) >= budget.deadline_seconds * 1000, "deadline", "The investigation reached its time limit."),
         (needs_llm and used.get("llm_calls", 0) >= budget.max_llm_calls, "llm_call_limit", "The LLM call budget is exhausted."),
         (used.get("input_tokens", 0) >= budget.max_input_tokens, "input_token_limit", "The input token budget is exhausted."),

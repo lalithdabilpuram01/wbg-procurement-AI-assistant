@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowUp, Calculator, Database, FileSearch, Landmark, PanelLeftOpen, ShieldCheck, Square, TableProperties } from "lucide-react";
+import { ArrowUp, Calculator, ClipboardList, Database, FileSearch, Landmark, PanelLeftOpen, ShieldCheck, Square, TableProperties } from "lucide-react";
 import type { ConversationDetail, Investigation } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/primitives";
@@ -28,6 +28,7 @@ type ChatProps = {
   onSend: (text: string, execute: boolean) => void;
   onStop: () => void;
   onAssess: () => void;
+  onPlan: () => void;
   onToggleBookmark: (seq: number) => void;
   onDecide: (requestId: string, approvalId: string, approved: boolean) => Promise<void>;
 };
@@ -60,13 +61,14 @@ export function ChatView(props: ChatProps) {
               </span>
             </label>
           </Tooltip>
-          <Button size="sm" onClick={props.onAssess}><Calculator /> Assess package</Button>
+          <Button size="sm" variant="outline" onClick={props.onAssess}><Calculator /> Assess package</Button>
+          <Button size="sm" onClick={props.onPlan}><ClipboardList /> Plan a new project</Button>
         </div>
       </header>
 
       <div className="scrollbar-thin flex-1 overflow-y-auto">
         {!detail || (detail.turns.length === 0 && !pending) ? (
-          <Welcome onSend={(t) => props.onSend(t, false)} onAssess={props.onAssess} />
+          <Welcome onSend={(t) => props.onSend(t, false)} onAssess={props.onAssess} onPlan={props.onPlan} />
         ) : (
           <div className="mx-auto max-w-4xl space-y-6 px-4 py-8">
             {detail.turns.map((turn) =>
@@ -81,7 +83,7 @@ export function ChatView(props: ChatProps) {
                   investigation={turn.request_id ? investigations[turn.request_id] : undefined}
                   bookmarked={props.bookmarkedSeqs.has(turn.seq)} onToggleBookmark={() => props.onToggleBookmark(turn.seq)}
                   onDecide={(approvalId, approved) => props.onDecide(turn.request_id!, approvalId, approved)}
-                  onAssess={props.onAssess} />
+                  onAssess={props.onAssess} onPlan={props.onPlan} onInvestigate={(q) => props.onSend(q, false)} />
               ),
             )}
             {pending && <PendingAnswer label={pending} />}
@@ -148,16 +150,26 @@ function Composer({ running, onSend, onStop }:
   );
 }
 
-function Welcome({ onSend, onAssess }: { onSend: (text: string) => void; onAssess: () => void }) {
+function Welcome({ onSend, onAssess, onPlan }: { onSend: (text: string) => void; onAssess: () => void; onPlan: () => void }) {
   return (
     <div className="mx-auto flex max-w-4xl flex-col items-center px-4 py-14 text-center">
       <div className="grid size-14 place-items-center rounded-2xl bg-gradient-to-br from-[#2b88d8] to-[#005a9e] text-xl font-bold text-white shadow-lg">PI</div>
-      <h2 className="mt-5 text-2xl font-semibold tracking-tight">How can I help with procurement today?</h2>
+      <h2 className="mt-5 text-2xl font-semibold tracking-tight">Plan your next project with what past projects learned</h2>
       <p className="mt-2 max-w-xl text-sm text-muted-foreground">
         Ask about contract awards and notices, search project appraisal, status and completion reports, or assess a new
         package with timeline and risk models. Every answer is checked against its sources.
       </p>
-      <div className="mt-8 grid w-full gap-3 sm:grid-cols-2">
+      <button onClick={onPlan} className="mt-8 w-full text-left">
+        <Card className="flex items-center gap-4 border-primary/40 bg-gradient-to-r from-primary-soft to-card p-5 transition-all hover:-translate-y-0.5 hover:shadow-md">
+          <div className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary text-white"><ClipboardList className="size-5" /></div>
+          <div>
+            <p className="font-semibold">Plan a new project</p>
+            <p className="mt-0.5 text-sm text-muted-foreground">Describe the project and its packages: get similar past projects, lessons, risks,
+              a realistic schedule and market approach, then investigate the past projects in depth.</p>
+          </div>
+        </Card>
+      </button>
+      <div className="mt-3 grid w-full gap-3 sm:grid-cols-2">
         {SUGGESTIONS.map((s) => (
           <button key={s.title} onClick={() => onSend(s.text)} className="text-left">
             <Card className="h-full p-4 transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md">

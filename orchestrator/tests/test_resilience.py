@@ -126,3 +126,10 @@ def test_workers_refuse_calls_without_a_controller_ticket():
     with pytest.raises(TicketError):
         worker.run(built.tasks[0], context)
     assert parts["workflow"].calls == []
+
+
+def test_writing_the_answer_is_not_stopped_by_the_task_limit():
+    from wbg_orchestrator.budget import check_budget
+    used, budget = {"tasks_executed": 6, "llm_calls": 2}, InvestigationBudget(max_tasks=6)
+    assert check_budget(used, budget, investigation_id="inv", node="dispatch").code == "task_limit"
+    assert check_budget(used, budget, investigation_id="inv", node="respond", needs_llm=True, starts_task=False) is None
