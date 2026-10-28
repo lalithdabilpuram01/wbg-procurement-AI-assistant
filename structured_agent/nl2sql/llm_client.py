@@ -49,6 +49,7 @@ class LlmFailure(str, Enum):
     INVALID_OUTPUT = "invalid_model_output"       # reply is not the requested structure
     OUTPUT_TRUNCATED = "model_output_truncated"   # reply stopped at max_tokens (finish_reason "length")
     UNEXPECTED_PROVIDER = "unexpected_provider"   # reply not produced by Claude (possible fallback)
+    DISABLED = "claude_disabled"                  # Claude is off for this session: no request was made
 
 
 # Transient upstream failures: these count towards the LLM circuit breaker.

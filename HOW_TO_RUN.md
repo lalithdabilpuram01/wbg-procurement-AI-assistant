@@ -1,30 +1,24 @@
 # How to run everything
 
-This is the cheat sheet for starting the app and the side tools (ingestion, lesson cards, evaluations, tests).
-Copy the commands as they are. Most of them are run from the `orchestrator/` folder, because that's where the
-Python environment lives.
-
-One rule for every Python command: we always use `uv`, never a plain `python` from another environment. If you ever
-see `ModuleNotFoundError: fastapi` (or similar), you ran it in the wrong environment.
+This is the cheat sheet for starting the app and the side tools: ingestion, lesson cards, evaluations and tests.
+Every command runs from the repo root. The whole project is one uv project (`pyproject.toml` + `uv.lock`), so
+there's no `cd` and no `PYTHONPATH`.
 
 ---
 
 ## 1. One-time setup
 
-You only do this once per laptop (or again when something expires).
+You only do this once per laptop, or again when something expires.
 
 **Install the dependencies:**
 
 ```bash
-cd orchestrator
-env -u VIRTUAL_ENV uv sync --locked          # the Python environment for the API and all tools
-
-cd ../frontend
-npm install                                  # the web app
+uv sync                        # one Python environment (.venv) for the API, the agents and every tool
 ```
 
-The MCP server that talks to Databricks has its own environment, `.venv-structured-mcp/`. It's already set up, and
-the app starts it by itself, so you never run it separately.
+The web app's packages install themselves the first time you run `uv run wbg-web` (it runs `npm install` once).
+
+If you ever see `ModuleNotFoundError`, run `uv sync` again.
 
 **Log in to Databricks.** We use two CLI profiles:
 
@@ -38,11 +32,10 @@ Each opens your browser. Run them again whenever a command complains that the lo
 **Create the Lakebase stores.** They live on the `dev-orchestrator` branch, and these commands are safe to run twice:
 
 ```bash
-cd orchestrator
-env -u VIRTUAL_ENV PYTHONPATH=..:. uv run --locked python -B -m wbg_orchestrator.learning_db init   # feedback store
-env -u VIRTUAL_ENV PYTHONPATH=..:. uv run --locked python -B -m ingest init-db                      # knowledge graph
-env -u VIRTUAL_ENV PYTHONPATH=..:. uv run --locked python -B -m lessons init-db                     # lesson cards table
-env -u VIRTUAL_ENV PYTHONPATH=..:. uv run --locked python -B -m lessons backfill                    # 280 proposed cards
+uv run wbg-feedback-db init      # feedback store
+uv run wbg-ingest init-db        # knowledge graph
+uv run wbg-lessons init-db       # lesson cards table
+uv run wbg-lessons backfill      # 280 proposed cards
 ```
 
 (These are already done on the current dev branch. You'd only need them again on a new branch.)
@@ -56,24 +49,30 @@ You need two terminals.
 **Terminal 1: the API** (http://127.0.0.1:8080)
 
 ```bash
-cd orchestrator
-WBG_ALLOW_LIVE_LLM_CALLS=true WBG_LLM_MAX_USD=0.50 \
-  env -u VIRTUAL_ENV PYTHONPATH=..:. uv run --locked python -m wbg_orchestrator.api serve --confirm-live-call
+uv run wbg-api                 # Claude OFF: nothing can spend money
+uv run wbg-api --live          # Claude ON, at most US$ 5 this session
+uv run wbg-api --live --cap 10 # Claude ON, at most US$ 10 this session
 ```
 
-Heads-up about Claude: the API only starts with the live-call switch on (both the variable and `--confirm-live-call`).
-That doesn't spend anything by itself, but any chat answer written by Claude does. `WBG_LLM_MAX_USD` is a hard
-spending cap for this run (I set it to 50 cents above). These features never call Claude, so they're free to demo:
+**Claude is off by default.** These features never use Claude, so they work either way:
 
 - Project watch, and monitoring questions in chat ("Is P148850 slipping?")
 - Check tender
 - Lesson cards (review queue and lessons in answers)
 
+Anything that needs Claude (most chat questions, the Planning Brief) answers "Claude is off for this session" until
+you start with `--live`.
+
+**What `--live` does:**
+
+- Each session gets its own spend record (`orchestrator/runs/llm_ledger_<time>.json`).
+- The cap applies to that session alone; a new session starts from zero.
+- When the cap is reached, Claude calls stop; nothing goes over.
+
 **Terminal 2: the web app** (http://localhost:3000)
 
 ```bash
-cd frontend
-npm run dev
+uv run wbg-web
 ```
 
 Open http://localhost:3000 and sign in.
@@ -92,11 +91,11 @@ To stop the app, press `Ctrl+C` in both terminals. Restarting the API signs ever
 ## 3. A quick demo route (the four lifecycle stages)
 
 1. **Planning & Strategy:** click **Plan a new project** and fill in a project. You get a Planning Brief with similar
-   projects, benchmarks and estimates. This one uses Claude.
+   projects, benchmarks and estimates. This one needs `--live`.
 2. **Tender Design & Packaging:** click **Check tender** and paste or upload a draft ToR or qualification section.
-   You get the terms read from it, checks against history, model estimates and lessons. No Claude.
+   You get the terms read from it, checks against history, model estimates and lessons. Free.
 3. **Execution & Monitoring:** open **Project watch** in the sidebar (try P148850), or ask in chat
-   "Is P148850 slipping?". No Claude.
+   "Is P148850 slipping?". Free.
 4. **Continuous Learning:**
    - sign in as `reviewer1`, open **Review queue → Lesson cards** and approve a few cards;
    - run the tender check again: the approved lessons now show up in the answer, with their source and reviewer;
@@ -106,14 +105,14 @@ To stop the app, press `Ctrl+C` in both terminals. Restarting the API signs ever
 
 ## 4. Users
 
-Add or change a user (run from `orchestrator/`):
+Add or change a user:
 
 ```bash
-env -u VIRTUAL_ENV PYTHONPATH=..:. uv run --locked python -B -m wbg_orchestrator.api add-user --user <name> --password '<password>'
-env -u VIRTUAL_ENV PYTHONPATH=..:. uv run --locked python -B -m wbg_orchestrator.api add-user --user <name> --password '<password>' --reviewer
+uv run wbg-user --user <name> --password '<password>'
+uv run wbg-user --user <name> --password '<password>' --reviewer
 ```
 
-Users live in `~/.wbg/api_users.json`, outside the repo. Only salted password hashes are stored. Running `add-user`
+Users live in `~/.wbg/api_users.json`, outside the repo. Only salted password hashes are stored. Running `wbg-user`
 again for the same name replaces that user. It also prints an access token, which is only needed for scripts.
 
 ---
@@ -121,15 +120,15 @@ again for the same name replaces that user. It also prints an access token, whic
 ## 5. Automated ingestion (drop folders)
 
 Drop a file into the folder for its type under `ingestion_inbox/`: `pad/`, `isr/`, `icr/`, `procurement_plans/`,
-`contracts/`, `notices/` or `other/`. Then, from `orchestrator/`:
+`contracts/`, `notices/` or `other/`. Then:
 
 ```bash
-env -u VIRTUAL_ENV PYTHONPATH=..:. uv run --locked python -B -m ingest run              # process everything waiting
-env -u VIRTUAL_ENV PYTHONPATH=..:. uv run --locked python -B -m ingest run --dry-run    # try it without writing anything
-env -u VIRTUAL_ENV PYTHONPATH=..:. uv run --locked python -B -m ingest watch            # keep running, ingest files as they land
-env -u VIRTUAL_ENV PYTHONPATH=..:. uv run --locked python -B -m ingest status           # what the graph holds
-env -u VIRTUAL_ENV PYTHONPATH=..:. uv run --locked python -B -m ingest lessons 1674058  # lessons linked to a contract
-env -u VIRTUAL_ENV PYTHONPATH=..:. uv run --locked python -B -m ingest neighbours project:P148850 --depth 2
+uv run wbg-ingest run                         # process everything waiting
+uv run wbg-ingest run --dry-run               # try it without writing anything
+uv run wbg-ingest watch                       # keep running, ingest files as they land
+uv run wbg-ingest status                      # what the graph holds
+uv run wbg-ingest lessons 1674058             # lessons linked to a contract
+uv run wbg-ingest neighbours project:P148850 --depth 2
 ```
 
 - Processed files move to `ingestion_inbox/_processed/`.
@@ -147,12 +146,10 @@ brew install tesseract
 
 ## 6. Lesson cards
 
-From `orchestrator/`:
-
 ```bash
-env -u VIRTUAL_ENV PYTHONPATH=..:. uv run --locked python -B -m lessons preview     # what the corpus would give (no database)
-env -u VIRTUAL_ENV PYTHONPATH=..:. uv run --locked python -B -m lessons status      # proposed / approved / rejected counts
-env -u VIRTUAL_ENV PYTHONPATH=..:. uv run --locked python -B -m lessons backfill    # re-propose the corpus cards (keeps decisions)
+uv run wbg-lessons preview     # what the corpus would give (no database)
+uv run wbg-lessons status      # proposed / approved / rejected counts
+uv run wbg-lessons backfill    # re-propose the corpus cards (keeps decisions)
 ```
 
 You approve or reject cards in the app: **Review queue → Lesson cards** (as `reviewer1`).
@@ -161,40 +158,37 @@ You approve or reject cards in the app: **Review queue → Lesson cards** (as `r
 
 ## 7. Feedback reports
 
-From `orchestrator/`:
-
 ```bash
-env -u VIRTUAL_ENV PYTHONPATH=..:. uv run --locked python -B -m wbg_orchestrator.learning_cli report    # feedback rate, causes, revisions
-env -u VIRTUAL_ENV PYTHONPATH=..:. uv run --locked python -B -m wbg_orchestrator.learning_cli export    # approved cases -> runs/learning/
-env -u VIRTUAL_ENV PYTHONPATH=..:. uv run --locked python -B -m wbg_orchestrator.learning_db check      # is the feedback store ready?
+uv run wbg-feedback report     # feedback rate, causes, revisions
+uv run wbg-feedback export     # approved cases -> runs/learning/
+uv run wbg-feedback-db check   # is the feedback store ready?
 ```
 
 ---
 
 ## 8. Tests and evaluations
 
-**Tests.** These are offline and safe to run any time. Run them from `orchestrator/`:
+**Tests.** These are offline and safe to run any time:
 
 ```bash
-env -u VIRTUAL_ENV PYTHONPATH=..:. uv run --locked python -B -m pytest -q -p no:cacheprovider \
-  tests ../monitoring/tests ../ingest/tests ../lessons/tests ../conversation/tests
+uv run wbg-test                # every offline suite
+uv run wbg-test -k tender      # extra arguments go to pytest
 ```
 
-Don't run `tests_mcp/`: those tests make live calls.
+They never run `tests_mcp/` or `tests_live/`, which make live calls.
 
 **Frontend checks:**
 
 ```bash
-cd frontend
-npx tsc --noEmit && npx eslint src && npx next build
+cd frontend && npx tsc --noEmit && npx eslint src && npx next build
 ```
 
-**Golden evaluations.** These make no LLM calls. Results are written to `live_results/golden/`, and the write-up is
-in `docs/evaluation/RESULTS.md`.
+**Golden evaluations.** These make no LLM calls. Results are written to `orchestrator/live_results/golden/`, and the
+write-up is in `docs/evaluation/RESULTS.md`.
 
 ```bash
-env -u VIRTUAL_ENV PYTHONPATH=..:. uv run --locked python -B -m evaluation.golden run       # all five sets, locally
-env -u VIRTUAL_ENV PYTHONPATH=..:. uv run --locked python -B -m evaluation.golden upload    # send them to LangSmith
+uv run wbg-eval run            # all five sets, locally
+uv run wbg-eval upload         # send them to LangSmith
 ```
 
 The `structured` set reads Databricks (read-only, through the MCP server), and `upload` sends redacted results to
@@ -207,11 +201,11 @@ LangSmith. Everything else stays on your laptop.
 | What you see | What to do |
 | --- | --- |
 | "token expired", "not logged in", or an auth error from Databricks | Run the matching `databricks auth login --profile ...` from step 1 again |
-| "the learning store is not initialised" | `python -m wbg_orchestrator.learning_db init` (step 1) |
-| "the lesson cards are not initialised" | `python -m lessons init-db` and then `python -m lessons backfill` |
-| "Live LLM calls are disabled" when starting the API | You missed `WBG_ALLOW_LIVE_LLM_CALLS=true` or `--confirm-live-call` |
+| "Claude is off for this session" | Expected without `--live`; restart with `uv run wbg-api --live` |
+| "the learning store is not initialised" | `uv run wbg-feedback-db init` (step 1) |
+| "the lesson cards are not initialised" | `uv run wbg-lessons init-db` and then `uv run wbg-lessons backfill` |
 | The login page says "the API is not reachable" | Terminal 1 isn't running, or it's on another port (the web app expects 8080) |
-| `ModuleNotFoundError` | You used a different Python; use the `uv run` commands exactly as written |
+| `ModuleNotFoundError` | Run `uv sync` |
 | Port 3000 or 8080 already in use | Stop the old process (`Ctrl+C` in its terminal) or `lsof -i :8080` to find it |
 
 **One date to remember:** the Lakebase `dev-orchestrator` branch expires on **2026-11-02**. It holds the feedback,

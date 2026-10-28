@@ -2,7 +2,9 @@
 
 Every live dependency is opt-in and fails closed:
 - Claude through Portkey:
-  - needs the existing dual opt-in: `--confirm-live-call` plus WBG_ALLOW_LIVE_LLM_CALLS=true in the process;
+  - off unless the operator confirms (`--confirm-live-call`, which `uv run wbg-api --live` passes): without it the app
+    runs with `ClaudeOff`, and only answers that need Claude are refused;
+  - with confirmation, the existing dual opt-in still applies: WBG_ALLOW_LIVE_LLM_CALLS=true must be set in the process;
   - every call (planner, answer writer, NL2SQL) goes through `BudgetedClaudeClient` and a persistent spend ledger
     (WBG_LLM_LEDGER, WBG_LLM_MAX_ATTEMPTS, WBG_LLM_MAX_USD).
 - Databricks SQL (Gold), through the tools of the Structured Data MCP server (WBG_TOOL_TRANSPORT=mcp, the default):
@@ -58,7 +60,7 @@ from .factory import authorization_factory, document_worker, llm_breaker, semant
 from . import learning_db
 from .feedback import FeedbackService
 from .graph import EngineDeps
-from .live_llm import SONNET_5_5_PRICES, BudgetedClaudeClient, LedgerLimits, SpendLedger
+from .live_llm import SONNET_5_5_PRICES, BudgetedClaudeClient, ClaudeOff, LedgerLimits, SpendLedger
 from .observability import AuditTrail, JsonlAuditSink, OrchestratorTracer
 from .planner import ClaudePlanner
 from .rag_modules import answering
@@ -153,8 +155,11 @@ def _tracer() -> OrchestratorTracer:
     return OrchestratorTracer.disabled()
 
 
-def _claude_client(config: RuntimeConfig, operator_confirmed: bool, tracer: OrchestratorTracer) -> BudgetedClaudeClient:
-    live = authorize_live_access(operator_confirmed)                       # raises unless both opt-ins are present
+def _claude_client(config: RuntimeConfig, operator_confirmed: bool, tracer: OrchestratorTracer) -> BudgetedClaudeClient | ClaudeOff:
+    """Claude off unless the operator confirmed live calls; with confirmation, both opt-ins are still required."""
+    if not operator_confirmed:
+        return ClaudeOff()
+    live = authorize_live_access(operator_confirmed)                       # raises unless the environment opts in too
     settings = dataclasses.replace(load_claude_settings(), timeout_seconds=120.0, max_output_tokens=max(OUTPUT_CAPS.values()))
     ledger = SpendLedger(config.ledger_path, LedgerLimits(max_attempts=config.max_attempts, max_usd=config.max_usd))
     return BudgetedClaudeClient(settings, ledger, output_caps=OUTPUT_CAPS, tracer=tracer, live_access=live)

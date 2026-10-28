@@ -1,11 +1,14 @@
 """Minimal MCP client helpers for the Structured Data MCP server (official MCP Python SDK, stdio transport).
 
-The server is always started as a separate process in the isolated environment `.venv-structured-mcp`. It receives
+The server is always started as a separate process: in the isolated environment `.venv-structured-mcp` when it exists,
+else in the project's uv environment (MCP_PYTHON). It receives
 only the MCP SDK's default safe environment (HOME, PATH, ...) plus the WBG_* settings passed here, so a test never
 leaks flags such as WBG_ALLOW_DEV_OWNER_CREDENTIALS into a server unintentionally.
 """
 from __future__ import annotations
 
+import os
+import sys
 from contextlib import asynccontextmanager
 from datetime import timedelta
 from pathlib import Path
@@ -16,7 +19,10 @@ from mcp.client.stdio import stdio_client
 from mcp.types import CallToolResult
 
 PROJECT_DIR = Path(__file__).resolve().parents[2]
-MCP_PYTHON = PROJECT_DIR / ".venv-structured-mcp" / "bin" / "python"
+ISOLATED_PYTHON = PROJECT_DIR / ".venv-structured-mcp" / "bin" / "python"
+# The isolated environment when it exists (the validated setup); otherwise the project's uv environment (`uv sync`),
+# which carries the same pinned packages. WBG_MCP_PYTHON overrides both.
+MCP_PYTHON = Path(os.environ.get("WBG_MCP_PYTHON") or (ISOLATED_PYTHON if ISOLATED_PYTHON.exists() else sys.executable))
 WORKSPACE = "wbg-procurement-poc"
 
 

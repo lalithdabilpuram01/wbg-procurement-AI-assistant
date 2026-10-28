@@ -1,0 +1,102 @@
+"""Short commands for running the app, installed by `uv sync` (see [project.scripts] in the root pyproject.toml).
+
+    uv run wbg-api [--live] [--cap 5] [--port 8080]   the API; Claude is off unless --live (then capped per session)
+    uv run wbg-web                                     the web app (npm run dev; npm install on first use)
+    uv run wbg-user --user <name> --password <pw> [--reviewer]
+    uv run wbg-test                                    the offline test suites
+    uv run wbg-ingest <command>                        document ingestion (python -m ingest)
+    uv run wbg-lessons <command>                       lesson cards (python -m lessons)
+    uv run wbg-feedback <command>                      feedback reports (python -m wbg_orchestrator.learning_cli)
+    uv run wbg-feedback-db init|check                  the feedback store on Lakebase (python -m wbg_orchestrator.learning_db)
+    uv run wbg-eval <command>                          golden evaluations (python -m evaluation.golden)
+"""
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import os
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parents[2]
+ORCHESTRATOR = REPO / "orchestrator"
+FRONTEND = REPO / "frontend"
+DEFAULT_CAP_USD = 5.0
+LIVE_MAX_ATTEMPTS = 400          # with --live the dollar cap is the real limit
+TEST_PATHS = ("tests", "../monitoring/tests", "../ingest/tests", "../lessons/tests", "../conversation/tests", "../etl/tests")
+
+
+def _argv() -> list[str]:
+    return sys.argv[1:]
+
+
+# --------------------------------------------------------------------------------------------------- app
+def api() -> int:
+    parser = argparse.ArgumentParser(prog="wbg-api", description="Run the API on this laptop (http://127.0.0.1:<port>).")
+    parser.add_argument("--live", action="store_true", help="turn Claude on for this session (answers written by Claude cost money)")
+    parser.add_argument("--cap", type=float, default=DEFAULT_CAP_USD, help="with --live: most this session may spend on Claude, in US$")
+    parser.add_argument("--port", type=int, default=8080)
+    args = parser.parse_args(_argv())
+    if args.live:
+        ledger = ORCHESTRATOR / "runs" / f"llm_ledger_{dt.datetime.now():%Y%m%dT%H%M%S}.json"
+        os.environ.update({"WBG_ALLOW_LIVE_LLM_CALLS": "true", "WBG_LLM_MAX_USD": f"{args.cap:.2f}",
+                           "WBG_LLM_MAX_ATTEMPTS": str(LIVE_MAX_ATTEMPTS), "WBG_LLM_LEDGER": str(ledger)})
+        print(f"Claude: ON for this session, at most US$ {args.cap:.2f} (spend ledger: {ledger.relative_to(REPO)})")
+    else:
+        os.environ.pop("WBG_ALLOW_LIVE_LLM_CALLS", None)
+        print("Claude: OFF. Project watch, monitoring, Check tender and lesson cards work; use --live for Claude answers.")
+    from .api import main
+    os.chdir(ORCHESTRATOR)                                   # the same working folder as `python -m wbg_orchestrator.api`
+    return main(["serve", *(["--confirm-live-call"] if args.live else []), "--port", str(args.port)])
+
+
+def web() -> int:
+    npm = shutil.which("npm")
+    if npm is None:
+        print("npm not found: install Node.js (https://nodejs.org) first")
+        return 1
+    if not (FRONTEND / "node_modules").is_dir():
+        subprocess.run([npm, "install"], cwd=FRONTEND, check=True)
+    return subprocess.run([npm, "run", "dev", *_argv()], cwd=FRONTEND).returncode
+
+
+def user() -> int:
+    from .api import main
+    return main(["add-user", *_argv()])
+
+
+# -------------------------------------------------------------------------------------------------- tools
+def test() -> int:
+    """The offline suites (never tests_mcp/ or tests_live/, which make live calls); extra arguments go to pytest."""
+    env = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}
+    paths = [p for p in TEST_PATHS if (ORCHESTRATOR / p).is_dir()]          # etl/ exists only where the ETL is
+    return subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", *paths, *_argv()],
+                          cwd=ORCHESTRATOR, env=env).returncode
+
+
+def ingest() -> int:
+    from ingest.__main__ import main
+    return main(_argv())
+
+
+def lessons() -> int:
+    from lessons.__main__ import main
+    return main(_argv())
+
+
+def feedback() -> int:
+    from .learning_cli import main
+    return main(_argv())
+
+
+def feedback_db() -> int:
+    from .learning_db import main
+    return main(_argv())
+
+
+def evaluate() -> int:
+    from evaluation.golden import main
+    os.chdir(ORCHESTRATOR)
+    return main(_argv())

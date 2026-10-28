@@ -32,8 +32,16 @@ class _BlankSpacyEngine:
         return Engine(models=[{"lang_code": "en", "model_name": "blank"}])
 
 
+def _offline_domain_list() -> None:
+    """The e-mail recognizer checks top-level domains with tldextract, which downloads the public suffix list on first
+    use. Use the list bundled with the package instead, so masking never goes online (and works in a fresh environment)."""
+    import tldextract.tldextract as tld
+    tld.TLD_EXTRACTOR = tld.TLDExtract(suffix_list_urls=(), cache_dir=None)
+
+
 @lru_cache(maxsize=1)
 def _engines():
+    _offline_domain_list()
     from presidio_analyzer import AnalyzerEngine
     from presidio_anonymizer import AnonymizerEngine
     from presidio_analyzer.predefined_recognizers import PhoneRecognizer

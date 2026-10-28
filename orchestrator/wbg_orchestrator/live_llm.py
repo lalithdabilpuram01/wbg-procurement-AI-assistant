@@ -29,7 +29,7 @@ from typing import Any, Mapping
 
 import httpx
 
-from structured_agent.nl2sql.llm_client import ClaudeRequest, ClaudeResponse, LlmError, PortkeyClaudeClient
+from structured_agent.nl2sql.llm_client import ClaudeRequest, ClaudeResponse, LlmError, LlmFailure, PortkeyClaudeClient
 from structured_agent.nl2sql.settings import ClaudeSettings
 
 from .budget import PriceTable
@@ -154,6 +154,20 @@ def _now() -> str:
 
 
 # ------------------------------------------------------------------------------------------------------ client
+class ClaudeOff:
+    """The Claude client of an app started without --live: every call stops before any request, so nothing is spent.
+    Features that never call Claude (project watch, monitoring, tender checks, lesson cards) work as usual."""
+
+    model = "claude-off"
+    timeout_seconds = 60.0
+
+    def output_cap(self, request: ClaudeRequest) -> int:
+        return 0
+
+    def complete(self, request: ClaudeRequest) -> ClaudeResponse:
+        raise LlmError(LlmFailure.DISABLED)
+
+
 class BudgetedClaudeClient(PortkeyClaudeClient):
     """The existing Portkey client with pre-call spend reservation, per-schema token caps and gateway-retry checks."""
 

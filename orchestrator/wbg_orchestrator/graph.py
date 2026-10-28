@@ -23,7 +23,7 @@ from langgraph.graph import END, START, StateGraph
 from langgraph.types import interrupt
 from pydantic import ValidationError
 
-from structured_agent.nl2sql.llm_client import LlmError
+from structured_agent.nl2sql.llm_client import LlmError, LlmFailure
 from structured_agent.nl2sql.resilience import CircuitBreaker, CircuitOpenError
 
 from .budget import PriceTable, check_budget, priced, usage_update
@@ -65,6 +65,14 @@ class EngineDeps:
 
 LLM_ATTEMPTS = 2                 # a transient provider failure (outage, 5xx, rate limit) is retried once
 LLM_RETRY_SECONDS = 2.0          # pause before the retry (the provider's Retry-After when shorter)
+
+
+CLAUDE_OFF = "Claude is off for this session. Start the app with `uv run wbg-api --live` for answers written by Claude."
+
+
+def provider_message(error: LlmError, default: str) -> str:
+    """What the user reads when a model call fails: Claude being switched off is said plainly."""
+    return CLAUDE_OFF if error.failure == LlmFailure.DISABLED else default
 
 
 def build_graph(deps: EngineDeps) -> StateGraph:
@@ -222,7 +230,8 @@ class _Nodes:
                     failure = self._error(request, "plan", ErrorCategory.PLANNER, "malformed_output",
                                           "The planner returned an invalid plan.")
                     return {**update, "plan_errors": [failure.to_state()], "errors": [failure.to_state()], "phase": "plan_failed"}
-                failure = self._error(request, "plan", ErrorCategory.PROVIDER, error.failure.value, "The planning model call failed.")
+                failure = self._error(request, "plan", ErrorCategory.PROVIDER, error.failure.value,
+                                      provider_message(error, "The planning model call failed."))
                 return {**update, "errors": [failure.to_state()], "phase": "plan_failed_final"}
             except PlannerError as error:
                 self.d.llm_breaker.record_ignored()
@@ -415,11 +424,13 @@ class _Nodes:
                                           "Answer generation is temporarily unavailable."))
             except LlmError as error:
                 errors.append(self._error(request, "respond", ErrorCategory.PROVIDER, error.failure.value,
-                                          "The answer generation call failed."))
+                                          provider_message(error, "The answer generation call failed.")))
             response = validate_response(request, plan, draft, records, report, partial, cancelled, failed)
             response = self._clarification(state, response)
             if errors:
                 response = response.model_copy(update={"error_codes": response.error_codes + tuple(e.code for e in errors)})
+            if any(e.code == LlmFailure.DISABLED.value for e in errors):
+                response = response.model_copy(update={"message": CLAUDE_OFF})
             span(status=response.status.value, claims_kept=len(response.claims), claims_removed=len(response.removed_claims))
             self._audit("answer.composed", state, status=response.status.value, claims_kept=len(response.claims),
                         claims_removed=len(response.removed_claims), evidence_count=len(used),
@@ -452,8 +463,9 @@ class _Nodes:
         request = self.request(state)
         codes = tuple(dict.fromkeys(e["code"] for e in state.get("errors", [])))
         pending = {t: TaskState.CANCELLED.value for t, s in state.get("task_states", {}).items() if s == TaskState.PENDING.value}
+        message = CLAUDE_OFF if LlmFailure.DISABLED.value in codes else "The investigation could not be planned or run safely."
         response = InvestigationResponse(investigation_id=request.investigation_id, status=InvestigationStatus.FAILED,
-                                         message="The investigation could not be planned or run safely.", error_codes=codes)
+                                         message=message, error_codes=codes)
         return {"task_states": pending, "response": response.to_state(), "phase": "done"}
 
     def finalize(self, state: InvestigationState) -> dict:
