@@ -6,16 +6,21 @@ Five categories, each with references a check can use without a model:
     tablelens    the 22 hand-checked table questions, each run with the TableLens switch OFF and ON
     planning     one Planning Brief and two package assessments; reference = the evidence kinds they must contain
     guardrails   off-topic, injection, write attempt, misconduct accusation, unknown project, personal data
+    feedback     reviewer-approved cases from user corrections (runs/learning/feedback_cases.json, when exported);
+                 reference = the terms a correct answer must contain
 """
 from __future__ import annotations
 
+import json
 import random
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any
 
 from live.tablelens_benchmark import QUESTIONS as TABLE_QUESTIONS
 
 DATASET = "wbg-procurement-app-eval"
+FEEDBACK_CASES = Path(__file__).resolve().parents[1] / "runs" / "learning" / "feedback_cases.json"
 G = "workspace.wbg_gold"
 SEED = 7
 DOCUMENT_SAMPLE = {"objective": 2, "risks": 2, "lessons": 2, "procurement": 2, "insufficient": 1}
@@ -152,6 +157,16 @@ def guardrail_cases() -> list[Case]:
             for cid, text, statuses, check in GUARDRAILS]
 
 
+# -------------------------------------------------------------------------------------------------- feedback
+def feedback_cases(path: Path = FEEDBACK_CASES) -> list[Case]:
+    """Regression cases a reviewer approved from user corrections (exported by wbg_orchestrator.learning_cli)."""
+    if not path.is_file():
+        return []
+    return [Case(c["case_id"], "feedback", "message", {"text": c["question"]},
+                 {"values": c["expected_terms"], "correction": c.get("correction")})
+            for c in json.loads(path.read_text()) if c["expected_terms"]]
+
+
 def all_cases(run_sql, question_sets) -> list[Case]:
     return [*structured_cases(run_sql), *document_cases(question_sets), *tablelens_cases(), *planning_cases(),
-            *guardrail_cases()]
+            *guardrail_cases(), *feedback_cases()]

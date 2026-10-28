@@ -3,12 +3,14 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { X } from "lucide-react";
 import {
-  api, waitForJob, type Bookmark, type Conversation, type ConversationDetail, type Folder, type Investigation, type Job,
-  type PackageInput, type PlanInput,
+  api, waitForJob, type Bookmark, type Conversation, type ConversationDetail, type FeedbackReason, type Folder, type Investigation,
+  type Job, type Me, type PackageInput, type PlanInput,
 } from "@/lib/api";
-import { Sidebar } from "./sidebar";
+import { Sidebar, type View } from "./sidebar";
 import { ChatView } from "./chat";
-import { BookmarksView } from "./bookmarks";
+import { MemoryView } from "./memory";
+import { ReviewsView } from "./reviews";
+import { WatchView } from "./watch";
 import { PackageDialog } from "./package-dialog";
 import { PlanDialog } from "./plan-dialog";
 
@@ -19,7 +21,10 @@ export function AppShell() {
   const [folders, setFolders] = useState<Folder[]>([]);
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [view, setView] = useState<"chat" | "bookmarks">("chat");
+  const [view, setView] = useState<View>("chat");
+  const [me, setMe] = useState<Me>({ user_id: "", reviewer: false, feedback: false });
+  const [defaultTableLens, setDefaultTableLens] = useState(false);
+  const [pendingReviews, setPendingReviews] = useState(0);
   const [detail, setDetail] = useState<ConversationDetail | null>(null);
   const [investigations, setInvestigations] = useState<Record<string, Investigation>>({});
   const [pending, setPending] = useState<string | null>(null);
@@ -29,8 +34,9 @@ export function AppShell() {
   const [planOpen, setPlanOpen] = useState(false);
   const [scrollToSeq, setScrollToSeq] = useState<number | null>(null);
   const [jobId, setJobId] = useState<string | null>(null);
+  const [watchedId, setWatchedId] = useState<string | null>(null);
 
-  const report = (e: unknown) => setError(e instanceof Error ? e.message : String(e));
+  const report = useCallback((e: unknown) => setError(e instanceof Error ? e.message : String(e)), []);
 
   const refreshLists = useCallback(async () => {
     const [c, f, b] = await Promise.all([api.conversations(), api.folders(), api.bookmarks()]);
@@ -39,7 +45,17 @@ export function AppShell() {
     setBookmarks(b);
   }, []);
 
-  useEffect(() => { refreshLists().catch(report); }, [refreshLists]);
+  useEffect(() => { refreshLists().catch(report); }, [refreshLists, report]);
+
+  useEffect(() => {
+    (async () => {
+      const who = await api.me();
+      setMe(who);
+      if (!who.feedback) return;
+      setDefaultTableLens(!!(await api.memory()).preferences.table_lens);
+      if (who.reviewer) setPendingReviews((await api.reviews()).length);
+    })().catch(report);
+  }, [report]);
 
   /** Loads a conversation and the investigations behind its answers (only those not loaded yet). */
   const openConversation = useCallback(async (id: string, scrollSeq: number | null = null, reload: string[] = []) => {
@@ -124,8 +140,22 @@ export function AppShell() {
       () => api.decide(activeId, requestId, approvalId, approved), "", [requestId]);
   };
 
+  /** Feedback on an answer; a thumbs-down with a correction re-runs the question (a revision job). */
+  const giveFeedback = async (seq: number, rating: "up" | "down", reasons: FeedbackReason[] = [], correction?: string) => {
+    if (!activeId) return;
+    const id = activeId;
+    try {
+      const { job } = await api.giveFeedback(id, seq, rating, reasons, correction);
+      if (job) await runJob(id, "Re-running the question with your correction…", async () => job, "");
+      else await openConversation(id, null);
+      if (me.reviewer) setPendingReviews((await api.reviews()).length);
+    } catch (e) { report(e); }
+  };
+
   const bookmarkedSeqs = useMemo(
     () => new Set(bookmarks.filter((b) => b.thread_id === activeId).map((b) => b.turn_seq)), [bookmarks, activeId]);
+  const chatBookmarks = useMemo(
+    () => bookmarks.filter((b) => b.thread_id === activeId).sort((a, b) => a.turn_seq - b.turn_seq), [bookmarks, activeId]);
 
   const toggleBookmark = async (seq: number) => {
     if (!activeId) return;
@@ -141,15 +171,23 @@ export function AppShell() {
     try { await action(); await refreshLists(); } catch (e) { report(e); }
   };
 
+  const watchProject = (projectId: string) => {
+    setWatchedId(projectId);
+    setView("watch");
+  };
+
   const active = conversations.find((c) => c.conversation_id === activeId);
 
   return (
     <div className="flex h-screen overflow-hidden">
       {sidebarOpen && (
-        <Sidebar conversations={conversations} folders={folders} activeId={activeId} view={view} bookmarkCount={bookmarks.length}
+        <Sidebar conversations={conversations} folders={folders} activeId={activeId} view={view}
+          reviewer={me.reviewer} feedback={me.feedback} pendingReviews={pendingReviews}
           onSelect={(id) => openConversation(id).catch(report)}
           onNew={() => { setActiveId(null); setDetail(null); setView("chat"); }}
-          onBookmarks={() => setView("bookmarks")}
+          onMemory={() => setView("memory")}
+          onReviews={() => setView("reviews")}
+          onWatch={() => setView("watch")}
           onCreateFolder={(name) => withRefresh(() => api.createFolder(name))()}
           onRenameFolder={(id, name) => withRefresh(() => api.renameFolder(id, name))()}
           onDeleteFolder={(id) => withRefresh(() => api.deleteFolder(id))()}
@@ -158,16 +196,20 @@ export function AppShell() {
           onCollapse={() => setSidebarOpen(false)} />
       )}
       <main className="relative flex min-w-0 flex-1">
-        {view === "bookmarks" ? (
-          <BookmarksView bookmarks={bookmarks}
-            onOpen={(b) => openConversation(b.thread_id, b.turn_seq).catch(report)}
-            onRemove={(b) => withRefresh(() => api.deleteBookmark(b.bookmark_id))()} />
+        {view === "memory" ? (
+          <MemoryView reviewer={me.reviewer} onError={report} onPreferences={(p) => setDefaultTableLens(!!p.table_lens)} />
+        ) : view === "reviews" ? (
+          <ReviewsView onError={report} onChanged={setPendingReviews} />
+        ) : view === "watch" ? (
+          <WatchView projectId={watchedId} onProject={setWatchedId} onError={report} />
         ) : (
           <ChatView title={active?.title ?? null} detail={detail} investigations={investigations} pending={pending}
-            bookmarkedSeqs={bookmarkedSeqs} sidebarOpen={sidebarOpen} scrollToSeq={scrollToSeq}
+            bookmarkedSeqs={bookmarkedSeqs} chatBookmarks={chatBookmarks} sidebarOpen={sidebarOpen} scrollToSeq={scrollToSeq}
+            onRemoveBookmark={(b) => withRefresh(() => api.deleteBookmark(b.bookmark_id))()}
             onOpenSidebar={() => setSidebarOpen(true)} onSend={send} onStop={stop} onAssess={() => setPackageOpen(true)}
             onPlan={() => setPlanOpen(true)}
-            onToggleBookmark={toggleBookmark} onDecide={decide} />
+            onToggleBookmark={toggleBookmark} onDecide={decide} defaultTableLens={defaultTableLens}
+            onFeedback={me.feedback ? giveFeedback : undefined} onManageMemory={() => setView("memory")} onWatch={watchProject} />
         )}
         {error && (
           <div role="alert" className="absolute bottom-24 left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-xl border border-danger/30 bg-danger-soft px-4 py-2.5 text-sm text-danger shadow-lg">

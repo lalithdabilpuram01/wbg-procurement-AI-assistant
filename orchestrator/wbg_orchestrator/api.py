@@ -12,7 +12,10 @@ Endpoints:
 - conversations: create, list, read;
 - messages: submit (returns a job);
 - jobs: poll;
-- investigations: read, decide an approval, recover after a restart, cancel.
+- investigations: read, decide an approval, recover after a restart, cancel;
+- feedback: rate an answer (a correction starts a revision job), the user's memory (preferences, learned items),
+  and the reviewer queue (only for users added with `--reviewer`);
+- monitoring: a project's milestones and early warnings (monitoring.watch; deterministic, cited, no model call).
 """
 from __future__ import annotations
 
@@ -21,27 +24,32 @@ import hashlib
 import hmac
 import json
 import os
+import re
 import secrets
 import stat
 import sys
 from pathlib import Path
 from typing import Any
 
-from fastapi import Depends, FastAPI, Header, HTTPException, Request, status
+from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request, status
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
+from conversation.learning import Feedback, LearnedItem, LearningItemNotFound, Review
 from conversation.models import Owner
+from monitoring.watch import watch as watch_project, watched_projects
 from conversation.store import ThreadNotFound
 from conversation.workspace import WorkspaceItemNotFound
 
 from .app_service import AppService, ConversationBusy, Job, JobNotFound, summarize
 from .contracts import PackageSpec, PlanningSpec
+from .feedback import FeedbackRefused, FeedbackRequest, Preferences, ReviewerOnly
 from .rate_limit import RateLimiter
 from .engine import ApprovalNotPending, InvestigationNotFound
 
 DEFAULT_USERS_FILE = Path.home() / ".wbg" / "api_users.json"
 CLIENT_ID = r"^[A-Za-z0-9_-]{8,64}$"
+PROJECT_ID = re.compile(r"P\d{6}")
 
 
 # --------------------------------------------------------------------------------------------------- users
@@ -69,13 +77,20 @@ class UserDirectory:
                 return Owner(tenant_id=entry["tenant_id"], user_id=entry["user_id"])
         return None
 
+    def is_reviewer(self, owner: Owner) -> bool:
+        """Reviewers decide what feedback is shared with the tenant and which evaluation cases are kept."""
+        self._refresh()
+        return any(e["tenant_id"] == owner.tenant_id and e["user_id"] == owner.user_id and "reviewer" in e.get("roles", [])
+                   for e in self._entries)
+
     @staticmethod
-    def add_user(path: Path, user_id: str, tenant_id: str = "local") -> str:
+    def add_user(path: Path, user_id: str, tenant_id: str = "local", reviewer: bool = False) -> str:
         """Create a token for a user, store only its hash, and return the token (shown once)."""
         token = secrets.token_urlsafe(32)
         data = json.loads(path.read_text()) if path.is_file() else {"users": []}
         data["users"] = [u for u in data["users"] if not (u["user_id"] == user_id and u["tenant_id"] == tenant_id)]
-        data["users"].append({"tenant_id": tenant_id, "user_id": user_id, "token_sha256": hashlib.sha256(token.encode()).hexdigest()})
+        data["users"].append({"tenant_id": tenant_id, "user_id": user_id, "token_sha256": hashlib.sha256(token.encode()).hexdigest(),
+                              "roles": ["reviewer"] if reviewer else []})
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(data, indent=2))
         os.chmod(path, stat.S_IRUSR | stat.S_IWUSR)
@@ -131,9 +146,40 @@ class Retry(BaseModel):
     client_message_id: str = Field(pattern=CLIENT_ID)
 
 
+class FeedbackBody(FeedbackRequest):
+    client_message_id: str = Field(pattern=CLIENT_ID)
+
+
+class ReviewDecision(BaseModel):
+    approved: bool
+    note: str | None = Field(default=None, max_length=300)
+    expected_terms: list[str] = Field(default_factory=list, max_length=10)
+
+
 def job_view(job: Job) -> dict[str, Any]:
     return {"job_id": job.job_id, "kind": job.kind, "state": job.state, "conversation_id": job.conversation_id,
             "request_id": job.request_id, "status": job.status, "error": job.error}
+
+
+def feedback_view(feedback: Feedback) -> dict[str, Any]:
+    return {"feedback_id": feedback.feedback_id, "turn_seq": feedback.turn_seq, "rating": feedback.rating,
+            "reasons": list(feedback.reasons), "correction": feedback.correction, "status": feedback.status}
+
+
+def item_view(item: LearnedItem, expired: bool = False) -> dict[str, Any]:
+    return {"item_id": item.item_id, "kind": item.kind, "scope": item.scope, "statement": item.statement,
+            "question": item.question, "use_count": item.use_count, "created_at": item.created_at.isoformat(),
+            "last_used_at": item.last_used_at.isoformat() if item.last_used_at else None, "expired": expired}
+
+
+def review_view(review: Review) -> dict[str, Any]:
+    payload = review.payload
+    return {"review_id": review.review_id, "kind": review.kind, "submitted_by": review.submitted_by, "status": review.status,
+            "question": payload.get("question", ""), "statement": payload.get("statement") or payload.get("correction", ""),
+            "details": {k: payload.get("details", {}).get(k) for k in ("steps", "tables", "filters")}
+            if review.kind == "share_approach" else {},
+            "answer_excerpt": payload.get("answer_excerpt"), "reasons": payload.get("reasons", []),
+            "created_at": review.created_at.isoformat(), "note": review.note, "expected_terms": list(review.expected_terms)}
 
 
 # ------------------------------------------------------------------------------------------------------ app
@@ -160,12 +206,26 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
                                 {"Retry-After": str(refusal.retry_after_seconds)})
         return owner
 
+    def reviewer_owner(owner: Owner = Depends(current_owner)) -> Owner:
+        if not users.is_reviewer(owner):
+            raise HTTPException(status.HTTP_403_FORBIDDEN, "reviewers only")
+        return owner
+
     @app.exception_handler(ThreadNotFound)
     @app.exception_handler(InvestigationNotFound)
     @app.exception_handler(JobNotFound)
     @app.exception_handler(WorkspaceItemNotFound)
+    @app.exception_handler(LearningItemNotFound)
     def not_found(request: Request, error: Exception) -> JSONResponse:
         return JSONResponse({"detail": "not found"}, status_code=404)
+
+    @app.exception_handler(FeedbackRefused)
+    def refused(request: Request, error: Exception) -> JSONResponse:
+        return JSONResponse({"detail": str(error)}, status_code=422)
+
+    @app.exception_handler(ReviewerOnly)
+    def forbidden(request: Request, error: Exception) -> JSONResponse:
+        return JSONResponse({"detail": str(error)}, status_code=403)
 
     @app.exception_handler(ConversationBusy)
     @app.exception_handler(ApprovalNotPending)
@@ -176,6 +236,23 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
     @app.get("/health")
     def health() -> dict[str, str]:
         return {"status": "ok"}
+
+    @app.get("/projects")
+    def list_projects(owner: Owner = Depends(current_owner)) -> list[dict[str, Any]]:
+        return watched_projects()
+
+    @app.get("/projects/{project_id}/watch")
+    def project_watch(project_id: str, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
+        if not PROJECT_ID.fullmatch(project_id):
+            raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "a project id is P followed by 6 digits")
+        result = watch_project(project_id)
+        if not result.packages and not result.ratings:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "no procurement plan or ISR for this project")
+        return result.to_dict()
+
+    @app.get("/me")
+    def me(owner: Owner = Depends(current_owner)) -> dict[str, Any]:
+        return {"user_id": owner.user_id, "reviewer": users.is_reviewer(owner), "feedback": service.learning is not None}
 
     @app.post("/conversations", status_code=201)
     def create_conversation(body: NewConversation, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
@@ -232,7 +309,39 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
                 "turns": [{"seq": t.seq, "role": t.role, "text": t.text, "status": t.metadata.status, "route": t.metadata.route,
                            "request_id": t.metadata.request_id, "created_at": t.created_at.isoformat()} for t in turns],
                 "investigations": [{"request_id": r.request_id, "turn_seq": r.turn_seq, "question": r.question}
-                                   for r in service.investigations(owner, conversation_id)]}
+                                   for r in service.investigations(owner, conversation_id)],
+                "feedback": [feedback_view(f) for f in service.thread_feedback(owner, conversation_id).values()]}
+
+    # ------------------------------------------------------------------------------------------ feedback
+    @app.post("/conversations/{conversation_id}/feedback", status_code=201)
+    def give_feedback(conversation_id: str, body: FeedbackBody, owner: Owner = Depends(limited_owner)) -> dict[str, Any]:
+        request = FeedbackRequest(**body.model_dump(exclude={"client_message_id"}))
+        feedback, job = service.give_feedback(owner, conversation_id, request, body.client_message_id)
+        return {"feedback": feedback_view(feedback), "job": job_view(job) if job else None}
+
+    @app.get("/learning")
+    def read_memory(owner: Owner = Depends(current_owner)) -> dict[str, Any]:
+        preferences, items = service.memory(owner)
+        return {"preferences": preferences.model_dump(mode="json"), "items": [item_view(i, expired) for i, expired in items]}
+
+    @app.put("/learning/preferences")
+    def save_preferences(body: Preferences, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
+        return service.set_preferences(owner, body).model_dump(mode="json")
+
+    @app.delete("/learning/items/{item_id}", status_code=204)
+    def revoke_item(item_id: str, owner: Owner = Depends(current_owner)) -> None:
+        service.revoke_item(owner, item_id, users.is_reviewer(owner))
+
+    @app.get("/reviews")
+    def list_reviews(state: str = Query("pending", alias="status"), owner: Owner = Depends(reviewer_owner)) -> list[dict[str, Any]]:
+        wanted = None if state == "all" else state
+        if wanted not in (None, "pending", "approved", "rejected"):
+            raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "unknown status")
+        return [review_view(r) for r in service.reviews(owner, wanted)]
+
+    @app.post("/reviews/{review_id}")
+    def decide_review(review_id: str, body: ReviewDecision, owner: Owner = Depends(reviewer_owner)) -> dict[str, Any]:
+        return review_view(service.decide_review(owner, review_id, body.approved, body.note, body.expected_terms))
 
     @app.post("/conversations/{conversation_id}/messages", status_code=202)
     def submit_message(conversation_id: str, body: NewMessage, owner: Owner = Depends(limited_owner)) -> dict[str, Any]:
@@ -263,7 +372,8 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
         view = summarize(outcome)
         if outcome.unfinished:
             view["status"] = "running" if service.is_running(owner, conversation_id, request_id) else "interrupted"
-        return {"request_id": request_id, **view}
+        return {"request_id": request_id, **view,
+                "applied_learning": [item_view(i) for i in service.applied_learning(owner, request_id)]}
 
     @app.post("/conversations/{conversation_id}/investigations/{request_id}/decision", status_code=202)
     def decide(conversation_id: str, request_id: str, body: ApprovalAnswer, owner: Owner = Depends(limited_owner)) -> dict[str, Any]:
@@ -288,12 +398,13 @@ def main(argv: list[str]) -> int:
     add = commands.add_parser("add-user", help="create (or replace) a user's token; prints it once")
     add.add_argument("--user", required=True)
     add.add_argument("--tenant", default="local")
+    add.add_argument("--reviewer", action="store_true", help="may approve shared feedback and evaluation cases")
     serve = commands.add_parser("serve", help="run the API on this laptop (127.0.0.1)")
     serve.add_argument("--confirm-live-call", action="store_true", help="operator approval for live Claude calls")
     serve.add_argument("--port", type=int, default=8080)
     args = parser.parse_args(argv)
     if args.command == "add-user":
-        print(UserDirectory.add_user(DEFAULT_USERS_FILE, args.user, args.tenant))
+        print(UserDirectory.add_user(DEFAULT_USERS_FILE, args.user, args.tenant, args.reviewer))
         return 0
     import uvicorn
 

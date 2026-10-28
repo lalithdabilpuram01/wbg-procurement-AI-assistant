@@ -184,11 +184,11 @@ def _session_setup(schema: str, statement_timeout_ms: int) -> Callable[[psycopg.
 
 def checkpoint_pool(connect_kwargs: Mapping[str, Any], schema: str, tokens: TokenProvider, *, max_size: int = 2,
                     wait_seconds: float = 30.0, statement_timeout_ms: int = 15_000,
-                    max_lifetime_seconds: float = 40 * 60) -> ConnectionPool:
+                    max_lifetime_seconds: float = 40 * 60, name: str = "wbg-checkpoints") -> ConnectionPool:
     """A closed pool (call `.open(wait=True)`); every connection is pinned to `schema` before first use."""
     validate_schema_name(schema)
     return ConnectionPool(
-        conninfo="", open=False, name="wbg-checkpoints", min_size=1, max_size=max_size, timeout=wait_seconds,
+        conninfo="", open=False, name=name, min_size=1, max_size=max_size, timeout=wait_seconds,
         max_lifetime=max_lifetime_seconds, max_idle=300, connection_class=oauth_connection_class(tokens),
         kwargs={**connect_kwargs, "autocommit": True, "prepare_threshold": 0, "row_factory": dict_row},
         configure=_session_setup(schema, statement_timeout_ms), check=ConnectionPool.check_connection)
@@ -199,6 +199,17 @@ def lakebase_checkpoint_pool(settings: CheckpointDbSettings, tokens: TokenProvid
     return checkpoint_pool(settings.connect_kwargs(), settings.schema, tokens, max_size=settings.pool_max_size,
                            wait_seconds=settings.pool_wait_seconds, statement_timeout_ms=settings.statement_timeout_ms,
                            max_lifetime_seconds=settings.max_lifetime_seconds)
+
+
+def endpoint_host(endpoint: str, profile: str) -> str:
+    """The host of a Lakebase endpoint (read-only `databricks postgres get-endpoint`)."""
+    import json
+    import subprocess
+
+    from infrastructure.lakebase_poc.lakebase_poc.credentials import databricks_cli
+    described = subprocess.run([databricks_cli(), "postgres", "get-endpoint", endpoint, "-p", profile, "-o", "json"],
+                               capture_output=True, text=True, check=True, timeout=90)
+    return json.loads(described.stdout)["status"]["hosts"]["host"]
 
 
 def safe_serde() -> JsonPlusSerializer:

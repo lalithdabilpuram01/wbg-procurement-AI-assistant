@@ -93,14 +93,21 @@ def _documents(inputs, outputs, reference) -> list[dict[str, Any]]:
             _result("gold_page_cited", bool(page_hit))]
 
 
+def contains_all(text: str, expected: list[str]) -> bool:
+    """Every expected value is in the text: numbers by value (any format), other terms case-insensitively."""
+    found = numbers(text)
+    return all(has_number(float(v), found) if re.fullmatch(r"[\d.]+", v) else v.lower() in text.lower() for v in expected)
+
+
 def _tablelens(inputs, outputs, reference) -> list[dict[str, Any]]:
     expected = reference["values"]
+    return [_result("value_in_answer", contains_all(answer_text(outputs), expected), f"expected {expected}"),
+            _result("value_in_evidence", contains_all(evidence_text(outputs), expected))]
 
-    def present(text: str) -> bool:
-        found = numbers(text)
-        return all(has_number(float(v), found) if re.fullmatch(r"[\d.]+", v) else v.lower() in text.lower() for v in expected)
-    return [_result("value_in_answer", present(answer_text(outputs)), f"expected {expected}"),
-            _result("value_in_evidence", present(evidence_text(outputs)))]
+
+def _feedback(inputs, outputs, reference) -> list[dict[str, Any]]:
+    expected = reference["values"]
+    return [_result("expected_terms_in_answer", contains_all(answer_text(outputs), expected), f"expected {expected}")]
 
 
 def _planning(inputs, outputs, reference) -> list[dict[str, Any]]:
@@ -125,7 +132,7 @@ def _guardrails(inputs, outputs, reference) -> list[dict[str, Any]]:
 
 
 CHECKS = {"structured": _structured, "documents": _documents, "tablelens": _tablelens, "planning": _planning,
-          "guardrails": _guardrails}
+          "guardrails": _guardrails, "feedback": _feedback}
 
 
 # ------------------------------------------------------------------------------------------------- judge

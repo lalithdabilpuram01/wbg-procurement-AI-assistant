@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowUp, Calculator, ClipboardList, Database, FileSearch, Landmark, PanelLeftOpen, ShieldCheck, Square, TableProperties } from "lucide-react";
-import type { ConversationDetail, Investigation } from "@/lib/api";
+import { ArrowUp, Calculator, ClipboardList, Database, FileSearch, Landmark, PanelLeftOpen, PencilLine, ShieldCheck, Square, TableProperties } from "lucide-react";
+import type { Bookmark, ConversationDetail, FeedbackReason, Investigation } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/primitives";
 import { Tooltip } from "@/components/ui/overlays";
 import { AnswerCard, PendingAnswer } from "./answer";
+import { ChatBookmarks } from "./chat-bookmarks";
 import { cn } from "@/lib/utils";
 
 const SUGGESTIONS = [
@@ -22,6 +23,8 @@ type ChatProps = {
   investigations: Record<string, Investigation>;
   pending: string | null;
   bookmarkedSeqs: Set<number>;
+  chatBookmarks: Bookmark[];                // this chat's bookmarks only
+  onRemoveBookmark: (bookmark: Bookmark) => void;
   sidebarOpen: boolean;
   scrollToSeq: number | null;
   onOpenSidebar: () => void;
@@ -31,13 +34,21 @@ type ChatProps = {
   onPlan: () => void;
   onToggleBookmark: (seq: number) => void;
   onDecide: (requestId: string, approvalId: string, approved: boolean) => Promise<void>;
+  defaultTableLens: boolean;
+  onFeedback?: (seq: number, rating: "up" | "down", reasons?: FeedbackReason[], correction?: string) => Promise<void>;
+  onManageMemory: () => void;
+  onWatch: (projectId: string) => void;
 };
 
 export function ChatView(props: ChatProps) {
   const { detail, investigations, pending } = props;
   const bottom = useRef<HTMLDivElement>(null);
-  const [tableLens, setTableLens] = useState(false);
+  const [tableLens, setTableLens] = useState(props.defaultTableLens);
   const send = (text: string, execute: boolean) => props.onSend(text, execute, tableLens);
+  const feedback = new Map((detail?.feedback ?? []).map((f) => [f.turn_seq, f]));
+  const revisedSeqs = new Set((detail?.turns ?? []).filter((t) => t.role === "user" && t.route === "revision").map((t) => t.seq + 1));
+
+  useEffect(() => setTableLens(props.defaultTableLens), [props.defaultTableLens]);
 
   useEffect(() => {
     if (props.scrollToSeq !== null) {
@@ -55,6 +66,10 @@ export function ChatView(props: ChatProps) {
         )}
         <h1 className="min-w-0 truncate text-sm font-semibold">{props.title ?? "New chat"}</h1>
         <div className="ml-auto flex items-center gap-3">
+          {detail && detail.turns.length > 0 && (
+            <ChatBookmarks bookmarks={props.chatBookmarks} onRemove={props.onRemoveBookmark}
+              onJump={(seq) => document.getElementById(`turn-${seq}`)?.scrollIntoView({ behavior: "smooth", block: "start" })} />
+          )}
           <Tooltip content="TableLens (Card-to-Cell): for the 10 pilot PDFs, finds the right table by its description and answers with SQL over its rows. Applies to the next messages you send.">
             <button type="button" role="switch" aria-checked={tableLens} onClick={() => setTableLens((on) => !on)}
               className={cn("flex items-center gap-2 text-xs", tableLens ? "text-foreground" : "text-muted-foreground")}>
@@ -77,7 +92,13 @@ export function ChatView(props: ChatProps) {
         ) : (
           <div className="mx-auto max-w-4xl space-y-6 px-4 py-8">
             {detail.turns.map((turn) =>
-              turn.role === "user" ? (
+              turn.role === "user" && turn.route === "revision" ? (
+                <div key={turn.seq} id={`turn-${turn.seq}`} className="flex justify-end">
+                  <div className="flex max-w-[80%] items-start gap-2 rounded-2xl rounded-br-md border border-primary/40 bg-primary-soft px-4 py-2.5 text-sm text-primary-strong">
+                    <PencilLine className="mt-0.5 size-4 shrink-0" /> {turn.text}
+                  </div>
+                </div>
+              ) : turn.role === "user" ? (
                 <div key={turn.seq} id={`turn-${turn.seq}`} className="flex justify-end">
                   <div className="max-w-[80%] rounded-2xl rounded-br-md bg-primary px-4 py-2.5 text-[15px] text-primary-foreground shadow-sm">
                     {turn.text}
@@ -88,7 +109,10 @@ export function ChatView(props: ChatProps) {
                   investigation={turn.request_id ? investigations[turn.request_id] : undefined}
                   bookmarked={props.bookmarkedSeqs.has(turn.seq)} onToggleBookmark={() => props.onToggleBookmark(turn.seq)}
                   onDecide={(approvalId, approved) => props.onDecide(turn.request_id!, approvalId, approved)}
-                  onAssess={props.onAssess} onPlan={props.onPlan} onInvestigate={(q) => send(q, false)} />
+                  onAssess={props.onAssess} onPlan={props.onPlan} onInvestigate={(q) => send(q, false)}
+                  feedback={feedback.get(turn.seq)} revised={revisedSeqs.has(turn.seq)} onManageMemory={props.onManageMemory}
+                  onWatch={props.onWatch}
+                  onFeedback={props.onFeedback && ((rating, reasons, correction) => props.onFeedback!(turn.seq, rating, reasons, correction))} />
               ),
             )}
             {pending && <PendingAnswer label={pending} />}

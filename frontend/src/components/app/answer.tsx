@@ -1,15 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { Bookmark, BookmarkCheck, Calculator, ChevronDown, ClipboardList, Copy, Info, Library, ShieldQuestion, Sparkles } from "lucide-react";
-import type { Investigation, Turn } from "@/lib/api";
+import { Bookmark, BookmarkCheck, Calculator, ChevronDown, ClipboardList, Copy, Eye, Info, Library, PencilLine, ShieldQuestion, Sparkles } from "lucide-react";
+import type { FeedbackState, Investigation, Turn } from "@/lib/api";
 import { Button } from "@/components/ui/button";
-import { Card, Spinner } from "@/components/ui/primitives";
+import { Badge, Card, Spinner } from "@/components/ui/primitives";
 import { Tooltip } from "@/components/ui/overlays";
 import { StatusBadge } from "./status";
 import { PredictionCards } from "./prediction-cards";
 import { BriefView } from "./brief";
 import { EvidencePanel } from "./evidence-panel";
+import { AppliedLearning, CorrectionForm, FeedbackNote, RateButtons, type SendFeedback } from "./feedback";
 import { cn, relativeTime } from "@/lib/utils";
 
 type Props = {
@@ -21,10 +22,17 @@ type Props = {
   onAssess: () => void;
   onPlan: () => void;
   onInvestigate: (question: string) => void;
+  feedback?: FeedbackState;
+  revised: boolean;                       // this answer re-ran the question after the user's correction
+  onFeedback?: SendFeedback;              // absent when feedback is not enabled
+  onManageMemory: () => void;
+  onWatch: (projectId: string) => void;
 };
 
-export function AnswerCard({ turn, investigation, bookmarked, onToggleBookmark, onDecide, onAssess, onPlan, onInvestigate }: Props) {
+export function AnswerCard(props: Props) {
+  const { turn, investigation, bookmarked, onToggleBookmark, onDecide, onAssess, onPlan, onInvestigate } = props;
   const [sourcesOpen, setSourcesOpen] = useState(false);
+  const [correcting, setCorrecting] = useState(false);
   const [focus, setFocus] = useState<string | null>(null);
   const [notesOpen, setNotesOpen] = useState(false);
   const [deciding, setDeciding] = useState(false);
@@ -33,6 +41,7 @@ export function AnswerCard({ turn, investigation, bookmarked, onToggleBookmark, 
   const stopped = investigation?.error_codes.includes("cancelled_by_user");
   const status = stopped ? "stopped" : investigation?.status ?? turn.status;
   const brief = investigation?.claims.some((c) => c.section) ?? false;
+  const projects = [...new Set(evidence.flatMap((e) => e.project_ids))].slice(0, 3);
   const cite = (id: string) => number(id) > 0 && (
     <button key={id} onClick={() => openSource(id)}
       className="ml-1 inline-grid h-[18px] min-w-[18px] place-items-center rounded-md bg-primary-soft px-1 align-text-top text-[10px] font-bold text-primary-strong hover:bg-primary hover:text-white">
@@ -62,6 +71,7 @@ export function AnswerCard({ turn, investigation, bookmarked, onToggleBookmark, 
       <Card className="min-w-0 flex-1 p-5">
         <div className="flex flex-wrap items-center gap-2">
           <StatusBadge status={status} />
+          {props.revised && <Badge tone="info"><PencilLine /> Revised answer</Badge>}
           {investigation && investigation.tasks.length > 0 && (
             <span className="text-[11px] text-muted-foreground">
               {investigation.tasks.map((t) => t.worker.replace("_", " ")).filter((w, i, a) => a.indexOf(w) === i).join(" · ")}
@@ -119,13 +129,21 @@ export function AnswerCard({ turn, investigation, bookmarked, onToggleBookmark, 
           </div>
         )}
 
+        <AppliedLearning items={investigation?.applied_learning ?? []} onManage={props.onManageMemory} />
+
         <div className="mt-4 flex items-center gap-1 border-t border-border pt-3">
           {evidence.length > 0 && (
             <Button variant="ghost" size="sm" onClick={() => openSource(null)}>
               <Library /> {evidence.length} source{evidence.length > 1 ? "s" : ""}
             </Button>
           )}
+          {projects.map((p) => (
+            <Button key={p} variant="ghost" size="sm" onClick={() => props.onWatch(p)}><Eye /> Watch {p}</Button>
+          ))}
           <div className="ml-auto flex gap-1 opacity-70 transition-opacity group-hover:opacity-100">
+            {props.onFeedback && (
+              <RateButtons state={props.feedback} onUp={() => props.onFeedback?.("up")} onDown={() => setCorrecting(true)} />
+            )}
             <Tooltip content="Copy answer">
               <Button variant="ghost" size="icon" onClick={() => navigator.clipboard.writeText(investigation?.message || turn.text)}><Copy /></Button>
             </Tooltip>
@@ -136,6 +154,11 @@ export function AnswerCard({ turn, investigation, bookmarked, onToggleBookmark, 
             </Tooltip>
           </div>
         </div>
+        {props.onFeedback && <FeedbackNote state={props.feedback} revised={props.revised} />}
+        {correcting && props.onFeedback && (
+          <CorrectionForm onCancel={() => setCorrecting(false)}
+            onSubmit={async (rating, reasons, correction) => { setCorrecting(false); await props.onFeedback?.(rating, reasons, correction); }} />
+        )}
       </Card>
       <EvidencePanel open={sourcesOpen} onOpenChange={setSourcesOpen} evidence={evidence} focusId={focus} />
     </div>

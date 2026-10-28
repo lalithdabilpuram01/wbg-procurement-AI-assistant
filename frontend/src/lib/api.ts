@@ -10,7 +10,48 @@ export type Turn = {
   seq: number; role: "user" | "assistant"; text: string; status: string | null; route: string | null;
   request_id: string | null; created_at: string;
 };
-export type ConversationDetail = { conversation_id: string; turns: Turn[]; investigations: { request_id: string; turn_seq: number }[] };
+export type FeedbackReason = "wrong_number" | "wrong_scope" | "wrong_source" | "missing_information" | "other";
+export type FeedbackState = {
+  feedback_id: string; turn_seq: number; rating: "up" | "down"; reasons: FeedbackReason[]; correction: string | null;
+  status: "recorded" | "revising" | "revised" | "validated";
+};
+export type ConversationDetail = {
+  conversation_id: string; turns: Turn[]; investigations: { request_id: string; turn_seq: number }[]; feedback?: FeedbackState[];
+};
+export type LearnedItem = {
+  item_id: string; kind: "correction" | "approach"; scope: "personal" | "shared"; statement: string; question: string;
+  use_count: number; created_at: string; last_used_at: string | null; expired: boolean;
+};
+export type Preferences = {
+  default_fiscal_years: [number, number] | null; amount_unit: "usd" | "usd_millions" | null;
+  answer_length: "brief" | "detailed" | null; table_lens: boolean | null;
+};
+export type Memory = { preferences: Preferences; items: LearnedItem[] };
+export type Review = {
+  review_id: string; kind: "share_correction" | "share_approach" | "eval_case"; submitted_by: string; status: string;
+  question: string; statement: string; details: { steps?: string[]; tables?: string[]; filters?: string[] };
+  answer_excerpt: string | null; reasons: FeedbackReason[]; created_at: string; note: string | null; expected_terms: string[];
+};
+export type Me = { user_id: string; reviewer: boolean; feedback: boolean };
+export type WatchedProject = { project_id: string; title: string | null; country: string | null; packages: number };
+export type WatchWarning = {
+  code: string; severity: "high" | "medium" | "low"; message: string; activity_id: string | null; reference: string | null;
+  value: number | null; benchmark: Record<string, unknown> | null; citations: string[];
+};
+export type PackageView = {
+  activity_id: string; reference: string; description: string; category: string | null; method: string | null; review_type: string | null;
+  status: string; estimated_usd: number | null; contract_amount_usd: number | null; planned_signing: string | null; signed: string | null;
+  slippage_days: number | null; contract_number: string | null; plan: string; page: number | null;
+  stages: { name: string; planned: string | null; actual: string | null }[];
+};
+export type ProjectWatch = {
+  project_id: string; title: string | null; country: string | null; as_of: string | null; warnings: WatchWarning[]; packages: PackageView[];
+  summary: {
+    packages: number; signed: number; open: number; cancelled: number; overdue: number; stale_plan_entries: number;
+    median_slippage_days: number | null; warnings: Record<"high" | "medium" | "low", number>;
+  };
+  ratings: { document_id: string; date: string | null; indicator: string; previous: string | null; current: string }[];
+};
 export type Fact = { name: string; value: string; unit: string | null };
 export type Evidence = {
   evidence_id: string; kind: string; citation: string; numeric_use: string; validation_status: string; warnings: string[];
@@ -21,7 +62,7 @@ export type Investigation = {
   status: string; message: string; claims: { text: string; evidence_ids: string[]; section: string | null }[]; limitations: string[];
   error_codes: string[]; tasks: { task: string; worker: string; operation: string; state: string }[];
   pending_approval: { approval_id: string; kind: string; summary: string; expires_at: string } | null;
-  evidence: Evidence[]; usage: Record<string, number | string | null>;
+  evidence: Evidence[]; usage: Record<string, number | string | null>; applied_learning?: LearnedItem[];
 };
 export type Job = { job_id: string; kind: string; state: "running" | "succeeded" | "failed"; request_id: string | null; status: string | null; error: string | null };
 export type PackageInput = {
@@ -84,6 +125,19 @@ export const api = {
   addBookmark: (conversationId: string, turnSeq: number, note = "") =>
     call<Bookmark>("bookmarks", json("POST", { conversation_id: conversationId, turn_seq: turnSeq, note })),
   deleteBookmark: (id: string) => call<void>(`bookmarks/${id}`, { method: "DELETE" }),
+  me: () => call<Me>("me"),
+  giveFeedback: (conversationId: string, turnSeq: number, rating: "up" | "down", reasons: FeedbackReason[] = [], correction?: string) =>
+    call<{ feedback: FeedbackState; job: Job | null }>(`conversations/${conversationId}/feedback`, json("POST", {
+      turn_seq: turnSeq, rating, reasons, correction: correction || null, client_message_id: clientId(),
+    })),
+  memory: () => call<Memory>("learning"),
+  savePreferences: (update: Partial<Preferences>) => call<Preferences>("learning/preferences", json("PUT", update)),
+  removeItem: (id: string) => call<void>(`learning/items/${id}`, { method: "DELETE" }),
+  projects: () => call<WatchedProject[]>("projects"),
+  watch: (projectId: string) => call<ProjectWatch>(`projects/${projectId}/watch`),
+  reviews: (status = "pending") => call<Review[]>(`reviews?status=${status}`),
+  decideReview: (id: string, approved: boolean, note?: string, expectedTerms: string[] = []) =>
+    call<Review>(`reviews/${id}`, json("POST", { approved, note: note || null, expected_terms: expectedTerms })),
 };
 
 /** Polls a background job until it finishes (the API runs every request as a job). */

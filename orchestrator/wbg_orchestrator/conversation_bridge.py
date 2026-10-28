@@ -10,11 +10,15 @@
   union of exactly those two route policies, and records the answer turn through the existing store API.
 * Approvals: `approve` checks thread ownership, records the decision with the existing `record_decision`, and
   resumes the engine as the same user.
+* Feedback (feedback.py): every investigation gets the owner's learned guidance appended to its memory block, and the
+  items used are recorded per request; `revise` re-runs an answered question after a correction; `answer_record`
+  tells the feedback service how an answer was produced.
 Nothing in conversation/ is modified.
 """
 from __future__ import annotations
 
 import contextvars
+import re
 from dataclasses import dataclass, field
 from typing import Any, Callable
 
@@ -31,6 +35,7 @@ from .authorization import AppAuthorizationContext
 from .contracts import (EvidenceKind, InvestigationRequest, InvestigationStatus, OwnerRef, PackageSpec, PlanningSpec,
                         ValidationStatus, investigation_id_for, new_id)
 from .engine import EngineOutcome, InvestigationEngine, InvestigationNotFound, checkpoint_thread_id
+from .feedback import REVISION_ROUTE, AnswerRecord, FeedbackService, Guidance
 from .planner import BRIEF_BUDGET
 
 COMBINABLE = {Route.STRUCTURED_DATA.value, Route.DOCUMENT_RAG.value}
@@ -49,6 +54,8 @@ PLANNING_FIELDS_MESSAGE = (
     "give: the country, the sector, a short description of what the project will do, the planned Board approval date "
     "(and the estimated cost if known), and for each planned package its name, category, method (or leave it for me to "
     "suggest), review type, bid window and planned tender date.")
+ANSWERED_STATUSES = {InvestigationStatus.ANSWERED, InvestigationStatus.PARTIAL}
+FILTERS = re.compile(r"Filters applied: (.+?)\.?$")
 
 
 def describe_plan(spec: PlanningSpec) -> str:
@@ -70,6 +77,7 @@ class OwnerBinding:
     thread_id: str
     on_start: Callable[[str], None] | None = None          # told the request id before the engine starts (to cancel)
     rag_release: str | None = None                         # this message's document pipeline (None = the app default)
+    guidance: str | None = None                            # the owner's learned guidance for this question (untrusted)
 
 
 CURRENT_OWNER: contextvars.ContextVar[OwnerBinding | None] = contextvars.ContextVar("wbg_current_owner", default=None)
@@ -131,7 +139,8 @@ class ConversationRunner:
             rag_release=binding.rag_release or self._release, authorization=self._authorization_for((self._route,)))
         if binding.on_start:
             binding.on_start(request_id)
-        return to_outcome(self._engine.start(request, memory_block=conversation_context or None))
+        memory = "\n\n".join(part for part in (conversation_context, binding.guidance) if part)
+        return to_outcome(self._engine.start(request, memory_block=memory or None))
 
 
 @dataclass
@@ -147,6 +156,11 @@ class ConversationFrontDoor:
                  authorization_for: AuthorizationFactory, *, allow_combined: bool = True, rag_release: str = "pilot_v3"):
         self._service, self._store, self._engine = service, store, engine
         self._authorization_for, self._allow_combined, self._release = authorization_for, allow_combined, rag_release
+        self._learning: FeedbackService | None = None
+
+    def use_learning(self, learning: FeedbackService) -> None:
+        """Attach the feedback service (it reads answer records from this front door, so it is created after it)."""
+        self._learning = learning
 
     def handle_message(self, owner: Owner, thread_id: str, text: str, execute: bool = False,
                        on_start: Callable[[str], None] | None = None, rag_release: str | None = None) -> FrontDoorReply:
@@ -165,7 +179,13 @@ class ConversationFrontDoor:
         if routing is not None and (self._opens_investigation(routing) or (planning and self._follows_brief(routing))):
             outcome = self._open_investigation(owner, thread_id, text, execute, on_start, planning, rag_release)
             return FrontDoorReply(outcome.status.value, outcome.values["request"]["request_id"], investigation=outcome)
-        token = CURRENT_OWNER.set(OwnerBinding(owner, thread_id, on_start, rag_release))
+        guidance = self._guidance(owner, text)
+
+        def started(request_id: str) -> None:
+            self._record_use(owner, request_id, guidance)
+            if on_start:
+                on_start(request_id)
+        token = CURRENT_OWNER.set(OwnerBinding(owner, thread_id, started, rag_release, guidance.text))
         try:
             reply = self._service.handle_message(owner, thread_id, text, execute=execute)
         finally:
@@ -191,7 +211,9 @@ class ConversationFrontDoor:
         spec = spec.model_copy(update={"profile": profile})                      # the free text is filtered once, here
         text = describe_plan(spec)
         memory = self._service.memory_for(owner, thread_id, text)                 # before this request's own turn
+        guidance = self._guidance(owner, text)
         request_id = self._user_turn(owner, thread_id, text, BRIEF_ROUTE)
+        self._record_use(owner, request_id, guidance)
         request = InvestigationRequest(
             investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=thread_id,
             owner=owner_ref(owner), question=self._service.text_filter(text), mode="investigation", planning=spec, budget=BRIEF_BUDGET,
@@ -199,7 +221,7 @@ class ConversationFrontDoor:
             authorization=self._authorization_for((Route.PROCUREMENT_PLANNING, Route.ML_PREDICTION, Route.DOCUMENT_RAG)))
         if on_start:
             on_start(request_id)
-        outcome = self._engine.start(request, memory_block=memory)
+        outcome = self._engine.start(request, memory_block=_joined(memory, guidance))
         self._record_answer(owner, thread_id, request_id, outcome)
         self._service.compact(owner, thread_id)                                    # summarize older turns when needed
         return outcome
@@ -209,17 +231,64 @@ class ConversationFrontDoor:
         """A structured package assessment: recorded as a user turn, run with the fixed prediction + lessons plan."""
         text = describe_package(package)
         memory = self._service.memory_for(owner, thread_id, text)
+        guidance = self._guidance(owner, text)
         request_id = self._user_turn(owner, thread_id, text, Route.ML_PREDICTION.value)
+        self._record_use(owner, request_id, guidance)
         request = InvestigationRequest(
             investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=thread_id,
             owner=owner_ref(owner), question=text, mode="investigation", package=package, rag_release=self._release,
             authorization=self._authorization_for((Route.ML_PREDICTION, Route.DOCUMENT_RAG)))
         if on_start:
             on_start(request_id)
-        outcome = self._engine.start(request, memory_block=memory)
+        outcome = self._engine.start(request, memory_block=_joined(memory, guidance))
         self._record_answer(owner, thread_id, request_id, outcome)
         self._service.compact(owner, thread_id)                                    # summarize older turns when needed
         return outcome
+
+    def revise(self, owner: Owner, thread_id: str, answer_request_id: str, correction: str,
+               on_start: Callable[[str], None] | None = None) -> EngineOutcome:
+        """Re-run the question behind an answer after the user's correction. The correction is already a constraint of
+        the conversation (recorded by the feedback service), so it reaches the planner and agents through the memory
+        block; the same kind of request is rebuilt from the original's checkpoint."""
+        original = self._original_request(owner, thread_id, answer_request_id)
+        question = original.question
+        memory = self._service.memory_for(owner, thread_id, question)
+        guidance = self._guidance(owner, question)
+        request_id = self._user_turn(owner, thread_id, f"Correction: {correction}", REVISION_ROUTE)
+        self._record_use(owner, request_id, guidance)
+        routes = ((Route.PROCUREMENT_PLANNING, Route.ML_PREDICTION, Route.DOCUMENT_RAG) if original.planning
+                  else (Route.ML_PREDICTION, Route.DOCUMENT_RAG) if original.package
+                  else (Route(original.route_hint),) if original.route_hint
+                  else (Route.STRUCTURED_DATA, Route.DOCUMENT_RAG))
+        request = InvestigationRequest(
+            investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=thread_id,
+            owner=owner_ref(owner), question=question, route_hint=original.route_hint, mode=original.mode,
+            rag_release=original.rag_release, execute_requested=original.execute_requested, package=original.package,
+            planning=original.planning, planning_context=original.planning_context,
+            budget=BRIEF_BUDGET if original.planning else original.budget, authorization=self._authorization_for(routes))
+        if on_start:
+            on_start(request_id)
+        outcome = self._engine.start(request, memory_block=_joined(memory, guidance))
+        self._record_answer(owner, thread_id, request_id, outcome)
+        self._service.compact(owner, thread_id)
+        return outcome
+
+    def answer_record(self, owner: Owner, thread_id: str, request_id: str) -> AnswerRecord | None:
+        """How an investigation's answer was produced: its steps, tables, filters and SQL hash (None if it has no
+        checkpoint, e.g. a conversational reply)."""
+        outcome = self._outcome(owner, thread_id, request_id)
+        if outcome is None:
+            return None
+        tasks = (outcome.values.get("plan") or {}).get("tasks", [])
+        evidence = outcome.evidence
+        sql_evidence = next((e for e in evidence if e.provenance_value("sql_sha256")), None)
+        filters = [m.group(1) for e in evidence if e.kind == EvidenceKind.STRUCTURED_RESULT
+                   for m in [FILTERS.search(e.summary)] if m]
+        return AnswerRecord(
+            question=outcome.values["request"]["question"],
+            steps=tuple(dict.fromkeys(f"{t['worker']}.{t['operation']}" for t in tasks)),
+            tables=tuple(sorted({o for e in evidence for o in e.source_objects})), filters=tuple(dict.fromkeys(filters)),
+            sql_sha256=sql_evidence.provenance_value("sql_sha256") if sql_evidence else None, answered=outcome.status in ANSWERED_STATUSES)
 
     # ------------------------------------------------------------------------------------------- internals
     @staticmethod
@@ -246,7 +315,9 @@ class ConversationFrontDoor:
                             on_start: Callable[[str], None] | None, planning_context: str | None = None,
                             rag_release: str | None = None) -> EngineOutcome:
         memory = self._service.memory_for(owner, thread_id, text)
+        guidance = self._guidance(owner, text)
         request_id = self._user_turn(owner, thread_id, text, "investigation")
+        self._record_use(owner, request_id, guidance)
         request = InvestigationRequest(
             investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=thread_id,
             owner=owner_ref(owner), question=self._service.text_filter(text), mode="investigation", execute_requested=execute,
@@ -254,10 +325,31 @@ class ConversationFrontDoor:
             authorization=self._authorization_for((Route.STRUCTURED_DATA, Route.DOCUMENT_RAG)))
         if on_start:
             on_start(request_id)
-        outcome = self._engine.start(request, memory_block=memory)
+        outcome = self._engine.start(request, memory_block=_joined(memory, guidance))
         self._record_answer(owner, thread_id, request_id, outcome)
         self._service.compact(owner, thread_id)                                    # summarize older turns when needed
         return outcome
+
+    def _guidance(self, owner: Owner, question: str) -> Guidance:
+        return self._learning.guidance(owner, self._service.text_filter(question)) if self._learning else Guidance(None)
+
+    def _record_use(self, owner: Owner, request_id: str, guidance: Guidance) -> None:
+        if self._learning and guidance.item_ids:
+            self._learning.record_use(owner, request_id, guidance.item_ids)
+
+    def _outcome(self, owner: Owner, thread_id: str, request_id: str) -> EngineOutcome | None:
+        owner_key = owner_ref(owner)
+        try:
+            return self._engine.outcome(owner_key, checkpoint_thread_id(owner_key, thread_id, investigation_id_for(request_id)))
+        except InvestigationNotFound:
+            return None
+
+    def _original_request(self, owner: Owner, thread_id: str, request_id: str) -> InvestigationRequest:
+        outcome = self._outcome(owner, thread_id, request_id)
+        if outcome is None:
+            raise InvestigationNotFound("investigation not found")
+        values = {k: v for k, v in outcome.values["request"].items() if k != "authorization"}
+        return InvestigationRequest.model_validate({**values, "authorization": self._authorization_for((Route.DOCUMENT_RAG,))})
 
     def _ask_for_fields(self, owner: Owner, thread_id: str, text: str, route: str, message: str) -> FrontDoorReply:
         """Predictions and briefs need structured fields: say exactly which ones (no agent runs)."""
@@ -311,3 +403,7 @@ class ConversationFrontDoor:
             metadata=TurnMetadata(request_id=request_id, status=outcome.status.value, route="investigation",
                                   source_objects=sorted({o for e in outcome.evidence for o in e.source_objects}),
                                   evidence=evidence[:20])))
+
+
+def _joined(memory: str | None, guidance: Guidance) -> str | None:
+    return "\n\n".join(part for part in (memory, guidance.text) if part) or None

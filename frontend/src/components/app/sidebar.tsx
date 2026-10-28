@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import {
-  Bookmark, ChevronRight, Folder as FolderIcon, FolderOpen, FolderPlus, LogOut, MessageSquare, Moon, MoreHorizontal,
+  Brain, ChevronRight, ClipboardCheck, Eye, Folder as FolderIcon, FolderOpen, FolderPlus, LogOut, MessageSquare, Moon, MoreHorizontal,
   PanelLeftClose, Pencil, Plus, Search, Sun, Trash2,
 } from "lucide-react";
 import type { Conversation, Folder } from "@/lib/api";
@@ -18,11 +18,15 @@ type Props = {
   conversations: Conversation[];
   folders: Folder[];
   activeId: string | null;
-  view: "chat" | "bookmarks";
-  bookmarkCount: number;
+  view: View;
+  reviewer: boolean;
+  feedback: boolean;
+  pendingReviews: number;
   onSelect: (id: string) => void;
   onNew: () => void;
-  onBookmarks: () => void;
+  onMemory: () => void;
+  onReviews: () => void;
+  onWatch: () => void;
   onCreateFolder: (name: string) => Promise<void>;
   onRenameFolder: (id: string, name: string) => Promise<void>;
   onDeleteFolder: (id: string) => Promise<void>;
@@ -32,6 +36,7 @@ type Props = {
 };
 
 type Naming = { title: string; initial: string; save: (name: string) => Promise<void> } | null;
+export type View = "chat" | "memory" | "reviews" | "watch";
 
 export function Sidebar(props: Props) {
   const { conversations, folders, activeId, view } = props;
@@ -107,11 +112,23 @@ export function Sidebar(props: Props) {
           <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search chats"
             className="h-8 w-full rounded-lg bg-white/5 pl-8 pr-2 text-xs text-white placeholder:text-sidebar-muted focus:outline-none focus:ring-1 focus:ring-[#2b88d8]" />
         </div>
-        <button onClick={props.onBookmarks}
-          className={cn("flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm", view === "bookmarks" ? "bg-sidebar-active text-white" : "hover:bg-sidebar-hover")}>
-          <Bookmark className="size-4 text-sidebar-muted" /> Bookmarks
-          {props.bookmarkCount > 0 && <span className="ml-auto rounded-full bg-white/10 px-1.5 text-[11px]">{props.bookmarkCount}</span>}
+        <button onClick={props.onWatch}
+          className={cn("flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm", view === "watch" ? "bg-sidebar-active text-white" : "hover:bg-sidebar-hover")}>
+          <Eye className="size-4 text-sidebar-muted" /> Project watch
         </button>
+        {props.feedback && (
+          <button onClick={props.onMemory}
+            className={cn("flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm", view === "memory" ? "bg-sidebar-active text-white" : "hover:bg-sidebar-hover")}>
+            <Brain className="size-4 text-sidebar-muted" /> Memory
+          </button>
+        )}
+        {props.feedback && props.reviewer && (
+          <button onClick={props.onReviews}
+            className={cn("flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm", view === "reviews" ? "bg-sidebar-active text-white" : "hover:bg-sidebar-hover")}>
+            <ClipboardCheck className="size-4 text-sidebar-muted" /> Review queue
+            {props.pendingReviews > 0 && <span className="ml-auto rounded-full bg-white/10 px-1.5 text-[11px]">{props.pendingReviews}</span>}
+          </button>
+        )}
       </div>
 
       <nav className="scrollbar-thin mt-3 flex-1 overflow-y-auto px-3 pb-3">

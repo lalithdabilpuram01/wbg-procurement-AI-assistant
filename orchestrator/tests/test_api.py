@@ -393,3 +393,17 @@ def test_the_tablelens_switch_picks_the_document_pipeline_per_message(tmp_path):
                 "table_lens": switch}
         assert stack.wait(stack.call("POST", f"/conversations/{cid}/messages", json=body).json()["job_id"])["state"] == "succeeded"
     assert stack.parts["releases"] == ["pilot_v3_tablelens", "pilot_v3"]
+
+
+# ----------------------------------------------------------------------------------------------- monitoring
+def test_project_watch_returns_cited_warnings_and_refuses_bad_ids(stack):
+    from monitoring.data import SHARED
+    if not (SHARED / "plan_activities.jsonl").exists():
+        pytest.skip("the processed corpus is not on this machine")
+    view = stack.call("GET", "/projects/P148850/watch").json()
+    assert view["summary"]["packages"] > 0 and all(w["citations"] for w in view["warnings"])
+    assert stack.call("GET", "/projects/X1/watch").status_code == 422
+    assert stack.call("GET", "/projects/P000000/watch").status_code == 404
+    assert stack.call("GET", "/projects/P148850/watch", user=None).status_code == 401
+    listed = {p["project_id"]: p for p in stack.call("GET", "/projects").json()}
+    assert listed["P148850"]["packages"] == view["summary"]["packages"] and listed["P148850"]["title"]

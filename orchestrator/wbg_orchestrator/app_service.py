@@ -21,6 +21,7 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from typing import Any, Callable, Literal
 
+from conversation.learning import Feedback, LearnedItem, Review
 from conversation.models import Owner, ThreadInfo, Turn
 from conversation.service import ConversationService
 from conversation.store import ConversationStore
@@ -29,6 +30,7 @@ from conversation.workspace import Bookmark, Folder, InMemoryWorkspaceStore, Wor
 from .contracts import PackageSpec, PlanningSpec, investigation_id_for, new_id
 from .conversation_bridge import ConversationFrontDoor, owner_ref
 from .engine import EngineOutcome, InvestigationEngine, InvestigationNotFound, checkpoint_thread_id
+from .feedback import FeedbackRequest, FeedbackService, Preferences
 
 JobState = Literal["running", "succeeded", "failed"]
 TABLELENS_RELEASE = "pilot_v3_tablelens"           # the document pipeline behind the TableLens switch
@@ -47,7 +49,7 @@ class Job:
     job_id: str
     owner: Owner
     conversation_id: str
-    kind: Literal["message", "approval", "recover", "package", "plan"]
+    kind: Literal["message", "approval", "recover", "package", "plan", "revision"]
     state: JobState = "running"
     request_id: str | None = None             # the investigation's request, once known
     status: str | None = None                 # conversation or investigation status at the end
@@ -65,9 +67,14 @@ class InvestigationRef:
 
 class AppService:
     def __init__(self, conversations: ConversationService, store: ConversationStore, engine: InvestigationEngine,
-                 front_door: ConversationFrontDoor, *, workspace: WorkspaceStore | None = None, max_workers: int = 2):
+                 front_door: ConversationFrontDoor, *, workspace: WorkspaceStore | None = None,
+                 learning: FeedbackService | None = None, max_workers: int = 2):
         self._conversations, self._store, self._engine, self._front_door = conversations, store, engine, front_door
         self._workspace = workspace or InMemoryWorkspaceStore()
+        self.learning = learning
+        if learning:
+            front_door.use_learning(learning)
+        self._feedback_by_client: dict[tuple[str, str, str, str], tuple[Feedback, str | None]] = {}
         self._pool = ThreadPoolExecutor(max_workers=max_workers, thread_name_prefix="wbg-job")
         self._lock = threading.Lock()
         self._jobs: dict[str, Job] = {}
@@ -144,6 +151,50 @@ class AppService:
                             lambda job: self._finish_outcome(job, self._front_door.plan_project(
                                 owner, conversation_id, spec, on_start=lambda rid: self._started(job, rid))))
 
+    # ------------------------------------------------------------------------------------------------ feedback
+    def give_feedback(self, owner: Owner, conversation_id: str, request: FeedbackRequest,
+                      client_message_id: str) -> tuple[Feedback, Job | None]:
+        """Feedback on one answer; a thumbs-down with a correction also starts a revision job (the corrected answer)."""
+        learning = self._learning()
+        key = (owner.tenant_id, owner.user_id, conversation_id, client_message_id)
+        with self._lock:
+            repeated = self._feedback_by_client.get(key)
+        if repeated:                                                            # a repeat: same feedback, no second run
+            return repeated[0], self._jobs.get(repeated[1]) if repeated[1] else None
+        if request.correction and self._busy(owner, conversation_id):
+            raise ConversationBusy("another request is still running in this conversation")
+        outcome = learning.give(owner, conversation_id, request)
+        job = None
+        if outcome.revise:
+            feedback = outcome.feedback
+            job = self._submit(owner, conversation_id, "revision", client_message_id,
+                               lambda job: self._run_revision(job, feedback))
+        with self._lock:
+            self._feedback_by_client[key] = (outcome.feedback, job.job_id if job else None)
+        return outcome.feedback, job
+
+    def thread_feedback(self, owner: Owner, conversation_id: str) -> dict[int, Feedback]:
+        return self.learning.thread_feedback(owner, conversation_id) if self.learning else {}
+
+    def applied_learning(self, owner: Owner, request_id: str) -> list[LearnedItem]:
+        return self.learning.applied(owner, request_id) if self.learning else []
+
+    def memory(self, owner: Owner) -> tuple[Preferences, list[tuple[LearnedItem, bool]]]:
+        learning = self._learning()
+        return learning.preferences(owner), learning.items(owner)
+
+    def set_preferences(self, owner: Owner, update: Preferences) -> Preferences:
+        return self._learning().set_preferences(owner, update)
+
+    def revoke_item(self, owner: Owner, item_id: str, reviewer: bool) -> None:
+        self._learning().revoke(owner, item_id, reviewer)
+
+    def reviews(self, owner: Owner, status: str | None) -> list[Review]:
+        return self._learning().reviews(owner, status)
+
+    def decide_review(self, owner: Owner, review_id: str, approved: bool, note: str | None, expected_terms: list[str]) -> Review:
+        return self._learning().decide(owner, review_id, approved, note, expected_terms)
+
     # ------------------------------------------------------------------------------------------ investigations
     def investigations(self, owner: Owner, conversation_id: str) -> list[InvestigationRef]:
         turns = self._store.turns(owner, conversation_id)
@@ -197,12 +248,27 @@ class AppService:
             existing = self._by_client_id.get(key)
             if existing:
                 return self._jobs[existing]                                     # a repeat: the same job, not a new run
-            if any(j.state == "running" and j.owner == owner and j.conversation_id == conversation_id for j in self._jobs.values()):
+            if self._busy(owner, conversation_id):
                 raise ConversationBusy("another request is still running in this conversation")
             job = Job(job_id=new_id("job"), owner=owner, conversation_id=conversation_id, kind=kind)
             self._jobs[job.job_id], self._by_client_id[key] = job, job.job_id
         self._pool.submit(self._guarded, job, work)
         return job
+
+    def _busy(self, owner: Owner, conversation_id: str) -> bool:
+        return any(j.state == "running" and j.owner == owner and j.conversation_id == conversation_id for j in self._jobs.values())
+
+    def _learning(self) -> FeedbackService:
+        if self.learning is None:
+            raise RuntimeError("feedback is not enabled in this app")
+        return self.learning
+
+    def _run_revision(self, job: Job, feedback: Feedback) -> None:
+        outcome = self._front_door.revise(job.owner, job.conversation_id, feedback.request_id, feedback.correction,
+                                          on_start=lambda rid: self._started(job, rid))
+        request_id = outcome.values["request"]["request_id"]
+        self._learning().revised(job.owner, feedback.feedback_id, request_id)
+        job.request_id, job.status = request_id, outcome.status.value
 
     @staticmethod
     def _guarded(job: Job, work: Callable[[Job], None]) -> None:

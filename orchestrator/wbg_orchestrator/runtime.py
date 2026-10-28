@@ -13,6 +13,8 @@ Every live dependency is opt-in and fails closed:
 - In-process tools: document retrieval, TableLens, the frozen ML models, similarity scoring (see tool_gateway.py).
 - Checkpoints: the isolated `PostgresSaver` on the Lakebase development branch (WBG_CKPT_ENDPOINT); `production` is refused.
 - Conversations: the existing PostgreSQL conversation store (WBG_CONVERSATION_DSN).
+- Feedback and learning: Lakebase schema `wbg_learning` on the development branch (learning_db.py; initialised once
+  with `learning_db init`); questions are matched to saved items with the local bge-m3 model of document retrieval.
 - Documents: the default RAG release with the evidence-only generator; `pilot_v3_tablelens` (chosen per message)
   adds TableLens, whose SQL is written by Claude through the same budgeted client (`table_sql`).
 - Audit:
@@ -28,6 +30,7 @@ from decimal import Decimal
 from pathlib import Path
 from typing import Callable
 
+from conversation.learning import PostgresLearningStore
 from conversation.postgres_store import PostgresConversationStore
 from conversation.routing.routes import Route
 from conversation.service import ConversationService
@@ -43,13 +46,16 @@ from structured_agent.observability import JsonlAuditSink as AgentAuditSink, Tel
 from structured_agent.service import StructuredDataService
 
 from .app_service import AppService
-from .checkpointing import CheckpointDbSettings, checkpointer, isolated_setup, lakebase_checkpoint_pool, lakebase_token_provider
+from .checkpointing import (CheckpointDbSettings, checkpointer, endpoint_host, isolated_setup, lakebase_checkpoint_pool,
+                            lakebase_token_provider)
 from .claude import PortkeyJsonClient
 from .controller import ExecutionController
 from .contracts import WorkerName
 from .conversation_bridge import ConversationFrontDoor, ConversationRunner
 from .engine import InvestigationEngine
 from .factory import authorization_factory, document_worker, llm_breaker, semantic_project_scores, structured_worker
+from . import learning_db
+from .feedback import FeedbackService
 from .graph import EngineDeps
 from .live_llm import SONNET_5_5_PRICES, BudgetedClaudeClient, LedgerLimits, SpendLedger
 from .observability import AuditTrail, JsonlAuditSink, OrchestratorTracer
@@ -115,13 +121,16 @@ def build_runtime(config: RuntimeConfig, operator_confirmed: bool) -> tuple[AppS
     runners = {route: ConversationRunner(engine, route, authorization_for, config.rag_release)
                for route in (Route.STRUCTURED_DATA, Route.DOCUMENT_RAG)}
     conversations = ConversationService(store, runners, guardrails, text_filter=redact_personal_data)
-    service = AppService(conversations, store, engine,
-                         ConversationFrontDoor(conversations, store, engine, authorization_for, rag_release=config.rag_release),
-                         workspace=PostgresWorkspaceStore())
+    front_door = ConversationFrontDoor(conversations, store, engine, authorization_for, rag_release=config.rag_release)
+    learning_pool = _learning_pool(config)
+    learning = FeedbackService(PostgresLearningStore(learning_pool.connection), conversations, store, front_door,
+                               embed=_question_embedding)
+    service = AppService(conversations, store, engine, front_door, workspace=PostgresWorkspaceStore(), learning=learning)
 
     def close() -> None:
         service.shutdown()
         pool.close()
+        learning_pool.close()
         close_tools()
     return service, close
 
@@ -164,23 +173,29 @@ def _structured_worker(config: RuntimeConfig, tools: ToolCaller, claude: Budgete
     return structured_worker(tools, claude, telemetry, authority, ResultCache(), guardrails=guardrails)
 
 
+def _learning_pool(config: RuntimeConfig):
+    pool = learning_db.learning_pool(learning_db.learning_endpoint(config.checkpoint_endpoint))
+    try:
+        learning_db.verify(pool)                                          # fail closed when the store is not initialised
+    except Exception:
+        pool.close()
+        raise
+    return pool
+
+
+def _question_embedding(text: str):
+    """bge-m3 query vector (loaded once per process and shared with document retrieval)."""
+    from rag.vector_store import encoder
+    return encoder.load_model().encode_query(text).tolist()
+
+
 def _checkpoint_pool(config: RuntimeConfig):
     from infrastructure.lakebase_poc.lakebase_poc.settings import load_settings as lakebase_login
     login = lakebase_login()
-    settings = CheckpointDbSettings(host=_endpoint_host(config.checkpoint_endpoint, login.databricks_profile),
+    settings = CheckpointDbSettings(host=endpoint_host(config.checkpoint_endpoint, login.databricks_profile),
                                     database="databricks_postgres", user=login.user, endpoint=config.checkpoint_endpoint,
                                     databricks_profile=login.databricks_profile)
     pool = lakebase_checkpoint_pool(settings, lakebase_token_provider(settings))
     pool.open(wait=True, timeout=60)
     isolated_setup(pool, checkpointer(pool), settings.schema)             # verifies isolation; creates nothing new
     return pool
-
-
-def _endpoint_host(endpoint: str, profile: str) -> str:
-    import json
-    import subprocess
-
-    from infrastructure.lakebase_poc.lakebase_poc.credentials import databricks_cli
-    described = subprocess.run([databricks_cli(), "postgres", "get-endpoint", endpoint, "-p", profile, "-o", "json"],
-                               capture_output=True, text=True, check=True, timeout=90)
-    return json.loads(described.stdout)["status"]["hosts"]["host"]
