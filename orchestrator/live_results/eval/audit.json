@@ -1,0 +1,426 @@
+{
+ "experiment": "wbg-app-4ddcb94e",
+ "code_version": "e9ac2d7+34 uncommitted",
+ "coverage": {
+  "dataset_cases": 71,
+  "ran": 71,
+  "missing": [],
+  "crashed_or_unfinished": []
+ },
+ "scores": {
+  "documents": {
+   "abstained": {
+    "mean": 1.0,
+    "n": 1
+   },
+   "completed": {
+    "mean": 1.0,
+    "n": 10
+   },
+   "cost_usd": {
+    "mean": 0.012,
+    "n": 10
+   },
+   "gold_document_cited": {
+    "mean": 0.667,
+    "n": 9
+   },
+   "gold_page_cited": {
+    "mean": 0.222,
+    "n": 9
+   },
+   "groundedness": {
+    "mean": 0.85,
+    "n": 10
+   },
+   "relevance": {
+    "mean": 0.775,
+    "n": 10
+   }
+  },
+  "guardrails": {
+   "completed": {
+    "mean": 1.0,
+    "n": 6
+   },
+   "cost_usd": {
+    "mean": 0.0,
+    "n": 6
+   },
+   "guardrail_outcome": {
+    "mean": 0.833,
+    "n": 6
+   },
+   "pii_masked": {
+    "mean": 1.0,
+    "n": 1
+   }
+  },
+  "planning": {
+   "brief_sections": {
+    "mean": 1.0,
+    "n": 1
+   },
+   "completed": {
+    "mean": 1.0,
+    "n": 3
+   },
+   "cost_usd": {
+    "mean": 0.035,
+    "n": 3
+   },
+   "groundedness": {
+    "mean": 0.75,
+    "n": 2
+   },
+   "relevance": {
+    "mean": 0.75,
+    "n": 2
+   },
+   "required_evidence": {
+    "mean": 1.0,
+    "n": 3
+   }
+  },
+  "structured": {
+   "completed": {
+    "mean": 1.0,
+    "n": 8
+   },
+   "cost_usd": {
+    "mean": 0.006,
+    "n": 8
+   },
+   "gold_values_in_answer": {
+    "mean": 0.917,
+    "n": 8
+   },
+   "gold_values_in_evidence": {
+    "mean": 0.917,
+    "n": 8
+   },
+   "groundedness": {
+    "mean": 0.969,
+    "n": 8
+   },
+   "relevance": {
+    "mean": 0.844,
+    "n": 8
+   }
+  },
+  "tablelens_off": {
+   "completed": {
+    "mean": 1.0,
+    "n": 22
+   },
+   "cost_usd": {
+    "mean": 0.013,
+    "n": 22
+   },
+   "groundedness": {
+    "mean": 0.897,
+    "n": 17
+   },
+   "relevance": {
+    "mean": 0.662,
+    "n": 17
+   },
+   "value_in_answer": {
+    "mean": 0.182,
+    "n": 22
+   },
+   "value_in_evidence": {
+    "mean": 0.5,
+    "n": 22
+   }
+  },
+  "tablelens_on": {
+   "completed": {
+    "mean": 1.0,
+    "n": 22
+   },
+   "cost_usd": {
+    "mean": 0.02,
+    "n": 22
+   },
+   "groundedness": {
+    "mean": 0.806,
+    "n": 18
+   },
+   "relevance": {
+    "mean": 0.931,
+    "n": 18
+   },
+   "value_in_answer": {
+    "mean": 0.773,
+    "n": 22
+   },
+   "value_in_evidence": {
+    "mean": 0.682,
+    "n": 22
+   }
+  }
+ },
+ "tablelens": {
+  "questions": 22,
+  "on_correct": 17.0,
+  "off_correct": 4.0,
+  "on_wins": [
+   "T01",
+   "T02",
+   "T03",
+   "T04",
+   "T07",
+   "T08",
+   "T09",
+   "T10",
+   "T13",
+   "T15",
+   "T16",
+   "T17",
+   "T20",
+   "T21"
+  ],
+  "on_losses": [
+   "T11"
+  ]
+ },
+ "judge": {
+  "judged": 55,
+  "failed": 0,
+  "groundedness_spread": {
+   "0.25": 3,
+   "0.5": 1,
+   "0.75": 19,
+   "1.0": 32
+  },
+  "relevance_mean": 0.8,
+  "disagreements_with_exact_checks": [
+   {
+    "case": "T04-off",
+    "judge_grounded": 1.0,
+    "value_in_answer": 0.0,
+    "judge_comment": "Both claims are supported by the evidence. The Sub-component 1(b) table row exists but is flagged numeric_use=not_approved, so declining to state the figure is consistent with the evidence. The pointer to Table 2.1 matches the passage. The answer does not give the cost, but the evidence does not per"
+   },
+   {
+    "case": "T10-on",
+    "judge_grounded": 0.25,
+    "value_in_answer": 1.0,
+    "judge_comment": "Rows 1 and 4 (data center/video conference package, 2020-09-05; GIS software, 2021-11-03) are supported by the evidence. The evidence is truncated at row 6 and row 7 is absent, so the other two packages, their dates, and the total of four cannot be verified. The answer addresses the question directl"
+   },
+   {
+    "case": "T18-on",
+    "judge_grounded": 1.0,
+    "value_in_answer": 0.0,
+    "judge_comment": "Claim 1 matches ev_ca2b54e776494683863b exactly: 3 IDA instruments, original principal 600,000,000.00, disbursed 586,680,538.38, 97.78%. Claim 2 matches the PAD envelope breakdown in ev_4be3c18a1c064b8aaeb3 (US$200M SUF, US$273M grant, US$127M credit). The inference that the disbursed figure covers "
+   },
+   {
+    "case": "T13-off",
+    "judge_grounded": 0.75,
+    "value_in_answer": 0.0,
+    "judge_comment": "Claim 1 matches the structured result (project name, Sri Lanka, Closed, USD 125,000,000). Claim 2 is broadly supported: the PAD tables do show land acquisition and resettlement lines. The answer declines to state the figure because numeric_use=not_approved, which is cautious and not contradicted. Th"
+   },
+   {
+    "case": "T09-off",
+    "judge_grounded": 0.75,
+    "value_in_answer": 0.0,
+    "judge_comment": "The evidence shows only column headers, including 'Estimated Amount (US$)' and 'Actual Amount (US$ )', with no Modjo-Hawassa row or amounts. The answer says this accurately and does not invent figures. The only gap is that the project attribution is not visible in the excerpts. The answer does not g"
+   },
+   {
+    "case": "T12-off",
+    "judge_grounded": 1.0,
+    "value_in_answer": 0.0,
+    "judge_comment": "The cited passage (ev_7a29533f8b2e45329d7f) states that Component 1, Institutional Strengthening and Capacity Building for Asset Management, is US$22.9 million. It also describes the RDA, DBMOT and OPRC purpose in the same terms the answer uses, so every claim is supported. The answer directly gives"
+   },
+   {
+    "case": "T15-off",
+    "judge_grounded": 1.0,
+    "value_in_answer": 0.0,
+    "judge_comment": "The answer is fully supported by ev_b471f8d5ecc44b0eb6f8: 58 km of the Ja-Ela to Chilaw section of A3, 8 segments, Table 5.1 referenced, and the passage as shown does not give segment lengths. It honestly says the length of A3-8 is not in the evidence, so it does not answer the question directly. Th"
+   },
+   {
+    "case": "T17-off",
+    "judge_grounded": 1.0,
+    "value_in_answer": 0.0,
+    "judge_comment": "The answer says the ICR table has a Provincial Roads Improvements row, but its figures are numeric_use=not_approved, so it declines to state a cost. Both points are supported by ev_8d972924a9464de8988e, which is a not_approved ICR table with that row. The answer also cites ev_be0d3a71fbf54adc8387, a"
+   },
+   {
+    "case": "T20-off",
+    "judge_grounded": 0.75,
+    "value_in_answer": 0.0,
+    "judge_comment": "Claim 2 closely follows ev_4578446100fa4d08a20b: monitoring by the ministry, DLIs rewarding own-source revenue generation, and the statement that the ULGDP phases helped cities improve revenue performance. Claim 1 is correct that no average growth rate appears in the evidence. It cites ev_c379f0b019"
+   },
+   {
+    "case": "T02-off",
+    "judge_grounded": 1.0,
+    "value_in_answer": 0.0,
+    "judge_comment": "Every claim matches the evidence it cites. Claim 1 says the PAD lists Component 1 and withholds the figure, which fits the not_approved numeric_use on ev_9e35931301a94938ad65. Claims 2 and 3 reproduce the ISR figures (234,800,000.00; 16,100,000.00; 14,650,000.00) and correctly note that no currency "
+   },
+   {
+    "case": "T01-off",
+    "judge_grounded": 1.0,
+    "value_in_answer": 0.0,
+    "judge_comment": "Every claim matches the evidence it cites. Claim 1 matches the Component 2 title and sub-component 2(a) in ev_4915. Claim 2 is accurate: the financing table has a separate IDA line for component 2, and its numbers are marked not_approved, so the answer rightly withholds the figure. Claim 3 is accura"
+   },
+   {
+    "case": "T03-off",
+    "judge_grounded": 0.75,
+    "value_in_answer": 0.0,
+    "judge_comment": "The cited tables do list two options, and option 2 has economic EIRR and NPV columns. Both tables are marked numeric_use=not_approved, so declining to state figures matches the evidence. The only embellishment is the remark about verification against the source PDF. The answer does not give the EIRR"
+   },
+   {
+    "case": "T18-off",
+    "judge_grounded": 0.75,
+    "value_in_answer": 0.0,
+    "judge_comment": "All the numbers in claims 1 and 2 match the structured result: the principal and disbursed amounts, the percentages, the instrument counts and the currencies. Claim 3's as-of date, filters and read-only execution are also supported. The answer is relevant because it gives disbursement figures for P1"
+   },
+   {
+    "case": "T21-on",
+    "judge_grounded": 0.25,
+    "value_in_answer": 1.0,
+    "judge_comment": "The answer directly addresses the question, listing cancelled works activities with amounts. The visible evidence supports only the Diaroum\u00e9 and Pakour activities (Annul\u00e9, US$140,000 each). The truncated row 3 gives only a reference number. The remaining claims about Di\u00e9goune, the nurseries activity"
+   },
+   {
+    "case": "S2",
+    "judge_grounded": 1.0,
+    "gold_values_in_answer": 0.3333333333333333,
+    "judge_comment": "Both claims match the cited evidence. Claim 1 repeats the contract_awards count and contract_award_value_usd from ev_2eab. Claim 2 restates the metric definition in ev_20f6 accurately. The answer is incomplete for a question about headline procurement totals, since it reports only contract awards. T"
+   },
+   {
+    "case": "T08-off",
+    "judge_grounded": 1.0,
+    "value_in_answer": 0.0,
+    "judge_comment": "Both claims match the evidence. The tables list ICB/NCB (Goods) and Competitive Methods (Firms) thresholds, each marked numeric_use=not_approved, and the answer withholds the figures accordingly. It also correctly says the evidence does not give a works threshold. The answer is only partly relevant "
+   },
+   {
+    "case": "T07-off",
+    "judge_grounded": 1.0,
+    "value_in_answer": 0.0,
+    "judge_comment": "The evidence shows category 1 with the description cited (goods, works, non-consulting services, consultant's services, training and workshops and operating costs under Parts 1 and 2) and is flagged numeric_use=not_approved. The answer accurately describes the category and withholds the number, cons"
+   }
+  ]
+ },
+ "cost": {
+  "app_cases_sum_usd": "1.0063",
+  "app_ledger_usd": "1.986722",
+  "app_attempts": 189,
+  "judge_ledger_usd": "0.435515",
+  "judge_attempts": 57,
+  "unaccounted_app_usd": "0.9804"
+ },
+ "upload": {
+  "cases_scanned": 71,
+  "findings": []
+ },
+ "latency": {
+  "structured": {
+   "median_s": 12.5,
+   "slowest": [
+    58.7,
+    "S1"
+   ]
+  },
+  "tablelens": {
+   "median_s": 20.7,
+   "slowest": [
+    35.2,
+    "T10-off"
+   ]
+  },
+  "guardrails": {
+   "median_s": 2.45,
+   "slowest": [
+    6.4,
+    "G5"
+   ]
+  },
+  "documents": {
+   "median_s": 12.5,
+   "slowest": [
+    30.8,
+    "D-V3-abstain-unknown_reference"
+   ]
+  },
+  "planning": {
+   "median_s": 20.6,
+   "slowest": [
+    57.0,
+    "P1-brief"
+   ]
+  }
+ },
+ "rescored_changes": [
+  {
+   "case": "G2",
+   "check": "guardrail_outcome",
+   "recorded": 0.0,
+   "now": 1.0
+  },
+  {
+   "case": "T03-on",
+   "check": "value_in_answer",
+   "recorded": 0.0,
+   "now": 1.0
+  },
+  {
+   "case": "T11-off",
+   "check": "value_in_answer",
+   "recorded": 0.0,
+   "now": 1.0
+  },
+  {
+   "case": "D-V3-abstain-unknown_reference",
+   "check": "abstained",
+   "recorded": 0.0,
+   "now": 1.0
+  },
+  {
+   "case": "T08-on",
+   "check": "value_in_answer",
+   "recorded": 0.0,
+   "now": 1.0
+  },
+  {
+   "case": "T08-on",
+   "check": "value_in_evidence",
+   "recorded": 0.0,
+   "now": 1.0
+  },
+  {
+   "case": "T13-on",
+   "check": "value_in_answer",
+   "recorded": 0.0,
+   "now": 1.0
+  },
+  {
+   "case": "T17-on",
+   "check": "value_in_answer",
+   "recorded": 0.0,
+   "now": 1.0
+  },
+  {
+   "case": "T04-on",
+   "check": "value_in_answer",
+   "recorded": 0.0,
+   "now": 1.0
+  },
+  {
+   "case": "T05-off",
+   "check": "value_in_answer",
+   "recorded": 0.0,
+   "now": 1.0
+  },
+  {
+   "case": "G4",
+   "check": "guardrail_outcome",
+   "recorded": 0.0,
+   "now": 1.0
+  },
+  {
+   "case": "T07-on",
+   "check": "value_in_answer",
+   "recorded": 0.0,
+   "now": 1.0
+  }
+ ]
+}
