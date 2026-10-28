@@ -73,7 +73,8 @@ class StructuredDataWorker:
         memory = _memory_block(context)
         result = self._workflow_for(context.authorization).run(task.question, execute=execute, request_id=context.request_id,
                                                                conversation_context=memory)
-        usage = Usage(llm_calls=result.llm_calls, executions=1 if result.executed_sql else 0)
+        usage = Usage(llm_calls=result.llm_calls, input_tokens=result.input_tokens, output_tokens=result.output_tokens,
+                      executions=1 if result.executed_sql else 0)
         status = result.status
         if status == WorkflowStatus.ANSWERED:
             return WorkerOutput(TaskState.SUCCEEDED, (self._result_evidence(task, result),), usage)

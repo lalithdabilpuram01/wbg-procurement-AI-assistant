@@ -47,12 +47,19 @@ INSTRUCTION_OVERRIDE = _compile([
 
 # Explicit requests for data the registry classifies as prohibited (supplier identities, contact/personal data,
 # masked notice text, raw records, re-identification). Aggregates such as "how many suppliers" stay allowed.
+# Contact and personal data: blocked when it is asked for (a request verb, a possessive, or whose data), not when the
+# user only mentions their own ("my phone number is ..." is masked and the question answered).
+CONTACT_DATA = (r"(e-?mail( address(es)?)?s?|phone numbers?|telephone( numbers?)?|contact (details|information|persons?)|"
+                r"home address(es)?|personal (data|details|information)|passport( numbers?)?|national id|bank (account|details))")
+PEOPLE = r"(suppliers?|vendors?|contractors?|bidders?|consultants?|individuals?|officials?|staff|team|specialists?|people|persons?)"
 RESTRICTED_DATA_REQUEST = _compile([
     r"\b(names?|identit(y|ies))\b[^.?!\n]{0,40}\b(suppliers?|vendors?|contractors?|bidders?|consultants?|individuals?)\b",
     r"\b(suppliers?|vendors?|contractors?|bidders?|consultants?)['’]?s?\s+(names?|identit(y|ies))\b",
     r"\bwho (are|were|is|was)\b[^.?!\n]{0,30}\b(suppliers?|vendors?|contractors?|bidders?|consultants?)\b",
-    r"\b(e-?mail( address(es)?)?s?|phone numbers?|telephone|contact (details|information|persons?)|home address(es)?|"
-    r"personal (data|details|information)|passport|national id|bank (account|details))\b",
+    rf"\b(what|which|give|list|show|get|find|share|provide|send|look up|tell me|need|want|export)\b[^.?!\n]{{0,40}}\b{CONTACT_DATA}\b",
+    rf"\b(\w+['’]s|their|his|her|its)\s+{CONTACT_DATA}\b",
+    rf"\b{PEOPLE}\b[^.?!\n]{{0,20}}\b{CONTACT_DATA}\b",
+    rf"\b{CONTACT_DATA}\b[^.?!\n]{{0,30}}\b(of|for)\b[^.?!\n]{{0,30}}\b{PEOPLE}\b",
     r"\b(full|raw|complete|unmasked|unredacted)\b[^.?!\n]{0,20}\b(notice (text|body)|text of (the )?notices?|records?|descriptions?)\b",
     r"\bnotice[_ ]text\b|\bbronze\b|\bcontract descriptions?\b",
     r"\b(de-?anonymi[sz]e|re-?identify|unmask)\b",

@@ -236,3 +236,11 @@ def test_turns_added_by_the_front_door_are_compressed_like_any_other():
         door.handle_message(ALICE, thread.thread_id, f"Tell me about the Ethiopia Expressway, point {i}")
     summary = store.latest_summary(ALICE, thread.thread_id)
     assert summary is not None and summary.covers_through_seq >= 4
+
+
+def test_procurement_references_are_not_mistaken_for_phone_numbers():
+    from conversation.pii import mask_pii
+    text = "Activities SN-PDEC-377835-CW-RFB and ET-ERA-221389-CW-DIR were cancelled; call +94 77 123 4567 or Tel:+251911234567."
+    masked = mask_pii(text)
+    assert "SN-PDEC-377835-CW-RFB" in masked and "ET-ERA-221389-CW-DIR" in masked
+    assert "123 4567" not in masked and "911234567" not in masked and masked.count("<PHONE_NUMBER>") == 2

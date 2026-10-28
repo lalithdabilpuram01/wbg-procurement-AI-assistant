@@ -65,14 +65,14 @@ def workflow_result(question: str, *, execute: bool, value: Any = 1234, sql: str
     if not execute:
         return WorkflowResult(request_id="req_fake", question=question, status=WorkflowStatus.VALIDATED_NOT_EXECUTED,
                               validated_sql=sql, validation=validation, context_tables=[GOLD_VIEW], llm_calls=1,
-                              parameters={"fiscal_year": fiscal_year}, message="The query was validated but not executed.")
+                              parameters={"fiscal_year": fiscal_year}, message="The query was validated but not executed.", **extra)
     return WorkflowResult(request_id="req_fake", question=question, status=WorkflowStatus.ANSWERED, validated_sql=sql, executed_sql=sql,
                           validation=validation, parameters={"fiscal_year": fiscal_year}, source_objects=[GOLD_VIEW],
                           rows=[{"publication_fiscal_year": fiscal_year, "tender_invitation_notices": value}], row_count=1,
                           columns=[{"name": "publication_fiscal_year"}, {"name": "tender_invitation_notices"}], llm_calls=1,
                           provenance={"credential_mode": "read_only_principal", "registry_build_id": "build_test",
                                       "executed_at": "2026-10-26T00:00:00+00:00"},
-                          message=f"Query executed: 1 row from {GOLD_VIEW}.")
+                          message=f"Query executed: 1 row from {GOLD_VIEW}.", **extra)
 
 
 class FakeWorkflow:

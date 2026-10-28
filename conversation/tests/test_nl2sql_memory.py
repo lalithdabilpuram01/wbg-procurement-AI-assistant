@@ -22,6 +22,7 @@ from structured_agent.nl2sql.settings import RuntimeSettings  # noqa: E402
 from structured_agent.nl2sql.tools import InProcessToolCaller  # noqa: E402
 from structured_agent.nl2sql.workflow import NlToSqlWorkflow  # noqa: E402
 from structured_agent.observability import Telemetry  # noqa: E402
+from structured_agent.tests.nl2sql_fakes import message_text  # noqa: E402
 from structured_agent.tests.nl2sql_fakes import EchoColumnsExecutor, FakePortkey, offline_claude_client, sql_draft  # noqa: E402
 from structured_agent.tests.test_nl2sql_guarded_workflow import RecordingTools  # noqa: E402
 from structured_agent.tests.test_nl2sql_workflow import BID_QUESTION, BID_SQL, ListSink, make_service  # noqa: E402
@@ -57,7 +58,7 @@ def conversation(registry_service, guardrails, portkey: FakePortkey):
 
 
 def prompts(portkey: FakePortkey) -> list[str]:
-    return [next(m["content"] for m in body["messages"] if m["role"] == "user") for body in portkey.bodies()]
+    return [next(message_text(m) for m in body["messages"] if m["role"] == "user") for body in portkey.bodies()]
 
 
 def test_follow_up_reaches_claude_as_resolved_question_with_labelled_memory(registry_service, guardrails, executor):

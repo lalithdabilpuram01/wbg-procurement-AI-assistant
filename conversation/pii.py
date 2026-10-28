@@ -8,11 +8,14 @@ contact data in the documents is withheld by the RAG privacy guard.
 """
 from __future__ import annotations
 
+import re
 from functools import lru_cache
 
 ENTITIES = ("EMAIL_ADDRESS", "PHONE_NUMBER", "CREDIT_CARD", "IBAN_CODE", "IP_ADDRESS", "US_SSN")
 MIN_SCORE = 0.4                       # Presidio's phone score; the phone parser itself is strict about what is a number
 PHONE_REGIONS = ("ET", "LK", "ID", "AR", "SN", "KE", "IN", "US", "GB", "FR", "DE")   # corpus countries and common ones
+IDENTIFIER_LEFT = re.compile(r"[A-Za-z]{2,}[-/]$")    # 'SN-PDEC-' before the digits: a procurement reference, not a phone
+IDENTIFIER_RIGHT = re.compile(r"^[-/][A-Za-z]{2,}")    # '-CW-RFB' after the digits
 
 
 class _BlankSpacyEngine:
@@ -40,13 +43,20 @@ def _engines():
     return analyzer, AnonymizerEngine()
 
 
+def _detect(text: str) -> list:
+    """Presidio results, without phone matches that are the digits inside a hyphenated reference such as
+    SN-PDEC-377835-CW-RFB or ET-ERA-221389-CW-DIR (those are procurement identifiers)."""
+    analyzer, _ = _engines()
+    results = analyzer.analyze(text=text, entities=list(ENTITIES), language="en", score_threshold=MIN_SCORE)
+    return [r for r in results if not (r.entity_type == "PHONE_NUMBER" and (
+        IDENTIFIER_LEFT.search(text[:r.start]) or IDENTIFIER_RIGHT.match(text[r.end:])))]
+
+
 def find_pii(text: str) -> list[str]:
     """Entity types of the personal data found (for audit; never the values)."""
     if not text:
         return []
-    analyzer, _ = _engines()
-    return sorted({r.entity_type for r in analyzer.analyze(text=text, entities=list(ENTITIES), language="en",
-                                                           score_threshold=MIN_SCORE)})
+    return sorted({r.entity_type for r in _detect(text)})
 
 
 def redact_personal_data(text: str) -> str:
@@ -59,6 +69,5 @@ def mask_pii(text: str) -> str:
     """The text with each detected personal data value replaced by <ENTITY_TYPE>."""
     if not text:
         return text
-    analyzer, anonymizer = _engines()
-    results = analyzer.analyze(text=text, entities=list(ENTITIES), language="en", score_threshold=MIN_SCORE)
-    return anonymizer.anonymize(text=text, analyzer_results=results).text if results else text
+    results = _detect(text)
+    return _engines()[1].anonymize(text=text, analyzer_results=results).text if results else text

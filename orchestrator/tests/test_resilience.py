@@ -133,3 +133,48 @@ def test_writing_the_answer_is_not_stopped_by_the_task_limit():
     used, budget = {"tasks_executed": 6, "llm_calls": 2}, InvestigationBudget(max_tasks=6)
     assert check_budget(used, budget, investigation_id="inv", node="dispatch").code == "task_limit"
     assert check_budget(used, budget, investigation_id="inv", node="respond", needs_llm=True, starts_task=False) is None
+
+
+def test_sql_drafting_tokens_count_towards_the_investigation_cost():
+    prices = PriceTable(model="test", input_usd_per_million=Decimal("2"), output_usd_per_million=Decimal("10"), source="test fixture")
+    drafted = FakeWorkflow(lambda q, execute: workflow_result(q, execute=execute, input_tokens=6000, output_tokens=250))
+    engine, _ = build_engine(workflow=drafted, prices=prices)
+    out = engine.start(request("How many bid invitations were published in fiscal year 2024?", execute=True))
+    assert out.values["usage"]["input_tokens"] >= 6000 and Decimal(out.values["usage"]["cost_usd"]) >= Decimal("0.0145")
+
+
+class FlakyPlanner(FakePlanner):
+    """Raises the given model errors first, then plans as scripted."""
+
+    def __init__(self, failures, *plans):
+        super().__init__(*plans)
+        self.failures, self.attempts = list(failures), 0
+
+    def plan(self, request, context):
+        self.attempts += 1
+        if self.failures:
+            raise self.failures.pop(0)
+        return super().plan(request, context)
+
+
+def test_a_transient_planner_failure_is_retried_once_after_a_pause():
+    from structured_agent.nl2sql.llm_client import LlmError, LlmFailure
+    planner = FlakyPlanner([LlmError(LlmFailure.UNAVAILABLE, 503)], METRIC_PLAN)
+    engine, parts = build_engine(planner=planner)
+    pauses = []
+    parts["deps"].sleep = pauses.append
+    out = engine.start(request("Investigate the metric step by step"))
+    assert out.status == InvestigationStatus.ANSWERED and planner.attempts == 2 and pauses == [2.0]
+
+
+def test_an_unusable_planner_reply_is_not_retried_by_the_model_call():
+    from structured_agent.nl2sql.llm_client import LlmError, LlmFailure
+    planner = FlakyPlanner([LlmError(LlmFailure.UNAVAILABLE, 503), LlmError(LlmFailure.UNAVAILABLE, 503)], METRIC_PLAN)
+    engine, parts = build_engine(planner=planner)
+    parts["deps"].sleep = lambda seconds: None
+    out = engine.start(request("Investigate the metric step by step"))
+    assert out.status == InvestigationStatus.FAILED and planner.attempts == 2       # one retry, then the failure stands
+    truncated = FlakyPlanner([LlmError(LlmFailure.OUTPUT_TRUNCATED)], METRIC_PLAN)
+    engine2, parts2 = build_engine(planner=truncated)
+    parts2["deps"].sleep = lambda seconds: pytest.fail("an unusable reply must not be retried as a provider failure")
+    engine2.start(request("Investigate the metric step by step"))

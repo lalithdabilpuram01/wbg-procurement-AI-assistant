@@ -15,6 +15,7 @@ execution controller, which every `execute` call goes through.
 from __future__ import annotations
 
 import datetime as dt
+import time
 from dataclasses import dataclass, field
 from typing import Any, Callable
 
@@ -57,6 +58,11 @@ class EngineDeps:
     memory: Callable[[str], str | None] = lambda investigation_id: None   # request-scoped memory (never in state)
     prices: PriceTable | None = None                                       # cost only from a configured price table
     cancel_requested: Callable[[str], bool] = lambda investigation_id: False   # user cancellation (checked between tasks)
+    sleep: Callable[[float], None] = time.sleep                            # the pause before retrying a model call
+
+
+LLM_ATTEMPTS = 2                 # a transient provider failure (outage, 5xx, rate limit) is retried once
+LLM_RETRY_SECONDS = 2.0          # pause before the retry (the provider's Retry-After when shorter)
 
 
 def build_graph(deps: EngineDeps) -> StateGraph:
@@ -117,6 +123,23 @@ class _Nodes:
         """One audit line: the event, its correlation ids and the Logfire trace it belongs to (metadata only)."""
         self.d.audit.record(event, request_id=state["request"]["request_id"], trace_id=current_trace_id(),
                             **{**self._correlation(state), **attributes})
+
+    def _model_call(self, call: Callable[[], Any]) -> Any:
+        """One planner or answer call behind the circuit breaker; a transient provider failure is retried once after a
+        short pause. Raises CircuitOpenError, or the last LlmError (invalid output and auth errors are never retried)."""
+        for attempt in range(1, LLM_ATTEMPTS + 1):
+            self.d.llm_breaker.before_call()
+            try:
+                result = call()
+            except LlmError as error:
+                (self.d.llm_breaker.record_failure if error.is_transient else self.d.llm_breaker.record_ignored)()
+                if not error.is_transient or attempt == LLM_ATTEMPTS:
+                    raise
+                self.d.sleep(min(error.retry_after_seconds or LLM_RETRY_SECONDS, LLM_RETRY_SECONDS))
+                continue
+            self.d.llm_breaker.record_success()
+            return result
+        raise AssertionError("unreachable")
 
     @staticmethod
     def _error(request: InvestigationRequest, node: str, category: ErrorCategory, code: str, message: str,
@@ -185,18 +208,14 @@ class _Nodes:
         if refusal:
             return {**update, "errors": [refusal.to_state()], "phase": "plan_failed_final"}
         with self._span("plan", state, replans=state.get("replans", 0) + update["replans"]) as span:
+            context = PlanningContext(memory_block=self.d.memory(request.investigation_id),
+                                      previous_plan=previous if replanning else None, failures=failures)
             try:
-                self.d.llm_breaker.before_call()
+                output = self._model_call(lambda: self.d.planner.plan(request, context))
             except CircuitOpenError:
                 error = self._error(request, "plan", ErrorCategory.CIRCUIT_OPEN, "circuit_open", "Planning is temporarily unavailable.")
                 return {**update, "errors": [error.to_state()], "phase": "plan_failed_final"}
-            try:
-                output = self.d.planner.plan(request, PlanningContext(memory_block=self.d.memory(request.investigation_id),
-                                                                      previous_plan=previous if replanning else None,
-                                                                      failures=failures))
-                self.d.llm_breaker.record_success()
             except LlmError as error:
-                (self.d.llm_breaker.record_failure if error.is_transient else self.d.llm_breaker.record_ignored)()
                 if error.failure.value in MALFORMED_OUTPUT:      # the model answered, but not with a usable plan
                     failure = self._error(request, "plan", ErrorCategory.PLANNER, "malformed_output",
                                           "The planner returned an invalid plan.")
@@ -383,17 +402,15 @@ class _Nodes:
                                            node="respond", needs_llm=True, starts_task=False)
                     if refusal:
                         raise _Stop(refusal)
-                    self.d.llm_breaker.before_call()
-                draft, usage = self.d.responder.compose(request, used, report)
-                if self.d.responder.is_llm:
-                    self.d.llm_breaker.record_success()
+                    draft, usage = self._model_call(lambda: self.d.responder.compose(request, used, report))
+                else:
+                    draft, usage = self.d.responder.compose(request, used, report)
             except _Stop as stop:
                 errors.append(stop.error)
             except CircuitOpenError:
                 errors.append(self._error(request, "respond", ErrorCategory.CIRCUIT_OPEN, "circuit_open",
                                           "Answer generation is temporarily unavailable."))
             except LlmError as error:
-                (self.d.llm_breaker.record_failure if error.is_transient else self.d.llm_breaker.record_ignored)()
                 errors.append(self._error(request, "respond", ErrorCategory.PROVIDER, error.failure.value,
                                           "The answer generation call failed."))
             response = validate_response(request, plan, draft, records, report, partial, cancelled, failed)

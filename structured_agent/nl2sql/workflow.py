@@ -237,6 +237,8 @@ class NlToSqlWorkflow:
                      duration_ms=usage["duration_ms"])
             breaker.record_success()
         result.timings_ms[f"llm_call_{attempt}"] = usage["duration_ms"]
+        result.input_tokens += usage["input_tokens"]
+        result.output_tokens += usage["output_tokens"]
         self._audit(result.request_id, "nl2sql.llm_call", status="ok", llm_call_index=attempt,
                     input_tokens=usage["input_tokens"], output_tokens=usage["output_tokens"], duration_ms=usage["duration_ms"])
         return draft

@@ -86,6 +86,8 @@ class WorkflowResult(BaseModel):
     guardrail_reason: str | None = None                 # reason category of a blocking guardrail decision
     guardrail_decisions: list[dict[str, Any]] = Field(default_factory=list)   # stage, policy, decision, reason only
     llm_calls: int = 0
+    input_tokens: int = 0                                # summed over every Claude call (for cost accounting)
+    output_tokens: int = 0
     generator: str = "Claude via Portkey (Claude-only route, no Config)"
     timings_ms: dict[str, int] = Field(default_factory=dict)
 
