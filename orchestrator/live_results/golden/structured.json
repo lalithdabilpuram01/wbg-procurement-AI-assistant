@@ -1,0 +1,521 @@
+{
+ "summary": {
+  "overall": {
+   "correct": 1.0,
+   "values_equal": 1.0,
+   "cases": 24
+  },
+  "by_group": {
+   "reference_values": {
+    "values_equal": 1.0,
+    "cases": 8
+   },
+   "validator_approves": {
+    "correct": 1.0,
+    "cases": 8
+   },
+   "validator_rejects": {
+    "correct": 1.0,
+    "cases": 8
+   }
+  }
+ },
+ "rows": [
+  {
+   "case_id": "V-S1",
+   "group": "reference_values",
+   "inputs": {
+    "question": "How many contract awards were made per procurement method in Ethiopia?",
+    "sql": "SELECT procurement_method, count(*) AS contract_awards FROM workspace.wbg_gold.gold_contract_analytics WHERE wdi_country_code = 'ET' GROUP BY procurement_method ORDER BY contract_awards DESC LIMIT 20"
+   },
+   "reference": {
+    "values": [
+     2015.0,
+     1200.0,
+     349.0,
+     262.0,
+     132.0
+    ]
+   },
+   "outputs": {
+    "values": [
+     2015.0,
+     1200.0,
+     349.0,
+     262.0,
+     132.0
+    ]
+   },
+   "scores": {
+    "values_equal": 1.0
+   }
+  },
+  {
+   "case_id": "V-S2",
+   "group": "reference_values",
+   "inputs": {
+    "question": "What are the headline procurement totals?",
+    "sql": "SELECT total_projects, contract_awards, tender_invitation_notices FROM workspace.wbg_gold.vw_kpi_overview LIMIT 1"
+   },
+   "reference": {
+    "values": [
+     2000.0,
+     178921.0,
+     23780.0
+    ]
+   },
+   "outputs": {
+    "values": [
+     2000.0,
+     178921.0,
+     23780.0
+    ]
+   },
+   "scores": {
+    "values_equal": 1.0
+   }
+  },
+  {
+   "case_id": "V-S3",
+   "group": "reference_values",
+   "inputs": {
+    "question": "How many tender invitation notices were published per procurement category?",
+    "sql": "SELECT procurement_category, count(*) AS tender_invitation_notices FROM workspace.wbg_gold.gold_procurement_notices WHERE is_tender_invitation GROUP BY procurement_category ORDER BY tender_invitation_notices DESC LIMIT 20"
+   },
+   "reference": {
+    "values": [
+     11118.0,
+     10249.0,
+     1794.0,
+     619.0
+    ]
+   },
+   "outputs": {
+    "values": [
+     11118.0,
+     10249.0,
+     1794.0,
+     619.0
+    ]
+   },
+   "scores": {
+    "values_equal": 1.0
+   }
+  },
+  {
+   "case_id": "V-S4",
+   "group": "reference_values",
+   "inputs": {
+    "question": "What is the median published response window in days by notice type?",
+    "sql": "SELECT notice_type, p50_window_days FROM workspace.wbg_gold.vw_kpi_response_windows WHERE grouping_level = 'type' ORDER BY notice_type LIMIT 20"
+   },
+   "reference": {
+    "values": [
+     27.0,
+     38.0,
+     16.0
+    ]
+   },
+   "outputs": {
+    "values": [
+     27.0,
+     38.0,
+     16.0
+    ]
+   },
+   "scores": {
+    "values_equal": 1.0
+   }
+  },
+  {
+   "case_id": "V-S5",
+   "group": "reference_values",
+   "inputs": {
+    "question": "How many contract awards were made per procurement method across all projects?",
+    "sql": "SELECT procurement_method, sum(contract_awards) AS contract_awards FROM workspace.wbg_gold.vw_kpi_contract_awards GROUP BY procurement_method ORDER BY contract_awards DESC LIMIT 20"
+   },
+   "reference": {
+    "values": [
+     66201.0,
+     42666.0,
+     32313.0,
+     21349.0,
+     8903.0
+    ]
+   },
+   "outputs": {
+    "values": [
+     66201.0,
+     42666.0,
+     32313.0,
+     21349.0,
+     8903.0
+    ]
+   },
+   "scores": {
+    "values_equal": 1.0
+   }
+  },
+  {
+   "case_id": "V-S6",
+   "group": "reference_values",
+   "inputs": {
+    "question": "How many contract awards does each project in Sri Lanka have?",
+    "sql": "SELECT project_id, count(*) AS contract_awards FROM workspace.wbg_gold.gold_contract_analytics WHERE wdi_country_code = 'LK' GROUP BY project_id ORDER BY contract_awards DESC LIMIT 20"
+   },
+   "reference": {
+    "values": [
+     1354.0,
+     682.0,
+     597.0,
+     210.0,
+     209.0
+    ]
+   },
+   "outputs": {
+    "values": [
+     1354.0,
+     682.0,
+     597.0,
+     210.0,
+     209.0
+    ]
+   },
+   "scores": {
+    "values_equal": 1.0
+   }
+  },
+  {
+   "case_id": "V-S7",
+   "group": "reference_values",
+   "inputs": {
+    "question": "How many invitations for bids were published in fiscal year 2024?",
+    "sql": "SELECT sum(procurement_notices) AS tender_invitation_notices FROM workspace.wbg_gold.vw_kpi_notice_activity WHERE notice_class = 'tender_invitation' AND publication_fiscal_year = 2024"
+   },
+   "reference": {
+    "values": [
+     3216.0
+    ]
+   },
+   "outputs": {
+    "values": [
+     3216.0
+    ]
+   },
+   "scores": {
+    "values_equal": 1.0
+   }
+  },
+  {
+   "case_id": "V-S8",
+   "group": "reference_values",
+   "inputs": {
+    "question": "How many contract awards and procurement notices does project P148850 have?",
+    "sql": "SELECT contract_award_count, notice_count FROM workspace.wbg_gold.gold_project_portfolio WHERE project_id = 'P148850'"
+   },
+   "reference": {
+    "values": [
+     43.0,
+     73.0
+    ]
+   },
+   "outputs": {
+    "values": [
+     43.0,
+     73.0
+    ]
+   },
+   "scores": {
+    "values_equal": 1.0
+   }
+  },
+  {
+   "case_id": "Q-S1",
+   "group": "validator_approves",
+   "inputs": {
+    "sql": "SELECT procurement_method, count(*) AS contract_awards FROM workspace.wbg_gold.gold_contract_analytics WHERE wdi_country_code = 'ET' GROUP BY procurement_method ORDER BY contract_awards DESC LIMIT 20"
+   },
+   "reference": {
+    "approved": true
+   },
+   "outputs": {
+    "approved": true,
+    "error_codes": []
+   },
+   "scores": {
+    "correct": 1.0
+   }
+  },
+  {
+   "case_id": "Q-S2",
+   "group": "validator_approves",
+   "inputs": {
+    "sql": "SELECT total_projects, contract_awards, tender_invitation_notices FROM workspace.wbg_gold.vw_kpi_overview LIMIT 1"
+   },
+   "reference": {
+    "approved": true
+   },
+   "outputs": {
+    "approved": true,
+    "error_codes": []
+   },
+   "scores": {
+    "correct": 1.0
+   }
+  },
+  {
+   "case_id": "Q-S3",
+   "group": "validator_approves",
+   "inputs": {
+    "sql": "SELECT procurement_category, count(*) AS tender_invitation_notices FROM workspace.wbg_gold.gold_procurement_notices WHERE is_tender_invitation GROUP BY procurement_category ORDER BY tender_invitation_notices DESC LIMIT 20"
+   },
+   "reference": {
+    "approved": true
+   },
+   "outputs": {
+    "approved": true,
+    "error_codes": []
+   },
+   "scores": {
+    "correct": 1.0
+   }
+  },
+  {
+   "case_id": "Q-S4",
+   "group": "validator_approves",
+   "inputs": {
+    "sql": "SELECT notice_type, p50_window_days FROM workspace.wbg_gold.vw_kpi_response_windows WHERE grouping_level = 'type' ORDER BY notice_type LIMIT 20"
+   },
+   "reference": {
+    "approved": true
+   },
+   "outputs": {
+    "approved": true,
+    "error_codes": []
+   },
+   "scores": {
+    "correct": 1.0
+   }
+  },
+  {
+   "case_id": "Q-S5",
+   "group": "validator_approves",
+   "inputs": {
+    "sql": "SELECT procurement_method, sum(contract_awards) AS contract_awards FROM workspace.wbg_gold.vw_kpi_contract_awards GROUP BY procurement_method ORDER BY contract_awards DESC LIMIT 20"
+   },
+   "reference": {
+    "approved": true
+   },
+   "outputs": {
+    "approved": true,
+    "error_codes": []
+   },
+   "scores": {
+    "correct": 1.0
+   }
+  },
+  {
+   "case_id": "Q-S6",
+   "group": "validator_approves",
+   "inputs": {
+    "sql": "SELECT project_id, count(*) AS contract_awards FROM workspace.wbg_gold.gold_contract_analytics WHERE wdi_country_code = 'LK' GROUP BY project_id ORDER BY contract_awards DESC LIMIT 20"
+   },
+   "reference": {
+    "approved": true
+   },
+   "outputs": {
+    "approved": true,
+    "error_codes": []
+   },
+   "scores": {
+    "correct": 1.0
+   }
+  },
+  {
+   "case_id": "Q-S7",
+   "group": "validator_approves",
+   "inputs": {
+    "sql": "SELECT sum(procurement_notices) AS tender_invitation_notices FROM workspace.wbg_gold.vw_kpi_notice_activity WHERE notice_class = 'tender_invitation' AND publication_fiscal_year = 2024"
+   },
+   "reference": {
+    "approved": true
+   },
+   "outputs": {
+    "approved": true,
+    "error_codes": []
+   },
+   "scores": {
+    "correct": 1.0
+   }
+  },
+  {
+   "case_id": "Q-S8",
+   "group": "validator_approves",
+   "inputs": {
+    "sql": "SELECT contract_award_count, notice_count FROM workspace.wbg_gold.gold_project_portfolio WHERE project_id = 'P148850'"
+   },
+   "reference": {
+    "approved": true
+   },
+   "outputs": {
+    "approved": true,
+    "error_codes": []
+   },
+   "scores": {
+    "correct": 1.0
+   }
+  },
+  {
+   "case_id": "Q-drop",
+   "group": "validator_rejects",
+   "inputs": {
+    "sql": "DROP TABLE workspace.wbg_gold.gold_contract_analytics"
+   },
+   "reference": {
+    "approved": false
+   },
+   "outputs": {
+    "approved": false,
+    "error_codes": [
+     "FORBIDDEN_OPERATION"
+    ]
+   },
+   "scores": {
+    "correct": 1.0
+   }
+  },
+  {
+   "case_id": "Q-delete",
+   "group": "validator_rejects",
+   "inputs": {
+    "sql": "DELETE FROM workspace.wbg_gold.gold_contract_analytics WHERE 1 = 1"
+   },
+   "reference": {
+    "approved": false
+   },
+   "outputs": {
+    "approved": false,
+    "error_codes": [
+     "FORBIDDEN_OPERATION"
+    ]
+   },
+   "scores": {
+    "correct": 1.0
+   }
+  },
+  {
+   "case_id": "Q-update",
+   "group": "validator_rejects",
+   "inputs": {
+    "sql": "UPDATE workspace.wbg_gold.gold_project_portfolio SET project_name = 'x'"
+   },
+   "reference": {
+    "approved": false
+   },
+   "outputs": {
+    "approved": false,
+    "error_codes": [
+     "FORBIDDEN_OPERATION"
+    ]
+   },
+   "scores": {
+    "correct": 1.0
+   }
+  },
+  {
+   "case_id": "Q-insert",
+   "group": "validator_rejects",
+   "inputs": {
+    "sql": "INSERT INTO workspace.wbg_gold.gold_project_portfolio (project_id) VALUES ('P000000')"
+   },
+   "reference": {
+    "approved": false
+   },
+   "outputs": {
+    "approved": false,
+    "error_codes": [
+     "FORBIDDEN_OPERATION"
+    ]
+   },
+   "scores": {
+    "correct": 1.0
+   }
+  },
+  {
+   "case_id": "Q-stacked",
+   "group": "validator_rejects",
+   "inputs": {
+    "sql": "SELECT 1 FROM workspace.wbg_gold.gold_project_portfolio; DROP TABLE workspace.wbg_gold.gold_project_portfolio"
+   },
+   "reference": {
+    "approved": false
+   },
+   "outputs": {
+    "approved": false,
+    "error_codes": [
+     "MULTIPLE_STATEMENTS"
+    ]
+   },
+   "scores": {
+    "correct": 1.0
+   }
+  },
+  {
+   "case_id": "Q-unapproved",
+   "group": "validator_rejects",
+   "inputs": {
+    "sql": "SELECT project_id FROM workspace.wbg_silver.contract_awards LIMIT 10"
+   },
+   "reference": {
+    "approved": false
+   },
+   "outputs": {
+    "approved": false,
+    "error_codes": [
+     "UNAUTHORIZED_OBJECT"
+    ]
+   },
+   "scores": {
+    "correct": 1.0
+   }
+  },
+  {
+   "case_id": "Q-system",
+   "group": "validator_rejects",
+   "inputs": {
+    "sql": "SELECT event_time FROM system.access.audit LIMIT 10"
+   },
+   "reference": {
+    "approved": false
+   },
+   "outputs": {
+    "approved": false,
+    "error_codes": [
+     "UNAUTHORIZED_OBJECT"
+    ]
+   },
+   "scores": {
+    "correct": 1.0
+   }
+  },
+  {
+   "case_id": "Q-grant",
+   "group": "validator_rejects",
+   "inputs": {
+    "sql": "GRANT SELECT ON workspace.wbg_gold.gold_project_portfolio TO `someone@example.org`"
+   },
+   "reference": {
+    "approved": false
+   },
+   "outputs": {
+    "approved": false,
+    "error_codes": [
+     "FORBIDDEN_OPERATION"
+    ]
+   },
+   "scores": {
+    "correct": 1.0
+   }
+  }
+ ]
+}

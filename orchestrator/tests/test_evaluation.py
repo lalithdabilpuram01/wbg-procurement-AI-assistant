@@ -117,3 +117,21 @@ def test_the_audit_pairs_tablelens_runs_and_flags_judge_disagreement(tmp_path):
     assert report["tablelens"]["on_wins"] == ["T01"] and report["coverage"]["missing"] == []
     assert [d["case"] for d in report["judge"]["disagreements_with_exact_checks"]] == ["T01-off"]
     assert report["rescored_changes"] == []
+
+
+# ---------------------------------------------------------------------------------------------- golden sets
+def test_golden_summaries_average_each_score_over_the_cases_that_have_it():
+    from evaluation.golden import _scores, row, summarize
+    rows = [row("a", "g1", {}, {}, {}, {"hit": True, "mrr": 0.5}), row("b", "g1", {}, {}, {}, {"hit": False}),
+            row("c", "g2", {}, {}, {}, {"refused": True})]
+    summary = summarize(rows)
+    assert summary["overall"] == {"hit": 0.5, "mrr": 0.5, "refused": 1.0, "cases": 3}
+    assert summary["by_group"]["g1"] == {"hit": 0.5, "mrr": 0.5, "cases": 2}
+    assert _scores({}, {"scores": {"hit": 1.0}}, {}) == {"results": [{"key": "hit", "score": 1.0}]}
+
+
+def test_golden_cases_have_unique_ids_and_both_outcomes():
+    from evaluation.golden_cases import INPUTS, MASKING, SQL
+    ids = [c[0] for c in INPUTS + MASKING + SQL]
+    assert len(ids) == len(set(ids))
+    assert {allowed for _, _, allowed in INPUTS} == {True, False} and {ok for _, _, ok in SQL} == {True, False}

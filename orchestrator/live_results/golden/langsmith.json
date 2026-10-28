@@ -1,0 +1,32 @@
+{
+ "documents": {
+  "dataset": "wbg-golden-documents-bad38474",
+  "experiment": "wbg-golden-documents-4900137f",
+  "examples": 275,
+  "url": "https://smith.langchain.com/o/8cf99e59-321b-4bf8-b7f9-846f3996ab11/projects/p/2926101b-1960-4469-b863-09ef67a82b52"
+ },
+ "tablelens": {
+  "dataset": "wbg-golden-tablelens-cf86ea67",
+  "experiment": "wbg-golden-tablelens-ed818234",
+  "examples": 24,
+  "url": "https://smith.langchain.com/o/8cf99e59-321b-4bf8-b7f9-846f3996ab11/projects/p/f76124ce-a1a9-4ae1-87f3-21cc7ac6a915"
+ },
+ "routing": {
+  "dataset": "wbg-golden-routing-5c078c7b",
+  "experiment": "wbg-golden-routing-143252d4",
+  "examples": 296,
+  "url": "https://smith.langchain.com/o/8cf99e59-321b-4bf8-b7f9-846f3996ab11/projects/p/f732595a-bf3a-4b4a-9f63-06870fa53909"
+ },
+ "guardrails": {
+  "dataset": "wbg-golden-guardrails-3c8e6b0d",
+  "experiment": "wbg-golden-guardrails-816c11ff",
+  "examples": 24,
+  "url": "https://smith.langchain.com/o/8cf99e59-321b-4bf8-b7f9-846f3996ab11/projects/p/234040a1-1e44-49e7-bc06-0738f9a98f79"
+ },
+ "structured": {
+  "dataset": "wbg-golden-structured-93a32794",
+  "experiment": "wbg-golden-structured-8ff89f9d",
+  "examples": 24,
+  "url": "https://smith.langchain.com/o/8cf99e59-321b-4bf8-b7f9-846f3996ab11/projects/p/00ef69f5-fe4e-4967-995b-7c724169cecd"
+ }
+}

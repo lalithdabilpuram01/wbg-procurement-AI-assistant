@@ -1,0 +1,5371 @@
+{
+ "summary": {
+  "overall": {
+   "acceptable": 0.99,
+   "exact": 0.26,
+   "cases": 296
+  },
+  "by_group": {
+   "documents_cross": {
+    "acceptable": 1.0,
+    "exact": 0.0,
+    "cases": 15
+   },
+   "documents_fr_v3": {
+    "acceptable": 1.0,
+    "exact": 0.0,
+    "cases": 112
+   },
+   "documents_v1": {
+    "acceptable": 0.963,
+    "exact": 0.185,
+    "cases": 27
+   },
+   "documents_v3": {
+    "acceptable": 1.0,
+    "exact": 0.58,
+    "cases": 112
+   },
+   "structured": {
+    "acceptable": 1.0,
+    "exact": 0.875,
+    "cases": 8
+   },
+   "tablelens": {
+    "acceptable": 0.909,
+    "exact": 0.0,
+    "cases": 22
+   }
+  }
+ },
+ "rows": [
+  {
+   "case_id": "R-S1",
+   "group": "structured",
+   "inputs": {
+    "question": "How many contract awards were made per procurement method in Ethiopia?"
+   },
+   "reference": {
+    "route": "structured_data"
+   },
+   "outputs": {
+    "route": "structured_data",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-S2",
+   "group": "structured",
+   "inputs": {
+    "question": "What are the headline procurement totals?"
+   },
+   "reference": {
+    "route": "structured_data"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-S3",
+   "group": "structured",
+   "inputs": {
+    "question": "How many tender invitation notices were published per procurement category?"
+   },
+   "reference": {
+    "route": "structured_data"
+   },
+   "outputs": {
+    "route": "structured_data",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-S4",
+   "group": "structured",
+   "inputs": {
+    "question": "What is the median published response window in days by notice type?"
+   },
+   "reference": {
+    "route": "structured_data"
+   },
+   "outputs": {
+    "route": "structured_data",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-S5",
+   "group": "structured",
+   "inputs": {
+    "question": "How many contract awards were made per procurement method across all projects?"
+   },
+   "reference": {
+    "route": "structured_data"
+   },
+   "outputs": {
+    "route": "structured_data",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-S6",
+   "group": "structured",
+   "inputs": {
+    "question": "How many contract awards does each project in Sri Lanka have?"
+   },
+   "reference": {
+    "route": "structured_data"
+   },
+   "outputs": {
+    "route": "structured_data",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-S7",
+   "group": "structured",
+   "inputs": {
+    "question": "How many invitations for bids were published in fiscal year 2024?"
+   },
+   "reference": {
+    "route": "structured_data"
+   },
+   "outputs": {
+    "route": "structured_data",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-S8",
+   "group": "structured",
+   "inputs": {
+    "question": "How many contract awards and procurement notices does project P148850 have?"
+   },
+   "reference": {
+    "route": "structured_data"
+   },
+   "outputs": {
+    "route": "structured_data",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-T01",
+   "group": "tablelens",
+   "inputs": {
+    "question": "How much IDA financing goes to institutional development and the regulatory framework in the Ethiopia Expressway Development Support Project (P148850)?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-T02",
+   "group": "tablelens",
+   "inputs": {
+    "question": "What is the cost of the construction of the high capacity highway component in the Ethiopia Expressway Development Support Project (P148850)?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-T03",
+   "group": "tablelens",
+   "inputs": {
+    "question": "What EIRR and NPV were estimated for the new highway option (option 2) in the Ethiopia Expressway Development Support Project (P148850)?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-T04",
+   "group": "tablelens",
+   "inputs": {
+    "question": "What is the estimated cost of monitoring and supervision, sub-component 1(b), in the Ethiopia Expressway Development Support Project (P148850)?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-T05",
+   "group": "tablelens",
+   "inputs": {
+    "question": "How much does China EXIM finance for the Arsi Negele-Hawassa road section in the Ethiopia Expressway Development Support Project (P148850)?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-T06",
+   "group": "tablelens",
+   "inputs": {
+    "question": "What is the total financing of all road sections from Modjo to Hawassa across all financiers in the Ethiopia Expressway Development Support Project (P148850)?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "structured_data",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 0.0
+   }
+  },
+  {
+   "case_id": "R-T07",
+   "group": "tablelens",
+   "inputs": {
+    "question": "How much of the credit is allocated to category 1 goods, works, non-consulting services and consultants in the Ethiopia Expressway Development Support Project (P148850)?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-T08",
+   "group": "tablelens",
+   "inputs": {
+    "question": "What is the prior review threshold for ICB/NCB works in the procurement plan of the Ethiopia Expressway Development Support Project (P148850)?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-T09",
+   "group": "tablelens",
+   "inputs": {
+    "question": "What are the estimated and actual amounts of the Modjo-Hawassa works contract in the procurement plan of the Ethiopia Expressway Development Support Project (P148850)?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-T10",
+   "group": "tablelens",
+   "inputs": {
+    "question": "How many goods packages are signed in the procurement plan of the Ethiopia Expressway Development Support Project (P148850)?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-T11",
+   "group": "tablelens",
+   "inputs": {
+    "question": "What is the cost of the Piloting the Implementation of Road Asset Management component in the Sri Lanka project P132833?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-T12",
+   "group": "tablelens",
+   "inputs": {
+    "question": "How much is budgeted for capacity building and training in the Sri Lanka project P132833?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-T13",
+   "group": "tablelens",
+   "inputs": {
+    "question": "How much is allocated to land acquisition and resettlement in the Sri Lanka project P132833?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-T14",
+   "group": "tablelens",
+   "inputs": {
+    "question": "Which procurement method applies to works contracts above US$10,000,000 in the Sri Lanka project P132833?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-T15",
+   "group": "tablelens",
+   "inputs": {
+    "question": "What is the length of road A3-8 in the economic analysis of the Sri Lanka project P132833?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-T16",
+   "group": "tablelens",
+   "inputs": {
+    "question": "What is the average annual OPRC cost for alternative 4 in the Sri Lanka project P132833?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-T17",
+   "group": "tablelens",
+   "inputs": {
+    "question": "What was the actual cost at closing of the provincial roads improvements component in the Sri Lanka project P132833?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-T18",
+   "group": "tablelens",
+   "inputs": {
+    "question": "How much of the IDA grant was actually disbursed in the Ethiopia urban program P163452?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-T19",
+   "group": "tablelens",
+   "inputs": {
+    "question": "How much co-financing did the French Agency for Development provide in the Ethiopia urban program P163452?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-T20",
+   "group": "tablelens",
+   "inputs": {
+    "question": "What was the average growth rate of own-source revenue collected by cities in the Ethiopia urban program P163452?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-T21",
+   "group": "tablelens",
+   "inputs": {
+    "question": "Which works activities were cancelled in the procurement plan of the Senegal project P175325, and what were their estimated amounts?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-T22",
+   "group": "tablelens",
+   "inputs": {
+    "question": "What is the total estimated amount of all works activities in the procurement plan of the Senegal project P175325?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "structured_data",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 0.0
+   }
+  },
+  {
+   "case_id": "R-Q01",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "What is the project development objective of the Ethiopia Expressway Development Support Project (P148850)?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q02",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "What is the project development objective of the Sri Lanka Transport Connectivity and Asset Management Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q03",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "How large was the IDA credit for P148850 at appraisal?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q04",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "What credit amount was proposed for the Sri Lanka Transport Connectivity and Asset Management Project (P132833)?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q05",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "When was the Casamance Economic Development Project (P175325) approved by the Bank and when did it become effective?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q06",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "What are the current PDO, implementation progress and overall risk ratings in the latest ISR for P148850?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q07",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "What overall risk rating does the Casamance ISR report?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q08",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "What procurement method and market approach are planned for activity LK-MIHAPCLG-109016-CW-RFB?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q09",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "What was the planned contract signing date for package LK-MIHAPCLG-109016-CW-RFB?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q10",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "What is the process status of activity SN-PDEC-237672-CW-RFQ in the Casamance procurement plan?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q11",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "What were the estimated and actual amounts for ET-ERA-221389-CW-DIR, the toll collection centers design and construction package?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q12",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "What does package ET-ERA-380826-GO-RFB procure and what is its status?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q13",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "Which World Bank contract corresponds to plan activity SN-PDEC-347105-GO-RFB and when was it signed?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "ambiguous_referent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 0.0
+   }
+  },
+  {
+   "case_id": "R-Q14",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "Is there a signed contract for package LK-MIHAPCLG-109016-CW-RFB?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q15",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "Do the procurement plan and the contract record agree on the amount for activity S/85/ICB/RP/IDA/2009EFY?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q16",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "What were the original and actual closing dates of P132833?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q17",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "What are the original and revised closing dates of credit IDA-56250?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q18",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "When was the mid-term review of the Ethiopia expressway project held?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q19",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "What was the total cost of the Sri Lanka Transport Connectivity and Asset Management Project at approval, after restructurings, and actual?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q20",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "How much of credit IDA-56250 has been disbursed and how much was cancelled?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q21",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "What lesson about work-site safety does the IEG review draw from the Sri Lanka road project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q22",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "Why was the credit closing date of the Sri Lanka transport connectivity project advanced?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q23",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "Why did the Ethiopian Roads Authority choose a Design and Build approach for the expressway works?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q24",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "Why were some urban local governments excluded from annual performance assessments in the Ethiopia urban program?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q25",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "What overall outcome rating did the ICR give the Ethiopia Urban Institutional and Infrastructure Development Program?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q26",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "What overall outcome rating did the Sri Lanka transport connectivity project receive in the ICR and in the IEG ICR Review?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-Q27",
+   "group": "documents_v1",
+   "inputs": {
+    "question": "How has the IDA financing for the Ethiopia Expressway Development Support Project changed between appraisal and the latest ISR?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P096532",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Dam Operational Improvement and Safety?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P106685",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the AR Socio-Economic Inclusion In Rural Areas?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P122841",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Stormwater Mgt. and Climate Change Adaptation Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P123531",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Health Sustainable Development Goals Program-for-Results?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P124018",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the SENEGAL - Sustainable and Inclusive Agribusiness Development Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P125151",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Plan Belgrano Water Supply and Sanitation Services Development Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P125565",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Electricity Sector Support Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P132833",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Transport Connectivity and Asset Management Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P143302",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Ethiopia Competitiveness and Job Creation Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P144269",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the PROMOTING SUSTAINABLE CBNRM AND INSTITUTIONAL DEVELOPMENT?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P146314",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Climate Resilience Improvement Project (CRIP)?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P148850",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Ethiopia- Expressway Development Support Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P156019",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Sri Lanka Agriculture Sector Modernization Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P156186",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Dakar Bus Rapid Transit Pilot Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P157599",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Integrated Infrastructure Development for National Tourism Strategic Areas (Indonesia Tourism Development Project)?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P159303",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Sri Lanka Financial Sector Modernization Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P159929",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Integrated Habitat and Housing Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P162042",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Investing in Maternal, Child and Adolescent Health?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P163452",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Ethiopia Urban Institutional and Infrastructure Development Program?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P163714",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the General Education Modernization Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P163721",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Sri Lanka: Primary Health Care System Strengthening Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P164336",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Lowlands Livelihood Resilience Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P165543",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Institutional Strengthening for Improved Village Service Delivery?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P167681",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Improving Youth Employability Through Informal Apprenticeship?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P168076",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Realizing  Education's  Promise:  Support to Indonesia's Ministry of Religious Affairs for Improved Quality of Education?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P169548",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Indonesia Mass Transit Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P170329",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Social Safety Nets for Vulnerable Populations in the Province of Buenos Aires?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P175325",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Casamance Economic Development Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P175669",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Sustainable Recovery of Landscapes and Livelihoods in Argentina Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P176731",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Power Sector Reform, Investment and Modernization in Ethiopia (PRIME-1)?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P177233",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Response - Recovery - Resilience for Conflict-Affected Communities in Ethiopia Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P178432",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Sri Lanka Public Financial Management Strengthening Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P179534",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Strengthening the Digital Health Agenda in the Province of Buenos Aires?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-objective-P180811",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What is the project development objective of the Indonesia Health Systems Strengthening Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P096532",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Dam Operational Improvement and Safety in Republic of Indonesia?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P106685",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the AR Socio-Economic Inclusion In Rural Areas in Argentine Republic?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P122841",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Stormwater Mgt. and Climate Change Adaptation Project in Republic of Senegal?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P123531",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Health Sustainable Development Goals Program-for-Results in Federal Democratic Republic of Ethiopia?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P124018",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the SENEGAL - Sustainable and Inclusive Agribusiness Development Project in Republic of Senegal?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P125151",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Plan Belgrano Water Supply and Sanitation Services Development Project in Argentine Republic?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P125565",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Electricity Sector Support Project in Republic of Senegal?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P132833",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Transport Connectivity and Asset Management Project in Democratic Socialist Republic of Sri Lanka?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P143302",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Ethiopia Competitiveness and Job Creation Project in Federal Democratic Republic of Ethiopia?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P144269",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the PROMOTING SUSTAINABLE CBNRM AND INSTITUTIONAL DEVELOPMENT in Republic of Indonesia?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P146314",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Climate Resilience Improvement Project (CRIP) in Democratic Socialist Republic of Sri Lanka?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P148850",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Ethiopia- Expressway Development Support Project in Federal Democratic Republic of Ethiopia?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P156019",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Sri Lanka Agriculture Sector Modernization Project in Democratic Socialist Republic of Sri Lanka?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P156186",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Dakar Bus Rapid Transit Pilot Project in Republic of Senegal?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P157599",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Integrated Infrastructure Development for National Tourism Strategic Areas (Indonesia Tourism Development Project) in Republic of Indonesia?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P159303",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Sri Lanka Financial Sector Modernization Project in Democratic Socialist Republic of Sri Lanka?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P159929",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Integrated Habitat and Housing Project in Argentine Republic?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P162042",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Investing in Maternal, Child and Adolescent Health in Republic of Senegal?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P163452",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Ethiopia Urban Institutional and Infrastructure Development Program in Federal Democratic Republic of Ethiopia?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P163714",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the General Education Modernization Project in Democratic Socialist Republic of Sri Lanka?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P163721",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Sri Lanka: Primary Health Care System Strengthening Project in Democratic Socialist Republic of Sri Lanka?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P164336",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Lowlands Livelihood Resilience Project in Federal Democratic Republic of Ethiopia?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P165543",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Institutional Strengthening for Improved Village Service Delivery in Republic of Indonesia?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P167681",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Improving Youth Employability Through Informal Apprenticeship in Republic of Senegal?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P168076",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Realizing  Education's  Promise:  Support to Indonesia's Ministry of Religious Affairs for Improved Quality of Education in Republic of Indonesia?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P169548",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Indonesia Mass Transit Project in Republic of Indonesia?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P170329",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Social Safety Nets for Vulnerable Populations in the Province of Buenos Aires in Argentine Republic?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P175325",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Casamance Economic Development Project in Republic of Senegal?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P175669",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Sustainable Recovery of Landscapes and Livelihoods in Argentina Project in Argentine Republic?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P176731",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Power Sector Reform, Investment and Modernization in Ethiopia (PRIME-1) in Federal Democratic Republic of Ethiopia?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P177233",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Response - Recovery - Resilience for Conflict-Affected Communities in Ethiopia Project in Federal Democratic Republic of Ethiopia?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P178432",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Sri Lanka Public Financial Management Strengthening Project in Democratic Socialist Republic of Sri Lanka?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P179534",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Strengthening the Digital Health Agenda in the Province of Buenos Aires in Argentine Republic?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-risks-P180811",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What are the key risks identified for the Indonesia Health Systems Strengthening Project in Republic of Indonesia?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P096532",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the Dam Operational Improvement and Safety?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P106685",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the AR Socio-Economic Inclusion In Rural Areas?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P122841",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the Stormwater Mgt. and Climate Change Adaptation Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P123531",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the Health Sustainable Development Goals Program-for-Results?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P124018",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the SENEGAL - Sustainable and Inclusive Agribusiness Development Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P125151",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the Plan Belgrano Water Supply and Sanitation Services Development Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P125565",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the Electricity Sector Support Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P132833",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the Transport Connectivity and Asset Management Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P133288",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the Argentina Renewable Energy for Rural Areas Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P143302",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the Ethiopia Competitiveness and Job Creation Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P144269",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the PROMOTING SUSTAINABLE CBNRM AND INSTITUTIONAL DEVELOPMENT?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P146314",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the Climate Resilience Improvement Project (CRIP)?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P156019",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the Sri Lanka Agriculture Sector Modernization Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P157599",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the Integrated Infrastructure Development for National Tourism Strategic Areas (Indonesia Tourism Development Project)?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P159303",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the Sri Lanka Financial Sector Modernization Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P159929",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the Integrated Habitat and Housing Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P162042",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the Investing in Maternal, Child and Adolescent Health?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P163452",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the Ethiopia Urban Institutional and Infrastructure Development Program?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P163721",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the Sri Lanka: Primary Health Care System Strengthening Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P164336",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the Lowlands Livelihood Resilience Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P165543",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the Institutional Strengthening for Improved Village Service Delivery?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P167681",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the Improving Youth Employability Through Informal Apprenticeship?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P168076",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the Realizing  Education's  Promise:  Support to Indonesia's Ministry of Religious Affairs for Improved Quality of Education?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-lessons-P170329",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "What lessons were learned from the Social Safety Nets for Vulnerable Populations in the Province of Buenos Aires?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "document_rag",
+    "reason": "explicit_task_request"
+   },
+   "scores": {
+    "exact": 1.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-procurement-P096532",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "How is procurement organized and managed for the Dam Operational Improvement and Safety?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-procurement-P106685",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "How is procurement organized and managed for the AR Socio-Economic Inclusion In Rural Areas?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-procurement-P122841",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "How is procurement organized and managed for the Stormwater Mgt. and Climate Change Adaptation Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-procurement-P124018",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "How is procurement organized and managed for the SENEGAL - Sustainable and Inclusive Agribusiness Development Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-procurement-P125151",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "How is procurement organized and managed for the Plan Belgrano Water Supply and Sanitation Services Development Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-procurement-P125565",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "How is procurement organized and managed for the Electricity Sector Support Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-procurement-P132833",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "How is procurement organized and managed for the Transport Connectivity and Asset Management Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-procurement-P143302",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "How is procurement organized and managed for the Ethiopia Competitiveness and Job Creation Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-procurement-P144269",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "How is procurement organized and managed for the PROMOTING SUSTAINABLE CBNRM AND INSTITUTIONAL DEVELOPMENT?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-procurement-P146314",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "How is procurement organized and managed for the Climate Resilience Improvement Project (CRIP)?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-procurement-P148850",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "How is procurement organized and managed for the Ethiopia- Expressway Development Support Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-procurement-P156019",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "How is procurement organized and managed for the Sri Lanka Agriculture Sector Modernization Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-procurement-P156186",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "How is procurement organized and managed for the Dakar Bus Rapid Transit Pilot Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-procurement-P157599",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "How is procurement organized and managed for the Integrated Infrastructure Development for National Tourism Strategic Areas (Indonesia Tourism Development Project)?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-procurement-P159303",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "How is procurement organized and managed for the Sri Lanka Financial Sector Modernization Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-procurement-P159929",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "How is procurement organized and managed for the Integrated Habitat and Housing Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-procurement-P163714",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "How is procurement organized and managed for the General Education Modernization Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-procurement-P164336",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "How is procurement organized and managed for the Lowlands Livelihood Resilience Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-procurement-P175325",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "How is procurement organized and managed for the Casamance Economic Development Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-V3-procurement-P180811",
+   "group": "documents_v3",
+   "inputs": {
+    "question": "How is procurement organized and managed for the Indonesia Health Systems Strengthening Project?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P096532",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Dam Operational Improvement and Safety ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P106685",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet AR Socio-Economic Inclusion In Rural Areas ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P122841",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Stormwater Mgt. and Climate Change Adaptation Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P123531",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Health Sustainable Development Goals Program-for-Results ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P124018",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet SENEGAL - Sustainable and Inclusive Agribusiness Development Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P125151",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Plan Belgrano Water Supply and Sanitation Services Development Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P125565",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Electricity Sector Support Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P132833",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Transport Connectivity and Asset Management Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P143302",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Ethiopia Competitiveness and Job Creation Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P144269",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet PROMOTING SUSTAINABLE CBNRM AND INSTITUTIONAL DEVELOPMENT ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P146314",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Climate Resilience Improvement Project (CRIP) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P148850",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Ethiopia- Expressway Development Support Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P156019",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Sri Lanka Agriculture Sector Modernization Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P156186",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Dakar Bus Rapid Transit Pilot Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P157599",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Integrated Infrastructure Development for National Tourism Strategic Areas (Indonesia Tourism Development Project) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P159303",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Sri Lanka Financial Sector Modernization Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P159929",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Integrated Habitat and Housing Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P162042",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Investing in Maternal, Child and Adolescent Health ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P163452",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Ethiopia Urban Institutional and Infrastructure Development Program ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P163714",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet General Education Modernization Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P163721",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Sri Lanka: Primary Health Care System Strengthening Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P164336",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Lowlands Livelihood Resilience Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P165543",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Institutional Strengthening for Improved Village Service Delivery ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P167681",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Improving Youth Employability Through Informal Apprenticeship ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P168076",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Realizing  Education's  Promise:  Support to Indonesia's Ministry of Religious Affairs for Improved Quality of Education ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P169548",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Indonesia Mass Transit Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P170329",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Social Safety Nets for Vulnerable Populations in the Province of Buenos Aires ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P175325",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Casamance Economic Development Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P175669",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Sustainable Recovery of Landscapes and Livelihoods in Argentina Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P176731",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Power Sector Reform, Investment and Modernization in Ethiopia (PRIME-1) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P177233",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Response - Recovery - Resilience for Conflict-Affected Communities in Ethiopia Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P178432",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Sri Lanka Public Financial Management Strengthening Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P179534",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Strengthening the Digital Health Agenda in the Province of Buenos Aires ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-objective-P180811",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quel est l'objectif de d\u00e9veloppement du projet Indonesia Health Systems Strengthening Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P096532",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Dam Operational Improvement and Safety (Republic of Indonesia) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P106685",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet AR Socio-Economic Inclusion In Rural Areas (Argentine Republic) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P122841",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Stormwater Mgt. and Climate Change Adaptation Project (Republic of Senegal) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P123531",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Health Sustainable Development Goals Program-for-Results (Federal Democratic Republic of Ethiopia) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P124018",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet SENEGAL - Sustainable and Inclusive Agribusiness Development Project (Republic of Senegal) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P125151",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Plan Belgrano Water Supply and Sanitation Services Development Project (Argentine Republic) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P125565",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Electricity Sector Support Project (Republic of Senegal) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P132833",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Transport Connectivity and Asset Management Project (Democratic Socialist Republic of Sri Lanka) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P143302",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Ethiopia Competitiveness and Job Creation Project (Federal Democratic Republic of Ethiopia) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P144269",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet PROMOTING SUSTAINABLE CBNRM AND INSTITUTIONAL DEVELOPMENT (Republic of Indonesia) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P146314",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Climate Resilience Improvement Project (CRIP) (Democratic Socialist Republic of Sri Lanka) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P148850",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Ethiopia- Expressway Development Support Project (Federal Democratic Republic of Ethiopia) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P156019",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Sri Lanka Agriculture Sector Modernization Project (Democratic Socialist Republic of Sri Lanka) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P156186",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Dakar Bus Rapid Transit Pilot Project (Republic of Senegal) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P157599",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Integrated Infrastructure Development for National Tourism Strategic Areas (Indonesia Tourism Development Project) (Republic of Indonesia) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P159303",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Sri Lanka Financial Sector Modernization Project (Democratic Socialist Republic of Sri Lanka) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P159929",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Integrated Habitat and Housing Project (Argentine Republic) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P162042",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Investing in Maternal, Child and Adolescent Health (Republic of Senegal) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P163452",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Ethiopia Urban Institutional and Infrastructure Development Program (Federal Democratic Republic of Ethiopia) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P163714",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet General Education Modernization Project (Democratic Socialist Republic of Sri Lanka) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P163721",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Sri Lanka: Primary Health Care System Strengthening Project (Democratic Socialist Republic of Sri Lanka) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P164336",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Lowlands Livelihood Resilience Project (Federal Democratic Republic of Ethiopia) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P165543",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Institutional Strengthening for Improved Village Service Delivery (Republic of Indonesia) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P167681",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Improving Youth Employability Through Informal Apprenticeship (Republic of Senegal) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P168076",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Realizing  Education's  Promise:  Support to Indonesia's Ministry of Religious Affairs for Improved Quality of Education (Republic of Indonesia) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P169548",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Indonesia Mass Transit Project (Republic of Indonesia) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P170329",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Social Safety Nets for Vulnerable Populations in the Province of Buenos Aires (Argentine Republic) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P175325",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Casamance Economic Development Project (Republic of Senegal) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P175669",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Sustainable Recovery of Landscapes and Livelihoods in Argentina Project (Argentine Republic) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P176731",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Power Sector Reform, Investment and Modernization in Ethiopia (PRIME-1) (Federal Democratic Republic of Ethiopia) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P177233",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Response - Recovery - Resilience for Conflict-Affected Communities in Ethiopia Project (Federal Democratic Republic of Ethiopia) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P178432",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Sri Lanka Public Financial Management Strengthening Project (Democratic Socialist Republic of Sri Lanka) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P179534",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Strengthening the Digital Health Agenda in the Province of Buenos Aires (Argentine Republic) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-risks-P180811",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quels sont les principaux risques identifi\u00e9s pour le projet Indonesia Health Systems Strengthening Project (Republic of Indonesia) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P096532",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet Dam Operational Improvement and Safety ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P106685",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet AR Socio-Economic Inclusion In Rural Areas ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P122841",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet Stormwater Mgt. and Climate Change Adaptation Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P123531",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet Health Sustainable Development Goals Program-for-Results ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P124018",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet SENEGAL - Sustainable and Inclusive Agribusiness Development Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P125151",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet Plan Belgrano Water Supply and Sanitation Services Development Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P125565",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet Electricity Sector Support Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P132833",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet Transport Connectivity and Asset Management Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P133288",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet Argentina Renewable Energy for Rural Areas Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P143302",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet Ethiopia Competitiveness and Job Creation Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P144269",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet PROMOTING SUSTAINABLE CBNRM AND INSTITUTIONAL DEVELOPMENT ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P146314",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet Climate Resilience Improvement Project (CRIP) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P156019",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet Sri Lanka Agriculture Sector Modernization Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P157599",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet Integrated Infrastructure Development for National Tourism Strategic Areas (Indonesia Tourism Development Project) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P159303",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet Sri Lanka Financial Sector Modernization Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P159929",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet Integrated Habitat and Housing Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P162042",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet Investing in Maternal, Child and Adolescent Health ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P163452",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet Ethiopia Urban Institutional and Infrastructure Development Program ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P163721",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet Sri Lanka: Primary Health Care System Strengthening Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P164336",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet Lowlands Livelihood Resilience Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P165543",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet Institutional Strengthening for Improved Village Service Delivery ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P167681",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet Improving Youth Employability Through Informal Apprenticeship ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P168076",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet Realizing  Education's  Promise:  Support to Indonesia's Ministry of Religious Affairs for Improved Quality of Education ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-lessons-P170329",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Quelles le\u00e7ons ont \u00e9t\u00e9 tir\u00e9es du projet Social Safety Nets for Vulnerable Populations in the Province of Buenos Aires ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-procurement-P096532",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Comment la passation des march\u00e9s est-elle organis\u00e9e pour le projet Dam Operational Improvement and Safety ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-procurement-P106685",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Comment la passation des march\u00e9s est-elle organis\u00e9e pour le projet AR Socio-Economic Inclusion In Rural Areas ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-procurement-P122841",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Comment la passation des march\u00e9s est-elle organis\u00e9e pour le projet Stormwater Mgt. and Climate Change Adaptation Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-procurement-P124018",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Comment la passation des march\u00e9s est-elle organis\u00e9e pour le projet SENEGAL - Sustainable and Inclusive Agribusiness Development Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-procurement-P125151",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Comment la passation des march\u00e9s est-elle organis\u00e9e pour le projet Plan Belgrano Water Supply and Sanitation Services Development Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-procurement-P125565",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Comment la passation des march\u00e9s est-elle organis\u00e9e pour le projet Electricity Sector Support Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-procurement-P132833",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Comment la passation des march\u00e9s est-elle organis\u00e9e pour le projet Transport Connectivity and Asset Management Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-procurement-P143302",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Comment la passation des march\u00e9s est-elle organis\u00e9e pour le projet Ethiopia Competitiveness and Job Creation Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-procurement-P144269",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Comment la passation des march\u00e9s est-elle organis\u00e9e pour le projet PROMOTING SUSTAINABLE CBNRM AND INSTITUTIONAL DEVELOPMENT ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-procurement-P146314",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Comment la passation des march\u00e9s est-elle organis\u00e9e pour le projet Climate Resilience Improvement Project (CRIP) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-procurement-P148850",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Comment la passation des march\u00e9s est-elle organis\u00e9e pour le projet Ethiopia- Expressway Development Support Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-procurement-P156019",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Comment la passation des march\u00e9s est-elle organis\u00e9e pour le projet Sri Lanka Agriculture Sector Modernization Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-procurement-P156186",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Comment la passation des march\u00e9s est-elle organis\u00e9e pour le projet Dakar Bus Rapid Transit Pilot Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-procurement-P157599",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Comment la passation des march\u00e9s est-elle organis\u00e9e pour le projet Integrated Infrastructure Development for National Tourism Strategic Areas (Indonesia Tourism Development Project) ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-procurement-P159303",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Comment la passation des march\u00e9s est-elle organis\u00e9e pour le projet Sri Lanka Financial Sector Modernization Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-procurement-P159929",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Comment la passation des march\u00e9s est-elle organis\u00e9e pour le projet Integrated Habitat and Housing Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-procurement-P163714",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Comment la passation des march\u00e9s est-elle organis\u00e9e pour le projet General Education Modernization Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-procurement-P164336",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Comment la passation des march\u00e9s est-elle organis\u00e9e pour le projet Lowlands Livelihood Resilience Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-procurement-P175325",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Comment la passation des march\u00e9s est-elle organis\u00e9e pour le projet Casamance Economic Development Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-FR-procurement-P180811",
+   "group": "documents_fr_v3",
+   "inputs": {
+    "question": "Comment la passation des march\u00e9s est-elle organis\u00e9e pour le projet Indonesia Health Systems Strengthening Project ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-X-en-cetud-works",
+   "group": "documents_cross",
+   "inputs": {
+    "question": "What procurement method is planned for the works to extend the CETUD headquarters offices?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-X-en-brt-guarding",
+   "group": "documents_cross",
+   "inputs": {
+    "question": "Which procurement approach is used for security guarding of the BRT premises in Dakar?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-X-en-prepaid-meters",
+   "group": "documents_cross",
+   "inputs": {
+    "question": "What is the estimated cost of supplying 260,000 prepaid electricity meters in Senegal?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-X-en-karmel-feeders",
+   "group": "documents_cross",
+   "inputs": {
+    "question": "Which contract covers securing the power supply of Karmel and improving feeder service quality?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-X-en-sigicmu-servers",
+   "group": "documents_cross",
+   "inputs": {
+    "question": "Is a security and systems consultant being hired to install the SIGICMU servers in the data center?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-X-en-child-health-eval",
+   "group": "documents_cross",
+   "inputs": {
+    "question": "Which consultant assignment covers the external evaluation of the children's health care financing programme?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-X-en-communication-expert",
+   "group": "documents_cross",
+   "inputs": {
+    "question": "What is the estimated budget for recruiting a communication expert for the youth employability project in Senegal?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-X-en-brt-evaluation-firm",
+   "group": "documents_cross",
+   "inputs": {
+    "question": "How will the firm for the pre-evaluation and final evaluation of the Dakar BRT project be selected?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-X-en-waste-equipment",
+   "group": "documents_cross",
+   "inputs": {
+    "question": "What equipment is planned to help local authorities manage waste for residents along the BRT route?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-X-en-grievance-supplies",
+   "group": "documents_cross",
+   "inputs": {
+    "question": "How are office supplies for the PROGEP grievance management committees procured?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-X-en-transport-master",
+   "group": "documents_cross",
+   "inputs": {
+    "question": "Which assignment supports the inter-university master's programme in transport and digital mobility?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-X-fr-brt-guarding",
+   "group": "documents_cross",
+   "inputs": {
+    "question": "Quelle est la m\u00e9thode de passation pour le gardiennage des locaux du BRT ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-X-fr-prepaid-meters",
+   "group": "documents_cross",
+   "inputs": {
+    "question": "Quel est le co\u00fbt estim\u00e9 de la fourniture de 260 000 compteurs \u00e0 paiement pr\u00e9alable ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-X-fr-communication-expert",
+   "group": "documents_cross",
+   "inputs": {
+    "question": "Quelle m\u00e9thode de s\u00e9lection pour le recrutement d'un expert en communication ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  },
+  {
+   "case_id": "R-X-fr-cetud-works",
+   "group": "documents_cross",
+   "inputs": {
+    "question": "Quels travaux d'extension du si\u00e8ge du CETUD sont pr\u00e9vus ?"
+   },
+   "reference": {
+    "route": "document_rag"
+   },
+   "outputs": {
+    "route": "clarification",
+    "reason": "no_clear_intent"
+   },
+   "scores": {
+    "exact": 0.0,
+    "acceptable": 1.0
+   }
+  }
+ ]
+}

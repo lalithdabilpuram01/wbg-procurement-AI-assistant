@@ -1,0 +1,684 @@
+{
+ "summary": {
+  "overall": {
+   "hit@1": 0.682,
+   "hit@2": 0.909,
+   "nothing_found": 0.5,
+   "cases": 24
+  },
+  "by_group": {
+   "no_table": {
+    "nothing_found": 0.5,
+    "cases": 2
+   },
+   "table_questions": {
+    "hit@1": 0.682,
+    "hit@2": 0.909,
+    "cases": 22
+   }
+  }
+ },
+ "rows": [
+  {
+   "case_id": "T01",
+   "group": "table_questions",
+   "inputs": {
+    "question": "How much IDA financing goes to institutional development and the regulatory framework in the Ethiopia Expressway Development Support Project (P148850)?"
+   },
+   "reference": {
+    "tables": [
+     "24440102:t02201"
+    ]
+   },
+   "outputs": {
+    "found": [
+     [
+      "24440102:t02201",
+      0.682
+     ],
+     [
+      "24440102:t06501",
+      0.693
+     ]
+    ]
+   },
+   "scores": {
+    "hit@1": 1.0,
+    "hit@2": 1.0
+   }
+  },
+  {
+   "case_id": "T02",
+   "group": "table_questions",
+   "inputs": {
+    "question": "What is the cost of the construction of the high capacity highway component in the Ethiopia Expressway Development Support Project (P148850)?"
+   },
+   "reference": {
+    "tables": [
+     "24440102:t02201",
+     "24440102:t06501"
+    ]
+   },
+   "outputs": {
+    "found": [
+     [
+      "24440102:t02201",
+      0.704
+     ],
+     [
+      "24440102:t11001",
+      0.657
+     ]
+    ]
+   },
+   "scores": {
+    "hit@1": 1.0,
+    "hit@2": 1.0
+   }
+  },
+  {
+   "case_id": "T03",
+   "group": "table_questions",
+   "inputs": {
+    "question": "What EIRR and NPV were estimated for the new highway option (option 2) in the Ethiopia Expressway Development Support Project (P148850)?"
+   },
+   "reference": {
+    "tables": [
+     "24440102:t02501",
+     "24440102:t11001"
+    ]
+   },
+   "outputs": {
+    "found": [
+     [
+      "24440102:t11901",
+      0.71
+     ],
+     [
+      "24440102:t11001",
+      0.652
+     ]
+    ]
+   },
+   "scores": {
+    "hit@1": 0.0,
+    "hit@2": 1.0
+   }
+  },
+  {
+   "case_id": "T04",
+   "group": "table_questions",
+   "inputs": {
+    "question": "What is the estimated cost of monitoring and supervision, sub-component 1(b), in the Ethiopia Expressway Development Support Project (P148850)?"
+   },
+   "reference": {
+    "tables": [
+     "24440102:t06501"
+    ]
+   },
+   "outputs": {
+    "found": [
+     [
+      "24440102:t06501",
+      0.707
+     ],
+     [
+      "24440102:t11601",
+      0.675
+     ]
+    ]
+   },
+   "scores": {
+    "hit@1": 1.0,
+    "hit@2": 1.0
+   }
+  },
+  {
+   "case_id": "T05",
+   "group": "table_questions",
+   "inputs": {
+    "question": "How much does China EXIM finance for the Arsi Negele-Hawassa road section in the Ethiopia Expressway Development Support Project (P148850)?"
+   },
+   "reference": {
+    "tables": [
+     "24440102:t10401"
+    ]
+   },
+   "outputs": {
+    "found": [
+     [
+      "24440102:t10401",
+      0.664
+     ],
+     [
+      "40089196:t00301",
+      0.619
+     ]
+    ]
+   },
+   "scores": {
+    "hit@1": 1.0,
+    "hit@2": 1.0
+   }
+  },
+  {
+   "case_id": "T06",
+   "group": "table_questions",
+   "inputs": {
+    "question": "What is the total financing of all road sections from Modjo to Hawassa across all financiers in the Ethiopia Expressway Development Support Project (P148850)?"
+   },
+   "reference": {
+    "tables": [
+     "24440102:t10401"
+    ]
+   },
+   "outputs": {
+    "found": [
+     [
+      "24440102:t09901",
+      0.627
+     ],
+     [
+      "24440102:t03101",
+      0.612
+     ]
+    ]
+   },
+   "scores": {
+    "hit@1": 0.0,
+    "hit@2": 0.0
+   }
+  },
+  {
+   "case_id": "T07",
+   "group": "table_questions",
+   "inputs": {
+    "question": "How much of the credit is allocated to category 1 goods, works, non-consulting services and consultants in the Ethiopia Expressway Development Support Project (P148850)?"
+   },
+   "reference": {
+    "tables": [
+     "24440102:t08301"
+    ]
+   },
+   "outputs": {
+    "found": [
+     [
+      "24440102:t08301",
+      0.737
+     ],
+     [
+      "40025990:t00501",
+      0.69
+     ]
+    ]
+   },
+   "scores": {
+    "hit@1": 1.0,
+    "hit@2": 1.0
+   }
+  },
+  {
+   "case_id": "T08",
+   "group": "table_questions",
+   "inputs": {
+    "question": "What is the prior review threshold for ICB/NCB works in the procurement plan of the Ethiopia Expressway Development Support Project (P148850)?"
+   },
+   "reference": {
+    "tables": [
+     "40025990:t00101"
+    ]
+   },
+   "outputs": {
+    "found": [
+     [
+      "40025990:t00501",
+      0.654
+     ],
+     [
+      "40025990:t00101",
+      0.676
+     ]
+    ]
+   },
+   "scores": {
+    "hit@1": 0.0,
+    "hit@2": 1.0
+   }
+  },
+  {
+   "case_id": "T09",
+   "group": "table_questions",
+   "inputs": {
+    "question": "What are the estimated and actual amounts of the Modjo-Hawassa works contract in the procurement plan of the Ethiopia Expressway Development Support Project (P148850)?"
+   },
+   "reference": {
+    "tables": [
+     "40025990:t00401"
+    ]
+   },
+   "outputs": {
+    "found": [
+     [
+      "40025990:t00401",
+      0.719
+     ],
+     [
+      "40025990:t00501",
+      0.646
+     ]
+    ]
+   },
+   "scores": {
+    "hit@1": 1.0,
+    "hit@2": 1.0
+   }
+  },
+  {
+   "case_id": "T10",
+   "group": "table_questions",
+   "inputs": {
+    "question": "How many goods packages are signed in the procurement plan of the Ethiopia Expressway Development Support Project (P148850)?"
+   },
+   "reference": {
+    "tables": [
+     "40025990:t00402"
+    ]
+   },
+   "outputs": {
+    "found": [
+     [
+      "40025990:t00402",
+      0.656
+     ],
+     [
+      "40025990:t00501",
+      0.601
+     ]
+    ]
+   },
+   "scores": {
+    "hit@1": 1.0,
+    "hit@2": 1.0
+   }
+  },
+  {
+   "case_id": "T11",
+   "group": "table_questions",
+   "inputs": {
+    "question": "What is the cost of the Piloting the Implementation of Road Asset Management component in the Sri Lanka project P132833?"
+   },
+   "reference": {
+    "tables": [
+     "26256705:t02301"
+    ]
+   },
+   "outputs": {
+    "found": [
+     [
+      "26256705:t02301",
+      0.561
+     ],
+     [
+      "34345370:t01301",
+      0.54
+     ]
+    ]
+   },
+   "scores": {
+    "hit@1": 1.0,
+    "hit@2": 1.0
+   }
+  },
+  {
+   "case_id": "T12",
+   "group": "table_questions",
+   "inputs": {
+    "question": "How much is budgeted for capacity building and training in the Sri Lanka project P132833?"
+   },
+   "reference": {
+    "tables": [
+     "26256705:t04601"
+    ]
+   },
+   "outputs": {
+    "found": [
+     [
+      "34345370:t02201",
+      0.453
+     ],
+     [
+      "33761744:t00301",
+      0.483
+     ]
+    ]
+   },
+   "scores": {
+    "hit@1": 0.0,
+    "hit@2": 0.0
+   }
+  },
+  {
+   "case_id": "T13",
+   "group": "table_questions",
+   "inputs": {
+    "question": "How much is allocated to land acquisition and resettlement in the Sri Lanka project P132833?"
+   },
+   "reference": {
+    "tables": [
+     "26256705:t04601",
+     "26256705:t05302"
+    ]
+   },
+   "outputs": {
+    "found": [
+     [
+      "26256705:t05302",
+      0.491
+     ],
+     [
+      "33761744:t00301",
+      0.476
+     ]
+    ]
+   },
+   "scores": {
+    "hit@1": 1.0,
+    "hit@2": 1.0
+   }
+  },
+  {
+   "case_id": "T14",
+   "group": "table_questions",
+   "inputs": {
+    "question": "Which procurement method applies to works contracts above US$10,000,000 in the Sri Lanka project P132833?"
+   },
+   "reference": {
+    "tables": [
+     "26256705:t05901",
+     "33761744:t00101"
+    ]
+   },
+   "outputs": {
+    "found": [
+     [
+      "33761744:t00101",
+      0.495
+     ],
+     [
+      "33761744:t00301",
+      0.501
+     ]
+    ]
+   },
+   "scores": {
+    "hit@1": 1.0,
+    "hit@2": 1.0
+   }
+  },
+  {
+   "case_id": "T15",
+   "group": "table_questions",
+   "inputs": {
+    "question": "What is the length of road A3-8 in the economic analysis of the Sri Lanka project P132833?"
+   },
+   "reference": {
+    "tables": [
+     "26256705:t06801"
+    ]
+   },
+   "outputs": {
+    "found": [
+     [
+      "26256705:t06801",
+      0.527
+     ],
+     [
+      "34345370:t02201",
+      0.469
+     ]
+    ]
+   },
+   "scores": {
+    "hit@1": 1.0,
+    "hit@2": 1.0
+   }
+  },
+  {
+   "case_id": "T16",
+   "group": "table_questions",
+   "inputs": {
+    "question": "What is the average annual OPRC cost for alternative 4 in the Sri Lanka project P132833?"
+   },
+   "reference": {
+    "tables": [
+     "26256705:t06902"
+    ]
+   },
+   "outputs": {
+    "found": [
+     [
+      "26256705:t06902",
+      0.625
+     ],
+     [
+      "34345370:t02201",
+      0.456
+     ]
+    ]
+   },
+   "scores": {
+    "hit@1": 1.0,
+    "hit@2": 1.0
+   }
+  },
+  {
+   "case_id": "T17",
+   "group": "table_questions",
+   "inputs": {
+    "question": "What was the actual cost at closing of the provincial roads improvements component in the Sri Lanka project P132833?"
+   },
+   "reference": {
+    "tables": [
+     "34345370:t05001"
+    ]
+   },
+   "outputs": {
+    "found": [
+     [
+      "34345370:t05001",
+      0.508
+     ],
+     [
+      "34345370:t02201",
+      0.486
+     ]
+    ]
+   },
+   "scores": {
+    "hit@1": 1.0,
+    "hit@2": 1.0
+   }
+  },
+  {
+   "case_id": "T18",
+   "group": "table_questions",
+   "inputs": {
+    "question": "How much of the IDA grant was actually disbursed in the Ethiopia urban program P163452?"
+   },
+   "reference": {
+    "tables": [
+     "34455066:t04202"
+    ]
+   },
+   "outputs": {
+    "found": [
+     [
+      "34455066:t05202",
+      0.527
+     ],
+     [
+      "34455066:t04202",
+      0.589
+     ]
+    ]
+   },
+   "scores": {
+    "hit@1": 0.0,
+    "hit@2": 1.0
+   }
+  },
+  {
+   "case_id": "T19",
+   "group": "table_questions",
+   "inputs": {
+    "question": "How much co-financing did the French Agency for Development provide in the Ethiopia urban program P163452?"
+   },
+   "reference": {
+    "tables": [
+     "34455066:t04202"
+    ]
+   },
+   "outputs": {
+    "found": [
+     [
+      "34455066:t04202",
+      0.647
+     ],
+     [
+      "34455066:t01101",
+      0.521
+     ]
+    ]
+   },
+   "scores": {
+    "hit@1": 1.0,
+    "hit@2": 1.0
+   }
+  },
+  {
+   "case_id": "T20",
+   "group": "table_questions",
+   "inputs": {
+    "question": "What was the average growth rate of own-source revenue collected by cities in the Ethiopia urban program P163452?"
+   },
+   "reference": {
+    "tables": [
+     "34455066:t05101"
+    ]
+   },
+   "outputs": {
+    "found": [
+     [
+      "34455066:t05101",
+      0.611
+     ],
+     [
+      "34455066:t01701",
+      0.551
+     ]
+    ]
+   },
+   "scores": {
+    "hit@1": 1.0,
+    "hit@2": 1.0
+   }
+  },
+  {
+   "case_id": "T21",
+   "group": "table_questions",
+   "inputs": {
+    "question": "Which works activities were cancelled in the procurement plan of the Senegal project P175325, and what were their estimated amounts?"
+   },
+   "reference": {
+    "tables": [
+     "40009757:t00301"
+    ]
+   },
+   "outputs": {
+    "found": [
+     [
+      "40009757:t00302",
+      0.478
+     ],
+     [
+      "40009757:t00301",
+      0.472
+     ]
+    ]
+   },
+   "scores": {
+    "hit@1": 0.0,
+    "hit@2": 1.0
+   }
+  },
+  {
+   "case_id": "T22",
+   "group": "table_questions",
+   "inputs": {
+    "question": "What is the total estimated amount of all works activities in the procurement plan of the Senegal project P175325?"
+   },
+   "reference": {
+    "tables": [
+     "40009757:t00301"
+    ]
+   },
+   "outputs": {
+    "found": [
+     [
+      "40009757:t00302",
+      0.55
+     ],
+     [
+      "40009757:t00301",
+      0.542
+     ]
+    ]
+   },
+   "scores": {
+    "hit@1": 0.0,
+    "hit@2": 1.0
+   }
+  },
+  {
+   "case_id": "TN1",
+   "group": "no_table",
+   "inputs": {
+    "question": "What lessons were learned about contractor mobilisation in the Sri Lanka project P132833?"
+   },
+   "reference": {
+    "tables": []
+   },
+   "outputs": {
+    "found": []
+   },
+   "scores": {
+    "nothing_found": 1.0
+   }
+  },
+  {
+   "case_id": "TN2",
+   "group": "no_table",
+   "inputs": {
+    "question": "Who are the procurement specialists on the team of the Ethiopia Expressway Development Support Project (P148850)?"
+   },
+   "reference": {
+    "tables": []
+   },
+   "outputs": {
+    "found": [
+     [
+      "24440102:t10902",
+      0.613
+     ],
+     [
+      "40025990:t00402",
+      0.649
+     ]
+    ]
+   },
+   "scores": {
+    "nothing_found": 0.0
+   }
+  }
+ ]
+}
