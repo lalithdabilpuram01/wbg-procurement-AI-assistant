@@ -113,7 +113,7 @@ def test_the_audit_pairs_tablelens_runs_and_flags_judge_disagreement(tmp_path):
     rows = [row("T01-off", "tablelens", False, 0.0, 1.0), row("T01-on", "tablelens", True, 1.0, 1.0)]
     (tmp_path / "results.json").write_text(json.dumps({"experiment": "e", "rows": rows}))
     (tmp_path / "dataset.json").write_text(json.dumps([{"inputs": {"case_id": "T01-off"}}, {"inputs": {"case_id": "T01-on"}}]))
-    report = audit(tmp_path)
+    report = audit(tmp_path, tmp_path / "dataset.json")
     assert report["tablelens"]["on_wins"] == ["T01"] and report["coverage"]["missing"] == []
     assert [d["case"] for d in report["judge"]["disagreements_with_exact_checks"]] == ["T01-off"]
     assert report["rescored_changes"] == []

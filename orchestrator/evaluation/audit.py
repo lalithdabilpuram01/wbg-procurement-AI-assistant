@@ -46,10 +46,10 @@ def rescored(rows: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dic
     return out, changes
 
 
-def audit(results_dir: Path) -> dict[str, Any]:
+def audit(results_dir: Path, dataset_file: Path) -> dict[str, Any]:
     data = json.loads((results_dir / "results.json").read_text())
     rows, changes = rescored(data["rows"])
-    dataset = json.loads((results_dir / "dataset.json").read_text())
+    dataset = json.loads(dataset_file.read_text())
     report = {"experiment": data["experiment"], "code_version": data.get("code_version"),
               "coverage": coverage(rows, dataset), "scores": category_scores(rows), "tablelens": tablelens(rows),
               "judge": judge(rows), "cost": cost(rows, results_dir), "upload": upload_scan(rows), "latency": latency(rows),

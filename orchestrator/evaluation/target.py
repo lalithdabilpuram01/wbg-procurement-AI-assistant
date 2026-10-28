@@ -20,7 +20,7 @@ from wbg_orchestrator.runtime import ORCHESTRATOR_DIR, RuntimeConfig, build_runt
 USERS = ORCHESTRATOR_DIR / "runs" / "eval_users.json"
 USER = "eval-runner"
 MAX_APPROVALS = 2
-EVIDENCE_SUMMARY_CHARS = 600
+EVIDENCE_SUMMARY_CHARS = 1500          # what the answer writer sees
 
 
 class AppHarness:
