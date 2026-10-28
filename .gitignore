@@ -88,3 +88,12 @@ rag/module1_discovery/**/plan_coverage/CONTRACT_PLAN_EVIDENCE_LINKS.csv
 **/access_log.jsonl
 discovery/country_indicators/raw/
 discovery/project_deep_dive/raw/*/
+
+# Ingestion inbox (ingest/): dropped files, processed/quarantined copies and the ledger stay local; folder READMEs are tracked
+ingestion_inbox/**
+!ingestion_inbox/*/
+!ingestion_inbox/*/README.md
+!ingestion_inbox/README.md
+ingestion_inbox/_processed/
+ingestion_inbox/_quarantine/
+ingestion_inbox/_ledger/
