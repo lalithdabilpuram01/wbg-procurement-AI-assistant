@@ -5,9 +5,12 @@ Every live dependency is opt-in and fails closed:
   - needs the existing dual opt-in: `--confirm-live-call` plus WBG_ALLOW_LIVE_LLM_CALLS=true in the process;
   - every call (planner, answer writer, NL2SQL) goes through `BudgetedClaudeClient` and a persistent spend ledger
     (WBG_LLM_LEDGER, WBG_LLM_MAX_ATTEMPTS, WBG_LLM_MAX_USD).
-- Databricks SQL:
-  - the identity is the profile in WBG_DATABRICKS_PROFILE (default `wbg-readonly`);
-  - the existing gateway refuses any write-capable identity, because development owner credentials are disabled here.
+- Databricks SQL (Gold), through the tools of the Structured Data MCP server (WBG_TOOL_TRANSPORT=mcp, the default):
+  - the server is a separate process; it alone connects to Databricks, as the profile in WBG_DATABRICKS_PROFILE
+    (default `wbg-readonly`), and its gateway refuses any write-capable identity;
+  - the Structured Data agent uses all seven tools; the Prediction and Planning agents use execute_readonly_sql;
+  - WBG_TOOL_TRANSPORT=in_process runs the same tools inside the app (no server process).
+- In-process tools: document retrieval, TableLens, the frozen ML models, similarity scoring (see tool_gateway.py).
 - Checkpoints: the isolated `PostgresSaver` on the Lakebase development branch (WBG_CKPT_ENDPOINT); `production` is refused.
 - Conversations: the existing PostgreSQL conversation store (WBG_CONVERSATION_DSN).
 - Documents: the default RAG release with the evidence-only generator; `pilot_v3_tablelens` (chosen per message)
@@ -34,6 +37,7 @@ from structured_agent.config import Settings
 from structured_agent.guardrails.pipeline import build_guardrails
 from structured_agent.nl2sql.live_guard import authorize_live_access
 from structured_agent.nl2sql.settings import load_claude_settings
+from structured_agent.nl2sql.tools import InProcessToolCaller, McpToolCaller, ToolCaller
 from structured_agent.nl2sql.tracing import load_logfire_settings
 from structured_agent.observability import JsonlAuditSink as AgentAuditSink, Telemetry
 from structured_agent.service import StructuredDataService
@@ -45,8 +49,7 @@ from .controller import ExecutionController
 from .contracts import WorkerName
 from .conversation_bridge import ConversationFrontDoor, ConversationRunner
 from .engine import InvestigationEngine
-from .factory import (authorization_factory, document_worker, llm_breaker, semantic_project_scores,
-                      structured_worker_for_service)
+from .factory import authorization_factory, document_worker, llm_breaker, semantic_project_scores, structured_worker
 from .graph import EngineDeps
 from .live_llm import SONNET_5_5_PRICES, BudgetedClaudeClient, LedgerLimits, SpendLedger
 from .observability import AuditTrail, JsonlAuditSink, OrchestratorTracer
@@ -55,9 +58,10 @@ from .rag_modules import answering
 from .response import ClaudeResponseGenerator
 from .supervisor import Supervisor
 from .table_sql import TableSqlWriter
+from .tool_gateway import TRANSPORTS, SupervisedMcpSession, gold_sql, mcp_parameters
 from .workers.base import ResultCache, TicketAuthority
 from .workers.planning import PlanningWorker
-from .workers.prediction import PredictionWorker, gateway_sql
+from .workers.prediction import PredictionWorker
 
 ORCHESTRATOR_DIR = Path(__file__).resolve().parents[1]
 DEV_CHECKPOINT_ENDPOINT = "projects/wbg-procurement-dev/branches/dev-orchestrator/endpoints/primary"
@@ -74,6 +78,7 @@ class RuntimeConfig:
     checkpoint_endpoint: str = DEV_CHECKPOINT_ENDPOINT
     rag_release: str = "pilot_v3"
     audit_path: Path = ORCHESTRATOR_DIR / "runs" / "app_audit.jsonl"
+    tool_transport: str = "mcp"                  # how agents reach the structured-data tools: mcp | in_process
 
     @classmethod
     def from_env(cls) -> "RuntimeConfig":
@@ -81,7 +86,8 @@ class RuntimeConfig:
         return cls(ledger_path=Path(env.get("WBG_LLM_LEDGER", ORCHESTRATOR_DIR / "runs" / "llm_ledger.json")),
                    max_attempts=int(env.get("WBG_LLM_MAX_ATTEMPTS", "10")), max_usd=Decimal(env.get("WBG_LLM_MAX_USD", "2.00")),
                    databricks_profile=env.get("WBG_DATABRICKS_PROFILE", "wbg-readonly"),
-                   checkpoint_endpoint=env.get("WBG_CKPT_ENDPOINT", DEV_CHECKPOINT_ENDPOINT))
+                   checkpoint_endpoint=env.get("WBG_CKPT_ENDPOINT", DEV_CHECKPOINT_ENDPOINT),
+                   tool_transport=env.get("WBG_TOOL_TRANSPORT", "mcp"))
 
 
 def build_runtime(config: RuntimeConfig, operator_confirmed: bool) -> tuple[AppService, Callable[[], None]]:
@@ -89,11 +95,12 @@ def build_runtime(config: RuntimeConfig, operator_confirmed: bool) -> tuple[AppS
     tracer = _tracer()
     claude = _claude_client(config, operator_confirmed, tracer)
     authority, guardrails = TicketAuthority(), build_guardrails()
-    service, structured = _structured_worker(config, claude, guardrails, authority)
+    tools, close_tools = structured_tools(config, tracer)
+    structured = _structured_worker(config, tools, claude, guardrails, authority)
     json_client = PortkeyJsonClient(claude)
     document = document_worker(authority, generator_factory=answering("generator").EvidenceOnlyGenerator,
                                table_writer=TableSqlWriter(json_client).writer)
-    gold = gateway_sql(service, REGISTRY_PRINCIPAL, WORKSPACE)
+    gold = gold_sql(tools)                                       # fixed Gold lookups via execute_readonly_sql
     planning = PlanningWorker(gold, authority, semantic_project_scores(document, config.rag_release))
     controller = ExecutionController({WorkerName.STRUCTURED: structured, WorkerName.DOCUMENT: document,
                                       WorkerName.PREDICTION: PredictionWorker(gold, authority), WorkerName.PLANNING: planning},
@@ -115,6 +122,7 @@ def build_runtime(config: RuntimeConfig, operator_confirmed: bool) -> tuple[AppS
     def close() -> None:
         service.shutdown()
         pool.close()
+        close_tools()
     return service, close
 
 
@@ -133,12 +141,27 @@ def _claude_client(config: RuntimeConfig, operator_confirmed: bool, tracer: Orch
     return BudgetedClaudeClient(settings, ledger, output_caps=OUTPUT_CAPS, tracer=tracer, live_access=live)
 
 
-def _structured_worker(config: RuntimeConfig, claude: BudgetedClaudeClient, guardrails, authority: TicketAuthority):
-    settings = dataclasses.replace(Settings(), databricks_profile=config.databricks_profile, allow_dev_owner_credentials=False,
-                                   audit_log_path=config.audit_path.with_name("structured_audit.jsonl"))
-    service = StructuredDataService.from_environment(settings)
-    telemetry = Telemetry(AgentAuditSink(settings.audit_log_path))
-    return service, structured_worker_for_service(service, claude, telemetry, authority, ResultCache(), guardrails=guardrails)
+def structured_tools(config: RuntimeConfig, tracer: OrchestratorTracer) -> tuple[ToolCaller, Callable[[], None]]:
+    """The structured-data tools and a function that releases them: the MCP server process, or the service in-process."""
+    if config.tool_transport not in TRANSPORTS:
+        raise ValueError(f"WBG_TOOL_TRANSPORT must be one of {TRANSPORTS}")
+    if config.tool_transport == "mcp":
+        session = SupervisedMcpSession(mcp_parameters(REGISTRY_PRINCIPAL, config.databricks_profile,
+                                                      config.audit_path.with_name("mcp_audit.jsonl")), tracer).open()
+        return McpToolCaller(session, REGISTRY_PRINCIPAL), session.close
+    settings = _settings(config)
+    return InProcessToolCaller(StructuredDataService.from_environment(settings), REGISTRY_PRINCIPAL, WORKSPACE), lambda: None
+
+
+def _settings(config: RuntimeConfig) -> Settings:
+    return dataclasses.replace(Settings(), databricks_profile=config.databricks_profile, allow_dev_owner_credentials=False,
+                               audit_log_path=config.audit_path.with_name("structured_audit.jsonl"))
+
+
+def _structured_worker(config: RuntimeConfig, tools: ToolCaller, claude: BudgetedClaudeClient, guardrails,
+                       authority: TicketAuthority):
+    telemetry = Telemetry(AgentAuditSink(_settings(config).audit_log_path))
+    return structured_worker(tools, claude, telemetry, authority, ResultCache(), guardrails=guardrails)
 
 
 def _checkpoint_pool(config: RuntimeConfig):

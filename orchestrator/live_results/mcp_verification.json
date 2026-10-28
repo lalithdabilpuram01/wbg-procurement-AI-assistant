@@ -1,0 +1,77 @@
+{
+ "tools": true,
+ "registry": {
+  "search_table_registry": true,
+  "get_metric_definition": true,
+  "get_table_schema": true
+ },
+ "gold_sql": {
+  "S1": {
+   "validation_identical": true,
+   "rows_identical": true,
+   "rows": 11
+  },
+  "S2": {
+   "validation_identical": true,
+   "rows_identical": true,
+   "rows": 1
+  },
+  "S3": {
+   "validation_identical": true,
+   "rows_identical": true,
+   "rows": 4
+  },
+  "S4": {
+   "validation_identical": true,
+   "rows_identical": true,
+   "rows": 3
+  },
+  "S5": {
+   "validation_identical": true,
+   "rows_identical": true,
+   "rows": 18
+  },
+  "S6": {
+   "validation_identical": true,
+   "rows_identical": true,
+   "rows": 20
+  },
+  "S7": {
+   "validation_identical": true,
+   "rows_identical": true,
+   "rows": 1
+  },
+  "S8": {
+   "validation_identical": true,
+   "rows_identical": true,
+   "rows": 1
+  }
+ },
+ "agents": {
+  "prediction_package_1": {
+   "identical": true,
+   "evidence": 3
+  },
+  "prediction_package_2": {
+   "identical": true,
+   "evidence": 3
+  },
+  "planning_match_similar_projects": {
+   "identical": true,
+   "evidence": 8
+  },
+  "planning_market_benchmarks": {
+   "identical": true,
+   "evidence": 3
+  },
+  "planning_governance_context": {
+   "identical": true,
+   "evidence": 1
+  }
+ },
+ "restart": {
+  "answered": true,
+  "restarts": 1,
+  "seconds": 4.4
+ }
+}

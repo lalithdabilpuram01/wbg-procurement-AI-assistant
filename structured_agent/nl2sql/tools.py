@@ -33,6 +33,8 @@ def _require_known_tool(tool: str) -> None:
 class McpToolCaller:
     """Uses an open MCP session. The server's principal is fixed by its deployment configuration."""
 
+    transport = "mcp"
+
     def __init__(self, session: BackgroundMcpSession, principal_id: str):
         self._session = session
         self.principal_id = principal_id
@@ -44,6 +46,8 @@ class McpToolCaller:
 
 class InProcessToolCaller:
     """Calls the service methods behind the MCP tools, with a trusted principal and workspace."""
+
+    transport = "in_process"
 
     def __init__(self, service: StructuredDataService, principal_id: str, workspace: str):
         self._service = service

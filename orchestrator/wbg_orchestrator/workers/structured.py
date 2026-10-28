@@ -71,13 +71,17 @@ class StructuredDataWorker:
     def _answer(self, task: AgentTask, context: WorkerContext) -> WorkerOutput:
         execute = task.requires_execution and context.execution_approved
         memory = _memory_block(context)
-        result = self._workflow_for(context.authorization).run(task.question, execute=execute, request_id=context.request_id,
-                                                               conversation_context=memory)
+        try:
+            result = self._workflow_for(context.authorization).run(task.question, execute=execute, request_id=context.request_id,
+                                                                   conversation_context=memory)
+        except (ConnectionError, TimeoutError) as error:            # the tools (MCP server) did not answer: retryable
+            raise TransientWorkerError("structured_tools_unavailable") from error
         usage = Usage(llm_calls=result.llm_calls, input_tokens=result.input_tokens, output_tokens=result.output_tokens,
                       executions=1 if result.executed_sql else 0)
         status = result.status
         if status == WorkflowStatus.ANSWERED:
-            return WorkerOutput(TaskState.SUCCEEDED, (self._result_evidence(task, result),), usage)
+            transport = getattr(self._tools_for(context.authorization), "transport", "in_process")
+            return WorkerOutput(TaskState.SUCCEEDED, (self._result_evidence(task, result, transport),), usage)
         if status == WorkflowStatus.VALIDATED_NOT_EXECUTED:
             notes = ("execution_not_approved",) if task.requires_execution else ()
             state = TaskState.PARTIAL if task.requires_execution else TaskState.SUCCEEDED
@@ -98,7 +102,7 @@ class StructuredDataWorker:
             task, category, failure.value if failure else status.value, "The data question could not be completed.",
             retry_after=result.retry_after_seconds))
 
-    def _result_evidence(self, task: AgentTask, result: WorkflowResult) -> EvidenceRecord:
+    def _result_evidence(self, task: AgentTask, result: WorkflowResult, transport: str) -> EvidenceRecord:
         validation_id = result.validation.validation_id if result.validation else None
         result_ref = self._cache.put(new_id("rows"), list(result.rows))
         facts = _row_facts(result.rows)
@@ -119,7 +123,8 @@ class StructuredDataWorker:
             provenance=tuple((k, v) for k, v in (
                 ("validation_id", validation_id), ("sql_sha256", _sha(result.executed_sql or "")),
                 ("params_sha256", _sha(json.dumps(result.parameters, sort_keys=True, default=str))), ("result_ref", result_ref),
-                ("row_count", str(result.row_count)), *((k, str(provenance[k])) for k in PROVENANCE_KEYS if k in provenance))
+                ("row_count", str(result.row_count)), ("tool_transport", transport),
+                *((k, str(provenance[k])) for k in PROVENANCE_KEYS if k in provenance))
                 if v),
             validation_status=ValidationStatus.VERIFIED, numeric_use=NumericUse.APPROVED, quality_warnings=tuple(warnings),
             facts=facts, summary=_safe_text(_with_filters(result.message, result.executed_sql, result.parameters)))

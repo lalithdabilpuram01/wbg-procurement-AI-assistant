@@ -63,13 +63,39 @@ CATALOG = (
 )
 
 
+GOLD_SQL = ("execute_readonly_sql", "mcp")
+# The tools each operation uses and where they run in the app (WBG_TOOL_TRANSPORT=mcp): over the Structured Data MCP
+# server, or in-process inside the LangGraph app (tool_gateway.py). With in_process, the MCP tools run in the app too.
+TOOLS = {
+    "answer_data_question": tuple((t, "mcp") for t in ("search_table_registry", "get_table_schema", "get_table_relationships",
+                                                       "get_metric_definition", "get_verified_sql_examples", "validate_sql",
+                                                       "execute_readonly_sql")),
+    "describe_metric": (("get_metric_definition", "mcp"),),
+    "find_tables": (("search_table_registry", "mcp"),),
+    "answer_document_question": (("lakebase_vector_search", "in_process"), ("tablelens_table_sql", "in_process")),
+    "retrieve_passages": (("lakebase_vector_search", "in_process"),),
+    "predict_package": (GOLD_SQL, ("frozen_ml_models", "in_process")),
+    "predict_planned_packages": (GOLD_SQL, ("frozen_ml_models", "in_process")),
+    "match_similar_projects": (GOLD_SQL, ("similar_project_scoring", "in_process")),
+    "market_benchmarks": (GOLD_SQL,),
+    "governance_context": (GOLD_SQL,),
+}
+
+
+def tools_text(operation: str) -> str:
+    by: dict[str, list[str]] = {}
+    for tool, transport in TOOLS[operation]:
+        by.setdefault(transport, []).append(tool)
+    return "; ".join(f"{transport.replace('_', '-')}: {', '.join(tools)}" for transport, tools in by.items())
+
+
 def as_markdown() -> str:
-    lines = ["| Worker | Operation | Reads | Returns (evidence kinds) | Data (read-only) | LLM | Attempts | Approval |",
-             "|---|---|---|---|---|---|---|---|"]
+    lines = ["| Worker | Operation | Reads | Returns (evidence kinds) | Data (read-only) | Tools (where they run) | LLM | Attempts | Approval |",
+             "|---|---|---|---|---|---|---|---|---|"]
     for c in CATALOG:
         spec = evidence_spec(c.operation, requires_execution=True) or OPERATION_EVIDENCE[c.operation]
         kinds = ", ".join(k.value for k in spec.kinds) + ("" if spec.verifiable else " (unverified)")
-        lines.append(f"| {c.worker} | {c.operation} | {c.reads} | {c.returns} ({kinds}) | {c.data} | "
+        lines.append(f"| {c.worker} | {c.operation} | {c.reads} | {c.returns} ({kinds}) | {c.data} | {tools_text(c.operation)} | "
                      f"{'yes' if c.llm else 'no'} | {DEFAULT_ATTEMPTS.get(c.operation, 2)} | {c.approval} |")
     return "\n".join(lines)
 

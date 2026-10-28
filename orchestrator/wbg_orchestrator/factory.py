@@ -1,7 +1,7 @@
 """Wiring of the engine to the existing components (used by hosts; offline tests inject fakes instead).
 
-`structured_worker_for_service` builds per-request NL2SQL workflows and tool callers for the application principal
-over an existing StructuredDataService. `document_worker` builds AnswerPipelines over `build_retriever(release)`.
+`structured_worker` builds per-request NL2SQL workflows over one tool caller (the MCP server in the app, see
+tool_gateway.py); `structured_worker_for_service` does the same in-process over a StructuredDataService. `document_worker` builds AnswerPipelines over `build_retriever(release)`.
 Nothing here performs a network call: Portkey/Claude clients are passed in by the host (live access is granted only
 through the existing dual opt-in, outside this milestone).
 """
@@ -13,7 +13,7 @@ from typing import Any, Callable
 from conversation.routing.routes import Route
 from structured_agent.nl2sql.resilience import CircuitBreaker
 from structured_agent.nl2sql.settings import RuntimeSettings
-from structured_agent.nl2sql.tools import InProcessToolCaller
+from structured_agent.nl2sql.tools import InProcessToolCaller, ToolCaller
 from structured_agent.nl2sql.workflow import NlToSqlWorkflow
 from structured_agent.observability import Telemetry
 
@@ -35,6 +35,20 @@ def authorization_factory(registry_principal: str, workspace: str, scope: Public
         return authorization_for_routes(routes, app_identity=app_identity, registry_principal=registry_principal,
                                         workspace=workspace, scope=scope)
     return build
+
+
+def structured_worker(tools: ToolCaller, claude: Any, telemetry: Telemetry, authority: TicketAuthority, cache: ResultCache,
+                      guardrails: Any = None, settings: RuntimeSettings = RuntimeSettings()) -> StructuredDataWorker:
+    """Every request uses the same tool caller, whose principal is fixed (by the MCP server's deployment); a request
+    authorized for another principal is refused rather than served with the server's identity."""
+    def tools_for(auth: AppAuthorizationContext) -> ToolCaller:
+        if auth.registry_principal != tools.principal_id:
+            raise PermissionError("the request's principal is not the principal of the structured-data tools")
+        return tools
+
+    def workflow_for(auth: AppAuthorizationContext) -> NlToSqlWorkflow:
+        return NlToSqlWorkflow(tools_for(auth), claude, telemetry, settings, guardrails=guardrails)
+    return StructuredDataWorker(workflow_for, tools_for, authority, cache)
 
 
 def structured_worker_for_service(service: Any, claude: Any, telemetry: Telemetry, authority: TicketAuthority,
@@ -98,4 +112,4 @@ def llm_breaker(clock=None) -> CircuitBreaker:
 
 
 __all__ = ["APP_IDENTITY", "EngineDeps", "authorization_factory", "controller_for", "document_worker", "llm_breaker",
-           "structured_worker_for_service"]
+           "structured_worker", "structured_worker_for_service"]
