@@ -13,6 +13,7 @@ const KIND: Record<string, { label: string; icon: React.ElementType }> = {
   document_table: { label: "Document table", icon: TableProperties },
   typed_plan_record: { label: "Procurement plan row", icon: TableProperties },
   model_prediction: { label: "Model estimate", icon: BrainCircuit },
+  early_warning: { label: "Early warning", icon: TableProperties },
 };
 
 const WARNING_LABELS: Record<string, string> = {

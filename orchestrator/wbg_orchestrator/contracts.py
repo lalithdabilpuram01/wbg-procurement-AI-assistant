@@ -65,6 +65,7 @@ class WorkerName(str, Enum):
     DOCUMENT = "document_intelligence"
     PREDICTION = "ml_prediction"
     PLANNING = "procurement_planning"
+    MONITORING = "project_monitoring"
 
 
 class TaskState(str, Enum):
@@ -151,6 +152,7 @@ class EvidenceKind(str, Enum):
     TYPED_PLAN_RECORD = "typed_plan_record"
     MODEL_PREDICTION = "model_prediction"
     SIMILAR_PROJECT = "similar_project"
+    EARLY_WARNING = "early_warning"          # a project's milestone status or early warning (monitoring rules)
 
 
 # ------------------------------------------------------------------------------------------------------- owners
@@ -240,6 +242,7 @@ class InvestigationRequest(Record):
     execute_requested: bool = False                                      # the user asked to run validated SQL
     package: PackageSpec | None = None                                   # a package assessment (ML predictions)
     planning: PlanningSpec | None = None                                 # a Planning Brief for a new project
+    monitor_project: str | None = Field(default=None, pattern=r"^P\d{6}$")  # a project's milestones and early warnings
     planning_context: str | None = Field(default=None, max_length=3000)  # the brief's profile + similar projects
     context_ref: str | None = None                                       # memory block id (text is not in state)
     authorization: "AppAuthorizationContext"
@@ -278,6 +281,7 @@ OPERATION_EVIDENCE = {
     "match_similar_projects": EvidenceSpec(kinds=(EvidenceKind.SIMILAR_PROJECT,), verifiable=True),
     "market_benchmarks": EvidenceSpec(kinds=(EvidenceKind.STRUCTURED_RESULT,), verifiable=True),   # fixed read-only SQL
     "governance_context": EvidenceSpec(kinds=(EvidenceKind.STRUCTURED_RESULT,), verifiable=True),
+    "watch_project": EvidenceSpec(kinds=(EvidenceKind.EARLY_WARNING,), verifiable=True),   # deterministic rules, cited rows
 }
 
 

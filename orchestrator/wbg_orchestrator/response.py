@@ -122,7 +122,7 @@ def _restatement(record: EvidenceRecord) -> str:
         return f"{record.citation}: {record.summary[:400]}"
     if record.kind == EvidenceKind.TABLE_CANDIDATE:
         return f"Relevant approved table: {', '.join(record.source_objects)}."
-    if record.kind in (EvidenceKind.MODEL_PREDICTION, EvidenceKind.SIMILAR_PROJECT):
+    if record.kind in (EvidenceKind.MODEL_PREDICTION, EvidenceKind.SIMILAR_PROJECT, EvidenceKind.EARLY_WARNING):
         return record.summary[:600]
     return ""
 

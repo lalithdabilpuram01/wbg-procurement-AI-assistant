@@ -12,6 +12,7 @@ from structured_agent.guardrails.policies import evaluate_user_input
 from structured_agent.nl2sql.result import ValidationSummary, WorkflowResult, WorkflowStatus
 from structured_agent.nl2sql.resilience import CircuitBreaker
 
+from monitoring.watch import ProjectWatch, Warning as MonitoringWarning
 from wbg_orchestrator.contracts import InvestigationBudget, InvestigationRequest, OwnerRef, WorkerName, new_id
 from wbg_orchestrator.controller import DEFAULT_BREAKER, ExecutionController, RetryBackoff
 from wbg_orchestrator.engine import InvestigationEngine
@@ -25,6 +26,7 @@ from wbg_orchestrator.response import DeterministicResponseGenerator
 from wbg_orchestrator.supervisor import Supervisor
 from wbg_orchestrator.workers.base import ResultCache, TicketAuthority
 from wbg_orchestrator.workers.document import DocumentIntelligenceWorker
+from wbg_orchestrator.workers.monitoring import MonitoringWorker
 from wbg_orchestrator.workers.planning import PlanningWorker
 from wbg_orchestrator.workers.prediction import PredictionWorker
 from wbg_orchestrator.workers.structured import StructuredDataWorker
@@ -207,9 +209,32 @@ def fake_semantic(text: str) -> dict[str, float]:
     return {"P148850": 0.71, "P163452": 0.52, "P143302": 0.40}
 
 
+def fake_watch(project_id: str) -> ProjectWatch:
+    """Monitoring results for P148850 (offline); other projects have no plan or ISR."""
+    if project_id != "P148850":
+        return ProjectWatch(project_id, None, None, None, {}, [], [], [])
+    summary = {"packages": 103, "signed": 47, "open": 33, "cancelled": 26, "overdue": 3, "stale_plan_entries": 28,
+               "median_slippage_days": 162.0, "warnings": {"high": 1, "medium": 1, "low": 1},
+               "plans": ["39584512"], "isr_reports": ["40089196"]}
+    warnings = [
+        MonitoringWarning("overdue_signing", "high", "Not signed 155 days after its planned signing date (2025-12-10); 75% of "
+                          "similar packages (CS / Individual Consultant Selection) were signed within 41 days of plan.",
+                          "a1", "ET-RSIDP-517060-CS-INDV", 155, {"group": "CS / Individual Consultant Selection", "n": 210},
+                          ["Procurement plan 39584512, p. 7 (ET-RSIDP-517060-CS-INDV, plan of 2026-05-14)"]),
+        MonitoringWarning("high_risk", "medium", "The latest ISR rates overall risk Substantial.",
+                          citations=["ISR 40089196 (2026-02-28)"]),
+        MonitoringWarning("stale_plan_entry", "low", "Still pending 3000 days after its planned signing date.", "a2", "OLD-1", 3000,
+                          citations=["Procurement plan 39584512, p. 2 (OLD-1, plan of 2026-05-14)"])]
+    ratings = [{"document_id": "40089196", "date": "2026-02-28", "indicator": "Overall risk", "previous": "Substantial",
+                "current": "Substantial"}]
+    return ProjectWatch("P148850", "Ethiopia Expressway Development Support Project", "Ethiopia", "2026-05-14", summary,
+                        warnings, [{"activity_id": "a1"}], ratings)
+
+
 def build_engine(*, workflow=None, tools=None, pipeline=None, retriever=None, planner=None, responder=None, guard=None, policy=None,
                  checkpointer=None, tracer=None, audit_sink=None, now=None, releases: list[str] | None = None, prices=None,
-                 breaker_settings=DEFAULT_BREAKER, backoff=RetryBackoff(base_seconds=0.0, max_seconds=0.0), run_sql=fake_gold_sql):
+                 breaker_settings=DEFAULT_BREAKER, backoff=RetryBackoff(base_seconds=0.0, max_seconds=0.0), run_sql=fake_gold_sql,
+                 watch=None):
     authority, cache = TicketAuthority(), ResultCache()
     workflow = workflow or FakeWorkflow()
     tools = tools or FakeTools()
@@ -225,7 +250,8 @@ def build_engine(*, workflow=None, tools=None, pipeline=None, retriever=None, pl
     planning = PlanningWorker(run_sql, authority, fake_semantic, sector_of=lambda pid: "Transportation" if pid in
                               ("P148850", "P111111") else "Urban Development")
     controller = ExecutionController({WorkerName.STRUCTURED: structured, WorkerName.DOCUMENT: document,
-                                      WorkerName.PREDICTION: prediction, WorkerName.PLANNING: planning}, authority, tracer=tracer,
+                                      WorkerName.PREDICTION: prediction, WorkerName.PLANNING: planning,
+                                      WorkerName.MONITORING: MonitoringWorker(authority, watch or fake_watch)}, authority, tracer=tracer,
                                      backoff=backoff, sleep=sleeps.append, prices=prices,
                                      breaker_settings=breaker_settings)
     audit_sink = audit_sink or MemoryAuditSink()

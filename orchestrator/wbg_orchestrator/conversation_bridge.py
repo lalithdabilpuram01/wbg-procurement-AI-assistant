@@ -10,6 +10,8 @@
   union of exactly those two route policies, and records the answer turn through the existing store API.
 * Approvals: `approve` checks thread ownership, records the decision with the existing `record_decision`, and
   resumes the engine as the same user.
+* Monitoring: a question about one project's progress ("Is P148850 slipping?") runs the fixed monitoring plan; its
+  answer restates the cited early warnings (no model call).
 * Feedback (feedback.py): every investigation gets the owner's learned guidance appended to its memory block, and the
   items used are recorded per request; `revise` re-runs an answered question after a correction; `answer_record`
   tells the feedback service how an answer was produced.
@@ -37,6 +39,7 @@ from .contracts import (EvidenceKind, InvestigationRequest, InvestigationStatus,
 from .engine import EngineOutcome, InvestigationEngine, InvestigationNotFound, checkpoint_thread_id
 from .feedback import REVISION_ROUTE, AnswerRecord, FeedbackService, Guidance
 from .planner import BRIEF_BUDGET
+from .workers.monitoring import monitoring_project
 
 COMBINABLE = {Route.STRUCTURED_DATA.value, Route.DOCUMENT_RAG.value}
 UNCLEAR = {ReasonCategory.NO_CLEAR_INTENT, ReasonCategory.CLASSIFIER_LOW_SCORE, ReasonCategory.CLASSIFIER_ERROR}
@@ -49,6 +52,7 @@ PACKAGE_FIELDS_MESSAGE = (
 SOURCE_TYPES = {EvidenceKind.STRUCTURED_RESULT: "structured_result", EvidenceKind.MODEL_PREDICTION: "ml_prediction",
                 EvidenceKind.SIMILAR_PROJECT: "structured_result"}
 BRIEF_ROUTE = "planning_brief"
+MONITOR_ROUTE = "project_watch"
 PLANNING_FIELDS_MESSAGE = (
     "I can prepare a Planning Brief for a new project from past similar projects. Please use “Plan a new project” and "
     "give: the country, the sector, a short description of what the project will do, the planned Board approval date "
@@ -173,6 +177,9 @@ class ConversationFrontDoor:
             return self._ask_for_fields(owner, thread_id, text, Route.ML_PREDICTION.value, PACKAGE_FIELDS_MESSAGE)
         if routing is not None and routing.route == Route.PROCUREMENT_PLANNING:
             return self._ask_for_fields(owner, thread_id, text, BRIEF_ROUTE, PLANNING_FIELDS_MESSAGE)
+        if routing is not None and (project := monitoring_project(text)):
+            outcome = self.watch_project(owner, thread_id, text, project, on_start)
+            return FrontDoorReply(outcome.status.value, outcome.values["request"]["request_id"], investigation=outcome)
         if routing is not None and routing.reason in UNCLEAR and not (mentions_domain(text) or mentions_entities(normalize(text))):
             return self._scope_reply(owner, thread_id, text)                  # nothing procurement-related to investigate
         planning = self._planning_context(owner, thread_id) if routing is not None else None
@@ -245,6 +252,22 @@ class ConversationFrontDoor:
         self._service.compact(owner, thread_id)                                    # summarize older turns when needed
         return outcome
 
+    def watch_project(self, owner: Owner, thread_id: str, text: str, project_id: str,
+                      on_start: Callable[[str], None] | None = None) -> EngineOutcome:
+        """A monitoring question about one project: recorded as a user turn, run with the fixed monitoring plan."""
+        memory = self._service.memory_for(owner, thread_id, text)
+        request_id = self._user_turn(owner, thread_id, text, MONITOR_ROUTE)
+        request = InvestigationRequest(
+            investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=thread_id,
+            owner=owner_ref(owner), question=self._service.text_filter(text), mode="investigation", monitor_project=project_id,
+            rag_release=self._release, authorization=self._authorization_for((Route.PROCUREMENT_PLANNING,)))
+        if on_start:
+            on_start(request_id)
+        outcome = self._engine.start(request, memory_block=memory)
+        self._record_answer(owner, thread_id, request_id, outcome)
+        self._service.compact(owner, thread_id)
+        return outcome
+
     def revise(self, owner: Owner, thread_id: str, answer_request_id: str, correction: str,
                on_start: Callable[[str], None] | None = None) -> EngineOutcome:
         """Re-run the question behind an answer after the user's correction. The correction is already a constraint of
@@ -257,6 +280,7 @@ class ConversationFrontDoor:
         request_id = self._user_turn(owner, thread_id, f"Correction: {correction}", REVISION_ROUTE)
         self._record_use(owner, request_id, guidance)
         routes = ((Route.PROCUREMENT_PLANNING, Route.ML_PREDICTION, Route.DOCUMENT_RAG) if original.planning
+                  else (Route.PROCUREMENT_PLANNING,) if original.monitor_project
                   else (Route.ML_PREDICTION, Route.DOCUMENT_RAG) if original.package
                   else (Route(original.route_hint),) if original.route_hint
                   else (Route.STRUCTURED_DATA, Route.DOCUMENT_RAG))
@@ -264,7 +288,7 @@ class ConversationFrontDoor:
             investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=thread_id,
             owner=owner_ref(owner), question=question, route_hint=original.route_hint, mode=original.mode,
             rag_release=original.rag_release, execute_requested=original.execute_requested, package=original.package,
-            planning=original.planning, planning_context=original.planning_context,
+            planning=original.planning, planning_context=original.planning_context, monitor_project=original.monitor_project,
             budget=BRIEF_BUDGET if original.planning else original.budget, authorization=self._authorization_for(routes))
         if on_start:
             on_start(request_id)

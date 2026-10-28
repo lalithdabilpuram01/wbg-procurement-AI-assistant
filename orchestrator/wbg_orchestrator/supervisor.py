@@ -27,7 +27,7 @@ COMPLEX = re.compile(r"\b(investigat\w*|root causes?|explain why|step by step|an
 
 class SupervisorDecision(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
-    mode: Literal["fast", "plan", "package", "brief", "clarify", "refuse"]
+    mode: Literal["fast", "plan", "package", "brief", "monitor", "clarify", "refuse"]
     worker: WorkerName | None = None
     operation: str | None = None
     requires_execution: bool = False
@@ -41,6 +41,8 @@ class Supervisor:
             return self._package(request)
         if request.planning is not None:
             return self._brief(request)
+        if request.monitor_project is not None:
+            return self._monitor(request)
         text = rules.normalize(request.question)
         if rules.is_tool_directive(text):
             return SupervisorDecision(mode="refuse", reasons=("tool_directive_refused",))
@@ -74,6 +76,14 @@ class Supervisor:
         if Route.PROCUREMENT_PLANNING not in {Route(r) for r in request.authorization.routes}:
             return SupervisorDecision(mode="refuse", routes=routes, reasons=("route_not_authorized",))
         return SupervisorDecision(mode="brief", routes=routes, reasons=("planning_brief",))
+
+    @staticmethod
+    def _monitor(request: InvestigationRequest) -> SupervisorDecision:
+        """A monitoring question about one project (detected by the front door) gets the fixed monitoring plan."""
+        routes = (Route.PROCUREMENT_PLANNING.value,)
+        if Route.PROCUREMENT_PLANNING not in {Route(r) for r in request.authorization.routes}:
+            return SupervisorDecision(mode="refuse", routes=routes, reasons=("route_not_authorized",))
+        return SupervisorDecision(mode="monitor", routes=routes, reasons=("project_monitoring",))
 
     @staticmethod
     def _package(request: InvestigationRequest) -> SupervisorDecision:

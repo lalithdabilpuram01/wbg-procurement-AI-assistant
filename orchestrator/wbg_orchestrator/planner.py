@@ -34,7 +34,7 @@ class PlannerError(Exception):
 class DraftTask(BaseModel):
     model_config = ConfigDict(extra="forbid")
     id: str = Field(pattern=r"^[A-Za-z][A-Za-z0-9_-]{0,15}$")
-    worker: Literal["structured_data", "document_intelligence", "ml_prediction", "procurement_planning"]
+    worker: Literal["structured_data", "document_intelligence", "ml_prediction", "procurement_planning", "project_monitoring"]
     operation: str = Field(min_length=1, max_length=40)
     question: str = Field(min_length=1, max_length=1000)
     depends_on: list[str] = Field(default_factory=list, max_length=6)
@@ -125,6 +125,14 @@ def package_plan(request: InvestigationRequest) -> InvestigationPlan:
          "question": f"What caused delays in the {package.procurement_category.lower()} contracts of project "
                      f"{package.project_id} and what lessons were learned?"}],
         "required": ["predict"], "partial_allowed": True, "rationale": "package assessment (fixed plan)"}
+    return build_plan(raw, request, produced_by="fast_path")
+
+
+def monitor_plan(request: InvestigationRequest) -> InvestigationPlan:
+    """A project's milestones and early warnings (no LLM planning; the answer restates the cited warnings)."""
+    raw = {"tasks": [{"id": "watch", "worker": WorkerName.MONITORING.value, "operation": "watch_project",
+                      "question": f"Milestones and early warnings for project {request.monitor_project}."}],
+           "partial_allowed": False, "rationale": "project monitoring (fixed plan)"}
     return build_plan(raw, request, produced_by="fast_path")
 
 

@@ -28,19 +28,21 @@ from structured_agent.nl2sql.resilience import CircuitBreaker, CircuitOpenError
 
 from .budget import PriceTable, check_budget, priced, usage_update
 from .contracts import (TERMINAL_TASK_STATES, ApprovalDecision, ApprovalRequest, ErrorCategory, EvidenceRecord, ExecutionError,
-                        InvestigationPlan, InvestigationRequest, InvestigationResponse, InvestigationStatus, TaskState, new_id,
-                        utc_now)
+                        InvestigationPlan, InvestigationRequest, InvestigationResponse, InvestigationStatus, TaskState, WorkerName,
+                        new_id, utc_now)
 from .controller import ExecutionController
 from .hitl import ApprovalPolicy, approval_needed, build_approval, decision_problem
 from .observability import AuditTrail, OrchestratorTracer, current_trace_id
-from .planner import Planner, PlannerError, PlanningContext, brief_plan, build_plan, fast_path_plan, package_plan
-from .response import ResponseGenerator, validate_response
+from .planner import (Planner, PlannerError, PlanningContext, brief_plan, build_plan, fast_path_plan, monitor_plan,
+                      package_plan)
+from .response import DeterministicResponseGenerator, ResponseGenerator, validate_response
 from .state import InvestigationState, add_counters
 from .supervisor import Supervisor
 from .verification import VerificationReport, ledger, verify
 
 REPLAN_CATEGORIES = {ErrorCategory.NO_EVIDENCE.value}
 MALFORMED_OUTPUT = {"invalid_model_output", "model_output_truncated"}     # LlmFailure values of unusable replies
+RESTATED_WORKERS = {WorkerName.MONITORING}          # their evidence is already the answer: restated, never sent to a model
 
 
 @dataclass
@@ -181,8 +183,8 @@ class _Nodes:
             self._audit("plan.created", state, plan_id=plan.plan_id, produced_by=plan.produced_by, mode=decision.mode,
                         task_count=len(plan.tasks))
             return {**update, "plan": plan.to_state(), "plans": [plan.to_state()], "phase": "planned"}
-        if decision.mode in ("package", "brief"):
-            plan = package_plan(request) if decision.mode == "package" else brief_plan(request)
+        if decision.mode in ("package", "brief", "monitor"):
+            plan = {"package": package_plan, "brief": brief_plan, "monitor": monitor_plan}[decision.mode](request)
             self._audit("plan.created", state, plan_id=plan.plan_id, produced_by=plan.produced_by, mode=decision.mode,
                         task_count=len(plan.tasks))
             return {**update, "plan": plan.to_state(), "plans": [plan.to_state()], "phase": "planned"}
@@ -395,16 +397,17 @@ class _Nodes:
         cancelled = tuple(t for t, s in states.items() if s == TaskState.CANCELLED.value)
         failed = tuple(t for t, s in states.items() if s in (TaskState.FAILED.value, TaskState.BLOCKED.value))
         draft, usage, errors = None, None, []
+        responder = self._responder(plan)
         with self._span("respond", state, plan_id=plan.plan_id) as span:
             try:
-                if self.d.responder.is_llm:
+                if responder.is_llm:
                     refusal = check_budget(state.get("usage", {}), request.budget, investigation_id=request.investigation_id,
                                            node="respond", needs_llm=True, starts_task=False)
                     if refusal:
                         raise _Stop(refusal)
-                    draft, usage = self._model_call(lambda: self.d.responder.compose(request, used, report))
+                    draft, usage = self._model_call(lambda: responder.compose(request, used, report))
                 else:
-                    draft, usage = self.d.responder.compose(request, used, report)
+                    draft, usage = responder.compose(request, used, report)
             except _Stop as stop:
                 errors.append(stop.error)
             except CircuitOpenError:
@@ -425,6 +428,11 @@ class _Nodes:
         if usage is not None:
             update["usage"] = usage_update(priced(usage, self.d.prices))
         return update
+
+    def _responder(self, plan: InvestigationPlan) -> ResponseGenerator:
+        if plan.tasks and all(t.worker in RESTATED_WORKERS for t in plan.tasks):
+            return DeterministicResponseGenerator()
+        return self.d.responder
 
     @staticmethod
     def _clarification(state, response: InvestigationResponse) -> InvestigationResponse:

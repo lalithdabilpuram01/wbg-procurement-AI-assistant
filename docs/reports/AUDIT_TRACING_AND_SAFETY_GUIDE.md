@@ -96,6 +96,7 @@ the planner schema and the engine's worker registry stop agreeing.
 | procurement_planning | match_similar_projects | the planning spec (profile) | up to 8 similar past projects with reasons and a document scope (similar_project) | Gold via fixed read-only SQL + Lakebase similarity | no | 2 | none (fixed, reviewed SQL) |
 | procurement_planning | market_benchmarks | the planning spec (country, categories) | methods, review types and supplier origin used historically (structured_result) | Gold via fixed read-only SQL | no | 2 | none (fixed, reviewed SQL) |
 | procurement_planning | governance_context | the planning spec (country) | latest CPIA, WGI and income group (structured_result) | Gold via fixed read-only SQL | no | 2 | none (fixed, reviewed SQL) |
+| project_monitoring | watch_project | a project ID from the monitoring question | status summary and cited early warnings (plan rows, contract records, ISR ratings) (early_warning) | typed procurement-plan records and ISR ratings (pilot_v3 corpus) | no | 2 | none (read-only, deterministic rules) |
 
 **Rules every agent follows** (enforced in code):
 

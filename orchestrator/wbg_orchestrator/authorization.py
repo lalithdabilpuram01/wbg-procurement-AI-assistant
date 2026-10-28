@@ -38,6 +38,9 @@ OPERATIONS: dict[str, dict[str, frozenset[str]]] = {
         "market_benchmarks": frozenset({"planning_drafter"}),
         "governance_context": frozenset({"planning_drafter"}),
     },
+    "project_monitoring": {
+        "watch_project": frozenset({"planning_drafter"}),          # the procurement plan's execution: same route
+    },
 }
 EXECUTION_CAPABILITY = "databricks_execution"
 READ_ONLY_OPERATIONS = frozenset(f"{w}:{op}" for w, ops in OPERATIONS.items() for op in ops)

@@ -60,6 +60,9 @@ CATALOG = (
                       "none (fixed, reviewed SQL)"),
     OperationContract("procurement_planning", "governance_context", "the planning spec (country)",
                       "latest CPIA, WGI and income group", "Gold via fixed read-only SQL", False, "none (fixed, reviewed SQL)"),
+    OperationContract("project_monitoring", "watch_project", "a project ID from the monitoring question",
+                      "status summary and cited early warnings (plan rows, contract records, ISR ratings)",
+                      "typed procurement-plan records and ISR ratings (pilot_v3 corpus)", False, "none (read-only, deterministic rules)"),
 )
 
 
@@ -79,6 +82,7 @@ TOOLS = {
     "match_similar_projects": (GOLD_SQL, ("similar_project_scoring", "in_process")),
     "market_benchmarks": (GOLD_SQL,),
     "governance_context": (GOLD_SQL,),
+    "watch_project": (("monitoring_rules", "in_process"),),
 }
 
 

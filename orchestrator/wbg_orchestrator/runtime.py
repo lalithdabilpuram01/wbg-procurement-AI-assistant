@@ -66,6 +66,7 @@ from .supervisor import Supervisor
 from .table_sql import TableSqlWriter
 from .tool_gateway import TRANSPORTS, SupervisedMcpSession, gold_sql, mcp_parameters
 from .workers.base import ResultCache, TicketAuthority
+from .workers.monitoring import MonitoringWorker
 from .workers.planning import PlanningWorker
 from .workers.prediction import PredictionWorker
 
@@ -109,7 +110,8 @@ def build_runtime(config: RuntimeConfig, operator_confirmed: bool) -> tuple[AppS
     gold = gold_sql(tools)                                       # fixed Gold lookups via execute_readonly_sql
     planning = PlanningWorker(gold, authority, semantic_project_scores(document, config.rag_release))
     controller = ExecutionController({WorkerName.STRUCTURED: structured, WorkerName.DOCUMENT: document,
-                                      WorkerName.PREDICTION: PredictionWorker(gold, authority), WorkerName.PLANNING: planning},
+                                      WorkerName.PREDICTION: PredictionWorker(gold, authority), WorkerName.PLANNING: planning,
+                                      WorkerName.MONITORING: MonitoringWorker(authority)},
                                      authority, tracer=tracer, prices=SONNET_5_5_PRICES)
     deps = EngineDeps(controller=controller, supervisor=Supervisor(), planner=ClaudePlanner(json_client),
                       responder=ClaudeResponseGenerator(json_client), guard=guardrails, llm_breaker=llm_breaker(), tracer=tracer,
