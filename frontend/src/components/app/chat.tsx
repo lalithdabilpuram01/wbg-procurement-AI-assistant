@@ -32,6 +32,7 @@ type ChatProps = {
   onStop: () => void;
   onAssess: () => void;
   onPlan: () => void;
+  onTender: () => void;
   onToggleBookmark: (seq: number) => void;
   onDecide: (requestId: string, approvalId: string, approved: boolean) => Promise<void>;
   defaultTableLens: boolean;
@@ -81,6 +82,7 @@ export function ChatView(props: ChatProps) {
               </span>
             </button>
           </Tooltip>
+          <Button size="sm" variant="outline" onClick={props.onTender}><FileSearch /> Check tender</Button>
           <Button size="sm" variant="outline" onClick={props.onAssess}><Calculator /> Assess package</Button>
           <Button size="sm" onClick={props.onPlan}><ClipboardList /> Plan a new project</Button>
         </div>
@@ -109,7 +111,7 @@ export function ChatView(props: ChatProps) {
                   investigation={turn.request_id ? investigations[turn.request_id] : undefined}
                   bookmarked={props.bookmarkedSeqs.has(turn.seq)} onToggleBookmark={() => props.onToggleBookmark(turn.seq)}
                   onDecide={(approvalId, approved) => props.onDecide(turn.request_id!, approvalId, approved)}
-                  onAssess={props.onAssess} onPlan={props.onPlan} onInvestigate={(q) => send(q, false)}
+                  onAssess={props.onAssess} onPlan={props.onPlan} onTender={props.onTender} onInvestigate={(q) => send(q, false)}
                   feedback={feedback.get(turn.seq)} revised={revisedSeqs.has(turn.seq)} onManageMemory={props.onManageMemory}
                   onWatch={props.onWatch}
                   onFeedback={props.onFeedback && ((rating, reasons, correction) => props.onFeedback!(turn.seq, rating, reasons, correction))} />

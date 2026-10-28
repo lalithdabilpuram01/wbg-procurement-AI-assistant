@@ -59,7 +59,7 @@ def _read(document) -> tuple[list[hierarchy.Line], list[tuple[list[str], list[li
             paragraph = Paragraph(element, document)
             text = paragraph.text.strip()
             if text:
-                lines.append(hierarchy.Line(sanitize(text)[0], None, _level(paragraph), _kind(paragraph)))
+                lines.append(hierarchy.Line(sanitize(text)[0], None, _level(paragraph), _kind(paragraph), whole=True))
         elif tag == "tbl":
             header, rows = _table(Table(element, document))
             if header or rows:

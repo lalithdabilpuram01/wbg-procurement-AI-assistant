@@ -24,6 +24,8 @@ from psycopg.rows import dict_row
 from psycopg.types.json import Jsonb
 
 from conversation.postgres_store import checked_schema
+from lessons import store as lesson_store
+from lessons.cards import LessonCard
 
 from .graph import Graph
 from .model import ParsedDocument
@@ -52,6 +54,7 @@ class KnowledgeGraphStore:
         ddl = SCHEMA_SQL.read_text().replace("{schema}", self._name).replace("{vector}", vector)
         with self._connect() as conn, conn.transaction():
             conn.execute(ddl, prepare=False)
+            conn.execute(lesson_store.apply_sql(self._name), prepare=False)
             if self._vector_schema:
                 conn.execute(f"CREATE INDEX IF NOT EXISTS chunk_embedding_hnsw ON {self._name}.chunk USING hnsw "
                              f"(embedding {self._vector_schema}.halfvec_cosine_ops) WITH (m = 16, ef_construction = 64)", prepare=False)
@@ -71,7 +74,7 @@ class KnowledgeGraphStore:
         return (row["status"], row["pipeline"]) if row else None
 
     def load(self, doc: ParsedDocument, graph: Graph, mentions: Sequence[Mention], embeddings: Sequence[Sequence[float]] | None,
-             source: dict[str, Any]) -> dict[str, int]:
+             source: dict[str, Any], lessons: Sequence[LessonCard] = ()) -> dict[str, int]:
         now = dt.datetime.now(dt.timezone.utc)
         with self._connect() as conn, conn.transaction(), conn.cursor() as cur:
             self._remove_document(cur, doc.document_id)
@@ -81,9 +84,10 @@ class KnowledgeGraphStore:
             self._mentions(cur, doc, mentions)
             self._chunks(cur, doc, embeddings)
             self._graph(cur, doc, graph, now)
+            lesson_store.upsert(cur, self._name, lessons)                 # proposed cards; decisions are kept
             self._source(cur, source | {"document_id": doc.document_id, "status": "processed"}, now)
         return {"sections": len(doc.sections), "chunks": len(doc.chunks), "tables": len(doc.tables), "records": len(doc.records),
-                "nodes": len(graph.nodes), "edges": len(graph.edges), "mentions": len(mentions)}
+                "nodes": len(graph.nodes), "edges": len(graph.edges), "mentions": len(mentions), "lessons": len(lessons)}
 
     def record_source(self, source: dict[str, Any]) -> None:
         """A quarantined or duplicate file: recorded for lineage, nothing else is written."""

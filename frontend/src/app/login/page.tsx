@@ -13,7 +13,8 @@ const FEATURES = [
 ];
 
 export default function LoginPage() {
-  const [token, setToken] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,14 +23,14 @@ export default function LoginPage() {
     setBusy(true);
     setError(null);
     const response = await fetch("/api/session", {
-      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token }),
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ username: username.trim(), password }),
     }).catch(() => null);
     if (response?.ok) {
       window.location.assign("/");
       return;
     }
     const body = await response?.json().catch(() => ({}));
-    setError(body?.detail === "invalid token" ? "That access token is not valid." : body?.detail ?? "The API is not reachable.");
+    setError(body?.detail === "wrong username or password" ? "Wrong username or password." : body?.detail ?? "The API is not reachable.");
     setBusy(false);
   };
 
@@ -58,14 +59,18 @@ export default function LoginPage() {
         <Card className="w-full max-w-sm p-8">
           <div className="grid size-10 place-items-center rounded-xl bg-primary-soft text-primary"><KeyRound className="size-5" /></div>
           <h2 className="mt-4 text-xl font-semibold">Sign in</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Use the access token issued for you with <code className="rounded bg-muted px-1">api add-user</code>.</p>
+          <p className="mt-1 text-sm text-muted-foreground">Sign in with your username and password.</p>
           <form onSubmit={submit} className="mt-6 space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="token">Access token</Label>
-              <Input id="token" type="password" value={token} onChange={(e) => setToken(e.target.value)} autoFocus autoComplete="off" />
+              <Label htmlFor="username">Username</Label>
+              <Input id="username" value={username} onChange={(e) => setUsername(e.target.value)} autoFocus autoComplete="username" />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="password">Password</Label>
+              <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" />
             </div>
             {error && <p className="text-sm text-danger">{error}</p>}
-            <Button type="submit" className="w-full" disabled={!token || busy}>{busy && <Spinner />} Continue</Button>
+            <Button type="submit" className="w-full" disabled={!username.trim() || !password || busy}>{busy && <Spinner />} Sign in</Button>
           </form>
         </Card>
       </section>

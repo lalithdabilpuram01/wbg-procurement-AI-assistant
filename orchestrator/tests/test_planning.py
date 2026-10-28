@@ -51,7 +51,7 @@ def test_similar_projects_rank_country_sector_text_and_size_and_keep_a_document_
 def test_a_planning_request_gets_the_fixed_brief_plan():
     assert Supervisor().decide(brief_request()).mode == "brief"
     tasks = {t.local_id: t for t in brief_plan(brief_request()).tasks}
-    assert set(tasks) == {"similar", "market", "governance", "predict", "risks", "issues", "lessons", "packaging"}
+    assert set(tasks) == {"similar", "market", "governance", "reviewed", "predict", "risks", "issues", "lessons", "packaging"}
     assert tasks["predict"].worker == WorkerName.PREDICTION and tasks["predict"].depends_on == (tasks["market"].task_id,)
     assert all(tasks[k].depends_on == (tasks["similar"].task_id,) for k in ("risks", "issues", "lessons", "packaging"))
 

@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Bookmark, BookmarkCheck, Calculator, ChevronDown, ClipboardList, Copy, Eye, Info, Library, PencilLine, ShieldQuestion, Sparkles } from "lucide-react";
+import { Bookmark, BookmarkCheck, Calculator, ChevronDown, ClipboardList, Copy, Eye, FileSearch, Info, Library, PencilLine, ShieldQuestion, Sparkles } from "lucide-react";
 import type { FeedbackState, Investigation, Turn } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Badge, Card, Spinner } from "@/components/ui/primitives";
 import { Tooltip } from "@/components/ui/overlays";
 import { StatusBadge } from "./status";
 import { PredictionCards } from "./prediction-cards";
+import { TenderChecks } from "./tender-checks";
 import { BriefView } from "./brief";
 import { EvidencePanel } from "./evidence-panel";
 import { AppliedLearning, CorrectionForm, FeedbackNote, RateButtons, type SendFeedback } from "./feedback";
@@ -21,6 +22,7 @@ type Props = {
   onDecide: (approvalId: string, approved: boolean) => Promise<void>;
   onAssess: () => void;
   onPlan: () => void;
+  onTender: () => void;
   onInvestigate: (question: string) => void;
   feedback?: FeedbackState;
   revised: boolean;                       // this answer re-ran the question after the user's correction
@@ -42,6 +44,8 @@ export function AnswerCard(props: Props) {
   const status = stopped ? "stopped" : investigation?.status ?? turn.status;
   const brief = investigation?.claims.some((c) => c.section) ?? false;
   const projects = [...new Set(evidence.flatMap((e) => e.project_ids))].slice(0, 3);
+  const checked = new Set(evidence.filter((e) => e.kind === "tender_check").map((e) => e.evidence_id));
+  const claims = (investigation?.claims ?? []).filter((c) => !c.evidence_ids.every((id) => checked.has(id)));   // shown as checks
   const cite = (id: string) => number(id) > 0 && (
     <button key={id} onClick={() => openSource(id)}
       className="ml-1 inline-grid h-[18px] min-w-[18px] place-items-center rounded-md bg-primary-soft px-1 align-text-top text-[10px] font-bold text-primary-strong hover:bg-primary hover:text-white">
@@ -85,17 +89,22 @@ export function AnswerCard(props: Props) {
         ) : (
           <div className="mt-3 space-y-2.5 text-[15px] leading-relaxed">
             {investigation && investigation.claims.length > 0 ? (
-              investigation.claims.map((claim, i) => <p key={i}>{claim.text}{claim.evidence_ids.map(cite)}</p>)
+              claims.map((claim, i) => <p key={i}>{claim.text}{claim.evidence_ids.map(cite)}</p>)
             ) : (
               <p className="whitespace-pre-line">{investigation?.message || turn.text}</p>
             )}
           </div>
         )}
 
+        {investigation && !brief && <TenderChecks evidence={evidence} />}
         {investigation && !brief && <PredictionCards evidence={evidence} />}
 
         {turn.status === "needs_project_details" && (
           <Button size="sm" className="mt-4" onClick={onPlan}><ClipboardList /> Plan a new project</Button>
+        )}
+
+        {turn.status === "needs_tender_details" && (
+          <Button size="sm" className="mt-4" onClick={props.onTender}><FileSearch /> Check tender design</Button>
         )}
 
         {turn.status === "needs_package_details" && (

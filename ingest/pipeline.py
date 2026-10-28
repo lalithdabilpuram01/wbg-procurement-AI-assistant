@@ -17,6 +17,7 @@ from typing import Any, Callable, Protocol, Sequence
 
 from . import PIPELINE_VERSION, detect
 from .graph import Graph, build
+from .lessons import cards_for
 from .layout import Folder, Inbox
 from .model import ParsedDocument, Quarantined
 from .parsers import common, ocr, pdf, tabular, word
@@ -30,7 +31,8 @@ RECORD_TYPES = {"contract": "contract", "notice": "notice", "PP": "plan_activity
 
 class Sink(Protocol):
     def known(self, sha256: str) -> tuple[str, str] | None: ...          # (status, pipeline version) of these exact bytes
-    def load(self, doc: ParsedDocument, graph: Graph, mentions: Sequence[Mention], embeddings, source: dict) -> dict[str, int]: ...
+    def load(self, doc: ParsedDocument, graph: Graph, mentions: Sequence[Mention], embeddings, source: dict,
+             lessons: Sequence = ()) -> dict[str, int]: ...
     def record_source(self, source: dict) -> None: ...
     def record_run(self, run_id: str, started: dt.datetime, summary: dict, pipeline: str) -> None: ...
     def reconcile(self) -> dict[str, int]: ...
@@ -98,10 +100,11 @@ class Pipeline:
             doc = self._parse(folder, path, sha, fmt)
             self._name_after_project(doc)
             res = resolve(doc, self.reference)
-            graph = build(doc, res, self.reference)
+            lessons = cards_for(doc, self.reference)                       # proposed lesson cards (ICR, ICRR, PAD)
+            graph = build(doc, res, self.reference, lessons)
             vectors = self.embed([c.text for c in doc.chunks]) if self.embed and doc.chunks else None
             outcome.counts = self.sink.load(doc, graph, res.mentions, vectors, source | {
-                "modality": doc.modality, "warnings": doc.warnings, "rejected_rows": doc.rejected_rows})
+                "modality": doc.modality, "warnings": doc.warnings, "rejected_rows": doc.rejected_rows}, lessons)
             outcome.document_id, outcome.doc_type, outcome.modality = doc.document_id, doc.doc_type, doc.modality
             outcome.warnings, outcome.rejected_rows = doc.warnings, len(doc.rejected_rows)
             self._move(path, folder, "_processed")
@@ -184,6 +187,7 @@ class MemorySink:
 
     def __init__(self) -> None:
         self.documents: dict[str, tuple[ParsedDocument, Graph, list[Mention], Any]] = {}
+        self.lessons: dict[str, list] = {}
         self.sources: dict[str, dict] = {}
         self.runs: list[dict] = []
 
@@ -191,10 +195,12 @@ class MemorySink:
         source = self.sources.get(sha256)
         return (source["status"], source["pipeline"]) if source else None
 
-    def load(self, doc, graph, mentions, embeddings, source) -> dict[str, int]:
+    def load(self, doc, graph, mentions, embeddings, source, lessons=()) -> dict[str, int]:
         self.documents[doc.document_id] = (doc, graph, list(mentions), embeddings)
+        self.lessons[doc.document_id] = list(lessons)
         self.sources[source["sha256"]] = source | {"status": "processed", "document_id": doc.document_id}
-        return {"sections": len(doc.sections), "chunks": len(doc.chunks), "nodes": len(graph.nodes), "edges": len(graph.edges)}
+        return {"sections": len(doc.sections), "chunks": len(doc.chunks), "nodes": len(graph.nodes), "edges": len(graph.edges),
+                "lessons": len(lessons)}
 
     def record_source(self, source: dict) -> None:
         self.sources[source["sha256"]] = source

@@ -1,11 +1,14 @@
 """Local web API (FastAPI) over `AppService`.
 
 Authentication: `Authorization: Bearer <token>`. Tokens are issued once with `add-user`; only their SHA-256 is kept
-in the user file (outside the repository, mode 600). The server derives the owner from the token; no request body or
+in the user file (outside the repository, mode 600). A user given a password (`add-user --password`) can also sign in
+with it (`POST /auth/login`): the password is kept as a salted scrypt hash and each sign-in issues a session token
+that lives in memory for SESSION_HOURS (a restart signs everyone out). The server derives the owner from the token; no request body or
 path carries a user id. Another user's conversation, investigation or job is reported as 404, like a missing one.
 
     cd orchestrator
     uv run python -m wbg_orchestrator.api add-user --user alice          # prints the token once
+    uv run python -m wbg_orchestrator.api add-user --user rita --password '...' --reviewer
     WBG_ALLOW_LIVE_LLM_CALLS=true uv run python -m wbg_orchestrator.api serve --confirm-live-call
 
 Endpoints:
@@ -16,10 +19,14 @@ Endpoints:
 - feedback: rate an answer (a correction starts a revision job), the user's memory (preferences, learned items),
   and the reviewer queue (only for users added with `--reviewer`);
 - monitoring: a project's milestones and early warnings (monitoring.watch; deterministic, cited, no model call).
+- lessons: the lesson-card review queue (reviewers only): approve or reject each proposed card;
+- tender design: check a draft against history (a job, like packages and plans); the text of an uploaded draft (not stored).
 """
 from __future__ import annotations
 
 import argparse
+import base64
+import binascii
 import hashlib
 import hmac
 import json
@@ -28,6 +35,7 @@ import re
 import secrets
 import stat
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -38,11 +46,14 @@ from pydantic import BaseModel, Field
 from conversation.learning import Feedback, LearnedItem, LearningItemNotFound, Review
 from conversation.models import Owner
 from monitoring.watch import watch as watch_project, watched_projects
+from lessons.cards import LessonCard
+from lessons.store import STATUSES as LESSON_STATUSES, LessonNotFound
+from tender.text import UnreadableDraft, text_from_file
 from conversation.store import ThreadNotFound
 from conversation.workspace import WorkspaceItemNotFound
 
 from .app_service import AppService, ConversationBusy, Job, JobNotFound, summarize
-from .contracts import PackageSpec, PlanningSpec
+from .contracts import PackageSpec, PlanningSpec, TenderSpec
 from .feedback import FeedbackRefused, FeedbackRequest, Preferences, ReviewerOnly
 from .rate_limit import RateLimiter
 from .engine import ApprovalNotPending, InvestigationNotFound
@@ -50,6 +61,8 @@ from .engine import ApprovalNotPending, InvestigationNotFound
 DEFAULT_USERS_FILE = Path.home() / ".wbg" / "api_users.json"
 CLIENT_ID = r"^[A-Za-z0-9_-]{8,64}$"
 PROJECT_ID = re.compile(r"P\d{6}")
+SESSION_HOURS = 12
+SCRYPT = {"n": 2 ** 14, "r": 8, "p": 1}
 
 
 # --------------------------------------------------------------------------------------------------- users
@@ -60,6 +73,7 @@ class UserDirectory:
     def __init__(self, entries: list[dict[str, str]], path: Path | None = None):
         self._entries, self._path = entries, path
         self._mtime = path.stat().st_mtime_ns if path and path.is_file() else None
+        self._sessions: dict[str, tuple[Owner, float]] = {}                 # token SHA-256 -> (owner, expiry)
 
     @classmethod
     def load(cls, path: Path = DEFAULT_USERS_FILE) -> "UserDirectory":
@@ -75,7 +89,24 @@ class UserDirectory:
         for entry in self._entries:
             if hmac.compare_digest(entry["token_sha256"], digest):
                 return Owner(tenant_id=entry["tenant_id"], user_id=entry["user_id"])
+        session = self._sessions.get(digest)
+        if session and session[1] > time.time():
+            return session[0]
+        self._sessions.pop(digest, None)
         return None
+
+    def sign_in(self, user_id: str, password: str) -> str | None:
+        """A session token for the right password (None otherwise; the same work is done for unknown users)."""
+        self._refresh()
+        entry = next((e for e in self._entries if e["user_id"] == user_id and e.get("password")), None)
+        stored = entry["password"] if entry else {"salt": "00" * 16, "scrypt": "00" * 32}
+        attempt = hashlib.scrypt(password.encode(), salt=bytes.fromhex(stored["salt"]), **SCRYPT).hex()
+        if entry is None or not hmac.compare_digest(attempt, stored["scrypt"]):
+            return None
+        token = secrets.token_urlsafe(32)
+        self._sessions[hashlib.sha256(token.encode()).hexdigest()] = (
+            Owner(tenant_id=entry["tenant_id"], user_id=entry["user_id"]), time.time() + SESSION_HOURS * 3600)
+        return token
 
     def is_reviewer(self, owner: Owner) -> bool:
         """Reviewers decide what feedback is shared with the tenant and which evaluation cases are kept."""
@@ -84,20 +115,31 @@ class UserDirectory:
                    for e in self._entries)
 
     @staticmethod
-    def add_user(path: Path, user_id: str, tenant_id: str = "local", reviewer: bool = False) -> str:
-        """Create a token for a user, store only its hash, and return the token (shown once)."""
+    def add_user(path: Path, user_id: str, tenant_id: str = "local", reviewer: bool = False, password: str | None = None) -> str:
+        """Create a token for a user (and a password sign-in when given), store only hashes, and return the token."""
         token = secrets.token_urlsafe(32)
         data = json.loads(path.read_text()) if path.is_file() else {"users": []}
         data["users"] = [u for u in data["users"] if not (u["user_id"] == user_id and u["tenant_id"] == tenant_id)]
         data["users"].append({"tenant_id": tenant_id, "user_id": user_id, "token_sha256": hashlib.sha256(token.encode()).hexdigest(),
-                              "roles": ["reviewer"] if reviewer else []})
+                              "roles": ["reviewer"] if reviewer else [],
+                              **({"password": _password_hash(password)} if password else {})})
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(data, indent=2))
         os.chmod(path, stat.S_IRUSR | stat.S_IWUSR)
         return token
 
 
+def _password_hash(password: str) -> dict[str, str]:
+    salt = secrets.token_bytes(16)
+    return {"salt": salt.hex(), "scrypt": hashlib.scrypt(password.encode(), salt=salt, **SCRYPT).hex()}
+
+
 # ------------------------------------------------------------------------------------------------- requests
+class SignIn(BaseModel):
+    username: str = Field(min_length=1, max_length=64)
+    password: str = Field(min_length=1, max_length=200)
+
+
 class NewConversation(BaseModel):
     title: str | None = Field(default=None, max_length=120)
 
@@ -135,6 +177,20 @@ class NewPlan(PlanningSpec):
     client_message_id: str = Field(pattern=CLIENT_ID)
 
 
+class NewTender(TenderSpec):
+    client_message_id: str = Field(pattern=CLIENT_ID)
+
+
+class DraftFile(BaseModel):
+    filename: str = Field(min_length=1, max_length=200)
+    content_base64: str = Field(min_length=1, max_length=7_000_000)        # about 5 MB of file
+
+
+class LessonDecision(BaseModel):
+    approved: bool
+    note: str | None = Field(default=None, max_length=300)
+
+
 class ApprovalAnswer(BaseModel):
     approval_id: str = Field(min_length=1, max_length=80)
     approved: bool
@@ -170,6 +226,14 @@ def item_view(item: LearnedItem, expired: bool = False) -> dict[str, Any]:
     return {"item_id": item.item_id, "kind": item.kind, "scope": item.scope, "statement": item.statement,
             "question": item.question, "use_count": item.use_count, "created_at": item.created_at.isoformat(),
             "last_used_at": item.last_used_at.isoformat() if item.last_used_at else None, "expired": expired}
+
+
+def lesson_view(card: LessonCard) -> dict[str, Any]:
+    return {"card_id": card.card_id, "status": card.status, "headline": card.headline, "text": card.text,
+            "project_id": card.project_id, "country": card.country, "sector": card.sector, "doc_type": card.doc_type,
+            "source": card.source_label, "citation": card.citation, "document_id": card.document_id, "page_start": card.page_start,
+            "page_end": card.page_end, "topics": list(card.topics), "stages": list(card.stages), "categories": list(card.categories),
+            "decided_by": card.decided_by, "note": card.note}
 
 
 def review_view(review: Review) -> dict[str, Any]:
@@ -216,6 +280,7 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
     @app.exception_handler(JobNotFound)
     @app.exception_handler(WorkspaceItemNotFound)
     @app.exception_handler(LearningItemNotFound)
+    @app.exception_handler(LessonNotFound)
     def not_found(request: Request, error: Exception) -> JSONResponse:
         return JSONResponse({"detail": "not found"}, status_code=404)
 
@@ -232,6 +297,13 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
     def conflict(request: Request, error: Exception) -> JSONResponse:
         detail = "another request is still running" if isinstance(error, ConversationBusy) else "no pending approval with this id"
         return JSONResponse({"detail": detail}, status_code=409)
+
+    @app.post("/auth/login")
+    def sign_in(body: SignIn) -> dict[str, str]:
+        token = users.sign_in(body.username.strip(), body.password)
+        if token is None:
+            raise HTTPException(status.HTTP_401_UNAUTHORIZED, "wrong username or password")
+        return {"token": token}
 
     @app.get("/health")
     def health() -> dict[str, str]:
@@ -332,6 +404,17 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
     def revoke_item(item_id: str, owner: Owner = Depends(current_owner)) -> None:
         service.revoke_item(owner, item_id, users.is_reviewer(owner))
 
+    @app.get("/lessons")
+    def list_lessons(state: str = Query("proposed", alias="status"), owner: Owner = Depends(reviewer_owner)) -> dict[str, Any]:
+        """Lesson cards for the review queue (reviewers only): the cards of one status and the counts of all."""
+        if state not in LESSON_STATUSES:
+            raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "unknown status")
+        return {"counts": service.lesson_counts(), "cards": [lesson_view(c) for c in service.lesson_cards(state)]}
+
+    @app.post("/lessons/{card_id}")
+    def decide_lesson(card_id: str, body: LessonDecision, owner: Owner = Depends(reviewer_owner)) -> dict[str, Any]:
+        return lesson_view(service.decide_lesson(owner, card_id, body.approved, body.note))
+
     @app.get("/reviews")
     def list_reviews(state: str = Query("pending", alias="status"), owner: Owner = Depends(reviewer_owner)) -> list[dict[str, Any]]:
         wanted = None if state == "all" else state
@@ -352,6 +435,21 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
     def submit_package(conversation_id: str, body: NewPackage, owner: Owner = Depends(limited_owner)) -> dict[str, Any]:
         package = PackageSpec(**body.model_dump(exclude={"client_message_id"}))
         return job_view(service.submit_package(owner, conversation_id, package, body.client_message_id))
+
+    @app.post("/conversations/{conversation_id}/tenders", status_code=202)
+    def submit_tender(conversation_id: str, body: NewTender, owner: Owner = Depends(limited_owner)) -> dict[str, Any]:
+        spec = TenderSpec(**body.model_dump(exclude={"client_message_id"}))
+        return job_view(service.submit_tender(owner, conversation_id, spec, body.client_message_id))
+
+    @app.post("/drafts/text")
+    def draft_text(body: DraftFile, owner: Owner = Depends(limited_owner)) -> dict[str, Any]:
+        """The text of an uploaded draft, for the user to review before a tender check (nothing is stored)."""
+        try:
+            text = text_from_file(body.filename, base64.b64decode(body.content_base64, validate=True))
+        except (UnreadableDraft, binascii.Error) as error:
+            detail = str(error) if isinstance(error, UnreadableDraft) else "The file could not be decoded."
+            raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, detail) from error
+        return {"text": text, "characters": len(text)}
 
     @app.post("/conversations/{conversation_id}/plans", status_code=202)
     def submit_plan(conversation_id: str, body: NewPlan, owner: Owner = Depends(limited_owner)) -> dict[str, Any]:
@@ -399,12 +497,13 @@ def main(argv: list[str]) -> int:
     add.add_argument("--user", required=True)
     add.add_argument("--tenant", default="local")
     add.add_argument("--reviewer", action="store_true", help="may approve shared feedback and evaluation cases")
+    add.add_argument("--password", help="also allow signing in with this password (kept as a salted hash)")
     serve = commands.add_parser("serve", help="run the API on this laptop (127.0.0.1)")
     serve.add_argument("--confirm-live-call", action="store_true", help="operator approval for live Claude calls")
     serve.add_argument("--port", type=int, default=8080)
     args = parser.parse_args(argv)
     if args.command == "add-user":
-        print(UserDirectory.add_user(DEFAULT_USERS_FILE, args.user, args.tenant, args.reviewer))
+        print(UserDirectory.add_user(DEFAULT_USERS_FILE, args.user, args.tenant, args.reviewer, args.password))
         return 0
     import uvicorn
 

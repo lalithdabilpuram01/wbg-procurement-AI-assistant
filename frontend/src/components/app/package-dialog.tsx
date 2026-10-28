@@ -7,12 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Input, Label, Select, Spinner } from "@/components/ui/primitives";
 import { Dialog, DialogContent } from "@/components/ui/overlays";
 
-const METHODS = ["Request for Bids", "Request for Quotations", "Request for Proposals", "Direct Selection",
+export const METHODS = ["Request for Bids", "Request for Quotations", "Request for Proposals", "Direct Selection",
   "Quality And Cost-Based Selection", "Quality Based Selection", "Consultant Qualification Selection",
   "Least Cost Selection", "Fixed Budget Selection", "Individual Consultant Selection"];
-const CATEGORIES = ["Works", "Goods", "Consultant Services", "Non-consulting Services"];
+export const CATEGORIES = ["Works", "Goods", "Consultant Services", "Non-consulting Services"];
 
-function inDays(days: number): string {
+export function inDays(days: number): string {
   const date = new Date(Date.now() + days * 86_400_000);
   return date.toISOString().slice(0, 10);
 }

@@ -26,8 +26,10 @@ from conversation.models import Owner, ThreadInfo, Turn
 from conversation.service import ConversationService
 from conversation.store import ConversationStore
 from conversation.workspace import Bookmark, Folder, InMemoryWorkspaceStore, WorkspaceItemNotFound, WorkspaceStore
+from lessons.cards import LessonCard
+from lessons.store import LessonNotFound, LessonStore
 
-from .contracts import PackageSpec, PlanningSpec, investigation_id_for, new_id
+from .contracts import PackageSpec, PlanningSpec, TenderSpec, investigation_id_for, new_id
 from .conversation_bridge import ConversationFrontDoor, owner_ref
 from .engine import EngineOutcome, InvestigationEngine, InvestigationNotFound, checkpoint_thread_id
 from .feedback import FeedbackRequest, FeedbackService, Preferences
@@ -49,7 +51,7 @@ class Job:
     job_id: str
     owner: Owner
     conversation_id: str
-    kind: Literal["message", "approval", "recover", "package", "plan", "revision"]
+    kind: Literal["message", "approval", "recover", "package", "plan", "revision", "tender"]
     state: JobState = "running"
     request_id: str | None = None             # the investigation's request, once known
     status: str | None = None                 # conversation or investigation status at the end
@@ -68,10 +70,11 @@ class InvestigationRef:
 class AppService:
     def __init__(self, conversations: ConversationService, store: ConversationStore, engine: InvestigationEngine,
                  front_door: ConversationFrontDoor, *, workspace: WorkspaceStore | None = None,
-                 learning: FeedbackService | None = None, max_workers: int = 2):
+                 learning: FeedbackService | None = None, lessons: LessonStore | None = None, max_workers: int = 2):
         self._conversations, self._store, self._engine, self._front_door = conversations, store, engine, front_door
         self._workspace = workspace or InMemoryWorkspaceStore()
         self.learning = learning
+        self.lessons = lessons
         if learning:
             front_door.use_learning(learning)
         self._feedback_by_client: dict[tuple[str, str, str, str], tuple[Feedback, str | None]] = {}
@@ -151,6 +154,12 @@ class AppService:
                             lambda job: self._finish_outcome(job, self._front_door.plan_project(
                                 owner, conversation_id, spec, on_start=lambda rid: self._started(job, rid))))
 
+    def submit_tender(self, owner: Owner, conversation_id: str, spec: TenderSpec, client_message_id: str) -> Job:
+        self._store.get_thread(owner, conversation_id)                         # ownership before anything runs
+        return self._submit(owner, conversation_id, "tender", client_message_id,
+                            lambda job: self._finish_outcome(job, self._front_door.check_tender(
+                                owner, conversation_id, spec, on_start=lambda rid: self._started(job, rid))))
+
     # ------------------------------------------------------------------------------------------------ feedback
     def give_feedback(self, owner: Owner, conversation_id: str, request: FeedbackRequest,
                       client_message_id: str) -> tuple[Feedback, Job | None]:
@@ -194,6 +203,21 @@ class AppService:
 
     def decide_review(self, owner: Owner, review_id: str, approved: bool, note: str | None, expected_terms: list[str]) -> Review:
         return self._learning().decide(owner, review_id, approved, note, expected_terms)
+
+    # ----------------------------------------------------------------------------------------------- lessons
+    def lesson_cards(self, status: str | None, limit: int = 500) -> list[LessonCard]:
+        return self._lessons().cards(status, limit)
+
+    def lesson_counts(self) -> dict[str, int]:
+        return self._lessons().counts()
+
+    def decide_lesson(self, owner: Owner, card_id: str, approved: bool, note: str | None) -> LessonCard:
+        return self._lessons().decide(card_id, approved, owner.user_id, note)
+
+    def _lessons(self) -> LessonStore:
+        if self.lessons is None:
+            raise LessonNotFound("lesson cards are not enabled in this app")
+        return self.lessons
 
     # ------------------------------------------------------------------------------------------ investigations
     def investigations(self, owner: Owner, conversation_id: str) -> list[InvestigationRef]:

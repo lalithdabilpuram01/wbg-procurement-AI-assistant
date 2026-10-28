@@ -11,7 +11,8 @@ Drop a file into the folder for its type under `ingestion_inbox/` and run `pytho
     5. sanitise    personal data masked (rag.ingestion.sanitize); the raw text is never stored in the graph
     6. resolve     entity mentions linked to reference records: exact key, normalised key, or probabilistic
                    (fuzzy match within a project, temporal proximity), each with a match class and confidence
-    7. graph       typed nodes and edges with provenance (ingest.graph), validated against the edge catalog
+    7. graph       typed nodes and edges with provenance (ingest.graph), validated against the edge catalog; lessons
+                   sections of ICRs, IEG reviews and PADs become proposed lesson cards (Lesson nodes, lesson_card rows)
     8. embed+load  bge-m3 vectors and the document's subgraph written in ONE transaction to Lakebase (schema wbg_kg)
 
 A processed file moves to `_processed/`, a refused one to `_quarantine/` with a `.reason.json` beside it, and every
@@ -19,4 +20,4 @@ outcome is appended to `_ledger/ledger.jsonl`. Re-dropping an identical file is 
 document's subgraph.
 """
 
-PIPELINE_VERSION = "ingest-1.0.2"
+PIPELINE_VERSION = "ingest-1.1.0"          # 1.1: lesson cards (Lesson nodes + lesson_card rows)

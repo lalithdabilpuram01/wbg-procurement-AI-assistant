@@ -32,6 +32,14 @@ export type Review = {
   question: string; statement: string; details: { steps?: string[]; tables?: string[]; filters?: string[] };
   answer_excerpt: string | null; reasons: FeedbackReason[]; created_at: string; note: string | null; expected_terms: string[];
 };
+export type LessonStatus = "proposed" | "approved" | "rejected";
+export type LessonCard = {
+  card_id: string; status: LessonStatus; headline: string; text: string; project_id: string | null; country: string | null;
+  sector: string | null; doc_type: "ICR" | "ICRR" | "PAD"; source: string; citation: string; document_id: string;
+  page_start: number | null; page_end: number | null; topics: string[]; stages: string[]; categories: string[];
+  decided_by: string | null; note: string | null;
+};
+export type LessonQueue = { counts: Record<LessonStatus, number>; cards: LessonCard[] };
 export type Me = { user_id: string; reviewer: boolean; feedback: boolean };
 export type WatchedProject = { project_id: string; title: string | null; country: string | null; packages: number };
 export type WatchWarning = {
@@ -69,6 +77,8 @@ export type PackageInput = {
   project_id: string; procurement_method: string; procurement_category: string; review_type: string;
   bid_window_days: number; tender_date: string;
 };
+
+export type TenderInput = PackageInput & { estimated_amount_usd: number | null; lots: number; draft_text: string };
 
 export type ProjectProfile = {
   country_code: string; sector: string; description: string; approval_date: string; total_cost_usd: number | null;
@@ -108,6 +118,10 @@ export const api = {
     call<Job>(`conversations/${id}/messages`, json("POST", { text, execute, table_lens: tableLens, client_message_id: clientId() })),
   assessPackage: (id: string, input: PackageInput) =>
     call<Job>(`conversations/${id}/packages`, json("POST", { ...input, client_message_id: clientId() })),
+  checkTender: (id: string, input: TenderInput) =>
+    call<Job>(`conversations/${id}/tenders`, json("POST", { ...input, client_message_id: clientId() })),
+  draftText: (filename: string, contentBase64: string) =>
+    call<{ text: string; characters: number }>("drafts/text", json("POST", { filename, content_base64: contentBase64 })),
   planProject: (id: string, input: PlanInput) =>
     call<Job>(`conversations/${id}/plans`, json("POST", { ...input, client_message_id: clientId() })),
   job: (id: string) => call<Job>(`jobs/${id}`),
@@ -135,6 +149,9 @@ export const api = {
   removeItem: (id: string) => call<void>(`learning/items/${id}`, { method: "DELETE" }),
   projects: () => call<WatchedProject[]>("projects"),
   watch: (projectId: string) => call<ProjectWatch>(`projects/${projectId}/watch`),
+  lessons: (status: LessonStatus = "proposed") => call<LessonQueue>(`lessons?status=${status}`),
+  decideLesson: (id: string, approved: boolean, note?: string) =>
+    call<LessonCard>(`lessons/${id}`, json("POST", { approved, note: note || null })),
   reviews: (status = "pending") => call<Review[]>(`reviews?status=${status}`),
   decideReview: (id: string, approved: boolean, note?: string, expectedTerms: string[] = []) =>
     call<Review>(`reviews/${id}`, json("POST", { approved, note: note || null, expected_terms: expectedTerms })),

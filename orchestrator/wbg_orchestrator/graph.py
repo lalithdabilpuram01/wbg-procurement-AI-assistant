@@ -34,7 +34,7 @@ from .controller import ExecutionController
 from .hitl import ApprovalPolicy, approval_needed, build_approval, decision_problem
 from .observability import AuditTrail, OrchestratorTracer, current_trace_id
 from .planner import (Planner, PlannerError, PlanningContext, brief_plan, build_plan, fast_path_plan, monitor_plan,
-                      package_plan)
+                      package_plan, tender_plan)
 from .response import DeterministicResponseGenerator, ResponseGenerator, validate_response
 from .state import InvestigationState, add_counters
 from .supervisor import Supervisor
@@ -42,7 +42,7 @@ from .verification import VerificationReport, ledger, verify
 
 REPLAN_CATEGORIES = {ErrorCategory.NO_EVIDENCE.value}
 MALFORMED_OUTPUT = {"invalid_model_output", "model_output_truncated"}     # LlmFailure values of unusable replies
-RESTATED_WORKERS = {WorkerName.MONITORING}          # their evidence is already the answer: restated, never sent to a model
+RESTATED_WORKERS = {WorkerName.MONITORING, WorkerName.LESSONS}          # their evidence is already the answer: restated, never sent to a model
 
 
 @dataclass
@@ -183,8 +183,8 @@ class _Nodes:
             self._audit("plan.created", state, plan_id=plan.plan_id, produced_by=plan.produced_by, mode=decision.mode,
                         task_count=len(plan.tasks))
             return {**update, "plan": plan.to_state(), "plans": [plan.to_state()], "phase": "planned"}
-        if decision.mode in ("package", "brief", "monitor"):
-            plan = {"package": package_plan, "brief": brief_plan, "monitor": monitor_plan}[decision.mode](request)
+        if decision.mode in ("package", "brief", "monitor", "tender"):
+            plan = {"package": package_plan, "brief": brief_plan, "monitor": monitor_plan, "tender": tender_plan}[decision.mode](request)
             self._audit("plan.created", state, plan_id=plan.plan_id, produced_by=plan.produced_by, mode=decision.mode,
                         task_count=len(plan.tasks))
             return {**update, "plan": plan.to_state(), "plans": [plan.to_state()], "phase": "planned"}
@@ -397,7 +397,7 @@ class _Nodes:
         cancelled = tuple(t for t, s in states.items() if s == TaskState.CANCELLED.value)
         failed = tuple(t for t, s in states.items() if s in (TaskState.FAILED.value, TaskState.BLOCKED.value))
         draft, usage, errors = None, None, []
-        responder = self._responder(plan)
+        responder = self._responder(request, plan)
         with self._span("respond", state, plan_id=plan.plan_id) as span:
             try:
                 if responder.is_llm:
@@ -429,8 +429,9 @@ class _Nodes:
             update["usage"] = usage_update(priced(usage, self.d.prices))
         return update
 
-    def _responder(self, plan: InvestigationPlan) -> ResponseGenerator:
-        if plan.tasks and all(t.worker in RESTATED_WORKERS for t in plan.tasks):
+    def _responder(self, request: InvestigationRequest, plan: InvestigationPlan) -> ResponseGenerator:
+        """Monitoring answers and tender checks are restated from their evidence (checks, warnings, estimates, passages)."""
+        if request.tender is not None or (plan.tasks and all(t.worker in RESTATED_WORKERS for t in plan.tasks)):
             return DeterministicResponseGenerator()
         return self.d.responder
 

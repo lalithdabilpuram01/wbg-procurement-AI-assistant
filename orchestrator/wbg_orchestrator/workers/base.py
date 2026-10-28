@@ -99,6 +99,7 @@ class WorkerContext:
     cancel_event: threading.Event = field(default_factory=threading.Event)
     package: Any = None                                    # PackageSpec of a package assessment (from the request)
     planning: Any = None                                   # PlanningSpec of a Planning Brief (from the request)
+    tender: Any = None                                     # TenderSpec of a tender-design check (from the request)
 
 
 @dataclass(frozen=True)

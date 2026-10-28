@@ -28,9 +28,10 @@ npm install && npm run dev        # http://localhost:3000   (WBG_API_URL default
 | Workspace | `components/app/sidebar.tsx` | Folders (create, rename, delete, move chats), chat search and rename |
 | Bookmarks | `components/app/chat-bookmarks.tsx` in the chat header | Bookmarks of the open chat only; pick one to jump to that answer, or remove it |
 | Project watch | `components/app/watch.tsx` (sidebar, or "Watch P…" on an answer) | Execution & Monitoring: summary tiles, latest ISR ratings, early warnings with their citations, packages with a stage timeline (`GET /projects`, `GET /projects/{id}/watch`) |
+| Tender check | `components/app/tender-dialog.tsx`, `tender-checks.tsx` ("Check tender" in the chat header) | Tender Design & Packaging: package basics + pasted or uploaded draft (`POST /drafts/text` reads PDF / Word / text, nothing stored); answer shows the terms found (hover for the sentence) and each check against history with its source (`POST /conversations/{id}/tenders`) |
 | Feedback | `components/app/feedback.tsx` in `answer.tsx` | Thumbs up/down; reasons and a correction re-run the question (“Revised answer”); “Guided by N saved items” |
 | Memory | `components/app/memory.tsx` | Preferences (default fiscal years, amounts, answer length, TableLens default); saved corrections and approaches, personal or team, with removal |
-| Review queue | `components/app/reviews.tsx` (reviewers only: `add-user --reviewer`) | Share a correction or approach with the team, or keep an answer marked wrong as an evaluation case |
+| Review queue | `components/app/reviews.tsx`, `lesson-reviews.tsx` (reviewers only: `add-user --reviewer`) | Feedback items: share a correction or approach with the team, or keep an answer marked wrong as an evaluation case. Lesson cards: approve or reject each proposed lesson (only approved cards reach answers; `GET/POST /lessons`) |
 | TableLens | header switch in `chat.tsx` | Reserved for the TableLens demo pipeline (Card-to-Cell table retrieval); disabled until it ships |
 
 Spending: every Claude call goes through the API's ledger (default 10 calls / $2.00; set `WBG_LLM_MAX_ATTEMPTS` and

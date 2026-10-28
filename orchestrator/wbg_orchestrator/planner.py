@@ -34,7 +34,8 @@ class PlannerError(Exception):
 class DraftTask(BaseModel):
     model_config = ConfigDict(extra="forbid")
     id: str = Field(pattern=r"^[A-Za-z][A-Za-z0-9_-]{0,15}$")
-    worker: Literal["structured_data", "document_intelligence", "ml_prediction", "procurement_planning", "project_monitoring"]
+    worker: Literal["structured_data", "document_intelligence", "ml_prediction", "procurement_planning", "project_monitoring",
+                    "tender_design", "lesson_cards"]
     operation: str = Field(min_length=1, max_length=40)
     question: str = Field(min_length=1, max_length=1000)
     depends_on: list[str] = Field(default_factory=list, max_length=6)
@@ -131,8 +132,29 @@ def package_plan(request: InvestigationRequest) -> InvestigationPlan:
 def monitor_plan(request: InvestigationRequest) -> InvestigationPlan:
     """A project's milestones and early warnings (no LLM planning; the answer restates the cited warnings)."""
     raw = {"tasks": [{"id": "watch", "worker": WorkerName.MONITORING.value, "operation": "watch_project",
-                      "question": f"Milestones and early warnings for project {request.monitor_project}."}],
-           "partial_allowed": False, "rationale": "project monitoring (fixed plan)"}
+                      "question": f"Milestones and early warnings for project {request.monitor_project}."},
+                     {"id": "lessons", "worker": WorkerName.LESSONS.value, "operation": "find_lessons", "optional": True,
+                      "depends_on": ["watch"], "question": f"Reviewed lessons on execution for project {request.monitor_project}."}],
+           "required": ["watch"], "partial_allowed": True, "rationale": "project monitoring (fixed plan)"}
+    return build_plan(raw, request, produced_by="fast_path")
+
+
+def tender_plan(request: InvestigationRequest) -> InvestigationPlan:
+    """A tender-design check (no LLM planning): the draft's terms against history, the three model estimates for the
+    package and the project's documented specification, qualification and competition problems (both optional)."""
+    tender = request.tender
+    raw = {"tasks": [
+        {"id": "check", "worker": WorkerName.TENDER.value, "operation": "check_tender_design",
+         "question": f"Check the tender design of a {tender.procurement_category} package ({tender.procurement_method}) in project "
+                     f"{tender.project_id} against historical benchmarks."},
+        {"id": "predict", "worker": WorkerName.PREDICTION.value, "operation": "predict_package", "optional": True,
+         "question": f"Predict tender duration, amendment risk and re-bidding risk for this {tender.procurement_category} package."},
+        {"id": "lessons", "worker": WorkerName.DOCUMENT.value, "operation": "answer_document_question", "optional": True,
+         "question": f"What problems with technical specifications, qualification requirements or the number of bidders occurred in "
+                     f"{tender.procurement_category.lower()} contracts of project {tender.project_id}, and what lessons were learned?"},
+        {"id": "reviewed", "worker": WorkerName.LESSONS.value, "operation": "find_lessons", "optional": True, "depends_on": ["check"],
+         "question": f"Reviewed lessons on tender design for {tender.procurement_category} packages."}],
+        "required": ["check"], "partial_allowed": True, "rationale": "tender design check (fixed plan)"}
     return build_plan(raw, request, produced_by="fast_path")
 
 
@@ -161,6 +183,8 @@ def brief_plan(request: InvestigationRequest) -> InvestigationPlan:
          "question": "Benchmark procurement methods, review types and supplier origin for the planned categories."},
         {"id": "governance", "worker": planning, "operation": "governance_context", "optional": True,
          "question": "Country governance and institutional context."},
+        {"id": "reviewed", "worker": WorkerName.LESSONS.value, "operation": "find_lessons", "optional": True, "depends_on": ["similar"],
+         "question": "Reviewed lessons on planning for projects in this sector."},
         {"id": "predict", "worker": WorkerName.PREDICTION.value, "operation": "predict_planned_packages",
          "depends_on": ["market"] if suggest else [], "question": "Estimate duration and risks for each planned package."},
         *({"id": key, "worker": doc, "operation": "answer_document_question", "depends_on": ["similar"], "optional": True,

@@ -36,6 +36,7 @@ from conversation.routing.routes import Route
 from conversation.service import ConversationService
 from conversation.pii import redact_personal_data
 from conversation.workspace import PostgresWorkspaceStore
+from lessons.store import PostgresLessonStore
 from structured_agent.config import Settings
 from structured_agent.guardrails.pipeline import build_guardrails
 from structured_agent.nl2sql.live_guard import authorize_live_access
@@ -66,8 +67,10 @@ from .supervisor import Supervisor
 from .table_sql import TableSqlWriter
 from .tool_gateway import TRANSPORTS, SupervisedMcpSession, gold_sql, mcp_parameters
 from .workers.base import ResultCache, TicketAuthority
+from .workers.lessons import LessonsWorker
 from .workers.monitoring import MonitoringWorker
 from .workers.planning import PlanningWorker
+from .workers.tender import TenderDesignWorker
 from .workers.prediction import PredictionWorker
 
 ORCHESTRATOR_DIR = Path(__file__).resolve().parents[1]
@@ -109,9 +112,12 @@ def build_runtime(config: RuntimeConfig, operator_confirmed: bool) -> tuple[AppS
                                table_writer=TableSqlWriter(json_client).writer)
     gold = gold_sql(tools)                                       # fixed Gold lookups via execute_readonly_sql
     planning = PlanningWorker(gold, authority, semantic_project_scores(document, config.rag_release))
+    lessons_pool, lessons = _lessons_store(config)
     controller = ExecutionController({WorkerName.STRUCTURED: structured, WorkerName.DOCUMENT: document,
                                       WorkerName.PREDICTION: PredictionWorker(gold, authority), WorkerName.PLANNING: planning,
-                                      WorkerName.MONITORING: MonitoringWorker(authority)},
+                                      WorkerName.MONITORING: MonitoringWorker(authority),
+                                      WorkerName.TENDER: TenderDesignWorker(gold, authority),
+                                      WorkerName.LESSONS: LessonsWorker(authority, lessons.cards)},
                                      authority, tracer=tracer, prices=SONNET_5_5_PRICES)
     deps = EngineDeps(controller=controller, supervisor=Supervisor(), planner=ClaudePlanner(json_client),
                       responder=ClaudeResponseGenerator(json_client), guard=guardrails, llm_breaker=llm_breaker(), tracer=tracer,
@@ -127,12 +133,14 @@ def build_runtime(config: RuntimeConfig, operator_confirmed: bool) -> tuple[AppS
     learning_pool = _learning_pool(config)
     learning = FeedbackService(PostgresLearningStore(learning_pool.connection), conversations, store, front_door,
                                embed=_question_embedding)
-    service = AppService(conversations, store, engine, front_door, workspace=PostgresWorkspaceStore(), learning=learning)
+    service = AppService(conversations, store, engine, front_door, workspace=PostgresWorkspaceStore(), learning=learning,
+                         lessons=lessons)
 
     def close() -> None:
         service.shutdown()
         pool.close()
         learning_pool.close()
+        lessons_pool.close()
         close_tools()
     return service, close
 
@@ -183,6 +191,18 @@ def _learning_pool(config: RuntimeConfig):
         pool.close()
         raise
     return pool
+
+
+def _lessons_store(config: RuntimeConfig):
+    """Lesson cards in the Knowledge Graph schema on the development branch (fails closed when not initialised)."""
+    pool = learning_db.dev_schema_pool(learning_db.learning_endpoint(config.checkpoint_endpoint), "wbg_kg", "lessons")
+    store = PostgresLessonStore(pool.connection, "wbg_kg")
+    try:
+        store.counts()
+    except Exception:
+        pool.close()
+        raise RuntimeError("the lesson cards are not initialised (run: python -m lessons init-db && python -m lessons backfill)")
+    return pool, store
 
 
 def _question_embedding(text: str):

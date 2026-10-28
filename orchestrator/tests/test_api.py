@@ -40,13 +40,14 @@ def planned():
 class Stack:
     """One 'process': an app over shared durable state (conversation store + checkpointer)."""
 
-    def __init__(self, tmp_path: Path, store=None, saver=None, **engine_options):
+    def __init__(self, tmp_path: Path, store=None, saver=None, lesson_store=None, **engine_options):
         self.store, self.saver = store or InMemoryConversationStore(), saver or InMemorySaver()
+        engine_options["lesson_store"] = lesson_store
         self.engine, self.parts = build_engine(checkpointer=self.saver, **engine_options)
         runners = {r: ConversationRunner(self.engine, r, AUTH) for r in (Route.STRUCTURED_DATA, Route.DOCUMENT_RAG)}
         conversations = ConversationService(self.store, runners, PolicyGuard())
         self.service = AppService(conversations, self.store, self.engine,
-                                  ConversationFrontDoor(conversations, self.store, self.engine, AUTH))
+                                  ConversationFrontDoor(conversations, self.store, self.engine, AUTH), lessons=lesson_store)
         users_file = tmp_path / "users.json"
         self.tokens = {u: UserDirectory.add_user(users_file, u) for u in ("alice", "bob")}
         self.client = TestClient(create_app(self.service, UserDirectory.load(users_file)))
@@ -407,3 +408,17 @@ def test_project_watch_returns_cited_warnings_and_refuses_bad_ids(stack):
     assert stack.call("GET", "/projects/P148850/watch", user=None).status_code == 401
     listed = {p["project_id"]: p for p in stack.call("GET", "/projects").json()}
     assert listed["P148850"]["packages"] == view["summary"]["packages"] and listed["P148850"]["title"]
+
+
+# ------------------------------------------------------------------------------------------- password sign-in
+def test_a_user_with_a_password_signs_in_and_gets_a_session_token(tmp_path):
+    users_file = tmp_path / "users.json"
+    UserDirectory.add_user(users_file, "reviewer1", reviewer=True, password="reviewer1")
+    stack = Stack(tmp_path)
+    stack.client = TestClient(create_app(stack.service, UserDirectory.load(users_file)))
+    assert stack.client.post("/auth/login", json={"username": "reviewer1", "password": "wrong"}).status_code == 401
+    assert stack.client.post("/auth/login", json={"username": "nobody", "password": "reviewer1"}).status_code == 401
+    token = stack.client.post("/auth/login", json={"username": "reviewer1", "password": "reviewer1"}).json()["token"]
+    me = stack.client.get("/me", headers={"Authorization": f"Bearer {token}"}).json()
+    assert me["user_id"] == "reviewer1" and me["reviewer"] is True
+    assert "reviewer1" not in users_file.read_text().replace('"user_id": "reviewer1"', "")      # only a salted hash is stored

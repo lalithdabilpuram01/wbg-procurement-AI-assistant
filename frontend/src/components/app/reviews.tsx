@@ -5,7 +5,8 @@ import { Check, ClipboardCheck, FlaskConical, Route as RouteIcon, Users, X } fro
 import { api, type Review } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Badge, Card, Input, Spinner } from "@/components/ui/primitives";
-import { relativeTime } from "@/lib/utils";
+import { cn, relativeTime } from "@/lib/utils";
+import { LessonReviews } from "./lesson-reviews";
 
 const KINDS: Record<Review["kind"], { label: string; icon: React.ElementType; approve: string }> = {
   share_correction: { label: "Share a correction with the team", icon: Users, approve: "Share" },
@@ -16,6 +17,7 @@ const KINDS: Record<Review["kind"], { label: string; icon: React.ElementType; ap
 /** Reviewer queue: nothing a user saved reaches other users, or the evaluation set, without a decision here. */
 export function ReviewsView({ onError, onChanged }: { onError: (e: unknown) => void; onChanged: (pending: number) => void }) {
   const [reviews, setReviews] = useState<Review[] | null>(null);
+  const [tab, setTab] = useState<"feedback" | "lessons">("feedback");
 
   const load = useCallback(async () => {
     try {
@@ -30,11 +32,22 @@ export function ReviewsView({ onError, onChanged }: { onError: (e: unknown) => v
     <div className="scrollbar-thin h-full flex-1 overflow-y-auto">
       <div className="mx-auto max-w-4xl px-4 py-8">
         <h1 className="text-xl font-semibold tracking-tight">Review queue</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Corrections and approaches users confirmed, and answers they marked wrong. Approving shares an item with every user
-          as guidance, or keeps a case for the evaluation set (export with <code>learning_cli export</code>).
+        <div className="mt-3 flex gap-1 border-b border-border">
+          {([["feedback", "Feedback items"], ["lessons", "Lesson cards"]] as const).map(([key, label]) => (
+            <button key={key} onClick={() => setTab(key)}
+              className={cn("-mb-px border-b-2 px-3 py-2 text-sm", tab === key ? "border-primary font-semibold" : "border-transparent text-muted-foreground hover:text-foreground")}>
+              {label}{key === "feedback" && reviews ? ` (${reviews.length})` : ""}
+            </button>
+          ))}
+        </div>
+        <p className="mt-3 text-sm text-muted-foreground">
+          {tab === "feedback"
+            ? <>Corrections and approaches users confirmed, and answers they marked wrong. Approving shares an item with every user
+              as guidance, or keeps a case for the evaluation set (export with <code>learning_cli export</code>).</>
+            : <>Lessons from completion reports, IEG reviews and appraisal documents. Only approved cards are used in tender checks,
+              monitoring answers and Planning Briefs; a decision is kept when the document is ingested again.</>}
         </p>
-        {!reviews ? (
+        {tab === "lessons" ? <LessonReviews onError={onError} /> : !reviews ? (
           <div className="mt-10 flex justify-center"><Spinner /></div>
         ) : reviews.length === 0 ? (
           <Card className="mt-8 p-10 text-center text-sm text-muted-foreground">

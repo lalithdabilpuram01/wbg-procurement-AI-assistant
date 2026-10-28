@@ -12,11 +12,15 @@ re-ingested; shared entity nodes (projects, contracts, countries, methods...) ar
     Document ─LISTS_ACTIVITY→ PlanActivity ─PLANNED_AS→ Contract ─AWARDED_UNDER→ Project
     PlanActivity ─ACTIVITY_OF→ Project     Contract ─AWARDED_TO→ Supplier     Contract|PlanActivity|Notice ─USES_METHOD→ Method
     Notice ─NOTICE_FOR→ Project     Notice ─NOTICE_OF→ PlanActivity     Contract ─TEMPORALLY_NEAR→ Document (ISR/ICR)
+    Section ─HAS_LESSON→ Lesson ─LESSON_FOR→ Project     Lesson ─ABOUT_TOPIC→ Topic     Lesson ─FOR_STAGE→ LifecycleStage
+    (a lesson's review decision lives in lesson_card and survives re-ingestion; its node is replaced with the document)
 """
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Any
+
+from lessons.cards import LessonCard
 
 from .model import Link, ParsedDocument, Record
 from .reference import Reference, slug
@@ -24,8 +28,9 @@ from .resolve import Resolution, method_name
 
 NODE_TYPES = {"project": "Project", "country": "Country", "sector": "Sector", "document": "Document", "section": "Section",
               "chunk": "Chunk", "table": "Table", "activity": "PlanActivity", "contract": "Contract", "notice": "Notice",
-              "supplier": "Supplier", "method": "ProcurementMethod", "topic": "Topic", "loan": "Loan"}
-OWNED = {"document", "section", "chunk", "table", "activity"}      # replaced with their document
+              "supplier": "Supplier", "method": "ProcurementMethod", "topic": "Topic", "loan": "Loan", "lesson": "Lesson",
+              "stage": "LifecycleStage"}
+OWNED = {"document", "section", "chunk", "table", "activity", "lesson"}      # replaced with their document
 EDGE_TYPES = {  # edge type -> (allowed source prefixes, allowed target prefixes, storage partition)
     "IN_COUNTRY": ({"project"}, {"country"}, "context"),
     "IN_SECTOR": ({"project"}, {"sector"}, "context"),
@@ -35,7 +40,10 @@ EDGE_TYPES = {  # edge type -> (allowed source prefixes, allowed target prefixes
     "HAS_CHUNK": ({"section"}, {"chunk"}, "hierarchy"),
     "NEXT": ({"chunk"}, {"chunk"}, "hierarchy"),
     "HAS_TABLE": ({"section", "document"}, {"table"}, "hierarchy"),
-    "ABOUT_TOPIC": ({"section"}, {"topic"}, "semantic"),
+    "ABOUT_TOPIC": ({"section", "lesson"}, {"topic"}, "semantic"),
+    "HAS_LESSON": ({"section"}, {"lesson"}, "hierarchy"),
+    "LESSON_FOR": ({"lesson"}, {"project"}, "semantic"),
+    "FOR_STAGE": ({"lesson"}, {"stage"}, "semantic"),
     "MENTIONS": ({"chunk"}, {"project", "contract", "country", "method", "loan"}, "semantic"),
     "LISTS_ACTIVITY": ({"document"}, {"activity"}, "procurement"),
     "ACTIVITY_OF": ({"activity"}, {"project"}, "procurement"),
@@ -113,11 +121,13 @@ class Graph:
                     raise GraphError(f"{e.edge_type} refers to a missing node {end}")
 
 
-def build(doc: ParsedDocument, res: Resolution, ref: Reference) -> Graph:
+def build(doc: ParsedDocument, res: Resolution, ref: Reference, lessons: list[LessonCard] = ()) -> Graph:
     g = Graph()
     project = _project(g, doc.project_id, ref)
     if not doc.is_feed:
         _document(g, doc, project)
+    for card in lessons:
+        _lesson(g, card, project)
     for record in doc.records:
         _record(g, doc, record, ref)
     for number, contract in res.contracts.items():
@@ -172,6 +182,19 @@ def _document(g: Graph, doc: ParsedDocument, project: str | None) -> None:
     for t in doc.tables:
         table = g.node(f"table:{t.table_id}", t.caption or f"table {t.table_id}", page=t.page, columns=t.header[:20], rows=len(t.rows))
         g.edge("HAS_TABLE", f"section:{t.section_id}" if t.section_id in known_sections else document, table)
+
+
+def _lesson(g: Graph, card: LessonCard, project: str | None) -> None:
+    lesson = g.node(f"lesson:{card.card_id}", card.headline[:200], doc_type=card.doc_type, page_start=card.page_start,
+                    page_end=card.page_end, categories=list(card.categories))
+    if card.section_id and f"section:{card.section_id}" in g.nodes:
+        g.edge("HAS_LESSON", f"section:{card.section_id}", lesson)
+    if project:
+        g.edge("LESSON_FOR", lesson, project)
+    for topic in card.topics:
+        g.edge("ABOUT_TOPIC", lesson, g.node(f"topic:{topic}", topic))
+    for stage in card.stages:
+        g.edge("FOR_STAGE", lesson, g.node(f"stage:{stage}", stage.replace("_", " ")))
 
 
 def _record(g: Graph, doc: ParsedDocument, r: Record, ref: Reference) -> None:

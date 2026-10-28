@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { X } from "lucide-react";
 import {
   api, waitForJob, type Bookmark, type Conversation, type ConversationDetail, type FeedbackReason, type Folder, type Investigation,
-  type Job, type Me, type PackageInput, type PlanInput,
+  type Job, type Me, type PackageInput, type PlanInput, type TenderInput,
 } from "@/lib/api";
 import { Sidebar, type View } from "./sidebar";
 import { ChatView } from "./chat";
@@ -13,6 +13,7 @@ import { ReviewsView } from "./reviews";
 import { WatchView } from "./watch";
 import { PackageDialog } from "./package-dialog";
 import { PlanDialog } from "./plan-dialog";
+import { TenderDialog } from "./tender-dialog";
 
 const FAILED_JOB = "The request could not be completed. Please try again.";
 
@@ -32,6 +33,7 @@ export function AppShell() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [packageOpen, setPackageOpen] = useState(false);
   const [planOpen, setPlanOpen] = useState(false);
+  const [tenderOpen, setTenderOpen] = useState(false);
   const [scrollToSeq, setScrollToSeq] = useState<number | null>(null);
   const [jobId, setJobId] = useState<string | null>(null);
   const [watchedId, setWatchedId] = useState<string | null>(null);
@@ -127,6 +129,14 @@ export function AppShell() {
       () => api.assessPackage(id, input), text);
   };
 
+  const checkTender = async (input: TenderInput) => {
+    const id = await ensureConversation(`Tender check · ${input.project_id} · ${input.procurement_category}`);
+    const text = `Check the tender design of a ${input.procurement_category} package for ${input.project_id}: ` +
+      `${input.procurement_method}, ${input.review_type} review, ${input.bid_window_days}-day bid window, ${input.lots} lot(s).`;
+    void runJob(id, "Reading the draft, comparing it with similar past packages and searching the project's documents…",
+      () => api.checkTender(id, input), text);
+  };
+
   const planProject = async (input: PlanInput) => {
     const id = await ensureConversation(`Plan · ${input.profile.sector} · ${input.profile.country_code}`);
     const text = `Plan a new ${input.profile.sector} project in ${input.profile.country_code}: ${input.profile.description}`;
@@ -207,7 +217,7 @@ export function AppShell() {
             bookmarkedSeqs={bookmarkedSeqs} chatBookmarks={chatBookmarks} sidebarOpen={sidebarOpen} scrollToSeq={scrollToSeq}
             onRemoveBookmark={(b) => withRefresh(() => api.deleteBookmark(b.bookmark_id))()}
             onOpenSidebar={() => setSidebarOpen(true)} onSend={send} onStop={stop} onAssess={() => setPackageOpen(true)}
-            onPlan={() => setPlanOpen(true)}
+            onPlan={() => setPlanOpen(true)} onTender={() => setTenderOpen(true)}
             onToggleBookmark={toggleBookmark} onDecide={decide} defaultTableLens={defaultTableLens}
             onFeedback={me.feedback ? giveFeedback : undefined} onManageMemory={() => setView("memory")} onWatch={watchProject} />
         )}
@@ -220,6 +230,7 @@ export function AppShell() {
       </main>
       <PackageDialog open={packageOpen} onOpenChange={setPackageOpen} onSubmit={assess} />
       <PlanDialog open={planOpen} onOpenChange={setPlanOpen} onSubmit={planProject} />
+      <TenderDialog open={tenderOpen} onOpenChange={setTenderOpen} onSubmit={checkTender} />
     </div>
   );
 }

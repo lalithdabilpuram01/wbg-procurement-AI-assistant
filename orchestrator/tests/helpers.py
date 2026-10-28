@@ -26,10 +26,12 @@ from wbg_orchestrator.response import DeterministicResponseGenerator
 from wbg_orchestrator.supervisor import Supervisor
 from wbg_orchestrator.workers.base import ResultCache, TicketAuthority
 from wbg_orchestrator.workers.document import DocumentIntelligenceWorker
+from wbg_orchestrator.workers.lessons import LessonsWorker
 from wbg_orchestrator.workers.monitoring import MonitoringWorker
 from wbg_orchestrator.workers.planning import PlanningWorker
 from wbg_orchestrator.workers.prediction import PredictionWorker
 from wbg_orchestrator.workers.structured import StructuredDataWorker
+from wbg_orchestrator.workers.tender import TenderDesignWorker
 
 WORKSPACE, PRINCIPAL = "wbg-procurement-poc", "analyst-demo"
 ALICE = OwnerRef.from_identity("tenant-1", "alice")
@@ -192,6 +194,8 @@ def fake_gold_sql(sql: str, parameters: dict) -> list[dict]:
                  "contract_award_count": 40, "ieg_outcome_rating": None} for pid, name, country, size in GOLD_PROJECTS]
     if sql == GOVERNANCE_SQL:
         return [{"year": 2023, "cpia_irai_overall": 3.2, "wgi_government_effectiveness_est": -0.6, "income_group_fy_starting_in_year": "L"}]
+    if "published_response_window_days" in sql:             # published bid windows (tender checks)
+        return [{"notices": 412, "p25_days": 35.0, "median_days": 45.0, "p75_days": 60.0}]
     if "GROUP BY procurement_method" in sql:
         return [{"procurement_method": "Request for Bids", "contract_awards": 120, "median_contract_amount_usd": 2400000.0,
                  "median_days_from_approval_to_signing": 640.0},
@@ -234,7 +238,7 @@ def fake_watch(project_id: str) -> ProjectWatch:
 def build_engine(*, workflow=None, tools=None, pipeline=None, retriever=None, planner=None, responder=None, guard=None, policy=None,
                  checkpointer=None, tracer=None, audit_sink=None, now=None, releases: list[str] | None = None, prices=None,
                  breaker_settings=DEFAULT_BREAKER, backoff=RetryBackoff(base_seconds=0.0, max_seconds=0.0), run_sql=fake_gold_sql,
-                 watch=None):
+                 watch=None, tender_history=None, lesson_store=None):
     authority, cache = TicketAuthority(), ResultCache()
     workflow = workflow or FakeWorkflow()
     tools = tools or FakeTools()
@@ -249,9 +253,12 @@ def build_engine(*, workflow=None, tools=None, pipeline=None, retriever=None, pl
     prediction = PredictionWorker(run_sql, authority)
     planning = PlanningWorker(run_sql, authority, fake_semantic, sector_of=lambda pid: "Transportation" if pid in
                               ("P148850", "P111111") else "Urban Development")
+    tender = (TenderDesignWorker(run_sql, authority, history_dir=tender_history) if tender_history
+              else TenderDesignWorker(run_sql, authority))
     controller = ExecutionController({WorkerName.STRUCTURED: structured, WorkerName.DOCUMENT: document,
                                       WorkerName.PREDICTION: prediction, WorkerName.PLANNING: planning,
-                                      WorkerName.MONITORING: MonitoringWorker(authority, watch or fake_watch)}, authority, tracer=tracer,
+                                      WorkerName.MONITORING: MonitoringWorker(authority, watch or fake_watch),
+                                      WorkerName.TENDER: tender, WorkerName.LESSONS: LessonsWorker(authority, lesson_store.cards if lesson_store else list)}, authority, tracer=tracer,
                                      backoff=backoff, sleep=sleeps.append, prices=prices,
                                      breaker_settings=breaker_settings)
     audit_sink = audit_sink or MemoryAuditSink()

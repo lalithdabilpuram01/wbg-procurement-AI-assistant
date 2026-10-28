@@ -26,6 +26,7 @@ from .contracts import (BriefSection, EvidenceKind, EvidenceRecord, Investigatio
 from .rag_modules import answering
 from .verification import VerificationReport
 
+MAX_RESTATED = 16                       # claims of a restated answer (e.g. a tender check: terms, checks, estimates, lessons)
 CONFIDENCE = re.compile(r"\b(confiden\w*|probabilit\w*|likelihood|likely|certaint\w*|chance)\b", re.I)
 
 
@@ -61,7 +62,7 @@ class DeterministicResponseGenerator:
             text = _restatement(record)
             if text:
                 claims.append(DraftClaim(text=text[:600], evidence_ids=[record.evidence_id]))
-        return DraftResponse(claims=claims[:12]), Usage()
+        return DraftResponse(claims=claims[:MAX_RESTATED]), Usage()
 
 
 class ClaudeResponseGenerator:
@@ -122,7 +123,8 @@ def _restatement(record: EvidenceRecord) -> str:
         return f"{record.citation}: {record.summary[:400]}"
     if record.kind == EvidenceKind.TABLE_CANDIDATE:
         return f"Relevant approved table: {', '.join(record.source_objects)}."
-    if record.kind in (EvidenceKind.MODEL_PREDICTION, EvidenceKind.SIMILAR_PROJECT, EvidenceKind.EARLY_WARNING):
+    if record.kind in (EvidenceKind.MODEL_PREDICTION, EvidenceKind.SIMILAR_PROJECT, EvidenceKind.EARLY_WARNING,
+                       EvidenceKind.TENDER_CHECK, EvidenceKind.LESSON_CARD):
         return record.summary[:600]
     return ""
 

@@ -76,6 +76,7 @@ class Project:
     project_id: str
     title: str
     country: str | None
+    sector: str | None = None
 
 
 @dataclass
@@ -154,6 +155,7 @@ def ratings(directory: Path = SHARED) -> dict[str, tuple[Rating, ...]]:
 
 @lru_cache(maxsize=2)
 def projects(directory: Path = SHARED) -> dict[str, Project]:
-    """Title and country of each project in the corpus (from the project selection, not the PDFs)."""
-    return {r["project_id"]: Project(r["project_id"], r["api"].get("project_title") or r["project_id"], r["api"].get("country_name"))
+    """Title, country and sector of each project in the corpus (from the project selection, not the PDFs)."""
+    return {r["project_id"]: Project(r["project_id"], r["api"].get("project_title") or r["project_id"], r["api"].get("country_name"),
+                                     r["api"].get("sector"))
             for r in _jsonl("projects", directory)}

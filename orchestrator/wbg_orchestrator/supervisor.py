@@ -27,7 +27,7 @@ COMPLEX = re.compile(r"\b(investigat\w*|root causes?|explain why|step by step|an
 
 class SupervisorDecision(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
-    mode: Literal["fast", "plan", "package", "brief", "monitor", "clarify", "refuse"]
+    mode: Literal["fast", "plan", "package", "brief", "monitor", "tender", "clarify", "refuse"]
     worker: WorkerName | None = None
     operation: str | None = None
     requires_execution: bool = False
@@ -37,6 +37,8 @@ class SupervisorDecision(BaseModel):
 
 class Supervisor:
     def decide(self, request: InvestigationRequest) -> SupervisorDecision:
+        if request.tender is not None:
+            return self._tender(request)
         if request.package is not None:
             return self._package(request)
         if request.planning is not None:
@@ -76,6 +78,14 @@ class Supervisor:
         if Route.PROCUREMENT_PLANNING not in {Route(r) for r in request.authorization.routes}:
             return SupervisorDecision(mode="refuse", routes=routes, reasons=("route_not_authorized",))
         return SupervisorDecision(mode="brief", routes=routes, reasons=("planning_brief",))
+
+    @staticmethod
+    def _tender(request: InvestigationRequest) -> SupervisorDecision:
+        """A structured tender-design check (from the API, never from message text) gets the fixed tender plan."""
+        routes = (Route.PROCUREMENT_PLANNING.value, Route.ML_PREDICTION.value, Route.DOCUMENT_RAG.value)
+        if Route.PROCUREMENT_PLANNING not in {Route(r) for r in request.authorization.routes}:
+            return SupervisorDecision(mode="refuse", routes=routes, reasons=("route_not_authorized",))
+        return SupervisorDecision(mode="tender", routes=routes, reasons=("tender_design",))
 
     @staticmethod
     def _monitor(request: InvestigationRequest) -> SupervisorDecision:

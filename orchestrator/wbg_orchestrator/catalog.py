@@ -60,6 +60,13 @@ CATALOG = (
                       "none (fixed, reviewed SQL)"),
     OperationContract("procurement_planning", "governance_context", "the planning spec (country)",
                       "latest CPIA, WGI and income group", "Gold via fixed read-only SQL", False, "none (fixed, reviewed SQL)"),
+    OperationContract("tender_design", "check_tender_design", "the tender spec (package, estimate, lots, draft text)",
+                      "terms read from the draft and checks against history (bid window, method, review, packaging, "
+                      "qualification ratios)", "Gold notices via fixed read-only SQL + typed procurement-plan records", False,
+                      "none (fixed, reviewed SQL; deterministic rules)"),
+    OperationContract("lesson_cards", "find_lessons", "the tender spec, planning spec or monitored project",
+                      "reviewer-approved lesson cards that fit the lifecycle stage (or how many await review)",
+                      "lesson cards in the Knowledge Graph schema (Lakebase)", False, "none (only approved cards are used)"),
     OperationContract("project_monitoring", "watch_project", "a project ID from the monitoring question",
                       "status summary and cited early warnings (plan rows, contract records, ISR ratings)",
                       "typed procurement-plan records and ISR ratings (pilot_v3 corpus)", False, "none (read-only, deterministic rules)"),
@@ -83,6 +90,8 @@ TOOLS = {
     "market_benchmarks": (GOLD_SQL,),
     "governance_context": (GOLD_SQL,),
     "watch_project": (("monitoring_rules", "in_process"),),
+    "find_lessons": (("lesson_card_store", "in_process"),),
+    "check_tender_design": (GOLD_SQL, ("tender_rules", "in_process")),
 }
 
 

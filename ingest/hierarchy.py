@@ -33,6 +33,7 @@ class Line:
     page: int | None = None
     level: int | None = None        # set when the source marks a heading (Word styles); else inferred
     kind: str = "paragraph"         # paragraph | list_item | table_text
+    whole: bool = False             # already a complete paragraph (Word): never merged with the next line
 
 
 def topic_of(heading: str) -> str | None:
@@ -61,7 +62,8 @@ def heading_level(text: str) -> int | None:
 
 
 def build(document_id: str, lines: list[Line], doc_kind: str = "narrative") -> tuple[list[Section], list[Block]]:
-    """Sections (a tree) and blocks from ordered lines. Consecutive body lines of one page form one paragraph."""
+    """Sections (a tree) and blocks from ordered lines. Consecutive body lines of one page form one paragraph, unless a
+    line is a whole paragraph already (Word), which stays its own block."""
     root = Section(f"{document_id}:s000", None, 0, "front_matter", "front_matter", 0, "front_matter")
     sections, blocks, stack = [root], [], [root]
     paragraph: list[Line] = []
@@ -78,7 +80,7 @@ def build(document_id: str, lines: list[Line], doc_kind: str = "narrative") -> t
     for line in lines:
         level = line.level if line.level is not None else heading_level(line.text)
         if level is None:
-            standalone = line.kind in ("list_item", "table_text")             # one block each, never merged
+            standalone = line.whole or line.kind in ("list_item", "table_text")   # one block each, never merged
             if standalone or not line.text.strip():
                 flush()
             if line.text.strip():

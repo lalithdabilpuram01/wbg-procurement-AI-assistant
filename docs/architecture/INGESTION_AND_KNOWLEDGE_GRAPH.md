@@ -172,6 +172,20 @@ Live result: contract 1674058 → "V. LESSONS AND RECOMMENDATIONS", ICR 34345370
 - **Growth path:** projects hash-partitioned on `chunk` and `edge` when the corpus passes tens of millions of rows. The
   node/edge layout maps one-to-one onto a property-graph database or Unity Catalog Delta tables if needed.
 
+**Lesson cards (Continuous Learning, pipeline `ingest-1.1.0`):**
+- Every paragraph of a lessons section in an ICR, an IEG review (ICRR) or a PAD becomes a proposed card. Lead-ins
+  ("The following lessons…"), footnotes, running headers and fragments are dropped by rules.
+- Each card is tagged by rules with topics (procurement, qualification, specifications, delays, contractors…),
+  lifecycle stages (planning, tender design, execution, learning) and categories (Works, Goods, Consultant Services).
+- **In the graph:** `Section ─HAS_LESSON→ Lesson ─LESSON_FOR→ Project`, `Lesson ─ABOUT_TOPIC→ Topic` and
+  `Lesson ─FOR_STAGE→ LifecycleStage`. The Lesson node is owned by its document and replaced with it.
+- **Review:** the decision lives in `lesson_card`, keyed by a stable id (document + normalised text). Re-ingesting
+  refreshes the text and tags but never the reviewer's decision.
+- **Use:** only approved cards are used, by the `find_lessons` operation in tender checks, monitoring answers and
+  Planning Briefs.
+- **Backfill:** the pilot corpus gave 280 proposed cards across 35 projects (150 PAD, 80 ICR, 50 ICRR), loaded on
+  `dev-orchestrator` on 2026-10-28.
+
 ## 5. Measured results (2026-10-28, live on Lakebase `dev-orchestrator`)
 
 **Inputs:** real files only.
@@ -203,5 +217,6 @@ The rule itself is tested (92 days apart → linked).
 - **Reference data** is the registered 35 projects and the verified contract snapshot. Notices, suppliers and loans
   get their own reference tables when those feeds are added.
 - **Branch:** the graph is on the development branch, which expires 2026-11-02 unless extended.
-- **Not yet connected to the app:** the document search still uses the `pilot_v3` release. The graph's chunks and
+- **Lesson cards are connected to the app** (approved cards only). **The rest is not yet connected:** the document
+  search still uses the `pilot_v3` release. The graph's chunks and
   traversals are ready to serve as an additional retrieval path (e.g. lessons for a planned package) once approved.

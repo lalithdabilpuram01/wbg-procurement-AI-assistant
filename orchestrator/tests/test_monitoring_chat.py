@@ -52,8 +52,9 @@ def test_a_monitoring_question_is_answered_from_the_cited_warnings_without_a_mod
     outcome = reply.investigation
     assert outcome is not None and outcome.status == InvestigationStatus.ANSWERED
     assert outcome.values["plan"]["tasks"][0]["operation"] == "watch_project"
-    assert {e.kind for e in outcome.evidence} == {EvidenceKind.EARLY_WARNING}
-    assert all(e.project_ids == ("P148850",) and e.citation for e in outcome.evidence)
+    warnings = [e for e in outcome.evidence if e.kind == EvidenceKind.EARLY_WARNING]
+    assert {e.kind for e in outcome.evidence} == {EvidenceKind.EARLY_WARNING, EvidenceKind.LESSON_CARD}   # "none reviewed yet"
+    assert all(e.project_ids == ("P148850",) and e.citation for e in warnings)
     message = outcome.response.message
     assert "103 packages" in message and "ET-RSIDP-517060-CS-INDV" in message and "Substantial" in message
     assert "OLD-1" not in message                                       # stale entries are counted, not listed

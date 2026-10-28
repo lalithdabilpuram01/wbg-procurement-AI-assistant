@@ -34,7 +34,7 @@ from .workers.prediction import GATEWAY_MAX_ROWS, LookupFailed
 MCP_SERVER = "wbg-structured-procurement-data"
 TRANSPORTS = ("mcp", "in_process")
 IN_PROCESS_TOOLS = ("lakebase_vector_search", "tablelens_table_sql", "frozen_ml_models", "similar_project_scoring",
-                    "monitoring_rules")
+                    "monitoring_rules", "tender_rules", "lesson_card_store")
 
 
 class McpUnavailable(ConnectionError):

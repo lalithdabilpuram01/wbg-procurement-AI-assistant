@@ -66,6 +66,8 @@ class WorkerName(str, Enum):
     PREDICTION = "ml_prediction"
     PLANNING = "procurement_planning"
     MONITORING = "project_monitoring"
+    TENDER = "tender_design"
+    LESSONS = "lesson_cards"
 
 
 class TaskState(str, Enum):
@@ -152,6 +154,8 @@ class EvidenceKind(str, Enum):
     TYPED_PLAN_RECORD = "typed_plan_record"
     MODEL_PREDICTION = "model_prediction"
     SIMILAR_PROJECT = "similar_project"
+    LESSON_CARD = "lesson_card"              # a reviewed lesson from a completion report, IEG review or appraisal
+    TENDER_CHECK = "tender_check"            # a tender-design term or check against history (tender rules)
     EARLY_WARNING = "early_warning"          # a project's milestone status or early warning (monitoring rules)
 
 
@@ -203,6 +207,18 @@ class PackageSpec(Record):
     tender_date: dt.date
 
 
+class TenderSpec(PackageSpec):
+    """A tender design to check: the package, its estimate and lots, and the draft text (ToR, specification or
+    qualification section; untrusted, already filtered for personal data)."""
+
+    estimated_amount_usd: float | None = Field(default=None, gt=0)
+    lots: int = Field(default=1, ge=1, le=50)
+    draft_text: str = Field(default="", max_length=20_000)
+
+    def package(self) -> PackageSpec:
+        return PackageSpec(**self.model_dump(include=set(PackageSpec.model_fields) - {"schema_version"}))
+
+
 class ProjectProfile(Record):
     """A new project being planned (no project ID yet)."""
 
@@ -242,6 +258,7 @@ class InvestigationRequest(Record):
     execute_requested: bool = False                                      # the user asked to run validated SQL
     package: PackageSpec | None = None                                   # a package assessment (ML predictions)
     planning: PlanningSpec | None = None                                 # a Planning Brief for a new project
+    tender: TenderSpec | None = None                                     # a tender design to check against history
     monitor_project: str | None = Field(default=None, pattern=r"^P\d{6}$")  # a project's milestones and early warnings
     planning_context: str | None = Field(default=None, max_length=3000)  # the brief's profile + similar projects
     context_ref: str | None = None                                       # memory block id (text is not in state)
@@ -282,6 +299,8 @@ OPERATION_EVIDENCE = {
     "market_benchmarks": EvidenceSpec(kinds=(EvidenceKind.STRUCTURED_RESULT,), verifiable=True),   # fixed read-only SQL
     "governance_context": EvidenceSpec(kinds=(EvidenceKind.STRUCTURED_RESULT,), verifiable=True),
     "watch_project": EvidenceSpec(kinds=(EvidenceKind.EARLY_WARNING,), verifiable=True),   # deterministic rules, cited rows
+    "find_lessons": EvidenceSpec(kinds=(EvidenceKind.LESSON_CARD,), verifiable=True),    # reviewer-approved cards only
+    "check_tender_design": EvidenceSpec(kinds=(EvidenceKind.TENDER_CHECK,), verifiable=True),  # rules + fixed Gold SQL
 }
 
 

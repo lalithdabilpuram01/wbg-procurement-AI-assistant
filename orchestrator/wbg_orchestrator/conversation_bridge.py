@@ -10,6 +10,8 @@
   union of exactly those two route policies, and records the answer turn through the existing store API.
 * Approvals: `approve` checks thread ownership, records the decision with the existing `record_decision`, and
   resumes the engine as the same user.
+* Tender design: a structured check (package + draft text, from the API) runs the fixed tender plan; asked in chat, the
+  front door asks for the package fields instead. Its answer is restated from the checks (no model call).
 * Monitoring: a question about one project's progress ("Is P148850 slipping?") runs the fixed monitoring plan; its
   answer restates the cited early warnings (no model call).
 * Feedback (feedback.py): every investigation gets the owner's learned guidance appended to its memory block, and the
@@ -35,7 +37,7 @@ from conversation.store import ConversationStore
 
 from .authorization import AppAuthorizationContext
 from .contracts import (EvidenceKind, InvestigationRequest, InvestigationStatus, OwnerRef, PackageSpec, PlanningSpec,
-                        ValidationStatus, investigation_id_for, new_id)
+                        TenderSpec, ValidationStatus, investigation_id_for, new_id)
 from .engine import EngineOutcome, InvestigationEngine, InvestigationNotFound, checkpoint_thread_id
 from .feedback import REVISION_ROUTE, AnswerRecord, FeedbackService, Guidance
 from .planner import BRIEF_BUDGET
@@ -53,6 +55,16 @@ SOURCE_TYPES = {EvidenceKind.STRUCTURED_RESULT: "structured_result", EvidenceKin
                 EvidenceKind.SIMILAR_PROJECT: "structured_result"}
 BRIEF_ROUTE = "planning_brief"
 MONITOR_ROUTE = "project_watch"
+TENDER_ROUTE = "tender_check"
+TENDER_REQUEST = re.compile(r"\b(check|review|assess|benchmark|compare)\b.{0,60}\b(tor|terms of reference|technical "
+                            r"specifications?|specs?|qualification (?:criteria|requirements)|bidding documents?|tender "
+                            r"(?:design|documents?)|draft tender)\b", re.I)
+TENDER_FIELDS_MESSAGE = (
+    "I can check a tender design against history. Please use “Check tender design” and give: the project ID, the "
+    "procurement method and category, the review type, the estimated amount, the bid window and planned tender date, the "
+    "number of lots, and paste or upload the draft (ToR, specification or qualification section). The bid window, method, "
+    "review type and packaging are compared with similar past packages; qualification requirements are compared with the "
+    "package size, and lessons come from the project's documents.")
 PLANNING_FIELDS_MESSAGE = (
     "I can prepare a Planning Brief for a new project from past similar projects. Please use “Plan a new project” and "
     "give: the country, the sector, a short description of what the project will do, the planned Board approval date "
@@ -68,6 +80,14 @@ def describe_plan(spec: PlanningSpec) -> str:
                          f"{p.review_type} review, tender {p.tender_date.isoformat()})" for p in spec.packages)
     return (f"Plan a new {profile.sector} project in {profile.country_code}, Board approval planned for "
             f"{profile.approval_date.isoformat()}: {profile.description} Packages: {packages}.")[:2000]
+
+
+def describe_tender(spec: TenderSpec) -> str:
+    amount = f", estimated US$ {spec.estimated_amount_usd:,.0f}" if spec.estimated_amount_usd else ""
+    draft = f" Draft: {len(spec.draft_text):,} characters." if spec.draft_text.strip() else " No draft text."
+    return (f"Check the tender design of a {spec.procurement_category} package for project {spec.project_id}: "
+            f"{spec.procurement_method}, {spec.review_type} review{amount}, {spec.lots} lot(s), {spec.bid_window_days}-day bid "
+            f"window, tender on {spec.tender_date.isoformat()}.{draft}")
 
 
 def describe_package(package: PackageSpec) -> str:
@@ -177,6 +197,8 @@ class ConversationFrontDoor:
             return self._ask_for_fields(owner, thread_id, text, Route.ML_PREDICTION.value, PACKAGE_FIELDS_MESSAGE)
         if routing is not None and routing.route == Route.PROCUREMENT_PLANNING:
             return self._ask_for_fields(owner, thread_id, text, BRIEF_ROUTE, PLANNING_FIELDS_MESSAGE)
+        if routing is not None and TENDER_REQUEST.search(text):
+            return self._ask_for_fields(owner, thread_id, text, TENDER_ROUTE, TENDER_FIELDS_MESSAGE)
         if routing is not None and (project := monitoring_project(text)):
             outcome = self.watch_project(owner, thread_id, text, project, on_start)
             return FrontDoorReply(outcome.status.value, outcome.values["request"]["request_id"], investigation=outcome)
@@ -252,6 +274,24 @@ class ConversationFrontDoor:
         self._service.compact(owner, thread_id)                                    # summarize older turns when needed
         return outcome
 
+    def check_tender(self, owner: Owner, thread_id: str, spec: TenderSpec,
+                     on_start: Callable[[str], None] | None = None) -> EngineOutcome:
+        """A tender-design check: recorded as a user turn, run with the fixed tender plan (checks, models, lessons)."""
+        spec = spec.model_copy(update={"draft_text": self._service.text_filter(spec.draft_text)})   # filtered once, here
+        text = describe_tender(spec)
+        memory = self._service.memory_for(owner, thread_id, text)
+        request_id = self._user_turn(owner, thread_id, text, TENDER_ROUTE)
+        request = InvestigationRequest(
+            investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=thread_id,
+            owner=owner_ref(owner), question=text, mode="investigation", tender=spec, package=spec.package(), rag_release=self._release,
+            authorization=self._authorization_for((Route.PROCUREMENT_PLANNING, Route.ML_PREDICTION, Route.DOCUMENT_RAG)))
+        if on_start:
+            on_start(request_id)
+        outcome = self._engine.start(request, memory_block=memory)
+        self._record_answer(owner, thread_id, request_id, outcome)
+        self._service.compact(owner, thread_id)
+        return outcome
+
     def watch_project(self, owner: Owner, thread_id: str, text: str, project_id: str,
                       on_start: Callable[[str], None] | None = None) -> EngineOutcome:
         """A monitoring question about one project: recorded as a user turn, run with the fixed monitoring plan."""
@@ -279,7 +319,7 @@ class ConversationFrontDoor:
         guidance = self._guidance(owner, question)
         request_id = self._user_turn(owner, thread_id, f"Correction: {correction}", REVISION_ROUTE)
         self._record_use(owner, request_id, guidance)
-        routes = ((Route.PROCUREMENT_PLANNING, Route.ML_PREDICTION, Route.DOCUMENT_RAG) if original.planning
+        routes = ((Route.PROCUREMENT_PLANNING, Route.ML_PREDICTION, Route.DOCUMENT_RAG) if original.planning or original.tender
                   else (Route.PROCUREMENT_PLANNING,) if original.monitor_project
                   else (Route.ML_PREDICTION, Route.DOCUMENT_RAG) if original.package
                   else (Route(original.route_hint),) if original.route_hint
@@ -289,6 +329,7 @@ class ConversationFrontDoor:
             owner=owner_ref(owner), question=question, route_hint=original.route_hint, mode=original.mode,
             rag_release=original.rag_release, execute_requested=original.execute_requested, package=original.package,
             planning=original.planning, planning_context=original.planning_context, monitor_project=original.monitor_project,
+            tender=original.tender,
             budget=BRIEF_BUDGET if original.planning else original.budget, authorization=self._authorization_for(routes))
         if on_start:
             on_start(request_id)
@@ -377,7 +418,7 @@ class ConversationFrontDoor:
 
     def _ask_for_fields(self, owner: Owner, thread_id: str, text: str, route: str, message: str) -> FrontDoorReply:
         """Predictions and briefs need structured fields: say exactly which ones (no agent runs)."""
-        status = "needs_package_details" if route == Route.ML_PREDICTION.value else "needs_project_details"
+        status = {Route.ML_PREDICTION.value: "needs_package_details", TENDER_ROUTE: "needs_tender_details"}.get(route, "needs_project_details")
         request_id = self._user_turn(owner, thread_id, text, route)
         thread = self._store.get_thread(owner, thread_id)
         self._store.append_turn(owner, Turn(

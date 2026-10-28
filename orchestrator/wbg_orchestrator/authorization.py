@@ -38,6 +38,12 @@ OPERATIONS: dict[str, dict[str, frozenset[str]]] = {
         "market_benchmarks": frozenset({"planning_drafter"}),
         "governance_context": frozenset({"planning_drafter"}),
     },
+    "tender_design": {
+        "check_tender_design": frozenset({"planning_drafter"}),     # tender design is part of procurement planning
+    },
+    "lesson_cards": {
+        "find_lessons": frozenset({"planning_drafter"}),            # read-only: reviewed lessons for a tender, brief or project
+    },
     "project_monitoring": {
         "watch_project": frozenset({"planning_drafter"}),          # the procurement plan's execution: same route
     },
