@@ -23,6 +23,7 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
+from pgvector import HalfVector
 
 from rag.embedding_cache.adapter import indexed_text_fingerprint
 from rag.ingestion import config as ingestion_config
@@ -66,7 +67,7 @@ def unit_rows(units, vectors: np.ndarray, docs: dict[str, dict]):
         doc = docs[unit.document_id]
         yield (RELEASE, unit.unit_id, unit.unit_type, unit.document_id, unit.project_id, doc.get("country_code"),
                doc.get("doc_type"), unit.page_start, unit.page_end, unit.section, unit.table_id, unit.activity_id,
-               unit.text, vector)
+               unit.text, HalfVector(vector))
 
 
 def plan() -> dict[str, Any]:
@@ -105,7 +106,7 @@ def index() -> dict[str, Any]:
             size = conn.execute("SELECT pg_relation_size(%s)", (f"{SCHEMA}.units_embedding_hnsw",)).fetchone()[0]
     finally:
         pool.close()
-    return {"index": "units_embedding_hnsw (hnsw, vector_cosine_ops)", "megabytes": round(size / 1e6, 1),
+    return {"index": "units_embedding_hnsw (hnsw, halfvec_cosine_ops)", "megabytes": round(size / 1e6, 1),
             "seconds": round(time.perf_counter() - started, 1)}
 
 

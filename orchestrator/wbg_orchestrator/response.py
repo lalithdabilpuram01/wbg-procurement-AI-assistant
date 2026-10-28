@@ -91,7 +91,8 @@ class ClaudeResponseGenerator:
     def compose(self, request, evidence, report):
         blocks = [f"[{e.evidence_id}] {e.kind.value}; numeric_use={e.numeric_use.value}; "
                   f"warnings={','.join(e.quality_warnings) or 'none'}; citation: {e.citation}\n"
-                  f"facts: {'; '.join(f'{f.name}={f.value}' for f in e.facts)}\nsummary: {e.summary[:800]}" for e in evidence]
+                  f"facts: {'; '.join(f'{f.name}={f.value}' for f in e.facts)}\nsummary: {e.summary[:_summary_chars(e)]}"
+                  for e in evidence]
         user = f"QUESTION:\n{request.question}\n\nEVIDENCE:\n" + "\n\n".join(blocks)
         system = self.SYSTEM + (" " + self.BRIEF if request.planning else "")
         parsed, content, usage = self._client.complete(system=system, user=user, schema=DraftResponse.model_json_schema(),
@@ -102,12 +103,19 @@ class ClaudeResponseGenerator:
             return None, usage
 
 
+def _summary_chars(record: EvidenceRecord) -> int:
+    """TableLens rows get the whole summary (a table answer is its rows); other records the usual excerpt."""
+    return 1500 if record.kind == EvidenceKind.DOCUMENT_TABLE and record.numeric_use != NumericUse.NOT_APPROVED else 800
+
+
 def _restatement(record: EvidenceRecord) -> str:
     if record.kind == EvidenceKind.STRUCTURED_RESULT and record.facts:
         values = "; ".join(f"{f.name} = {f.value}" for f in record.facts[:10])
         return f"Result from {', '.join(record.source_objects)}: {values}."
     if record.kind == EvidenceKind.METRIC_DEFINITION:
         return f"{record.citation}: {record.summary}"
+    if record.kind == EvidenceKind.DOCUMENT_TABLE and record.numeric_use != NumericUse.NOT_APPROVED and record.summary:
+        return f"{record.citation}: {record.summary[:400]}"                  # TableLens rows (SQL over the PDF table)
     if record.kind == EvidenceKind.DOCUMENT_TABLE:
         return f"A table in {record.citation} is relevant; its values are not verified and are not restated."
     if record.kind in (EvidenceKind.DOCUMENT_PASSAGE, EvidenceKind.TYPED_PLAN_RECORD) and record.summary:

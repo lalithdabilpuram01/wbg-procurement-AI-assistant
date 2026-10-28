@@ -1,7 +1,7 @@
 """Schema, release loading and nearest-neighbour search for the Lakebase vector store (schema `wbg_rag`).
 
     releases  1 row per loaded release: model, revision, dimension, unit count and fingerprints
-    units     1 row per retrieval unit: metadata, indexed text and its embedding (vector(1024), HNSW cosine)
+    units     1 row per retrieval unit: metadata, indexed text and its embedding (halfvec(1024), HNSW cosine)
 
 A release is loaded in one transaction and is immutable afterwards (reload = explicit replace). The retriever
 verifies the release row against its local corpus and model before any search, so a mismatch fails instead of
@@ -20,11 +20,12 @@ import psycopg
 from .lakebase import SCHEMA
 
 DIMENSION = 1024
+VECTOR_TYPE = f"halfvec({DIMENSION})"   # half precision: halves storage (Free Edition cap 512 MB)
 DENSE_CANDIDATES = 300                    # neighbours fetched per question for fusion with BM25
 UNIT_COLUMNS = ("release", "unit_id", "unit_type", "document_id", "project_id", "country_code", "doc_type",
                 "page_start", "page_end", "section", "table_id", "activity_id", "text", "embedding")
 UNIT_TYPES = ("text", "text", "text", "text", "text", "text", "text", "int4", "int4", "text", "text", "text", "text",
-              "vector")
+              "halfvec")
 TABLE_DDL = (
     "CREATE EXTENSION IF NOT EXISTS vector",
     f"CREATE SCHEMA IF NOT EXISTS {SCHEMA}",
@@ -36,10 +37,11 @@ TABLE_DDL = (
         release text NOT NULL REFERENCES {SCHEMA}.releases ON DELETE CASCADE, unit_id text NOT NULL,
         unit_type text NOT NULL, document_id text NOT NULL, project_id text NOT NULL, country_code text, doc_type text,
         page_start int, page_end int, section text, table_id text, activity_id text, text text NOT NULL,
-        embedding vector({DIMENSION}) NOT NULL, PRIMARY KEY (release, unit_id))""",
+        embedding {VECTOR_TYPE} NOT NULL, PRIMARY KEY (release, unit_id))""",
     f"CREATE INDEX IF NOT EXISTS units_release_project ON {SCHEMA}.units (release, project_id)",
 )
-HNSW_DDL = f"CREATE INDEX IF NOT EXISTS units_embedding_hnsw ON {SCHEMA}.units USING hnsw (embedding vector_cosine_ops)"
+HNSW_DDL = (f"CREATE INDEX IF NOT EXISTS units_embedding_hnsw ON {SCHEMA}.units USING hnsw (embedding halfvec_cosine_ops) "
+            "WITH (m = 32, ef_construction = 200)")
 
 
 class ReleaseMismatchError(RuntimeError):
@@ -112,9 +114,9 @@ def nearest(conn: psycopg.Connection, release: str, query: np.ndarray, scope_pro
     params: list = [query, release, *([scope] if scope else []), query, limit]
     with conn.transaction():
         conn.execute("SELECT set_config('hnsw.ef_search', %s, true), set_config('hnsw.iterative_scan', 'relaxed_order', true)",
-                     (str(min(max(limit, 100), 1000)),))
-        rows = conn.execute(f"SELECT unit_id, 1 - (embedding <=> %s) FROM {SCHEMA}.units WHERE {where} "
-                            f"ORDER BY embedding <=> %s LIMIT %s", params).fetchall()
+                     (str(min(max(2 * limit, 100), 1000)),))   # 2x: halfvec recall@10 1.0
+        rows = conn.execute(f"SELECT unit_id, 1 - (embedding <=> %s::{VECTOR_TYPE}) FROM {SCHEMA}.units WHERE {where} "
+                            f"ORDER BY embedding <=> %s::{VECTOR_TYPE} LIMIT %s", params).fetchall()
     return sorted(((unit_id, float(score)) for unit_id, score in rows), key=lambda r: -r[1])   # relaxed order -> exact
 
 

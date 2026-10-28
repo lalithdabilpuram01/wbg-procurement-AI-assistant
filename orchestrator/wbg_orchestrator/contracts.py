@@ -236,7 +236,7 @@ class InvestigationRequest(Record):
     question: str = Field(min_length=1, max_length=MAX_QUESTION_CHARS)   # standalone, already redacted
     route_hint: Literal["structured_data", "document_rag"] | None = None  # from the conversation front door
     mode: Literal["auto", "fast", "investigation"] = "auto"
-    rag_release: Literal["pilot_v2", "pilot_v2_1", "pilot_v3"] = "pilot_v3"   # default: 237 docs, Lakebase pgvector
+    rag_release: Literal["pilot_v2", "pilot_v2_1", "pilot_v3", "pilot_v3_tablelens"] = "pilot_v3"   # default: 237 docs, Lakebase pgvector
     execute_requested: bool = False                                      # the user asked to run validated SQL
     package: PackageSpec | None = None                                   # a package assessment (ML predictions)
     planning: PlanningSpec | None = None                                 # a Planning Brief for a new project

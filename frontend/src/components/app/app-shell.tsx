@@ -96,10 +96,10 @@ export function AppShell() {
     try { await api.cancelJob(jobId); } catch (e) { report(e); }
   };
 
-  const send = async (text: string, execute: boolean) => {
+  const send = async (text: string, execute: boolean, tableLens = false) => {
     try {
       const id = await ensureConversation(text);
-      await runJob(id, "Working on it – routing, searching and checking sources…", () => api.sendMessage(id, text, execute), text);
+      await runJob(id, "Working on it – routing, searching and checking sources…", () => api.sendMessage(id, text, execute, tableLens), text);
     } catch (e) { report(e); }
   };
 

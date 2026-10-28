@@ -108,6 +108,7 @@ class NewBookmark(BaseModel):
 class NewMessage(BaseModel):
     text: str = Field(min_length=1, max_length=2000)
     execute: bool = False                       # the user asks to run the validated, read-only SQL
+    table_lens: bool = False                    # answer the 10 pilot PDFs' tables with TableLens (SQL over the table)
     client_message_id: str = Field(pattern=CLIENT_ID)
 
 
@@ -235,7 +236,8 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
 
     @app.post("/conversations/{conversation_id}/messages", status_code=202)
     def submit_message(conversation_id: str, body: NewMessage, owner: Owner = Depends(limited_owner)) -> dict[str, Any]:
-        return job_view(service.submit_message(owner, conversation_id, body.text, body.execute, body.client_message_id))
+        return job_view(service.submit_message(owner, conversation_id, body.text, body.execute, body.client_message_id,
+                                               body.table_lens))
 
     @app.post("/conversations/{conversation_id}/packages", status_code=202)
     def submit_package(conversation_id: str, body: NewPackage, owner: Owner = Depends(limited_owner)) -> dict[str, Any]:

@@ -381,3 +381,15 @@ def test_the_limiter_counts_a_sliding_minute_and_day():
     assert limiter.check("u") is None and limiter.check("u") is None and limiter.check("u").limit == "per_minute"
     now[0] = 61.0
     assert limiter.check("u") is None and limiter.check("u").limit == "per_day"
+
+
+def test_the_tablelens_switch_picks_the_document_pipeline_per_message(tmp_path):
+    docs = FakePlanner(plan(task("docs", worker="document_intelligence", operation="answer_document_question",
+                                 question="What lessons were learned about road works procurement?")))
+    stack = Stack(tmp_path, planner=docs)
+    cid = stack.conversation()
+    for client_id, switch in (("msg-tl-01", True), ("msg-tl-02", False)):
+        body = {"text": "What lessons were learned about road works procurement in Ethiopia?", "client_message_id": client_id,
+                "table_lens": switch}
+        assert stack.wait(stack.call("POST", f"/conversations/{cid}/messages", json=body).json()["job_id"])["state"] == "succeeded"
+    assert stack.parts["releases"] == ["pilot_v3_tablelens", "pilot_v3"]

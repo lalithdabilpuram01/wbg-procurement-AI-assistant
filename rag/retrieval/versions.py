@@ -5,6 +5,8 @@
     build_retriever("pilot_v2_1")             # opt-in: extraction 2.1.0 corpus + its registered per-unit release store
     build_retriever("pilot_v3")               # the approved 35-project corpus; bge-m3 vectors served from Lakebase pgvector
     build_retriever("pilot_v3_gte_local")     # evaluation only: same corpus, English model, local per-unit store
+    build_retriever("pilot_v3_tablelens")     # pilot_v3, but the 10 TableLens PDFs' tables are answered by SQL
+    build_table_lens("pilot_v3_tablelens")    # the TableLens side of that pipeline (None for every other version)
 
 A non-default version is validated when the retriever is built (corpus version, indexed-text fingerprint, store
 hashes, model configuration and compatibility attestation; see rag/embedding_cache/adapter.py) and any mismatch
@@ -35,6 +37,8 @@ class RagVersion:
     description: str
     resolve_project_names: bool = False   # a distinctive project-title word in the question scopes the search
     vector_store: str | None = None       # "lakebase" = dense vectors served from the wbg_rag pgvector store
+    lakebase_release: str | None = None   # the stored vector release, when shared with another version
+    table_lens: str | None = None         # TableLens release: its tables are answered by SQL, their row slices excluded
 
 
 VERSIONS = {
@@ -48,6 +52,11 @@ VERSIONS = {
     "pilot_v3_gte_local": RagVersion("pilot_v3_gte_local", core.ROOT / "rag" / "corpus_v3" / "processed" / "pilot_v3",
                                      "unit", ("C",), "evaluation only: pilot_v3 with the English model's local store",
                                      resolve_project_names=True),
+    "pilot_v3_tablelens": RagVersion("pilot_v3_tablelens", core.ROOT / "rag" / "corpus_v3" / "processed" / "pilot_v3", None,
+                                     ("C",), "pilot_v3 plus TableLens: tables of the 10 pilot PDFs answered by SQL over "
+                                     "Lakebase (table description -> schema registry -> one validated SELECT)",
+                                     resolve_project_names=True, vector_store="lakebase", lakebase_release="pilot_v3",
+                                     table_lens="tablelens_pilot"),
 }
 
 
@@ -89,7 +98,19 @@ def _lakebase_retriever(spec: RagVersion, corpus: "core.Corpus") -> "core.Retrie
     from rag.vector_store.index import LakebaseVectorIndex
     from rag.vector_store.lakebase import open_pool
     model = encoder.load_model()
-    index = LakebaseVectorIndex(open_pool(read_only=True), spec.name)
+    index = LakebaseVectorIndex(open_pool(read_only=True), spec.lakebase_release or spec.name)
     index.verify(indexed_text_fingerprint(corpus.units), len(corpus.units), model.model_id, model.revision)
+    lens = build_table_lens(spec.name)
     return core.Retriever(corpus, resolve_project_names=spec.resolve_project_names, dense_index=index,
-                          query_encoder=model.encode_query)
+                          query_encoder=model.encode_query, excluded_tables=lens.part_ids if lens else frozenset())
+
+
+def build_table_lens(version: str):
+    """The version's TableLens (registry loaded and release verified now), or None when it has none."""
+    spec = get_version(version)
+    if spec.table_lens is None:
+        return None
+    from rag.tablelens.query import TableLens
+    from rag.vector_store import encoder
+    from rag.vector_store.lakebase import open_pool
+    return TableLens(open_pool(read_only=True), encoder.load_model().encode_query, spec.table_lens)

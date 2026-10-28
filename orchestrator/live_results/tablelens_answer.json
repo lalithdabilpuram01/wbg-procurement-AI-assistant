@@ -1,0 +1,690 @@
+{
+ "questions": 22,
+ "switch_on_value_returned": 20,
+ "switch_off_value_in_top10": 17,
+ "rows": [
+  {
+   "question": "How much IDA financing goes to institutional development and the regulatory framework in the Ethiopia Expressway Development Support Project (P148850)?",
+   "expected": [
+    "18"
+   ],
+   "on": true,
+   "off_in_top10": true,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 2147,
+    "output_tokens": 237
+   },
+   "notes": [
+    "24440102:t02201: rows",
+    "24440102:t06501: rows"
+   ],
+   "tables": [
+    {
+     "table": "24440102:t02201",
+     "sql": "SELECT project_components, ida_financing, _row, _page, _quality FROM pdf_tables.t_24440102_t02201 WHERE project_components ILIKE '%institutional%' AND project_components ILIKE '%regulatory%' LIMIT 50",
+     "rows": [
+      "row 2, p. 22: Project Components: 2. Institutional development and regulatory framework | IDA Financing: 18.0"
+     ],
+     "flagged": false,
+     "broadened": false
+    },
+    {
+     "table": "24440102:t06501",
+     "sql": "SELECT it_no, components_and_activities, total_estimated_cost_us_m_incl_tax_fully, _row, _page, _quality FROM pdf_tables.t_24440102_t06501 WHERE components_and_activities ILIKE '%institutional%' OR components_and_activities ILIKE '%regulatory%' LIMIT 50",
+     "rows": [
+      "row 7, p. 65: It No: 2 | Components and Activities: Component 2 - Institutional Development and Regulatory Framework for",
+      "row 10, p. 65: It No: 2 (a) i | Components and Activities: Sub-component 2 (a) i - Advisory services and training for preparation of strategic master plan and legal and regulatory framework preparation for expressway and high capacity highway development and management. | Total Estimated Cost US$ M (incl.tax) Fully Financed by IDA: 2.5"
+     ],
+     "flagged": false,
+     "broadened": false
+    }
+   ]
+  },
+  {
+   "question": "What is the cost of the construction of the high capacity highway component in the Ethiopia Expressway Development Support Project (P148850)?",
+   "expected": [
+    "340"
+   ],
+   "on": true,
+   "off_in_top10": true,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 2317,
+    "output_tokens": 108
+   },
+   "notes": [
+    "24440102:t02201: rows",
+    "24440102:t11001: unanswerable"
+   ],
+   "tables": [
+    {
+     "table": "24440102:t02201",
+     "sql": "SELECT project_components, project_cost, ida_financing, _row, _page, _quality FROM pdf_tables.t_24440102_t02201 WHERE project_components ILIKE '%high capacity%' LIMIT 50",
+     "rows": [
+      "row 1, p. 22: Project Components: 1. Construction of high capacity highway | Project cost: 340.0 | IDA Financing: 340.0"
+     ],
+     "flagged": false,
+     "broadened": false
+    }
+   ]
+  },
+  {
+   "question": "What EIRR and NPV were estimated for the new highway option (option 2) in the Ethiopia Expressway Development Support Project (P148850)?",
+   "expected": [
+    "28.2",
+    "1233"
+   ],
+   "on": true,
+   "off_in_top10": true,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 2438,
+    "output_tokens": 194
+   },
+   "notes": [
+    "24440102:t11901: rows",
+    "24440102:t11001: rows"
+   ],
+   "tables": [
+    {
+     "table": "24440102:t11901",
+     "sql": "SELECT col_1, npv_m_us, eirr, _row, _page FROM pdf_tables.t_24440102_t11901 WHERE col_1 ILIKE '%Option 2%' AND _quality = 'ok' LIMIT 50",
+     "rows": [
+      "row 2, p. 119: col_1: Option 2 New Dual Carriageway | NPV (M,US$): 1233.0 | EIRR (%): 28.2"
+     ],
+     "flagged": false,
+     "broadened": false
+    },
+    {
+     "table": "24440102:t11001",
+     "sql": "SELECT road_project, economic_analysis_eirr, npv_us_million, _row, _page FROM pdf_tables.t_24440102_t11001 WHERE road_project ILIKE '%option 2%' LIMIT 50",
+     "rows": [
+      "row 2, p. 110: Road Project: Option 2 | Economic Analysis / EIRR (%): 28.2 | NPV (US$ million): 1233.0"
+     ],
+     "flagged": false,
+     "broadened": false
+    }
+   ]
+  },
+  {
+   "question": "What is the estimated cost of monitoring and supervision, sub-component 1(b), in the Ethiopia Expressway Development Support Project (P148850)?",
+   "expected": [
+    "17"
+   ],
+   "on": true,
+   "off_in_top10": true,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 2341,
+    "output_tokens": 149
+   },
+   "notes": [
+    "24440102:t06501: rows",
+    "24440102:t11601: unanswerable"
+   ],
+   "tables": [
+    {
+     "table": "24440102:t06501",
+     "sql": "SELECT it_no, components_and_activities, total_estimated_cost_us_m_incl_tax_fully, _row, _page, _quality FROM pdf_tables.t_24440102_t06501 WHERE it_no ILIKE '%1 (b)%' OR components_and_activities ILIKE '%Monitoring%' LIMIT 50",
+     "rows": [
+      "row 3, p. 65: It No: 1 (b) | Components and Activities: Sub-component 1 (b) - Monitoring and Supervision Services. | Total Estimated Cost US$ M (incl.tax) Fully Financed by IDA: 17.0"
+     ],
+     "flagged": false,
+     "broadened": false
+    }
+   ]
+  },
+  {
+   "question": "How much does China EXIM finance for the Arsi Negele-Hawassa road section in the Ethiopia Expressway Development Support Project (P148850)?",
+   "expected": [
+    "315"
+   ],
+   "on": true,
+   "off_in_top10": true,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 2751,
+    "output_tokens": 103
+   },
+   "notes": [
+    "24440102:t10401: rows",
+    "40089196:t00301: unanswerable"
+   ],
+   "tables": [
+    {
+     "table": "24440102:t10401",
+     "sql": "SELECT road_section, china_exim, _row, _page, _quality FROM pdf_tables.t_24440102_t10401 WHERE road_section ILIKE '%Hawasa%' LIMIT 50",
+     "rows": [
+      "row 4, p. 104: Road Section: 4. Arsi Negele-Hawasa | China EXIM: 315.0"
+     ],
+     "flagged": false,
+     "broadened": false
+    }
+   ]
+  },
+  {
+   "question": "What is the total financing of all road sections from Modjo to Hawassa across all financiers in the Ethiopia Expressway Development Support Project (P148850)?",
+   "expected": [
+    "1077.1"
+   ],
+   "on": false,
+   "off_in_top10": false,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 2630,
+    "output_tokens": 32
+   },
+   "notes": [
+    "24440102:t09901: unanswerable",
+    "24440102:t03101: unanswerable"
+   ],
+   "tables": []
+  },
+  {
+   "question": "How much of the credit is allocated to category 1 goods, works, non-consulting services and consultants in the Ethiopia Expressway Development Support Project (P148850)?",
+   "expected": [
+    "358"
+   ],
+   "on": true,
+   "off_in_top10": true,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 4155,
+    "output_tokens": 122
+   },
+   "notes": [
+    "24440102:t08301: rows",
+    "40025990:t00501: unanswerable"
+   ],
+   "tables": [
+    {
+     "table": "24440102:t08301",
+     "sql": "SELECT category, amount_of_the_credit_allocated_in_us_mil, _row, _page FROM pdf_tables.t_24440102_t08301 WHERE category ILIKE '%1. Goods%' AND _quality = 'ok' LIMIT 50",
+     "rows": [
+      "row 1, p. 83: Category: 1. Goods, works, non-consulting services, consultant\u2019s services, Training and workshops and operating costs under Parts 1 and 2 (Components 1 and 2) of the project | Amount of the credit allocated (in US$ million): 358.0"
+     ],
+     "flagged": false,
+     "broadened": false
+    }
+   ]
+  },
+  {
+   "question": "What is the prior review threshold for ICB/NCB works in the procurement plan of the Ethiopia Expressway Development Support Project (P148850)?",
+   "expected": [
+    "10"
+   ],
+   "on": true,
+   "off_in_top10": false,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 4031,
+    "output_tokens": 119
+   },
+   "notes": [
+    "40025990:t00501: unanswerable",
+    "40025990:t00101: rows"
+   ],
+   "tables": [
+    {
+     "table": "40025990:t00101",
+     "sql": "SELECT procurement_method, prior_review_threshold_us, comments, _row, _page FROM pdf_tables.t_40025990_t00101 WHERE procurement_method ILIKE '%works%' AND _quality = 'ok' LIMIT 50",
+     "rows": [
+      "row 2, p. 1: Procurement Method: ICB / NCB (Works) | Prior Review Threshold US$: Above US$ 10 million | Comments: All"
+     ],
+     "flagged": false,
+     "broadened": false
+    }
+   ]
+  },
+  {
+   "question": "What are the estimated and actual amounts of the Modjo-Hawassa works contract in the procurement plan of the Ethiopia Expressway Development Support Project (P148850)?",
+   "expected": [
+    "290000000",
+    "140348308.59"
+   ],
+   "on": true,
+   "off_in_top10": true,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 5467,
+    "output_tokens": 228
+   },
+   "notes": [
+    "40025990:t00401: rows",
+    "40025990:t00501: rows"
+   ],
+   "tables": [
+    {
+     "table": "40025990:t00401",
+     "sql": "SELECT activity_reference_no_description, estimated_amount_us, actual_amount_us, _row, _page FROM pdf_tables.t_40025990_t00401 WHERE activity_reference_no_description ILIKE '%Modjo%' AND _quality = 'ok' LIMIT 50",
+     "rows": [
+      "row 1, p. 4: Activity Reference No. / Description: W/03/ICB/OC/L/IDA/2009EYY / Modjo-Hawassa Design and Build Highway Project, Lot3: Batu (Ziway)-Arsinegele | Estimated Amount (US$): 290000000.0 | Actual Amount (US$ ): 140348308.59",
+      "row 3, p. 4: Activity Reference No. / Description: W/13/ICB/OC/L/IDA/2007 EFY - 2 / Modjo - Hawassa Design and Build Highway Project, Lot3: Batu (Ziway) - Arsinegele Project | Estimated Amount (US$): 76241411.73 | Actual Amount (US$ ): 0.0"
+     ],
+     "flagged": false,
+     "broadened": false
+    },
+    {
+     "table": "40025990:t00501",
+     "sql": "SELECT activity_reference_no_description, estimated_amount_us, actual_amount_us, _row, _page, _quality FROM pdf_tables.t_40025990_t00501 WHERE activity_reference_no_description ILIKE '%Hawassa%' LIMIT 50",
+     "rows": [
+      "row 3, p. 5: Activity Reference No. / Description: S/20/ICB/RP/IDA/200EFY / Mo djo-Hawassa Design and Build Highway Project; Phase II: Zeway-Hawassa; Lot 3 : Zeway-Arsi Negele (57.10 km) | Estimated Amount (US$): 17000000.0 | Actual Amount (US$): 0.0",
+      "row 4, p. 5: Activity Reference No. / Description: S/20/ICB/RP/IDA/2007EFY / Modjo-Hawassa Design and Build Highway Project; Phase II: Zeway-Hawassa; Lot 3 : Zeway-Arsi Negele (57.10 km) | Estimated Amount (US$): 17000000.0 | Actual Amount (US$): 7613005.97",
+      "row 7, p. 5: Activity Reference No. / Description: ET-ERA-152325-CS-QBS / Mid Term Review for Expressway Development Support Project for the construction of Batu (Zeway) - Arsi Negele Section of the Modjo - Hawassa Project | Estimated Amount (US$): 62000.0 | Actual Amount (US$): 0.0"
+     ],
+     "flagged": false,
+     "broadened": false
+    }
+   ]
+  },
+  {
+   "question": "How many goods packages are signed in the procurement plan of the Ethiopia Expressway Development Support Project (P148850)?",
+   "expected": [
+    "4"
+   ],
+   "on": true,
+   "off_in_top10": true,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 5787,
+    "output_tokens": 103
+   },
+   "notes": [
+    "40025990:t00402: total",
+    "40025990:t00501: unanswerable"
+   ],
+   "tables": [
+    {
+     "table": "40025990:t00402",
+     "sql": "SELECT COUNT(*) AS signed_goods_packages FROM pdf_tables.t_40025990_t00402 WHERE (process_status ILIKE '%signed%' AND _quality = 'ok') AND _quality = 'ok' LIMIT 50",
+     "rows": [
+      "signed_goods_packages: 4"
+     ],
+     "flagged": false,
+     "broadened": false
+    }
+   ]
+  },
+  {
+   "question": "What is the cost of the Piloting the Implementation of Road Asset Management component in the Sri Lanka project P132833?",
+   "expected": [
+    "102.1"
+   ],
+   "on": true,
+   "off_in_top10": true,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 2067,
+    "output_tokens": 181
+   },
+   "notes": [
+    "26256705:t02301: rows",
+    "34345370:t01301: rows"
+   ],
+   "tables": [
+    {
+     "table": "26256705:t02301",
+     "sql": "SELECT project_components, project_cost_us_millions, _row, _page, _quality FROM pdf_tables.t_26256705_t02301 WHERE project_components ILIKE '%piloting%' LIMIT 50",
+     "rows": [
+      "row 2, p. 23: Project Components: Piloting the Implementation of Road Asset Management Principles including cost of compensation for land acquisition and resettlement | Project Cost (US$, millions): 102.1"
+     ],
+     "flagged": false,
+     "broadened": false
+    },
+    {
+     "table": "34345370:t01301",
+     "sql": "SELECT component, cost_us_million, _row, _page FROM pdf_tables.t_34345370_t01301 WHERE component ILIKE '%Piloting%' AND _quality = 'ok' LIMIT 50",
+     "rows": [
+      "row 2, p. 13: Component: Component 2: Piloting the Implementation of Road Asset Management Principles | Cost (US$ Million): Cost at appraisal: 102.1 Cost at completion: 0 (the activity was dropped and subsequently replaced)"
+     ],
+     "flagged": false,
+     "broadened": false
+    }
+   ]
+  },
+  {
+   "question": "How much is budgeted for capacity building and training in the Sri Lanka project P132833?",
+   "expected": [
+    "2"
+   ],
+   "on": false,
+   "off_in_top10": true,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 4523,
+    "output_tokens": 32
+   },
+   "notes": [
+    "34345370:t02201: unanswerable",
+    "33761744:t00301: unanswerable"
+   ],
+   "tables": []
+  },
+  {
+   "question": "How much is allocated to land acquisition and resettlement in the Sri Lanka project P132833?",
+   "expected": [
+    "2.1"
+   ],
+   "on": true,
+   "off_in_top10": true,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 4174,
+    "output_tokens": 109
+   },
+   "notes": [
+    "26256705:t05302: rows",
+    "33761744:t00301: unanswerable"
+   ],
+   "tables": [
+    {
+     "table": "26256705:t05302",
+     "sql": "SELECT category, amount_of_financing_allocated_in_us_mill, _row, _page, _quality FROM pdf_tables.t_26256705_t05302 WHERE category ILIKE '%land%' LIMIT 50",
+     "rows": [
+      "row 2, p. 53: Category: (2) Land acquisition and resettlement related compensation under part 2 (b) of the project | Amount of Financing Allocated (in US$, millions equivalent): 2.1"
+     ],
+     "flagged": false,
+     "broadened": false
+    }
+   ]
+  },
+  {
+   "question": "Which procurement method applies to works contracts above US$10,000,000 in the Sri Lanka project P132833?",
+   "expected": [
+    "ICB"
+   ],
+   "on": true,
+   "off_in_top10": true,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 4144,
+    "output_tokens": 166
+   },
+   "notes": [
+    "33761744:t00101: rows",
+    "33761744:t00301: unanswerable"
+   ],
+   "tables": [
+    {
+     "table": "33761744:t00101",
+     "sql": "SELECT expenditure_category, contract_value_threshold, procurement_method, _row, _page FROM pdf_tables.t_33761744_t00101 WHERE expenditure_category ILIKE '%works%' AND contract_value_threshold ILIKE '%>%' AND contract_value_threshold ILIKE '%10,000,000%' AND _quality = 'ok' LIMIT 50",
+     "rows": [
+      "row 1, p. 1: Expenditure Category: Works | Contract Value (Threshold): > US$10,000,000 | Procurement Method: ICB and Performance-based Procurement"
+     ],
+     "flagged": false,
+     "broadened": false
+    }
+   ]
+  },
+  {
+   "question": "What is the length of road A3-8 in the economic analysis of the Sri Lanka project P132833?",
+   "expected": [
+    "26"
+   ],
+   "on": true,
+   "off_in_top10": true,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 2272,
+    "output_tokens": 99
+   },
+   "notes": [
+    "26256705:t06801: rows",
+    "34345370:t02201: unanswerable"
+   ],
+   "tables": [
+    {
+     "table": "26256705:t06801",
+     "sql": "SELECT road, length_in_km, _row, _page, _quality FROM pdf_tables.t_26256705_t06801 WHERE road ILIKE '%A3-8%' LIMIT 50",
+     "rows": [
+      "row 7, p. 68: Road: A3-8 | Length (in km): 26.0"
+     ],
+     "flagged": false,
+     "broadened": false
+    }
+   ]
+  },
+  {
+   "question": "What is the average annual OPRC cost for alternative 4 in the Sri Lanka project P132833?",
+   "expected": [
+    "9.5"
+   ],
+   "on": true,
+   "off_in_top10": false,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 2271,
+    "output_tokens": 109
+   },
+   "notes": [
+    "26256705:t06902: rows",
+    "34345370:t02201: unanswerable"
+   ],
+   "tables": [
+    {
+     "table": "26256705:t06902",
+     "sql": "SELECT alternative, average_annual_cost_for_oprc, _row, _page FROM pdf_tables.t_26256705_t06902 WHERE alternative = 4 AND _quality = 'ok' LIMIT 50",
+     "rows": [
+      "row 4, p. 69: Alternative: 4.0 | Average annual cost for OPRC: 9.5"
+     ],
+     "flagged": false,
+     "broadened": false
+    }
+   ]
+  },
+  {
+   "question": "What was the actual cost at closing of the provincial roads improvements component in the Sri Lanka project P132833?",
+   "expected": [
+    "61.74"
+   ],
+   "on": true,
+   "off_in_top10": true,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 2631,
+    "output_tokens": 140
+   },
+   "notes": [
+    "34345370:t05001: rows",
+    "34345370:t02201: unanswerable"
+   ],
+   "tables": [
+    {
+     "table": "34345370:t05001",
+     "sql": "SELECT col_2, _group, actual_at_project_closing_us_m, amount_at_approval_us_m, amount_after_restructurings_us_m, _row, _page, _quality FROM pdf_tables.t_34345370_t05001 WHERE col_2 ILIKE '%provincial%' LIMIT 50",
+     "rows": [
+      "row 3, p. 50, group Principles: col_2: Provincial Roads | Actual at Project Closing (US$M): 61.74 | Amount at Approval (US$M): 0.0 | Amount after restructurings (US$M): 63.0"
+     ],
+     "flagged": false,
+     "broadened": false
+    }
+   ]
+  },
+  {
+   "question": "How much of the IDA grant was actually disbursed in the Ethiopia urban program P163452?",
+   "expected": [
+    "270281509"
+   ],
+   "on": true,
+   "off_in_top10": true,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 2262,
+    "output_tokens": 141
+   },
+   "notes": [
+    "34455066:t05202: unanswerable",
+    "34455066:t04202: rows"
+   ],
+   "tables": [
+    {
+     "table": "34455066:t04202",
+     "sql": "SELECT source_of_program_financing_us, type_of_co_financing, estimates_at_appraisal, actual, percentage_of_appraisal, _row, _page, _quality FROM pdf_tables.t_34455066_t04202 WHERE type_of_co_financing ILIKE '%grant%' LIMIT 50",
+     "rows": [
+      "row 2, p. 42: Type of Co-Financing: IDA Grant | Estimates at Appraisal: 273000000.0 | Actual: 270281509.0 | Percentage of Appraisal: 100.0"
+     ],
+     "flagged": false,
+     "broadened": false
+    }
+   ]
+  },
+  {
+   "question": "How much co-financing did the French Agency for Development provide in the Ethiopia urban program P163452?",
+   "expected": [
+    "10800000"
+   ],
+   "on": true,
+   "off_in_top10": true,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 2309,
+    "output_tokens": 151
+   },
+   "notes": [
+    "34455066:t04202: rows",
+    "34455066:t01101: unanswerable"
+   ],
+   "tables": [
+    {
+     "table": "34455066:t04202",
+     "sql": "SELECT source_of_program_financing_us, type_of_co_financing, estimates_at_appraisal, actual, percentage_of_appraisal, percentage_of_actual, _row, _page, _quality FROM pdf_tables.t_34455066_t04202 WHERE source_of_program_financing_us ILIKE '%French%' LIMIT 50",
+     "rows": [
+      "row 4, p. 42: Source of Program Financing (US$): French Agency for Development | Type of Co-Financing: Co-financing | Estimates at Appraisal: 10800000.0 | Actual: 10800000.0 | Percentage of Appraisal: 100.0 | Percentage of Actual: 100.0"
+     ],
+     "flagged": false,
+     "broadened": false
+    }
+   ]
+  },
+  {
+   "question": "What was the average growth rate of own-source revenue collected by cities in the Ethiopia urban program P163452?",
+   "expected": [
+    "24.89"
+   ],
+   "on": true,
+   "off_in_top10": true,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 2098,
+    "output_tokens": 284
+   },
+   "notes": [
+    "34455066:t05101: rows",
+    "34455066:t01701: unanswerable"
+   ],
+   "tables": [
+    {
+     "table": "34455066:t05101",
+     "sql": "SELECT _row, _page, col_1, collected_in_mil, growth_rate_in, collected_in_mil_2, growth_rate_in_2, _group, _quality FROM pdf_tables.t_34455066_t05101 WHERE col_1 ILIKE '%average%' LIMIT 50",
+     "rows": [
+      "row 7, p. 51: col_1: Average growth | Growth rate in %: 24.89 | Growth rate in %: 31.06"
+     ],
+     "flagged": false,
+     "broadened": false
+    }
+   ]
+  },
+  {
+   "question": "Which works activities were cancelled in the procurement plan of the Senegal project P175325, and what were their estimated amounts?",
+   "expected": [
+    "6076795"
+   ],
+   "on": true,
+   "off_in_top10": false,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 5771,
+    "output_tokens": 180
+   },
+   "notes": [
+    "40009757:t00302: unanswerable",
+    "40009757:t00301: rows"
+   ],
+   "tables": [
+    {
+     "table": "40009757:t00301",
+     "sql": "SELECT activity_reference_no_description, estimated_amount_us, process_status, _row, _page FROM pdf_tables.t_40009757_t00301 WHERE process_status ILIKE '%annul%' AND _quality = 'ok' LIMIT 50",
+     "rows": [
+      "row 1, p. 3: Activity Reference No. / Description: SN-PDEC-237672-CW-RFQ / S\u00e9lection d'entreprise pour la r\u00e9alisation des travaux de so us-projets d'engagement citoyen dans la commune de Dia roum\u00e9 | Estimated Amount (US$): 140000.0 | Process Status: Annul\u00e9",
+      "row 2, p. 3: Activity Reference No. / Description: SN-PDEC-237671-CW-RFQ / S\u00e9lection d'entreprise pour la r\u00e9alisation des travaux de so us-projets d'engagement citoyen dans la commune de Pak our | Estimated Amount (US$): 140000.0 | Process Status: Annul\u00e9",
+      "row 3, p. 3: Activity Reference No. / Description: SN-PDEC-237666-CW-RFQ / S\u00e9lection d'entreprise pour am\u00e9nager des p\u00e9pini\u00e8res, abris et bureaux dans les fermes horticoles | Estimated Amount (US$): 100000.0 | Process Status: Annul\u00e9",
+      "row 4, p. 3: Activity Reference No. / Description: SN-PDEC-237667-CW-RFQ / S\u00e9lection d'entreprises pour la r\u00e9alisation des travaux de sous-projets d'engagement cit oyen dans la commune de Di \u00e9goune | Estimated Amount (US$): 140000.0 | Process Status: Annul\u00e9",
+      "row 5, p. 3: Activity Reference No. / Description: SN-PDEC-377835-CW-RFB / Travaux de r\u00e9habilitation (du r\u00e9seau secondaire et tertiaire et routier) de 104 Km de pist es dans la r\u00e9gion de S\u00e9dhiou en 3 lots. | Estimated Amount (US$): 6076795.0 | Process Status: Annul\u00e9"
+     ],
+     "flagged": false,
+     "broadened": false
+    }
+   ]
+  },
+  {
+   "question": "What is the total estimated amount of all works activities in the procurement plan of the Senegal project P175325?",
+   "expected": [
+    "9251967"
+   ],
+   "on": true,
+   "off_in_top10": false,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 5757,
+    "output_tokens": 109
+   },
+   "notes": [
+    "40009757:t00302: unanswerable",
+    "40009757:t00301: total"
+   ],
+   "tables": [
+    {
+     "table": "40009757:t00301",
+     "sql": "SELECT SUM(estimated_amount_us) AS total_estimated_amount_us, COUNT(*) AS n_rows FROM pdf_tables.t_40009757_t00301 WHERE _quality = 'ok' AND _quality = 'ok' LIMIT 50",
+     "rows": [
+      "total_estimated_amount_us: 9251967.0 | n_rows: 7"
+     ],
+     "flagged": false,
+     "broadened": false
+    }
+   ]
+  },
+  {
+   "question": "What lessons were learned about contractor mobilisation in the Sri Lanka project P132833?",
+   "expected": [],
+   "on": false,
+   "off_in_top10": false,
+   "usage": {},
+   "notes": [],
+   "tables": []
+  },
+  {
+   "question": "Who are the procurement specialists on the team of the Ethiopia Expressway Development Support Project (P148850)?",
+   "expected": [],
+   "on": false,
+   "off_in_top10": false,
+   "usage": {
+    "llm_calls": 2,
+    "input_tokens": 3775,
+    "output_tokens": 32
+   },
+   "notes": [
+    "24440102:t10902: unanswerable",
+    "40025990:t00402: unanswerable"
+   ],
+   "tables": []
+  }
+ ],
+ "ledger": {
+  "limits": {
+   "max_attempts": 50,
+   "max_usd": "0.40"
+  },
+  "prices": {
+   "model": "claude-sonnet-5-5",
+   "input_usd_per_million": "2",
+   "output_usd_per_million": "10",
+   "source": "platform.claude.com/docs/en/about-claude/pricing, verified 2026-10-26"
+  },
+  "attempts_used": 46,
+  "estimated_usd": "0.187516",
+  "committed_usd": "0.206269",
+  "locked": null
+ }
+}

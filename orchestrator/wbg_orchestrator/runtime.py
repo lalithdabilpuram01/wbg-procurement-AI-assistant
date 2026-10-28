@@ -10,7 +10,8 @@ Every live dependency is opt-in and fails closed:
   - the existing gateway refuses any write-capable identity, because development owner credentials are disabled here.
 - Checkpoints: the isolated `PostgresSaver` on the Lakebase development branch (WBG_CKPT_ENDPOINT); `production` is refused.
 - Conversations: the existing PostgreSQL conversation store (WBG_CONVERSATION_DSN).
-- Documents: the default RAG release with the evidence-only generator.
+- Documents: the default RAG release with the evidence-only generator; `pilot_v3_tablelens` (chosen per message)
+  adds TableLens, whose SQL is written by Claude through the same budgeted client (`table_sql`).
 - Audit:
   - orchestrator events go to `orchestrator/runs/app_audit.jsonl`, never the historical project log;
   - Logfire export happens only if the existing LOGFIRE_* settings switch it on.
@@ -53,13 +54,14 @@ from .planner import ClaudePlanner
 from .rag_modules import answering
 from .response import ClaudeResponseGenerator
 from .supervisor import Supervisor
+from .table_sql import TableSqlWriter
 from .workers.base import ResultCache, TicketAuthority
 from .workers.planning import PlanningWorker
 from .workers.prediction import PredictionWorker, gateway_sql
 
 ORCHESTRATOR_DIR = Path(__file__).resolve().parents[1]
 DEV_CHECKPOINT_ENDPOINT = "projects/wbg-procurement-dev/branches/dev-orchestrator/endpoints/primary"
-OUTPUT_CAPS = {"investigation_plan": 8000, "investigation_answer": 9000, "sql_draft": 4000}
+OUTPUT_CAPS = {"investigation_plan": 8000, "investigation_answer": 9000, "sql_draft": 4000, "table_sql": 1000}
 REGISTRY_PRINCIPAL, WORKSPACE = "analyst-demo", "wbg-procurement-poc"
 
 
@@ -88,13 +90,14 @@ def build_runtime(config: RuntimeConfig, operator_confirmed: bool) -> tuple[AppS
     claude = _claude_client(config, operator_confirmed, tracer)
     authority, guardrails = TicketAuthority(), build_guardrails()
     service, structured = _structured_worker(config, claude, guardrails, authority)
-    document = document_worker(authority, generator_factory=answering("generator").EvidenceOnlyGenerator)
+    json_client = PortkeyJsonClient(claude)
+    document = document_worker(authority, generator_factory=answering("generator").EvidenceOnlyGenerator,
+                               table_writer=TableSqlWriter(json_client).writer)
     gold = gateway_sql(service, REGISTRY_PRINCIPAL, WORKSPACE)
     planning = PlanningWorker(gold, authority, semantic_project_scores(document, config.rag_release))
     controller = ExecutionController({WorkerName.STRUCTURED: structured, WorkerName.DOCUMENT: document,
                                       WorkerName.PREDICTION: PredictionWorker(gold, authority), WorkerName.PLANNING: planning},
                                      authority, tracer=tracer, prices=SONNET_5_5_PRICES)
-    json_client = PortkeyJsonClient(claude)
     deps = EngineDeps(controller=controller, supervisor=Supervisor(), planner=ClaudePlanner(json_client),
                       responder=ClaudeResponseGenerator(json_client), guard=guardrails, llm_breaker=llm_breaker(), tracer=tracer,
                       audit=AuditTrail(JsonlAuditSink(config.audit_path)), prices=SONNET_5_5_PRICES)

@@ -25,7 +25,7 @@ type ChatProps = {
   sidebarOpen: boolean;
   scrollToSeq: number | null;
   onOpenSidebar: () => void;
-  onSend: (text: string, execute: boolean) => void;
+  onSend: (text: string, execute: boolean, tableLens?: boolean) => void;
   onStop: () => void;
   onAssess: () => void;
   onPlan: () => void;
@@ -36,6 +36,8 @@ type ChatProps = {
 export function ChatView(props: ChatProps) {
   const { detail, investigations, pending } = props;
   const bottom = useRef<HTMLDivElement>(null);
+  const [tableLens, setTableLens] = useState(false);
+  const send = (text: string, execute: boolean) => props.onSend(text, execute, tableLens);
 
   useEffect(() => {
     if (props.scrollToSeq !== null) {
@@ -53,13 +55,16 @@ export function ChatView(props: ChatProps) {
         )}
         <h1 className="min-w-0 truncate text-sm font-semibold">{props.title ?? "New chat"}</h1>
         <div className="ml-auto flex items-center gap-3">
-          <Tooltip content="TableLens (Card-to-Cell table retrieval): finds the right PDF table, then the exact cell. Demo pipeline – coming soon.">
-            <label className="flex cursor-not-allowed items-center gap-2 text-xs text-muted-foreground">
+          <Tooltip content="TableLens (Card-to-Cell): for the 10 pilot PDFs, finds the right table by its description and answers with SQL over its rows. Applies to the next messages you send.">
+            <button type="button" role="switch" aria-checked={tableLens} onClick={() => setTableLens((on) => !on)}
+              className={cn("flex items-center gap-2 text-xs", tableLens ? "text-foreground" : "text-muted-foreground")}>
               <TableProperties className="size-4" /> TableLens
-              <span className="relative inline-flex h-5 w-9 items-center rounded-full bg-muted opacity-60">
-                <span className="ml-0.5 size-4 rounded-full bg-card shadow" />
+              <span className={cn("relative inline-flex h-5 w-9 items-center rounded-full transition-colors",
+                tableLens ? "bg-primary" : "bg-muted")}>
+                <span className={cn("size-4 rounded-full bg-card shadow transition-transform",
+                  tableLens ? "translate-x-[18px]" : "translate-x-0.5")} />
               </span>
-            </label>
+            </button>
           </Tooltip>
           <Button size="sm" variant="outline" onClick={props.onAssess}><Calculator /> Assess package</Button>
           <Button size="sm" onClick={props.onPlan}><ClipboardList /> Plan a new project</Button>
@@ -68,7 +73,7 @@ export function ChatView(props: ChatProps) {
 
       <div className="scrollbar-thin flex-1 overflow-y-auto">
         {!detail || (detail.turns.length === 0 && !pending) ? (
-          <Welcome onSend={(t) => props.onSend(t, false)} onAssess={props.onAssess} onPlan={props.onPlan} />
+          <Welcome onSend={(t) => send(t, false)} onAssess={props.onAssess} onPlan={props.onPlan} />
         ) : (
           <div className="mx-auto max-w-4xl space-y-6 px-4 py-8">
             {detail.turns.map((turn) =>
@@ -83,7 +88,7 @@ export function ChatView(props: ChatProps) {
                   investigation={turn.request_id ? investigations[turn.request_id] : undefined}
                   bookmarked={props.bookmarkedSeqs.has(turn.seq)} onToggleBookmark={() => props.onToggleBookmark(turn.seq)}
                   onDecide={(approvalId, approved) => props.onDecide(turn.request_id!, approvalId, approved)}
-                  onAssess={props.onAssess} onPlan={props.onPlan} onInvestigate={(q) => props.onSend(q, false)} />
+                  onAssess={props.onAssess} onPlan={props.onPlan} onInvestigate={(q) => send(q, false)} />
               ),
             )}
             {pending && <PendingAnswer label={pending} />}
@@ -92,7 +97,7 @@ export function ChatView(props: ChatProps) {
         )}
       </div>
 
-      <Composer running={pending !== null} onSend={props.onSend} onStop={props.onStop} />
+      <Composer running={pending !== null} onSend={send} onStop={props.onStop} />
     </div>
   );
 }

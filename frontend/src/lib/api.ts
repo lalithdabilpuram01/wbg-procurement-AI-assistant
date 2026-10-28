@@ -63,8 +63,8 @@ export const api = {
   createConversation: (title?: string) => call<{ conversation_id: string; title: string }>("conversations", json("POST", { title })),
   renameConversation: (id: string, title: string) => call<void>(`conversations/${id}`, json("PATCH", { title })),
   fileConversation: (id: string, folderId: string | null) => call<void>(`conversations/${id}/folder`, json("PUT", { folder_id: folderId })),
-  sendMessage: (id: string, text: string, execute: boolean) =>
-    call<Job>(`conversations/${id}/messages`, json("POST", { text, execute, client_message_id: clientId() })),
+  sendMessage: (id: string, text: string, execute: boolean, tableLens = false) =>
+    call<Job>(`conversations/${id}/messages`, json("POST", { text, execute, table_lens: tableLens, client_message_id: clientId() })),
   assessPackage: (id: string, input: PackageInput) =>
     call<Job>(`conversations/${id}/packages`, json("POST", { ...input, client_message_id: clientId() })),
   planProject: (id: string, input: PlanInput) =>

@@ -48,9 +48,11 @@ def structured_worker_for_service(service: Any, claude: Any, telemetry: Telemetr
     return StructuredDataWorker(workflow_for, tools_for, authority, cache)
 
 
-def document_worker(authority: TicketAuthority, generator_factory: Callable[[], Any], use_nli: bool = False) -> DocumentIntelligenceWorker:
-    """AnswerPipeline per corpus release; the release is explicit per investigation (default pilot_v2)."""
-    from rag.retrieval.versions import VERSIONS, build_retriever
+def document_worker(authority: TicketAuthority, generator_factory: Callable[[], Any], use_nli: bool = False,
+                    table_writer: Callable[[str], Any] | None = None) -> DocumentIntelligenceWorker:
+    """AnswerPipeline per corpus release; the release is explicit per investigation (default pilot_v3).
+    table_writer (request id -> SQL writer) enables TableLens for the releases that have one."""
+    from rag.retrieval.versions import VERSIONS, build_retriever, build_table_lens
 
     @lru_cache(maxsize=2)
     def retriever_for(release: str):
@@ -64,7 +66,11 @@ def document_worker(authority: TicketAuthority, generator_factory: Callable[[], 
     def flags_for(release: str):
         directory = VERSIONS[release].processed_dir or (PROJECT / "rag" / "corpus_v3" / "processed" / "pilot_v2")
         return table_flag_index(str(directory))
-    return DocumentIntelligenceWorker(pipeline_for, retriever_for, authority, flags_for)
+
+    @lru_cache(maxsize=2)
+    def table_lens_for(release: str):
+        return build_table_lens(release)
+    return DocumentIntelligenceWorker(pipeline_for, retriever_for, authority, flags_for, table_lens_for, table_writer)
 
 
 def semantic_project_scores(document: DocumentIntelligenceWorker, release: str) -> Callable[[str], dict[str, float]]:

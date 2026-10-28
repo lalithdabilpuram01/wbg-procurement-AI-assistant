@@ -31,6 +31,7 @@ from .conversation_bridge import ConversationFrontDoor, owner_ref
 from .engine import EngineOutcome, InvestigationEngine, InvestigationNotFound, checkpoint_thread_id
 
 JobState = Literal["running", "succeeded", "failed"]
+TABLELENS_RELEASE = "pilot_v3_tablelens"           # the document pipeline behind the TableLens switch
 
 
 class ConversationBusy(RuntimeError):
@@ -123,10 +124,13 @@ class AppService:
     def history(self, owner: Owner, conversation_id: str) -> list[Turn]:
         return self._conversations.history(owner, conversation_id)
 
-    def submit_message(self, owner: Owner, conversation_id: str, text: str, execute: bool, client_message_id: str) -> Job:
+    def submit_message(self, owner: Owner, conversation_id: str, text: str, execute: bool, client_message_id: str,
+                       table_lens: bool = False) -> Job:
+        """table_lens: answer PDF tables of the 10 pilot documents with TableLens (SQL) instead of table slices."""
         self._store.get_thread(owner, conversation_id)                         # ownership before anything runs
+        release = TABLELENS_RELEASE if table_lens else None
         return self._submit(owner, conversation_id, "message", client_message_id,
-                            lambda job: self._run_message(job, text, execute))
+                            lambda job: self._run_message(job, text, execute, release))
 
     def submit_package(self, owner: Owner, conversation_id: str, package: PackageSpec, client_message_id: str) -> Job:
         self._store.get_thread(owner, conversation_id)                         # ownership before anything runs
@@ -208,9 +212,9 @@ class AppService:
         except Exception as error:                     # the class only: messages may contain data
             job.state, job.error = "failed", type(error).__name__
 
-    def _run_message(self, job: Job, text: str, execute: bool) -> None:
+    def _run_message(self, job: Job, text: str, execute: bool, rag_release: str | None = None) -> None:
         reply = self._front_door.handle_message(job.owner, job.conversation_id, text, execute=execute,
-                                                on_start=lambda rid: self._started(job, rid))
+                                                on_start=lambda rid: self._started(job, rid), rag_release=rag_release)
         job.request_id, job.status = reply.request_id, reply.status
 
     def _started(self, job: Job, request_id: str) -> None:

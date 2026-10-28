@@ -243,9 +243,10 @@ EMBEDDING_CACHE_MODES = ("legacy", "unit")   # legacy = whole-index .npy (defaul
 
 class Retriever:
     def __init__(self, corpus: Corpus, embedding_cache: str | None = None, resolve_project_names: bool = False,
-                 dense_index=None, query_encoder=None):
+                 dense_index=None, query_encoder=None, excluded_tables: frozenset[str] = frozenset()):
         """dense_index (opt-in): an external vector index with `nearest(query, scope_projects)`, e.g. the Lakebase
-        store; it replaces the in-memory embedding matrix and needs `query_encoder` (question -> unit vector)."""
+        store; it replaces the in-memory embedding matrix and needs `query_encoder` (question -> unit vector).
+        excluded_tables (opt-in): table ids whose row slices are never returned (TableLens answers them with SQL)."""
         from rank_bm25 import BM25Okapi
         if (dense_index is None) != (query_encoder is None):
             raise ValueError("dense_index and query_encoder are given together")
@@ -254,6 +255,7 @@ class Retriever:
         self._position = {u.unit_id: i for i, u in enumerate(corpus.units)} if dense_index is not None else {}
         # opt-in (pilot_v3): a distinctive project-title word in the question narrows the search to that project
         self._project_names = corpus.project_name_index() if resolve_project_names else {}
+        self.keep = np.array([not (u.unit_type == "table" and u.table_id in excluded_tables) for u in corpus.units], dtype=bool)
         self.bm25 = BM25Okapi([tok(u.text) for u in corpus.units])
         self._emb = None
         self._model = None
@@ -357,9 +359,9 @@ class Retriever:
         g = self.guard(q) if guarded else {"status": "ok", "scope_projects": None, "exact_units": [], "notes": []}
         if g["status"] != "ok":
             return {"query": q, "status": g["status"], "notes": g["notes"], "results": [], "latency_ms": round(1000 * (time.perf_counter() - t0), 1)}
-        mask = np.ones(len(self.c.units), dtype=bool)
+        mask = self.keep.copy()
         if g["scope_projects"]:
-            mask = np.array([u.project_id in g["scope_projects"] for u in self.c.units])
+            mask &= np.array([u.project_id in g["scope_projects"] for u in self.c.units])
         if method == "bm25":
             s = self.rank_bm25(q, mask)
             order, scores = np.argsort(-s), {"bm25": s}

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from functools import lru_cache
 from pathlib import Path
 
 import numpy as np
@@ -30,6 +31,7 @@ def snapshot_path(model_id: str = MODEL_ID) -> Path:
     return Path(snapshot_download(model_id, local_files_only=True))
 
 
+@lru_cache(maxsize=2)                    # one copy per process (retriever and TableLens share it)
 def load_model(model_id: str = MODEL_ID, max_sequence_tokens: int = MAX_SEQUENCE_TOKENS) -> LoadedModel:
     """Load from the local snapshot path (loading by repo id fails offline); Apple GPU when available."""
     import torch

@@ -83,7 +83,7 @@ class EvidenceSelector:
     def _targeted(self, q: str, doc_ids: list[str]) -> list[int]:
         """Coverage retrieval restricted to given documents: the best unit by fused rank, by dense and by BM25 separately.
         (Fusion alone can bury a unit one signal ranks first, e.g. a numeric disbursement table that BM25 ranks last.)"""
-        mask = np.array([u.document_id in doc_ids for u in self.c.units])
+        mask = np.array([u.document_id in doc_ids for u in self.c.units]) & self.R.keep
         if not mask.any():
             return []
         b, d = self.R.rank_bm25(q, mask), self.R.rank_dense(q, mask)

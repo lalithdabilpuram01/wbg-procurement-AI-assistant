@@ -69,6 +69,7 @@ class OwnerBinding:
     owner: Owner
     thread_id: str
     on_start: Callable[[str], None] | None = None          # told the request id before the engine starts (to cancel)
+    rag_release: str | None = None                         # this message's document pipeline (None = the app default)
 
 
 CURRENT_OWNER: contextvars.ContextVar[OwnerBinding | None] = contextvars.ContextVar("wbg_current_owner", default=None)
@@ -127,7 +128,7 @@ class ConversationRunner:
         request = InvestigationRequest(
             investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=binding.thread_id,
             owner=owner_ref(binding.owner), question=question, route_hint=self._route.value, execute_requested=execute,
-            rag_release=self._release, authorization=self._authorization_for((self._route,)))
+            rag_release=binding.rag_release or self._release, authorization=self._authorization_for((self._route,)))
         if binding.on_start:
             binding.on_start(request_id)
         return to_outcome(self._engine.start(request, memory_block=conversation_context or None))
@@ -148,10 +149,11 @@ class ConversationFrontDoor:
         self._authorization_for, self._allow_combined, self._release = authorization_for, allow_combined, rag_release
 
     def handle_message(self, owner: Owner, thread_id: str, text: str, execute: bool = False,
-                       on_start: Callable[[str], None] | None = None) -> FrontDoorReply:
+                       on_start: Callable[[str], None] | None = None, rag_release: str | None = None) -> FrontDoorReply:
         """Questions for both agents, and questions whose intent the rules cannot place, go straight to an
         investigation (its planner chooses the agents) instead of a clarifying question. Prediction requests ask for
-        the package fields. Everything else is handled by the conversation service as before."""
+        the package fields. Everything else is handled by the conversation service as before.
+        rag_release: this message's document pipeline (e.g. pilot_v3_tablelens); None = the app default."""
         routing = self._service.route_message(owner, thread_id, text)
         if routing is not None and routing.route == Route.ML_PREDICTION:
             return self._ask_for_fields(owner, thread_id, text, Route.ML_PREDICTION.value, PACKAGE_FIELDS_MESSAGE)
@@ -161,9 +163,9 @@ class ConversationFrontDoor:
             return self._scope_reply(owner, thread_id, text)                  # nothing procurement-related to investigate
         planning = self._planning_context(owner, thread_id) if routing is not None else None
         if routing is not None and (self._opens_investigation(routing) or (planning and self._follows_brief(routing))):
-            outcome = self._open_investigation(owner, thread_id, text, execute, on_start, planning)
+            outcome = self._open_investigation(owner, thread_id, text, execute, on_start, planning, rag_release)
             return FrontDoorReply(outcome.status.value, outcome.values["request"]["request_id"], investigation=outcome)
-        token = CURRENT_OWNER.set(OwnerBinding(owner, thread_id, on_start))
+        token = CURRENT_OWNER.set(OwnerBinding(owner, thread_id, on_start, rag_release))
         try:
             reply = self._service.handle_message(owner, thread_id, text, execute=execute)
         finally:
@@ -241,13 +243,14 @@ class ConversationFrontDoor:
         return request_id
 
     def _open_investigation(self, owner: Owner, thread_id: str, text: str, execute: bool,
-                            on_start: Callable[[str], None] | None, planning_context: str | None = None) -> EngineOutcome:
+                            on_start: Callable[[str], None] | None, planning_context: str | None = None,
+                            rag_release: str | None = None) -> EngineOutcome:
         memory = self._service.memory_for(owner, thread_id, text)
         request_id = self._user_turn(owner, thread_id, text, "investigation")
         request = InvestigationRequest(
             investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=thread_id,
             owner=owner_ref(owner), question=self._service.text_filter(text), mode="investigation", execute_requested=execute,
-            rag_release=self._release, planning_context=planning_context,
+            rag_release=rag_release or self._release, planning_context=planning_context,
             authorization=self._authorization_for((Route.STRUCTURED_DATA, Route.DOCUMENT_RAG)))
         if on_start:
             on_start(request_id)

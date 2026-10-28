@@ -1,0 +1,18 @@
+{
+ "structured_tables": 74,
+ "rows": 797,
+ "flagged_rows": 3,
+ "by_document": {
+  "24440102": 17,
+  "26256705": 14,
+  "33761744": 5,
+  "34345370": 10,
+  "34407877": 1,
+  "34455066": 14,
+  "40009757": 5,
+  "40025990": 6,
+  "40089196": 2
+ },
+ "cards_sha256": "be83effe7c88fc4d63d3ea88ab01e685912cfb47a1ce183ece364999cb53cb22",
+ "example_card": "[PAD 24440102 \u00b7 Ethiopia- Expressway Development Support Project (P148850, ET) \u00b7 III. PROJECT DESCRIPTION > B. Project Financing \u00b7 page 22]\nCaption: Table 1: Project Cost and Financing (US$ million)\nColumns: Project Components (text); Project cost (number); IDA Financing (number); % Financing (number)\nRow labels: 1. Construction of high capacity highway; 2. Institutional development and regulatory framework; 3. Road Safety, and institutional development support to the transport sector; Total Costs Total Project Costs Front-End Fees Total Financing Required\nRows: 6"
+}
