@@ -38,8 +38,11 @@ from .contracts import (EvidenceKind, InvestigationRequest, InvestigationStatus,
                         TenderSpec, ValidationStatus, investigation_id_for, new_id)
 from .engine import EngineOutcome, InvestigationEngine, InvestigationNotFound, checkpoint_thread_id
 from .feedback import REVISION_ROUTE, AnswerRecord, FeedbackService, Guidance
+from .logs import get_logger
 from .planner import BRIEF_BUDGET
 from .workers.monitoring import monitoring_project
+
+log = get_logger("front_door")
 
 COMBINABLE = {Route.STRUCTURED_DATA.value, Route.DOCUMENT_RAG.value}
 UNCLEAR = {ReasonCategory.NO_CLEAR_INTENT, ReasonCategory.CLASSIFIER_LOW_SCORE, ReasonCategory.CLASSIFIER_ERROR}
@@ -190,8 +193,23 @@ class ConversationFrontDoor:
         """Questions for both agents, and questions whose intent the rules cannot place, go straight to an
         investigation (its planner chooses the agents) instead of a clarifying question. Prediction requests ask for
         the package fields. Everything else is handled by the conversation service as before.
-        rag_release: this message's document pipeline (e.g. pilot_v3_tablelens); None = the app default."""
+        rag_release: this message's document pipeline (e.g. pilot_v3_tablelens); None = the app default.
+
+        Traced as `conversation.message` (the masked question, the route chosen and why); an investigation's graph
+        steps nest under it."""
+        with self._engine.deps.tracer.span("conversation.message", conversation_id=thread_id, question=text) as span:
+            reply = self._route_and_answer(owner, thread_id, text, execute, on_start, rag_release, on_text, span)
+            span(status=reply.status, request_id=reply.request_id)
+            return reply
+
+    def _route_and_answer(self, owner: Owner, thread_id: str, text: str, execute: bool,
+                          on_start: Callable[[str], None] | None, rag_release: str | None,
+                          on_text: Callable[[str], None] | None, span: Callable[..., None]) -> FrontDoorReply:
         routing = self._service.route_message(owner, thread_id, text)
+        if routing is not None:
+            reason = getattr(routing.reason, "value", str(routing.reason))
+            span(route=routing.route.value, reason=reason)
+            log.info("message routed", extra={"route": routing.route.value, "reason": reason})
         if routing is not None and routing.route == Route.ML_PREDICTION:
             return self._ask_for_fields(owner, thread_id, text, Route.ML_PREDICTION.value, PACKAGE_FIELDS_MESSAGE)
         if routing is not None and routing.route == Route.PROCUREMENT_PLANNING:

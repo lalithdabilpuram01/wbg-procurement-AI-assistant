@@ -11,6 +11,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import logging
+import traceback
 import uuid
 from contextlib import contextmanager
 from datetime import datetime, timezone
@@ -19,6 +21,8 @@ from typing import Any, Iterator, Protocol
 
 from opentelemetry import trace
 from pydantic import BaseModel
+
+log = logging.getLogger("wbg.structured_agent")
 
 SAFE_ATTRIBUTES = {
     "tool", "status", "duration_ms", "error_codes", "objects", "candidate_objects", "approved", "validation_id",
@@ -37,6 +41,14 @@ SAFE_ATTRIBUTES = {
     "route", "route_reason", "confidence_level", "confidence_basis", "retrieval_allowed", "external_tools_allowed",
     "reset_topic", "inherited_route", "route_decided_by",
 }
+
+
+def log_failure(message: str, error: BaseException, **ids: Any) -> None:
+    """Log a failure that is turned into a typed error result: its type and where it was raised (file:line:function),
+    never its message, which may contain SQL or data. Enough to find the failing code; the caller returns the error."""
+    frames = traceback.extract_tb(error.__traceback__)
+    location = f"{Path(frames[-1].filename).name}:{frames[-1].lineno}:{frames[-1].name}" if frames else ""
+    log.error(message, extra={"error_type": type(error).__name__, "error_location": location, **sanitize(ids)})
 
 
 def principal_hash(principal_id: str) -> str:

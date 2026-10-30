@@ -33,7 +33,11 @@ from .contracts import InvestigationResponse, PackageAssessment, PlanningSpec, T
 from .conversation_bridge import ConversationFrontDoor, owner_ref
 from .engine import EngineOutcome, InvestigationEngine, InvestigationNotFound, checkpoint_thread_id
 from .feedback import FeedbackRequest, FeedbackService, Preferences
+from .logs import bind, get_logger, log_context
+from .observability import current_trace_id
 from .progress import JobStreams
+
+log = get_logger("jobs")
 
 JobState = Literal["running", "succeeded", "failed"]
 TABLELENS_RELEASE = "pilot_v3_tablelens"           # the document pipeline behind the TableLens switch
@@ -57,6 +61,7 @@ class Job:
     request_id: str | None = None             # the investigation's request, once known
     status: str | None = None                 # conversation or investigation status at the end
     error: str | None = None                  # error class only (never a message that could contain data)
+    trace_id: str | None = None               # the job's Logfire trace (also on every log line of the job)
     cancel_requested: bool = False            # the owner pressed stop (applied as soon as the investigation id is known)
     created_at: dt.datetime = field(default_factory=lambda: dt.datetime.now(dt.timezone.utc))
 
@@ -97,6 +102,7 @@ class AppService:
         self._lock = threading.Lock()
         self._jobs: dict[str, Job] = {}
         self._by_client_id: dict[tuple[str, str, str, str], str] = {}
+        self._job_spans: dict[str, Callable[..., None]] = {}                   # a running job's root span setter
         self.streams = JobStreams()                                             # live steps and text, per job
         engine.deps.progress = self.streams.publish_investigation
 
@@ -323,13 +329,27 @@ class AppService:
         job.request_id, job.status = request_id, outcome.status.value
 
     def _guarded(self, job: Job, work: Callable[[Job], None]) -> None:
-        try:
-            work(job)
-            job.state = "succeeded"
-        except Exception as error:                     # the class only: messages may contain data
-            job.state, job.error = "failed", type(error).__name__
-        finally:
-            self.streams.close(job.job_id, {"state": job.state, "status": job.status})
+        """Run one job in a worker thread. The job is the root of its trace: every span below it (routing, graph
+        steps, tool and model calls) nests under `job.<kind>`, and every log line carries the job's ids."""
+        tracer = self._engine.deps.tracer
+        with log_context(job_id=job.job_id, job_kind=job.kind, conversation_id=job.conversation_id), \
+                tracer.span(f"job.{job.kind}", job_id=job.job_id, job_kind=job.kind, conversation_id=job.conversation_id,
+                            owner_hash=owner_ref(job.owner).user_hash) as span:
+            job.trace_id = current_trace_id()
+            self._job_spans[job.job_id] = span
+            log.info("job started")
+            try:
+                work(job)
+                span(status=job.status, request_id=job.request_id)
+                log.info("job finished", extra={"status": job.status})
+                job.state = "succeeded"                 # last: pollers see the end only after it is logged
+            except Exception as error:                 # the user sees the class only; the log has the full record
+                span(error=error, log_message="job failed", status="failed")
+                job.error = type(error).__name__
+                job.state = "failed"
+            finally:
+                self._job_spans.pop(job.job_id, None)
+                self.streams.close(job.job_id, {"state": job.state, "status": job.status})
 
     def _run_message(self, job: Job, text: str, execute: bool, rag_release: str | None = None) -> None:
         reply = self._front_door.handle_message(job.owner, job.conversation_id, text, execute=execute,
@@ -346,6 +366,9 @@ class AppService:
 
     def _started(self, job: Job, request_id: str) -> None:
         job.request_id = request_id
+        bind(request_id=request_id, investigation_id=investigation_id_for(request_id))
+        if span := self._job_spans.get(job.job_id):
+            span(request_id=request_id, investigation_id=investigation_id_for(request_id))
         self.streams.bind(investigation_id_for(request_id), job.job_id)
         if job.cancel_requested:                                                # stop was pressed before the id existed
             self._engine.request_cancel(investigation_id_for(request_id))

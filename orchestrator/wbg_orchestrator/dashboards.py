@@ -15,6 +15,10 @@ from decimal import Decimal
 from pathlib import Path
 from typing import Any, Callable
 
+from .logs import get_logger
+
+log = get_logger("dashboards")
+
 CONFIG = Path(__file__).resolve().parents[2] / "app_config" / "dashboards.json"
 CACHE_SECONDS = 300
 NOT_BUILT = "TABLE_OR_VIEW_NOT_FOUND"
@@ -120,5 +124,5 @@ class KpiBoard:
                 try:
                     self.kpis(key)
                 except Exception:                                       # warming is best effort; the page retries
-                    pass
+                    log.warning("KPI warm-up failed", extra={"dashboard": key}, exc_info=True)
         threading.Thread(target=fill, name="kpi-warm", daemon=True).start()

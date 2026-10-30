@@ -8,6 +8,7 @@ tasks so that bounded parallel execution can be added later without changing the
 """
 from __future__ import annotations
 
+import contextvars
 import time
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import TimeoutError as FutureTimeout
@@ -230,9 +231,10 @@ class ExecutionController:
                     return self._finish(run, task, attempt, TaskState.FAILED, error)
                 except TicketError:
                     raise                                       # a programming error, never a task outcome
-                except Exception as unexpected:                 # unknown worker failure: record the class only
+                except Exception as unexpected:                 # unknown worker failure: the task fails safely
                     breaker.record_failure()
                     run.elapsed_ms += round(1000 * (self._clock() - started))
+                    span(error=unexpected, execution_state="failed")   # traceback to the log, location on the span
                     error = _error(request, task, ErrorCategory.INTERNAL, type(unexpected).__name__[:80],
                                    "The task failed unexpectedly.")
                     return self._finish(run, task, attempt, TaskState.FAILED, error)
@@ -253,7 +255,14 @@ class ExecutionController:
         return run
 
     def _call(self, worker: Worker, task: AgentTask, context: WorkerContext, seconds: float):
-        future = self._pool.submit(worker.run, task, context)
+        """Run the worker in the task pool with a deadline. The caller's context (trace span and log ids) is copied
+        into the pool thread, so the worker's span `worker.<name>` and everything it calls (Claude, MCP tools,
+        document search) nest under this task attempt."""
+        def traced_run() -> Any:
+            with self._tracer.span(f"worker.{task.worker.value}", worker=task.worker.value, operation=task.operation,
+                                   task_id=task.task_id):
+                return worker.run(task, context)
+        future = self._pool.submit(contextvars.copy_context().run, traced_run)
         try:
             return future.result(timeout=seconds)
         except FutureTimeout:

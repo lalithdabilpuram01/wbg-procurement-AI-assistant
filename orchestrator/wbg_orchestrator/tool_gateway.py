@@ -28,8 +28,11 @@ from structured_agent.nl2sql.tools import ToolCaller
 
 from ml.serving.gold import RunSql
 
+from .logs import get_logger
 from .observability import OrchestratorTracer, current_trace_id
 from .workers.prediction import GATEWAY_MAX_ROWS, LookupFailed
+
+log = get_logger("mcp")
 
 MCP_SERVER = "wbg-structured-procurement-data"
 TRANSPORTS = ("mcp", "in_process")
@@ -68,14 +71,15 @@ class SupervisedMcpSession:
 
     def call(self, tool: str, **arguments: Any) -> dict[str, Any]:
         started = time.perf_counter()
-        with self._tracer.span("mcp.tool_call", operation=tool, request_id=arguments.get("request_id")) as span:
+        sql = arguments.get("sql") if isinstance(arguments.get("sql"), str) else None        # masked on the span
+        with self._tracer.span("mcp.tool_call", operation=tool, request_id=arguments.get("request_id"), sql=sql) as span:
             try:
                 result = self._call_with_restart(tool, arguments)
-            except ToolCallError:
-                span(status="tool_error", duration_ms=_ms(started))
+            except ToolCallError as error:                       # the tool refused the call (an answer, not a crash)
+                span(status="tool_error", error_type=type(error).__name__, duration_ms=_ms(started))
                 raise
-            except McpUnavailable:
-                span(status="unavailable", duration_ms=_ms(started))
+            except McpUnavailable as error:
+                span(status="unavailable", error=error, log_message="MCP server unavailable", duration_ms=_ms(started))
                 raise
             span(status="ok", duration_ms=_ms(started), retries=self.restarts)
             return result
@@ -87,6 +91,7 @@ class SupervisedMcpSession:
         except ToolCallError:
             raise
         except Exception as error:                              # the transport broke: the server died or hung
+            log.warning("MCP transport broke; restarting the server once", extra={"tool": tool}, exc_info=error)
             with self._lock:
                 if self._session is session:                    # not already restarted by another thread
                     _quietly(session.close)
@@ -138,7 +143,7 @@ def _quietly(close: Callable[[], None]) -> None:
     try:
         close()
     except Exception:                                            # a dead server cannot be closed cleanly; nothing to do
-        pass
+        log.debug("closing the MCP session failed", exc_info=True)
 
 
 def _ms(started: float) -> int:

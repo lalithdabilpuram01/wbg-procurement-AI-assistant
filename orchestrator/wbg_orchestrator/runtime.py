@@ -19,9 +19,10 @@ Every live dependency is opt-in and fails closed:
   with `learning_db init`); questions are matched to saved items with the local bge-m3 model of document retrieval.
 - Documents: the default RAG release with the evidence-only generator; `pilot_v3_tablelens` (chosen per message)
   adds TableLens, whose SQL is written by Claude through the same budgeted client (`table_sql`).
-- Audit:
+- Audit and debugging:
   - orchestrator events go to `orchestrator/runs/app_audit.jsonl`, never the historical project log;
-  - Logfire export happens only if the existing LOGFIRE_* settings switch it on.
+  - application logs (one JSON line per event, with job, request and trace ids) go to `orchestrator/runs/logs/app.jsonl`;
+  - spans are always created locally; Logfire export happens only if the existing LOGFIRE_* settings switch it on.
 """
 from __future__ import annotations
 
@@ -159,10 +160,12 @@ def build_runtime(config: RuntimeConfig, operator_confirmed: bool) -> tuple[AppS
 
 # ------------------------------------------------------------------------------------------------ internals
 def _tracer() -> OrchestratorTracer:
+    """Spans go to Logfire when LOGFIRE_SEND_TO_LOGFIRE=true and a token is set; otherwise they stay local, which still
+    gives every log line a trace id."""
     settings = load_logfire_settings()
     if settings.send_to_logfire and settings.token:
         return OrchestratorTracer.exporting(settings.token, "wbg-orchestrator-app")
-    return OrchestratorTracer.disabled()
+    return OrchestratorTracer.local(service_name="wbg-orchestrator-app")
 
 
 def _claude_client(config: RuntimeConfig, operator_confirmed: bool, tracer: OrchestratorTracer) -> BudgetedClaudeClient | ClaudeOff:

@@ -1,4 +1,5 @@
-"""Acceptance 16: metadata-only Logfire traces (local, in-memory exporter), LangSmith disabled, audit isolation."""
+"""Acceptance 16: Logfire traces carry metadata plus masked text only (local, in-memory exporter), LangSmith disabled,
+audit isolation, and failures recorded on the step that failed."""
 from __future__ import annotations
 
 import hashlib
@@ -14,15 +15,16 @@ from conversation.routing.routes import Route
 from structured_agent.nl2sql.resilience import BreakerSettings
 
 from wbg_orchestrator.contracts import InvestigationStatus
-from wbg_orchestrator.observability import SAFE_ATTRIBUTES, OrchestratorTracer, safe_attributes
+from wbg_orchestrator.observability import SAFE_ATTRIBUTES, TEXT_ATTRIBUTES, OrchestratorTracer, safe_attributes
 from wbg_orchestrator.planner import FakePlanner
 from wbg_orchestrator.safety import external_tracing_enabled
 
 from tests.orchestrator.helpers import ALICE, SECRET, FakeTools, build_engine, plan, request, task
 
 PERSISTENT_AUDIT = Path(__file__).resolve().parents[2] / "structured_agent" / "runs" / "audit_events.jsonl"
-FORBIDDEN = ("bid invitations", "fiscal year", "SELECT", "tender_invitation", SECRET, "contractor mobilisation", "jane.doe",
-             "example.org", "lessons learned", "Investigate")
+PERSONAL = (SECRET, "jane.doe", "example.org")                    # never recorded anywhere, masked or not
+FREE_TEXT = ("bid invitations", "fiscal year", "SELECT", "tender_invitation", "contractor mobilisation", "lessons learned",
+             "Investigate")                                       # allowed only in the masked TEXT_ATTRIBUTES
 
 
 @pytest.fixture(scope="module")
@@ -52,7 +54,7 @@ def run_scenarios(tracer):
     planned.start(request("Investigate the bid invitations of fiscal year 2024 and then explain"))
 
 
-def test_traces_are_metadata_only(traced):
+def test_traces_carry_metadata_and_masked_text_only(traced):
     tracer, exporter = traced
     before = file_digest(PERSISTENT_AUDIT)
     run_scenarios(tracer)
@@ -63,9 +65,14 @@ def test_traces_are_metadata_only(traced):
     assert {"orchestrator.node.intake", "orchestrator.node.execute", "orchestrator.task_attempt"} <= names
     for span in spans:
         own = {k for k in span.attributes if not k.startswith(("logfire.", "code."))}
-        assert own <= SAFE_ATTRIBUTES, f"{span.name}: {own - SAFE_ATTRIBUTES}"
+        assert own <= SAFE_ATTRIBUTES | set(TEXT_ATTRIBUTES), f"{span.name}: {own - SAFE_ATTRIBUTES - set(TEXT_ATTRIBUTES)}"
         dump = json.dumps({k: str(v) for k, v in span.attributes.items()})
-        assert not any(term in dump for term in FORBIDDEN), f"{span.name} leaked content"
+        assert not any(term in dump for term in PERSONAL), f"{span.name} leaked personal data"
+        metadata = json.dumps({k: str(v) for k, v in span.attributes.items() if k not in TEXT_ATTRIBUTES})
+        assert not any(term in metadata for term in FREE_TEXT), f"{span.name} leaked text outside the text attributes"
+    questions = [s.attributes["question"] for s in spans if "question" in s.attributes]
+    assert any("bid invitations" in q for q in questions)                             # the question helps debugging
+    assert any("<EMAIL_ADDRESS>" in q for q in questions)                             # ... with personal data masked
     events = {s.name for s in spans}
     for expected in ("orchestrator.task_retry", "orchestrator.circuit_breaker_transition", "orchestrator.investigation_finished"):
         assert expected in events, expected
@@ -77,6 +84,40 @@ def test_traces_are_metadata_only(traced):
 def test_attribute_filter_drops_free_text_and_unknown_keys():
     assert safe_attributes({"task_id": "t1", "status": "a b", "question": "x", "error_code": "x" * 201, "latency_ms": 3}) == \
         {"task_id": "t1", "latency_ms": 3}
+
+
+def test_spans_may_carry_the_question_with_personal_data_masked():
+    clean = safe_attributes({"question": "Contracts mailed to jane.doe@example.org?", "rows": "x"}, allow_text=True)
+    assert clean == {"question": "Contracts mailed to <EMAIL_ADDRESS>?"}
+
+
+def test_a_failure_is_recorded_on_the_step_that_failed_and_on_its_parents():
+    exporter = InMemorySpanExporter()
+    tracer = OrchestratorTracer.local([SimpleSpanProcessor(exporter)])
+    with pytest.raises(ValueError):
+        with tracer.span("job.message", job_id="job_1"):
+            with tracer.span("orchestrator.node.plan"):
+                raise ValueError("no plan for jane.doe@example.org")
+    tracer.force_flush()
+    spans = {s.name: s.attributes for s in exporter.get_finished_spans()}
+    inner, outer = spans["orchestrator.node.plan"], spans["job.message"]
+    assert inner["error_type"] == "ValueError" and inner["failed_step"] == "orchestrator.node.plan"
+    assert inner["error_location"].startswith("test_observability.py:")
+    assert inner["error_message"] == "no plan for <EMAIL_ADDRESS>"
+    assert outer["failed_step"] == "orchestrator.node.plan" and "error_message" not in outer
+
+
+def test_a_handled_failure_marks_the_span_without_stopping_the_block():
+    exporter = InMemorySpanExporter()
+    tracer = OrchestratorTracer.local([SimpleSpanProcessor(exporter)])
+    with tracer.span("orchestrator.task_attempt") as span:
+        try:
+            raise TimeoutError("tool timed out")
+        except TimeoutError as error:
+            span(error=error, execution_state="failed")
+    tracer.force_flush()
+    (attributes,) = [s.attributes for s in exporter.get_finished_spans()]
+    assert attributes["error_type"] == "TimeoutError" and attributes["execution_state"] == "failed"
 
 
 def test_langsmith_stays_off_even_when_the_environment_asks_for_it(monkeypatch):

@@ -24,7 +24,7 @@ from structured_agent.contracts import (ErrorCode, ExecuteSqlRequest, MetricDefi
                                         ValidateSqlResponse, VerifiedSqlExamplesRequest, VerifiedSqlExamplesResponse)
 from structured_agent.execution.executor import DatabricksSparkExecutor, SqlExecutor
 from structured_agent.execution.gateway import ExecutionGateway
-from structured_agent.observability import JsonlAuditSink, Telemetry, principal_hash
+from structured_agent.observability import JsonlAuditSink, Telemetry, log_failure, principal_hash
 from structured_agent.policy import AccessPolicy, AuthorizationError, Principal
 from structured_agent.registry.models import RegisteredObject, RegistryBundle
 from structured_agent.registry.store import RegistryStore
@@ -99,6 +99,7 @@ class StructuredDataService:
         try:
             return handler(request, principal, base)
         except Exception as error:  # never leak internals or data in the message
+            log_failure("structured tool failed", error, tool=getattr(request, "tool", None))
             return response_cls(**base, status="error", errors=[ToolError.of(ErrorCode.INTERNAL_ERROR, f"Internal error ({type(error).__name__})")])
 
     def audit_protocol_rejection(self, tool: str, principal_id: str, request_id: str | None, duration_ms: int) -> None:

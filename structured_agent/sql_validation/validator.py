@@ -14,6 +14,7 @@ from sqlglot import exp
 from structured_agent.config import QueryLimits
 from structured_agent.contracts import CheckResult, ErrorCode, OutputColumn, ParameterValue, ToolError, ValidationReport
 from structured_agent.policy import AccessPolicy, Principal
+from structured_agent.observability import log_failure
 from structured_agent.registry.models import RegistryBundle
 from structured_agent.sql_validation import rules, structure
 from structured_agent.sql_validation.joins import JoinAnalyzer
@@ -53,6 +54,7 @@ class SqlValidator:
         try:
             self._run(sql, parameters, principal, max_rows, report)
         except Exception as error:  # fail closed
+            log_failure("sql validator failed", error)
             report.approved = False
             report.validated_sql = None
             report.errors.append(ToolError.of(ErrorCode.INTERNAL_ERROR, f"Validator error: {type(error).__name__}"))

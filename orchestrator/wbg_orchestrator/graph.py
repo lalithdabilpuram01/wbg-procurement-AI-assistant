@@ -30,6 +30,7 @@ from .contracts import (TERMINAL_TASK_STATES, ErrorCategory, EvidenceRecord, Exe
                         InvestigationPlan, InvestigationRequest, InvestigationResponse, InvestigationStatus, TaskState, WorkerName,
                         new_id, utc_now)
 from .controller import ExecutionController
+from .logs import get_logger
 from .observability import AuditTrail, OrchestratorTracer, current_trace_id
 from .planner import (Planner, PlannerError, PlanningContext, brief_plan, build_plan, fast_path_plan, monitor_plan,
                       package_plan, tender_plan)
@@ -37,6 +38,8 @@ from .response import DeterministicResponseGenerator, ResponseGenerator, validat
 from .state import InvestigationState, add_counters
 from .supervisor import Supervisor
 from .verification import VerificationReport, ledger, verify
+
+log = get_logger("graph")
 
 REPLAN_CATEGORIES = {ErrorCategory.NO_EVIDENCE.value}
 MALFORMED_OUTPUT = {"invalid_model_output", "model_output_truncated"}     # LlmFailure values of unusable replies
@@ -170,7 +173,7 @@ class _Nodes:
         try:
             self.d.progress(state["request"]["investigation_id"], event)
         except Exception:                                  # the live view must never break an investigation
-            pass
+            log.warning("live progress update failed", exc_info=True)
 
     def _event(self, name: str, state, **attributes) -> None:
         self.d.tracer.event(name, **{**self._correlation(state), **attributes})
@@ -211,7 +214,7 @@ class _Nodes:
     # --------------------------------------------------------------------------------------------- intake
     def intake(self, state: InvestigationState) -> dict:
         request = self.request(state)
-        with self._span("intake", state, mode=request.mode, rag_release=request.rag_release) as span:
+        with self._span("intake", state, mode=request.mode, rag_release=request.rag_release, question=request.question) as span:
             decision = self.d.guard.check_input(request.question)
             span(status="allowed" if decision.allowed else "blocked")
             self._audit("guard.input", state, status="allowed" if decision.allowed else "blocked",
@@ -283,8 +286,9 @@ class _Nodes:
                 self.d.llm_breaker.record_ignored()
                 failure = self._error(request, "plan", ErrorCategory.PLANNER, error.code, "The planner could not produce a plan.")
                 return {**update, "plan_errors": [failure.to_state()], "errors": [failure.to_state()], "phase": "plan_failed"}
-            except Exception as error:                     # an unexpected planner failure: class name only, fail safe
+            except Exception as error:                     # an unexpected planner failure: fail safe, log the cause
                 self.d.llm_breaker.record_ignored()
+                span(error=error)
                 failure = self._error(request, "plan", ErrorCategory.INTERNAL, type(error).__name__, "Planning failed unexpectedly.")
                 return {**update, "errors": [failure.to_state()], "phase": "plan_failed_final"}
             usage = usage_update(priced(output.usage, self.d.prices))

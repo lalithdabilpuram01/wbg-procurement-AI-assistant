@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import datetime as dt
 import json
+import logging
 import shutil
 import uuid
 from dataclasses import asdict, dataclass, field
@@ -24,6 +25,8 @@ from .parsers import common, ocr, pdf, tabular, word
 from .reference import Reference
 from .reference import load as load_reference
 from .resolve import Mention, resolve
+
+log = logging.getLogger("wbg.ingest")
 
 Embedder = Callable[[list[str]], Sequence[Sequence[float]]]
 RECORD_TYPES = {"contract": "contract", "notice": "notice", "PP": "plan_activity"}
@@ -107,6 +110,7 @@ class Pipeline:
         except Quarantined as q:
             self._quarantine(outcome, path, folder, source, q.reason, q.detail)
         except Exception as error:                                       # an unexpected failure is quarantined, never lost
+            log.error("ingestion failed; file quarantined", extra={"file": path.name}, exc_info=error)
             self._quarantine(outcome, path, folder, source, "pipeline_error", f"{type(error).__name__}: {str(error)[:300]}")
         return self._done(outcome, started)
 
@@ -165,6 +169,7 @@ class Pipeline:
         try:
             self.sink.record_source(source | {"status": "quarantined", "reason": f"{reason}: {detail}"[:500]})
         except Exception:                                                 # lineage is best effort; the file is already safe
+            log.warning("lineage not recorded for a quarantined file", exc_info=True)
             outcome.warnings.append("lineage_not_recorded")
 
     def _move(self, path: Path, folder: Folder, area: str) -> Path:

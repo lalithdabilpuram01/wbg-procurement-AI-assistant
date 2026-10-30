@@ -25,6 +25,7 @@ from nemoguardrails.rails.llm.options import GenerationOptions  # noqa: E402
 from structured_agent.guardrails import policies  # noqa: E402
 from structured_agent.guardrails.decisions import GuardDecision, GuardStage, PolicyResult, ReasonCategory, timed  # noqa: E402
 from structured_agent.nl2sql.settings import ConfigurationError  # noqa: E402
+from structured_agent.observability import log_failure  # noqa: E402
 
 CONFIG_DIR = Path(__file__).resolve().parent / "nemo_config"
 DECISION_VARIABLE = "wbg_decision"
@@ -93,7 +94,8 @@ class NemoGuardrails:
                 response = self._rails.generate(messages=messages, options=GenerationOptions(
                     rails=rails, output_vars=[DECISION_VARIABLE], log={"activated_rails": True}))
                 decision = self._decision(stage, response)
-            except Exception:   # fail closed; the exception text may contain the message, so it is not kept
+            except Exception as error:   # fail closed; the exception text may contain the message, so it is not kept
+                log_failure("guardrail runtime failed", error)
                 decision = GuardDecision(stage=stage, policy_id="nemo.runtime", allowed=False,
                                          reason_category=ReasonCategory.GUARDRAIL_ERROR, enforced_by="nemo_rails")
         return decision.model_copy(update={"duration_ms": timing["ms"]})

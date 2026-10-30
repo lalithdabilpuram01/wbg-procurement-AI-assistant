@@ -54,10 +54,13 @@ from conversation.workspace import WorkspaceItemNotFound
 
 from .dashboards import KpiBoard, dashboards, settings as dashboard_settings, warehouse_sql
 from .app_service import DELETED_FOLDER, AppService, ConversationBusy, Job, JobNotFound, summarize
-from .contracts import PackageAssessment, PlanningSpec, TenderSpec
+from .contracts import PackageAssessment, PlanningSpec, TenderSpec, new_id
 from .feedback import FeedbackRefused, FeedbackRequest, Preferences, ReviewerOnly
 from .rate_limit import RateLimiter
 from .engine import InvestigationNotFound
+from .logs import get_logger, log_context
+
+log = get_logger("api")
 
 DEFAULT_USERS_FILE = Path.home() / ".wbg" / "api_users.json"
 CLIENT_ID = r"^[A-Za-z0-9_-]{8,64}$"
@@ -214,7 +217,7 @@ def allowed_folder_name(name: str) -> str:
 
 def job_view(job: Job) -> dict[str, Any]:
     return {"job_id": job.job_id, "kind": job.kind, "state": job.state, "conversation_id": job.conversation_id,
-            "request_id": job.request_id, "status": job.status, "error": job.error}
+            "request_id": job.request_id, "status": job.status, "error": job.error, "trace_id": job.trace_id}
 
 
 def feedback_view(feedback: Feedback) -> dict[str, Any]:
@@ -296,6 +299,34 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
     @app.exception_handler(ConversationBusy)
     def conflict(request: Request, error: Exception) -> JSONResponse:
         return JSONResponse({"detail": "another request is still running"}, status_code=409)
+
+    @app.exception_handler(Exception)
+    def unexpected(request: Request, error: Exception) -> JSONResponse:
+        """Any other failure: logged with its traceback under a reference id the user can quote; no details leak."""
+        reference = getattr(request.state, "request_ref", None) or new_id("http")
+        log.error("request failed", extra={"method": request.method, "path": request.url.path, "reference": reference},
+                  exc_info=error)
+        return JSONResponse({"detail": "Something went wrong on the server.", "reference": reference}, status_code=500,
+                            headers={"X-Request-ID": reference})
+
+    @app.middleware("http")
+    async def correlate(request: Request, call_next):
+        """Give every request a reference id (X-Request-ID, echoed back), log requests that change something or fail,
+        and attach the id to every log line written while the request is handled."""
+        reference = request.headers.get("X-Request-ID") or new_id("http")
+        if not re.fullmatch(r"[A-Za-z0-9_.:-]{1,80}", reference):
+            reference = new_id("http")
+        request.state.request_ref = reference
+        started = time.perf_counter()
+        with log_context(http_request_id=reference):
+            response = await call_next(request)
+            ms = round(1000 * (time.perf_counter() - started))
+            if request.method != "GET" or response.status_code >= 400:
+                level = "warning" if response.status_code >= 400 else "info"
+                getattr(log, level)("http request", extra={"method": request.method, "path": request.url.path,
+                                                            "status_code": response.status_code, "duration_ms": ms})
+        response.headers["X-Request-ID"] = reference
+        return response
 
     @app.post("/auth/login")
     def sign_in(body: SignIn) -> dict[str, str]:
@@ -550,7 +581,10 @@ def main(argv: list[str]) -> int:
         return 0
     import uvicorn
 
-    from .runtime import RuntimeConfig, build_runtime
+    from .logs import configure_logging
+    from .runtime import ORCHESTRATOR_DIR, RuntimeConfig, build_runtime
+    log_file = configure_logging(ORCHESTRATOR_DIR / "runs" / "logs")
+    print(f"Logs: {log_file}")
     service, close = build_runtime(RuntimeConfig.from_env(), operator_confirmed=args.confirm_live_call)
     board = kpi_board()
     try:

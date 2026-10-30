@@ -23,6 +23,7 @@ from structured_agent.contracts import (CheckResult, ErrorCode, ExecutionProvena
                                         ValidationReport)
 from structured_agent.execution.executor import CredentialCheck, QueryTimeout, SqlExecutor
 from structured_agent.execution.result_validation import validate_result
+from structured_agent.observability import log_failure
 from structured_agent.policy import Principal
 from structured_agent.registry.models import Metric, RegistryBundle
 from structured_agent.sql_validation.structure import DIALECT
@@ -88,6 +89,7 @@ class ExecutionGateway:
                                  errors=[ToolError.of(ErrorCode.EXECUTION_TIMEOUT, str(timeout))],
                                  execution_ms=round(1000 * (time.perf_counter() - started)))
         except Exception as failure:  # the engine's message may contain data: return only its type
+            log_failure("databricks query failed", failure, query_id=query_id)
             return GatewayResult(status="error", report=report, query_id=query_id,
                                  errors=[ToolError.of(ErrorCode.EXECUTION_FAILED, f"Query failed in Databricks ({type(failure).__name__})")],
                                  execution_ms=round(1000 * (time.perf_counter() - started)))
