@@ -28,7 +28,7 @@ gold/
   procurement_kpis/kpi_queries.py / run_procurement_kpis_dry_run.py / verify_procurement_kpis.py
                      PROPOSED dashboard KPI views (D-23 pending; nothing created): 7 vw_kpi_* SQL views over the 5 Gold tables
   common/baseline.py shared pre-write baseline + unchanged checks (Bronze/Silver/Gold versions, rows, grants, masks, cohort)
-  tests/             synthetic-frame tests (run with the Silver suite)
+  (tests: tests/live/gold/, synthetic-frame tests over Databricks Connect, run with the Silver suite)
   runs/<run_id>/     baseline, dq_report.json, verification JSON, design/dry-run reports
 ```
 
@@ -37,7 +37,7 @@ gold/
 ```bash
 python -m gold.project_portfolio.run_project_portfolio_gold                     # dry run
 python -m gold.project_portfolio.verify_project_portfolio_gold --dry-run --run-id <dry_run_id>
-python -m pytest silver/tests gold/tests -q -p no:cacheprovider
+WBG_RUN_LIVE_TESTS=1 uv run pytest tests/live/silver tests/live/gold -q -p no:cacheprovider
 ```
 
 ## Rules for every Gold table

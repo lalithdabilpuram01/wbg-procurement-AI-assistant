@@ -25,7 +25,7 @@ uv run wbg-etl-seed          # split the demo slice off, fill the landing Volume
 uv run wbg-etl-watch         # it sees the seeded files and starts the first full data run (about 20-30 minutes)
 ```
 
-`wbg-etl-seed` uploads the cohort extracts in `databricks_upload/` to `/Volumes/wbg_etl/etl/landing/<dataset>/`. One
+`wbg-etl-seed` uploads the cohort extracts in `data/bronze_inputs/` and `data/ref_bronze_inputs/` to `/Volumes/wbg_etl/etl/landing/<dataset>/`. One
 exception: **DS00005 contract awards signed on or after 1 September 2026** (665 contracts, about US$792 M) are held back
 in `demo/structured/ds00005_new_contract_awards.csv`, so that uploading them later is real "new awards arriving".
 Use `--dry-run` to see what it would upload.
@@ -124,5 +124,5 @@ also land in `/Volumes/wbg_etl/etl/runs/<job run id>/`, and Delta keeps every ol
 ## Tests (offline: no Spark, no Databricks)
 
 ```bash
-uv run python -m pytest -q etl/tests
+uv run wbg-test tests/etl
 ```

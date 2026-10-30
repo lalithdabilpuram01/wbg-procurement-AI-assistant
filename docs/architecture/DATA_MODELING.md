@@ -323,7 +323,7 @@ The corpus is 237 PDFs from the 35 projects. Each document type answers a differ
 **Procurement plans mattered most, and the choice of plan versions mattered too.**
 - With only the 35 latest plans, 64% of contracts that carry a STEP reference had a matching plan row.
 - Adding 50 carefully chosen older versions raised that to **83%**, within 1.2 points of using all 2,111 available
-  versions (`rag/module1_discovery/rag_scope_v3_35_projects/RAG_SCOPE_v3_35_PROJECTS_REPORT.md`).
+  versions (`data/rag_scope/rag_scope_v3_35_projects/RAG_SCOPE_v3_35_PROJECTS_REPORT.md`).
 
 **Language.** Every narrative report is in English. French appears only in about 7 Senegal procurement plans (plus a
 few bilingual ones), even though the catalogue metadata lists all 237 as English.

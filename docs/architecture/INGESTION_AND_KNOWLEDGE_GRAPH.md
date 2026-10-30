@@ -8,7 +8,7 @@ and chunking of long multilateral reports.
 - `ingest/` (pipeline);
 - `ingest/sql/kg_schema.sql` (schema);
 - `ingestion_inbox/` (drop folders);
-- `ingest/tests/` (38 tests).
+- `tests/ingest/` (38 tests).
 
 **Store:** Lakebase (PostgreSQL 18 with pgvector), schema `wbg_kg` on the development branch.
 

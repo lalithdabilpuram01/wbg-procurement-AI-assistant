@@ -181,7 +181,7 @@ the independently measured rendered block never exceeds the budget.
 - Memory is sanitised in the builder and screened again in the workflow, where a block that still contains
   instruction-like text is dropped and audited.
 
-## Evaluation criteria (all checked by offline tests in `conversation/tests/`)
+## Evaluation criteria (all checked by offline tests in `tests/conversation/`)
 
 | Criterion | Measure |
 |---|---|

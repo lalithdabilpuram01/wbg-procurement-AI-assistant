@@ -81,7 +81,7 @@ Open http://localhost:3000 and sign in.
 
 | Username | Password | What they can do |
 | --- | --- | --- |
-| `user1` | `user1` | Everything a normal user does: chat, Check tender, Project watch, Memory |
+| `user1` | `user1` | Everything a normal user does: chat, Check tender, Project watch, Dashboard |
 | `reviewer1` | `reviewer1` | All of that, plus the **Review queue** (feedback items and lesson cards) |
 
 To stop the app, press `Ctrl+C` in both terminals. Restarting the API signs everyone out (sessions last 12 hours).
@@ -99,7 +99,7 @@ To stop the app, press `Ctrl+C` in both terminals. Restarting the API signs ever
 4. **Continuous Learning:**
    - sign in as `reviewer1`, open **Review queue → Lesson cards** and approve a few cards;
    - run the tender check again: the approved lessons now show up in the answer, with their source and reviewer;
-   - thumbs up or down and corrections on answers feed the Memory page and the Review queue too.
+   - thumbs up or down and corrections on answers feed the Review queue and guide later answers.
 
 ---
 
@@ -186,14 +186,21 @@ uv run wbg-feedback-db check   # is the feedback store ready?
 
 ## 8. Tests and evaluations
 
-**Tests.** These are offline and safe to run any time:
+**Tests.** All tests live in `tests/`, one folder per component (`tests/orchestrator/`, `tests/conversation/`, ...).
+These are offline and safe to run any time:
 
 ```bash
-uv run wbg-test                # every offline suite
+uv run wbg-test                # every offline suite in tests/ (about 1,300 tests, 2-3 minutes)
 uv run wbg-test -k tender      # extra arguments go to pytest
+uv run wbg-test tests/rag      # one component
 ```
 
-They never run `tests_mcp/` or `tests_live/`, which make live calls.
+`tests/live/` holds the tests that call Databricks, Lakebase, Claude or the MCP server. They are never collected unless
+you ask for them explicitly, one suite at a time (they may cost money):
+
+```bash
+WBG_RUN_LIVE_TESTS=1 uv run pytest tests/live/<suite>
+```
 
 **Frontend checks:**
 
@@ -214,7 +221,35 @@ LangSmith. Everything else stays on your laptop.
 
 ---
 
-## 9. When something goes wrong
+## 9. Debugging: logs and traces
+
+Every chat message, tender check or plan runs as a background **job**. The job and everything it does share the same
+ids, in both places an engineer looks:
+
+- **The log file:** `orchestrator/runs/logs/app.jsonl`, one JSON line per event. Each line has `job_id`, `request_id`,
+  `conversation_id` and `trace_id`. Every failure is written once, at level ERROR, with `error_type`, `error_location`
+  (file:line:function), the traceback and the step that failed. Personal data in messages is masked.
+- **Logfire:** one trace per job, with nested spans: `job.message` > `conversation.message` > `orchestrator.node.*`
+  (intake, plan, execute, verify, respond) > `orchestrator.task_attempt` > `worker.*` > `mcp.tool_call` /
+  `orchestrator.llm_call`. A failed span is red and carries the same `error_type`, `error_location` and `failed_step`.
+  Spans are sent to Logfire only when `.env` has `LOGFIRE_SEND_TO_LOGFIRE=true` and `LOGFIRE_TOKEN`; otherwise the trace
+  ids are still in the log file.
+
+How to find a failure:
+
+```bash
+grep '"level": "ERROR"' orchestrator/runs/logs/app.jsonl | tail -5     # the latest failures
+grep '<job_id>' orchestrator/runs/logs/app.jsonl                        # everything one job did, in order
+```
+
+The job id is in the API's job response (`GET /jobs/<id>`), along with `trace_id`; paste the trace id into Logfire's
+search to open the nested trace. An unexpected server error returns `{"detail": ..., "reference": "http_..."}`: that
+reference is on the matching log line. The audit trail of each investigation (metadata only) stays in
+`orchestrator/runs/app_audit.jsonl`.
+
+---
+
+## 10. When something goes wrong
 
 | What you see | What to do |
 | --- | --- |

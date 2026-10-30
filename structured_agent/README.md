@@ -24,10 +24,10 @@ structured_agent/
   mcp_server.py             FastMCP domain server exposing exactly the 7 operations (stdio)
   mcp_env/                  isolated MCP environment: pinned requirements, lock file, setup script
   mcp_transport/            MCP client helpers and smoke check (official MCP Python SDK)
-  tests_mcp/                41 end-to-end tests through the real stdio transport (run in .venv-structured-mcp)
+  (tests: tests/structured_agent/ offline; tests/live/structured_agent_mcp/ = 41 end-to-end tests over the real stdio transport)
   metadata/                 discovery, live verification, curated inputs, bundles, METADATA_INVENTORY.md
   registry/                 registry models, column policy, builder, PostgreSQL store, vector index, init script, SQL DDL
-  tests/                    97 tests (validator, gateway, generation, observability, registry store, MCP tools)
+  (offline tests in tests/structured_agent/: validator, gateway, generation, observability, registry store, MCP tools)
   evaluation/               15 live scenarios with independent baselines; runs/<UTC>/
 ```
 
@@ -49,7 +49,7 @@ bash structured_agent/mcp_env/setup_mcp_env.sh                                  
 WBG_MCP_PRINCIPAL=analyst-demo WBG_MCP_WORKSPACE=wbg-procurement-poc \
   .venv-structured-mcp/bin/python -m structured_agent.mcp_server                 # stdio server
 .venv-structured-mcp/bin/python -m structured_agent.mcp_transport.smoke_check [--execute]
-.venv-structured-mcp/bin/python -m pytest structured_agent/tests_mcp -q -p no:cacheprovider
+WBG_RUN_LIVE_TESTS=1 .venv-structured-mcp/bin/python -m pytest tests/live/structured_agent_mcp -q -p no:cacheprovider
 ```
 
 ## Environment variables

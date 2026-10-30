@@ -35,7 +35,7 @@ silver/
   notices/d14_gate_tests_b.py        D-14 gate tests T3b–T6b (direct SP grants, identity masks, temp catalog)
   notices/d14_gate_tests.py          D-14 gate tests T1–T7 (temporary SP/group, synthetic data, ledger + cleanup)
   notices/probe_access_controls.py   D-14 probe: tests what column masks enforce on Free Edition (synthetic data, temporary objects)
-  tests/                logic tests on synthetic DataFrames over Databricks Connect (no table I/O)
+  (tests: tests/live/silver/, logic tests on synthetic DataFrames over Databricks Connect, no table I/O)
   runs/<run_id>/        local DQ report of every run (dq_report.json)
 ```
 
@@ -67,7 +67,7 @@ python -m silver.ieg.verify_ieg_silver --run-id <run_id>
 python -m silver.notices.run_notices_silver                     # dry run (add --mode write --confirm-create after approval)
 python -m silver.notices.verify_notices_silver --run-id <run_id>
 python -m silver.notices.probe_access_controls                  # D-14 access-control probe (synthetic; drops its objects)
-python -m pytest silver/tests -q -p no:cacheprovider
+WBG_RUN_LIVE_TESTS=1 uv run pytest tests/live/silver -q -p no:cacheprovider
 ```
 
 **Authentication:**
@@ -76,7 +76,7 @@ python -m pytest silver/tests -q -p no:cacheprovider
   (`~/.vscode/extensions/databricks.databricks-*/bin`).
 - To use another profile, set `WBG_DATABRICKS_PROFILE`.
 
-The Phase 1 discovery tests (`discovery/`, plain pandas) are separate. Databricks Connect replaces `pyspark`, so the two
+The Phase 1 discovery tests (`research/discovery/`, plain pandas) are separate. Databricks Connect replaces `pyspark`, so the two
 should not share one environment.
 
 ## WDI economic indicators (`wdi/`)
