@@ -1,7 +1,7 @@
 """Live checkpoint validation on the Lakebase development branch (`dev-orchestrator`), schema `wbg_orchestrator_ckpt`.
 
 The same checks as the offline suite (tests/test_checkpointing.py), against real Lakebase PostgreSQL 18.6:
-isolation before setup, setup confined to the schema, save and read-back, restart and resume, HITL with the owner,
+isolation before setup, setup confined to the schema, save and read-back, restart and recover by the owner only,
 refusal of another user, no secrets or unrestricted rows, crash recovery, a failed task's state, OAuth credential
 refresh on new connections, and every other schema unchanged. Workers are synthetic fixtures; no LLM is called.
 Test rows stay in the checkpoint schema; nothing is dropped or deleted.
@@ -22,7 +22,7 @@ from structured_agent.nl2sql.result import WorkflowResult, WorkflowStatus
 from wbg_orchestrator.checkpointing import (CHECKPOINT_OBJECTS, IsolationError, checkpointer, database_inventory,
                                             isolated_setup, lakebase_checkpoint_pool, lakebase_token_provider, verify_isolation)
 from wbg_orchestrator.contracts import InvestigationStatus
-from wbg_orchestrator.engine import ApprovalNotPending, InvestigationNotFound
+from wbg_orchestrator.engine import InvestigationNotFound, checkpoint_thread_id
 from wbg_orchestrator.observability import OrchestratorTracer
 from wbg_orchestrator.planner import FakePlanner
 
@@ -105,12 +105,26 @@ def test_2_checkpoint_is_saved_and_reads_back_identically(pool):
     RESULTS["round_trip_thread"] = out.thread_id
 
 
-def test_3_hitl_survives_a_restart_and_only_the_owner_can_resume(ckpt_settings, tokens):
+class Crash(BaseException):
+    """Stands in for a killed process (not an Exception, so nothing catches it)."""
+
+
+def crash(question: str, execute: bool):
+    raise Crash()
+
+
+def crashed_run(engine) -> str:
+    """Start an investigation that dies mid-way; returns its checkpoint thread."""
+    req = request(QUESTION, thread="conv-live-ckpt")
+    with pytest.raises(Crash):
+        engine.start(req)
+    return checkpoint_thread_id(req.owner, req.conversation_thread_id, req.investigation_id)
+
+
+def test_3_an_interrupted_run_survives_a_restart_and_only_the_owner_can_recover_it(ckpt_settings, tokens):
     first = lakebase_checkpoint_pool(ckpt_settings, tokens)
     first.open(wait=True, timeout=60)
-    engine, parts = build_engine(planner=planned(), checkpointer=checkpointer(first))
-    pending = engine.start(request(QUESTION, thread="conv-live-ckpt"))
-    assert pending.status == InvestigationStatus.AWAITING_APPROVAL and parts["workflow"].calls == []
+    thread_id = crashed_run(build_engine(planner=planned(), workflow=FakeWorkflow(crash), checkpointer=checkpointer(first))[0])
     first.close()                                                    # "restart": all connections closed, graph rebuilt
 
     second = lakebase_checkpoint_pool(ckpt_settings, tokens)
@@ -118,16 +132,14 @@ def test_3_hitl_survives_a_restart_and_only_the_owner_can_resume(ckpt_settings, 
     try:
         workflow = FakeWorkflow()
         restarted, _ = build_engine(planner=FakePlanner(), workflow=workflow, checkpointer=checkpointer(second))
-        for attempt in (lambda: restarted.resume(BOB, pending.thread_id, pending.pending_approval.approval_id, approved=True),
-                        lambda: restarted.outcome(BOB, pending.thread_id), lambda: restarted.recover(BOB, pending.thread_id)):
+        for attempt in (lambda: restarted.outcome(BOB, thread_id), lambda: restarted.recover(BOB, thread_id)):
             with pytest.raises(InvestigationNotFound):
                 attempt()
-        assert restarted.outcome(ALICE, pending.thread_id).status == InvestigationStatus.AWAITING_APPROVAL
-        done = restarted.resume(ALICE, pending.thread_id, pending.pending_approval.approval_id, approved=True)
+        assert restarted.outcome(ALICE, thread_id).unfinished
+        done = restarted.recover(ALICE, thread_id)
         assert done.status == InvestigationStatus.ANSWERED and [c["execute"] for c in workflow.calls] == [True]
-        with pytest.raises(ApprovalNotPending):
-            restarted.resume(ALICE, pending.thread_id, pending.pending_approval.approval_id, approved=True)
-        RESULTS["hitl_restart"] = {"thread": pending.thread_id, "executions": len(workflow.calls), "status": done.status.value}
+        assert restarted.recover(ALICE, thread_id).status == InvestigationStatus.ANSWERED and len(workflow.calls) == 1
+        RESULTS["restart_recovery"] = {"thread": thread_id, "executions": len(workflow.calls), "status": done.status.value}
     finally:
         second.close()
 
@@ -149,22 +161,13 @@ def test_4_checkpoints_hold_no_secrets_or_unrestricted_rows(pool):
 
 
 def test_5_a_crash_mid_run_leaves_a_recoverable_checkpoint(pool):
-    class Crash(BaseException):
-        pass
-
-    def crash(question: str, execute: bool):
-        raise Crash()
-
-    engine, _ = build_engine(planner=planned(), workflow=FakeWorkflow(crash), checkpointer=checkpointer(pool))
-    pending = engine.start(request(QUESTION, thread="conv-live-ckpt"))
-    with pytest.raises(Crash):
-        engine.resume(ALICE, pending.thread_id, pending.pending_approval.approval_id, approved=True)
+    thread_id = crashed_run(build_engine(planner=planned(), workflow=FakeWorkflow(crash), checkpointer=checkpointer(pool))[0])
     workflow = FakeWorkflow()
     restarted, _ = build_engine(planner=FakePlanner(), workflow=workflow, checkpointer=checkpointer(pool))
-    assert restarted.graph.get_state({"configurable": {"thread_id": pending.thread_id}}).next
-    recovered = restarted.recover(ALICE, pending.thread_id)
+    assert restarted.graph.get_state({"configurable": {"thread_id": thread_id}}).next
+    recovered = restarted.recover(ALICE, thread_id)
     assert recovered.status == InvestigationStatus.ANSWERED and len(workflow.calls) == 1
-    RESULTS["crash_recovery"] = {"thread": pending.thread_id, "status": recovered.status.value}
+    RESULTS["crash_recovery"] = {"thread": thread_id, "status": recovered.status.value}
 
 
 def test_6_a_failed_task_keeps_its_error_and_state(pool):
@@ -172,12 +175,11 @@ def test_6_a_failed_task_keeps_its_error_and_state(pool):
                                task("metric", operation="describe_metric", question="Which metric?", optional=True)))
     failing = FakeWorkflow(lambda q, e: workflow_result(q, execute=e, status=WorkflowStatus.CANNOT_ANSWER, message="no data"))
     engine, _ = build_engine(planner=planner, workflow=failing, checkpointer=checkpointer(pool))
-    pending = engine.start(request(QUESTION, thread="conv-live-ckpt"))
-    done = engine.resume(ALICE, pending.thread_id, pending.pending_approval.approval_id, approved=True)
-    again = build_engine(checkpointer=checkpointer(pool))[0].outcome(ALICE, pending.thread_id)
+    done = engine.start(request(QUESTION, thread="conv-live-ckpt"))
+    again = build_engine(checkpointer=checkpointer(pool))[0].outcome(ALICE, done.thread_id)
     assert again.status == done.status and again.task_states == done.task_states and "failed" in again.task_states.values()
     assert again.values["errors"] == done.values["errors"]
-    RESULTS["failed_task"] = {"thread": pending.thread_id, "status": again.status.value,
+    RESULTS["failed_task"] = {"thread": done.thread_id, "status": again.status.value,
                               "error_codes": [e["code"] for e in again.values["errors"]]}
 
 
@@ -205,9 +207,9 @@ def test_7_new_connections_take_a_fresh_oauth_credential(ckpt_settings):
 def test_8_checkpoint_events_are_traced(pool):
     exporter = InMemorySpanExporter()
     tracer = OrchestratorTracer.local([SimpleSpanProcessor(exporter)])
-    engine, _ = build_engine(planner=planned(), checkpointer=checkpointer(pool), tracer=tracer)
-    pending = engine.start(request(QUESTION, thread="conv-live-ckpt"))
-    engine.resume(ALICE, pending.thread_id, pending.pending_approval.approval_id, approved=True)
+    thread_id = crashed_run(build_engine(planner=planned(), workflow=FakeWorkflow(crash), checkpointer=checkpointer(pool),
+                                         tracer=tracer)[0])
+    build_engine(planner=FakePlanner(), checkpointer=checkpointer(pool), tracer=tracer)[0].recover(ALICE, thread_id)
     tracer.force_flush()
     events = [s for s in exporter.get_finished_spans() if s.name.startswith("orchestrator.checkpoint_")]
     assert {s.name for s in events} == {"orchestrator.checkpoint_saved", "orchestrator.checkpoint_resumed"}

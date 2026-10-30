@@ -25,12 +25,13 @@ from gold.common import baseline as B
 from gold.financing_analytics import transform as T
 from gold.financing_analytics.checks import check
 from silver.common.dq import DQReport
+from silver.common.pipeline import CATALOG, runs_dir
 from silver.common.session import DEFAULT_PROFILE, get_spark
 from silver.common.write import create_table
 
 REPO = Path(__file__).resolve().parents[2]
-RUNS = REPO / "gold" / "runs"
-PORTFOLIO = "workspace.wbg_gold.gold_project_portfolio"
+RUNS = runs_dir(REPO / "gold" / "runs")
+PORTFOLIO = f"{CATALOG}.wbg_gold.gold_project_portfolio"
 NOT_NULL = ["financing_number", "lender", "financing_number_prefix", "source_dataset", "project_id", "geography_type", "country_context_status",
             "financing_country_code_status", "financing_status", "currency_status", *T.AMOUNTS, "has_negative_published_amount", "board_approval_date",
             "board_approval_fiscal_year", "board_approval_calendar_year", "agreement_signing_date_is_placeholder", "effective_date_is_placeholder",

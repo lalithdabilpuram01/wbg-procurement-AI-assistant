@@ -22,16 +22,18 @@ from typing import Any
 
 from pyspark.sql import functions as F
 
+from silver.common import pipeline
 from silver.common.dq import DQReport
+from silver.common.pipeline import CATALOG, runs_dir
 from silver.common.session import DEFAULT_PROFILE, get_spark
 from silver.common.sourcefiles import verify_csv_source_file
 from silver.common.write import create_table
 from silver.contracts import transform as T
 from silver.contracts.checks import check_contracts, check_legacy, check_lines
 
-S = "workspace.wbg_silver"
+S = f"{CATALOG}.wbg_silver"
 TARGETS = {"lines": f"{S}.contract_award_lines", "contracts": f"{S}.contract_awards", "legacy": f"{S}.contract_awards_legacy"}
-RUNS = Path(__file__).resolve().parents[1] / "runs"
+RUNS = runs_dir(Path(__file__).resolve().parents[1] / "runs")
 EXISTING_SILVER = ["wdi_indicator_observations", "wdi_country", "income_classification_history", "wgi_estimates", "cpia_ratings", "projects"]
 COHORT = T.REPO / "cohort" / "poc_cohort_2000_manifest.csv"
 SPEC: dict[str, dict[str, Any]] = {
@@ -129,7 +131,7 @@ def main() -> int:
     if args.mode == "dry-run":
         print("DRY RUN: nothing written to Databricks")
         return 0
-    if any(baseline["targets_exist"].values()):
+    if any(baseline["targets_exist"].values()) and not pipeline.ENABLED:
         raise SystemExit(f"target(s) already exist: {baseline['targets_exist']}; refusing to overwrite")
     for k in ("lines", "contracts", "legacy"):
         spec = SPEC[k]

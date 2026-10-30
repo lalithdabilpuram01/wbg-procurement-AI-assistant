@@ -86,13 +86,13 @@ export function FeedbackNote({ state, revised }: { state?: FeedbackState; revise
     : state.rating === "up" ? "Thanks – noted."
     : state.status === "revising" ? "Re-running with your correction…"
     : state.status === "revised" ? "Corrected – see the revised answer below."
-    : state.status === "validated" ? "Correction confirmed and saved to your memory."
+    : state.status === "validated" ? "Correction confirmed and saved."
     : "Thanks – your feedback was recorded.";
   return text ? <p className="mt-2 text-[11px] text-muted-foreground">{text}</p> : null;
 }
 
 /** Which saved corrections, approaches or team notes guided this answer (they never supply numbers). */
-export function AppliedLearning({ items, onManage }: { items: LearnedItem[]; onManage: () => void }) {
+export function AppliedLearning({ items }: { items: LearnedItem[] }) {
   const [open, setOpen] = useState(false);
   if (items.length === 0) return null;
   return (
@@ -109,7 +109,6 @@ export function AppliedLearning({ items, onManage }: { items: LearnedItem[]; onM
               <span><span className="font-semibold">{i.kind === "correction" ? "Correction" : "Approach"}:</span> {i.statement}</span>
             </p>
           ))}
-          <button onClick={onManage} className="pt-1 font-medium text-primary-strong hover:underline">Manage memory</button>
         </div>
       )}
     </div>

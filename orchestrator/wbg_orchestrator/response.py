@@ -12,14 +12,17 @@ Unsupported claims are removed and counted; the status reflects missing, partial
 """
 from __future__ import annotations
 
+import json
 import re
-from typing import Protocol
+from typing import Callable, Protocol
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 from conversation.pii import mask_pii
 from conversation.redaction import redact_secrets
+from structured_agent.nl2sql.llm_client import LlmError, LlmFailure
 
+from .claim_stream import ClaimTextStream
 from .claude import PortkeyJsonClient
 from .contracts import (BriefSection, EvidenceKind, EvidenceRecord, InvestigationPlan, InvestigationRequest,
                         InvestigationResponse, InvestigationStatus, NumericUse, ResponseClaim, Usage)
@@ -68,13 +71,15 @@ class DeterministicResponseGenerator:
 class ClaudeResponseGenerator:
     """Claude composes claims from evidence summaries only (Portkey). Not called live in Milestone A."""
 
-    name, is_llm = "claude", True
+    name, is_llm, streams = "claude", True, True
     SYSTEM = ("Write a short answer to the question using ONLY the evidence records provided. Every claim must cite the "
               "evidence ids it relies on. Do not state any number, date or confidence that is not in the cited evidence. "
               "Values marked NOT_APPROVED must not be stated as figures. Values marked MODEL_ESTIMATE are model "
               "predictions: present them as estimates, never as recorded facts. For records warned synthetic_training_data, "
               "say in plain words that the model was trained on synthetic data; never write warning codes or evidence ids "
               "in the text. Return only JSON matching the schema.")
+
+    SHORT = ("Write at most 6 claims, each 1-2 sentences, the most important first, and at most 2 short limitations.")
 
     BRIEF = ("This is a PLANNING BRIEF for a new project described in the question. Group claims by section: "
              "similar_projects (which past projects are comparable and why); schedule (per package: estimated tender-to-signing "
@@ -89,19 +94,34 @@ class ClaudeResponseGenerator:
     def __init__(self, client: PortkeyJsonClient):
         self._client = client
 
-    def compose(self, request, evidence, report):
+    def compose(self, request, evidence, report, on_text: Callable[[str], None] | None = None):
+        """The draft answer. With `on_text`, the claims' text is passed on as Claude writes it (streaming)."""
         blocks = [f"[{e.evidence_id}] {e.kind.value}; numeric_use={e.numeric_use.value}; "
                   f"warnings={','.join(e.quality_warnings) or 'none'}; citation: {e.citation}\n"
                   f"facts: {'; '.join(f'{f.name}={f.value}' for f in e.facts)}\nsummary: {e.summary[:_summary_chars(e)]}"
                   for e in evidence]
         user = f"QUESTION:\n{request.question}\n\nEVIDENCE:\n" + "\n\n".join(blocks)
-        system = self.SYSTEM + (" " + self.BRIEF if request.planning else "")
-        parsed, content, usage = self._client.complete(system=system, user=user, schema=DraftResponse.model_json_schema(),
-                                                       schema_name="investigation_answer", trace_id=request.request_id)
+        system = self.SYSTEM + " " + (self.BRIEF if request.planning else self.SHORT)
+        call = dict(system=system, user=user, schema=DraftResponse.model_json_schema(), schema_name="investigation_answer",
+                    trace_id=request.request_id)
+        parsed, content, usage = self._stream(call, on_text) if on_text else self._client.complete(**call)
         try:
             return DraftResponse.model_validate(parsed if parsed is not None else content), usage
         except ValidationError:
             return None, usage
+
+
+    def _stream(self, call: dict, on_text: Callable[[str], None]):
+        """Streamed; if the gateway refuses a streamed structured request, the same request once without streaming."""
+        try:
+            return self._client.stream_json(**call, on_text=ClaimTextStream(on_text).feed)
+        except LlmError as error:
+            if error.failure != LlmFailure.BAD_REQUEST:
+                raise
+            parsed, content, usage = self._client.complete(**call)
+            if parsed:
+                ClaimTextStream(on_text).feed(json.dumps(parsed))
+            return parsed, content, usage
 
 
 def _summary_chars(record: EvidenceRecord) -> int:

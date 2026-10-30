@@ -23,17 +23,19 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from silver.common import pipeline
 from silver.common.dq import DQReport
+from silver.common.pipeline import CATALOG, runs_dir
 from silver.common.session import DEFAULT_PROFILE, get_spark
 from silver.common.sourcefiles import verify_csv_source_file
 from silver.common.write import create_table
 from silver.financing import transform as T
 from silver.financing.checks import check, known_anomalies
 
-S = "workspace.wbg_silver"
+S = f"{CATALOG}.wbg_silver"
 TARGETS = {"ibrd": f"{S}.ibrd_loans", "ida": f"{S}.ida_credits"}
 EXPECTED = {"ibrd": 612, "ida": 2073}
-RUNS = Path(__file__).resolve().parents[1] / "runs"
+RUNS = runs_dir(Path(__file__).resolve().parents[1] / "runs")
 EXISTING_SILVER = ["wdi_indicator_observations", "wdi_country", "income_classification_history", "wgi_estimates", "cpia_ratings", "projects",
                    "contract_award_lines", "contract_awards", "contract_awards_legacy", "procurement_notices", "procurement_notice_details",
                    "notice_contract_link_candidates", "notice_contract_links", "ieg_project_ratings"]
@@ -106,13 +108,13 @@ def main() -> int:
     spark = get_spark(args.profile)
     baseline: dict = {"bronze": {}, "silver": {}, "targets_exist": {k: spark.catalog.tableExists(v) for k, v in TARGETS.items()},
                       "cohort_manifest_sha256": hashlib.sha256(COHORT.read_bytes()).hexdigest()}
-    bronze_tables = [f"workspace.{sc}.{r.tableName}" for sc in ("wbg_bronze", "wbg_ref_bronze") for r in spark.sql(f"SHOW TABLES IN workspace.{sc}").collect()]
+    bronze_tables = [f"{CATALOG}.{sc}.{r.tableName}" for sc in ("wbg_bronze", "wbg_ref_bronze") for r in spark.sql(f"SHOW TABLES IN {CATALOG}.{sc}").collect()]
     for group, tables in (("bronze", bronze_tables), ("silver", [f"{S}.{t}" for t in EXISTING_SILVER])):
         for t in tables:
             h = spark.sql(f"DESCRIBE HISTORY {t} LIMIT 1").collect()[0]
             baseline[group][t] = {"version": h.version, "rows": spark.table(t).count()}
     baseline["column_masks"] = sorted([r[0], r[1], r[2], r[3]] for r in spark.sql(
-        "SELECT table_schema, table_name, column_name, mask_name FROM workspace.information_schema.column_masks").collect())
+        f"SELECT table_schema, table_name, column_name, mask_name FROM {CATALOG}.information_schema.column_masks").collect())
     (run_dir / "baseline_before_write.json").write_text(json.dumps(baseline, indent=1))
 
     projects = spark.table(f"{S}.projects")
@@ -165,7 +167,7 @@ def main() -> int:
     if args.mode == "dry-run":
         print("DRY RUN: nothing written to Databricks")
         return 0
-    if any(baseline["targets_exist"].values()):
+    if any(baseline["targets_exist"].values()) and not pipeline.ENABLED:
         raise SystemExit(f"target(s) already exist: {baseline['targets_exist']}; refusing to overwrite (create-only)")
     for s in ("ibrd", "ida"):
         sp = specs[s]

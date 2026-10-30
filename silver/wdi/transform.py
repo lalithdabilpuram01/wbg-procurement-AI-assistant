@@ -24,9 +24,10 @@ from __future__ import annotations
 from pyspark.sql import DataFrame
 from pyspark.sql import functions as F
 from pyspark.sql import types as T
+from silver.common.pipeline import CATALOG
 
 TRANSFORM_VERSION = "wdi_silver_v1.0.0"
-BRONZE = "workspace.wbg_ref_bronze"
+BRONZE = f"{CATALOG}.wbg_ref_bronze"
 EXPECTED_INDICATORS = ("NY.GDP.MKTP.KD.ZG", "FP.CPI.TOTL.ZG", "NY.GDP.PCAP.CD")
 
 OBSERVATION_SCHEMA = T.StructType([

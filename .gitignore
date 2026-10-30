@@ -97,3 +97,6 @@ ingestion_inbox/**
 ingestion_inbox/_processed/
 ingestion_inbox/_quarantine/
 ingestion_inbox/_ledger/
+
+# Demo upload files made by `uv run wbg-etl-seed` (real World Bank rows; reproducible)
+demo/structured/*.csv

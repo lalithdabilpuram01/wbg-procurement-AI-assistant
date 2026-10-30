@@ -17,8 +17,9 @@ Rules encoded in every query:
   * snapshot dates and source Gold run ids are carried for lineage. No supplier, contact, free-text or description fields.
 """
 from __future__ import annotations
+from silver.common.pipeline import CATALOG
 
-VIEW_SCHEMA = "workspace.wbg_gold"
+VIEW_SCHEMA = f"{CATALOG}.wbg_gold"
 SOURCES = {"pf": "gold_project_portfolio", "ca": "gold_contract_analytics", "pn": "gold_procurement_notices", "cc": "gold_country_context",
            "fa": "gold_financing_analytics"}
 PCTS = (("p25", 0.25), ("p50", 0.5), ("p75", 0.75), ("p90", 0.9))

@@ -29,7 +29,7 @@ from conversation.models import ActiveContext, Decision, Owner, ThreadInfo, Turn
 from conversation.replies import guard_reply
 from conversation.redaction import redact_secrets, result_metadata
 from conversation.responder import (ConversationRequest, ConversationResponder, ConversationResponse, OfflineResponder,
-                                    recall_memory)
+                                    recall_memory, transcript)
 from conversation.routing import CONVERSATIONAL_ROUTES, TASK_ROUTES, IntentRouter, ReasonCategory, Route, RouteRequest
 from conversation.routing.routes import RoutingDecision
 from conversation.store import ConversationStore
@@ -169,8 +169,10 @@ class ConversationService:
         """Summarize older turns of the current topic when needed (after a host-handled request)."""
         self._compress(owner, self._store.get_thread(owner, thread_id))
 
-    def handle_message(self, owner: Owner, thread_id: str, text: str, execute: bool = False) -> ConversationReply:
-        """User message -> input guardrails -> intent router -> exactly one permitted handler."""
+    def handle_message(self, owner: Owner, thread_id: str, text: str, execute: bool = False,
+                       on_text: Callable[[str], None] | None = None) -> ConversationReply:
+        """User message -> input guardrails -> intent router -> exactly one permitted handler. `on_text` receives a
+        conversational reply as it is written (streaming); agent answers arrive whole."""
         started = time.perf_counter()
         request_id = "req_" + uuid.uuid4().hex[:16]
         thread = self._store.get_thread(owner, thread_id)                     # ownership check first
@@ -194,7 +196,7 @@ class ConversationService:
         if routing.route == Route.CLARIFICATION or (routing.is_task and resolution.kind == TurnKind.CLARIFICATION_REQUIRED):
             reply = self._clarify(owner, thread, stored_text, state.active, routing, resolution, request_id)
         elif routing.route in CONVERSATIONAL_ROUTES:
-            reply = self._converse(owner, thread, stored_text, state.active, routing, request_id)
+            reply = self._converse(owner, thread, stored_text, state.active, routing, request_id, on_text)
         else:
             reply = self._run_task(owner, thread, stored_text, routing, resolution, request_id, execute)
         reply.routing = routing
@@ -214,15 +216,17 @@ class ConversationService:
                                  user_turn.seq, assistant.seq, clarification_options=options)
 
     def _converse(self, owner: Owner, thread: ThreadInfo, stored_text: str, active: ActiveContext, routing: RoutingDecision,
-                  request_id: str) -> ConversationReply:
+                  request_id: str, on_text: Callable[[str], None] | None = None) -> ConversationReply:
         """Conversation routes read only the owner's stored conversation; no retrieval, MCP tool or specialist agent."""
         context = ActiveContext() if routing.reset_topic else active
         kind = TurnKind.TOPIC_RESET if routing.reset_topic else TurnKind.CONVERSATION
         user_turn = self._append(owner, thread, "user", kind, stored_text, context, self._metadata(request_id, routing))
         package = self._memory_context(owner, thread, user_turn, stored_text, context)
         recall = recall_memory(self._store, owner, thread) if routing.route == Route.CONVERSATION_MEMORY else None
-        response = self._responder.respond(ConversationRequest(message=stored_text, route=routing.route, reason=routing.reason,
-                                                               memory_context=package.text, recall=recall))
+        earlier = [t for t in self._store.turns(owner, thread.thread_id, topic_epoch=thread.topic_epoch) if t.seq < user_turn.seq]
+        request = ConversationRequest(message=stored_text, route=routing.route, reason=routing.reason, memory_context=package.text,
+                                      recall=recall, transcript="" if routing.reset_topic else transcript(earlier, stored_text))
+        response = self._responder.respond(request, on_text) if on_text else self._responder.respond(request)
         status = "topic_reset" if routing.reset_topic else "responded"
         assistant = self._append(owner, thread, "assistant", TurnKind.ANSWER, self.text_filter(response.text), context,
                                  self._metadata(request_id, routing, status=status))

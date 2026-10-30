@@ -33,6 +33,7 @@ class ReasonCategory(str, Enum):
     CONCEPTUAL_QUESTION = "conceptual_question"
     TOPIC_CHANGE = "topic_change"
     MEMORY_RECALL = "memory_recall"
+    ABOUT_PREVIOUS_ANSWER = "about_previous_answer"  # explain / simplify / shorten what was already said (history only)
     EVIDENCE_RECHECK = "evidence_recheck"            # recall that must be re-verified by the previous task's agent
     EXPLICIT_TASK_REQUEST = "explicit_task_request"
     FOLLOW_UP_INHERITED = "follow_up_inherited"

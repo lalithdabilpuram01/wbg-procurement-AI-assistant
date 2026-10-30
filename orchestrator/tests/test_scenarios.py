@@ -5,7 +5,6 @@ from conversation.routing.routes import Route
 from structured_agent.nl2sql.result import WorkflowStatus
 
 from wbg_orchestrator.contracts import EvidenceKind, InvestigationStatus, NumericUse, TaskState
-from wbg_orchestrator.hitl import ApprovalPolicy
 from wbg_orchestrator.planner import FakePlanner
 from wbg_orchestrator.response import DraftClaim, DraftResponse
 
@@ -13,7 +12,6 @@ from tests.helpers import (ALICE, FakePipeline, FakeWorkflow, answer_response, b
                            workflow_result)
 
 BOTH = (Route.STRUCTURED_DATA, Route.DOCUMENT_RAG)
-NO_HITL = ApprovalPolicy(execution_requires_approval="never")
 
 
 # ------------------------------------------------------------------------------------------------ 1 and 2
@@ -56,7 +54,7 @@ def test_complex_structured_investigation_with_dependent_tasks():
     planner = FakePlanner(plan(task("metric", operation="describe_metric", question="Which metric counts bid invitations?"),
                                task("count", deps=("metric",), execute=True,
                                     question="How many bid invitations were published in fiscal year 2024?")))
-    engine, parts = build_engine(planner=planner, policy=NO_HITL)
+    engine, parts = build_engine(planner=planner)
     out = engine.start(request("Investigate how many bid invitations were published in fiscal year 2024 and then explain the metric"))
     assert out.status == InvestigationStatus.ANSWERED and len(planner.calls) == 1
     assert [t for t, s in out.task_states.items() if s == "succeeded"] == [t["task_id"] for t in out.values["plan"]["tasks"]]
@@ -71,7 +69,7 @@ def test_combined_structured_and_document_investigation():
     planner = FakePlanner(plan(task("data", execute=True, question="How many bid invitations were published in fiscal year 2024?"),
                                task("docs", worker="document_intelligence", operation="answer_document_question",
                                     question="What lessons learned explain procurement delays?")))
-    engine, parts = build_engine(planner=planner, policy=NO_HITL)
+    engine, parts = build_engine(planner=planner)
     out = engine.start(request("Compare the number of bid invitations with the lessons learned in the documents", routes=BOTH))
     assert out.status == InvestigationStatus.ANSWERED
     assert {e.kind for e in out.evidence} == {EvidenceKind.STRUCTURED_RESULT, EvidenceKind.DOCUMENT_PASSAGE}
@@ -84,7 +82,7 @@ def test_failed_optional_task_gives_a_safe_partial_answer():
     planner = FakePlanner(plan(task("data", execute=True, question="How many bid invitations were published in fiscal year 2024?"),
                                task("docs", worker="document_intelligence", operation="answer_document_question", optional=True),
                                required=["data"]))
-    engine, _ = build_engine(planner=planner, pipeline=pipeline, policy=NO_HITL)
+    engine, _ = build_engine(planner=planner, pipeline=pipeline)
     out = engine.start(request("Compare the bid invitations with lessons learned in the documents", routes=BOTH))
     assert out.status == InvestigationStatus.PARTIAL and len(out.response.claims) == 1
     assert any("failed" in limitation for limitation in out.response.limitations)
@@ -96,7 +94,7 @@ def test_dependents_of_a_failed_task_are_cancelled_not_run():
                                                                  operation="answer_document_question", deps=("data",))),
                           plan(task("data2", execute=True), task("docs2", worker="document_intelligence",
                                                                   operation="answer_document_question", deps=("data2",))))
-    engine, parts = build_engine(planner=planner, workflow=workflow, policy=NO_HITL)
+    engine, parts = build_engine(planner=planner, workflow=workflow)
     out = engine.start(request("Investigate the bids and then the lessons learned in the documents", routes=BOTH))
     states = out.task_states
     assert sorted(states.values()).count("cancelled") == 2 and parts["pipeline"].questions == []
@@ -109,7 +107,7 @@ def test_missing_evidence_is_reported_not_invented():
     engine, _ = build_engine(pipeline=pipeline)
     out = engine.start(request("What lessons learned are reported?", routes=(Route.DOCUMENT_RAG,)))
     assert out.status == InvestigationStatus.INSUFFICIENT_EVIDENCE and out.response.claims == ()
-    assert "not sufficient" in out.response.message
+    assert out.response.message.startswith("No evidence found to answer this question.")
 
 
 def test_conflicting_results_of_the_same_query_are_surfaced():
@@ -117,7 +115,7 @@ def test_conflicting_results_of_the_same_query_are_surfaced():
     workflow = FakeWorkflow(lambda q, execute: workflow_result(q, execute=execute, value=next(values)))
     planner = FakePlanner(plan(task("a", execute=True, question="Bid invitations in fiscal year 2024?"),
                                task("b", execute=True, question="Number of tender invitations, fiscal year 2024?")))
-    engine, _ = build_engine(planner=planner, workflow=workflow, policy=NO_HITL)
+    engine, _ = build_engine(planner=planner, workflow=workflow)
     out = engine.start(request("Investigate and cross-check the bid invitations of fiscal year 2024"))
     assert out.status == InvestigationStatus.CONFLICTING_EVIDENCE
     conflict = out.values["verification"]["conflicts"][0]
@@ -129,7 +127,7 @@ def test_different_filters_on_the_same_view_are_not_a_conflict():
     workflow = FakeWorkflow(lambda q, execute: workflow_result(q, execute=execute, fiscal_year=next(years), value=10))
     planner = FakePlanner(plan(task("a", execute=True, question="Bids in fiscal year 2023?"),
                                task("b", execute=True, question="Bids in fiscal year 2024?")))
-    engine, _ = build_engine(planner=planner, workflow=workflow, policy=NO_HITL)
+    engine, _ = build_engine(planner=planner, workflow=workflow)
     out = engine.start(request("Investigate the bid invitations of fiscal years 2023 and 2024"))
     assert out.status == InvestigationStatus.ANSWERED and out.values["verification"]["conflicts"] == []
 
@@ -215,8 +213,7 @@ def live_plan():
 
 
 def run_live_plan(pipeline):
-    no_approval = ApprovalPolicy(execution_requires_approval="never", large_plan_tasks=10)     # approval is tested in test_hitl
-    engine, parts = build_engine(planner=live_plan(), pipeline=pipeline, policy=no_approval)
+    engine, parts = build_engine(planner=live_plan(), pipeline=pipeline)
     out = engine.start(request(LIVE_QUESTION, routes=BOTH))
     return out, parts
 

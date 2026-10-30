@@ -27,13 +27,14 @@ from pathlib import Path
 from pyspark.sql import Column, DataFrame
 from pyspark.sql import functions as F
 
+from silver.common.pipeline import CATALOG, manifest
 from silver.common.sourcefiles import row_hash_expr
 
 TRANSFORM_VERSION = "ieg_silver_v1.0.0"
-BRONZE = "workspace.wbg_bronze.bronze_ieg_ratings_ds00053"
+BRONZE = f"{CATALOG}.wbg_bronze.bronze_ieg_ratings_ds00053"
 REPO = Path(__file__).resolve().parents[2]
-BRONZE_INPUTS_MANIFEST = REPO / "databricks_upload" / "bronze_inputs" / "_manifest" / "bronze_inputs_manifest.json"
-PHASE1_CACHE_MANIFEST = REPO / "discovery" / "data_cache" / "MANIFEST.jsonl"
+BRONZE_INPUTS_MANIFEST = manifest("WBG_BRONZE_INPUTS_MANIFEST", REPO / "databricks_upload" / "bronze_inputs" / "_manifest" / "bronze_inputs_manifest.json")
+PHASE1_CACHE_MANIFEST = manifest("WBG_SOURCE_PULLS_MANIFEST", REPO / "discovery" / "data_cache" / "MANIFEST.jsonl")
 META = ("source_file", "cohort_id", "ingested_at")
 
 SIX_POINT = {"Highly Unsatisfactory": 1, "Unsatisfactory": 2, "Moderately Unsatisfactory": 3,

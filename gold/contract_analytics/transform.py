@@ -28,10 +28,11 @@ import json
 
 from pyspark.sql import DataFrame
 from pyspark.sql import functions as F
+from silver.common.pipeline import CATALOG
 
 TRANSFORM_VERSION = "gold_contract_analytics_v1.0.0"
-TARGET = "workspace.wbg_gold.gold_contract_analytics"
-S = "workspace.wbg_silver."
+TARGET = f"{CATALOG}.wbg_gold.gold_contract_analytics"
+S = f"{CATALOG}.wbg_silver."
 SOURCES = ["contract_awards", "contract_award_lines", "projects", "wdi_country", "income_classification_history",
            "notice_contract_links", "procurement_notice_details"]
 SNAPSHOT_SEMANTICS = "ds00005_dataset_snapshot_as_of_source_as_of_date"

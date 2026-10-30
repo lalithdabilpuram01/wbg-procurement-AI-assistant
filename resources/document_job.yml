@@ -1,0 +1,86 @@
+# The document flow: drop a PDF / Word / spreadsheet file into /Volumes/<catalog>/etl/inbox/<type>/ and the job takes it
+# through Bronze -> Silver -> Gold -> bge-m3 vectors -> the app (Lakebase development branch: pgvector chunks searchable in
+# chat, lesson cards in the Review queue). See etl/documents.py.
+
+resources:
+  schemas:
+    documents:
+      catalog_name: ${var.catalog}
+      name: documents
+      comment: Document flow - registered files (Bronze), parsed documents (Silver), lesson cards and graph (Gold)
+
+  volumes:
+    inbox:
+      catalog_name: ${var.catalog}
+      schema_name: ${resources.schemas.etl.name}
+      name: inbox
+      comment: Drop documents here, in the folder for their type (pad, isr, icr, procurement_plans, contracts, notices, other)
+    reference:
+      catalog_name: ${var.catalog}
+      schema_name: ${resources.schemas.etl.name}
+      name: reference
+      comment: Reference inputs of the document parser - contracts snapshot (35 projects) and the table-cell vocabulary
+
+  jobs:
+    wbg_document_ingest:
+      name: WBG document ingestion (upload -> Bronze -> Silver -> Gold -> pgvector -> app)
+      description: >-
+        Started by the upload watcher (etl/watch.py) when a document lands in /Volumes/${var.catalog}/etl/inbox. Registers the file, parses it
+        into sections, chunks and tables, links it to projects and contracts, proposes lesson cards and publishes them to
+        the app's Review queue (Lakebase development branch).
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      # Started by `uv run wbg-etl-watch` when a file lands in /Volumes/${var.catalog}/etl/inbox/ (etl/watch.py): Databricks'
+      # file-arrival trigger needs an external volume, and Free Edition volumes are managed.
+      parameters:
+        - name: catalog
+          default: ${var.catalog}
+      environments:
+        - environment_key: documents
+          spec:
+            environment_version: "2"
+            dependencies:
+              - pdfplumber==0.11.9
+              - pymupdf==1.26.7
+              - tiktoken==0.8.0
+              - python-docx==1.2.0
+              - rapidfuzz==3.14.3
+              - openpyxl==3.1.5
+              - psycopg[binary]==3.3.6
+              - psycopg-pool==3.3.3
+              - databricks-sdk==0.157.0
+        - environment_key: embedding
+          spec:
+            environment_version: "2"
+            dependencies:
+              - --extra-index-url https://download.pytorch.org/whl/cpu
+              - torch==2.9.1+cpu
+              - transformers==4.57.3
+              - sentence-transformers==5.4.1
+              - pdfplumber==0.11.9
+              - pymupdf==1.26.7
+              - tiktoken==0.8.0
+              - python-docx==1.2.0
+              - rapidfuzz==3.14.3
+              - openpyxl==3.1.5
+      tasks:
+        - task_key: register
+          environment_key: documents
+          spark_python_task: {python_file: ../etl/run_documents.py, parameters: [register, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]}
+        - task_key: parse
+          depends_on: [{task_key: register}]
+          environment_key: documents
+          spark_python_task: {python_file: ../etl/run_documents.py, parameters: [parse, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]}
+        - task_key: enrich
+          depends_on: [{task_key: parse}]
+          environment_key: documents
+          spark_python_task: {python_file: ../etl/run_documents.py, parameters: [enrich, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]}
+        - task_key: embed
+          depends_on: [{task_key: enrich}]
+          environment_key: embedding
+          spark_python_task: {python_file: ../etl/run_documents.py, parameters: [embed, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]}
+        - task_key: publish
+          depends_on: [{task_key: embed}]
+          environment_key: documents
+          spark_python_task: {python_file: ../etl/run_documents.py, parameters: [publish, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]}

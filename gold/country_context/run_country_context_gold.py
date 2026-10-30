@@ -26,11 +26,12 @@ from gold.common import baseline as B
 from gold.country_context import transform as T
 from gold.country_context.checks import check
 from silver.common.dq import DQReport
+from silver.common.pipeline import CATALOG, runs_dir
 from silver.common.session import DEFAULT_PROFILE, get_spark
 from silver.common.write import create_table
 
 REPO = Path(__file__).resolve().parents[2]
-RUNS = REPO / "gold" / "runs"
+RUNS = runs_dir(REPO / "gold" / "runs")
 GOLD = ["gold_project_portfolio", "gold_contract_analytics", "gold_procurement_notices"]
 NOT_NULL = ["country_code", "country_iso3", "country_name", "year", "indicator_year_basis", "wdi_values_present", "wgi_values_present", "wgi_coverage_status",
             "cpia_values_present", "cpia_coverage_status", "income_fy_ending_in_year", "income_status_fy_ending_in_year", "income_fy_starting_in_year",
@@ -115,7 +116,7 @@ def main() -> int:
     rep.equals("baseline_table_counts (Bronze, Silver, Gold)", (len(base["bronze"]), len(base["silver"]), len(base["gold"])), (17, 18, 3))
     dfs, versions = T.load_sources(spark)
     g = T.build(dfs, versions, run_id)
-    summary = check(g, dfs, {t: spark.table(f"workspace.wbg_gold.{t}") for t in GOLD}, rep)
+    summary = check(g, dfs, {t: spark.table(f"{CATALOG}.wbg_gold.{t}") for t in GOLD}, rep)
     rep.equals("delta_check_constraints_hold_before_write", {c: g.filter(f"NOT coalesce(({e}), false)").count() for c, e in CONSTRAINTS.items()}, {c: 0 for c in CONSTRAINTS})
     rep.equals("not_null_columns_have_no_nulls", {c: g.filter(f"`{c}` IS NULL").count() for c in NOT_NULL}, {c: 0 for c in NOT_NULL})
     summary["silver_source_versions"] = json.loads(versions)

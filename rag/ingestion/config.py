@@ -1,6 +1,7 @@
 """Paths and constants for the ingestion pipeline."""
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
@@ -12,7 +13,9 @@ PROJECT_MANIFEST = REPO / "rag" / "module1_discovery" / "rag_scope_v3_35_project
 OUTPUT = CORPUS / "processed" / "pilot_v1"            # stage-1 outputs (kept unchanged)
 OUTPUT_V2 = CORPUS / "processed" / "pilot_v2"         # quality improvements + three chunking strategies
 OUTPUT_V2_1 = CORPUS / "processed" / "pilot_v2_1"     # v2 + stacked-value table cells (extraction 2.1.0)
-REFERENCE = CORPUS / "processed" / "reference"
+# WBG_RAG_REFERENCE_DIR: the folder holding the contracts snapshots and vocab.json (the document ETL job reads them
+# from a Volume); unset, the local corpus folder is used.
+REFERENCE = Path(os.environ["WBG_RAG_REFERENCE_DIR"]) if os.environ.get("WBG_RAG_REFERENCE_DIR") else CORPUS / "processed" / "reference"
 CONTRACTS_SNAPSHOT = REFERENCE / "contracts_snapshot.jsonl"
 CONTRACTS_SNAPSHOT_META = REFERENCE / "contracts_snapshot.meta.json"
 

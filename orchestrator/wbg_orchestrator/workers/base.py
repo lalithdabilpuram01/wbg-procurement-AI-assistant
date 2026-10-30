@@ -93,7 +93,7 @@ class WorkerContext:
     request_id: str
     rag_release: str
     remaining_seconds: float
-    execution_approved: bool = False                       # set only by the controller after HITL approval
+    execution_allowed: bool = False                       # set only by the controller (read-only SQL may run)
     upstream_evidence: tuple[EvidenceRecord, ...] = ()     # verified evidence of the task's dependencies
     memory_block: str | None = None                        # untrusted conversation memory (never in state)
     cancel_event: threading.Event = field(default_factory=threading.Event)

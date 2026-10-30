@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ClipboardList, Plus, Trash2 } from "lucide-react";
 import type { PlanInput, PlannedPackage } from "@/lib/api";
 import { COUNTRIES, SECTORS } from "@/lib/reference";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Select, Spinner, Textarea } from "@/components/ui/primitives";
 import { Dialog, DialogContent } from "@/components/ui/overlays";
@@ -37,10 +38,17 @@ export function PlanDialog({ open, onOpenChange, onSubmit }:
   const setPackage = (i: number, patch: Partial<PlannedPackage>) =>
     setInput((p) => ({ ...p, packages: p.packages.map((pkg, j) => (j === i ? { ...pkg, ...patch } : pkg)) }));
   const country = COUNTRIES.find((c) => c.code === profile.country_code);
-  const valid = profile.description.trim().length >= 20 && input.packages.every((p) => p.name.trim());
+  const described = profile.description.trim().length;
+  const missing = described < 20 ? `Describe what the project will do (at least 20 characters; ${described} so far).`
+    : !input.packages.every((p) => p.name.trim()) ? "Give every package a name." : null;
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (missing) {                                                    // say what is missing instead of a silent grey button
+      setError(missing);
+      if (described < 20) document.getElementById("description")?.focus();
+      return;
+    }
     setBusy(true);
     setError(null);
     try {
@@ -80,8 +88,10 @@ export function PlanDialog({ open, onOpenChange, onSubmit }:
               <Label htmlFor="description">What will the project do?</Label>
               <Textarea id="description" rows={3} maxLength={1500} value={profile.description}
                 placeholder="e.g. Rehabilitate 120 km of rural roads and build three bridges in Oromia, with road maintenance capacity building."
-                onChange={(e) => setProfile({ description: e.target.value })} />
-              <p className="text-[11px] text-muted-foreground">Used to find projects with similar content (at least 20 characters).</p>
+                onChange={(e) => { setProfile({ description: e.target.value }); setError(null); }} />
+              <p className={cn("text-[11px]", described > 0 && described < 20 ? "text-danger" : "text-muted-foreground")}>
+                Used to find projects with similar content: at least 20 characters ({described}/20).
+              </p>
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="approval">Planned Board approval</Label>
@@ -159,7 +169,7 @@ export function PlanDialog({ open, onOpenChange, onSubmit }:
           {error && <p className="text-sm text-danger">{error}</p>}
           <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-            <Button type="submit" disabled={!valid || busy}>{busy ? <Spinner /> : <ClipboardList />} Build planning brief</Button>
+            <Button type="submit" disabled={busy}>{busy ? <Spinner /> : <ClipboardList />} Build planning brief</Button>
           </div>
         </form>
       </DialogContent>

@@ -1,7 +1,8 @@
 """Thin adapter over the frozen Module 2 models (ml/serving): each package -> three model-prediction evidence records.
 
 Operations (read-only):
-  predict_package          an existing project's package (`WorkerContext.package`); context looked up by project ID
+  predict_package          one package (`WorkerContext.package`): the project from the user; its country's region and
+                           income history from Gold
   predict_planned_packages the packages of a new project (`WorkerContext.planning`); context from its profile, the
                            method suggested from historical practice where the planner left it open
 Inputs come from the structured request, never from message text. Project context is read from the Gold tables with
@@ -13,10 +14,10 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from ml.serving.features import InvalidRequest, PackageRequest
-from ml.serving.gold import GOLD, RunSql, new_project_context
+from ml.serving.features import InvalidRequest, PackageRequest, ProjectContext, user_context
+from ml.serving.gold import GOLD, RunSql, country_region, income_history, new_project_context
 from ml.serving.models import Driver, FrozenModelError, FrozenModels
-from ml.serving.service import PackagePrediction, predict_for_context, predict_package
+from ml.serving.service import PackagePrediction, predict_for_context
 
 from ..contracts import (AgentTask, ErrorCategory, EvidenceKind, EvidenceRecord, ExecutionError, Fact, NumericUse,
                          PackageSpec, PlannedPackage, PlanningSpec, SourceSystem, TaskState, ValidationStatus, WorkerName,
@@ -26,6 +27,9 @@ from .base import TicketAuthority, WorkerContext, WorkerOutput
 PROJECT_ID = re.compile(r"P\d{6}")
 GATEWAY_MAX_ROWS = 500                    # the fixed lookups' largest LIMIT (the gateway allows up to 1,000)
 SOURCE_OBJECTS = (f"{GOLD}.gold_project_portfolio", f"{GOLD}.gold_country_context", f"{GOLD}.gold_procurement_notices")
+USER_INPUTS = ("package and project inputs given by the user",)
+COUNTRY_OBJECTS = (f"{GOLD}.gold_project_portfolio", f"{GOLD}.gold_country_context")   # the country's region and income
+PROFILE_FIELDS = ("country_code", "sector", "board_approval_date")
 
 
 class LookupFailed(RuntimeError):
@@ -49,14 +53,16 @@ class PredictionWorker:
         if not isinstance(context.package, PackageSpec):
             return _failed(task, ErrorCategory.VALIDATION, "package_missing", "A package assessment needs the package details.")
         try:
-            prediction = predict_package(_request(context.package), self._run_sql, self._models)
+            project, objects = _user_project(context.package, self._run_sql)
+            prediction = predict_for_context(_request(context.package), project, self._models)
         except InvalidRequest as invalid:
             return _failed(task, ErrorCategory.VALIDATION, "invalid_package", str(invalid)[:300])
         except FrozenModelError:
             return _failed(task, ErrorCategory.INTERNAL, "model_integrity", "A frozen model failed its integrity check.")
         except LookupFailed as failed:
-            return _failed(task, ErrorCategory.EXECUTION, str(failed)[:80], "The project context could not be read.")
-        return WorkerOutput(TaskState.SUCCEEDED, evidence=tuple(_evidence(task, context.package, prediction)), notes=prediction.notes)
+            return _failed(task, ErrorCategory.EXECUTION, str(failed)[:80], "The country's region and income could not be read.")
+        return WorkerOutput(TaskState.SUCCEEDED, evidence=tuple(_evidence(task, context.package, prediction, objects=objects)),
+                            notes=prediction.notes)
 
 
     def _planned(self, task: AgentTask, context: WorkerContext) -> WorkerOutput:
@@ -106,6 +112,22 @@ def _spec_of(spec: PlanningSpec, package: PlannedPackage, method: str) -> Packag
                                        tender_date=package.tender_date)
 
 
+def _user_project(package: PackageSpec, run_sql: RunSql) -> tuple[ProjectContext, tuple[str, ...]]:
+    """The project as the user described it, and the objects it was read from. For a country, its region (unless given)
+    and its income history (unless an income group is given) come from Gold; a regional project gives its region."""
+    missing = [name for name in PROFILE_FIELDS if not getattr(package, name, None)]
+    if package.country_code == "REGIONAL" and not package.region_name:
+        missing.append("region_name")
+    if missing:
+        raise InvalidRequest("the assessment needs the project's " + ", ".join(m.replace("_", " ") for m in missing))
+    common = (package.sector, package.board_approval_date, package.income_group, package.prior_tender_notices, package.project_id)
+    if package.country_code == "REGIONAL":
+        return user_context(package.region_name, None, *common), USER_INPUTS
+    region = package.region_name or country_region(package.country_code, run_sql)
+    income = {} if package.income_group else income_history(package.country_code, run_sql)
+    return user_context(region, package.country_code, *common, income_by_year=income), USER_INPUTS + COUNTRY_OBJECTS
+
+
 def _request(package: PackageSpec) -> PackageRequest:
     return PackageRequest(package.project_id, package.procurement_method, package.procurement_category, package.review_type,
                           float(package.bid_window_days), package.tender_date)
@@ -115,13 +137,15 @@ def _drivers(drivers: tuple[Driver, ...]) -> str:
     return "; ".join(f"{d.label}: {d.effect}" for d in drivers) or "no dominant driver"
 
 
-def _evidence(task: AgentTask, package: PackageSpec, p: PackagePrediction, label: str = "") -> list[EvidenceRecord]:
-    inputs = (f"{label + ': ' if label else ''}{package.project_id}, {package.procurement_method}, {package.procurement_category}, "
+def _evidence(task: AgentTask, package: PackageSpec, p: PackagePrediction, label: str = "",
+              objects: tuple[str, ...] = SOURCE_OBJECTS) -> list[EvidenceRecord]:
+    name = package.label() if hasattr(package, "label") else package.project_id
+    inputs = (f"{label + ': ' if label else ''}{name}, {package.procurement_method}, {package.procurement_category}, "
               f"{package.review_type} review, {package.bid_window_days}-day bid window, tender {package.tender_date.isoformat()}")
     context = [Fact(name=f"input_{k}", value=str(v)) for k, v in p.context.items()]
     notes = ("model_input_note",) if p.notes else ()
     d = p.duration
-    duration = _record(task, package, "Model 1 tender duration (ridge_final, real data)", inputs, (
+    duration = _record(task, package, objects, "Model 1 tender duration (ridge_final, real data)", inputs, (
         Fact(name="estimated_duration", value=str(d.days), unit="days"),
         Fact(name="likely_range_p10", value=str(d.p10_days), unit="days"),
         Fact(name="likely_range_p90", value=str(d.p90_days), unit="days"),
@@ -133,7 +157,7 @@ def _evidence(task: AgentTask, package: PackageSpec, p: PackagePrediction, label
     records = [duration]
     for name, risk in (("Model 2 amendment risk (m2_S2_l2_final, SYNTHETIC)", p.amendment),
                        ("Model 3 re-bidding risk (m3_S2_l2_final, SYNTHETIC)", p.rebid)):
-        records.append(_record(task, package, name, inputs, (
+        records.append(_record(task, package, objects, name, inputs, (
             Fact(name="simulated_probability", value=f"{risk.simulated_probability_pct}", unit="%"),
             Fact(name="assessment", value=risk.flag[:200])),
             f"{risk.model}: simulated probability {risk.simulated_probability_pct}% ({risk.flag}). "
@@ -141,13 +165,13 @@ def _evidence(task: AgentTask, package: PackageSpec, p: PackagePrediction, label
     return records
 
 
-def _record(task: AgentTask, package: PackageSpec, model: str, inputs: str, facts: tuple[Fact, ...], summary: str,
-            warnings: tuple[str, ...]) -> EvidenceRecord:
+def _record(task: AgentTask, package: PackageSpec, objects: tuple[str, ...], model: str, inputs: str, facts: tuple[Fact, ...],
+            summary: str, warnings: tuple[str, ...]) -> EvidenceRecord:
     return EvidenceRecord(
         evidence_id=new_id("ev"), investigation_id=task.investigation_id, task_id=task.task_id,
         source_system=SourceSystem.FROZEN_ML_MODELS, kind=EvidenceKind.MODEL_PREDICTION,
-        project_ids=(package.project_id,) if PROJECT_ID.fullmatch(package.project_id) else (),
-        source_objects=SOURCE_OBJECTS, source_version="ml:frozen", citation=f"{model}; inputs: {inputs}"[:300],
+        project_ids=(package.project_id,) if package.project_id and PROJECT_ID.fullmatch(package.project_id) else (),
+        source_objects=objects, source_version="ml:frozen", citation=f"{model}; inputs: {inputs}"[:300],
         provenance=(("model", model), ("integrity", "sha256 checked against FROZEN.json")),
         validation_status=ValidationStatus.VERIFIED, numeric_use=NumericUse.MODEL_ESTIMATE, quality_warnings=warnings,
         facts=facts, summary=summary[:1500])

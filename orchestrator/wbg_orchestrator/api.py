@@ -15,7 +15,7 @@ Endpoints:
 - conversations: create, list, read;
 - messages: submit (returns a job);
 - jobs: poll;
-- investigations: read, decide an approval, recover after a restart, cancel;
+- investigations: read, recover after a restart, cancel;
 - feedback: rate an answer (a correction starts a revision job), the user's memory (preferences, learned items),
   and the reviewer queue (only for users added with `--reviewer`);
 - monitoring: a project's milestones and early warnings (monitoring.watch; deterministic, cited, no model call).
@@ -40,7 +40,7 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request, status
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
 from conversation.learning import Feedback, LearnedItem, LearningItemNotFound, Review
@@ -52,11 +52,12 @@ from tender.text import UnreadableDraft, text_from_file
 from conversation.store import ThreadNotFound
 from conversation.workspace import WorkspaceItemNotFound
 
-from .app_service import AppService, ConversationBusy, Job, JobNotFound, summarize
-from .contracts import PackageSpec, PlanningSpec, TenderSpec
+from .dashboards import KpiBoard, dashboards, settings as dashboard_settings, warehouse_sql
+from .app_service import DELETED_FOLDER, AppService, ConversationBusy, Job, JobNotFound, summarize
+from .contracts import PackageAssessment, PlanningSpec, TenderSpec
 from .feedback import FeedbackRefused, FeedbackRequest, Preferences, ReviewerOnly
 from .rate_limit import RateLimiter
-from .engine import ApprovalNotPending, InvestigationNotFound
+from .engine import InvestigationNotFound
 
 DEFAULT_USERS_FILE = Path.home() / ".wbg" / "api_users.json"
 CLIENT_ID = r"^[A-Za-z0-9_-]{8,64}$"
@@ -169,7 +170,7 @@ class NewMessage(BaseModel):
     client_message_id: str = Field(pattern=CLIENT_ID)
 
 
-class NewPackage(PackageSpec):
+class NewPackage(PackageAssessment):
     client_message_id: str = Field(pattern=CLIENT_ID)
 
 
@@ -191,13 +192,6 @@ class LessonDecision(BaseModel):
     note: str | None = Field(default=None, max_length=300)
 
 
-class ApprovalAnswer(BaseModel):
-    approval_id: str = Field(min_length=1, max_length=80)
-    approved: bool
-    reason: str | None = Field(default=None, max_length=300)
-    client_message_id: str = Field(pattern=CLIENT_ID)
-
-
 class Retry(BaseModel):
     client_message_id: str = Field(pattern=CLIENT_ID)
 
@@ -210,6 +204,12 @@ class ReviewDecision(BaseModel):
     approved: bool
     note: str | None = Field(default=None, max_length=300)
     expected_terms: list[str] = Field(default_factory=list, max_length=10)
+
+
+def allowed_folder_name(name: str) -> str:
+    if name.strip() == DELETED_FOLDER:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "that folder name is reserved")
+    return name
 
 
 def job_view(job: Job) -> dict[str, Any]:
@@ -247,7 +247,8 @@ def review_view(review: Review) -> dict[str, Any]:
 
 
 # ------------------------------------------------------------------------------------------------------ app
-def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter | None = None) -> FastAPI:
+def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter | None = None,
+               kpi_board: KpiBoard | None = None) -> FastAPI:
     app = FastAPI(title="WBG Procurement Intelligence API", version="0.1.0")
 
     def current_owner(authorization: str = Header(default="")) -> Owner:
@@ -293,10 +294,8 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
         return JSONResponse({"detail": str(error)}, status_code=403)
 
     @app.exception_handler(ConversationBusy)
-    @app.exception_handler(ApprovalNotPending)
     def conflict(request: Request, error: Exception) -> JSONResponse:
-        detail = "another request is still running" if isinstance(error, ConversationBusy) else "no pending approval with this id"
-        return JSONResponse({"detail": detail}, status_code=409)
+        return JSONResponse({"detail": "another request is still running"}, status_code=409)
 
     @app.post("/auth/login")
     def sign_in(body: SignIn) -> dict[str, str]:
@@ -322,6 +321,19 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
             raise HTTPException(status.HTTP_404_NOT_FOUND, "no procurement plan or ISR for this project")
         return result.to_dict()
 
+    @app.get("/dashboards")
+    def list_dashboards(owner: Owner = Depends(current_owner)) -> list[dict[str, str]]:
+        return dashboards()
+
+    @app.get("/dashboards/{key}/kpis")
+    def dashboard_kpis(key: str, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
+        if kpi_board is None:
+            raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, "the KPI dashboard is not connected")
+        try:
+            return kpi_board.kpis(key)
+        except KeyError:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "no such dashboard") from None
+
     @app.get("/me")
     def me(owner: Owner = Depends(current_owner)) -> dict[str, Any]:
         return {"user_id": owner.user_id, "reviewer": users.is_reviewer(owner), "feedback": service.learning is not None}
@@ -335,6 +347,10 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
     def list_conversations(owner: Owner = Depends(current_owner)) -> list[dict[str, Any]]:
         return [{"conversation_id": t.thread_id, "title": t.title, "updated_at": t.updated_at.isoformat(), "folder_id": folder}
                 for t, folder in service.list_conversations(owner)]
+
+    @app.delete("/conversations/{conversation_id}", status_code=204)
+    def delete_conversation(conversation_id: str, owner: Owner = Depends(current_owner)) -> None:
+        service.delete_conversation(owner, conversation_id)
 
     @app.patch("/conversations/{conversation_id}", status_code=204)
     def rename_conversation(conversation_id: str, body: Rename, owner: Owner = Depends(current_owner)) -> None:
@@ -351,11 +367,11 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
 
     @app.post("/folders", status_code=201)
     def create_folder(body: FolderName, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
-        return service.create_folder(owner, body.name).model_dump(mode="json")
+        return service.create_folder(owner, allowed_folder_name(body.name)).model_dump(mode="json")
 
     @app.patch("/folders/{folder_id}")
     def rename_folder(folder_id: str, body: FolderName, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
-        return service.rename_folder(owner, folder_id, body.name).model_dump(mode="json")
+        return service.rename_folder(owner, folder_id, allowed_folder_name(body.name)).model_dump(mode="json")
 
     @app.delete("/folders/{folder_id}", status_code=204)
     def delete_folder(folder_id: str, owner: Owner = Depends(current_owner)) -> None:
@@ -433,7 +449,7 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
 
     @app.post("/conversations/{conversation_id}/packages", status_code=202)
     def submit_package(conversation_id: str, body: NewPackage, owner: Owner = Depends(limited_owner)) -> dict[str, Any]:
-        package = PackageSpec(**body.model_dump(exclude={"client_message_id"}))
+        package = PackageAssessment(**body.model_dump(exclude={"client_message_id"}))
         return job_view(service.submit_package(owner, conversation_id, package, body.client_message_id))
 
     @app.post("/conversations/{conversation_id}/tenders", status_code=202)
@@ -464,6 +480,13 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
     def read_job(job_id: str, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
         return job_view(service.job(owner, job_id))
 
+    @app.get("/jobs/{job_id}/events")
+    def job_events(job_id: str, after: int = Query(default=0, ge=0), owner: Owner = Depends(current_owner)) -> StreamingResponse:
+        """The job's live steps and answer text as server-sent events (see progress.py), from event `after` on."""
+        service.job(owner, job_id)                                              # the owner's job, else not found
+        return StreamingResponse(event_stream(service.streams, job_id, after), media_type="text/event-stream",
+                                 headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
     @app.get("/conversations/{conversation_id}/investigations/{request_id}")
     def read_investigation(conversation_id: str, request_id: str, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
         outcome = service.investigation(owner, conversation_id, request_id)
@@ -472,11 +495,6 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
             view["status"] = "running" if service.is_running(owner, conversation_id, request_id) else "interrupted"
         return {"request_id": request_id, **view,
                 "applied_learning": [item_view(i) for i in service.applied_learning(owner, request_id)]}
-
-    @app.post("/conversations/{conversation_id}/investigations/{request_id}/decision", status_code=202)
-    def decide(conversation_id: str, request_id: str, body: ApprovalAnswer, owner: Owner = Depends(limited_owner)) -> dict[str, Any]:
-        return job_view(service.decide(owner, conversation_id, request_id, body.approval_id, body.approved, body.reason,
-                                       body.client_message_id))
 
     @app.post("/conversations/{conversation_id}/investigations/{request_id}/recover", status_code=202)
     def recover(conversation_id: str, request_id: str, body: Retry, owner: Owner = Depends(limited_owner)) -> dict[str, Any]:
@@ -490,6 +508,31 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
 
 
 # ------------------------------------------------------------------------------------------------------ cli
+def event_stream(streams, job_id: str, after: int, heartbeat_seconds: float = 15.0):
+    """Server-sent events: one `data:` line per event (its index as the id), a comment as keep-alive while waiting."""
+    sent = after
+    while True:
+        events, ended = streams.read(job_id, sent, timeout=heartbeat_seconds)
+        for event in events:
+            sent += 1
+            yield f"id: {sent}\ndata: {json.dumps(event)}\n\n"
+        if ended:
+            return
+        if not events:
+            yield ": keep-alive\n\n"
+
+
+def kpi_board() -> KpiBoard | None:
+    """The Dashboard page's KPIs from the SQL warehouse (None when no warehouse is configured); warmed in the background."""
+    from infrastructure.lakebase_poc.lakebase_poc.settings import load_settings as lakebase_login
+    warehouse = dashboard_settings().get("warehouse_id")
+    if not warehouse:
+        return None
+    board = KpiBoard(warehouse_sql(lakebase_login().databricks_profile, warehouse))
+    board.warm()
+    return board
+
+
 def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description="WBG Procurement Intelligence local API")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -509,8 +552,9 @@ def main(argv: list[str]) -> int:
 
     from .runtime import RuntimeConfig, build_runtime
     service, close = build_runtime(RuntimeConfig.from_env(), operator_confirmed=args.confirm_live_call)
+    board = kpi_board()
     try:
-        uvicorn.run(create_app(service, UserDirectory.load()), host="127.0.0.1", port=args.port)
+        uvicorn.run(create_app(service, UserDirectory.load(), kpi_board=board), host="127.0.0.1", port=args.port)
     finally:
         close()
     return 0

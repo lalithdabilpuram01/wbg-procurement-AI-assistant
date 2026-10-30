@@ -17,10 +17,11 @@ import json
 
 from pyspark.sql import DataFrame
 from pyspark.sql import functions as F
+from silver.common.pipeline import CATALOG
 
 TRANSFORM_VERSION = "gold_financing_analytics_v1.0.0"
-TARGET = "workspace.wbg_gold.gold_financing_analytics"
-S = "workspace.wbg_silver."
+TARGET = f"{CATALOG}.wbg_gold.gold_financing_analytics"
+S = f"{CATALOG}.wbg_silver."
 SOURCES = ["ibrd_loans", "ida_credits", "projects", "wdi_country", "project_loan_transactions", "project_details_v3"]
 AMOUNTS = ["original_principal_amount_usd", "cancelled_amount_usd", "undisbursed_amount_usd", "disbursed_amount_usd", "repaid_to_lender_usd",
            "due_to_lender_usd", "exchange_adjustment_usd", "borrower_obligation_usd", "sold_third_party_usd", "repaid_third_party_usd",

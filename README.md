@@ -1,6 +1,29 @@
-# Procurement Intelligence Platform — Phase 1: Public Data Discovery
+# WBG Procurement Intelligence
 
-Status: **Phase 1 complete and aligned with the technical assessment (2026-10-21); awaiting architecture review.** No production pipelines, models,
+An agentic AI analyst for World Bank procurement. Ask in plain language; agents query the Gold data, read project
+reports, run prediction models and return one answer in which every statement cites its source.
+
+![WBG Procurement Intelligence architecture](docs/architecture/architecture.svg)
+
+The numbers on the arrows are the five workflows: (1) ask a question, (2) follow-up chat, (3) upload data and the
+dashboard updates, (4) upload a report and chat can cite it, (5) feedback that guides later answers.
+A PNG copy for slides is at [docs/architecture/architecture.png](docs/architecture/architecture.png).
+
+| Read next | What it covers |
+|---|---|
+| [HOW_TO_RUN.md](HOW_TO_RUN.md) | Start the app (`uv run wbg-api`, `uv run wbg-web`) and the commands |
+| [etl/README.md](etl/README.md) | The Lakeflow ingestion pipelines and the live demo script |
+| [docs/architecture/DATA_MODELING.md](docs/architecture/DATA_MODELING.md) | How the data was modelled: Bronze, Silver, Gold, documents, graph |
+| [docs/evaluation/RESULTS.md](docs/evaluation/RESULTS.md) | Evaluation results |
+| [demo/DEMO_QUESTIONS.pdf](demo/DEMO_QUESTIONS.pdf) | Questions to ask during a demo, with the expected answers |
+
+---
+
+## Phase 1: public data discovery (history)
+
+The sections below are the original Phase 1 discovery notes, kept as a record.
+
+Status at the time: **Phase 1 complete and aligned with the technical assessment (2026-10-21); awaiting architecture review.** No production pipelines, models,
 RAG components, MCP servers or cloud resources have been created. PoC scope approved: **2,000 projects** (D-26,
 [cohort/](cohort/COHORT_SELECTION_METHODOLOGY.md)).
 

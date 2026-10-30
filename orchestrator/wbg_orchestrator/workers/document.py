@@ -9,6 +9,10 @@ The RAG release is explicit per investigation: "pilot_v3" (default; 237 document
 citation becomes a ledger record with its document, version, pages, page check and corpus release. Table windows from
 the text index are never approved numerical evidence; extraction flags of pilot_v2_1 rows become quality warnings.
 
+Uploaded documents: passages of documents ingested after the corpus release (the ingestion pipelines' bge-m3 chunks in
+pgvector, wbg_kg) are added to every document answer, within the guard's project scope. Their pages were not re-checked,
+so they are unverified passages and their numbers are not approved figures.
+
 TableLens (pilot_v3_tablelens only): the question finds a table by its description, Claude writes one SELECT over that
 table's registered schema, TableLens validates and runs it read-only. The returned rows (or a total and the rows it used)
 become one DOCUMENT_TABLE record per table with document, table, rows and pages; values from rows the extraction did
@@ -43,6 +47,9 @@ class AnswerPipelineLike(Protocol):
 class RetrieverLike(Protocol):
     def search(self, q: str, method: str = "hybrid", k: int = 10, guarded: bool = True, rerank: bool = False) -> dict: ...
     def guard(self, q: str) -> dict: ...
+
+
+UploadedSearch = Callable[[str, "set[str] | None"], list[dict]]   # question, project scope -> passages (uploaded_documents.py)
 
 
 class TableLensLike(Protocol):
@@ -83,9 +90,11 @@ class DocumentIntelligenceWorker:
     def __init__(self, pipeline_for: Callable[[str], AnswerPipelineLike], retriever_for: Callable[[str], RetrieverLike],
                  authority: TicketAuthority, table_flags: Callable[[str], TableFlagIndex | None] | None = None,
                  table_lens_for: Callable[[str], TableLensLike | None] | None = None,
-                 table_writer: Callable[[str], Callable] | None = None):
-        """table_lens_for: the release's TableLens or None; table_writer: request id -> SQL writer (Claude)."""
+                 table_writer: Callable[[str], Callable] | None = None, uploaded: UploadedSearch | None = None):
+        """table_lens_for: the release's TableLens or None; table_writer: request id -> SQL writer (Claude);
+        uploaded: search over documents uploaded after the corpus release (None: corpus only)."""
         self._pipeline_for, self._retriever_for = pipeline_for, retriever_for
+        self._uploaded_search = uploaded
         self._authority = authority
         self._table_flags = table_flags or (lambda release: None)
         self._table_lens_for = table_lens_for or (lambda release: None)
@@ -120,10 +129,11 @@ class DocumentIntelligenceWorker:
             return WorkerOutput(TaskState.BLOCKED, usage=usage, error=_error(
                 task, ErrorCategory.GUARDRAIL, "personal_data_withheld", "Personal contact data is not returned."))
         tables, table_usage = self._tables(task, question, context)
+        tables += self._uploaded(task, question, context)
         usage = _combined(usage, table_usage)
         if response.status == "insufficient_evidence" or not response.citations:
             if tables:
-                return WorkerOutput(TaskState.SUCCEEDED, tables, usage, notes=("tablelens_only",))
+                return WorkerOutput(TaskState.SUCCEEDED, tables, usage, notes=(_extra_only(tables),))
             return WorkerOutput(TaskState.FAILED, usage=usage, error=_error(
                 task, ErrorCategory.NO_EVIDENCE, "insufficient_evidence", "The documents do not contain enough evidence."))
         conflict = response.status == "conflicting_evidence"
@@ -142,9 +152,10 @@ class DocumentIntelligenceWorker:
             return WorkerOutput(TaskState.BLOCKED, error=_error(task, ErrorCategory.GUARDRAIL, "personal_data_withheld",
                                                                   "Personal contact data is not returned."))
         tables, usage = self._tables(task, question, context)
+        tables += self._uploaded(task, question, context)
         if result["status"] != "ok" or not result["results"]:
             if tables:
-                return WorkerOutput(TaskState.SUCCEEDED, tables, usage, notes=("tablelens_only",))
+                return WorkerOutput(TaskState.SUCCEEDED, tables, usage, notes=(_extra_only(tables),))
             return WorkerOutput(TaskState.FAILED, usage=usage, error=_error(task, ErrorCategory.NO_EVIDENCE, result["status"],
                                                                               "No document passage matches."))
         flags = self._table_flags(context.rag_release)
@@ -166,7 +177,42 @@ class DocumentIntelligenceWorker:
         return tuple(_table_evidence(task, r, context.rag_release, lens.release) for r in answer.results), usage
 
 
+    def _uploaded(self, task: AgentTask, question: str, context: WorkerContext) -> tuple[EvidenceRecord, ...]:
+        """Passages of uploaded documents within the guard's scope; this extra source never breaks the main search."""
+        if self._uploaded_search is None:
+            return ()
+        guard = self._retriever_for(context.rag_release).guard(question)
+        if guard["status"] != "ok":
+            return ()
+        try:
+            hits = self._uploaded_search(question, set(guard["scope_projects"] or ()) or None)
+        except Exception:                                                    # Lakebase unreachable: corpus results only
+            return ()
+        return tuple(_uploaded_evidence(task, hit, context.rag_release) for hit in hits)
+
+
 # ------------------------------------------------------------------------------------------------------ helpers
+def _extra_only(records: tuple[EvidenceRecord, ...]) -> str:
+    return "tablelens_only" if all(r.unit_id and r.unit_id.startswith("tablelens:") for r in records) else "uploaded_or_tables_only"
+
+
+def _uploaded_evidence(task: AgentTask, hit: dict, release: str) -> EvidenceRecord:
+    """One passage of an uploaded document: cited with its pages, unverified (pages not re-checked against the PDF)."""
+    start, end = hit.get("page_start"), hit.get("page_end")
+    pages = f", p. {start}-{end}" if start is not None and end is not None else ""
+    return EvidenceRecord(
+        evidence_id=new_id("ev"), investigation_id=task.investigation_id, task_id=task.task_id,
+        source_system=SourceSystem.RAG_PDF_CORPUS, kind=EvidenceKind.DOCUMENT_PASSAGE,
+        project_ids=(hit["project_id"],) if hit.get("project_id") else (), document_id=hit["document_id"],
+        unit_id=hit["chunk_id"], pages=(start, end) if start is not None and end is not None else None,
+        source_version="kg:uploaded",
+        citation=f"{hit.get('doc_type') or 'document'} {hit['document_id']} (uploaded){pages}"[:300],
+        provenance=(("source", "uploaded document (wbg_kg pgvector)"), ("similarity", f"{float(hit['similarity']):.3f}"),
+                    ("corpus_release", release)),
+        validation_status=ValidationStatus.UNVERIFIED, numeric_use=NumericUse.NOT_APPROVED,
+        quality_warnings=("uploaded_document", "page_not_checked"), summary=redact_secrets(hit.get("text") or "")[:MAX_EXCERPT])
+
+
 def _citation_evidence(task: AgentTask, c: dict[str, Any], release: str, flags: TableFlagIndex | None,
                        conflict: bool) -> EvidenceRecord:
     unit_type = c.get("unit_type")

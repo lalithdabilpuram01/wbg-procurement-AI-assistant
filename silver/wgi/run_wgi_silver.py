@@ -20,14 +20,16 @@ from pathlib import Path
 
 from pyspark.sql import functions as F
 
+from silver.common import pipeline
 from silver.common.dq import DQReport
+from silver.common.pipeline import CATALOG, runs_dir
 from silver.common.session import DEFAULT_PROFILE, get_spark
 from silver.common.write import create_table
 from silver.wgi import transform as W
 from silver.wgi.checks import check, verify_source_files
 
-TARGET = "workspace.wbg_silver.wgi_estimates"
-RUNS = Path(__file__).resolve().parents[1] / "runs"
+TARGET = f"{CATALOG}.wbg_silver.wgi_estimates"
+RUNS = runs_dir(Path(__file__).resolve().parents[1] / "runs")
 EXISTING_SILVER = ["wdi_indicator_observations", "wdi_country", "income_classification_history"]
 NOT_NULL = ["entity_key", "entity_key_type", "country_name", "wdi_match_status", "indicator_code", "indicator_short_code", "year",
             "is_value_missing", "source_lastupdated", "source_file_sha256", "bronze_raw_record", "raw_record_sha256",
@@ -65,7 +67,7 @@ def main() -> int:
     h = spark.sql(f"DESCRIBE HISTORY {W.BRONZE_TABLE} LIMIT 1").collect()[0]
     baseline["bronze"][W.BRONZE_TABLE] = {"version": h.version, "rows": spark.table(W.BRONZE_TABLE).count()}
     for t in EXISTING_SILVER:
-        full = f"workspace.wbg_silver.{t}"
+        full = f"{CATALOG}.wbg_silver.{t}"
         h = spark.sql(f"DESCRIBE HISTORY {full} LIMIT 1").collect()[0]
         baseline["silver"][full] = {"version": h.version, "rows": spark.table(full).count()}
     (run_dir / "baseline_before_write.json").write_text(json.dumps(baseline, indent=1))
@@ -118,7 +120,7 @@ def main() -> int:
     if args.mode == "dry-run":
         print("DRY RUN: nothing written to Databricks")
         return 0
-    if baseline["target_exists"]:
+    if baseline["target_exists"] and not pipeline.ENABLED:
         raise SystemExit(f"{TARGET} already exists: refusing to overwrite")
     create_table(spark, out, TARGET,
                  {"silver.run_id": run_id, "silver.transform_version": W.TRANSFORM_VERSION, "silver.source_table": W.BRONZE_TABLE,

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ArrowUp, Calculator, ClipboardList, Database, FileSearch, Landmark, PanelLeftOpen, PencilLine, ShieldCheck, Square, TableProperties } from "lucide-react";
-import type { Bookmark, ConversationDetail, FeedbackReason, Investigation } from "@/lib/api";
+import type { Bookmark, ConversationDetail, FeedbackReason, Investigation, LiveStep } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/primitives";
 import { Tooltip } from "@/components/ui/overlays";
@@ -22,6 +22,7 @@ type ChatProps = {
   detail: ConversationDetail | null;
   investigations: Record<string, Investigation>;
   pending: string | null;
+  live: { steps: LiveStep[]; text: string };     // the running job's steps and streamed text
   bookmarkedSeqs: Set<number>;
   chatBookmarks: Bookmark[];                // this chat's bookmarks only
   onRemoveBookmark: (bookmark: Bookmark) => void;
@@ -34,10 +35,8 @@ type ChatProps = {
   onPlan: () => void;
   onTender: () => void;
   onToggleBookmark: (seq: number) => void;
-  onDecide: (requestId: string, approvalId: string, approved: boolean) => Promise<void>;
   defaultTableLens: boolean;
   onFeedback?: (seq: number, rating: "up" | "down", reasons?: FeedbackReason[], correction?: string) => Promise<void>;
-  onManageMemory: () => void;
   onWatch: (projectId: string) => void;
 };
 
@@ -45,6 +44,7 @@ export function ChatView(props: ChatProps) {
   const { detail, investigations, pending } = props;
   const bottom = useRef<HTMLDivElement>(null);
   const [tableLens, setTableLens] = useState(props.defaultTableLens);
+  const [draft, setDraft] = useState({ text: "", n: 0 });                // an example placed in the message box
   const send = (text: string, execute: boolean) => props.onSend(text, execute, tableLens);
   const feedback = new Map((detail?.feedback ?? []).map((f) => [f.turn_seq, f]));
   const revisedSeqs = new Set((detail?.turns ?? []).filter((t) => t.role === "user" && t.route === "revision").map((t) => t.seq + 1));
@@ -90,7 +90,7 @@ export function ChatView(props: ChatProps) {
 
       <div className="scrollbar-thin flex-1 overflow-y-auto">
         {!detail || (detail.turns.length === 0 && !pending) ? (
-          <Welcome onSend={(t) => send(t, false)} onAssess={props.onAssess} onPlan={props.onPlan} />
+          <Welcome onPick={(text) => setDraft((d) => ({ text, n: d.n + 1 }))} onAssess={props.onAssess} onPlan={props.onPlan} />
         ) : (
           <div className="mx-auto max-w-4xl space-y-6 px-4 py-8">
             {detail.turns.map((turn) =>
@@ -110,29 +110,34 @@ export function ChatView(props: ChatProps) {
                 <AnswerCard key={turn.seq} turn={turn}
                   investigation={turn.request_id ? investigations[turn.request_id] : undefined}
                   bookmarked={props.bookmarkedSeqs.has(turn.seq)} onToggleBookmark={() => props.onToggleBookmark(turn.seq)}
-                  onDecide={(approvalId, approved) => props.onDecide(turn.request_id!, approvalId, approved)}
                   onAssess={props.onAssess} onPlan={props.onPlan} onTender={props.onTender} onInvestigate={(q) => send(q, false)}
-                  feedback={feedback.get(turn.seq)} revised={revisedSeqs.has(turn.seq)} onManageMemory={props.onManageMemory}
+                  feedback={feedback.get(turn.seq)} revised={revisedSeqs.has(turn.seq)}
                   onWatch={props.onWatch}
                   onFeedback={props.onFeedback && ((rating, reasons, correction) => props.onFeedback!(turn.seq, rating, reasons, correction))} />
               ),
             )}
-            {pending && <PendingAnswer label={pending} />}
+            {pending && <PendingAnswer label={pending} steps={props.live.steps} text={props.live.text} />}
             <div ref={bottom} />
           </div>
         )}
       </div>
 
-      <Composer running={pending !== null} onSend={send} onStop={props.onStop} />
+      <Composer running={pending !== null} onSend={send} onStop={props.onStop} draft={draft} />
     </div>
   );
 }
 
-function Composer({ running, onSend, onStop }:
-  { running: boolean; onSend: (text: string, execute: boolean) => void; onStop: () => void }) {
+function Composer({ running, onSend, onStop, draft }:
+  { running: boolean; onSend: (text: string, execute: boolean) => void; onStop: () => void; draft: { text: string; n: number } }) {
   const [text, setText] = useState("");
   const [execute, setExecute] = useState(false);
   const area = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {                                                  // an example was picked: edit it, then send it
+    if (draft.n === 0) return;
+    setText(draft.text);
+    area.current?.focus();
+  }, [draft]);
 
   const send = () => {
     if (!text.trim() || running) return;
@@ -181,7 +186,7 @@ function Composer({ running, onSend, onStop }:
   );
 }
 
-function Welcome({ onSend, onAssess, onPlan }: { onSend: (text: string) => void; onAssess: () => void; onPlan: () => void }) {
+function Welcome({ onPick, onAssess, onPlan }: { onPick: (text: string) => void; onAssess: () => void; onPlan: () => void }) {
   return (
     <div className="mx-auto flex max-w-4xl flex-col items-center px-4 py-14 text-center">
       <div className="grid size-14 place-items-center rounded-2xl bg-gradient-to-br from-[#2b88d8] to-[#005a9e] text-xl font-bold text-white shadow-lg">PI</div>
@@ -202,7 +207,7 @@ function Welcome({ onSend, onAssess, onPlan }: { onSend: (text: string) => void;
       </button>
       <div className="mt-3 grid w-full gap-3 sm:grid-cols-2">
         {SUGGESTIONS.map((s) => (
-          <button key={s.title} onClick={() => onSend(s.text)} className="text-left">
+          <button key={s.title} onClick={() => onPick(s.text)} className="text-left" title="Puts this question in the message box">
             <Card className="h-full p-4 transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md">
               <s.icon className="size-5 text-primary" />
               <p className="mt-2 text-sm font-semibold">{s.title}</p>

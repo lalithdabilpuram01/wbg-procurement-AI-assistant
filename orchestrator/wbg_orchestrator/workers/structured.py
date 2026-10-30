@@ -69,7 +69,7 @@ class StructuredDataWorker:
 
     # ------------------------------------------------------------------------------------------------- NL2SQL
     def _answer(self, task: AgentTask, context: WorkerContext) -> WorkerOutput:
-        execute = task.requires_execution and context.execution_approved
+        execute = task.requires_execution and context.execution_allowed
         memory = _memory_block(context)
         try:
             result = self._workflow_for(context.authorization).run(task.question, execute=execute, request_id=context.request_id,

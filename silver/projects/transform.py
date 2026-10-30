@@ -27,13 +27,15 @@ from pyspark.sql import DataFrame
 from pyspark.sql import functions as F
 from pyspark.sql import types as T
 
+from silver.common.pipeline import CATALOG, manifest
+
 TRANSFORM_VERSION = "projects_silver_v1.0.0"
-BRONZE_TABLE = "workspace.wbg_bronze.bronze_projects_v3"
-WDI_COUNTRY = "workspace.wbg_silver.wdi_country"
+BRONZE_TABLE = f"{CATALOG}.wbg_bronze.bronze_projects_v3"
+WDI_COUNTRY = f"{CATALOG}.wbg_silver.wdi_country"
 REPO = Path(__file__).resolve().parents[2]
 COHORT_MANIFEST = REPO / "cohort" / "poc_cohort_2000_manifest.csv"
-BRONZE_INPUTS_MANIFEST = REPO / "databricks_upload" / "bronze_inputs" / "_manifest" / "bronze_inputs_manifest.json"
-PHASE1_CACHE_MANIFEST = REPO / "discovery" / "data_cache" / "MANIFEST.jsonl"
+BRONZE_INPUTS_MANIFEST = manifest("WBG_BRONZE_INPUTS_MANIFEST", REPO / "databricks_upload" / "bronze_inputs" / "_manifest" / "bronze_inputs_manifest.json")
+PHASE1_CACHE_MANIFEST = manifest("WBG_SOURCE_PULLS_MANIFEST", REPO / "discovery" / "data_cache" / "MANIFEST.jsonl")
 SOURCE_API = "search.worldbank.org/api/v3/projects"
 
 sys.path.insert(0, str(REPO / "discovery"))

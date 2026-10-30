@@ -30,14 +30,14 @@ class OperationContract:
     returns: str               # in plain words; the evidence kinds come from contracts.evidence_spec
     data: str                  # systems touched (always read-only)
     llm: bool                  # calls Claude inside the worker
-    approval: str              # when a user approval is required
+    approval: str              # when a user approval is required (none: every operation is read-only)
 
 
 CATALOG = (
     OperationContract("structured_data", "answer_data_question", "task question; conversation memory",
                       "figures from approved Gold/Silver data (or the validated query only)",
                       "Databricks via the read-only principal and the SQL validator", True,
-                      "running Claude-written SQL in a planned investigation"),
+                      "none (read-only SQL)"),
     OperationContract("structured_data", "describe_metric", "task question", "a registered metric definition",
                       "local registry metadata", False, "none"),
     OperationContract("structured_data", "find_tables", "task question", "approved tables or views for the question",

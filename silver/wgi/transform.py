@@ -24,12 +24,13 @@ from pathlib import Path
 from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql import functions as F
 from pyspark.sql import types as T
+from silver.common.pipeline import CATALOG, manifest
 
 TRANSFORM_VERSION = "wgi_silver_v1.0.0"
-BRONZE_TABLE = "workspace.wbg_ref_bronze.wgi_estimates"
-WDI_COUNTRY = "workspace.wbg_silver.wdi_country"
+BRONZE_TABLE = f"{CATALOG}.wbg_ref_bronze.wgi_estimates"
+WDI_COUNTRY = f"{CATALOG}.wbg_silver.wdi_country"
 EXPECTED_SHORT_CODES = ("CC.EST", "GE.EST", "PV.EST", "RL.EST", "RQ.EST", "VA.EST")
-MANIFEST = Path(__file__).resolve().parents[2] / "databricks_upload" / "ref_bronze_inputs" / "_manifest" / "ref_bronze_inputs_manifest.json"
+MANIFEST = manifest("WBG_REF_BRONZE_MANIFEST", Path(__file__).resolve().parents[2] / "databricks_upload" / "ref_bronze_inputs" / "_manifest" / "ref_bronze_inputs_manifest.json")
 
 RECORD_SCHEMA = T.StructType([
     T.StructField("indicator", T.StructType([T.StructField("id", T.StringType()), T.StructField("value", T.StringType())])),

@@ -18,7 +18,6 @@ from wbg_orchestrator.controller import DEFAULT_BREAKER, ExecutionController, Re
 from wbg_orchestrator.engine import InvestigationEngine
 from wbg_orchestrator.factory import authorization_factory
 from wbg_orchestrator.graph import EngineDeps
-from wbg_orchestrator.hitl import ApprovalPolicy
 from wbg_orchestrator.observability import AuditTrail, MemoryAuditSink, OrchestratorTracer
 from wbg_orchestrator.planner import FakePlanner
 from wbg_orchestrator.rag_modules import answering
@@ -235,7 +234,7 @@ def fake_watch(project_id: str) -> ProjectWatch:
                         warnings, [{"activity_id": "a1"}], ratings)
 
 
-def build_engine(*, workflow=None, tools=None, pipeline=None, retriever=None, planner=None, responder=None, guard=None, policy=None,
+def build_engine(*, workflow=None, tools=None, pipeline=None, retriever=None, planner=None, responder=None, guard=None,
                  checkpointer=None, tracer=None, audit_sink=None, now=None, releases: list[str] | None = None, prices=None,
                  breaker_settings=DEFAULT_BREAKER, backoff=RetryBackoff(base_seconds=0.0, max_seconds=0.0), run_sql=fake_gold_sql,
                  watch=None, tender_history=None, lesson_store=None):
@@ -264,7 +263,7 @@ def build_engine(*, workflow=None, tools=None, pipeline=None, retriever=None, pl
     audit_sink = audit_sink or MemoryAuditSink()
     deps = EngineDeps(controller=controller, supervisor=Supervisor(), planner=planner or FakePlanner(),
                       responder=responder or DeterministicResponseGenerator(), guard=guard or PolicyGuard(),
-                      llm_breaker=CircuitBreaker("llm.portkey", DEFAULT_BREAKER), approval_policy=policy or ApprovalPolicy(),
+                      llm_breaker=CircuitBreaker("llm.portkey", DEFAULT_BREAKER),
                       tracer=tracer, audit=AuditTrail(audit_sink), now=now or Clock(), prices=prices)
     engine = InvestigationEngine(deps, checkpointer=checkpointer)
     return engine, {"workflow": workflow, "tools": tools, "pipeline": pipeline, "retriever": retriever, "controller": controller,

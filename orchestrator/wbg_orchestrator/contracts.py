@@ -77,7 +77,7 @@ class TaskState(str, Enum):
     PARTIAL = "partial"              # finished with incomplete evidence
     FAILED = "failed"
     BLOCKED = "blocked"              # a guardrail or privacy control stopped it
-    CANCELLED = "cancelled"          # not run: a dependency failed, the investigation stopped, or approval was refused
+    CANCELLED = "cancelled"          # not run: a dependency failed or the investigation stopped
     SKIPPED = "skipped"              # not run: already executed (idempotent re-dispatch)
 
 
@@ -97,8 +97,8 @@ class InvestigationStatus(str, Enum):
     PARTIAL = "partial"
     INSUFFICIENT_EVIDENCE = "insufficient_evidence"
     CONFLICTING_EVIDENCE = "conflicting_evidence"
-    AWAITING_APPROVAL = "awaiting_approval"
-    REJECTED = "rejected"                    # the user refused (or let expire) the approval: nothing ran
+    AWAITING_APPROVAL = "awaiting_approval"  # legacy: investigations saved before human review was removed
+    REJECTED = "rejected"                    # legacy: the same (an approval was refused); never set now
     CLARIFICATION_REQUIRED = "clarification_required"
     BLOCKED = "blocked"                      # input guardrail or privacy control
     FAILED = "failed"
@@ -118,7 +118,7 @@ class ErrorCategory(str, Enum):
     EXECUTION = "execution"
     NO_EVIDENCE = "no_evidence"
     CLARIFICATION = "clarification"
-    APPROVAL = "approval"
+    APPROVAL = "approval"                    # legacy: errors saved before human review was removed
     CANCELLED = "cancelled"                  # the user cancelled the investigation
     INTERNAL = "internal"
 
@@ -207,6 +207,25 @@ class PackageSpec(Record):
     tender_date: dt.date
 
 
+class PackageAssessment(PackageSpec):
+    """A package to assess with the three models. The project comes from the user, so one without a World Bank ID yet
+    can be assessed; for a country, its region and income group are read from Gold (a regional project gives its region).
+    A project ID, when given, only scopes the search for documented lessons. The profile fields default to None only so
+    that assessments saved before they existed still load (they are then refused)."""
+
+    project_id: str | None = Field(default=None, pattern=r"^P\d{6}$")
+    region_name: str | None = Field(default=None, min_length=1, max_length=80)          # needed for a regional project
+    country_code: str | None = Field(default=None, pattern=r"^([A-Z0-9]{2}|REGIONAL)$")   # WDI code; REGIONAL = multi-country
+    sector: str | None = Field(default=None, min_length=1, max_length=80)
+    board_approval_date: dt.date | None = None                                           # planned or actual Board approval
+    income_group: Literal["L", "LM", "UM", "H"] | None = None                             # None = from Gold, by tender year
+    prior_tender_notices: int = Field(default=0, ge=0, le=5000)                           # tenders the project published before
+
+    def label(self) -> str:
+        """How the package's project is named in plans, messages and citations."""
+        return self.project_id or f"a new {self.sector or ''} project in {self.country_code or 'an unnamed country'}".replace("  ", " ")
+
+
 class TenderSpec(PackageSpec):
     """A tender design to check: the package, its estimate and lots, and the draft text (ToR, specification or
     qualification section; untrusted, already filtered for personal data)."""
@@ -214,9 +233,6 @@ class TenderSpec(PackageSpec):
     estimated_amount_usd: float | None = Field(default=None, gt=0)
     lots: int = Field(default=1, ge=1, le=50)
     draft_text: str = Field(default="", max_length=20_000)
-
-    def package(self) -> PackageSpec:
-        return PackageSpec(**self.model_dump(include=set(PackageSpec.model_fields) - {"schema_version"}))
 
 
 class ProjectProfile(Record):
@@ -256,7 +272,7 @@ class InvestigationRequest(Record):
     mode: Literal["auto", "fast", "investigation"] = "auto"
     rag_release: Literal["pilot_v2", "pilot_v2_1", "pilot_v3", "pilot_v3_tablelens"] = "pilot_v3"   # default: 237 docs, Lakebase pgvector
     execute_requested: bool = False                                      # the user asked to run validated SQL
-    package: PackageSpec | None = None                                   # a package assessment (ML predictions)
+    package: PackageAssessment | None = None                             # a package assessment (ML predictions)
     planning: PlanningSpec | None = None                                 # a Planning Brief for a new project
     tender: TenderSpec | None = None                                     # a tender design to check against history
     monitor_project: str | None = Field(default=None, pattern=r"^P\d{6}$")  # a project's milestones and early warnings
@@ -333,7 +349,7 @@ class AgentTask(Record):
     question: str = Field(min_length=1, max_length=1000)
     depends_on: tuple[str, ...] = ()             # task ids
     evidence_requirements: tuple[EvidenceRequirement, ...] = ()
-    requires_execution: bool = False             # structured: run the validated SQL (gated by policy and approval)
+    requires_execution: bool = False             # structured: run the validated read-only SQL
     optional: bool = False                       # its failure gives a partial result instead of a failed one
     deadline_seconds: float | None = Field(default=None, gt=0)
     max_attempts: int = Field(default=1, ge=1, le=3)
@@ -431,30 +447,6 @@ class AgentResult(Record):
         return value
 
 
-# ------------------------------------------------------------------------------------------------------ approvals
-class ApprovalRequest(Record):
-    approval_id: str
-    investigation_id: str
-    plan_id: str
-    kind: Literal["execute_sql", "llm_plan", "large_plan"]
-    reasons: tuple[str, ...]
-    summary: str = Field(max_length=600)         # what will run (tasks, workers, objects): no SQL parameters
-    task_ids: tuple[str, ...]
-    payload_sha256: str                          # hash of exactly what is approved
-    requested_for: OwnerRef
-    created_at: dt.datetime
-    expires_at: dt.datetime
-
-
-class ApprovalDecision(Record):
-    approval_id: str
-    payload_sha256: str
-    approved: bool
-    decided_by: OwnerRef
-    decided_at: dt.datetime = Field(default_factory=utc_now)
-    reason: str | None = Field(default=None, max_length=300)
-
-
 # ------------------------------------------------------------------------------------------------------ response
 BriefSection = Literal["similar_projects", "schedule", "market_approach", "risks", "lessons", "tender_design", "monitoring"]
 
@@ -473,7 +465,7 @@ class InvestigationResponse(Record):
     removed_claims: tuple[str, ...] = ()          # reason codes only
     limitations: tuple[str, ...] = ()
     evidence_ids: tuple[str, ...] = ()
-    pending_approval_id: str | None = None
+    pending_approval_id: str | None = None        # legacy: always None (kept so saved responses still load)
     clarification_options: tuple[str, ...] = ()
     error_codes: tuple[str, ...] = ()
 

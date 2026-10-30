@@ -107,3 +107,9 @@ class ParsedDocument:
     @property
     def is_feed(self) -> bool:
         return self.modality == "tabular" and self.doc_type in ("contract_feed", "notice_feed")
+
+
+def document_from_dict(data: dict[str, Any]) -> ParsedDocument:
+    """A ParsedDocument back from dataclasses.asdict() (e.g. JSON handed from one job task to the next)."""
+    parts = {"sections": Section, "blocks": Block, "tables": TableBlock, "chunks": Chunk, "records": Record, "links": Link}
+    return ParsedDocument(**{**data, **{k: [cls(**item) for item in data.get(k, [])] for k, cls in parts.items()}})

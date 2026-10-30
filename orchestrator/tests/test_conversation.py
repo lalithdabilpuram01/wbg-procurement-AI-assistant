@@ -95,7 +95,7 @@ def test_combined_escalation_can_be_disabled():
 
 
 # ------------------------------------------------------------------------------------------------ acceptance 13
-def test_cross_user_isolation_of_threads_investigations_approvals_and_memory():
+def test_cross_user_isolation_of_threads_investigations_and_memory():
     planner = FakePlanner(plan(task("metric", operation="describe_metric", question="Which metric?"),
                                task("count", deps=("metric",), execute=True, question=DATA_QUESTION)))
     door, service, store, engine, parts = front_door(planner=planner)
@@ -103,21 +103,15 @@ def test_cross_user_isolation_of_threads_investigations_approvals_and_memory():
     service.record_decision(ALICE, alice_thread.thread_id, "constraint", "Only use fiscal year 2024 data for project P148850.")
     reply = door.handle_message(ALICE, alice_thread.thread_id,
                                 "Investigate how many bid invitations were published in fiscal year 2024 and then explain the metric")
-    pending = reply.investigation
-    assert pending.status == InvestigationStatus.AWAITING_APPROVAL
+    done = reply.investigation
+    assert done.status == InvestigationStatus.ANSWERED and len(parts["workflow"].calls) == 1      # runs without a review step
     with pytest.raises(ThreadNotFound):
         door.handle_message(BOB, alice_thread.thread_id, DATA_QUESTION)
-    with pytest.raises(ThreadNotFound):
-        door.approve(BOB, alice_thread.thread_id, pending.thread_id, pending.pending_approval.approval_id, True)
-    bob_thread = service.start_thread(BOB)
     with pytest.raises(InvestigationNotFound):
-        door.approve(BOB, bob_thread.thread_id, pending.thread_id, pending.pending_approval.approval_id, True)
+        engine.outcome(owner_ref(BOB), done.thread_id)
     assert OwnerScopedMemoryRetriever(store).retrieve(BOB, "bid invitations fiscal year 2024") == []
     assert OwnerScopedMemoryRetriever(store).retrieve(ALICE, "bid invitations fiscal year 2024")
-    assert parts["workflow"].calls == []
-    done = door.approve(ALICE, alice_thread.thread_id, pending.thread_id, pending.pending_approval.approval_id, True)
-    assert done.status == InvestigationStatus.ANSWERED
-    assert any("approved" in d.statement for d in service._store.decisions(ALICE, alice_thread.thread_id))
+    assert len(parts["workflow"].calls) == 1
 
 
 def test_memory_view_reads_only_the_owners_recent_messages_summary_and_decisions():
@@ -132,7 +126,7 @@ def test_memory_view_reads_only_the_owners_recent_messages_summary_and_decisions
 
 
 # ------------------------------------------------------------------------------------------------ acceptance 14
-def test_compression_preserves_constraints_approvals_projects_evidence_and_unresolved_tasks():
+def test_compression_preserves_constraints_projects_and_evidence():
     planner = FakePlanner(plan(task("metric", operation="describe_metric", question="Which metric?"),
                                task("count", deps=("metric",), execute=True, question=DATA_QUESTION)))
     door, service, store, engine, parts = front_door(planner=planner)
@@ -140,22 +134,16 @@ def test_compression_preserves_constraints_approvals_projects_evidence_and_unres
     decision = service.record_decision(ALICE, thread.thread_id, "constraint", "Only use fiscal year 2024 data for P148850.")
     reply = door.handle_message(ALICE, thread.thread_id,
                                 "Investigate how many bid invitations were published for project P148850 in fiscal year 2024 and then explain the metric")
-    pending = reply.investigation
+    done = reply.investigation
     decisions = store.decisions(ALICE, thread.thread_id)
-    approval_ids = (pending.pending_approval.approval_id,)
-    digest = build_digest(pending.values, pending.thread_id, decisions, approval_ids)
+    digest = build_digest(done.values, done.thread_id, decisions)
     assert digest.constraint_ids == (decision.decision_id,) and digest.constraints == (decision.statement,)
-    assert digest.pending_approval_ids == approval_ids and "P148850" in digest.project_ids
-    assert set(digest.unresolved_task_ids) == set(pending.task_states)                # nothing ran yet: all unresolved
-    assert digest_losses(digest, pending.values, decisions, approval_ids) == []
-    lossy = digest.model_copy(update={"pending_approval_ids": (), "project_ids": ()})
-    assert sorted(digest_losses(lossy, pending.values, decisions, approval_ids)) == [
-        f"pending_approval_ids:{approval_ids[0]}", "project_ids:P148850"]
+    assert "P148850" in digest.project_ids and digest.unresolved_task_ids == () and digest.status == "answered"
+    assert len(digest.evidence_ids) == 2 and digest_losses(digest, done.values, decisions) == []
+    lossy = digest.model_copy(update={"project_ids": ()})
+    assert digest_losses(lossy, done.values, decisions) == ["project_ids:P148850"]
     rendered = render_digest(digest, budget_tokens=10)
-    assert rendered.over_budget and approval_ids[0] in rendered.text and decision.statement in rendered.text   # not truncated
-    done = door.approve(ALICE, thread.thread_id, pending.thread_id, approval_ids[0], True)
-    final = build_digest(done.values, done.thread_id, store.decisions(ALICE, thread.thread_id))
-    assert final.unresolved_task_ids == () and len(final.evidence_ids) == 2 and final.status == "answered"
+    assert rendered.over_budget and decision.statement in rendered.text                 # constraints are never truncated
     assert owner_ref(ALICE).user_hash != "alice"
 
 

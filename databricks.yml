@@ -1,0 +1,55 @@
+# Lakeflow ETL jobs for the WBG procurement data:
+#   wbg_procurement_etl   data files  -> Bronze -> Silver -> Gold -> KPI views -> audit   (resources/etl_job.yml)
+#   wbg_document_ingest   documents   -> Bronze -> Silver -> Gold -> the app's Review queue (resources/document_job.yml)
+# Everything lives in its own catalog (default wbg_etl); the demo's `workspace` tables are never touched.
+#
+#   databricks bundle validate -t etl -p wbg-databricks-free
+#   databricks bundle deploy   -t etl -p wbg-databricks-free
+#   databricks bundle run wbg_procurement_etl -t etl -p wbg-databricks-free
+#
+# The catalog itself is created once, before the first deploy:  databricks catalogs create wbg_etl -p wbg-databricks-free
+# See etl/README.md.
+
+bundle:
+  name: wbg-procurement-etl
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    description: Catalog for every ETL table and Volume (kept apart from the demo's `workspace` catalog)
+    default: wbg_etl
+
+sync:
+  exclude:
+    - ".env*"
+    - "frontend/**"
+    - "orchestrator/**"
+    - "rag/answering/**"
+    - "rag/embedding_cache/**"
+    - "rag/release_*/**"
+    - "rag/retrieval/**"
+    - "rag/vector_store/**"
+    - "rag/tablelens/**"
+    - "rag/ingestion_p1/**"
+    - "rag/module1_discovery/selection_*/**"
+    - "rag/module1_discovery/evidence/**"
+    - "rag/module1_discovery/plan_version_coverage_v1/**"
+    - "ml/**"
+    - "monitoring/**"
+    - "ingestion_inbox/**"
+    - "tender/**"
+    - "structured_agent/**"
+    - "app_config/**"
+    - "audits/**"
+    - "infrastructure/**"
+    - "docs/**"
+    - "discovery/profiling/**"
+    - "**/tests/**"
+
+targets:
+  etl:
+    default: true
+    workspace:
+      host: https://dbc-0c89a1d3-a697.cloud.databricks.com

@@ -6,7 +6,7 @@
 
 | Record | Location | Contents |
 |---|---|---|
-| Investigation audit | `orchestrator/runs/app_audit.jsonl` | One line per step: guardrail, plan, each task, approval, answer, finish. Metadata only |
+| Investigation audit | `orchestrator/runs/app_audit.jsonl` | One line per step: guardrail, plan, each task, answer, finish. Metadata only |
 | SQL gateway audit | `orchestrator/runs/structured_audit.jsonl` | Every validated or executed query: validation id, objects, checks, row count |
 | Claude spend ledger | `orchestrator/runs/llm_ledger.json` | Every Claude attempt: tokens, worst-case and committed USD, caps |
 | Logfire traces | Logfire project (when `LOGFIRE_SEND_TO_LOGFIRE=true`) | Spans per node, task attempt and Claude call, with the same correlation ids |
@@ -65,7 +65,7 @@
 | Unclear, no procurement content | Conversation front door | The same scope reply (no planner call) |
 | Personal data masking (Presidio) | `conversation/pii.py` | E-mails, phones, card and IBAN numbers, IP addresses and SSNs replaced by `<TYPE>` in everything stored, forwarded or answered |
 | RAG privacy guard | `rag/retrieval/core.py` | Requests for personal contact data in documents are withheld |
-| Read-only data access | SQL validator + `wbg-readonly` principal | Claude-written SQL needs the user's approval; fixed templates are reviewed in code |
+| Read-only data access | SQL validator + `wbg-readonly` principal | Every query is validated and runs as a read-only identity; fixed templates are reviewed in code |
 | Rate limits | `wbg_orchestrator/rate_limit.py` | 6 work requests per minute and 200 per day per user; 429 with the wait time |
 | Spend caps | Claude ledger + per-investigation budgets | The run stops with a budget code; nothing is charged beyond the cap |
 | Grounding | `response.py` claim checks | Unsupported numbers, dates and confidence words are removed and counted |
@@ -110,7 +110,7 @@ the planner schema and the engine's worker registry stop agreeing.
 | Each operation returns only the evidence kinds of its specification; required evidence must be verified | `contracts.OPERATION_EVIDENCE`, `verification.py` |
 | Errors carry a category, a code and a safe message, never exception text | `contracts.ExecutionError` |
 | Structured inputs (packages, planning specs) come from the API, never from message text | `PackageSpec`, `PlanningSpec` |
-| Claude-written SQL in a planned investigation needs the user's approval; fixed templates are reviewed in code | `hitl.py` |
+| Claude-written SQL is validated (approved tables only, read-only) and runs as a read-only identity; fixed templates are reviewed in code | `structured_agent` validator |
 
 ## 6. Reliability
 

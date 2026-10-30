@@ -25,7 +25,7 @@ import time
 from dataclasses import dataclass
 from decimal import Decimal
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Callable, Mapping
 
 import httpx
 
@@ -167,6 +167,9 @@ class ClaudeOff:
     def complete(self, request: ClaudeRequest) -> ClaudeResponse:
         raise LlmError(LlmFailure.DISABLED)
 
+    def stream(self, request: ClaudeRequest, on_text: Callable[[str], None]) -> ClaudeResponse:
+        raise LlmError(LlmFailure.DISABLED)
+
 
 class BudgetedClaudeClient(PortkeyClaudeClient):
     """The existing Portkey client with pre-call spend reservation, per-schema token caps and gateway-retry checks."""
@@ -184,6 +187,13 @@ class BudgetedClaudeClient(PortkeyClaudeClient):
         return min(self._caps.get(request.schema_name, self._settings.max_output_tokens), self._settings.max_output_tokens)
 
     def complete(self, request: ClaudeRequest) -> ClaudeResponse:
+        return self._ledgered(request, lambda: super(BudgetedClaudeClient, self).complete(request))
+
+    def stream(self, request: ClaudeRequest, on_text: Callable[[str], None]) -> ClaudeResponse:
+        """A streamed plain-text reply, reserved and settled in the spend ledger exactly like `complete`."""
+        return self._ledgered(request, lambda: super(BudgetedClaudeClient, self).stream(request, on_text))
+
+    def _ledgered(self, request: ClaudeRequest, call: Callable[[], ClaudeResponse]) -> ClaudeResponse:
         cap = self.output_cap(request)
         index = self._ledger.reserve(purpose=request.schema_name, trace_id=request.trace_id, model=self.model,
                                      max_tokens=cap, input_bound=input_token_bound(request))
@@ -193,7 +203,7 @@ class BudgetedClaudeClient(PortkeyClaudeClient):
         with self._tracer.span("orchestrator.llm_call", request_id=request.trace_id, model=model_slug(self.model),
                                attempt=index + 1, worst_case_usd=worst) as span:
             try:
-                response = super().complete(request)
+                response = call()
             except LlmError as error:
                 self._ledger.settle(index, status=error.failure.value, http_status=error.status_code,
                                     provider_error_type=error.provider_error_type,

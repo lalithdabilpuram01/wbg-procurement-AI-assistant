@@ -41,6 +41,15 @@ export type LessonCard = {
 };
 export type LessonQueue = { counts: Record<LessonStatus, number>; cards: LessonCard[] };
 export type Me = { user_id: string; reviewer: boolean; feedback: boolean };
+export type Dashboard = { key: string; title: string; source: string; embed_url: string; open_url: string };
+export type KpiBar = { label: string | number; value: number; count?: number };
+export type Kpis =
+  | { status: "ok"; catalog: string; value_by_year: KpiBar[]; awards_by_method: KpiBar[]; top_countries: KpiBar[]; bid_windows: KpiBar[];
+      overview: { total_projects: number; contract_awards: number; total_contract_award_value_usd: number; procurement_notices: number;
+                  ibrd_loan_instruments: number; ida_credit_instruments: number; last_contract_signing_date: string;
+                  contracts_source_as_of_date: string; contracts_gold_run_id: string } }
+  | { status: "not_built"; catalog: string }
+  | { status: "unavailable"; catalog: string; detail: string };
 export type WatchedProject = { project_id: string; title: string | null; country: string | null; packages: number };
 export type WatchWarning = {
   code: string; severity: "high" | "medium" | "low"; message: string; activity_id: string | null; reference: string | null;
@@ -69,13 +78,17 @@ export type Evidence = {
 export type Investigation = {
   status: string; message: string; claims: { text: string; evidence_ids: string[]; section: string | null }[]; limitations: string[];
   error_codes: string[]; tasks: { task: string; worker: string; operation: string; state: string }[];
-  pending_approval: { approval_id: string; kind: string; summary: string; expires_at: string } | null;
   evidence: Evidence[]; usage: Record<string, number | string | null>; applied_learning?: LearnedItem[];
 };
 export type Job = { job_id: string; kind: string; state: "running" | "succeeded" | "failed"; request_id: string | null; status: string | null; error: string | null };
 export type PackageInput = {
   project_id: string; procurement_method: string; procurement_category: string; review_type: string;
   bid_window_days: number; tender_date: string;
+};
+/** A package to assess: every model input comes from the user, so the project may have no ID yet (null). */
+export type PackageAssessmentInput = Omit<PackageInput, "project_id"> & {
+  project_id: string | null; region_name: string | null; country_code: string; sector: string; board_approval_date: string;
+  income_group: string | null; prior_tender_notices: number;
 };
 
 export type TenderInput = PackageInput & { estimated_amount_usd: number | null; lots: number; draft_text: string };
@@ -106,17 +119,24 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 const json = (method: string, body: unknown): RequestInit => ({ method, body: JSON.stringify(body) });
-const clientId = () => `ui-${crypto.randomUUID()}`;
+/** A unique id per request. crypto.randomUUID exists only on secure pages (https, localhost), so the app also works
+ *  when opened at the network address (http://192.168.x.x:3000). */
+const clientId = () => {
+  if (typeof crypto.randomUUID === "function") return `ui-${crypto.randomUUID()}`;
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  return `ui-${Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("")}`;
+};
 
 export const api = {
   conversations: () => call<Conversation[]>("conversations"),
   conversation: (id: string) => call<ConversationDetail>(`conversations/${id}`),
   createConversation: (title?: string) => call<{ conversation_id: string; title: string }>("conversations", json("POST", { title })),
   renameConversation: (id: string, title: string) => call<void>(`conversations/${id}`, json("PATCH", { title })),
+  deleteConversation: (id: string) => call<void>(`conversations/${id}`, { method: "DELETE" }),
   fileConversation: (id: string, folderId: string | null) => call<void>(`conversations/${id}/folder`, json("PUT", { folder_id: folderId })),
   sendMessage: (id: string, text: string, execute: boolean, tableLens = false) =>
     call<Job>(`conversations/${id}/messages`, json("POST", { text, execute, table_lens: tableLens, client_message_id: clientId() })),
-  assessPackage: (id: string, input: PackageInput) =>
+  assessPackage: (id: string, input: PackageAssessmentInput) =>
     call<Job>(`conversations/${id}/packages`, json("POST", { ...input, client_message_id: clientId() })),
   checkTender: (id: string, input: TenderInput) =>
     call<Job>(`conversations/${id}/tenders`, json("POST", { ...input, client_message_id: clientId() })),
@@ -128,9 +148,6 @@ export const api = {
   cancelJob: (id: string) => call<Job>(`jobs/${id}/cancel`, { method: "POST" }),
   investigation: (conversationId: string, requestId: string) =>
     call<Investigation>(`conversations/${conversationId}/investigations/${requestId}`),
-  decide: (conversationId: string, requestId: string, approvalId: string, approved: boolean) =>
-    call<Job>(`conversations/${conversationId}/investigations/${requestId}/decision`,
-      json("POST", { approval_id: approvalId, approved, client_message_id: clientId() })),
   folders: () => call<Folder[]>("folders"),
   createFolder: (name: string) => call<Folder>("folders", json("POST", { name })),
   renameFolder: (id: string, name: string) => call<Folder>(`folders/${id}`, json("PATCH", { name })),
@@ -140,6 +157,8 @@ export const api = {
     call<Bookmark>("bookmarks", json("POST", { conversation_id: conversationId, turn_seq: turnSeq, note })),
   deleteBookmark: (id: string) => call<void>(`bookmarks/${id}`, { method: "DELETE" }),
   me: () => call<Me>("me"),
+  dashboards: () => call<Dashboard[]>("dashboards"),
+  kpis: (key: string) => call<Kpis>(`dashboards/${key}/kpis`),
   giveFeedback: (conversationId: string, turnSeq: number, rating: "up" | "down", reasons: FeedbackReason[] = [], correction?: string) =>
     call<{ feedback: FeedbackState; job: Job | null }>(`conversations/${conversationId}/feedback`, json("POST", {
       turn_seq: turnSeq, rating, reasons, correction: correction || null, client_message_id: clientId(),
@@ -157,12 +176,49 @@ export const api = {
     call<Review>(`reviews/${id}`, json("POST", { approved, note: note || null, expected_terms: expectedTerms })),
 };
 
-/** Polls a background job until it finishes (the API runs every request as a job). */
+/** One live event of a running job (GET /jobs/{id}/events, server-sent events). */
+export type LiveStep = { key: string; label: string; state: "running" | "done" | "failed" | "no_result"; ms?: number };
+export type LiveEvent =
+  | ({ type: "step" } & LiveStep)
+  | { type: "text"; text: string }                 // a piece of the reply, as Claude writes it
+  | { type: "text_reset" }                         // the reply starts over (a retried model call)
+  | { type: "answer"; text: string }               // the final answer, after the evidence check
+  | { type: "done"; state: string; status: string | null };
+
+/** Streams a job's live events to `onEvent` until it ends. Resolves true when the job's "done" event arrived, false
+ *  if the stream broke first (the caller then falls back to polling). */
+export async function streamJob(jobId: string, onEvent: (event: LiveEvent) => void): Promise<boolean> {
+  const response = await fetch(`/api/backend/jobs/${jobId}/events`, { cache: "no-store" }).catch(() => null);
+  if (!response?.ok || !response.body) return false;
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  for (;;) {
+    const { value, done } = await reader.read().catch(() => ({ value: undefined, done: true }));
+    if (done) return false;
+    buffer += decoder.decode(value, { stream: true });
+    let end: number;
+    while ((end = buffer.indexOf("\n\n")) >= 0) {
+      const block = buffer.slice(0, end);
+      buffer = buffer.slice(end + 2);
+      const data = block.split("\n").filter((l) => l.startsWith("data: ")).map((l) => l.slice(6)).join("\n");
+      if (!data) continue;                          // a keep-alive comment
+      const event = JSON.parse(data) as LiveEvent;
+      onEvent(event);
+      if (event.type === "done") return true;
+    }
+  }
+}
+
+/** Polls a background job until it finishes (the API runs every request as a job). Quick replies (greetings, fixed
+ *  plans) finish in well under a second, so the first checks come fast and the interval grows to a second. */
 export async function waitForJob(job: Job, onTick?: (job: Job) => void, timeoutMs = 300_000): Promise<Job> {
   const started = Date.now();
   let current = job;
+  let delay = 150;
   while (current.state === "running" && Date.now() - started < timeoutMs) {
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    await new Promise((resolve) => setTimeout(resolve, delay));
+    delay = Math.min(delay * 1.5, 1000);
     current = await api.job(current.job_id);
     onTick?.(current);
   }

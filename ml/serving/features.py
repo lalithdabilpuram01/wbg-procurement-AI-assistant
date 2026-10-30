@@ -1,6 +1,7 @@
 """Feature rows for one package, built exactly as in training (stage2b/regression.py, stage3a/features.py).
 
-Mode B: the user gives the project ID and the package basics; everything else is the project's context.
+A package assessment takes the project from the user (`user_context`), so it may have no World Bank ID yet; only the
+country's region and income history are read from Gold (gold.py), as for a Planning Brief.
 World Bank fiscal year F runs from 1 July F-1 to 30 June F. Income group: training used the classification of the
 fiscal year starting in calendar year F-1 (gold_country_context row `year` = F-1).
 """
@@ -46,6 +47,19 @@ class ProjectContext:
     approval_fiscal_year: int
     income_by_year: dict[int, str] = field(default_factory=dict)   # gold_country_context year -> income group code
     prior_tender_notices: int = 0             # tender notices published before the tender date
+    income_group: str | None = None           # given by the user (L, LM, UM, H): used for every fiscal year
+
+
+def user_context(region_name: str, country_code: str | None, sector: str, board_approval_date: dt.date,
+                 income_group: str | None, prior_tender_notices: int, project_id: str | None = None,
+                 income_by_year: dict[int, str] | None = None) -> ProjectContext:
+    """A project described by the user (its country's income history, when known, from Gold)."""
+    if income_group is not None and income_group not in INCOME_ORDINAL:
+        raise InvalidRequest("income_group must be one of L, LM, UM, H")
+    return ProjectContext(project_id=project_id or "new project", region_name=region_name, country_code=country_code,
+                          sector=sector, board_approval_date=board_approval_date,
+                          approval_fiscal_year=fiscal_year(board_approval_date), prior_tender_notices=prior_tender_notices,
+                          income_group=income_group, income_by_year=income_by_year or {})
 
 
 def fiscal_year(day: dt.date) -> int:
@@ -56,6 +70,10 @@ def income_at(context: ProjectContext, fy: int) -> tuple[float | None, str | Non
     """Income ordinal for fiscal year `fy`; falls back to the latest earlier classification (noted)."""
     if context.country_code is None:
         return None, None
+    if context.income_group is not None:
+        return INCOME_ORDINAL[context.income_group], None
+    if not context.income_by_year:
+        return None, "no income group given; the model's median was used"
     year = fy - 1
     if year in context.income_by_year:
         return INCOME_ORDINAL.get(context.income_by_year[year]), None

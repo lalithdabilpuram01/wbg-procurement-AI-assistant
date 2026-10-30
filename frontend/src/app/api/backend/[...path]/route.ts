@@ -22,6 +22,13 @@ async function forward(request: Request, { params }: Context) {
   }).catch(() => null);
   if (!upstream) return NextResponse.json({ detail: "the API is not reachable" }, { status: 502 });
   if (upstream.status === 204) return new Response(null, { status: 204 });
+  const type = upstream.headers.get("Content-Type") ?? "";
+  if (type.startsWith("text/event-stream")) {                      // live job events: passed through as they arrive
+    return new Response(upstream.body, {
+      status: upstream.status,
+      headers: { "Content-Type": "text/event-stream", "Cache-Control": "no-cache", "X-Accel-Buffering": "no" },
+    });
+  }
   return new Response(await upstream.text(), {
     status: upstream.status,
     headers: { "Content-Type": upstream.headers.get("Content-Type") ?? "application/json" },

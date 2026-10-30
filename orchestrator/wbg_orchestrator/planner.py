@@ -118,13 +118,14 @@ def package_plan(request: InvestigationRequest) -> InvestigationPlan:
     """A package assessment (no LLM planning): the three model predictions, plus the project's documented delays,
     risks and lessons (optional: the predictions stand on their own if the documents yield nothing)."""
     package = request.package
+    scope = f"project {package.project_id}" if package.project_id else f"{package.sector} projects in {package.country_code}"
     raw = {"tasks": [
         {"id": "predict", "worker": WorkerName.PREDICTION.value, "operation": "predict_package",
          "question": f"Predict tender duration, amendment risk and re-bidding risk for a {package.procurement_category} package "
-                     f"({package.procurement_method}, {package.review_type} review) in project {package.project_id}."},
+                     f"({package.procurement_method}, {package.review_type} review) in {package.label()}."},
         {"id": "lessons", "worker": WorkerName.DOCUMENT.value, "operation": "answer_document_question", "optional": True,
-         "question": f"What caused delays in the {package.procurement_category.lower()} contracts of project "
-                     f"{package.project_id} and what lessons were learned?"}],
+         "question": f"What caused delays in the {package.procurement_category.lower()} contracts of {scope} "
+                     f"and what lessons were learned?"}],
         "required": ["predict"], "partial_allowed": True, "rationale": "package assessment (fixed plan)"}
     return build_plan(raw, request, produced_by="fast_path")
 
@@ -140,15 +141,14 @@ def monitor_plan(request: InvestigationRequest) -> InvestigationPlan:
 
 
 def tender_plan(request: InvestigationRequest) -> InvestigationPlan:
-    """A tender-design check (no LLM planning): the draft's terms against history, the three model estimates for the
-    package and the project's documented specification, qualification and competition problems (both optional)."""
+    """A tender-design check (no LLM planning): the draft's terms against history and the project's documented
+    specification, qualification and competition problems (optional). Model estimates are Assess package's job: they need
+    the project's facts from the user, which the tender form does not ask for."""
     tender = request.tender
     raw = {"tasks": [
         {"id": "check", "worker": WorkerName.TENDER.value, "operation": "check_tender_design",
          "question": f"Check the tender design of a {tender.procurement_category} package ({tender.procurement_method}) in project "
                      f"{tender.project_id} against historical benchmarks."},
-        {"id": "predict", "worker": WorkerName.PREDICTION.value, "operation": "predict_package", "optional": True,
-         "question": f"Predict tender duration, amendment risk and re-bidding risk for this {tender.procurement_category} package."},
         {"id": "lessons", "worker": WorkerName.DOCUMENT.value, "operation": "answer_document_question", "optional": True,
          "question": f"What problems with technical specifications, qualification requirements or the number of bidders occurred in "
                      f"{tender.procurement_category.lower()} contracts of project {tender.project_id}, and what lessons were learned?"},
@@ -216,7 +216,8 @@ class FakePlanner:
 
 
 PLANNER_SYSTEM = """You plan read-only procurement investigations for World Bank procurement data and documents.
-Return ONLY JSON matching the schema. Decompose the question into at most 6 tasks with explicit dependencies.
+Return ONLY JSON matching the schema. Use as few tasks as the question needs (usually 1-3, never more than 6), with
+explicit dependencies. Be brief: each task question under 30 words, the rationale one short sentence.
 Use only these workers and operations: {operations}.
 What the operations do:
 - structured_data:describe_metric - the registered definition of a metric;

@@ -10,7 +10,7 @@ full Pydantic model still validates every reply client-side, so no constraint is
 """
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Callable
 
 from structured_agent.nl2sql.llm_client import ClaudeRequest, PortkeyClaudeClient
 
@@ -45,6 +45,21 @@ class PortkeyJsonClient:
     @property
     def model(self) -> str:
         return self._client.model
+
+    def stream_text(self, *, system: str, user: str, schema_name: str, trace_id: str,
+                    on_text: Callable[[str], None]) -> tuple[str, Usage]:
+        """A plain-text reply streamed piece by piece to `on_text` (used for conversational answers)."""
+        response = self._client.stream(ClaudeRequest(system=system, user=user, trace_id=trace_id, schema_name=schema_name),
+                                       on_text)
+        return response.content, Usage(llm_calls=1, input_tokens=response.input_tokens, output_tokens=response.output_tokens)
+
+    def stream_json(self, *, system: str, user: str, schema: dict[str, Any], schema_name: str, trace_id: str,
+                    on_text: Callable[[str], None]) -> tuple[dict[str, Any] | None, str, Usage]:
+        """A structured reply streamed as it is written (`on_text` gets the raw JSON pieces), then parsed like complete()."""
+        response = self._client.stream(ClaudeRequest(system=system, user=user, trace_id=trace_id,
+                                                     json_schema=strict_output_schema(schema), schema_name=schema_name), on_text)
+        return response.parsed, response.content, Usage(llm_calls=1, input_tokens=response.input_tokens,
+                                                        output_tokens=response.output_tokens)
 
     def complete(self, *, system: str, user: str, schema: dict[str, Any], schema_name: str, trace_id: str,
                  timeout_seconds: float | None = None) -> tuple[dict[str, Any] | None, str, Usage]:

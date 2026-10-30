@@ -26,10 +26,11 @@ import json
 
 from pyspark.sql import DataFrame, Window
 from pyspark.sql import functions as F
+from silver.common.pipeline import CATALOG
 
 TRANSFORM_VERSION = "gold_procurement_notices_v1.0.0"
-TARGET = "workspace.wbg_gold.gold_procurement_notices"
-S = "workspace.wbg_silver."
+TARGET = f"{CATALOG}.wbg_gold.gold_procurement_notices"
+S = f"{CATALOG}.wbg_silver."
 SOURCES = ["procurement_notices", "projects", "wdi_country", "income_classification_history", "procurement_notice_details", "notice_contract_links"]
 SNAPSHOT_SEMANTICS = "ds00979_snapshot_retrieved_2026_10_21"
 LONG_WINDOW_DAYS = 180  # review flag only: IFB p99 = 73 days, REOI p99 = 49 days

@@ -1,4 +1,5 @@
-"""Databricks Connect session for Silver jobs (profile + Serverless compute).
+"""Spark session for Silver and Gold jobs: Databricks Connect (profile + Serverless) from a laptop, or the job's own
+session when the code runs inside Databricks (the Lakeflow ETL job, etl/).
 
 The `wbg-databricks-free` profile authenticates with `auth_type = databricks-cli`, which needs the
 `databricks` CLI on PATH. When it is not installed globally, the copy bundled with the Databricks
@@ -25,8 +26,16 @@ def ensure_databricks_cli_on_path() -> str | None:
     return None
 
 
+def in_databricks() -> bool:
+    """True inside a Databricks job or notebook (the runtime sets this variable; a laptop never does)."""
+    return "DATABRICKS_RUNTIME_VERSION" in os.environ
+
+
 def get_spark(profile: str = DEFAULT_PROFILE):
-    """Serverless Spark Connect session for the given CLI profile."""
+    """The job's own Spark session inside Databricks; otherwise a Serverless Spark Connect session for the CLI profile."""
+    if in_databricks():
+        from pyspark.sql import SparkSession
+        return SparkSession.builder.getOrCreate()
     if ensure_databricks_cli_on_path() is None:
         raise RuntimeError("Databricks CLI not found: install it or the Databricks VS Code extension "
                            "(auth_type=databricks-cli needs it to obtain tokens)")

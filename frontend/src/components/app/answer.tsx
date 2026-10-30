@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Bookmark, BookmarkCheck, Calculator, ChevronDown, ClipboardList, Copy, Eye, FileSearch, Info, Library, PencilLine, ShieldQuestion, Sparkles } from "lucide-react";
-import type { FeedbackState, Investigation, Turn } from "@/lib/api";
+import { Bookmark, BookmarkCheck, Calculator, ChevronDown, ClipboardList, Copy, Eye, FileSearch, Info, Library, PencilLine, Sparkles } from "lucide-react";
+import type { FeedbackState, Investigation, LiveStep, Turn } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Badge, Card, Spinner } from "@/components/ui/primitives";
 import { Tooltip } from "@/components/ui/overlays";
@@ -19,7 +19,6 @@ type Props = {
   investigation?: Investigation;
   bookmarked: boolean;
   onToggleBookmark: () => void;
-  onDecide: (approvalId: string, approved: boolean) => Promise<void>;
   onAssess: () => void;
   onPlan: () => void;
   onTender: () => void;
@@ -27,17 +26,35 @@ type Props = {
   feedback?: FeedbackState;
   revised: boolean;                       // this answer re-ran the question after the user's correction
   onFeedback?: SendFeedback;              // absent when feedback is not enabled
-  onManageMemory: () => void;
   onWatch: (projectId: string) => void;
 };
 
+const ANSWER_BODY = "mt-3 space-y-2.5 text-[15px] leading-relaxed";
+const ANSWER_FOOTER = "mt-4 flex min-h-11 items-center border-t border-border pt-3";
+const OPENING = "text-muted-foreground";
+const GAP_OPENING = /^(No evidence found for part of the question:[\s\S]*?What the evidence shows:)\s*/;
+
+/** An answer's text as the card lays it out: the no-evidence opening on its own, then one paragraph per blank line. */
+export function paragraphs(text: string): string[] {
+  const opening = text.match(GAP_OPENING);
+  const rest = opening ? text.slice(opening[0].length) : text;
+  return [...(opening ? [opening[1]] : []), ...rest.split(/\n{2,}/)].map((p) => p.trim()).filter(Boolean);
+}
+
+function AnswerAvatar({ working = false }: { working?: boolean }) {
+  return (
+    <div className="mt-1 grid size-8 shrink-0 place-items-center rounded-full bg-gradient-to-br from-[#0078d4] to-[#005a9e] text-white shadow-sm">
+      <Sparkles className={cn("size-4", working && "animate-pulse")} />
+    </div>
+  );
+}
+
 export function AnswerCard(props: Props) {
-  const { turn, investigation, bookmarked, onToggleBookmark, onDecide, onAssess, onPlan, onInvestigate } = props;
+  const { turn, investigation, bookmarked, onToggleBookmark, onAssess, onPlan, onInvestigate } = props;
   const [sourcesOpen, setSourcesOpen] = useState(false);
   const [correcting, setCorrecting] = useState(false);
   const [focus, setFocus] = useState<string | null>(null);
   const [notesOpen, setNotesOpen] = useState(false);
-  const [deciding, setDeciding] = useState(false);
   const evidence = investigation?.evidence ?? [];
   const number = (id: string) => evidence.findIndex((e) => e.evidence_id === id) + 1;
   const stopped = investigation?.error_codes.includes("cancelled_by_user");
@@ -46,6 +63,7 @@ export function AnswerCard(props: Props) {
   const projects = [...new Set(evidence.flatMap((e) => e.project_ids))].slice(0, 3);
   const checked = new Set(evidence.filter((e) => e.kind === "tender_check").map((e) => e.evidence_id));
   const claims = (investigation?.claims ?? []).filter((c) => !c.evidence_ids.every((id) => checked.has(id)));   // shown as checks
+  const opening = investigation?.message.match(GAP_OPENING)?.[1];
   const cite = (id: string) => number(id) > 0 && (
     <button key={id} onClick={() => openSource(id)}
       className="ml-1 inline-grid h-[18px] min-w-[18px] place-items-center rounded-md bg-primary-soft px-1 align-text-top text-[10px] font-bold text-primary-strong hover:bg-primary hover:text-white">
@@ -57,21 +75,9 @@ export function AnswerCard(props: Props) {
     setFocus(id);
     setSourcesOpen(true);
   };
-  const decide = async (approved: boolean) => {
-    if (!investigation?.pending_approval) return;
-    setDeciding(true);
-    try {
-      await onDecide(investigation.pending_approval.approval_id, approved);
-    } finally {
-      setDeciding(false);
-    }
-  };
-
   return (
     <div id={`turn-${turn.seq}`} className="group flex gap-3">
-      <div className="mt-1 grid size-8 shrink-0 place-items-center rounded-full bg-gradient-to-br from-[#0078d4] to-[#005a9e] text-white shadow-sm">
-        <Sparkles className="size-4" />
-      </div>
+      <AnswerAvatar />
       <Card className="min-w-0 flex-1 p-5">
         <div className="flex flex-wrap items-center gap-2">
           <StatusBadge status={status} />
@@ -87,11 +93,14 @@ export function AnswerCard(props: Props) {
         {investigation && brief ? (
           <BriefView investigation={investigation} citation={cite} onInvestigate={onInvestigate} />
         ) : (
-          <div className="mt-3 space-y-2.5 text-[15px] leading-relaxed">
+          <div className={ANSWER_BODY}>
             {investigation && investigation.claims.length > 0 ? (
-              claims.map((claim, i) => <p key={i}>{claim.text}{claim.evidence_ids.map(cite)}</p>)
+              <>
+                {opening && <p className={OPENING}>{opening}</p>}
+                {claims.map((claim, i) => <p key={i}>{claim.text}{claim.evidence_ids.map(cite)}</p>)}
+              </>
             ) : (
-              <p className="whitespace-pre-line">{investigation?.message || turn.text}</p>
+              paragraphs(investigation?.message || turn.text).map((p, i) => <p key={i} className="whitespace-pre-line">{p}</p>)
             )}
           </div>
         )}
@@ -111,19 +120,6 @@ export function AnswerCard(props: Props) {
           <Button size="sm" className="mt-4" onClick={onAssess}><Calculator /> Assess package</Button>
         )}
 
-        {investigation?.pending_approval && (
-          <div className="mt-4 rounded-xl border border-primary/30 bg-primary-soft/60 p-4">
-            <div className="flex items-center gap-2 text-sm font-semibold text-primary-strong">
-              <ShieldQuestion className="size-4" /> Approval needed to run validated SQL on Databricks
-            </div>
-            <p className="mt-1.5 text-sm text-muted-foreground">{investigation.pending_approval.summary}</p>
-            <div className="mt-3 flex gap-2">
-              <Button size="sm" onClick={() => decide(true)} disabled={deciding}>{deciding ? <Spinner /> : null} Approve and run</Button>
-              <Button size="sm" variant="outline" onClick={() => decide(false)} disabled={deciding}>Reject</Button>
-            </div>
-          </div>
-        )}
-
         {investigation && investigation.limitations.length > 0 && (
           <div className="mt-4">
             <button onClick={() => setNotesOpen(!notesOpen)} className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground">
@@ -138,9 +134,9 @@ export function AnswerCard(props: Props) {
           </div>
         )}
 
-        <AppliedLearning items={investigation?.applied_learning ?? []} onManage={props.onManageMemory} />
+        <AppliedLearning items={investigation?.applied_learning ?? []} />
 
-        <div className="mt-4 flex items-center gap-1 border-t border-border pt-3">
+        <div className={cn(ANSWER_FOOTER, "gap-1")}>
           {evidence.length > 0 && (
             <Button variant="ghost" size="sm" onClick={() => openSource(null)}>
               <Library /> {evidence.length} source{evidence.length > 1 ? "s" : ""}
@@ -174,16 +170,51 @@ export function AnswerCard(props: Props) {
   );
 }
 
-export function PendingAnswer({ label }: { label: string }) {
+const STEP_ICON: Record<LiveStep["state"], string> = { running: "", done: "✓", failed: "✕", no_result: "–" };
+
+/** The running answer, in the same card as the finished one: the steps while the work runs, then the answer's paragraphs
+ *  as they are written (a cursor at the end), so the card only gains its citations and buttons when it is checked. */
+export function PendingAnswer({ label, steps = [], text = "" }: { label: string; steps?: LiveStep[]; text?: string }) {
+  const parts = paragraphs(text);
+  const opening = GAP_OPENING.test(text);
+  const finished = steps.filter((s) => s.state !== "running");
+  const seconds = finished.reduce((total, s) => total + (s.ms ?? 0), 0) / 1000;
   return (
     <div className="flex gap-3">
-      <div className="mt-1 grid size-8 shrink-0 place-items-center rounded-full bg-gradient-to-br from-[#0078d4] to-[#005a9e] text-white">
-        <Spinner className="size-3.5" />
-      </div>
-      <Card className="flex-1 p-5">
-        <p className="text-sm font-medium text-primary-strong">{label}</p>
-        <div className="mt-3 space-y-2">
-          {[92, 76, 54].map((w) => <div key={w} className="h-2.5 animate-pulse rounded-full bg-muted" style={{ width: `${w}%` }} />)}
+      <AnswerAvatar working />
+      <Card className="min-w-0 flex-1 p-5">
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge tone="info"><Spinner className="size-3" /> {text ? "Writing the answer" : steps.find((s) => s.state === "running")?.label ?? label}</Badge>
+          {text && finished.length > 0 && (
+            <span className="text-[11px] text-muted-foreground">{finished.length} step{finished.length > 1 ? "s" : ""} · {seconds.toFixed(1)}s</span>
+          )}
+        </div>
+        {!text && steps.length > 0 && (
+          <ul className="mt-3 space-y-1 text-sm">
+            {steps.map((s) => (
+              <li key={s.key} className={cn("flex items-center gap-2", s.state === "running" ? "text-primary-strong" : "text-muted-foreground")}>
+                <span className="grid w-4 place-items-center">{s.state === "running" ? <Spinner className="size-3" /> : STEP_ICON[s.state]}</span>
+                <span>{s.label}{s.state === "no_result" ? " (found nothing)" : s.state === "failed" ? " (failed)" : ""}</span>
+                {s.ms !== undefined && s.state !== "running" && <span className="ml-auto tabular-nums text-xs">{(s.ms / 1000).toFixed(1)}s</span>}
+              </li>
+            ))}
+          </ul>
+        )}
+        {text ? (
+          <div className={ANSWER_BODY}>
+            {parts.map((p, i) => (
+              <p key={i} className={cn("whitespace-pre-line", opening && i === 0 && OPENING)}>
+                {p}{i === parts.length - 1 && <span className="ml-0.5 inline-block h-4 w-1.5 animate-pulse bg-primary align-middle" />}
+              </p>
+            ))}
+          </div>
+        ) : steps.length === 0 && (
+          <div className="mt-3 space-y-2">
+            {[92, 76, 54].map((w) => <div key={w} className="h-2.5 animate-pulse rounded-full bg-muted" style={{ width: `${w}%` }} />)}
+          </div>
+        )}
+        <div className={cn(ANSWER_FOOTER, "text-xs text-muted-foreground")}>
+          {text ? "Checking each statement against its sources…" : "\u00a0"}
         </div>
       </Card>
     </div>

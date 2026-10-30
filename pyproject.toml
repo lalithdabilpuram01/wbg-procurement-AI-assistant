@@ -61,9 +61,16 @@ wbg-lessons = "wbg_orchestrator.commands:lessons"
 wbg-feedback = "wbg_orchestrator.commands:feedback"
 wbg-feedback-db = "wbg_orchestrator.commands:feedback_db"
 wbg-eval = "wbg_orchestrator.commands:evaluate"
+wbg-etl-watch = "etl.watch:run"
+wbg-etl-seed = "etl.seed:run"
 
 [dependency-groups]
 dev = ["pytest>=8.3,<9"]
+notebooks = [
+    "ipykernel>=7.4.0",
+    "jupyterlab>=4.6.4",
+    "matplotlib>=3.11.2",
+]
 
 [build-system]
 requires = ["hatchling"]

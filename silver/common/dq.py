@@ -2,12 +2,14 @@
 
 A check is a name, a severity ("error" blocks any write; "warn" is reported only), the observed value,
 the expected value or rule, and whether it passed. Checks are evaluated eagerly on Spark and collected
-into a JSON-serialisable report.
+into a JSON-serialisable report. In pipeline mode a failing snapshot check is reported as a warning (silver.common.pipeline).
 """
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
 from typing import Any
+
+from silver.common.pipeline import relaxed
 
 
 @dataclass
@@ -26,6 +28,8 @@ class DQReport:
     results: list[CheckResult] = field(default_factory=list)
 
     def add(self, name: str, observed: Any, expected: Any, passed: bool, severity: str = "error", detail: str = "") -> None:
+        if severity == "error" and not passed and relaxed(name):
+            severity, detail = "warn", ("pipeline: snapshot check, reported only. " + detail).strip()
         self.results.append(CheckResult(name, severity, bool(passed), observed, expected, detail))
 
     def equals(self, name: str, observed: Any, expected: Any, severity: str = "error", detail: str = "") -> None:

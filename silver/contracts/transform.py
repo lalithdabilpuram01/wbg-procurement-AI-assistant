@@ -28,14 +28,15 @@ from pathlib import Path
 from pyspark.sql import DataFrame, Window
 from pyspark.sql import functions as F
 
+from silver.common.pipeline import CATALOG, manifest
 from silver.common.sourcefiles import row_hash_expr
 
 TRANSFORM_VERSION = "contracts_silver_v1.0.0"
-BRONZE_DS5 = "workspace.wbg_bronze.bronze_contract_awards_ds00005"
-BRONZE_DS1 = "workspace.wbg_bronze.bronze_contract_awards_legacy_ds01004"
+BRONZE_DS5 = f"{CATALOG}.wbg_bronze.bronze_contract_awards_ds00005"
+BRONZE_DS1 = f"{CATALOG}.wbg_bronze.bronze_contract_awards_legacy_ds01004"
 REPO = Path(__file__).resolve().parents[2]
-BRONZE_INPUTS_MANIFEST = REPO / "databricks_upload" / "bronze_inputs" / "_manifest" / "bronze_inputs_manifest.json"
-PHASE1_CACHE_MANIFEST = REPO / "discovery" / "data_cache" / "MANIFEST.jsonl"
+BRONZE_INPUTS_MANIFEST = manifest("WBG_BRONZE_INPUTS_MANIFEST", REPO / "databricks_upload" / "bronze_inputs" / "_manifest" / "bronze_inputs_manifest.json")
+PHASE1_CACHE_MANIFEST = manifest("WBG_SOURCE_PULLS_MANIFEST", REPO / "discovery" / "data_cache" / "MANIFEST.jsonl")
 META = ("source_file", "cohort_id", "ingested_at")
 DEC = "decimal(22,2)"
 HEX_ID = r"^[0-9a-f]{16}$"

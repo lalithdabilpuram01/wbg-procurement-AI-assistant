@@ -23,14 +23,14 @@ class Refusal:
 
 
 class RateLimiter:
-    def __init__(self, per_minute: int = 6, per_day: int = 200, clock: Callable[[], float] = time.monotonic):
+    def __init__(self, per_minute: int = 20, per_day: int = 500, clock: Callable[[], float] = time.monotonic):
         self.per_minute, self.per_day, self._clock = per_minute, per_day, clock
         self._seen: dict[str, deque[float]] = {}
         self._lock = threading.Lock()
 
     @classmethod
     def from_env(cls) -> "RateLimiter":
-        return cls(int(os.environ.get("WBG_RATE_PER_MINUTE", "6")), int(os.environ.get("WBG_RATE_PER_DAY", "200")))
+        return cls(int(os.environ.get("WBG_RATE_PER_MINUTE", "20")), int(os.environ.get("WBG_RATE_PER_DAY", "500")))
 
     def check(self, user_key: str) -> Refusal | None:
         """Record the request when it is within the limits; otherwise return why and when to retry."""

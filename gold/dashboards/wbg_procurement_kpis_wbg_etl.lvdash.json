@@ -1,0 +1,854 @@
+{
+ "datasets": [
+  {
+   "name": "overview",
+   "displayName": "Overview",
+   "queryLines": [
+    "SELECT * FROM wbg_etl.wbg_gold.vw_kpi_overview"
+   ]
+  },
+  {
+   "name": "awards",
+   "displayName": "Contract awards",
+   "queryLines": [
+    "SELECT * FROM wbg_etl.wbg_gold.vw_kpi_contract_awards"
+   ]
+  },
+  {
+   "name": "notices",
+   "displayName": "Notice activity",
+   "queryLines": [
+    "SELECT * FROM wbg_etl.wbg_gold.vw_kpi_notice_activity"
+   ]
+  },
+  {
+   "name": "windows",
+   "displayName": "Bid windows by notice type",
+   "queryLines": [
+    "SELECT * FROM wbg_etl.wbg_gold.vw_kpi_response_windows WHERE grouping_level = 'type'"
+   ]
+  },
+  {
+   "name": "countries",
+   "displayName": "Top countries by contract value",
+   "queryLines": [
+    "SELECT * FROM wbg_etl.wbg_gold.vw_kpi_country_comparison WHERE geography_type = 'single_country' ORDER BY contract_award_value_usd DESC LIMIT 15"
+   ]
+  },
+  {
+   "name": "income",
+   "displayName": "Projects by income group",
+   "queryLines": [
+    "SELECT coalesce(latest_income_group, 'Not classified') AS income_group, projects FROM wbg_etl.wbg_gold.vw_kpi_country_comparison WHERE geography_type = 'single_country'"
+   ]
+  },
+  {
+   "name": "sizes",
+   "displayName": "Contract size by category",
+   "queryLines": [
+    "SELECT * FROM wbg_etl.wbg_gold.vw_kpi_contract_value_distribution WHERE grouping_level = 'category'"
+   ]
+  },
+  {
+   "name": "financing",
+   "displayName": "Financing instruments",
+   "queryLines": [
+    "SELECT * FROM wbg_etl.wbg_gold.vw_kpi_financing_instruments"
+   ]
+  }
+ ],
+ "pages": [
+  {
+   "name": "overview",
+   "displayName": "Overview",
+   "pageType": "PAGE_TYPE_CANVAS",
+   "layout": [
+    {
+     "widget": {
+      "name": "title",
+      "multilineTextboxSpec": {
+       "lines": [
+        "## WBG procurement KPIs",
+        "2,000-project PoC cohort. Source: the Gold layer (`wbg_etl.wbg_gold`), read-only. Contract values are exact sums of contract awards; bid windows are published windows, not tender durations."
+       ]
+      }
+     },
+     "position": {
+      "x": 0,
+      "y": 0,
+      "width": 6,
+      "height": 2
+     }
+    },
+    {
+     "widget": {
+      "name": "projects",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "overview",
+         "fields": [
+          {
+           "name": "total_projects",
+           "expression": "`total_projects`"
+          }
+         ],
+         "disaggregated": true
+        }
+       }
+      ],
+      "spec": {
+       "version": 2,
+       "widgetType": "counter",
+       "encodings": {
+        "value": {
+         "fieldName": "total_projects",
+         "displayName": "Projects"
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Projects"
+       }
+      }
+     },
+     "position": {
+      "x": 0,
+      "y": 2,
+      "width": 1,
+      "height": 2
+     }
+    },
+    {
+     "widget": {
+      "name": "awards_n",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "overview",
+         "fields": [
+          {
+           "name": "contract_awards",
+           "expression": "`contract_awards`"
+          }
+         ],
+         "disaggregated": true
+        }
+       }
+      ],
+      "spec": {
+       "version": 2,
+       "widgetType": "counter",
+       "encodings": {
+        "value": {
+         "fieldName": "contract_awards",
+         "displayName": "Contract awards"
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Contract awards"
+       }
+      }
+     },
+     "position": {
+      "x": 1,
+      "y": 2,
+      "width": 1,
+      "height": 2
+     }
+    },
+    {
+     "widget": {
+      "name": "value",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "overview",
+         "fields": [
+          {
+           "name": "total_contract_award_value_usd",
+           "expression": "`total_contract_award_value_usd`"
+          }
+         ],
+         "disaggregated": true
+        }
+       }
+      ],
+      "spec": {
+       "version": 2,
+       "widgetType": "counter",
+       "encodings": {
+        "value": {
+         "fieldName": "total_contract_award_value_usd",
+         "displayName": "Contract value (USD)"
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Contract value (USD)"
+       }
+      }
+     },
+     "position": {
+      "x": 2,
+      "y": 2,
+      "width": 1,
+      "height": 2
+     }
+    },
+    {
+     "widget": {
+      "name": "notices_n",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "overview",
+         "fields": [
+          {
+           "name": "procurement_notices",
+           "expression": "`procurement_notices`"
+          }
+         ],
+         "disaggregated": true
+        }
+       }
+      ],
+      "spec": {
+       "version": 2,
+       "widgetType": "counter",
+       "encodings": {
+        "value": {
+         "fieldName": "procurement_notices",
+         "displayName": "Procurement notices"
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Procurement notices"
+       }
+      }
+     },
+     "position": {
+      "x": 3,
+      "y": 2,
+      "width": 1,
+      "height": 2
+     }
+    },
+    {
+     "widget": {
+      "name": "ibrd",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "overview",
+         "fields": [
+          {
+           "name": "ibrd_loan_instruments",
+           "expression": "`ibrd_loan_instruments`"
+          }
+         ],
+         "disaggregated": true
+        }
+       }
+      ],
+      "spec": {
+       "version": 2,
+       "widgetType": "counter",
+       "encodings": {
+        "value": {
+         "fieldName": "ibrd_loan_instruments",
+         "displayName": "IBRD loans"
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "IBRD loans"
+       }
+      }
+     },
+     "position": {
+      "x": 4,
+      "y": 2,
+      "width": 1,
+      "height": 2
+     }
+    },
+    {
+     "widget": {
+      "name": "ida",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "overview",
+         "fields": [
+          {
+           "name": "ida_credit_instruments",
+           "expression": "`ida_credit_instruments`"
+          }
+         ],
+         "disaggregated": true
+        }
+       }
+      ],
+      "spec": {
+       "version": 2,
+       "widgetType": "counter",
+       "encodings": {
+        "value": {
+         "fieldName": "ida_credit_instruments",
+         "displayName": "IDA credits"
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "IDA credits"
+       }
+      }
+     },
+     "position": {
+      "x": 5,
+      "y": 2,
+      "width": 1,
+      "height": 2
+     }
+    },
+    {
+     "widget": {
+      "name": "value_by_year",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "awards",
+         "fields": [
+          {
+           "name": "contract_fiscal_year",
+           "expression": "`contract_fiscal_year`"
+          },
+          {
+           "name": "sum(contract_award_value_usd)",
+           "expression": "SUM(`contract_award_value_usd`)"
+          },
+          {
+           "name": "procurement_category",
+           "expression": "`procurement_category`"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 3,
+       "widgetType": "bar",
+       "encodings": {
+        "x": {
+         "fieldName": "contract_fiscal_year",
+         "scale": {
+          "type": "categorical"
+         },
+         "displayName": "Fiscal year"
+        },
+        "y": {
+         "fieldName": "sum(contract_award_value_usd)",
+         "scale": {
+          "type": "quantitative"
+         },
+         "displayName": "Contract value (USD)"
+        },
+        "color": {
+         "fieldName": "procurement_category",
+         "scale": {
+          "type": "categorical"
+         },
+         "displayName": "procurement category"
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Contract value by fiscal year and category"
+       }
+      }
+     },
+     "position": {
+      "x": 0,
+      "y": 4,
+      "width": 3,
+      "height": 6
+     }
+    },
+    {
+     "widget": {
+      "name": "awards_by_method",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "awards",
+         "fields": [
+          {
+           "name": "procurement_method",
+           "expression": "`procurement_method`"
+          },
+          {
+           "name": "sum(contract_awards)",
+           "expression": "SUM(`contract_awards`)"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 3,
+       "widgetType": "bar",
+       "encodings": {
+        "x": {
+         "fieldName": "procurement_method",
+         "scale": {
+          "type": "categorical",
+          "sort": {
+           "by": "y-reversed"
+          }
+         },
+         "displayName": "Method"
+        },
+        "y": {
+         "fieldName": "sum(contract_awards)",
+         "scale": {
+          "type": "quantitative"
+         },
+         "displayName": "Contract awards"
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Contract awards by procurement method"
+       }
+      }
+     },
+     "position": {
+      "x": 3,
+      "y": 4,
+      "width": 3,
+      "height": 6
+     }
+    },
+    {
+     "widget": {
+      "name": "notices_by_year",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "notices",
+         "fields": [
+          {
+           "name": "publication_fiscal_year",
+           "expression": "`publication_fiscal_year`"
+          },
+          {
+           "name": "sum(procurement_notices)",
+           "expression": "SUM(`procurement_notices`)"
+          },
+          {
+           "name": "notice_class",
+           "expression": "`notice_class`"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 3,
+       "widgetType": "line",
+       "encodings": {
+        "x": {
+         "fieldName": "publication_fiscal_year",
+         "scale": {
+          "type": "categorical"
+         },
+         "displayName": "Fiscal year"
+        },
+        "y": {
+         "fieldName": "sum(procurement_notices)",
+         "scale": {
+          "type": "quantitative"
+         },
+         "displayName": "Notices"
+        },
+        "color": {
+         "fieldName": "notice_class",
+         "scale": {
+          "type": "categorical"
+         },
+         "displayName": "notice class"
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Procurement notices by fiscal year"
+       }
+      }
+     },
+     "position": {
+      "x": 0,
+      "y": 10,
+      "width": 3,
+      "height": 6
+     }
+    },
+    {
+     "widget": {
+      "name": "windows_by_type",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "windows",
+         "fields": [
+          {
+           "name": "notice_type",
+           "expression": "`notice_type`"
+          },
+          {
+           "name": "max(p50_window_days)",
+           "expression": "MAX(`p50_window_days`)"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 3,
+       "widgetType": "bar",
+       "encodings": {
+        "x": {
+         "fieldName": "notice_type",
+         "scale": {
+          "type": "categorical",
+          "sort": {
+           "by": "y-reversed"
+          }
+         },
+         "displayName": "Notice type"
+        },
+        "y": {
+         "fieldName": "max(p50_window_days)",
+         "scale": {
+          "type": "quantitative"
+         },
+         "displayName": "Median window (days)"
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Median published bid window (days) by notice type"
+       }
+      }
+     },
+     "position": {
+      "x": 3,
+      "y": 10,
+      "width": 3,
+      "height": 6
+     }
+    }
+   ]
+  },
+  {
+   "name": "countries",
+   "displayName": "Countries",
+   "pageType": "PAGE_TYPE_CANVAS",
+   "layout": [
+    {
+     "widget": {
+      "name": "countries_title",
+      "multilineTextboxSpec": {
+       "lines": [
+        "## Countries",
+        "Single-country projects only; regional projects are kept as a separate geography."
+       ]
+      }
+     },
+     "position": {
+      "x": 0,
+      "y": 0,
+      "width": 6,
+      "height": 2
+     }
+    },
+    {
+     "widget": {
+      "name": "top_countries",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "countries",
+         "fields": [
+          {
+           "name": "country_name",
+           "expression": "`country_name`"
+          },
+          {
+           "name": "sum(contract_award_value_usd)",
+           "expression": "SUM(`contract_award_value_usd`)"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 3,
+       "widgetType": "bar",
+       "encodings": {
+        "x": {
+         "fieldName": "country_name",
+         "scale": {
+          "type": "categorical",
+          "sort": {
+           "by": "y-reversed"
+          }
+         },
+         "displayName": "Country"
+        },
+        "y": {
+         "fieldName": "sum(contract_award_value_usd)",
+         "scale": {
+          "type": "quantitative"
+         },
+         "displayName": "Contract value (USD)"
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Top 15 countries by contract value (USD)"
+       }
+      }
+     },
+     "position": {
+      "x": 0,
+      "y": 2,
+      "width": 6,
+      "height": 7
+     }
+    },
+    {
+     "widget": {
+      "name": "income_groups",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "income",
+         "fields": [
+          {
+           "name": "income_group",
+           "expression": "`income_group`"
+          },
+          {
+           "name": "sum(projects)",
+           "expression": "SUM(`projects`)"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 3,
+       "widgetType": "bar",
+       "encodings": {
+        "x": {
+         "fieldName": "income_group",
+         "scale": {
+          "type": "categorical",
+          "sort": {
+           "by": "y-reversed"
+          }
+         },
+         "displayName": "Income group"
+        },
+        "y": {
+         "fieldName": "sum(projects)",
+         "scale": {
+          "type": "quantitative"
+         },
+         "displayName": "Projects"
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Projects by latest income group"
+       }
+      }
+     },
+     "position": {
+      "x": 0,
+      "y": 9,
+      "width": 3,
+      "height": 6
+     }
+    },
+    {
+     "widget": {
+      "name": "median_size",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "sizes",
+         "fields": [
+          {
+           "name": "procurement_category",
+           "expression": "`procurement_category`"
+          },
+          {
+           "name": "max(p50_contract_value_usd)",
+           "expression": "MAX(`p50_contract_value_usd`)"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 3,
+       "widgetType": "bar",
+       "encodings": {
+        "x": {
+         "fieldName": "procurement_category",
+         "scale": {
+          "type": "categorical",
+          "sort": {
+           "by": "y-reversed"
+          }
+         },
+         "displayName": "Category"
+        },
+        "y": {
+         "fieldName": "max(p50_contract_value_usd)",
+         "scale": {
+          "type": "quantitative"
+         },
+         "displayName": "Median contract value (USD)"
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Median contract size by category (USD)"
+       }
+      }
+     },
+     "position": {
+      "x": 3,
+      "y": 9,
+      "width": 3,
+      "height": 6
+     }
+    }
+   ]
+  },
+  {
+   "name": "financing",
+   "displayName": "Financing",
+   "pageType": "PAGE_TYPE_CANVAS",
+   "layout": [
+    {
+     "widget": {
+      "name": "financing_title",
+      "multilineTextboxSpec": {
+       "lines": [
+        "## Financing instruments",
+        "IBRD loans and IDA credits of the cohort's projects (counts only)."
+       ]
+      }
+     },
+     "position": {
+      "x": 0,
+      "y": 0,
+      "width": 6,
+      "height": 2
+     }
+    },
+    {
+     "widget": {
+      "name": "instruments_by_year",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "financing",
+         "fields": [
+          {
+           "name": "board_approval_fiscal_year",
+           "expression": "`board_approval_fiscal_year`"
+          },
+          {
+           "name": "sum(financing_instruments)",
+           "expression": "SUM(`financing_instruments`)"
+          },
+          {
+           "name": "lender",
+           "expression": "`lender`"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 3,
+       "widgetType": "bar",
+       "encodings": {
+        "x": {
+         "fieldName": "board_approval_fiscal_year",
+         "scale": {
+          "type": "categorical"
+         },
+         "displayName": "Fiscal year"
+        },
+        "y": {
+         "fieldName": "sum(financing_instruments)",
+         "scale": {
+          "type": "quantitative"
+         },
+         "displayName": "Instruments"
+        },
+        "color": {
+         "fieldName": "lender",
+         "scale": {
+          "type": "categorical"
+         },
+         "displayName": "lender"
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Instruments by Board approval fiscal year"
+       }
+      }
+     },
+     "position": {
+      "x": 0,
+      "y": 2,
+      "width": 6,
+      "height": 7
+     }
+    }
+   ]
+  }
+ ]
+}

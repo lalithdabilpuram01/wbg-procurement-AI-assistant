@@ -117,7 +117,25 @@ again for the same name replaces that user. It also prints an access token, whic
 
 ---
 
-## 5. Automated ingestion (drop folders)
+## 5. Automated ingestion
+
+There are two ways in, and both end in the same Lakebase store (`wbg_kg`, pgvector), so a new document becomes
+searchable in chat.
+
+### In Databricks (Lakeflow jobs): the demo path
+
+Structured data goes through Bronze → Silver → Gold → the **Dashboard** page. Documents go through parse → bge-m3
+embeddings → pgvector → chat and the Review queue. The full runbook is in [etl/README.md](etl/README.md).
+
+```bash
+uv run wbg-etl-seed      # once: fill the landing Volume and set aside the demo slice of new contract awards
+uv run wbg-etl-watch     # keep running: starts the job whenever a file is uploaded to a Volume
+```
+
+Upload in Databricks (**Catalog → wbg_etl → etl → landing/<dataset>** or **inbox/<type>** → Upload), then watch the run
+under **Jobs & Pipelines**.
+
+### On the laptop (drop folders): the backup path
 
 Drop a file into the folder for its type under `ingestion_inbox/`: `pad/`, `isr/`, `icr/`, `procurement_plans/`,
 `contracts/`, `notices/` or `other/`. Then:

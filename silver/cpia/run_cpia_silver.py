@@ -21,15 +21,17 @@ from typing import Any
 
 from pyspark.sql import functions as F
 
+from silver.common import pipeline
 from silver.common.dq import DQReport
+from silver.common.pipeline import CATALOG, runs_dir
 from silver.common.session import DEFAULT_PROFILE, get_spark
 from silver.common.sourcefiles import load_manifest_vintages, vintages_df, verify_source_files
 from silver.common.write import create_table
 from silver.cpia import transform as C
 from silver.cpia.checks import check
 
-TARGET = "workspace.wbg_silver.cpia_ratings"
-RUNS = Path(__file__).resolve().parents[1] / "runs"
+TARGET = f"{CATALOG}.wbg_silver.cpia_ratings"
+RUNS = runs_dir(Path(__file__).resolve().parents[1] / "runs")
 EXISTING_SILVER = ["wdi_indicator_observations", "wdi_country", "income_classification_history", "wgi_estimates"]
 NOT_NULL = ["country_code", "country_name", "wdi_match_status", "indicator_code", "year", "is_value_missing",
             "source_lastupdated", "source_file_sha256", "source_url", "bronze_raw_record", "raw_record_sha256",
@@ -63,7 +65,7 @@ def main() -> int:
     spark = get_spark(args.profile)
 
     baseline: dict = {"bronze": {}, "silver": {}, "target_exists": spark.catalog.tableExists(TARGET)}
-    for group, tables in (("bronze", [C.BRONZE_TABLE]), ("silver", [f"workspace.wbg_silver.{t}" for t in EXISTING_SILVER])):
+    for group, tables in (("bronze", [C.BRONZE_TABLE]), ("silver", [f"{CATALOG}.wbg_silver.{t}" for t in EXISTING_SILVER])):
         for t in tables:
             h = spark.sql(f"DESCRIBE HISTORY {t} LIMIT 1").collect()[0]
             baseline[group][t] = {"version": h.version, "rows": spark.table(t).count()}
@@ -124,7 +126,7 @@ def main() -> int:
     if args.mode == "dry-run":
         print("DRY RUN: nothing written to Databricks")
         return 0
-    if baseline["target_exists"]:
+    if baseline["target_exists"] and not pipeline.ENABLED:
         raise SystemExit(f"{TARGET} already exists: refusing to overwrite")
     create_table(spark, out, TARGET,
                  {"silver.run_id": run_id, "silver.transform_version": C.TRANSFORM_VERSION, "silver.source_table": C.BRONZE_TABLE,

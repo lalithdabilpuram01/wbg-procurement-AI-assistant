@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import {
-  Brain, ChevronRight, ClipboardCheck, Eye, Folder as FolderIcon, FolderOpen, FolderPlus, LogOut, MessageSquare, Moon, MoreHorizontal,
+  ChevronRight, ClipboardCheck, Eye, LayoutDashboard, Folder as FolderIcon, FolderOpen, FolderPlus, LogOut, MessageSquare, Moon, MoreHorizontal,
   PanelLeftClose, Pencil, Plus, Search, Sun, Trash2,
 } from "lucide-react";
 import type { Conversation, Folder } from "@/lib/api";
@@ -23,20 +23,21 @@ type Props = {
   feedback: boolean;
   pendingReviews: number;
   onSelect: (id: string) => void;
-  onNew: () => void;
-  onMemory: () => void;
+  onNew: (folderId?: string) => void;           // with a folder: the new chat is filed there
   onReviews: () => void;
   onWatch: () => void;
+  onDashboard: () => void;
   onCreateFolder: (name: string) => Promise<void>;
   onRenameFolder: (id: string, name: string) => Promise<void>;
   onDeleteFolder: (id: string) => Promise<void>;
   onRenameConversation: (id: string, title: string) => Promise<void>;
+  onDeleteConversation: (id: string) => Promise<void>;
   onFile: (conversationId: string, folderId: string | null) => Promise<void>;
   onCollapse: () => void;
 };
 
 type Naming = { title: string; initial: string; save: (name: string) => Promise<void> } | null;
-export type View = "chat" | "memory" | "reviews" | "watch";
+export type View = "chat" | "reviews" | "watch" | "dashboard";
 
 export function Sidebar(props: Props) {
   const { conversations, folders, activeId, view } = props;
@@ -89,6 +90,11 @@ export function Sidebar(props: Props) {
           {c.folder_id && (
             <DropdownMenuItem onSelect={() => props.onFile(c.conversation_id, null)}><FolderOpen /> Remove from folder</DropdownMenuItem>
           )}
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="text-danger"
+            onSelect={() => { if (window.confirm(`Delete "${c.title}"?`)) props.onDeleteConversation(c.conversation_id); }}>
+            <Trash2 /> Delete chat
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
@@ -106,7 +112,7 @@ export function Sidebar(props: Props) {
       </div>
 
       <div className="space-y-2 px-3">
-        <Button onClick={props.onNew} className="w-full justify-start bg-white/10 text-white hover:bg-white/15"><Plus /> New chat</Button>
+        <Button onClick={() => props.onNew()} className="w-full justify-start bg-white/10 text-white hover:bg-white/15"><Plus /> New chat</Button>
         <div className="relative">
           <Search className="absolute left-2.5 top-2.5 size-3.5 text-sidebar-muted" />
           <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search chats"
@@ -116,12 +122,10 @@ export function Sidebar(props: Props) {
           className={cn("flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm", view === "watch" ? "bg-sidebar-active text-white" : "hover:bg-sidebar-hover")}>
           <Eye className="size-4 text-sidebar-muted" /> Project watch
         </button>
-        {props.feedback && (
-          <button onClick={props.onMemory}
-            className={cn("flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm", view === "memory" ? "bg-sidebar-active text-white" : "hover:bg-sidebar-hover")}>
-            <Brain className="size-4 text-sidebar-muted" /> Memory
-          </button>
-        )}
+        <button onClick={props.onDashboard}
+          className={cn("flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm", view === "dashboard" ? "bg-sidebar-active text-white" : "hover:bg-sidebar-hover")}>
+          <LayoutDashboard className="size-4 text-sidebar-muted" /> Dashboard
+        </button>
         {props.feedback && props.reviewer && (
           <button onClick={props.onReviews}
             className={cn("flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm", view === "reviews" ? "bg-sidebar-active text-white" : "hover:bg-sidebar-hover")}>
@@ -150,11 +154,19 @@ export function Sidebar(props: Props) {
                   <span className="truncate">{f.name}</span>
                   <span className="ml-auto text-[11px] text-sidebar-muted">{inside.length}</span>
                 </button>
+                <button onClick={() => { setOpen({ ...open, [f.folder_id]: true }); props.onNew(f.folder_id); }}
+                  className="rounded-md p-1 text-sidebar-muted opacity-0 hover:text-white group-hover:opacity-100" aria-label={`New chat in ${f.name}`}
+                  title="New chat in this folder">
+                  <Plus className="size-4" />
+                </button>
                 <DropdownMenu>
                   <DropdownMenuTrigger className="rounded-md p-1 text-sidebar-muted opacity-0 hover:text-white group-hover:opacity-100" aria-label="Folder actions">
                     <MoreHorizontal className="size-4" />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
+                    <DropdownMenuItem onSelect={() => props.onNew(f.folder_id)}>
+                      <Plus /> New chat here
+                    </DropdownMenuItem>
                     <DropdownMenuItem onSelect={() => setNaming({ title: "Rename folder", initial: f.name, save: (n) => props.onRenameFolder(f.folder_id, n) })}>
                       <Pencil /> Rename
                     </DropdownMenuItem>
@@ -164,7 +176,16 @@ export function Sidebar(props: Props) {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              {expanded && <div className="ml-4 border-l border-white/10 pl-1.5">{inside.map(item)}</div>}
+              {expanded && (
+                <div className="ml-4 border-l border-white/10 pl-1.5">
+                  {inside.map(item)}
+                  {inside.length === 0 && (
+                    <button onClick={() => props.onNew(f.folder_id)} className="px-2.5 py-1 text-xs text-sidebar-muted hover:text-white">
+                      Empty: start a chat here
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           );
         })}

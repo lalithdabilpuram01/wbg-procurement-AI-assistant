@@ -158,28 +158,28 @@ class ExecutionController:
 
     # ---------------------------------------------------------------------------------------------- execution
     def execute(self, task: AgentTask, request: InvestigationRequest, state: Mapping[str, Any], *,
-                execution_approved: bool, memory_block: str | None = None) -> TaskRun:
+                execution_allowed: bool, memory_block: str | None = None) -> TaskRun:
         reused = _previous_result(task, state)
         if reused is not None:
             return TaskRun(task.task_id, TaskState.SKIPPED, results=[AgentResult(
                 task_id=task.task_id, attempt=1, worker=task.worker, idempotency_key=task.idempotency_key, status=TaskState.SKIPPED,
                 evidence_ids=tuple(reused["evidence_ids"]), notes=(f"reused:{reused['task_id']}",))])
-        refusal = self._refusal(task, request, state, execution_approved)
+        refusal = self._refusal(task, request, state, execution_allowed)
         if refusal is not None:
             final = TaskState.FAILED
             return TaskRun(task.task_id, final, errors=[refusal], results=[self._result(task, 1, final, refusal)])
-        return self._attempts(task, request, state, execution_approved, memory_block)
+        return self._attempts(task, request, state, execution_allowed, memory_block)
 
-    def _refusal(self, task, request, state, execution_approved) -> ExecutionError | None:
+    def _refusal(self, task, request, state, execution_allowed) -> ExecutionError | None:
         auth = request.authorization
         if not auth.allows(task.worker.value, task.operation, task.requires_execution):
             return _error(request, task, ErrorCategory.AUTHORIZATION, "operation_not_authorized",
                           "The operation is not authorized for this investigation.")
         return check_budget(state.get("usage", {}), request.budget, investigation_id=request.investigation_id, node="execute",
                             task_id=task.task_id, needs_llm=task.operation in LLM_OPERATIONS,
-                            needs_execution=task.requires_execution and execution_approved)
+                            needs_execution=task.requires_execution and execution_allowed)
 
-    def _attempts(self, task, request, state, execution_approved, memory_block) -> TaskRun:
+    def _attempts(self, task, request, state, execution_allowed, memory_block) -> TaskRun:
         run = TaskRun(task.task_id, TaskState.FAILED)
         breaker, worker = self._breakers[task.worker], self._workers[task.worker]
         budget = request.budget
@@ -200,7 +200,7 @@ class ExecutionController:
                 return self._finish(run, task, attempt, TaskState.FAILED, error)
             context = WorkerContext(ticket=self._authority.issue(task, attempt), authorization=request.authorization,
                                     request_id=request.request_id, rag_release=request.rag_release, remaining_seconds=remaining,
-                                    execution_approved=execution_approved, upstream_evidence=upstream, memory_block=memory_block,
+                                    execution_allowed=execution_allowed, upstream_evidence=upstream, memory_block=memory_block,
                                     package=request.package, planning=request.planning, tender=request.tender)
             started = self._clock()
             run.attempts = attempt

@@ -17,11 +17,12 @@ from __future__ import annotations
 from pyspark.sql import DataFrame
 from pyspark.sql import functions as F
 from pyspark.sql import types as T
+from silver.common.pipeline import CATALOG
 
 TRANSFORM_VERSION = "cpia_silver_v1.0.0"
-BRONZE_TABLE = "workspace.wbg_ref_bronze.cpia_ratings"
+BRONZE_TABLE = f"{CATALOG}.wbg_ref_bronze.cpia_ratings"
 BRONZE_FOLDER = "cpia_ratings"
-WDI_COUNTRY = "workspace.wbg_silver.wdi_country"
+WDI_COUNTRY = f"{CATALOG}.wbg_silver.wdi_country"
 EXPECTED_INDICATORS = ("IQ.CPA.FINQ.XQ", "IQ.CPA.IRAI.XQ", "IQ.CPA.PADM.XQ", "IQ.CPA.PROP.XQ", "IQ.CPA.PUBS.XQ", "IQ.CPA.TRAN.XQ")
 # criterion ratings are assigned in 0.5 steps; IRAI and the PUBS cluster are averages (reported only)
 CRITERION_INDICATORS = ("IQ.CPA.FINQ.XQ", "IQ.CPA.PADM.XQ", "IQ.CPA.PROP.XQ", "IQ.CPA.TRAN.XQ")

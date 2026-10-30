@@ -8,8 +8,6 @@
 * Combined data + document questions: the existing router answers them with a mixed-intent clarification. When the
   application allows combined investigations, the front door runs one investigation whose authorization is the
   union of exactly those two route policies, and records the answer turn through the existing store API.
-* Approvals: `approve` checks thread ownership, records the decision with the existing `record_decision`, and
-  resumes the engine as the same user.
 * Tender design: a structured check (package + draft text, from the API) runs the fixed tender plan; asked in chat, the
   front door asks for the package fields instead. Its answer is restated from the checks (no model call).
 * Monitoring: a question about one project's progress ("Is P148850 slipping?") runs the fixed monitoring plan; its
@@ -36,7 +34,7 @@ from conversation.service import DEFAULT_TITLE, TITLE_CHARS, ConversationReply, 
 from conversation.store import ConversationStore
 
 from .authorization import AppAuthorizationContext
-from .contracts import (EvidenceKind, InvestigationRequest, InvestigationStatus, OwnerRef, PackageSpec, PlanningSpec,
+from .contracts import (EvidenceKind, InvestigationRequest, InvestigationStatus, OwnerRef, PackageAssessment, PlanningSpec,
                         TenderSpec, ValidationStatus, investigation_id_for, new_id)
 from .engine import EngineOutcome, InvestigationEngine, InvestigationNotFound, checkpoint_thread_id
 from .feedback import REVISION_ROUTE, AnswerRecord, FeedbackService, Guidance
@@ -90,8 +88,8 @@ def describe_tender(spec: TenderSpec) -> str:
             f"window, tender on {spec.tender_date.isoformat()}.{draft}")
 
 
-def describe_package(package: PackageSpec) -> str:
-    return (f"Assess a {package.procurement_category} package for project {package.project_id}: {package.procurement_method}, "
+def describe_package(package: PackageAssessment) -> str:
+    return (f"Assess a {package.procurement_category} package for {package.label()}: {package.procurement_method}, "
             f"{package.review_type} review, {package.bid_window_days}-day bid window, tender on {package.tender_date.isoformat()}.")
 
 
@@ -187,7 +185,8 @@ class ConversationFrontDoor:
         self._learning = learning
 
     def handle_message(self, owner: Owner, thread_id: str, text: str, execute: bool = False,
-                       on_start: Callable[[str], None] | None = None, rag_release: str | None = None) -> FrontDoorReply:
+                       on_start: Callable[[str], None] | None = None, rag_release: str | None = None,
+                       on_text: Callable[[str], None] | None = None) -> FrontDoorReply:
         """Questions for both agents, and questions whose intent the rules cannot place, go straight to an
         investigation (its planner chooses the agents) instead of a clarifying question. Prediction requests ask for
         the package fields. Everything else is handled by the conversation service as before.
@@ -216,22 +215,13 @@ class ConversationFrontDoor:
                 on_start(request_id)
         token = CURRENT_OWNER.set(OwnerBinding(owner, thread_id, started, rag_release, guidance.text))
         try:
-            reply = self._service.handle_message(owner, thread_id, text, execute=execute)
+            reply = self._service.handle_message(owner, thread_id, text, execute=execute, on_text=on_text)
         finally:
             CURRENT_OWNER.reset(token)
         outcome = reply.agent_result.investigation if isinstance(reply.agent_result, ConversationOutcome) else None
         user_turn = next((t for t in self._store.turns(owner, thread_id) if t.seq == reply.user_turn_seq), None)
         request_id = outcome.values["request"]["request_id"] if outcome else (user_turn.metadata.request_id if user_turn else None)
         return FrontDoorReply(outcome.status.value if outcome else reply.status, request_id, reply, outcome)
-
-    def approve(self, owner: Owner, thread_id: str, checkpoint_thread_id: str, approval_id: str, approved: bool,
-                reason: str | None = None) -> EngineOutcome:
-        self._store.get_thread(owner, thread_id)                                    # ownership of the conversation
-        outcome = self._engine.resume(owner_ref(owner), checkpoint_thread_id, approval_id, approved, reason)
-        self._service.record_decision(owner, thread_id, "decision",
-                                      f"Investigation approval {approval_id}: {'approved' if approved else 'rejected'}")
-        self._record_answer(owner, thread_id, outcome.values["request"]["request_id"], outcome)    # history shows the result
-        return outcome
 
     def plan_project(self, owner: Owner, thread_id: str, spec: PlanningSpec,
                      on_start: Callable[[str], None] | None = None) -> EngineOutcome:
@@ -255,7 +245,7 @@ class ConversationFrontDoor:
         self._service.compact(owner, thread_id)                                    # summarize older turns when needed
         return outcome
 
-    def assess_package(self, owner: Owner, thread_id: str, package: PackageSpec,
+    def assess_package(self, owner: Owner, thread_id: str, package: PackageAssessment,
                        on_start: Callable[[str], None] | None = None) -> EngineOutcome:
         """A structured package assessment: recorded as a user turn, run with the fixed prediction + lessons plan."""
         text = describe_package(package)
@@ -276,15 +266,15 @@ class ConversationFrontDoor:
 
     def check_tender(self, owner: Owner, thread_id: str, spec: TenderSpec,
                      on_start: Callable[[str], None] | None = None) -> EngineOutcome:
-        """A tender-design check: recorded as a user turn, run with the fixed tender plan (checks, models, lessons)."""
+        """A tender-design check: recorded as a user turn, run with the fixed tender plan (checks and lessons)."""
         spec = spec.model_copy(update={"draft_text": self._service.text_filter(spec.draft_text)})   # filtered once, here
         text = describe_tender(spec)
         memory = self._service.memory_for(owner, thread_id, text)
         request_id = self._user_turn(owner, thread_id, text, TENDER_ROUTE)
         request = InvestigationRequest(
             investigation_id=investigation_id_for(request_id), request_id=request_id, conversation_thread_id=thread_id,
-            owner=owner_ref(owner), question=text, mode="investigation", tender=spec, package=spec.package(), rag_release=self._release,
-            authorization=self._authorization_for((Route.PROCUREMENT_PLANNING, Route.ML_PREDICTION, Route.DOCUMENT_RAG)))
+            owner=owner_ref(owner), question=text, mode="investigation", tender=spec, rag_release=self._release,
+            authorization=self._authorization_for((Route.PROCUREMENT_PLANNING, Route.DOCUMENT_RAG)))
         if on_start:
             on_start(request_id)
         outcome = self._engine.start(request, memory_block=memory)

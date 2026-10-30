@@ -63,9 +63,11 @@ def structured_worker_for_service(service: Any, claude: Any, telemetry: Telemetr
 
 
 def document_worker(authority: TicketAuthority, generator_factory: Callable[[], Any], use_nli: bool = False,
-                    table_writer: Callable[[str], Any] | None = None) -> DocumentIntelligenceWorker:
+                    table_writer: Callable[[str], Any] | None = None,
+                    uploaded: Callable[[str, set[str] | None], list[dict]] | None = None) -> DocumentIntelligenceWorker:
     """AnswerPipeline per corpus release; the release is explicit per investigation (default pilot_v3).
-    table_writer (request id -> SQL writer) enables TableLens for the releases that have one."""
+    table_writer (request id -> SQL writer) enables TableLens for the releases that have one; uploaded adds passages of
+    documents ingested after the release (pgvector over wbg_kg)."""
     from rag.retrieval.versions import VERSIONS, build_retriever, build_table_lens
 
     @lru_cache(maxsize=2)
@@ -84,7 +86,7 @@ def document_worker(authority: TicketAuthority, generator_factory: Callable[[], 
     @lru_cache(maxsize=2)
     def table_lens_for(release: str):
         return build_table_lens(release)
-    return DocumentIntelligenceWorker(pipeline_for, retriever_for, authority, flags_for, table_lens_for, table_writer)
+    return DocumentIntelligenceWorker(pipeline_for, retriever_for, authority, flags_for, table_lens_for, table_writer, uploaded)
 
 
 def semantic_project_scores(document: DocumentIntelligenceWorker, release: str) -> Callable[[str], dict[str, float]]:

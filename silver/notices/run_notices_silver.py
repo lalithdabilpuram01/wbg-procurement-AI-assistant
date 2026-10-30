@@ -23,7 +23,9 @@ from typing import Any
 
 from pyspark.sql import functions as F
 
+from silver.common import pipeline
 from silver.common.dq import DQReport
+from silver.common.pipeline import CATALOG, runs_dir
 from silver.common.session import DEFAULT_PROFILE, get_spark
 from silver.common.sourcefiles import verify_csv_source_file, verify_jsonl_source_file
 from silver.common.write import _sql_str, complete_metadata, create_table
@@ -33,10 +35,10 @@ from silver.notices.checks import check_contact_data_outside_text, check_details
 sys.path.insert(0, str(T.REPO / "discovery" / "scripts"))
 from p09_ml_label_feasibility import BID_DOC_AMENDMENT, CONTRACT_AMENDMENT, NOTICE_CANCELLED, REBID_STRONG, REF_REBID_STRONG, clean  # noqa: E402
 
-S = "workspace.wbg_silver"
+S = f"{CATALOG}.wbg_silver"
 TARGETS = {"notices": f"{S}.procurement_notices", "details": f"{S}.procurement_notice_details",
            "candidates": f"{S}.notice_contract_link_candidates", "links": f"{S}.notice_contract_links"}
-RUNS = Path(__file__).resolve().parents[1] / "runs"
+RUNS = runs_dir(Path(__file__).resolve().parents[1] / "runs")
 EXISTING_SILVER = ["wdi_indicator_observations", "wdi_country", "income_classification_history", "wgi_estimates", "cpia_ratings", "projects",
                    "contract_award_lines", "contract_awards", "contract_awards_legacy"]
 COHORT = T.REPO / "cohort" / "poc_cohort_2000_manifest.csv"
@@ -238,17 +240,17 @@ def main() -> int:
     if args.mode == "dry-run":
         print("DRY RUN: nothing written to Databricks")
         return 0
-    if first_baseline is None and (any(baseline["targets_exist"].values()) or baseline["mask_function_exists"]):
+    if first_baseline is None and (any(baseline["targets_exist"].values()) or baseline["mask_function_exists"]) and not pipeline.ENABLED:
         raise SystemExit(f"target(s) or mask function already exist: {baseline['targets_exist']}; refusing to overwrite")
     if first_baseline is None:
         # D-14: create-only mask function; the details table is created with the mask declared before any row is inserted
-        spark.sql(f"CREATE FUNCTION {T.TEXT_MASK_FUNCTION}(t STRING) RETURNS STRING "
+        spark.sql(f"CREATE {'OR REPLACE ' if pipeline.ENABLED else ''}FUNCTION {T.TEXT_MASK_FUNCTION}(t STRING) RETURNS STRING "
                   f"COMMENT 'D-14: restricted notice text; readable only by members of account group {T.TEXT_MASK_GROUP}' "
                   f"RETURN CASE WHEN t IS NULL THEN NULL WHEN is_account_group_member('{T.TEXT_MASK_GROUP}') THEN t ELSE '{T.TEXT_PLACEHOLDER}' END")
     sources = {"notices": T.BRONZE_CSV, "details": T.BRONZE_API, "candidates": f"{T.BRONZE_API},{S}.contract_awards",
                "links": f"{T.BRONZE_API},{S}.contract_awards"}
     for k in ("details", "notices", "candidates", "links"):
-        if baseline["targets_exist"][k]:
+        if baseline["targets_exist"][k] and not pipeline.ENABLED:
             if k == "details":  # metadata only: record the rules that cannot be CHECK constraints on a masked table
                 spark.sql(f"ALTER TABLE {TARGETS[k]} SET TBLPROPERTIES ('silver.validated_rules' = '{_sql_str(json.dumps(SPEC[k]['validated_rules']))}')")
             spec = SPEC[k]

@@ -30,13 +30,14 @@ from pathlib import Path
 
 from pyspark.sql import Column, DataFrame, Window
 from pyspark.sql import functions as F
+from silver.common.pipeline import CATALOG, manifest
 
 TRANSFORM_VERSION = "project_details_silver_v1.0.0"
-BRONZE = "workspace.wbg_bronze.bronze_projects_v3_allfields"
+BRONZE = f"{CATALOG}.wbg_bronze.bronze_projects_v3_allfields"
 SOURCE_API = "search.worldbank.org/api/v3/projects (id=<P>, fl=*)"
 REPO = Path(__file__).resolve().parents[2]
-BRONZE_INPUTS_MANIFEST = REPO / "databricks_upload" / "bronze_inputs" / "_manifest" / "bronze_inputs_manifest.json"
-SAMPLES_MANIFEST = REPO / "discovery" / "samples" / "MANIFEST.jsonl"
+BRONZE_INPUTS_MANIFEST = manifest("WBG_BRONZE_INPUTS_MANIFEST", REPO / "databricks_upload" / "bronze_inputs" / "_manifest" / "bronze_inputs_manifest.json")
+SAMPLES_MANIFEST = manifest("WBG_SOURCE_PULLS_MANIFEST", REPO / "discovery" / "samples" / "MANIFEST.jsonl")
 DETAIL_COVERAGE = "phase1_cluster_detail_pull"
 RECORD_SEMANTICS = "current_values_as_of_source_retrieval"
 TRANSACTION_SEMANTICS = "dated_records_from_snapshot_retrieved_2026_10_21"

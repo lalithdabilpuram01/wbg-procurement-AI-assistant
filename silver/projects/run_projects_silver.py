@@ -22,15 +22,17 @@ from pathlib import Path
 import pandas as pd
 from pyspark.sql import functions as F
 
+from silver.common import pipeline
 from silver.common.dq import DQReport
+from silver.common.pipeline import CATALOG, runs_dir
 from silver.common.session import DEFAULT_PROFILE, get_spark
 from silver.common.sourcefiles import verify_source_files
 from silver.common.write import create_table
 from silver.projects import transform as P
 from silver.projects.checks import check, cohort_df
 
-TARGET = "workspace.wbg_silver.projects"
-RUNS = Path(__file__).resolve().parents[1] / "runs"
+TARGET = f"{CATALOG}.wbg_silver.projects"
+RUNS = runs_dir(Path(__file__).resolve().parents[1] / "runs")
 EXISTING_SILVER = ["wdi_indicator_observations", "wdi_country", "income_classification_history", "wgi_estimates", "cpia_ratings"]
 NOT_NULL = ["project_id", "project_name", "country_code", "geography_type", "wdi_match_method", "project_status", "approval_fiscal_year_raw",
             "bronze_raw_record", "raw_record_sha256", "bronze_source_file", "bronze_ingested_at", "bronze_input_file_sha256"]
@@ -66,7 +68,7 @@ def main() -> int:
     run_dir.mkdir(parents=True, exist_ok=True)
     spark = get_spark(args.profile)
     baseline: dict = {"bronze": {}, "silver": {}, "target_exists": spark.catalog.tableExists(TARGET)}
-    for group, tables in (("bronze", [P.BRONZE_TABLE]), ("silver", [f"workspace.wbg_silver.{t}" for t in EXISTING_SILVER])):
+    for group, tables in (("bronze", [P.BRONZE_TABLE]), ("silver", [f"{CATALOG}.wbg_silver.{t}" for t in EXISTING_SILVER])):
         for t in tables:
             h = spark.sql(f"DESCRIBE HISTORY {t} LIMIT 1").collect()[0]
             baseline[group][t] = {"version": h.version, "rows": spark.table(t).count()}
@@ -102,7 +104,7 @@ def main() -> int:
     if args.mode == "dry-run":
         print("DRY RUN: nothing written to Databricks")
         return 0
-    if baseline["target_exists"]:
+    if baseline["target_exists"] and not pipeline.ENABLED:
         raise SystemExit(f"{TARGET} already exists: refusing to overwrite")
     create_table(spark, out, TARGET,
                  {"silver.run_id": run_id, "silver.transform_version": P.TRANSFORM_VERSION, "silver.source_table": P.BRONZE_TABLE,

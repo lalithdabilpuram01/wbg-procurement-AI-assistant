@@ -47,10 +47,9 @@ def run_scenarios(tracer):
                                                         task("b", operation="describe_metric", question="metric b"))),
                                breaker_settings=BreakerSettings(2, 60, 60, 120))
     retrying.start(request("Investigate the metrics step by step"))
-    hitl, _ = build_engine(tracer=tracer, planner=FakePlanner(plan(task("m", operation="describe_metric", question="metric"),
-                                                                   task("c", deps=("m",), execute=True))))
-    pending = hitl.start(request("Investigate the bid invitations of fiscal year 2024 and then explain"))
-    hitl.resume(ALICE, pending.thread_id, pending.pending_approval.approval_id, approved=True)
+    planned, _ = build_engine(tracer=tracer, planner=FakePlanner(plan(task("m", operation="describe_metric", question="metric"),
+                                                                      task("c", deps=("m",), execute=True))))
+    planned.start(request("Investigate the bid invitations of fiscal year 2024 and then explain"))
 
 
 def test_traces_are_metadata_only(traced):
@@ -68,8 +67,7 @@ def test_traces_are_metadata_only(traced):
         dump = json.dumps({k: str(v) for k, v in span.attributes.items()})
         assert not any(term in dump for term in FORBIDDEN), f"{span.name} leaked content"
     events = {s.name for s in spans}
-    for expected in ("orchestrator.task_retry", "orchestrator.circuit_breaker_transition", "orchestrator.approval_requested",
-                     "orchestrator.approval_decision", "orchestrator.investigation_finished"):
+    for expected in ("orchestrator.task_retry", "orchestrator.circuit_breaker_transition", "orchestrator.investigation_finished"):
         assert expected in events, expected
     finished = [s for s in spans if s.name == "orchestrator.investigation_finished"]
     assert any(s.attributes.get("input_tokens", 0) > 0 for s in finished)                 # token metrics recorded
@@ -100,30 +98,28 @@ def test_every_span_and_event_correlates_investigation_conversation_plan_and_tas
     tracer = OrchestratorTracer.local([SimpleSpanProcessor(exporter)])
     engine, _ = build_engine(tracer=tracer, planner=FakePlanner(plan(task("m", operation="describe_metric", question="metric"),
                                                                      task("c", deps=("m",), execute=True))))
-    pending = engine.start(request(f"Investigate the bid invitations of fiscal year 2024 and then explain {SYNTHETIC_SECRETS[0]}",
-                                   thread="conv-77"))
-    assert pending.status == InvestigationStatus.AWAITING_APPROVAL
-    done = engine.resume(ALICE, pending.thread_id, pending.pending_approval.approval_id, approved=True)
+    done = engine.start(request(f"Investigate the bid invitations of fiscal year 2024 and then explain {SYNTHETIC_SECRETS[0]}",
+                                thread="conv-77"))
     assert done.status == InvestigationStatus.ANSWERED
     tracer.force_flush()
     spans = exporter.get_finished_spans()
     assert {"orchestrator.node.execute", "orchestrator.task_attempt", "orchestrator.node.respond"} <= {s.name for s in spans}
-    investigation = pending.values["request"]["investigation_id"]
-    planned_nodes = {"validate_plan", "request_approval", "await_approval", "dispatch", "execute", "verify", "respond"}
+    investigation = done.values["request"]["investigation_id"]
+    planned_nodes = {"validate_plan", "dispatch", "execute", "verify", "respond"}
     for span in spans:
         attributes = span.attributes
-        if span.name.startswith("orchestrator.node.") or span.name.startswith("orchestrator.approval") or \
+        if span.name.startswith("orchestrator.node.") or \
                 span.name in ("orchestrator.dispatch", "orchestrator.investigation_finished", "orchestrator.task_attempt"):
             assert attributes["investigation_id"] == investigation and attributes["conversation_id"] == "conv-77", span.name
         if span.name.removeprefix("orchestrator.node.") in planned_nodes or span.name == "orchestrator.task_attempt":
-            assert attributes["plan_id"] == pending.values["plan"]["plan_id"], span.name
+            assert attributes["plan_id"] == done.values["plan"]["plan_id"], span.name
         if span.name == "orchestrator.task_attempt":
-            assert attributes["task_id"].startswith(pending.values["plan"]["plan_id"])
+            assert attributes["task_id"].startswith(done.values["plan"]["plan_id"])
         if span.name.startswith("orchestrator.node."):
             assert attributes["owner_hash"] == ALICE.user_hash and "alice" not in json.dumps(dict(attributes))
         dump = json.dumps({k: str(v) for k, v in attributes.items()})
         assert not any(secret in dump for secret in SYNTHETIC_SECRETS)
-    assert {"orchestrator.checkpoint_saved", "orchestrator.checkpoint_resumed"} <= {s.name for s in spans}
+    assert "orchestrator.checkpoint_saved" in {s.name for s in spans}
 
 
 def test_the_audit_timeline_reads_one_investigation_step_by_step():

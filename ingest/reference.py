@@ -4,13 +4,15 @@ from __future__ import annotations
 
 import csv
 import json
+import os
 import re
 from dataclasses import dataclass, field
 from functools import lru_cache
 
 from rag.ingestion import config, contracts_snapshot, evidence
 
-V3_VOCAB = config.OUTPUT_V3 / "reference" / "vocab.json"
+V3_VOCAB = (config.REFERENCE / "vocab.json" if os.environ.get("WBG_RAG_REFERENCE_DIR")
+            else config.OUTPUT_V3 / "reference" / "vocab.json")
 
 
 def normalise_reference(value: str | None) -> str | None:

@@ -1,0 +1,21 @@
+{
+  "workspace_host": "https://dbc-0c89a1d3-a697.cloud.databricks.com",
+  "workspace_id": "7474656606200987",
+  "dashboards": [
+    {
+      "key": "snapshot",
+      "title": "Verified snapshot (workspace)",
+      "dashboard_id": "01f1d333522016b8b63f6247e7f929d4",
+      "source": "workspace.wbg_gold: the verified October 2026 snapshot the assistant answers from",
+      "catalog": "workspace"
+    },
+    {
+      "key": "pipeline",
+      "title": "Pipeline (wbg_etl)",
+      "dashboard_id": "01f1d3524fa5127fa4ca6fd18e064b07",
+      "source": "wbg_etl.wbg_gold: rebuilt by the Lakeflow ETL job after every upload",
+      "catalog": "wbg_etl"
+    }
+  ],
+  "warehouse_id": "0761b45505de79f9"
+}

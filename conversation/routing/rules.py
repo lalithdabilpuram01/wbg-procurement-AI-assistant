@@ -34,6 +34,22 @@ CONVERSATIONAL_CLAUSES: dict[ReasonCategory, re.Pattern] = {
 }
 CLAUSE_SPLIT = re.compile(r"[.!?,;:]+|\s+-\s+")
 
+# ------------------------------------------------------------------------------------------- the previous answer
+# The whole message asks about what was already said: answered from the conversation history, never by a new search.
+_THAT = r"(that|this|it|those|these|your( last| previous)? (answer|reply|response|point)|the (last|previous) (answer|reply)|what you (just )?said)"
+_HOW = r"(simply|more simply|in simple(r)? (terms|words|english)|in plain (english|words|terms)|in (more )?detail|briefly|again|step by step|for me|please)"
+ABOUT_PREVIOUS_ANSWER = _rx(
+    rf"^(please |can you |could you |would you )?(explain|clarify|elaborate( on)?|expand( on)?|simplify|rephrase|reword|"
+    rf"summari[sz]e|shorten|break down|unpack)( {_THAT})?( {_HOW})*( please)?$"
+    rf"|^(what do you mean( by {_THAT})?|what does {_THAT} mean|what is meant by {_THAT}|why( is| was| would)?( {_THAT})?( so)?|"
+    rf"how so|how come|really|are you sure|in simple(r)? (terms|words)|say {_THAT} again|tell me more( about {_THAT})?|"
+    rf"go on|what else|anything else|is that (all|right|correct)|(and )?what about the rest|(give|show) me (a )?(shorter|simpler) version)$")
+
+
+def is_about_previous_answer(text: str) -> bool:
+    return bool(ABOUT_PREVIOUS_ANSWER.match(text.strip().rstrip("?!. ")))
+
+
 # ------------------------------------------------------------------------------------------------ memory recall
 MEMORY_RECALL = _rx(r"\b(summari[sz]e|recap|remind me|go over|go back over)\b.{0,40}\b(we|our|this|the|i)\s+"
                     r"(discussed|discussion|conversation|talked|covered|decided|chat|asked|said|agreed)\b"

@@ -5,6 +5,7 @@ from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql import functions as F
 
 from silver.common.dq import DQReport
+from silver.common.pipeline import CATALOG
 from silver.projects.transform import AMOUNTS
 
 
@@ -45,7 +46,7 @@ def check(spark: SparkSession, s: DataFrame, bronze: DataFrame, cohort: DataFram
     report.equals("regional_projects_never_mapped_to_wdi", s.filter("geography_type = 'regional_multicountry' AND wdi_country_code IS NOT NULL").count(), 0)
     report.equals("single_country_projects_unmatched_to_wdi", s.filter("geography_type = 'single_country' AND wdi_match_method = 'unmatched'").count(), 0)
     report.equals("single_country_matched_to_non_economy",
-                  s.filter("geography_type = 'single_country'").join(spark.table("workspace.wbg_silver.wdi_country").select(F.col("country_code").alias("w"), "entity_type"),
+                  s.filter("geography_type = 'single_country'").join(spark.table(f"{CATALOG}.wbg_silver.wdi_country").select(F.col("country_code").alias("w"), "entity_type"),
                                                                    F.col("wdi_country_code") == F.col("w")).filter("entity_type != 'economy'").count(), 0)
     meth = {r[0]: r[1] for r in s.groupBy("wdi_match_method").count().collect()}
     report.add("wdi_match_methods (projects)", meth, "exact + curated_alias = 1,861; not_applicable_regional = 139", True, "warn")

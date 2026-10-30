@@ -3,14 +3,14 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { X } from "lucide-react";
 import {
-  api, waitForJob, type Bookmark, type Conversation, type ConversationDetail, type FeedbackReason, type Folder, type Investigation,
-  type Job, type Me, type PackageInput, type PlanInput, type TenderInput,
+  api, streamJob, waitForJob, type Bookmark, type Conversation, type ConversationDetail, type FeedbackReason, type Folder, type Investigation,
+  type Job, type LiveEvent, type LiveStep, type Me, type PackageAssessmentInput, type PlanInput, type TenderInput,
 } from "@/lib/api";
 import { Sidebar, type View } from "./sidebar";
 import { ChatView } from "./chat";
-import { MemoryView } from "./memory";
 import { ReviewsView } from "./reviews";
 import { WatchView } from "./watch";
+import { DashboardView } from "./dashboard";
 import { PackageDialog } from "./package-dialog";
 import { PlanDialog } from "./plan-dialog";
 import { TenderDialog } from "./tender-dialog";
@@ -29,6 +29,7 @@ export function AppShell() {
   const [detail, setDetail] = useState<ConversationDetail | null>(null);
   const [investigations, setInvestigations] = useState<Record<string, Investigation>>({});
   const [pending, setPending] = useState<string | null>(null);
+  const [live, setLive] = useState<{ steps: LiveStep[]; text: string }>({ steps: [], text: "" });
   const [error, setError] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [packageOpen, setPackageOpen] = useState(false);
@@ -37,6 +38,7 @@ export function AppShell() {
   const [scrollToSeq, setScrollToSeq] = useState<number | null>(null);
   const [jobId, setJobId] = useState<string | null>(null);
   const [watchedId, setWatchedId] = useState<string | null>(null);
+  const [newChatFolder, setNewChatFolder] = useState<string | null>(null);    // the folder a new chat will be filed in
 
   const report = useCallback((e: unknown) => setError(e instanceof Error ? e.message : String(e)), []);
 
@@ -67,8 +69,11 @@ export function AppShell() {
       .filter((t) => t.role === "assistant" && t.request_id && known.has(t.request_id))
       .map((t) => t.request_id!)
       .filter((r) => reload.includes(r) || !investigations[r]);
-    const fetched = await Promise.all(needed.map(async (r) => [r, await api.investigation(id, r)] as const));
+    // one investigation that cannot be read (e.g. an old run paused for an approval) must not keep the chat closed
+    const settled = await Promise.allSettled(needed.map(async (r) => [r, await api.investigation(id, r)] as const));
+    const fetched = settled.flatMap((s) => (s.status === "fulfilled" ? [s.value] : []));
     setInvestigations((current) => ({ ...current, ...Object.fromEntries(fetched) }));
+    setNewChatFolder(null);
     setActiveId(id);
     setDetail(loaded);
     setView("chat");
@@ -78,6 +83,10 @@ export function AppShell() {
   const ensureConversation = async (title: string): Promise<string> => {
     if (activeId) return activeId;
     const created = await api.createConversation(title.slice(0, 120));
+    if (newChatFolder) {                                                         // started from a folder: file it there
+      await api.fileConversation(created.conversation_id, newChatFolder);
+      setNewChatFolder(null);
+    }
     setActiveId(created.conversation_id);
     setDetail({ conversation_id: created.conversation_id, turns: [], investigations: [] });
     return created.conversation_id;
@@ -96,6 +105,11 @@ export function AppShell() {
     try {
       const started = await start();
       setJobId(started.job_id);
+      setLive({ steps: [], text: "" });
+      const onEvent = (event: LiveEvent) => {                                    // live steps only; the checked answer
+        if (event.type === "step") setLive((l) => ({ ...l, steps: mergeStep(l.steps, event) }));   // appears whole at the end
+      };
+      await streamJob(started.job_id, onEvent).catch(() => false);              // falls back to polling below
       const job = await waitForJob(started);
       if (job.state === "failed") setError(FAILED_JOB);
       await openConversation(id, null, job.request_id ? [...reload, job.request_id] : reload);
@@ -105,6 +119,7 @@ export function AppShell() {
     } finally {
       setPending(null);
       setJobId(null);
+      setLive({ steps: [], text: "" });
     }
   };
 
@@ -121,11 +136,12 @@ export function AppShell() {
     } catch (e) { report(e); }
   };
 
-  const assess = async (input: PackageInput) => {
-    const id = await ensureConversation(`Package · ${input.project_id} · ${input.procurement_category}`);
-    const text = `Assess a ${input.procurement_category} package for ${input.project_id}: ${input.procurement_method}, ` +
+  const assess = async (input: PackageAssessmentInput) => {
+    const project = input.project_id ?? `a new ${input.sector} project (${input.country_code})`;
+    const id = await ensureConversation(`Package · ${input.project_id ?? "new project"} · ${input.procurement_category}`);
+    const text = `Assess a ${input.procurement_category} package for ${project}: ${input.procurement_method}, ` +
       `${input.review_type} review, ${input.bid_window_days}-day bid window, tender on ${input.tender_date}.`;
-    void runJob(id, "Looking up the project, running the three models and searching past lessons…",
+    void runJob(id, "Running the three models on your inputs and searching past lessons…",
       () => api.assessPackage(id, input), text);
   };
 
@@ -142,12 +158,6 @@ export function AppShell() {
     const text = `Plan a new ${input.profile.sector} project in ${input.profile.country_code}: ${input.profile.description}`;
     void runJob(id, "Finding similar past projects, reading their reports and data, and running the models…",
       () => api.planProject(id, input), text);
-  };
-
-  const decide = async (requestId: string, approvalId: string, approved: boolean) => {
-    if (!activeId) return;
-    await runJob(activeId, approved ? "Running the approved query…" : "Recording your decision…",
-      () => api.decide(activeId, requestId, approvalId, approved), "", [requestId]);
   };
 
   /** Feedback on an answer; a thumbs-down with a correction re-runs the question (a revision job). */
@@ -194,32 +204,36 @@ export function AppShell() {
         <Sidebar conversations={conversations} folders={folders} activeId={activeId} view={view}
           reviewer={me.reviewer} feedback={me.feedback} pendingReviews={pendingReviews}
           onSelect={(id) => openConversation(id).catch(report)}
-          onNew={() => { setActiveId(null); setDetail(null); setView("chat"); }}
-          onMemory={() => setView("memory")}
+          onNew={(folderId) => { setActiveId(null); setDetail(null); setNewChatFolder(folderId ?? null); setView("chat"); }}
           onReviews={() => setView("reviews")}
           onWatch={() => setView("watch")}
+          onDashboard={() => setView("dashboard")}
           onCreateFolder={(name) => withRefresh(() => api.createFolder(name))()}
           onRenameFolder={(id, name) => withRefresh(() => api.renameFolder(id, name))()}
           onDeleteFolder={(id) => withRefresh(() => api.deleteFolder(id))()}
           onRenameConversation={(id, title) => withRefresh(() => api.renameConversation(id, title))()}
+          onDeleteConversation={(id) => withRefresh(async () => {
+            await api.deleteConversation(id);
+            if (id === activeId) { setActiveId(null); setDetail(null); setView("chat"); }
+          })()}
           onFile={(id, folderId) => withRefresh(() => api.fileConversation(id, folderId))()}
           onCollapse={() => setSidebarOpen(false)} />
       )}
       <main className="relative flex min-w-0 flex-1">
-        {view === "memory" ? (
-          <MemoryView reviewer={me.reviewer} onError={report} onPreferences={(p) => setDefaultTableLens(!!p.table_lens)} />
-        ) : view === "reviews" ? (
+        {view === "reviews" ? (
           <ReviewsView onError={report} onChanged={setPendingReviews} />
+        ) : view === "dashboard" ? (
+          <DashboardView onError={report} />
         ) : view === "watch" ? (
           <WatchView projectId={watchedId} onProject={setWatchedId} onError={report} />
         ) : (
-          <ChatView title={active?.title ?? null} detail={detail} investigations={investigations} pending={pending}
+          <ChatView title={active?.title ?? null} detail={detail} investigations={investigations} pending={pending} live={live}
             bookmarkedSeqs={bookmarkedSeqs} chatBookmarks={chatBookmarks} sidebarOpen={sidebarOpen} scrollToSeq={scrollToSeq}
             onRemoveBookmark={(b) => withRefresh(() => api.deleteBookmark(b.bookmark_id))()}
             onOpenSidebar={() => setSidebarOpen(true)} onSend={send} onStop={stop} onAssess={() => setPackageOpen(true)}
             onPlan={() => setPlanOpen(true)} onTender={() => setTenderOpen(true)}
-            onToggleBookmark={toggleBookmark} onDecide={decide} defaultTableLens={defaultTableLens}
-            onFeedback={me.feedback ? giveFeedback : undefined} onManageMemory={() => setView("memory")} onWatch={watchProject} />
+            onToggleBookmark={toggleBookmark} defaultTableLens={defaultTableLens}
+            onFeedback={me.feedback ? giveFeedback : undefined} onWatch={watchProject} />
         )}
         {error && (
           <div role="alert" className="absolute bottom-24 left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-xl border border-danger/30 bg-danger-soft px-4 py-2.5 text-sm text-danger shadow-lg">
@@ -233,4 +247,11 @@ export function AppShell() {
       <TenderDialog open={tenderOpen} onOpenChange={setTenderOpen} onSubmit={checkTender} />
     </div>
   );
+}
+
+/** A step's latest state replaces its earlier one; new steps are added in the order they start. */
+function mergeStep(steps: LiveStep[], step: LiveStep): LiveStep[] {
+  const { key, label, state, ms } = step;
+  const next = { key, label, state, ms };
+  return steps.some((s) => s.key === key) ? steps.map((s) => (s.key === key ? next : s)) : [...steps, next];
 }

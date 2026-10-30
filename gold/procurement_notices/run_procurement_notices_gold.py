@@ -27,12 +27,13 @@ from gold.common import baseline as B
 from gold.procurement_notices import transform as T
 from gold.procurement_notices.checks import check
 from silver.common.dq import DQReport
+from silver.common.pipeline import CATALOG, runs_dir
 from silver.common.session import DEFAULT_PROFILE, get_spark
 from silver.common.write import create_table
 
 REPO = Path(__file__).resolve().parents[2]
-RUNS = REPO / "gold" / "runs"
-PORTFOLIO = "workspace.wbg_gold.gold_project_portfolio"
+RUNS = runs_dir(REPO / "gold" / "runs")
+PORTFOLIO = f"{CATALOG}.wbg_gold.gold_project_portfolio"
 CLASS_CASE = "CASE notice_type " + " ".join(f"WHEN '{t}' THEN '{c}'" for t, c in T.CLASSES.items()) + " END"
 NOT_NULL = ["notice_op_id", "notice_id", "project_id", "geography_type", "country_context_status", "notice_country_code_status",
             "income_group_status_at_publication_fy", "notice_type", "notice_class", "is_tender_invitation", "is_solicitation_notice", "is_award_announcement",
@@ -135,7 +136,7 @@ def main() -> int:
         cohort_ids = {r["project_id"] for r in csv.DictReader(fh)}
     dfs, versions = T.load_sources(spark)
     g = T.build(dfs, versions, run_id)
-    summary = check(g, {**dfs, "bronze_projects_v3_allfields": spark.table("workspace.wbg_bronze.bronze_projects_v3_allfields")}, spark.table(PORTFOLIO), cohort_ids, rep)
+    summary = check(g, {**dfs, "bronze_projects_v3_allfields": spark.table(f"{CATALOG}.wbg_bronze.bronze_projects_v3_allfields")}, spark.table(PORTFOLIO), cohort_ids, rep)
     rep.equals("delta_check_constraints_hold_before_write", {c: g.filter(f"NOT coalesce(({e}), false)").count() for c, e in CONSTRAINTS.items()}, {c: 0 for c in CONSTRAINTS})
     rep.equals("not_null_columns_have_no_nulls", {c: g.filter(f"`{c}` IS NULL").count() for c in NOT_NULL}, {c: 0 for c in NOT_NULL})
     summary["silver_source_versions"] = json.loads(versions)

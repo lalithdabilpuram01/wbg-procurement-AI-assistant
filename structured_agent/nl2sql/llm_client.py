@@ -29,7 +29,7 @@ import re
 import time
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any
+from typing import Any, Callable
 
 import httpx
 
@@ -139,6 +139,33 @@ class PortkeyClaudeClient:
             raise self._http_error(response)
         return self._parse(response.json(), request, round(1000 * (time.perf_counter() - started)))
 
+    def stream(self, request: ClaudeRequest, on_text: Callable[[str], None]) -> ClaudeResponse:
+        """A reply streamed as it is written: `on_text` gets each piece of the raw text (for a structured reply, pieces of
+        its JSON); the whole reply is returned, parsed like `complete`. The same checks: Claude only, typed errors."""
+        if self._live:
+            require_live_env_opt_in()
+        timeout = request.timeout_seconds or self._settings.timeout_seconds
+        started = time.perf_counter()
+        body = {**self._body(request), "stream": True, "stream_options": {"include_usage": True}}
+        reply = _StreamedReply()
+        try:
+            with self._http.stream("POST", PORTKEY_CHAT_COMPLETIONS_URL, headers=self._headers(request, timeout), json=body,
+                                   timeout=timeout) as response:
+                if response.status_code != 200:
+                    response.read()
+                    raise self._http_error(response)
+                if "text/event-stream" not in response.headers.get("content-type", ""):   # the gateway did not stream
+                    whole = self._parse(json.loads(response.read()), request, round(1000 * (time.perf_counter() - started)))
+                    on_text(whole.content)
+                    return whole
+                for line in response.iter_lines():
+                    reply.add(line, on_text)
+        except httpx.TimeoutException:
+            raise LlmError(LlmFailure.TIMEOUT) from None
+        except httpx.TransportError:
+            raise LlmError(LlmFailure.CONNECTION) from None
+        return reply.response(round(1000 * (time.perf_counter() - started)), structured=request.json_schema is not None)
+
     # ------------------------------------------------------------------------------------------------------ request
     def _headers(self, request: ClaudeRequest, timeout_seconds: float) -> dict[str, str]:
         # Deliberately no x-portkey-config header: Claude-only routing.
@@ -199,6 +226,44 @@ class PortkeyClaudeClient:
                               input_tokens=int(usage.get("prompt_tokens", 0)), output_tokens=int(usage.get("completion_tokens", 0)),
                               duration_ms=duration_ms, cache_read_tokens=int(usage.get("cache_read_input_tokens") or 0),
                               cache_write_tokens=int(usage.get("cache_creation_input_tokens") or 0))
+
+
+class _StreamedReply:
+    """Accumulates the server-sent events of a streamed completion (OpenAI-compatible chunks from Portkey)."""
+
+    def __init__(self) -> None:
+        self.parts: list[str] = []
+        self.model, self.provider, self.finish, self.usage = "", "anthropic", None, {}
+
+    def add(self, line: str, on_text: Callable[[str], None]) -> None:
+        if not line.startswith("data:") or line[5:].strip() == "[DONE]":
+            return
+        try:
+            chunk = json.loads(line[5:])
+        except json.JSONDecodeError:
+            raise LlmError(LlmFailure.INVALID_OUTPUT) from None
+        self.model = str(chunk.get("model") or self.model)
+        self.provider = str(chunk.get("provider") or self.provider)
+        if self.model and ("claude" not in self.model.lower() or self.provider.lower() != "anthropic"):
+            raise LlmError(LlmFailure.UNEXPECTED_PROVIDER)              # stop before any non-Claude text is shown
+        self.usage = chunk.get("usage") or self.usage
+        for choice in chunk.get("choices") or []:
+            self.finish = choice.get("finish_reason") or self.finish
+            text = (choice.get("delta") or {}).get("content")
+            if text:
+                self.parts.append(text)
+                on_text(text)
+
+    def response(self, duration_ms: int, structured: bool = False) -> ClaudeResponse:
+        if not self.model:
+            raise LlmError(LlmFailure.INVALID_OUTPUT)
+        if self.finish == "length":
+            raise LlmError(LlmFailure.OUTPUT_TRUNCATED)
+        u, content = self.usage, "".join(self.parts)
+        return ClaudeResponse(content=content, parsed=_parse_json_object(content) if structured else None, model=self.model,
+                              input_tokens=int(u.get("prompt_tokens", 0)), output_tokens=int(u.get("completion_tokens", 0)),
+                              duration_ms=duration_ms, cache_read_tokens=int(u.get("cache_read_input_tokens") or 0),
+                              cache_write_tokens=int(u.get("cache_creation_input_tokens") or 0))
 
 
 def _parse_json_object(content: str) -> dict[str, Any]:

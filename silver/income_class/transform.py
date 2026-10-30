@@ -11,10 +11,11 @@ from datetime import datetime, timezone
 from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql import types as T
 
+from silver.common.pipeline import CATALOG
 from silver.income_class.parse import ParsedWorkbook, parse_oghist
 
 TRANSFORM_VERSION = "income_class_silver_v1.0.0"
-BRONZE_TABLE = "workspace.wbg_ref_bronze.income_classification_history"
+BRONZE_TABLE = f"{CATALOG}.wbg_ref_bronze.income_classification_history"
 EXPECTED_SHA256 = "a4024eb8052150155034559daf053aabbc16336d8290efeb5629e6eeb6515a60"  # OGHIST_2026_10_08.xlsx (R2)
 
 SCHEMA = T.StructType([

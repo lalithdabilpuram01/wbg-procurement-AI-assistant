@@ -1,7 +1,7 @@
 """C3: the local web API over the conversation service, the engine and its checkpoints (offline, fakes only).
 
 Covers: authentication, start and follow-up, background jobs, duplicate messages, one job per conversation,
-cross-user isolation on every path, approval through the API, cancel, restart recovery with the same checkpoints
+cross-user isolation on every path, planned investigations that run without a review step, cancel, restart recovery with the same checkpoints
 and conversation store, an interrupted run continued with `recover`, and input validation.
 """
 from __future__ import annotations
@@ -22,7 +22,6 @@ from conversation.store import InMemoryConversationStore
 from wbg_orchestrator.api import UserDirectory, create_app
 from wbg_orchestrator.app_service import AppService
 from wbg_orchestrator.conversation_bridge import ConversationFrontDoor, ConversationRunner
-from wbg_orchestrator.hitl import ApprovalPolicy
 from wbg_orchestrator.planner import FakePlanner
 
 from tests.helpers import AUTH, BID_SQL, FakeWorkflow, PolicyGuard, build_engine, plan, task, workflow_result
@@ -136,50 +135,34 @@ def test_another_user_sees_nothing_and_can_change_nothing(tmp_path):
     cid = stack.conversation()
     job = stack.wait(stack.send(cid, PLANNED, "msg-0001").json()["job_id"])
     rid = job["request_id"]
-    approval = stack.call("GET", f"/conversations/{cid}/investigations/{rid}").json()["pending_approval"]
     base = f"/conversations/{cid}/investigations/{rid}"
     for method, path, body in [("GET", f"/conversations/{cid}", None), ("GET", base, None), ("GET", f"/jobs/{job['job_id']}", None),
                                ("POST", f"/conversations/{cid}/messages", {"text": "hi", "client_message_id": "msg-bob-01"}),
-                               ("POST", f"{base}/decision", {"approval_id": approval["approval_id"], "approved": True,
-                                                             "client_message_id": "msg-bob-02"}),
                                ("POST", f"{base}/recover", {"client_message_id": "msg-bob-03"}),
                                ("POST", f"{base}/cancel", None)]:
         assert stack.call(method, path, "bob", json=body).status_code == 404, path
     assert stack.call("GET", "/conversations", "bob").json() == []
-    assert stack.call("GET", base).json()["status"] == "awaiting_approval" and stack.parts["workflow"].calls == []
+    assert stack.call("GET", base).json()["status"] == "answered" and len(stack.parts["workflow"].calls) == 1   # alice's run only
 
 
-# ----------------------------------------------------------------------------------------------- approvals
-def test_approval_through_the_api_runs_once(tmp_path):
+# ------------------------------------------------------------------------------------------ planned questions
+def test_a_planned_investigation_runs_straight_away_and_once(tmp_path):
     stack = Stack(tmp_path, planner=planned())
     cid = stack.conversation()
-    rid = stack.wait(stack.send(cid, PLANNED, "msg-0001").json()["job_id"])["request_id"]
-    view = stack.call("GET", f"/conversations/{cid}/investigations/{rid}").json()
-    assert view["status"] == "awaiting_approval" and view["pending_approval"]["kind"] == "execute_sql"
-    answer = {"approval_id": view["pending_approval"]["approval_id"], "approved": True, "client_message_id": "msg-approve-1"}
-    done = stack.wait(stack.call("POST", f"/conversations/{cid}/investigations/{rid}/decision", json=answer).json()["job_id"])
-    assert done["status"] == "answered" and [c["execute"] for c in stack.parts["workflow"].calls] == [True]
+    done = stack.wait(stack.send(cid, PLANNED, "msg-0001").json()["job_id"])
+    assert done["status"] == "answered" and [c["execute"] for c in stack.parts["workflow"].calls] == [True]   # no review step
+    view = stack.call("GET", f"/conversations/{cid}/investigations/{done['request_id']}").json()
+    assert "pending_approval" not in view
     last = stack.call("GET", f"/conversations/{cid}").json()["turns"][-1]
-    assert last["role"] == "assistant" and last["status"] == "answered" and last["request_id"] == rid   # answer in history
-    replay = stack.wait(stack.call("POST", f"/conversations/{cid}/investigations/{rid}/decision",
-                                   json={**answer, "client_message_id": "msg-approve-2"}).json()["job_id"])
-    assert replay["state"] == "failed" and replay["error"] == "ApprovalNotPending"
-    assert len(stack.parts["workflow"].calls) == 1
-
-
-def test_cancel_rejects_a_pending_approval(tmp_path):
-    stack = Stack(tmp_path, planner=planned())
-    cid = stack.conversation()
-    rid = stack.wait(stack.send(cid, PLANNED, "msg-0001").json()["job_id"])["request_id"]
-    cancelled = stack.call("POST", f"/conversations/{cid}/investigations/{rid}/cancel").json()
-    assert cancelled["status"] == "rejected" and stack.parts["workflow"].calls == []
+    assert last["role"] == "assistant" and last["status"] == "answered" and last["request_id"] == done["request_id"]
+    assert stack.call("POST", f"/conversations/{cid}/investigations/{done['request_id']}/decision",
+                      json={"approval_id": "x", "approved": True, "client_message_id": "msg-old-1"}).status_code == 404
 
 
 def test_cancel_stops_a_running_investigation_before_its_next_task(tmp_path):
-    no_approval = ApprovalPolicy(execution_requires_approval="never")
     two_tasks = FakePlanner(plan(task("a", execute=True, question="Bid invitations in fiscal year 2023?"),
                                  task("b", deps=("a",), execute=True, question="Bid invitations in fiscal year 2024?")))
-    stack = Stack(tmp_path, planner=two_tasks, policy=no_approval, workflow=FakeWorkflow(delay_seconds=0.5))
+    stack = Stack(tmp_path, planner=two_tasks, workflow=FakeWorkflow(delay_seconds=0.5))
     cid = stack.conversation()
     job = stack.send(cid, "Investigate how many bid invitations were published in fiscal year 2023 and then 2024", "msg-0001").json()
     for _ in range(100):                                 # wait until the investigation is visible and running
@@ -196,17 +179,14 @@ def test_cancel_stops_a_running_investigation_before_its_next_task(tmp_path):
 
 
 # ---------------------------------------------------------------------------------------- restart recovery
-def test_state_survives_a_restart_and_the_owner_can_still_approve(tmp_path):
+def test_a_finished_investigation_is_still_there_after_a_restart(tmp_path):
     first = Stack(tmp_path, planner=planned())
     cid = first.conversation()
     rid = first.wait(first.send(cid, PLANNED, "msg-0001").json()["job_id"])["request_id"]
     first.service.shutdown()
     restarted = Stack(tmp_path, store=first.store, saver=first.saver)            # new process, same durable state
     view = restarted.call("GET", f"/conversations/{cid}/investigations/{rid}").json()
-    assert view["status"] == "awaiting_approval"
-    answer = {"approval_id": view["pending_approval"]["approval_id"], "approved": True, "client_message_id": "msg-approve-1"}
-    done = restarted.wait(restarted.call("POST", f"/conversations/{cid}/investigations/{rid}/decision", json=answer).json()["job_id"])
-    assert done["status"] == "answered" and len(restarted.parts["workflow"].calls) == 1 and first.parts["workflow"].calls == []
+    assert view["status"] == "answered" and restarted.parts["workflow"].calls == [] and len(first.parts["workflow"].calls) == 1
 
 
 def test_an_interrupted_investigation_is_reported_and_can_be_recovered(tmp_path):
@@ -215,13 +195,11 @@ def test_an_interrupted_investigation_is_reported_and_can_be_recovered(tmp_path)
 
     def crash(question: str, execute: bool):
         raise Crash()
-
-    no_approval = ApprovalPolicy(execution_requires_approval="never")
-    first = Stack(tmp_path, planner=planned(), policy=no_approval, workflow=FakeWorkflow(crash))
+    first = Stack(tmp_path, planner=planned(), workflow=FakeWorkflow(crash))
     cid = first.conversation()
     with pytest.raises(Crash):                           # the run dies mid-way, like a killed process
         first.service._front_door.handle_message(ALICE_OWNER, cid, PLANNED)
-    restarted = Stack(tmp_path, store=first.store, saver=first.saver, policy=no_approval)
+    restarted = Stack(tmp_path, store=first.store, saver=first.saver)
     rid = restarted.call("GET", f"/conversations/{cid}").json()["investigations"][0]["request_id"]
     assert restarted.call("GET", f"/conversations/{cid}/investigations/{rid}").json()["status"] == "interrupted"
     done = restarted.wait(restarted.call("POST", f"/conversations/{cid}/investigations/{rid}/recover",
@@ -248,7 +226,8 @@ def test_workflow_result_text_is_redacted_before_it_is_stored(tmp_path):
 
 # ------------------------------------------------------------------------------------------ package assessments
 PACKAGE = {"project_id": "P148850", "procurement_method": "Request for Bids", "procurement_category": "Works",
-           "review_type": "Prior", "bid_window_days": 60, "tender_date": "2026-12-01"}
+           "review_type": "Prior", "bid_window_days": 60, "tender_date": "2026-12-01",
+           "country_code": "ET", "sector": "Transportation", "board_approval_date": "2015-06-30", "prior_tender_notices": 40}
 
 
 def test_a_package_assessment_runs_as_a_job_and_shows_three_predictions(stack):
@@ -263,8 +242,17 @@ def test_a_package_assessment_runs_as_a_job_and_shows_three_predictions(stack):
     assert [t["role"] for t in turns] == ["user", "assistant"] and "P148850" in turns[0]["text"]
 
 
+def test_a_package_of_a_project_with_no_id_yet_is_assessed(stack):
+    cid = stack.conversation()
+    body = {**PACKAGE, "project_id": None, "board_approval_date": "2026-03-01", "client_message_id": "pkg-0003"}
+    job = stack.wait(stack.call("POST", f"/conversations/{cid}/packages", json=body).json()["job_id"])
+    investigation = stack.call("GET", f"/conversations/{cid}/investigations/{job['request_id']}").json()
+    assert sum(e["kind"] == "model_prediction" for e in investigation["evidence"]) == 3
+
+
 @pytest.mark.parametrize("change", [{"project_id": "148850"}, {"bid_window_days": -1}, {"tender_date": "soon"},
-                                    {"unexpected": "field"}])
+                                    {"unexpected": "field"}, {"country_code": "Ethiopia"}, {"income_group": "low"},
+                                    {"prior_tender_notices": -1}])
 def test_invalid_packages_are_rejected_before_anything_runs(stack, change):
     cid = stack.conversation()
     response = stack.call("POST", f"/conversations/{cid}/packages", json={**PACKAGE, **change, "client_message_id": "pkg-0002"})
@@ -321,10 +309,9 @@ def test_a_user_added_while_the_api_runs_can_sign_in_at_once(tmp_path):
 
 
 def test_the_stop_button_cancels_the_running_job_immediately(tmp_path):
-    no_approval = ApprovalPolicy(execution_requires_approval="never")
     two_tasks = FakePlanner(plan(task("a", execute=True, question="Bid invitations in fiscal year 2023?"),
                                  task("b", deps=("a",), execute=True, question="Bid invitations in fiscal year 2024?")))
-    stack = Stack(tmp_path, planner=two_tasks, policy=no_approval, workflow=FakeWorkflow(delay_seconds=0.5))
+    stack = Stack(tmp_path, planner=two_tasks, workflow=FakeWorkflow(delay_seconds=0.5))
     cid = stack.conversation()
     job = stack.send(cid, "Investigate how many bid invitations were published in fiscal year 2023 and then 2024", "msg-stop1").json()
     stopped = stack.call("POST", f"/jobs/{job['job_id']}/cancel")             # pressed at once: no investigation id yet
@@ -343,13 +330,13 @@ PLAN = {"profile": {"country_code": "ET", "sector": "Transportation", "approval_
                       "bid_window_days": 45, "tender_date": "2027-10-01"}]}
 
 
-def test_a_planning_brief_runs_as_a_job_without_an_approval_click(stack):
+def test_a_planning_brief_runs_as_a_job(stack):
     cid = stack.conversation()
     accepted = stack.call("POST", f"/conversations/{cid}/plans", json={**PLAN, "client_message_id": "plan-0001"})
     assert accepted.status_code == 202
     job = stack.wait(accepted.json()["job_id"])
     view = stack.call("GET", f"/conversations/{cid}/investigations/{job['request_id']}").json()
-    assert view["pending_approval"] is None
+    assert "pending_approval" not in view
     assert {"similar_project", "model_prediction", "structured_result"} <= {e["kind"] for e in view["evidence"]}
 
 
@@ -422,3 +409,46 @@ def test_a_user_with_a_password_signs_in_and_gets_a_session_token(tmp_path):
     me = stack.client.get("/me", headers={"Authorization": f"Bearer {token}"}).json()
     assert me["user_id"] == "reviewer1" and me["reviewer"] is True
     assert "reviewer1" not in users_file.read_text().replace('"user_id": "reviewer1"', "")      # only a salted hash is stored
+
+
+def test_the_dashboards_are_listed_with_their_embed_and_open_links(tmp_path):
+    stack = Stack(tmp_path)
+    boards = stack.call("GET", "/dashboards", "alice").json()
+    assert [b["key"] for b in boards] == ["snapshot", "pipeline"]
+    assert all("/embed/dashboardsv3/" in b["embed_url"] and b["open_url"].endswith(b["embed_url"].split("?o=")[1]) for b in boards)
+    assert stack.call("GET", "/dashboards", None).status_code == 401
+
+
+def test_kpis_come_from_fixed_queries_cached_and_a_missing_catalog_says_not_built(tmp_path):
+    from wbg_orchestrator.dashboards import KpiBoard
+    statements: list[str] = []
+
+    def run(sql):
+        statements.append(sql)
+        if "wbg_etl." in sql:
+            raise LookupError("[TABLE_OR_VIEW_NOT_FOUND] The table or view `wbg_etl`.`wbg_gold`.`vw_kpi_overview` cannot be found")
+        return [{"total_projects": 2000}] if "vw_kpi_overview" in sql else [{"label": "Request for Bids", "value": 10}]
+    board = KpiBoard(run)
+    stack = Stack(tmp_path)
+    stack.client = TestClient(create_app(stack.service, UserDirectory.load(tmp_path / "users.json"), kpi_board=board))
+    snapshot = stack.call("GET", "/dashboards/snapshot/kpis").json()
+    assert snapshot["status"] == "ok" and snapshot["overview"] == {"total_projects": 2000}
+    assert snapshot["awards_by_method"] == [{"label": "Request for Bids", "value": 10}] and len(statements) == 5
+    stack.call("GET", "/dashboards/snapshot/kpis")
+    assert len(statements) == 5                                                        # cached
+    assert stack.call("GET", "/dashboards/pipeline/kpis").json()["status"] == "not_built"
+    assert all(s.lstrip().upper().startswith("SELECT") for s in statements)
+    assert stack.call("GET", "/dashboards/nope/kpis").status_code == 404
+
+
+def test_a_deleted_chat_leaves_the_lists_and_its_bookmarks_but_stays_on_record(tmp_path):
+    stack = Stack(tmp_path)
+    keep, gone = stack.conversation(), stack.conversation()
+    folder = stack.call("POST", "/folders", json={"name": "Ethiopia"}).json()
+    assert stack.call("DELETE", f"/conversations/{gone}").status_code == 204
+    listed = [c["conversation_id"] for c in stack.call("GET", "/conversations").json()]
+    assert keep in listed and gone not in listed
+    assert [f["name"] for f in stack.call("GET", "/folders").json()] == [folder["name"]]      # the system folder is hidden
+    assert stack.call("GET", f"/conversations/{gone}").status_code == 200                     # kept on record (append-only)
+    assert stack.call("DELETE", f"/conversations/{gone}", "bob").status_code == 404           # only the owner can delete
+    assert stack.call("POST", "/folders", json={"name": "__deleted__"}).status_code == 422

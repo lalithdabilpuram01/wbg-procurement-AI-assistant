@@ -16,8 +16,9 @@ from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql import functions as F
 
 from silver.common.dq import DQReport
+from silver.common.pipeline import manifest
 
-MANIFEST = Path(__file__).resolve().parents[2] / "databricks_upload" / "ref_bronze_inputs" / "_manifest" / "ref_bronze_inputs_manifest.json"
+MANIFEST = manifest("WBG_REF_BRONZE_MANIFEST", Path(__file__).resolve().parents[2] / "databricks_upload" / "ref_bronze_inputs" / "_manifest" / "ref_bronze_inputs_manifest.json")
 
 
 def load_manifest_vintages(bronze_folder: str, manifest_path: Path = MANIFEST) -> list[dict]:

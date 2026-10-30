@@ -6,15 +6,16 @@ import hashlib
 from pathlib import Path
 
 from silver.common.dq import DQReport
+from silver.common.pipeline import CATALOG
 
 REPO = Path(__file__).resolve().parents[2]
 COHORT = REPO / "cohort" / "poc_cohort_2000_manifest.csv"
 
 
 def _tables(spark, schema: str) -> list[str]:
-    if not spark.sql(f"SHOW SCHEMAS IN workspace LIKE '{schema}'").collect():
+    if not spark.sql(f"SHOW SCHEMAS IN {CATALOG} LIKE '{schema}'").collect():
         return []
-    return [f"workspace.{schema}.{r.tableName}" for r in spark.sql(f"SHOW TABLES IN workspace.{schema}").collect()]
+    return [f"{CATALOG}.{schema}.{r.tableName}" for r in spark.sql(f"SHOW TABLES IN {CATALOG}.{schema}").collect()]
 
 
 def _state(spark, tbl: str) -> dict:
@@ -24,7 +25,7 @@ def _state(spark, tbl: str) -> dict:
 
 def _masks(spark) -> list:
     return sorted([r[0], r[1], r[2], r[3]] for r in spark.sql(
-        "SELECT table_schema, table_name, column_name, mask_name FROM workspace.information_schema.column_masks").collect())
+        f"SELECT table_schema, table_name, column_name, mask_name FROM {CATALOG}.information_schema.column_masks").collect())
 
 
 def _grants(spark, tbl: str) -> list:

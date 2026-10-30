@@ -1,0 +1,142 @@
+# Schemas, Volumes and the job. Same schema names as the demo (wbg_bronze, wbg_ref_bronze, wbg_silver, wbg_gold) so
+# the existing Silver and Gold code runs unchanged; only the catalog differs.
+
+resources:
+  schemas:
+    etl:
+      catalog_name: ${var.catalog}
+      name: etl
+      comment: ETL control - upload Volume, staged extracts, run reports, DQ results and table snapshots
+    wbg_bronze:
+      catalog_name: ${var.catalog}
+      name: wbg_bronze
+      comment: Bronze - cohort-bounded procurement data, rebuilt from the uploaded files on every run
+    wbg_ref_bronze:
+      catalog_name: ${var.catalog}
+      name: wbg_ref_bronze
+      comment: Bronze - country-level reference data (WDI, WGI, CPIA, income groups), not cut to the cohort
+    wbg_silver:
+      catalog_name: ${var.catalog}
+      name: wbg_silver
+      comment: Silver - typed, validated tables (the existing Silver jobs in pipeline mode)
+    wbg_gold:
+      catalog_name: ${var.catalog}
+      name: wbg_gold
+      comment: Gold - analytical tables and vw_kpi_* views
+
+  volumes:
+    landing:
+      catalog_name: ${var.catalog}
+      schema_name: ${resources.schemas.etl.name}
+      name: landing
+      comment: Upload files here, one folder per dataset (see etl/README.md); a new file starts the job
+    staged:
+      catalog_name: ${var.catalog}
+      schema_name: ${resources.schemas.etl.name}
+      name: staged
+      comment: Cohort extracts and reference copies written by the bronze task (the files Bronze rows point to)
+    runs:
+      catalog_name: ${var.catalog}
+      schema_name: ${resources.schemas.etl.name}
+      name: runs
+      comment: One folder per job run - manifests and the DQ report of every step
+
+  jobs:
+    wbg_procurement_etl:
+      name: WBG procurement ETL (upload -> Bronze -> Silver -> Gold)
+      description: >-
+        Started by the upload watcher (etl/watch.py) when a file lands in /Volumes/${var.catalog}/etl/landing. Stages the uploads (cohort cut, provenance
+        manifests), rebuilds Bronze, runs the ten Silver and five Gold jobs with their data-quality gates, refreshes the
+        KPI views and records every check in ${var.catalog}.etl.dq_results.
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      # Started by `uv run wbg-etl-watch` when a file lands in /Volumes/${var.catalog}/etl/landing/ (etl/watch.py): Databricks'
+      # file-arrival trigger needs an external volume, and Free Edition volumes are managed.
+      parameters:
+        - name: catalog
+          default: ${var.catalog}
+      environments:
+        - environment_key: etl
+          spec:
+            environment_version: "2"
+            dependencies:
+              - openpyxl==3.1.5
+              - rapidfuzz==3.14.3
+      tasks:
+        - task_key: bronze
+          environment_key: etl
+          spark_python_task:
+            python_file: ../etl/run_step.py
+            parameters: [bronze, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]
+
+        - task_key: silver_wdi
+          depends_on: [{task_key: bronze}]
+          environment_key: etl
+          spark_python_task: {python_file: ../etl/run_step.py, parameters: [silver_wdi, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]}
+        - task_key: silver_income_class
+          depends_on: [{task_key: silver_wdi}]
+          environment_key: etl
+          spark_python_task: {python_file: ../etl/run_step.py, parameters: [silver_income_class, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]}
+        - task_key: silver_wgi
+          depends_on: [{task_key: silver_income_class}]
+          environment_key: etl
+          spark_python_task: {python_file: ../etl/run_step.py, parameters: [silver_wgi, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]}
+        - task_key: silver_cpia
+          depends_on: [{task_key: silver_wgi}]
+          environment_key: etl
+          spark_python_task: {python_file: ../etl/run_step.py, parameters: [silver_cpia, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]}
+        - task_key: silver_projects
+          depends_on: [{task_key: silver_cpia}]
+          environment_key: etl
+          spark_python_task: {python_file: ../etl/run_step.py, parameters: [silver_projects, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]}
+        - task_key: silver_contracts
+          depends_on: [{task_key: silver_projects}]
+          environment_key: etl
+          spark_python_task: {python_file: ../etl/run_step.py, parameters: [silver_contracts, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]}
+        - task_key: silver_notices
+          depends_on: [{task_key: silver_contracts}]
+          environment_key: etl
+          spark_python_task: {python_file: ../etl/run_step.py, parameters: [silver_notices, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]}
+        - task_key: silver_ieg
+          depends_on: [{task_key: silver_notices}]
+          environment_key: etl
+          spark_python_task: {python_file: ../etl/run_step.py, parameters: [silver_ieg, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]}
+        - task_key: silver_financing
+          depends_on: [{task_key: silver_ieg}]
+          environment_key: etl
+          spark_python_task: {python_file: ../etl/run_step.py, parameters: [silver_financing, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]}
+        - task_key: silver_project_details
+          depends_on: [{task_key: silver_financing}]
+          environment_key: etl
+          spark_python_task: {python_file: ../etl/run_step.py, parameters: [silver_project_details, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]}
+
+        - task_key: gold_project_portfolio
+          depends_on: [{task_key: silver_project_details}]
+          environment_key: etl
+          spark_python_task: {python_file: ../etl/run_step.py, parameters: [gold_project_portfolio, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]}
+        - task_key: gold_contract_analytics
+          depends_on: [{task_key: gold_project_portfolio}]
+          environment_key: etl
+          spark_python_task: {python_file: ../etl/run_step.py, parameters: [gold_contract_analytics, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]}
+        - task_key: gold_procurement_notices
+          depends_on: [{task_key: gold_contract_analytics}]
+          environment_key: etl
+          spark_python_task: {python_file: ../etl/run_step.py, parameters: [gold_procurement_notices, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]}
+        - task_key: gold_country_context
+          depends_on: [{task_key: gold_procurement_notices}]
+          environment_key: etl
+          spark_python_task: {python_file: ../etl/run_step.py, parameters: [gold_country_context, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]}
+        - task_key: gold_financing_analytics
+          depends_on: [{task_key: gold_country_context}]
+          environment_key: etl
+          spark_python_task: {python_file: ../etl/run_step.py, parameters: [gold_financing_analytics, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]}
+
+        - task_key: kpi_views
+          depends_on: [{task_key: gold_financing_analytics}]
+          environment_key: etl
+          spark_python_task: {python_file: ../etl/run_step.py, parameters: [kpi_views, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]}
+        - task_key: audit
+          depends_on: [{task_key: kpi_views}]
+          environment_key: etl
+          spark_python_task: {python_file: ../etl/run_step.py, parameters: [audit, --catalog, "{{job.parameters.catalog}}", --run-id, "{{job.run_id}}"]}

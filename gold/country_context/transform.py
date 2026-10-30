@@ -20,10 +20,11 @@ import json
 
 from pyspark.sql import DataFrame
 from pyspark.sql import functions as F
+from silver.common.pipeline import CATALOG
 
 TRANSFORM_VERSION = "gold_country_context_v1.0.0"
-TARGET = "workspace.wbg_gold.gold_country_context"
-S = "workspace.wbg_silver."
+TARGET = f"{CATALOG}.wbg_gold.gold_country_context"
+S = f"{CATALOG}.wbg_silver."
 SOURCES = ["wdi_country", "wdi_indicator_observations", "wgi_estimates", "cpia_ratings", "income_classification_history"]
 YEARS = (2000, 2025)
 SEMANTICS = "current_vintage_values_not_point_in_time"

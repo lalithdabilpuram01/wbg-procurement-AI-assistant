@@ -1,7 +1,10 @@
-"""Create-only Delta writes shared by Silver jobs. Existing tables are never overwritten or replaced."""
+"""Create-only Delta writes shared by Silver jobs. Existing tables are never overwritten or replaced, except in pipeline
+mode (the Lakeflow ETL job), where a target is replaced with CREATE OR REPLACE so its Delta history is kept."""
 from __future__ import annotations
 
 from pyspark.sql import DataFrame, SparkSession
+
+from silver.common import pipeline
 
 
 def _sql_str(v: str) -> str:
@@ -14,13 +17,16 @@ def create_table(spark: SparkSession, df: DataFrame, target: str, properties: di
                  constraints: dict[str, str] | None = None, column_masks: dict[str, str] | None = None) -> None:
     """column_masks: {column: mask function}. The masks are declared in CREATE TABLE and confirmed in
     information_schema before any row is inserted, so no row is ever stored in the table without its mask."""
-    if spark.catalog.tableExists(target):
+    replace = pipeline.ENABLED and spark.catalog.tableExists(target)
+    if spark.catalog.tableExists(target) and not replace:
         raise SystemExit(f"{target} already exists: refusing to overwrite (create-only)")
+    if replace:
+        drop_constraints(spark, target)
     if column_masks:
         cols = ", ".join(f"`{f.name}` {f.dataType.simpleString()}" + (f" MASK {column_masks[f.name]}" if f.name in column_masks else "")
                          for f in df.schema.fields)
         props = ", ".join(f"'{k}' = '{_sql_str(v)}'" for k, v in properties.items())
-        spark.sql(f"CREATE TABLE {target} ({cols}) USING DELTA TBLPROPERTIES ({props})")
+        spark.sql(f"CREATE {'OR REPLACE ' if replace else ''}TABLE {target} ({cols}) USING DELTA TBLPROPERTIES ({props})")
         catalog, schema, table = target.split(".")
         got = {r[0]: r[1] for r in spark.sql(f"SELECT column_name, mask_name FROM {catalog}.information_schema.column_masks "
                                              f"WHERE table_schema = '{schema}' AND table_name = '{table}'").collect()}
@@ -32,7 +38,7 @@ def create_table(spark: SparkSession, df: DataFrame, target: str, properties: di
         w = df.writeTo(target).using("delta")
         for k, v in properties.items():
             w = w.tableProperty(k, v)
-        w.create()
+        w.createOrReplace() if replace else w.create()
     spark.sql(f"COMMENT ON TABLE {target} IS '{table_comment.replace(chr(39), '')}'")
     for col, text in (column_comments or {}).items():
         spark.sql(f"ALTER TABLE {target} ALTER COLUMN {col} COMMENT '{text.replace(chr(39), '')}'")
@@ -40,6 +46,13 @@ def create_table(spark: SparkSession, df: DataFrame, target: str, properties: di
         spark.sql(f"ALTER TABLE {target} ALTER COLUMN {col} SET NOT NULL")
     for name, expr in (constraints or {}).items():
         spark.sql(f"ALTER TABLE {target} ADD CONSTRAINT {name} CHECK ({expr})")
+
+
+def drop_constraints(spark: SparkSession, target: str) -> None:
+    """Before a pipeline replace: drop the old CHECK constraints (they are re-added after the new rows are written)."""
+    for key in (r[0] for r in spark.sql(f"SHOW TBLPROPERTIES {target}").collect()):
+        if key.startswith("delta.constraints."):
+            spark.sql(f"ALTER TABLE {target} DROP CONSTRAINT IF EXISTS {key.removeprefix('delta.constraints.')}")
 
 
 def complete_metadata(spark: SparkSession, target: str, table_comment: str, column_comments: dict[str, str] | None = None,

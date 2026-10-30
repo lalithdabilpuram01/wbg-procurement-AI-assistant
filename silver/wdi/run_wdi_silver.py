@@ -20,14 +20,17 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+from silver.common import pipeline
 from silver.common.dq import DQReport
+from silver.common.pipeline import CATALOG, runs_dir
 from silver.common.session import DEFAULT_PROFILE, get_spark
+from silver.common.write import drop_constraints
 from silver.wdi import transform as W
 from silver.wdi.checks import check_countries, check_observations
 
-TARGET_SCHEMA = "workspace.wbg_silver"
+TARGET_SCHEMA = f"{CATALOG}.wbg_silver"
 TARGETS = {"observations": f"{TARGET_SCHEMA}.wdi_indicator_observations", "countries": f"{TARGET_SCHEMA}.wdi_country"}
-RUNS_DIR = Path(__file__).resolve().parents[1] / "runs"
+RUNS_DIR = runs_dir(Path(__file__).resolve().parents[1] / "runs")
 NOT_NULL = {
     TARGETS["observations"]: ["country_code", "country_wb_id", "entity_type", "indicator_code", "year", "is_value_missing",
                               "source_lastupdated", "bronze_source_file", "bronze_ingested_at", "raw_record_sha256"],
@@ -65,12 +68,15 @@ def build(spark, run_id: str):
 
 
 def write_table(spark, df, target: str, run_id: str, comments: dict, table_comment: str) -> None:
-    if spark.catalog.tableExists(target):
+    replace = pipeline.ENABLED and spark.catalog.tableExists(target)
+    if spark.catalog.tableExists(target) and not replace:
         raise SystemExit(f"{target} already exists: refusing to overwrite (no replace mode without explicit approval)")
-    (df.writeTo(target).using("delta")
-       .tableProperty("silver.run_id", run_id).tableProperty("silver.transform_version", W.TRANSFORM_VERSION)
-       .tableProperty("silver.source_schema", W.BRONZE).tableProperty("silver.decisions", "D-28,D-30,D-31")
-       .create())
+    if replace:
+        drop_constraints(spark, target)
+    w = (df.writeTo(target).using("delta")
+         .tableProperty("silver.run_id", run_id).tableProperty("silver.transform_version", W.TRANSFORM_VERSION)
+         .tableProperty("silver.source_schema", W.BRONZE).tableProperty("silver.decisions", "D-28,D-30,D-31"))
+    w.createOrReplace() if replace else w.create()
     spark.sql(f"COMMENT ON TABLE {target} IS '{table_comment}'")
     for col, text in comments.items():
         spark.sql(f"ALTER TABLE {target} ALTER COLUMN {col} COMMENT '{text.replace(chr(39), '')}'")

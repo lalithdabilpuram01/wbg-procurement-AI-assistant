@@ -12,13 +12,11 @@ from structured_agent.nl2sql.result import WorkflowStatus
 from wbg_orchestrator.budget import PriceTable
 from wbg_orchestrator.contracts import ErrorCategory, InvestigationBudget, InvestigationStatus, WorkerName
 from wbg_orchestrator.controller import RetryBackoff
-from wbg_orchestrator.hitl import ApprovalPolicy
 from wbg_orchestrator.planner import FakePlanner, build_plan
 from wbg_orchestrator.workers.base import TicketError, WorkerContext
 
 from tests.helpers import FakeTools, FakeWorkflow, build_engine, plan, request, task, workflow_result
 
-NO_HITL = ApprovalPolicy(execution_requires_approval="never")
 METRIC_PLAN = plan(task("m", operation="describe_metric", question="Which metric counts bid invitations?"))
 
 
@@ -73,7 +71,7 @@ def test_circuit_breaker_opens_and_stops_calls_to_the_failing_worker():
 # ------------------------------------------------------------------------------------------------ budgets
 def test_execution_budget_is_enforced_before_the_call():
     planner = FakePlanner(plan(task("a", execute=True, question="Bids in fiscal year 2024?")))
-    engine, parts = build_engine(planner=planner, policy=NO_HITL)
+    engine, parts = build_engine(planner=planner)
     out = engine.start(request("Investigate the bids step by step", budget=InvestigationBudget(max_executions=0)))
     assert parts["workflow"].calls == [] and errors_of(out, ErrorCategory.BUDGET)[0]["code"] == "execution_limit"
 
@@ -101,15 +99,14 @@ def test_tokens_are_counted_and_cost_needs_a_price_table():
 
 
 # ------------------------------------------------------------------------------------------------ idempotency
-def test_identical_task_in_a_replan_is_reused_not_rerun():
+def test_a_plan_with_some_evidence_answers_at_once_and_names_what_was_not_found():
     workflow = FakeWorkflow(lambda q, execute: workflow_result(q, execute=execute, status=WorkflowStatus.CANNOT_ANSWER))
     metric = task("m", operation="describe_metric", question="Which metric counts bid invitations?")
     planner = FakePlanner(plan(metric, task("d", execute=True, deps=("m",))), plan(metric, task("d2", execute=True, deps=("m",))))
-    engine, parts = build_engine(planner=planner, workflow=workflow, policy=NO_HITL)
+    engine, parts = build_engine(planner=planner, workflow=workflow)
     out = engine.start(request("Investigate the bid invitations step by step"))
-    assert len(parts["tools"].calls) == 1                                             # the metric lookup ran once
-    reused = [r for r in out.values["results"] if r["status"] == "skipped"]
-    assert len(reused) == 1 and reused[0]["notes"][0].startswith("reused:") and reused[0]["evidence_ids"]
+    assert out.values["replans"] == 0 and len(planner.calls) == 1 and len(parts["tools"].calls) == 1     # no second plan
+    assert out.response.message.startswith("No evidence found")
 
 
 # ------------------------------------------------------------------------------------------------ controller-only

@@ -49,14 +49,15 @@ from pathlib import Path
 from pyspark.sql import DataFrame, Window
 from pyspark.sql import functions as F
 
+from silver.common.pipeline import CATALOG, manifest
 from silver.common.sourcefiles import row_hash_expr
 
 TRANSFORM_VERSION = "notices_silver_v1.0.0"
-BRONZE_CSV = "workspace.wbg_bronze.bronze_procurement_notices_ds00979"
-BRONZE_API = "workspace.wbg_bronze.bronze_procurement_notices_api"
+BRONZE_CSV = f"{CATALOG}.wbg_bronze.bronze_procurement_notices_ds00979"
+BRONZE_API = f"{CATALOG}.wbg_bronze.bronze_procurement_notices_api"
 REPO = Path(__file__).resolve().parents[2]
-BRONZE_INPUTS_MANIFEST = REPO / "databricks_upload" / "bronze_inputs" / "_manifest" / "bronze_inputs_manifest.json"
-PHASE1_MANIFESTS = [REPO / "discovery" / "data_cache" / "MANIFEST.jsonl", REPO / "discovery" / "samples" / "MANIFEST.jsonl"]
+BRONZE_INPUTS_MANIFEST = manifest("WBG_BRONZE_INPUTS_MANIFEST", REPO / "databricks_upload" / "bronze_inputs" / "_manifest" / "bronze_inputs_manifest.json")
+PHASE1_MANIFESTS = [manifest("WBG_SOURCE_PULLS_MANIFEST", REPO / "discovery" / "data_cache" / "MANIFEST.jsonl"), manifest("WBG_SOURCE_PULLS_MANIFEST", REPO / "discovery" / "samples" / "MANIFEST.jsonl")]
 META = ("source_file", "cohort_id", "ingested_at")
 URL_PREFIX = "https://projects.worldbank.org/en/projects-operations/procurement-detail/"
 NOTICE_TYPES = ["Contract Award", "Request for Expression of Interest", "Invitation for Bids", "General Procurement Notice",
@@ -69,7 +70,7 @@ API_STRING_FIELDS = ["id", "notice_type", "noticedate", "notice_lang_name", "not
 API_KEYS = sorted(API_STRING_FIELDS + ["_extract"])
 API_SCHEMA = ", ".join(f"{k} string" for k in API_STRING_FIELDS) + ", _extract struct<filter_project_id: string>"
 TEXT_MASK_GROUP = "wbg_restricted_notice_text"
-TEXT_MASK_FUNCTION = "workspace.wbg_silver.mask_restricted_notice_text"
+TEXT_MASK_FUNCTION = f"{CATALOG}.wbg_silver.mask_restricted_notice_text"
 TEXT_PLACEHOLDER = f"[RESTRICTED: requires membership of {TEXT_MASK_GROUP}]"
 # contact-data detection (flags only; the whole column is restricted). Python uses the same strings with re.I.
 EMAIL_RE = r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"

@@ -21,15 +21,16 @@ from pathlib import Path
 from pyspark.sql import functions as F
 
 from silver.common.dq import DQReport
+from silver.common.pipeline import CATALOG, runs_dir
 from silver.common.session import DEFAULT_PROFILE, get_spark
 from silver.common.write import create_table
 from silver.income_class import transform as T
 from silver.income_class.checks import check
 
-TARGET = "workspace.wbg_silver.income_classification_history"
-WDI_COUNTRY = "workspace.wbg_silver.wdi_country"
+TARGET = f"{CATALOG}.wbg_silver.income_classification_history"
+WDI_COUNTRY = f"{CATALOG}.wbg_silver.wdi_country"
 REPO = Path(__file__).resolve().parents[2]
-RUNS = REPO / "silver" / "runs"
+RUNS = runs_dir(REPO / "silver" / "runs")
 COHORT_WINDOW = (2005, 2027)
 NOT_NULL = ["iso3_code", "country_name", "fiscal_year", "fiscal_year_label", "gni_data_year", "classification_status",
             "is_classified", "source_cell", "bronze_file_sha256", "bronze_source_file"]

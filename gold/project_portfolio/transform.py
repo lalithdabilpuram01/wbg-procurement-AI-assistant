@@ -27,10 +27,11 @@ import json
 
 from pyspark.sql import Column, DataFrame
 from pyspark.sql import functions as F
+from silver.common.pipeline import CATALOG
 
 TRANSFORM_VERSION = "gold_project_portfolio_v1.0.0"
-TARGET = "workspace.wbg_gold.gold_project_portfolio"
-S = "workspace.wbg_silver."
+TARGET = f"{CATALOG}.wbg_gold.gold_project_portfolio"
+S = f"{CATALOG}.wbg_silver."
 SOURCES = ["projects", "contract_awards", "procurement_notices", "procurement_notice_details", "ibrd_loans", "ida_credits",
            "ieg_project_ratings", "project_details_v3", "wdi_country", "income_classification_history"]
 CONTRACT_COVERAGE = "ds00005_contracts_signed_fy2020_onwards"

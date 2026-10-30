@@ -104,7 +104,7 @@ def test_a_tender_check_is_answered_from_its_checks_without_a_model(history):
     outcome = door.check_tender(ALICE, thread.thread_id, spec())
     assert outcome.status in (InvestigationStatus.ANSWERED, InvestigationStatus.PARTIAL)
     tasks = [t["operation"] for t in outcome.values["plan"]["tasks"]]
-    assert tasks == ["check_tender_design", "predict_package", "answer_document_question", "find_lessons"]
+    assert tasks == ["check_tender_design", "answer_document_question", "find_lessons"]   # predictions: Assess package
     checks = [e for e in outcome.evidence if e.kind == EvidenceKind.TENDER_CHECK]
     assert any(e.provenance_value("check") == "similar_contracts" and e.provenance_value("status") == "fail" for e in checks)
     assert "Read from the draft" in outcome.response.message and "Similar experience" in outcome.response.message

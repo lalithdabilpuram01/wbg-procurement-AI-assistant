@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import dataclasses
 import os
+import threading
 from dataclasses import dataclass
 from decimal import Decimal
 from pathlib import Path
@@ -34,6 +35,7 @@ from typing import Callable
 
 from conversation.learning import PostgresLearningStore
 from conversation.postgres_store import PostgresConversationStore
+from conversation.routing import IntentRouter
 from conversation.routing.routes import Route
 from conversation.service import ConversationService
 from conversation.pii import redact_personal_data
@@ -53,11 +55,13 @@ from .checkpointing import (CheckpointDbSettings, checkpointer, endpoint_host, i
                             lakebase_token_provider)
 from .claude import PortkeyJsonClient
 from .controller import ExecutionController
+from .conversation_responder import HistoryResponder
 from .contracts import WorkerName
 from .conversation_bridge import ConversationFrontDoor, ConversationRunner
 from .engine import InvestigationEngine
 from .factory import authorization_factory, document_worker, llm_breaker, semantic_project_scores, structured_worker
 from . import learning_db
+from .uploaded_documents import UploadedDocumentSearch
 from .feedback import FeedbackService
 from .graph import EngineDeps
 from .live_llm import SONNET_5_5_PRICES, BudgetedClaudeClient, ClaudeOff, LedgerLimits, SpendLedger
@@ -68,6 +72,7 @@ from .response import ClaudeResponseGenerator
 from .supervisor import Supervisor
 from .table_sql import TableSqlWriter
 from .tool_gateway import TRANSPORTS, SupervisedMcpSession, gold_sql, mcp_parameters
+from .topic_router import ClaudeTopicRouter
 from .workers.base import ResultCache, TicketAuthority
 from .workers.lessons import LessonsWorker
 from .workers.monitoring import MonitoringWorker
@@ -77,7 +82,8 @@ from .workers.prediction import PredictionWorker
 
 ORCHESTRATOR_DIR = Path(__file__).resolve().parents[1]
 DEV_CHECKPOINT_ENDPOINT = "projects/wbg-procurement-dev/branches/dev-orchestrator/endpoints/primary"
-OUTPUT_CAPS = {"investigation_plan": 8000, "investigation_answer": 9000, "sql_draft": 4000, "table_sql": 1000}
+OUTPUT_CAPS = {"investigation_plan": 8000, "investigation_answer": 9000, "sql_draft": 4000, "table_sql": 1000,
+               "conversation_answer": 600, "route_message": 100}
 REGISTRY_PRINCIPAL, WORKSPACE = "analyst-demo", "wbg-procurement-poc"
 
 
@@ -107,14 +113,17 @@ def build_runtime(config: RuntimeConfig, operator_confirmed: bool) -> tuple[AppS
     tracer = _tracer()
     claude = _claude_client(config, operator_confirmed, tracer)
     authority, guardrails = TicketAuthority(), build_guardrails()
+    _warm_up(guardrails)
     tools, close_tools = structured_tools(config, tracer)
     structured = _structured_worker(config, tools, claude, guardrails, authority)
     json_client = PortkeyJsonClient(claude)
+    lessons_pool, lessons = _lessons_store(config)
+    uploaded = UploadedDocumentSearch(lessons_pool.connection, _question_embedding)      # same wbg_kg pool, read-only
     document = document_worker(authority, generator_factory=answering("generator").EvidenceOnlyGenerator,
-                               table_writer=TableSqlWriter(json_client).writer)
+                               table_writer=TableSqlWriter(json_client).writer,
+                               uploaded=lambda question, projects: uploaded.search(question, projects=projects))
     gold = gold_sql(tools)                                       # fixed Gold lookups via execute_readonly_sql
     planning = PlanningWorker(gold, authority, semantic_project_scores(document, config.rag_release))
-    lessons_pool, lessons = _lessons_store(config)
     controller = ExecutionController({WorkerName.STRUCTURED: structured, WorkerName.DOCUMENT: document,
                                       WorkerName.PREDICTION: PredictionWorker(gold, authority), WorkerName.PLANNING: planning,
                                       WorkerName.MONITORING: MonitoringWorker(authority),
@@ -130,7 +139,8 @@ def build_runtime(config: RuntimeConfig, operator_confirmed: bool) -> tuple[AppS
     store = PostgresConversationStore()
     runners = {route: ConversationRunner(engine, route, authorization_for, config.rag_release)
                for route in (Route.STRUCTURED_DATA, Route.DOCUMENT_RAG)}
-    conversations = ConversationService(store, runners, guardrails, text_filter=redact_personal_data)
+    conversations = ConversationService(store, runners, guardrails, text_filter=redact_personal_data,
+                                        **_conversation_responder(claude, json_client, operator_confirmed))
     front_door = ConversationFrontDoor(conversations, store, engine, authorization_for, rag_release=config.rag_release)
     learning_pool = _learning_pool(config)
     learning = FeedbackService(PostgresLearningStore(learning_pool.connection), conversations, store, front_door,
@@ -163,6 +173,24 @@ def _claude_client(config: RuntimeConfig, operator_confirmed: bool, tracer: Orch
     settings = dataclasses.replace(load_claude_settings(), timeout_seconds=120.0, max_output_tokens=max(OUTPUT_CAPS.values()))
     ledger = SpendLedger(config.ledger_path, LedgerLimits(max_attempts=config.max_attempts, max_usd=config.max_usd))
     return BudgetedClaudeClient(settings, ledger, output_caps=OUTPUT_CAPS, tracer=tracer, live_access=live)
+
+
+def _warm_up(guardrails) -> None:
+    """Load the input guardrails and the personal-data masker now, and the bge-m3 model in the background: otherwise the
+    first message after a restart waits several seconds for them. The API does not wait for the model."""
+    guardrails.check_input("hello")
+    redact_personal_data("warm-up")
+    threading.Thread(target=_question_embedding, args=("warm-up",), name="wbg-warm-up", daemon=True).start()
+
+
+def _conversation_responder(claude, json_client: PortkeyJsonClient, operator_confirmed: bool) -> dict:
+    """With Claude on: the first router (procurement or conversation) for messages the rules cannot place, and
+    conversational answers written from the conversation history only. With Claude off: the deterministic router and
+    the fixed offline replies (ConversationService's defaults)."""
+    if isinstance(claude, ClaudeOff):
+        return {}
+    return {"router": IntentRouter(classifier=ClaudeTopicRouter(json_client)), "responder": HistoryResponder(json_client),
+            "live_access": authorize_live_access(operator_confirmed)}
 
 
 def structured_tools(config: RuntimeConfig, tracer: OrchestratorTracer) -> tuple[ToolCaller, Callable[[], None]]:

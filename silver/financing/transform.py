@@ -27,12 +27,13 @@ from pathlib import Path
 from pyspark.sql import Column, DataFrame
 from pyspark.sql import functions as F
 
+from silver.common.pipeline import CATALOG, manifest
 from silver.common.sourcefiles import row_hash_expr
 
 TRANSFORM_VERSION = "financing_silver_v1.0.0"
 REPO = Path(__file__).resolve().parents[2]
-BRONZE_INPUTS_MANIFEST = REPO / "databricks_upload" / "bronze_inputs" / "_manifest" / "bronze_inputs_manifest.json"
-PHASE1_CACHE_MANIFEST = REPO / "discovery" / "data_cache" / "MANIFEST.jsonl"
+BRONZE_INPUTS_MANIFEST = manifest("WBG_BRONZE_INPUTS_MANIFEST", REPO / "databricks_upload" / "bronze_inputs" / "_manifest" / "bronze_inputs_manifest.json")
+PHASE1_CACHE_MANIFEST = manifest("WBG_SOURCE_PULLS_MANIFEST", REPO / "discovery" / "data_cache" / "MANIFEST.jsonl")
 META = ("source_file", "cohort_id", "ingested_at")
 DEC_AMOUNT, DEC_RATE = "decimal(22,2)", "decimal(12,6)"
 PLACEHOLDER_DATE = "01/01/1900"
@@ -48,7 +49,7 @@ IDA_CURRENCIES = ["EUR", "GBP", "JPY", "USD", "XAF", "XDR"]
 
 SOURCES: dict[str, dict] = {
     "ibrd": {
-        "bronze": "workspace.wbg_bronze.bronze_ibrd_loans_ds00047", "bronze_short": "bronze_ibrd_loans_ds00047", "dataset": "DS00047",
+        "bronze": f"{CATALOG}.wbg_bronze.bronze_ibrd_loans_ds00047", "bronze_short": "bronze_ibrd_loans_ds00047", "dataset": "DS00047",
         "lender": "IBRD", "key_src": "Loan Number", "key": "loan_number", "key_regex": r"^IBRD[A-Z]?[0-9]+$", "status_src": "Loan Status",
         "statuses": IBRD_STATUSES,
         "amounts": {"Original Principal Amount (US$)": "original_principal_amount_usd", "Cancelled Amount (US$)": "cancelled_amount_usd",
@@ -59,7 +60,7 @@ SOURCES: dict[str, dict] = {
                     "Due 3rd Party (US$)": "due_third_party_usd", "Loans Held (US$)": "held_amount_usd"},
     },
     "ida": {
-        "bronze": "workspace.wbg_bronze.bronze_ida_credits_ds00001", "bronze_short": "bronze_ida_credits_ds00001", "dataset": "DS00001",
+        "bronze": f"{CATALOG}.wbg_bronze.bronze_ida_credits_ds00001", "bronze_short": "bronze_ida_credits_ds00001", "dataset": "DS00001",
         "lender": "IDA", "key_src": "Credit Number", "key": "credit_number", "key_regex": r"^IDA[A-Z]?[0-9]+$", "status_src": "Credit Status",
         "statuses": IDA_STATUSES,
         "amounts": {"Original Principal Amount (US$)": "original_principal_amount_usd", "Cancelled Amount (US$)": "cancelled_amount_usd",

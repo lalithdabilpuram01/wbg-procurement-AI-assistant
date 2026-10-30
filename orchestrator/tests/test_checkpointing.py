@@ -22,7 +22,7 @@ from wbg_orchestrator.checkpointing import (CHECKPOINT_OBJECTS, CheckpointConfig
                                             TokenProvider, checkpoint_pool, checkpointer, create_schema, database_inventory,
                                             isolated_setup, oauth_connection_class, verify_isolation)
 from wbg_orchestrator.contracts import InvestigationStatus
-from wbg_orchestrator.engine import ApprovalNotPending, InvestigationNotFound
+from wbg_orchestrator.engine import InvestigationNotFound, checkpoint_thread_id
 from wbg_orchestrator.observability import OrchestratorTracer
 from wbg_orchestrator.planner import FakePlanner
 
@@ -178,38 +178,35 @@ def test_checkpoint_is_saved_and_reads_back_identically(pool):
         assert json.dumps(values[key], sort_keys=True) == json.dumps(out.values[key], sort_keys=True), key
 
 
-def test_hitl_survives_a_restart_and_only_the_owner_can_resume(cluster, setup_report):
+class Crash(BaseException):
+    """Stands in for a killed process (not an Exception, so nothing catches it)."""
+
+
+def test_an_interrupted_run_survives_a_restart_and_only_the_owner_can_recover_it(cluster, setup_report):
+    def crash(question: str, execute: bool):
+        raise Crash()
     first_pool = open_pool(cluster)
-    engine, parts = build_engine(planner=planned(), checkpointer=checkpointer(first_pool))
-    pending = engine.start(request(QUESTION))
-    assert pending.status == InvestigationStatus.AWAITING_APPROVAL and parts["workflow"].calls == []
+    engine, _ = build_engine(planner=planned(), workflow=FakeWorkflow(crash), checkpointer=checkpointer(first_pool))
+    req = request(QUESTION)
+    with pytest.raises(Crash):
+        engine.start(req)
+    thread_id = checkpoint_thread_id(req.owner, req.conversation_thread_id, req.investigation_id)
     first_pool.close()                                              # "restart": connections closed, graph rebuilt
 
     second_pool = open_pool(cluster)
     try:
         workflow = FakeWorkflow()
-        restarted, parts2 = build_engine(planner=FakePlanner(), workflow=workflow, checkpointer=checkpointer(second_pool))
+        restarted, _ = build_engine(planner=FakePlanner(), workflow=workflow, checkpointer=checkpointer(second_pool))
         with pytest.raises(InvestigationNotFound):
-            restarted.resume(BOB, pending.thread_id, pending.pending_approval.approval_id, approved=True)
+            restarted.recover(BOB, thread_id)
         with pytest.raises(InvestigationNotFound):
-            restarted.outcome(BOB, pending.thread_id)
-        assert restarted.outcome(ALICE, pending.thread_id).status == InvestigationStatus.AWAITING_APPROVAL
-        done = restarted.resume(ALICE, pending.thread_id, pending.pending_approval.approval_id, approved=True)
+            restarted.outcome(BOB, thread_id)
+        assert restarted.outcome(ALICE, thread_id).unfinished
+        done = restarted.recover(ALICE, thread_id)
         assert done.status == InvestigationStatus.ANSWERED and [c["execute"] for c in workflow.calls] == [True]
-        with pytest.raises(ApprovalNotPending):
-            restarted.resume(ALICE, pending.thread_id, pending.pending_approval.approval_id, approved=True)
-        assert len(workflow.calls) == 1
+        assert restarted.recover(ALICE, thread_id).status == InvestigationStatus.ANSWERED and len(workflow.calls) == 1
     finally:
         second_pool.close()
-
-
-def test_rejection_is_persisted(pool):
-    engine, parts = build_engine(planner=planned(), checkpointer=checkpointer(pool))
-    pending = engine.start(request(QUESTION))
-    rejected = engine.resume(ALICE, pending.thread_id, pending.pending_approval.approval_id, approved=False)
-    reread, _ = build_engine(checkpointer=checkpointer(pool))
-    assert reread.outcome(ALICE, pending.thread_id).status == InvestigationStatus.REJECTED == rejected.status
-    assert parts["workflow"].calls == []
 
 
 def test_checkpoints_hold_no_secrets_or_unrestricted_rows(cluster, pool):
@@ -231,49 +228,33 @@ def test_checkpoints_hold_no_secrets_or_unrestricted_rows(cluster, pool):
     assert '"rows"' not in dump
 
 
-def test_a_crash_mid_run_leaves_a_recoverable_checkpoint(pool):
-    class Crash(BaseException):                                       # escapes every handler, like a killed process
-        pass
-
-    def crash_once(question: str, execute: bool):
-        raise Crash()
-
-    engine, _ = build_engine(planner=planned(), workflow=FakeWorkflow(crash_once), checkpointer=checkpointer(pool))
-    pending = engine.start(request(QUESTION))
-    with pytest.raises(Crash):
-        engine.resume(ALICE, pending.thread_id, pending.pending_approval.approval_id, approved=True)
-    workflow = FakeWorkflow()
-    restarted, parts = build_engine(planner=FakePlanner(), workflow=workflow, checkpointer=checkpointer(pool))
-    interrupted = restarted.graph.get_state({"configurable": {"thread_id": pending.thread_id}})
-    assert interrupted.next and interrupted.values["decisions"][0]["approved"] is True
-    with pytest.raises(InvestigationNotFound):
-        restarted.recover(BOB, pending.thread_id)
-    recovered = restarted.recover(ALICE, pending.thread_id)
-    assert recovered.status == InvestigationStatus.ANSWERED and len(workflow.calls) == 1
-
-
 def test_a_failed_task_keeps_its_error_and_partial_state(pool):
     planner = FakePlanner(plan(task("count", execute=True, question=DATA_QUESTION),
                                task("metric", operation="describe_metric", question="Which metric?", optional=True)))
     failing = FakeWorkflow(lambda q, e: workflow_result(q, execute=e, status=WorkflowStatus.CANNOT_ANSWER, message="no data"))
     engine, _ = build_engine(planner=planner, workflow=failing, checkpointer=checkpointer(pool))
-    pending = engine.start(request(QUESTION))
-    done = engine.resume(ALICE, pending.thread_id, pending.pending_approval.approval_id, approved=True)
+    done = engine.start(request(QUESTION))
     reread, _ = build_engine(checkpointer=checkpointer(pool))
-    again = reread.outcome(ALICE, pending.thread_id)
+    again = reread.outcome(ALICE, done.thread_id)
     assert again.status == done.status and again.task_states == done.task_states
     assert "failed" in again.task_states.values() and again.values["errors"] == done.values["errors"]
 
 
 def test_checkpoint_saves_and_resumes_are_traced(pool):
+    def crash(question: str, execute: bool):
+        raise Crash()
     exporter = InMemorySpanExporter()
     tracer = OrchestratorTracer.local([SimpleSpanProcessor(exporter)])
-    engine, _ = build_engine(planner=planned(), checkpointer=checkpointer(pool), tracer=tracer)
-    pending = engine.start(request(QUESTION))
-    engine.resume(ALICE, pending.thread_id, pending.pending_approval.approval_id, approved=True)
+    engine, _ = build_engine(planner=planned(), workflow=FakeWorkflow(crash), checkpointer=checkpointer(pool), tracer=tracer)
+    req = request(QUESTION)
+    with pytest.raises(Crash):
+        engine.start(req)
+    thread_id = checkpoint_thread_id(req.owner, req.conversation_thread_id, req.investigation_id)
+    restarted, _ = build_engine(planner=FakePlanner(), checkpointer=checkpointer(pool), tracer=tracer)
+    restarted.recover(ALICE, thread_id)                             # resumed from the checkpoint, then saved
     tracer.force_flush()
     events = [s for s in exporter.get_finished_spans() if s.name.startswith("orchestrator.checkpoint_")]
     assert {s.name for s in events} == {"orchestrator.checkpoint_saved", "orchestrator.checkpoint_resumed"}
     for span in events:
-        assert span.attributes["checkpointer"] == "PostgresSaver" and span.attributes["checkpoint_thread"] == pending.thread_id
+        assert span.attributes["checkpointer"] == "PostgresSaver" and span.attributes["checkpoint_thread"] == thread_id
         assert span.attributes["checkpoint_id"] and span.attributes["conversation_id"] == "conv-1"

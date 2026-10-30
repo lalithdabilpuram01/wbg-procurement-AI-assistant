@@ -6,13 +6,15 @@ Order of rules (first match wins):
   3. every clause conversational            -> conversation
   4. topic reset                            -> conversation (+ reset), or the task named after the reset phrase
   5. memory recall                          -> conversation_memory
+     about the previous answer ("explain that", "why?", "in simple terms") -> conversation (history only, no search)
      "recheck/verify against the data"      -> previous task route (re-run on the active filters)
   6. definition question, no entities       -> conversation
   7. specific task phrases                  -> that task route; two different task routes -> clarification
   8. follow-up cue (refine/compare/...)     -> previous task route, if there is one
   9. follow-up that the resolver could not resolve -> clarification
  10. general question, no entities          -> conversation
- 11. otherwise                              -> classifier (if configured and confident) or clarification
+ 11. otherwise: the first decision (conversation, procurement data or documents, or off topic) by the classifier
+     (Claude, when the app runs with --live) if confident; else clarification (off-topic messages get the scope reply)
 A task route is never kept when the resolver found the referent ambiguous.
 """
 from __future__ import annotations
@@ -69,6 +71,9 @@ class IntentRouter:
             return self._recheck(request.previous_task_route)
         if rules.is_memory_recall(text):
             return self._memory_recall(text)
+        if rules.is_about_previous_answer(text):
+            return decision(Route.CONVERSATION, ReasonCategory.ABOUT_PREVIOUS_ANSWER, "high", "deterministic_rule",
+                            matched_signals=("previous_answer",))
         if rules.is_strong_definition(text) and not rules.mentions_entities(text):
             return decision(Route.CONVERSATION, ReasonCategory.CONCEPTUAL_QUESTION, "high", "deterministic_rule",
                             matched_signals=("definition",))

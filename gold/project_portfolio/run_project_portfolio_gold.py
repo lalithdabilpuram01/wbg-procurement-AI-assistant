@@ -26,11 +26,12 @@ from typing import Any
 from gold.project_portfolio import transform as T
 from gold.project_portfolio.checks import COUNT_COLUMNS, check
 from silver.common.dq import DQReport
+from silver.common.pipeline import CATALOG, runs_dir
 from silver.common.session import DEFAULT_PROFILE, get_spark
 from silver.common.write import create_table
 
 REPO = Path(__file__).resolve().parents[2]
-RUNS = REPO / "gold" / "runs"
+RUNS = runs_dir(REPO / "gold" / "runs")
 COHORT = REPO / "cohort" / "poc_cohort_2000_manifest.csv"
 SILVER = ["wdi_indicator_observations", "wdi_country", "income_classification_history", "wgi_estimates", "cpia_ratings", "projects", "contract_award_lines",
           "contract_awards", "contract_awards_legacy", "procurement_notices", "procurement_notice_details", "notice_contract_link_candidates",
@@ -109,10 +110,10 @@ def main() -> int:
     run_dir.mkdir(parents=True, exist_ok=True)
     spark = get_spark(args.profile)
 
-    schema_exists = bool(spark.sql("SHOW SCHEMAS IN workspace LIKE 'wbg_gold'").collect())
+    schema_exists = bool(spark.sql(f"SHOW SCHEMAS IN {CATALOG} LIKE 'wbg_gold'").collect())
     baseline: dict = {"bronze": {}, "silver": {}, "gold_schema_exists": schema_exists, "target_exists": schema_exists and spark.catalog.tableExists(T.TARGET),
                       "cohort_manifest_sha256": hashlib.sha256(COHORT.read_bytes()).hexdigest()}
-    bronze = [f"workspace.{sc}.{r.tableName}" for sc in ("wbg_bronze", "wbg_ref_bronze") for r in spark.sql(f"SHOW TABLES IN workspace.{sc}").collect()]
+    bronze = [f"{CATALOG}.{sc}.{r.tableName}" for sc in ("wbg_bronze", "wbg_ref_bronze") for r in spark.sql(f"SHOW TABLES IN {CATALOG}.{sc}").collect()]
     for group, tables in (("bronze", bronze), ("silver", [T.S + t for t in SILVER])):
         for tbl in tables:
             h = spark.sql(f"DESCRIBE HISTORY {tbl} LIMIT 1").collect()[0]
@@ -120,7 +121,7 @@ def main() -> int:
     baseline["grants"] = {tbl: sorted([str(x) for x in r] for r in spark.sql(f"SHOW GRANTS ON TABLE {tbl}").collect())
                           for tbl in [*baseline["bronze"], *baseline["silver"]]}
     baseline["column_masks"] = sorted([r[0], r[1], r[2], r[3]] for r in spark.sql(
-        "SELECT table_schema, table_name, column_name, mask_name FROM workspace.information_schema.column_masks").collect())
+        f"SELECT table_schema, table_name, column_name, mask_name FROM {CATALOG}.information_schema.column_masks").collect())
     (run_dir / "baseline_before_write.json").write_text(json.dumps(baseline, indent=1))
 
     rep = DQReport(T.TARGET)
@@ -131,7 +132,7 @@ def main() -> int:
     dfs, versions = T.load_sources(spark)
     g = T.build(dfs, versions, run_id)
     chk_dfs = {**dfs, "contract_award_lines": spark.table(T.S + "contract_award_lines"),
-               "bronze_projects_v3_allfields": spark.table("workspace.wbg_bronze.bronze_projects_v3_allfields")}
+               "bronze_projects_v3_allfields": spark.table(f"{CATALOG}.wbg_bronze.bronze_projects_v3_allfields")}
     summary = check(g, chk_dfs, cohort_ids, rep)
     rep.equals("delta_check_constraints_hold_before_write", {c: g.filter(f"NOT coalesce(({e}), false)").count() for c, e in CONSTRAINTS.items()}, {c: 0 for c in CONSTRAINTS})
     rep.equals("not_null_columns_have_no_nulls", {c: g.filter(f"`{c}` IS NULL").count() for c in NOT_NULL}, {c: 0 for c in NOT_NULL})
@@ -157,8 +158,8 @@ def main() -> int:
         return 0
     if not schema_exists:
         if not args.create_schema:
-            raise SystemExit("workspace.wbg_gold does not exist: re-run with --create-schema (approved create-only)")
-        spark.sql("CREATE SCHEMA workspace.wbg_gold COMMENT 'Gold layer: analytical models built from wbg_silver (create-only runs)'")
+            raise SystemExit(f"{CATALOG}.wbg_gold does not exist: re-run with --create-schema (approved create-only)")
+        spark.sql(f"CREATE SCHEMA {CATALOG}.wbg_gold COMMENT 'Gold layer: analytical models built from wbg_silver (create-only runs)'")
     create_table(spark, g, T.TARGET, {"gold.run_id": run_id, "gold.transform_version": T.TRANSFORM_VERSION, "gold.silver_source_versions": versions,
                                        "gold.model": "current-state accumulating snapshot, project grain"},
                  COMMENTS["table"], COMMENTS["columns"], NOT_NULL, CONSTRAINTS)

@@ -93,12 +93,8 @@ class Pipeline:
                 outcome.status = "duplicate"
                 self._move(path, folder, "_processed")
                 return self._done(outcome, started)
-            fmt = detect.sniff(path)
-            source["format"] = fmt
-            if fmt not in folder.formats:
-                raise Quarantined("format_not_accepted", f"{fmt} files do not belong in {folder.name}/ (accepted: {', '.join(folder.formats)})")
-            doc = self._parse(folder, path, sha, fmt)
-            self._name_after_project(doc)
+            source["format"] = detect.sniff(path)
+            doc = self.parse_file(folder, path, sha)
             res = resolve(doc, self.reference)
             lessons = cards_for(doc, self.reference)                       # proposed lesson cards (ICR, ICRR, PAD)
             graph = build(doc, res, self.reference, lessons)
@@ -115,6 +111,15 @@ class Pipeline:
         return self._done(outcome, started)
 
     # ---------------------------------------------------------------------------------------------- parse
+    def parse_file(self, folder: Folder, path: Path, sha: str) -> ParsedDocument:
+        """Intake and parse one file (format from the bytes, type, project); raises Quarantined when it cannot be used."""
+        fmt = detect.sniff(path)
+        if fmt not in folder.formats:
+            raise Quarantined("format_not_accepted", f"{fmt} files do not belong in {folder.name}/ (accepted: {', '.join(folder.formats)})")
+        doc = self._parse(folder, path, sha, fmt)
+        self._name_after_project(doc)
+        return doc
+
     def _parse(self, folder: Folder, path: Path, sha: str, fmt: str) -> ParsedDocument:
         document_id = common.document_id_for(folder.name, path)
         declared = folder.doc_type if folder.kind == "document" else None

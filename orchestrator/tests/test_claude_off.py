@@ -33,3 +33,15 @@ def test_an_answer_that_needs_claude_says_claude_is_off():
     engine, _ = build_engine(responder=ClaudeResponseGenerator(PortkeyJsonClient(ClaudeOff())))
     out = engine.start(request("How many bid invitations were published in fiscal year 2024?", execute=True))
     assert out.response.message == CLAUDE_OFF and "claude_disabled" in out.response.error_codes
+
+
+def test_planned_sql_runs_without_a_human_review_step():
+    from wbg_orchestrator.planner import FakePlanner
+    from tests.helpers import plan, task
+
+    tasks = (task(f"t{i}", execute=True, question=f"How many bid invitations in fiscal year {2020 + i}?") for i in range(3))   # 3 = the query budget
+    engine, parts = build_engine(planner=FakePlanner(plan(*tasks)))
+    out = engine.start(request("Investigate the bid invitations step by step"))
+    assert out.status == InvestigationStatus.ANSWERED and len(parts["workflow"].calls) == 3
+    nodes = set(engine.graph.get_graph().nodes)
+    assert not nodes & {"request_approval", "await_approval", "reject"} and {"validate_plan", "dispatch"} <= nodes
