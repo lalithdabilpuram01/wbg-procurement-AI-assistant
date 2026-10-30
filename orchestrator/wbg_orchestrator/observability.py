@@ -3,16 +3,24 @@
 What a trace looks like: one trace per user action (a chat message, a tender check, ...), with nested spans
 
     job.message                         the background job (job_id, kind, conversation_id, request_id)
-      conversation.route                which route the message took (conversation, investigation, ...)
+      conversation.message              the masked question, the route it took and why
         orchestrator.node.intake        input guardrail (the question, personal data masked)
-        orchestrator.node.plan          the planner (Claude or a fixed plan)
-        orchestrator.node.execute       one span per task
-          orchestrator.task_attempt     one span per attempt (retries are visible)
-            worker.<name>               the worker itself, in its own thread (structured, document, prediction, ...)
-              mcp.tool_call             a structured-data tool call (SQL over the Gold tables)
-              orchestrator.llm_call     a Claude call (tokens, cost, provider errors)
+        orchestrator.node.supervise     fast path, fixed plan, Claude plan, clarify or refuse
+        orchestrator.node.plan          the planner (Claude), only when a plan is needed
+        orchestrator.node.validate_plan the controller's checks
+        orchestrator.node.dispatch      which tasks are ready (repeats with execute until none are left)
+        orchestrator.node.execute       one batch of ready tasks
+          orchestrator.task             one task (worker, operation, final state)
+            orchestrator.task_attempt   one span per attempt (retries are visible)
+              worker.<name>             the worker itself, in its own thread (structured, document, prediction, ...)
+                mcp.tool_call           a structured-data tool call (SQL over the Gold tables)
+                orchestrator.llm_call   a Claude call (tokens, cost, provider errors)
         orchestrator.node.verify        evidence checks
         orchestrator.node.respond       the answer and how many claims were kept
+        orchestrator.node.finalize      totals (tokens, cost, task count)
+
+Graph steps also carry `state_changes` (what the step wrote) and `state` (the state after it), as JSON summaries
+built by state_view.py: ids, statuses, counts and masked text, never rows or document excerpts.
 
 When a step fails, its span is marked as an error and records `error_type`, `error_message` (personal data masked)
 and `error_location` (file:line:function where it was raised); every enclosing span records `failed_step`, the name
@@ -22,8 +30,8 @@ and the trace id, so the log line and the Logfire trace point at each other.
 What may be recorded:
 * attribute names come from an allow-list; string values must look like identifiers or codes (no spaces, bounded
   length), so rows, prompts, excerpts and tokens cannot be recorded by mistake;
-* the only free-text attributes are TEXT_ATTRIBUTES (the question, generated SQL, an error message). They pass through
-  the personal-data masker (e-mail addresses, phone numbers, card and IBAN numbers, IP addresses, secret-shaped
+* the only free-text attributes are TEXT_ATTRIBUTES (the question, generated SQL, an error message, the state
+  summaries). They pass through the personal-data masker (e-mail addresses, phone numbers, card and IBAN numbers, IP addresses, secret-shaped
   values) and are truncated. The audit trail never records them;
 * users appear only as the pseudonymous owner hash.
 
@@ -35,12 +43,14 @@ from __future__ import annotations
 
 import datetime as dt
 import json
+import logging
 import re
+import time
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Callable, Iterator, Protocol, Sequence
 
-from .logs import describe_error, get_logger, redacted
+from .logs import current_steps, describe_error, get_logger, redacted, step_scope
 
 log = get_logger("trace")
 
@@ -60,7 +70,10 @@ SAFE_ATTRIBUTES = frozenset({
     "job_id", "job_kind", "reason", "error_type", "error_location", "failed_step",
 })
 # Free text allowed on spans only (never in the audit trail), masked and cut to this many characters.
-TEXT_ATTRIBUTES = {"question": 1000, "sql": 4000, "error_message": 500}
+TEXT_ATTRIBUTES = {"question": 1000, "sql": 4000, "error_message": 500,
+                   "state_changes": 6000, "state": 12000}         # the graph state after each step (state_view.py)
+# Built by state_view.py, which masks every free-text field it includes: only truncated here, not masked twice.
+PREMASKED_ATTRIBUTES = frozenset({"state_changes", "state"})
 SAFE_STRING = re.compile(r"^[A-Za-z0-9_.:@,\-]{0,200}$")
 
 
@@ -78,7 +91,9 @@ def safe_attributes(attributes: dict[str, Any], allow_text: bool = False) -> dic
     for key, value in attributes.items():
         if value is None:
             continue
-        if allow_text and key in TEXT_ATTRIBUTES and isinstance(value, str):
+        if allow_text and key in PREMASKED_ATTRIBUTES and isinstance(value, str):
+            clean[key] = value[:TEXT_ATTRIBUTES[key]]
+        elif allow_text and key in TEXT_ATTRIBUTES and isinstance(value, str):
             clean[key] = redacted(value, TEXT_ATTRIBUTES[key])
         elif key not in SAFE_ATTRIBUTES:
             continue
@@ -132,17 +147,54 @@ class OrchestratorTracer:
         record a failure that the code handles itself (the span is marked as an error, the block continues;
         `log_message=` names the log line, default "step failed").
 
-        An exception that escapes the block is recorded on this span and re-raised unchanged (see record_failure)."""
+        An exception that escapes the block is recorded on this span and re-raised unchanged (see record_failure).
+
+        Every span is also a step in the log, with or without Logfire: a "step started" line, a "step finished" line
+        (outcome done or failed, duration, the attributes set on the span), and every line written in between carries
+        the step path (logs.step_scope)."""
+        if self._logfire is None and not log.isEnabledFor(logging.INFO):     # nothing records it: keep the step path only
+            with step_scope(name), self._open(name, {}) as setter:
+                yield setter
+            return
+        started, recorded = time.perf_counter(), safe_attributes(attributes, allow_text=True)
+        outcome = "failed"
+        with step_scope(name):
+            log.info("step started", extra={"attributes": recorded})
+            try:
+                with self._open(name, recorded) as setter:
+                    def set_attributes(**values: Any) -> None:
+                        nonlocal outcome
+                        if isinstance(values.get("error"), BaseException):
+                            outcome = "failed (handled)"
+                        cleaned = safe_attributes({k: v for k, v in values.items() if k not in ("error", "log_message")},
+                                                  allow_text=True)
+                        recorded.update(cleaned)
+                        setter(**cleaned, **{k: v for k, v in values.items() if k in ("error", "log_message")})
+                    yield set_attributes
+                if outcome == "failed":
+                    outcome = "done"
+            finally:
+                log.log(logging.WARNING if outcome == "failed" else logging.INFO, "step finished",
+                        extra={"outcome": outcome, "duration_ms": round(1000 * (time.perf_counter() - started)),
+                               "attributes": recorded})
+
+    @contextmanager
+    def _open(self, name: str, attributes: dict[str, Any]) -> Iterator[SpanSetter]:
+        """The Logfire span itself (or a no-op setter when tracing is off)."""
         if self._logfire is None:
-            yield _ignore
+            try:
+                yield _ignore
+            except Exception as exc:
+                _ignore(error=exc)
+                raise
             return
         error: BaseException | None = None
-        with self._logfire.span(name, _span_name=name, **safe_attributes(attributes, allow_text=True)) as span:
+        with self._logfire.span(name, _span_name=name, **attributes) as span:
             def set_attributes(**values: Any) -> None:
                 handled, message = values.pop("error", None), values.pop("log_message", "step failed")
                 if isinstance(handled, BaseException):
                     record_failure(span, name, handled, message)
-                for key, value in safe_attributes(values, allow_text=True).items():
+                for key, value in values.items():                         # already filtered and masked by span()
                     span.set_attribute(key, value)
             try:
                 yield set_attributes
@@ -153,8 +205,15 @@ class OrchestratorTracer:
             raise error
 
     def event(self, name: str, level: str = "info", **attributes: Any) -> None:
+        """A point-in-time event (a dispatch, a retry, a breaker transition), in the trace and in the log."""
+        logged = log.isEnabledFor(logging.INFO)
+        if self._logfire is None and not logged:
+            return
+        clean = safe_attributes(attributes, allow_text=True)
         if self._logfire is not None:
-            self._logfire.log(level, name, attributes=safe_attributes(attributes, allow_text=True))
+            self._logfire.log(level, name, attributes=clean)
+        if logged:
+            log.log(logging.WARNING if level in ("warn", "warning") else logging.INFO, name, extra={"attributes": clean})
 
     def force_flush(self) -> None:
         if self._logfire is not None:
@@ -176,7 +235,7 @@ def record_failure(span: Any, step: str, error: BaseException, log_message: str 
             error._wbg_failed_step = step                                     # type: ignore[attr-defined]
         except AttributeError:                                                 # exceptions with __slots__
             pass
-        log.error(log_message, extra={"step": step}, exc_info=error)
+        log.error(log_message, exc_info=error)
     else:
         span.set_attribute("error_type", type(error).__name__)
         span.set_attribute("failed_step", first_step)
@@ -187,7 +246,7 @@ def _ignore(**values: Any) -> None:
     error = values.get("error")
     if isinstance(error, BaseException) and getattr(error, "_wbg_failed_step", None) is None:
         try:
-            error._wbg_failed_step = "untraced"                               # type: ignore[attr-defined]
+            error._wbg_failed_step = current_steps().get("step", "untraced")  # type: ignore[attr-defined]
         except AttributeError:
             pass
         log.error(values.get("log_message", "step failed"), exc_info=error)

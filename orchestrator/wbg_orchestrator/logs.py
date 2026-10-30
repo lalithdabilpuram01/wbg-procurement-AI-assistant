@@ -6,6 +6,9 @@ Every line carries the ids that tie it to one user action, so an engineer can go
     request_id       the question's id (one per user message; the investigation id is derived from it)
     conversation_id  the chat thread
     trace_id         the Logfire / OpenTelemetry trace of the same work (open it in Logfire to see the nested spans)
+    step             the step the line was written in (the innermost span, e.g. orchestrator.node.execute)
+    step_path        every enclosing step, outermost first ("job.message > conversation.message > ...")
+    depth            how deep that step is (0 = the job), so the lines can be read as a tree
 
 The ids come from `log_context(...)`, which the job runner and the HTTP layer open; code below them only logs.
 Messages are short and fixed ("job failed", "planner failed"); free text that may hold personal data (a question,
@@ -14,6 +17,7 @@ locations, and the exception message in them is redacted too.
 
 To find a failure:   grep '"level": "ERROR"' orchestrator/runs/logs/app.jsonl
 To follow one job:   grep '<job_id>' orchestrator/runs/logs/app.jsonl
+To read it as a tree: uv run wbg-logs [<job_id>] [--state]   (log_view.py)
 """
 from __future__ import annotations
 
@@ -32,6 +36,7 @@ MAX_TEXT_CHARS = 2000
 CONTEXT_KEYS = ("job_id", "job_kind", "request_id", "investigation_id", "conversation_id", "http_request_id")
 
 _context: contextvars.ContextVar[dict[str, str]] = contextvars.ContextVar("wbg_log_context", default={})
+_steps: contextvars.ContextVar[tuple[str, ...]] = contextvars.ContextVar("wbg_log_steps", default=())
 
 
 def get_logger(name: str) -> logging.Logger:
@@ -57,6 +62,24 @@ def bind(**ids: str | None) -> None:
 
 def current_context() -> dict[str, str]:
     return dict(_context.get())
+
+
+@contextmanager
+def step_scope(name: str) -> Iterator[None]:
+    """Mark the lines written inside this block as belonging to step `name`, nested under the enclosing steps.
+    Every tracer span opens one, so the log's step path is the same tree as the Logfire trace."""
+    token = _steps.set((*_steps.get(), name))
+    try:
+        yield
+    finally:
+        _steps.reset(token)
+
+
+def current_steps() -> dict[str, Any]:
+    steps = _steps.get()
+    if not steps:
+        return {}
+    return {"step": steps[-1], "step_path": " > ".join(steps), "depth": len(steps) - 1}
 
 
 # ------------------------------------------------------------------------------------------------ redaction
@@ -96,7 +119,7 @@ class JsonLineFormatter(logging.Formatter):
         line: dict[str, Any] = {
             "time": dt.datetime.fromtimestamp(record.created, dt.timezone.utc).isoformat(timespec="milliseconds"),
             "level": record.levelname, "logger": record.name, "message": record.getMessage(),
-            **current_context(), **_trace_ids(),
+            **current_context(), **current_steps(), **_trace_ids(),
         }
         line.update({k: v for k, v in vars(record).items() if k not in self.STANDARD and not k.startswith("_")})
         if record.exc_info and record.exc_info[1] is not None:
@@ -112,7 +135,8 @@ class ConsoleFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:
         ids = " ".join(f"{k}={v}" for k, v in current_context().items() if k in ("job_id", "request_id"))
         trace_id = _trace_ids().get("trace_id")
-        text = f"{record.levelname:<7} {record.name}: {record.getMessage()}"
+        step = current_steps().get("step")
+        text = f"{record.levelname:<7} {record.name}: {record.getMessage()}" + (f" (in {step})" if step else "")
         if record.exc_info and record.exc_info[1] is not None:
             error = describe_error(record.exc_info[1])
             text += f" [{error['error_type']} at {error['error_location']}]"

@@ -57,9 +57,10 @@ def test_one_question_is_one_trace_with_every_step_nested_under_its_job(traced_s
     assert {"conversation.message", "orchestrator.node.intake", "orchestrator.node.execute",
             "orchestrator.task_attempt", "orchestrator.node.respond"} <= names
     attempt = next(s for s in trace if s.name == "orchestrator.task_attempt")
-    assert ancestors(attempt, by_id)[:1] == ["orchestrator.node.execute"] and ancestors(attempt, by_id)[-1] == "job.message"
+    assert ancestors(attempt, by_id)[:2] == ["orchestrator.task", "orchestrator.node.execute"]
+    assert ancestors(attempt, by_id)[-1] == "job.message"
     worker = next(s for s in trace if s.name.startswith("worker."))                  # ran in the task pool's thread
-    assert ancestors(worker, by_id)[:2] == ["orchestrator.task_attempt", "orchestrator.node.execute"]
+    assert ancestors(worker, by_id)[:3] == ["orchestrator.task_attempt", "orchestrator.task", "orchestrator.node.execute"]
     assert job["trace_id"] == format(root.context.trace_id, "032x")
     assert root.attributes["request_id"] == job["request_id"] and root.attributes["job_id"] == job["job_id"]
 
@@ -109,3 +110,49 @@ def test_every_response_echoes_a_request_id(tmp_path):
     response = stack.client.get("/health", headers={"X-Request-ID": "support-ticket-42"})
     assert response.headers["X-Request-ID"] == "support-ticket-42"
     assert stack.client.get("/health").headers["X-Request-ID"].startswith("http_")
+
+
+def test_every_graph_step_logs_what_it_wrote_and_the_state_after_it(traced_stack, json_log):
+    stack, exporter = traced_stack
+    cid = stack.conversation()
+    job = stack.wait(stack.send(cid, DATA_QUESTION, "msg-trace-3", execute=True).json()["job_id"])
+    lines = [line for line in json_log() if line.get("job_id") == job["job_id"]]
+
+    updates = [line for line in lines if line["message"] == "state updated"]
+    steps = [line["step"] for line in updates]
+    assert steps[:2] == ["orchestrator.node.intake", "orchestrator.node.supervise"] and steps[-1] == "orchestrator.node.finalize"
+    assert {"orchestrator.node.dispatch", "orchestrator.node.execute", "orchestrator.node.respond"} <= set(steps)
+    supervise = updates[1]
+    assert supervise["changes"]["phase"] == "planned" and supervise["state"]["plan"]["tasks"]
+    assert supervise["state"]["request"]["question"]                                     # the masked question
+    assert updates[-1]["state"]["response"]["status"] == job["status"]
+
+    (task,) = [line for line in lines if line["message"] == "task state updated"]
+    assert task["step_path"].endswith("orchestrator.node.execute > orchestrator.task")
+    assert list(task["changes"]["task_states"].values()) == ["running -> succeeded"] and task["changes"]["evidence"]
+
+    hops = [(line["from_step"], line["to_step"]) for line in lines if line["message"] == "next step"]
+    assert hops[0] == ("intake", "supervise") and ("dispatch", "verify") in hops
+    starts = [line for line in lines if line["message"] == "step started"]
+    assert starts[0]["step"] == "job.message" and starts[0]["depth"] == 0
+    worker = next(line for line in starts if line["step"].startswith("worker."))
+    assert worker["step_path"].startswith("job.message > conversation.message > orchestrator.node.execute")
+    spans = {s.name: s.attributes for s in exporter.get_finished_spans() if s.context.trace_id == int(job["trace_id"], 16)}
+    assert json.loads(spans["orchestrator.node.respond"]["state"])["response"]["status"] == job["status"]
+
+
+def test_a_failing_worker_is_named_by_its_full_step_path(traced_stack, json_log, monkeypatch):
+    stack, _ = traced_stack
+    workers = stack.engine.deps.controller._workers
+
+    def broken(task, context):
+        raise KeyError("column missing")
+    for worker in workers.values():
+        monkeypatch.setattr(worker, "run", broken)
+    cid = stack.conversation()
+    job = stack.wait(stack.send(cid, DATA_QUESTION, "msg-trace-4", execute=True).json()["job_id"])
+    (error,) = [line for line in json_log() if line["level"] == "ERROR" and line.get("job_id") == job["job_id"]]
+    assert error["step"].startswith("worker.") and error["error_type"] == "KeyError"
+    assert error["step_path"].startswith("job.message > conversation.message > orchestrator.node.execute > orchestrator.task")
+    finished = [line for line in json_log() if line["message"] == "step finished" and line["step"] == error["step"]]
+    assert finished[0]["outcome"] == "failed" and finished[0]["level"] == "WARNING"

@@ -223,29 +223,77 @@ LangSmith. Everything else stays on your laptop.
 
 ## 9. Debugging: logs and traces
 
-Every chat message, tender check or plan runs as a background **job**. The job and everything it does share the same
-ids, in both places an engineer looks:
+Every chat message, tender check or plan runs as a background **job**. Everything the job does is written, step by
+step, to two places that share the same ids.
 
-- **The log file:** `orchestrator/runs/logs/app.jsonl`, one JSON line per event. Each line has `job_id`, `request_id`,
-  `conversation_id` and `trace_id`. Every failure is written once, at level ERROR, with `error_type`, `error_location`
-  (file:line:function), the traceback and the step that failed. Personal data in messages is masked.
-- **Logfire:** one trace per job, with nested spans: `job.message` > `conversation.message` > `orchestrator.node.*`
-  (intake, plan, execute, verify, respond) > `orchestrator.task_attempt` > `worker.*` > `mcp.tool_call` /
-  `orchestrator.llm_call`. A failed span is red and carries the same `error_type`, `error_location` and `failed_step`.
-  Spans are sent to Logfire only when `.env` has `LOGFIRE_SEND_TO_LOGFIRE=true` and `LOGFIRE_TOKEN`; otherwise the trace
-  ids are still in the log file.
+**The log file: `orchestrator/runs/logs/app.jsonl`**
 
-How to find a failure:
+The file has one JSON line per event. Every line carries:
+
+- **Ids:** `job_id`, `request_id`, `conversation_id` and `trace_id`.
+- **Where it happened:** `step` is the step the line was written in, and `step_path` is the full path to it, for
+  example `job.message > conversation.message > orchestrator.node.execute > orchestrator.task >
+  orchestrator.task_attempt > worker.structured_data`. `depth` is how deep that step is.
+
+The lines you will see:
+
+| Line | What it tells you |
+| --- | --- |
+| `step started` / `step finished` | One pair for every step, with its outcome (`done`, `failed`, `failed (handled)`), its time and its attributes |
+| `message routed` | Which route the message took, and why |
+| `state updated` | After every graph step: `changes` (what the step wrote) and `state` (the investigation state after it) |
+| `task state updated` | After every task: its state change (for example `running -> succeeded`) and the results, evidence and errors it added |
+| `next step` | Which step comes next, and the phase that decided it |
+| `step failed` (ERROR) | Each failure, written once by the innermost step that saw it: `error_type`, `error_location` (file:line:function), the traceback and the step path |
+
+Personal data is masked. The state lines hold ids, statuses, counts and the masked question and answer, never data rows
+or document text.
+
+**Read one job as a tree:**
+
+```bash
+uv run wbg-logs                    # the latest job
+uv run wbg-logs --failed           # the latest job that logged an error
+uv run wbg-logs <job_id>           # one job (the id is in GET /jobs/<id> and on every line)
+uv run wbg-logs <job_id> --state   # plus the full state after every step
+uv run wbg-logs --traceback        # plus each error's traceback
+uv run wbg-logs --list             # the latest jobs, with their status and error count
+```
+
+The output is indented by step, and ends with where the job failed:
+
+```
+          + orchestrator.node.execute
+            + orchestrator.task  task_id=t1 worker=structured_data operation=answer_data_question
+              + orchestrator.task_attempt  attempt=1 max_attempts=1
+                + worker.structured_data
+ERROR             step failed: KeyError at gateway.py:88:run: 'fiscal_year'  (in worker.structured_data)
+WARNING         - worker.structured_data  FAILED 6 ms
+              task state: tasks t1: running -> failed; errors +1 [{"code": "KeyError", ...}]
+            - orchestrator.task  done 7 ms  execution_state=failed
+
+FAILED in: job.message > conversation.message > orchestrator.node.execute > orchestrator.task > orchestrator.task_attempt > worker.structured_data
+           KeyError at gateway.py:88:run: 'fiscal_year'
+```
+
+**Logfire**
+
+Logfire shows the same tree: one trace per job, with a span per step. Each graph step span also carries
+`state_changes` and `state`, and a failed span is red, with `error_type`, `error_location` and `failed_step`.
+
+Spans are sent to Logfire only when `.env` has `LOGFIRE_SEND_TO_LOGFIRE=true` and `LOGFIRE_TOKEN`. Without them, the
+trace ids are still in the log file. To open a run in Logfire, paste its `trace_id` (from `wbg-logs` or
+`GET /jobs/<id>`) into Logfire's search.
+
+**Plain grep also works:**
 
 ```bash
 grep '"level": "ERROR"' orchestrator/runs/logs/app.jsonl | tail -5     # the latest failures
 grep '<job_id>' orchestrator/runs/logs/app.jsonl                        # everything one job did, in order
 ```
 
-The job id is in the API's job response (`GET /jobs/<id>`), along with `trace_id`; paste the trace id into Logfire's
-search to open the nested trace. An unexpected server error returns `{"detail": ..., "reference": "http_..."}`: that
-reference is on the matching log line. The audit trail of each investigation (metadata only) stays in
-`orchestrator/runs/app_audit.jsonl`.
+An unexpected server error returns `{"detail": ..., "reference": "http_..."}`. That reference is on the matching log
+line. The audit trail of each investigation (metadata only) stays in `orchestrator/runs/app_audit.jsonl`.
 
 ---
 

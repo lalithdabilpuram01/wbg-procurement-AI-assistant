@@ -32,6 +32,7 @@ procurement-intelligence/
     controller.py                  runs each task with retries, deadlines and circuit breakers
     workers/                       one adapter per agent (structured data, documents, prediction, monitoring, ...)
     observability.py, logs.py      Logfire spans and the JSON log file (see "Debugging")
+    state_view.py, log_view.py     the state summary logged after every step; `wbg-logs`, which reads the log as a tree
     runtime.py                     wires the real services together at start-up
   conversation/        chat memory, intent routing, personal-data masking, feedback learning
   structured_agent/    questions over the Gold tables: question > SQL (Claude) > validation > Databricks; MCP server
@@ -65,8 +66,10 @@ procurement-intelligence/
 
 ## Debugging
 
-Each job writes JSON lines with its `job_id`, `request_id` and `trace_id` to `orchestrator/runs/logs/app.jsonl`, and,
-when Logfire export is switched on, one nested trace to Logfire. A failure is logged once with the step, file and line
-where it happened. See [HOW_TO_RUN.md](HOW_TO_RUN.md), section 9.
+Each job writes JSON lines to `orchestrator/runs/logs/app.jsonl`. When Logfire export is switched on, it also sends
+one nested trace to Logfire. Every line carries the job's ids and the step it was written in, with that step's full
+path. Every graph step logs what it changed and the state after it, and a failure is logged once with its step, file
+and line. `uv run wbg-logs` prints the latest job as an indented tree; `--failed` shows the latest failed one. See
+[HOW_TO_RUN.md](HOW_TO_RUN.md), section 9.
 
 Phase 1 discovery notes (history) are in [research/discovery/PHASE1_README.md](research/discovery/PHASE1_README.md).

@@ -61,6 +61,7 @@ wbg-lessons = "wbg_orchestrator.commands:lessons"
 wbg-feedback = "wbg_orchestrator.commands:feedback"
 wbg-feedback-db = "wbg_orchestrator.commands:feedback_db"
 wbg-eval = "wbg_orchestrator.commands:evaluate"
+wbg-logs = "wbg_orchestrator.commands:logs"
 wbg-etl-watch = "etl.watch:run"
 wbg-etl-seed = "etl.seed:run"
 

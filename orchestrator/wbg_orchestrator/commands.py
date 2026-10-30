@@ -9,6 +9,7 @@
     uv run wbg-feedback <command>                      feedback reports (python -m wbg_orchestrator.learning_cli)
     uv run wbg-feedback-db init|check                  the feedback store on Lakebase (python -m wbg_orchestrator.learning_db)
     uv run wbg-eval <command>                          golden evaluations (python -m evaluation.golden)
+    uv run wbg-logs [<job_id>] [--failed] [--state]    one job from the app log, as a tree of steps (log_view.py)
 """
 from __future__ import annotations
 
@@ -99,4 +100,9 @@ def feedback_db() -> int:
 def evaluate() -> int:
     from evaluation.golden import main
     os.chdir(ORCHESTRATOR)
+    return main(_argv())
+
+
+def logs() -> int:
+    from .log_view import main
     return main(_argv())

@@ -10,10 +10,25 @@
 
 Nodes only return state updates (the reducers in state.py merge them). Workers are reachable only through the
 execution controller, which every `execute` call goes through.
+
+Every node runs inside the same wrapper (`_Nodes.step`): one span `orchestrator.node.<name>` per step, and after the
+node returns, one "state updated" log line with what the step wrote (`changes`) and the state after it (`state`),
+summarized by state_view.py. Each task of an `execute` step has its own span `orchestrator.task` and its own
+"task state updated" line, and every edge taken writes a "next step" line. Read in order, the log is the run:
+
+    orchestrator.node.intake      step started / state updated / step finished      next step: intake -> supervise
+    orchestrator.node.supervise   ...
+    orchestrator.node.execute
+      orchestrator.task           task state updated (t1: running -> succeeded, evidence added)
+        orchestrator.task_attempt
+          worker.structured       mcp.tool_call ...
 """
 from __future__ import annotations
 
+import contextvars
 import datetime as dt
+import json
+import logging
 import time
 from contextlib import contextmanager
 from dataclasses import dataclass, field
@@ -36,10 +51,15 @@ from .planner import (Planner, PlannerError, PlanningContext, brief_plan, build_
                       package_plan, tender_plan)
 from .response import DeterministicResponseGenerator, ResponseGenerator, validate_response
 from .state import InvestigationState, add_counters
+from .state_view import apply_update, describe_update, summarize_state
 from .supervisor import Supervisor
 from .verification import VerificationReport, ledger, verify
 
 log = get_logger("graph")
+
+NODES = ("intake", "supervise", "plan", "validate_plan", "dispatch", "execute", "verify", "respond", "fail", "finalize")
+# The span setter of the node step running in this context, so a node can add attributes to its own step span.
+_NODE_SPAN: contextvars.ContextVar[Callable[..., None] | None] = contextvars.ContextVar("wbg_node_span", default=None)
 
 REPLAN_CATEGORIES = {ErrorCategory.NO_EVIDENCE.value}
 MALFORMED_OUTPUT = {"invalid_model_output", "model_output_truncated"}     # LlmFailure values of unusable replies
@@ -106,17 +126,17 @@ def no_evidence_first(response: InvestigationResponse, plan: InvestigationPlan, 
 def build_graph(deps: EngineDeps) -> StateGraph:
     nodes = _Nodes(deps)
     graph = StateGraph(InvestigationState)
-    for name in ("intake", "supervise", "plan", "validate_plan", "dispatch", "execute", "verify", "respond", "fail", "finalize"):
-        graph.add_node(name, getattr(nodes, name))
+    for name in NODES:
+        graph.add_node(name, nodes.step(name, getattr(nodes, name)))
     graph.add_edge(START, "intake")
     # every conditional edge lists where it can go, so LangGraph can draw the whole graph (get_graph().draw_mermaid())
     _route(graph, "intake", {"done": "finalize"}, "supervise")
     _route(graph, "supervise", {"planned": "validate_plan", "needs_plan": "plan", "done": "finalize"})
-    graph.add_conditional_edges("plan", nodes.after_plan, ["validate_plan", "plan", "fail"])
-    graph.add_conditional_edges("validate_plan", nodes.after_validation, ["dispatch", "plan", "fail"])
+    graph.add_conditional_edges("plan", _logged("plan", nodes.after_plan), ["validate_plan", "plan", "fail"])
+    graph.add_conditional_edges("validate_plan", _logged("validate_plan", nodes.after_validation), ["dispatch", "plan", "fail"])
     _route(graph, "dispatch", {"executing": "execute"}, "verify")
     graph.add_edge("execute", "dispatch")
-    graph.add_conditional_edges("verify", nodes.after_verify, ["respond", "plan"])
+    graph.add_conditional_edges("verify", _logged("verify", nodes.after_verify), ["respond", "plan"])
     for name in ("respond", "fail"):
         graph.add_edge(name, "finalize")
     graph.add_edge("finalize", END)
@@ -125,7 +145,16 @@ def build_graph(deps: EngineDeps) -> StateGraph:
 
 def _route(graph: StateGraph, source: str, mapping: dict[str, str], default: str = "fail") -> None:
     """A conditional edge chosen by the phase the node set (`default` for any other phase)."""
-    graph.add_conditional_edges(source, _by_phase(mapping, default), sorted({*mapping.values(), default}))
+    graph.add_conditional_edges(source, _logged(source, _by_phase(mapping, default)), sorted({*mapping.values(), default}))
+
+
+def _logged(source: str, route: Callable[[InvestigationState], str]) -> Callable[[InvestigationState], str]:
+    """The edge function, writing which step comes next and why (the phase the step set)."""
+    def chosen(state: InvestigationState) -> str:
+        target = route(state)
+        log.info("next step", extra={"from_step": source, "to_step": target, "phase": state.get("phase")})
+        return target
+    return chosen
 
 
 def _by_phase(mapping: dict[str, str], default: str | None = None) -> Callable[[InvestigationState], str]:
@@ -154,16 +183,52 @@ class _Nodes:
         return {"investigation_id": request["investigation_id"], "conversation_id": request["conversation_thread_id"],
                 "owner_hash": request["owner"]["user_hash"], "plan_id": (state.get("plan") or {}).get("plan_id")}
 
+    # ------------------------------------------------------------------------------------------ step wrapper
+    def step(self, name: str, node: Callable[[InvestigationState], dict]) -> Callable[[InvestigationState], dict]:
+        """The node as a traced step: its span, then the changes it wrote and the state after them (log and span)."""
+        def run(state: InvestigationState) -> dict:
+            with self.d.tracer.span(f"orchestrator.node.{name}", node=name, **self._correlation(state)) as span:
+                token = _NODE_SPAN.set(span)
+                try:
+                    update = node(state)
+                finally:
+                    _NODE_SPAN.reset(token)
+                self._record_state("state updated", span, state, update)
+            return update
+        run.__name__ = name
+        return run
+
+    def _record_state(self, message: str, span: Callable[..., None], before, update: dict) -> None:
+        """One log line (and two span attributes) with what was written and the state it leads to. Skipped when nothing
+        records it; a summary that fails is logged as a warning and never stops the investigation."""
+        if not (self.d.tracer.enabled or log.isEnabledFor(logging.INFO)):
+            return
+        try:
+            changes = describe_update(update, before)
+            after = summarize_state(apply_update(before, update))
+        except Exception:
+            log.warning("state summary failed", exc_info=True)
+            return
+        log.info(message, extra={"changes": changes, "state": after})
+        span(state_changes=json.dumps(changes, default=str), state=json.dumps(after, default=str))
+
     @contextmanager
     def _span(self, node: str, state, **attributes):
-        """The node's trace span, and its step in the live view (started, then done or failed, with its time)."""
+        """The node's step span (opened by `step`; a task gets its own `orchestrator.task` span inside it), and its
+        step in the live view (started, then done or failed, with its time)."""
         key = f"{node}:{attributes['task_id']}" if "task_id" in attributes else node
         label = WORKER_LABELS.get(WorkerName(attributes["worker"])) if "worker" in attributes else STEP_LABELS.get(node, node)
         self._progress(state, {"type": "step", "key": key, "label": label, "state": "running"})
         started, outcome = time.perf_counter(), "failed"
         try:
-            with self.d.tracer.span(f"orchestrator.node.{node}", node=node, **{**self._correlation(state), **attributes}) as span:
-                yield span
+            step_span = _NODE_SPAN.get()
+            if "task_id" in attributes or step_span is None:
+                name = "orchestrator.task" if "task_id" in attributes else f"orchestrator.node.{node}"
+                with self.d.tracer.span(name, node=node, **{**self._correlation(state), **attributes}) as span:
+                    yield span
+            else:
+                step_span(**attributes)
+                yield step_span
             outcome = "done"
         finally:
             self._progress(state, {"type": "step", "key": key, "label": label, "state": outcome,
@@ -370,11 +435,12 @@ class _Nodes:
                 span(execution_state=run.final_state.value, attempt=run.attempts, retries=run.retries,
                      evidence_count=len(run.evidence), llm_calls=run.usage.llm_calls, input_tokens=run.usage.input_tokens,
                      output_tokens=run.usage.output_tokens, duration_ms=run.elapsed_ms)
+                rows = {"results": [r.to_state() for r in run.results], "evidence": [e.to_state() for e in run.evidence],
+                        "errors": [e.to_state() for e in run.errors]}
+                self._record_state("task state updated", span, view, {"task_states": {task_id: run.final_state.value}, **rows})
             if run.final_state in (TaskState.FAILED, TaskState.BLOCKED):           # it ran, but found nothing it could use
                 self._progress(state, {"type": "step", "key": f"execute:{task_id}", "label": WORKER_LABELS.get(task.worker),
                                        "state": "no_result"})
-            rows = {"results": [r.to_state() for r in run.results], "evidence": [e.to_state() for e in run.evidence],
-                    "errors": [e.to_state() for e in run.errors]}
             for key, values in rows.items():
                 update[key] += values
                 view[key] = view.get(key, []) + values
