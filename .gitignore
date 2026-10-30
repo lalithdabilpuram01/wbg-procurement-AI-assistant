@@ -19,30 +19,30 @@ __pycache__/
 .pytest_cache/
 
 # Large public bulk files – reproducible via discovery/scripts (see MANIFEST.jsonl for checksums)
-discovery/data_cache/*
-!discovery/data_cache/MANIFEST.jsonl
+research/discovery/data_cache/*
+!research/discovery/data_cache/MANIFEST.jsonl
 
 # Downloaded document files – reproducible via s04/s04b/p05; checksums in samples/MANIFEST.jsonl
-discovery/samples/documents/files/*.pdf
-discovery/samples/documents/files/*.txt
-discovery/samples/documents/pp_files/
+research/discovery/samples/documents/files/*.pdf
+research/discovery/samples/documents/files/*.txt
+research/discovery/samples/documents/pp_files/
 *.part
-discovery/samples/documents/isr_series/*.txt
+research/discovery/samples/documents/isr_series/*.txt
 
 # Cohort-bounded Bronze inputs – reproducible via discovery/scripts/b01_extract_bronze_inputs.py
 # (checksums in databricks_upload/bronze_inputs/_manifest/)
-databricks_upload/bronze_inputs/*
-!databricks_upload/bronze_inputs/_manifest/
+data/bronze_inputs/*
+!data/bronze_inputs/_manifest/
 
 # Staged country-level reference inputs – byte copies of discovery/country_indicators/raw and samples/indicators
-databricks_upload/ref_bronze_inputs/*
-!databricks_upload/ref_bronze_inputs/_manifest/
+data/ref_bronze_inputs/*
+!data/ref_bronze_inputs/_manifest/
 
 # D-14 (approved 2026-10-23): raw procurement-notice text containing personal contact data – never commit.
 # Reproducible via discovery/scripts/s03_procnotices.py and discovery/project_deep_dive/d01_fetch_two_projects.py;
 # checksums in discovery/samples/MANIFEST.jsonl and discovery/project_deep_dive/raw/MANIFEST.json.
-discovery/samples/procnotices/*.jsonl.gz
-discovery/project_deep_dive/raw/*/procnotices_*.json
+research/discovery/samples/procnotices/*.jsonl.gz
+research/discovery/project_deep_dive/raw/*/procnotices_*.json
 
 # ---------------------------------------------------------------------------------------------------------------
 # Repository scope (2026-10-26): code, configuration, lock files, docs/reports, small manifests and the frozen ML
@@ -63,8 +63,9 @@ discovery/project_deep_dive/raw/*/procnotices_*.json
 *.txt
 !requirements*.txt
 !**/requirements*.txt
-rag/module1_discovery/**/plan_text/
-discovery/project_deep_dive/raw/*/docs_text/
+data/rag_scope/**/plan_text/
+research/rag_module1_discovery/**/plan_text/
+research/discovery/project_deep_dive/raw/*/docs_text/
 
 # Derived data: corpora, indexes, embeddings, tabular extracts
 *.npy
@@ -82,12 +83,14 @@ rag/release_v3/results/embedding_manifest.json
 **/runs/
 *.log
 ml/eda/
-rag/module1_discovery/**/plan_coverage/PLAN_ACTIVITIES.csv
-rag/module1_discovery/**/plan_coverage/CONTRACT_PLAN_EVIDENCE_LINKS.csv
+data/rag_scope/**/plan_coverage/PLAN_ACTIVITIES.csv
+research/rag_module1_discovery/**/plan_coverage/PLAN_ACTIVITIES.csv
+data/rag_scope/**/plan_coverage/CONTRACT_PLAN_EVIDENCE_LINKS.csv
+research/rag_module1_discovery/**/plan_coverage/CONTRACT_PLAN_EVIDENCE_LINKS.csv
 **/fetch_log.jsonl
 **/access_log.jsonl
-discovery/country_indicators/raw/
-discovery/project_deep_dive/raw/*/
+research/discovery/country_indicators/raw/
+research/discovery/project_deep_dive/raw/*/
 
 # Ingestion inbox (ingest/): dropped files, processed/quarantined copies and the ledger stay local; folder READMEs are tracked
 ingestion_inbox/**

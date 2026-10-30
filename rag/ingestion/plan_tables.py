@@ -16,7 +16,7 @@ import pdfplumber
 
 from . import config  # noqa: F401
 from .references import category_family, header_key, normalize_plan_status, normalize_ref, package_core, package_core_in_text, review_code
-import plan_text_rows as T  # noqa: E402  (rag/module1_discovery, via config)
+from . import plan_text_rows as T
 
 SECTION_LABELS = {"WORKS", "GOODS", "NON CONSULTING SERVICES", "CONSULTING FIRMS", "INDIVIDUAL CONSULTANTS"}
 DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")

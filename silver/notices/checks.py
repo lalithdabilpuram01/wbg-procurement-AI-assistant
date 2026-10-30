@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import hashlib
 import re
-import sys
 from collections import Counter
 
 from pyspark.sql import DataFrame
@@ -19,7 +18,6 @@ from silver.notices import transform as T
 EMAIL = re.compile(T.EMAIL_RE)
 PHONE = re.compile(T.PHONE_RE, re.I)
 
-sys.path.insert(0, str(T.REPO / "discovery"))
 from wbdisc.award_notice import parse_award_notice  # noqa: E402
 from wbdisc.normalize import normalize_ref, strip_html  # noqa: E402
 

@@ -12,6 +12,7 @@ Usage (from procurement-intelligence/):
 """
 from __future__ import annotations
 
+from app_config.paths import COHORT_MANIFEST
 import argparse
 import hashlib
 import io
@@ -27,7 +28,6 @@ import pandas as pd
 from silver.common.dq import DQReport
 from silver.common.session import DEFAULT_PROFILE, get_spark
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "discovery"))
 from wbdisc.award_notice import parse_award_notice  # noqa: E402
 from wbdisc.normalize import normalize_ref  # noqa: E402
 
@@ -39,7 +39,7 @@ T = {"notices": f"{S}.procurement_notices", "details": f"{S}.procurement_notice_
 BRONZE = {"csv": "workspace.wbg_bronze.bronze_procurement_notices_ds00979", "api": "workspace.wbg_bronze.bronze_procurement_notices_api",
           "ds5": "workspace.wbg_bronze.bronze_contract_awards_ds00005"}
 RUNS = Path(__file__).resolve().parents[1] / "runs"
-COHORT = Path(__file__).resolve().parents[2] / "cohort" / "poc_cohort_2000_manifest.csv"
+COHORT = COHORT_MANIFEST
 SEP = "\x1f"
 URL = "https://projects.worldbank.org/en/projects-operations/procurement-detail/"
 

@@ -2,6 +2,7 @@
 existing Gold table, explicit grants (SHOW GRANTS), column masks and the cohort manifest SHA-256."""
 from __future__ import annotations
 
+from app_config.paths import COHORT_MANIFEST
 import hashlib
 from pathlib import Path
 
@@ -9,7 +10,7 @@ from silver.common.dq import DQReport
 from silver.common.pipeline import CATALOG
 
 REPO = Path(__file__).resolve().parents[2]
-COHORT = REPO / "cohort" / "poc_cohort_2000_manifest.csv"
+COHORT = COHORT_MANIFEST
 
 
 def _tables(spark, schema: str) -> list[str]:

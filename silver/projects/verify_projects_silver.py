@@ -24,7 +24,6 @@ from silver.common.dq import DQReport
 from silver.common.session import DEFAULT_PROFILE, get_spark
 from silver.projects.transform import AMOUNTS, COHORT_MANIFEST, MILESTONES, WB_TO_ISO2
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "discovery"))
 from wbdisc.countries import is_regional  # noqa: E402
 
 BRONZE = "workspace.wbg_bronze.bronze_projects_v3"

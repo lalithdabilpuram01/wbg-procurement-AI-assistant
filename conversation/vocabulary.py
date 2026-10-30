@@ -6,6 +6,7 @@ forms are derived from WB-style names ("Egypt, Arab Republic of" -> "Egypt"); a 
 """
 from __future__ import annotations
 
+from app_config.paths import COHORT_MANIFEST
 import csv
 import re
 from functools import lru_cache
@@ -13,7 +14,7 @@ from pathlib import Path
 
 from conversation.models import CountryRef
 
-COHORT_MANIFEST = Path(__file__).resolve().parents[1] / "cohort" / "poc_cohort_2000_manifest.csv"
+COHORT_MANIFEST = COHORT_MANIFEST
 
 
 class CountryVocabulary:

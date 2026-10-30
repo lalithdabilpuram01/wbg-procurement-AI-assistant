@@ -11,6 +11,7 @@ Usage (from procurement-intelligence/):
 """
 from __future__ import annotations
 
+from app_config.paths import BRONZE_INPUTS_MANIFEST, COHORT_MANIFEST, SOURCE_PULLS_CACHE_MANIFEST
 import argparse
 import hashlib
 import io
@@ -28,9 +29,9 @@ from silver.common.session import DEFAULT_PROFILE, get_spark
 
 REPO = Path(__file__).resolve().parents[2]
 RUNS = REPO / "silver" / "runs"
-COHORT = REPO / "cohort" / "poc_cohort_2000_manifest.csv"
-MANIFEST = REPO / "databricks_upload" / "bronze_inputs" / "_manifest" / "bronze_inputs_manifest.json"
-CACHE_MANIFEST = REPO / "discovery" / "data_cache" / "MANIFEST.jsonl"
+COHORT = COHORT_MANIFEST
+MANIFEST = BRONZE_INPUTS_MANIFEST
+CACHE_MANIFEST = SOURCE_PULLS_CACHE_MANIFEST
 SEP = "\x1f"
 PLACEHOLDER = "01/01/1900"
 CFG = {

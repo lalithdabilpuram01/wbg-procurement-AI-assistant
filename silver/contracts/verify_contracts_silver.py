@@ -10,6 +10,7 @@ Usage (from procurement-intelligence/):
 """
 from __future__ import annotations
 
+from app_config.paths import COHORT_MANIFEST
 import argparse
 import hashlib
 import io
@@ -30,7 +31,7 @@ S = "workspace.wbg_silver"
 T = {"lines": f"{S}.contract_award_lines", "contracts": f"{S}.contract_awards", "legacy": f"{S}.contract_awards_legacy"}
 BRONZE = {"ds5": "workspace.wbg_bronze.bronze_contract_awards_ds00005", "ds1": "workspace.wbg_bronze.bronze_contract_awards_legacy_ds01004"}
 RUNS = Path(__file__).resolve().parents[1] / "runs"
-COHORT = Path(__file__).resolve().parents[2] / "cohort" / "poc_cohort_2000_manifest.csv"
+COHORT = COHORT_MANIFEST
 SEP = "\x1f"
 
 

@@ -25,6 +25,7 @@ IBRD/IDA original principal US$ for 223/224 loans, which is evidence, not a sour
 """
 from __future__ import annotations
 
+from app_config.paths import BRONZE_INPUTS_MANIFEST, SOURCE_PULLS_SAMPLES_MANIFEST
 import json
 from pathlib import Path
 
@@ -36,8 +37,8 @@ TRANSFORM_VERSION = "project_details_silver_v1.0.0"
 BRONZE = f"{CATALOG}.wbg_bronze.bronze_projects_v3_allfields"
 SOURCE_API = "search.worldbank.org/api/v3/projects (id=<P>, fl=*)"
 REPO = Path(__file__).resolve().parents[2]
-BRONZE_INPUTS_MANIFEST = manifest("WBG_BRONZE_INPUTS_MANIFEST", REPO / "databricks_upload" / "bronze_inputs" / "_manifest" / "bronze_inputs_manifest.json")
-SAMPLES_MANIFEST = manifest("WBG_SOURCE_PULLS_MANIFEST", REPO / "discovery" / "samples" / "MANIFEST.jsonl")
+BRONZE_INPUTS_MANIFEST = manifest("WBG_BRONZE_INPUTS_MANIFEST", BRONZE_INPUTS_MANIFEST)
+SAMPLES_MANIFEST = manifest("WBG_SOURCE_PULLS_MANIFEST", SOURCE_PULLS_SAMPLES_MANIFEST)
 DETAIL_COVERAGE = "phase1_cluster_detail_pull"
 RECORD_SEMANTICS = "current_values_as_of_source_retrieval"
 TRANSACTION_SEMANTICS = "dated_records_from_snapshot_retrieved_2026_10_21"

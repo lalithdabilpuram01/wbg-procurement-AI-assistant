@@ -19,8 +19,8 @@ Rules:
 """
 from __future__ import annotations
 
+from app_config.paths import BRONZE_INPUTS_MANIFEST, COHORT_MANIFEST, SOURCE_PULLS_CACHE_MANIFEST
 import json
-import sys
 from pathlib import Path
 
 from pyspark.sql import DataFrame
@@ -33,12 +33,11 @@ TRANSFORM_VERSION = "projects_silver_v1.0.0"
 BRONZE_TABLE = f"{CATALOG}.wbg_bronze.bronze_projects_v3"
 WDI_COUNTRY = f"{CATALOG}.wbg_silver.wdi_country"
 REPO = Path(__file__).resolve().parents[2]
-COHORT_MANIFEST = REPO / "cohort" / "poc_cohort_2000_manifest.csv"
-BRONZE_INPUTS_MANIFEST = manifest("WBG_BRONZE_INPUTS_MANIFEST", REPO / "databricks_upload" / "bronze_inputs" / "_manifest" / "bronze_inputs_manifest.json")
-PHASE1_CACHE_MANIFEST = manifest("WBG_SOURCE_PULLS_MANIFEST", REPO / "discovery" / "data_cache" / "MANIFEST.jsonl")
+COHORT_MANIFEST = COHORT_MANIFEST
+BRONZE_INPUTS_MANIFEST = manifest("WBG_BRONZE_INPUTS_MANIFEST", BRONZE_INPUTS_MANIFEST)
+PHASE1_CACHE_MANIFEST = manifest("WBG_SOURCE_PULLS_MANIFEST", SOURCE_PULLS_CACHE_MANIFEST)
 SOURCE_API = "search.worldbank.org/api/v3/projects"
 
-sys.path.insert(0, str(REPO / "discovery"))
 from wbdisc.countries import _REGIONAL, WB_TO_ISO2  # noqa: E402  (approved curated rules, D-07/D-31)
 
 S = T.StringType()

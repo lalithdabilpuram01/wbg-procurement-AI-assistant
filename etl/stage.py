@@ -15,12 +15,12 @@ carried over; otherwise the upload time is recorded as the retrieval time.
 """
 from __future__ import annotations
 
+from app_config.paths import BRONZE_INPUTS_MANIFEST, COHORT_MANIFEST, REF_BRONZE_INPUTS_MANIFEST, SOURCE_PULLS_CACHE_MANIFEST, SOURCE_PULLS_SAMPLES_MANIFEST
 import csv
 import gzip
 import hashlib
 import json
 import shutil
-import sys
 from collections import Counter
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -29,14 +29,13 @@ from pathlib import Path
 from etl.datasets import DATASETS, PROCUREMENT, REFERENCE, SERIES_URLS, Dataset, series_code
 
 REPO = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO / "discovery"))
 from wbdisc.bronze import iter_csv_records, parse_record, select_csv, select_jsonl  # noqa: E402  (the original selection)
 
-COHORT = REPO / "cohort" / "poc_cohort_2000_manifest.csv"
+COHORT = COHORT_MANIFEST
 COHORT_SIZE = 2000
-ORIGINAL_BRONZE = REPO / "databricks_upload" / "bronze_inputs" / "_manifest" / "bronze_inputs_manifest.json"
-ORIGINAL_REF = REPO / "databricks_upload" / "ref_bronze_inputs" / "_manifest" / "ref_bronze_inputs_manifest.json"
-ORIGINAL_PULLS = (REPO / "discovery" / "data_cache" / "MANIFEST.jsonl", REPO / "discovery" / "samples" / "MANIFEST.jsonl")
+ORIGINAL_BRONZE = BRONZE_INPUTS_MANIFEST
+ORIGINAL_REF = REF_BRONZE_INPUTS_MANIFEST
+ORIGINAL_PULLS = (SOURCE_PULLS_CACHE_MANIFEST, SOURCE_PULLS_SAMPLES_MANIFEST)
 SELECTION_RULE = ("exact string equality between the raw source key value and a cohort project_id "
                   "(no trimming, case-folding or other normalisation)")
 MANIFEST_NAMES = {"bronze": "bronze_inputs_manifest.json", "pulls": "source_pulls.jsonl", "ref": "ref_bronze_inputs_manifest.json"}

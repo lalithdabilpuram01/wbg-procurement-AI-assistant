@@ -12,6 +12,7 @@ Usage (from procurement-intelligence/):
 """
 from __future__ import annotations
 
+from app_config.paths import COHORT_MANIFEST
 import argparse
 import csv
 import hashlib
@@ -28,7 +29,7 @@ from silver.common.session import DEFAULT_PROFILE, get_spark
 
 REPO = Path(__file__).resolve().parents[2]
 RUNS = REPO / "gold" / "runs"
-COHORT = REPO / "cohort" / "poc_cohort_2000_manifest.csv"
+COHORT = COHORT_MANIFEST
 TARGET = "workspace.wbg_gold.gold_project_portfolio"
 S = "workspace.wbg_silver."
 AUDIT_TOTAL = Decimal("85248987799.45")

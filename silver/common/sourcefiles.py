@@ -7,6 +7,7 @@
 """
 from __future__ import annotations
 
+from app_config.paths import REF_BRONZE_INPUTS_MANIFEST
 import gzip
 import hashlib
 import json
@@ -18,7 +19,7 @@ from pyspark.sql import functions as F
 from silver.common.dq import DQReport
 from silver.common.pipeline import manifest
 
-MANIFEST = manifest("WBG_REF_BRONZE_MANIFEST", Path(__file__).resolve().parents[2] / "databricks_upload" / "ref_bronze_inputs" / "_manifest" / "ref_bronze_inputs_manifest.json")
+MANIFEST = manifest("WBG_REF_BRONZE_MANIFEST", REF_BRONZE_INPUTS_MANIFEST)
 
 
 def load_manifest_vintages(bronze_folder: str, manifest_path: Path = MANIFEST) -> list[dict]:

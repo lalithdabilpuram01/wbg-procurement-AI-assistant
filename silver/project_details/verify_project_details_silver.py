@@ -17,6 +17,7 @@ Usage (from procurement-intelligence/):
 """
 from __future__ import annotations
 
+from app_config.paths import BRONZE_INPUTS_MANIFEST, COHORT_MANIFEST, SOURCE_PULLS_SAMPLES_MANIFEST
 import argparse
 import hashlib
 import json
@@ -34,9 +35,9 @@ from silver.common.session import DEFAULT_PROFILE, get_spark
 
 REPO = Path(__file__).resolve().parents[2]
 RUNS = REPO / "silver" / "runs"
-COHORT = REPO / "cohort" / "poc_cohort_2000_manifest.csv"
-MANIFEST = REPO / "databricks_upload" / "bronze_inputs" / "_manifest" / "bronze_inputs_manifest.json"
-SAMPLES_MANIFEST = REPO / "discovery" / "samples" / "MANIFEST.jsonl"
+COHORT = COHORT_MANIFEST
+MANIFEST = BRONZE_INPUTS_MANIFEST
+SAMPLES_MANIFEST = SOURCE_PULLS_SAMPLES_MANIFEST
 BRONZE = "workspace.wbg_bronze.bronze_projects_v3_allfields"
 TABLES = {"details": "workspace.wbg_silver.project_details_v3", "transactions": "workspace.wbg_silver.project_loan_transactions"}
 ROWS = {"details": 184, "transactions": 16643}

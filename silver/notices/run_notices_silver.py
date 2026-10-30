@@ -12,6 +12,7 @@ Usage (from procurement-intelligence/):
 """
 from __future__ import annotations
 
+from app_config.paths import COHORT_MANIFEST
 import argparse
 import hashlib
 import json
@@ -32,8 +33,7 @@ from silver.common.write import _sql_str, complete_metadata, create_table
 from silver.notices import transform as T
 from silver.notices.checks import check_contact_data_outside_text, check_details, check_links, check_notices
 
-sys.path.insert(0, str(T.REPO / "discovery" / "scripts"))
-from p09_ml_label_feasibility import BID_DOC_AMENDMENT, CONTRACT_AMENDMENT, NOTICE_CANCELLED, REBID_STRONG, REF_REBID_STRONG, clean  # noqa: E402
+from silver.notices.label_patterns import BID_DOC_AMENDMENT, CONTRACT_AMENDMENT, NOTICE_CANCELLED, REBID_STRONG, REF_REBID_STRONG, clean
 
 S = f"{CATALOG}.wbg_silver"
 TARGETS = {"notices": f"{S}.procurement_notices", "details": f"{S}.procurement_notice_details",
@@ -41,7 +41,7 @@ TARGETS = {"notices": f"{S}.procurement_notices", "details": f"{S}.procurement_n
 RUNS = runs_dir(Path(__file__).resolve().parents[1] / "runs")
 EXISTING_SILVER = ["wdi_indicator_observations", "wdi_country", "income_classification_history", "wgi_estimates", "cpia_ratings", "projects",
                    "contract_award_lines", "contract_awards", "contract_awards_legacy"]
-COHORT = T.REPO / "cohort" / "poc_cohort_2000_manifest.csv"
+COHORT = COHORT_MANIFEST
 PID = "project_id RLIKE '^P[0-9]{6}$'"
 LINEAGE_NN = ["source_row_sha256", "bronze_source_file", "bronze_ingested_at", "bronze_input_file_sha256"]
 SPEC: dict[str, dict[str, Any]] = {

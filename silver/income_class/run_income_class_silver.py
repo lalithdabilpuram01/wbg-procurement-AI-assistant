@@ -11,6 +11,7 @@ Usage (from procurement-intelligence/):
 """
 from __future__ import annotations
 
+from app_config.paths import COHORT_MANIFEST
 import argparse
 import csv
 import json
@@ -51,7 +52,6 @@ COLUMN_COMMENTS = {
 
 def matching_report(spark, df, run_dir: Path) -> dict:
     """Read-only comparison with WDI Silver country metadata and the approved cohort (no mappings invented)."""
-    sys.path.insert(0, str(REPO / "discovery"))
     from wbdisc.countries import WB_TO_ISO2, is_regional  # curated D-31 aliases only
 
     og = {r.iso3_code: r.country_name for r in df.select("iso3_code", "country_name").distinct().collect()}
@@ -69,7 +69,7 @@ def matching_report(spark, df, run_dir: Path) -> dict:
         w.writerows(rows)
 
     import pandas as pd
-    cohort = pd.read_csv(REPO / "cohort" / "poc_cohort_2000_manifest.csv", dtype=str, keep_default_na=False)
+    cohort = pd.read_csv(COHORT_MANIFEST, dtype=str, keep_default_na=False)
     single = cohort[~cohort.country_code.map(is_regional)]
     econ = single.groupby("country_code").size()
     win = df.filter((F.col("fiscal_year") >= COHORT_WINDOW[0]) & (F.col("fiscal_year") <= COHORT_WINDOW[1]))

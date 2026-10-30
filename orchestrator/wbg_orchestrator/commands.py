@@ -3,7 +3,7 @@
     uv run wbg-api [--live] [--cap 5] [--port 8080]   the API; Claude is off unless --live (then capped per session)
     uv run wbg-web                                     the web app (npm run dev; npm install on first use)
     uv run wbg-user --user <name> --password <pw> [--reviewer]
-    uv run wbg-test                                    the offline test suites
+    uv run wbg-test                                    the offline tests (tests/, never tests/live/)
     uv run wbg-ingest <command>                        document ingestion (python -m ingest)
     uv run wbg-lessons <command>                       lesson cards (python -m lessons)
     uv run wbg-feedback <command>                      feedback reports (python -m wbg_orchestrator.learning_cli)
@@ -25,7 +25,7 @@ ORCHESTRATOR = REPO / "orchestrator"
 FRONTEND = REPO / "frontend"
 DEFAULT_CAP_USD = 5.0
 LIVE_MAX_ATTEMPTS = 400          # with --live the dollar cap is the real limit
-TEST_PATHS = ("tests", "../monitoring/tests", "../ingest/tests", "../lessons/tests", "../conversation/tests", "../etl/tests")
+TESTS = REPO / "tests"
 
 
 def _argv() -> list[str]:
@@ -69,11 +69,11 @@ def user() -> int:
 
 # -------------------------------------------------------------------------------------------------- tools
 def test() -> int:
-    """The offline suites (never tests_mcp/ or tests_live/, which make live calls); extra arguments go to pytest."""
+    """Every offline suite under tests/ (tests/live/ is skipped, see tests/conftest.py); extra arguments go to pytest."""
     env = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}
-    paths = [p for p in TEST_PATHS if (ORCHESTRATOR / p).is_dir()]          # etl/ exists only where the ETL is
-    return subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", *paths, *_argv()],
-                          cwd=ORCHESTRATOR, env=env).returncode
+    env.pop("WBG_RUN_LIVE_TESTS", None)                                     # wbg-test never runs the live suites
+    return subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", str(TESTS), *_argv()],
+                          cwd=REPO, env=env).returncode
 
 
 def ingest() -> int:

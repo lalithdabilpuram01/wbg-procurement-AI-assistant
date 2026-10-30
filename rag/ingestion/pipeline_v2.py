@@ -52,7 +52,7 @@ def code_hash() -> str:
     h = hashlib.sha256()
     for p in sorted(Path(__file__).parent.glob("*.py")):
         h.update(p.read_bytes())
-    h.update((config.REPO / "rag" / "module1_discovery" / "plan_text_rows.py").read_bytes())
+    h.update((Path(__file__).with_name("plan_text_rows.py")).read_bytes())
     return h.hexdigest()[:16]
 
 

@@ -21,6 +21,7 @@ Scores are ordinal category codes (1 = lowest rating, maximum = highest), not co
 """
 from __future__ import annotations
 
+from app_config.paths import BRONZE_INPUTS_MANIFEST, SOURCE_PULLS_CACHE_MANIFEST
 import json
 from pathlib import Path
 
@@ -33,8 +34,8 @@ from silver.common.sourcefiles import row_hash_expr
 TRANSFORM_VERSION = "ieg_silver_v1.0.0"
 BRONZE = f"{CATALOG}.wbg_bronze.bronze_ieg_ratings_ds00053"
 REPO = Path(__file__).resolve().parents[2]
-BRONZE_INPUTS_MANIFEST = manifest("WBG_BRONZE_INPUTS_MANIFEST", REPO / "databricks_upload" / "bronze_inputs" / "_manifest" / "bronze_inputs_manifest.json")
-PHASE1_CACHE_MANIFEST = manifest("WBG_SOURCE_PULLS_MANIFEST", REPO / "discovery" / "data_cache" / "MANIFEST.jsonl")
+BRONZE_INPUTS_MANIFEST = manifest("WBG_BRONZE_INPUTS_MANIFEST", BRONZE_INPUTS_MANIFEST)
+PHASE1_CACHE_MANIFEST = manifest("WBG_SOURCE_PULLS_MANIFEST", SOURCE_PULLS_CACHE_MANIFEST)
 META = ("source_file", "cohort_id", "ingested_at")
 
 SIX_POINT = {"Highly Unsatisfactory": 1, "Unsatisfactory": 2, "Moderately Unsatisfactory": 3,

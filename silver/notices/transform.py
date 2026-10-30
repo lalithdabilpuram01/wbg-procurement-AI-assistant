@@ -42,6 +42,7 @@ award_notice.py). Differences, all checked for parity on every record by checks.
 """
 from __future__ import annotations
 
+from app_config.paths import BRONZE_INPUTS_MANIFEST, SOURCE_PULLS_CACHE_MANIFEST, SOURCE_PULLS_SAMPLES_MANIFEST
 import json
 import unicodedata
 from pathlib import Path
@@ -56,8 +57,8 @@ TRANSFORM_VERSION = "notices_silver_v1.0.0"
 BRONZE_CSV = f"{CATALOG}.wbg_bronze.bronze_procurement_notices_ds00979"
 BRONZE_API = f"{CATALOG}.wbg_bronze.bronze_procurement_notices_api"
 REPO = Path(__file__).resolve().parents[2]
-BRONZE_INPUTS_MANIFEST = manifest("WBG_BRONZE_INPUTS_MANIFEST", REPO / "databricks_upload" / "bronze_inputs" / "_manifest" / "bronze_inputs_manifest.json")
-PHASE1_MANIFESTS = [manifest("WBG_SOURCE_PULLS_MANIFEST", REPO / "discovery" / "data_cache" / "MANIFEST.jsonl"), manifest("WBG_SOURCE_PULLS_MANIFEST", REPO / "discovery" / "samples" / "MANIFEST.jsonl")]
+BRONZE_INPUTS_MANIFEST = manifest("WBG_BRONZE_INPUTS_MANIFEST", BRONZE_INPUTS_MANIFEST)
+PHASE1_MANIFESTS = [manifest("WBG_SOURCE_PULLS_MANIFEST", SOURCE_PULLS_CACHE_MANIFEST), manifest("WBG_SOURCE_PULLS_MANIFEST", SOURCE_PULLS_SAMPLES_MANIFEST)]
 META = ("source_file", "cohort_id", "ingested_at")
 URL_PREFIX = "https://projects.worldbank.org/en/projects-operations/procurement-detail/"
 NOTICE_TYPES = ["Contract Award", "Request for Expression of Interest", "Invitation for Bids", "General Procurement Notice",

@@ -14,7 +14,7 @@ dev = [
 ]
 
 [tool.pytest.ini_options]
-# Offline tests only by default. Live Lakebase tests (tests_live/) run only when selected explicitly AND
+# Offline tests only by default. Live Lakebase tests (tests/live/lakebase_poc/) run only when selected explicitly AND
 # LAKEBASE_LIVE_TESTS=1 is set for that invocation.
-testpaths = ["tests"]
+testpaths = ["../../tests/lakebase_poc"]
 pythonpath = ["."]

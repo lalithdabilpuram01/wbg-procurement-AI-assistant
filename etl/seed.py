@@ -12,6 +12,7 @@ Each file is copied to <folder>/<file name>; a file that an earlier run left whe
 """
 from __future__ import annotations
 
+from app_config.paths import BRONZE_INPUTS, REF_BRONZE_INPUTS
 import argparse
 import datetime as dt
 import subprocess
@@ -23,7 +24,7 @@ from etl.datasets import PROCUREMENT, REFERENCE
 from etl.stage import iter_csv_records, parse_record
 
 REPO = Path(__file__).resolve().parents[1]
-INPUTS = {"procurement": REPO / "databricks_upload" / "bronze_inputs", "reference": REPO / "databricks_upload" / "ref_bronze_inputs"}
+INPUTS = {"procurement": BRONZE_INPUTS, "reference": REF_BRONZE_INPUTS}
 CONTRACTS = "contract_awards_ds00005"
 DEMO_FILE = REPO / "demo" / "structured" / "ds00005_new_contract_awards.csv"
 PARSER_REFERENCE = (REPO / "rag/corpus_v3/processed/reference/contracts_snapshot_v3_35.jsonl",

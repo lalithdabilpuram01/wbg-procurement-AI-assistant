@@ -82,3 +82,7 @@ packages = ["orchestrator/wbg_orchestrator"]
 [tool.hatch.build]
 # The editable install puts the repo root and orchestrator/ on the import path (what PYTHONPATH=..:. used to do).
 dev-mode-dirs = [".", "orchestrator"]
+
+[tool.pytest.ini_options]
+# All tests live in tests/, one folder per component. tests/live/ is collected only with WBG_RUN_LIVE_TESTS=1.
+testpaths = ["tests"]

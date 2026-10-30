@@ -11,6 +11,7 @@ Usage (from procurement-intelligence/):
 """
 from __future__ import annotations
 
+from app_config.paths import COHORT_MANIFEST
 import argparse
 import csv
 import hashlib
@@ -31,7 +32,7 @@ from silver.notices.transform import PHONE_RE as _PHONE
 S = "workspace.wbg_silver."
 REPO = Path(__file__).resolve().parents[2]
 RUNS = REPO / "silver" / "runs"
-COHORT = REPO / "cohort" / "poc_cohort_2000_manifest.csv"
+COHORT = COHORT_MANIFEST
 PHONE_RE = "(?i)" + _PHONE  # Java regex is case-sensitive by default; the shared detector is written lower-case
 MASK_PLACEHOLDER = "[RESTRICTED: requires membership of wbg_restricted_notice_text]"
 # table: (business key columns, expected rows, grain)

@@ -17,6 +17,7 @@ Usage (from procurement-intelligence/):  python -m silver.notices.d14_gate_tests
 """
 from __future__ import annotations
 
+from app_config.paths import COHORT_MANIFEST
 import hashlib
 import json
 import re
@@ -37,7 +38,7 @@ from databricks.sdk.service import iam
 from silver.common.session import DEFAULT_PROFILE, ensure_databricks_cli_on_path, get_spark
 
 RUNS = Path(__file__).resolve().parents[1] / "runs"
-COHORT = Path(__file__).resolve().parents[2] / "cohort" / "poc_cohort_2000_manifest.csv"
+COHORT = COHORT_MANIFEST
 PH = "[RESTRICTED-TEST]"
 JSON_TEXT_RE = r'"notice_text": "(?:[^"\\]|\\.)*"'          # a JSON string value, escape-aware
 JSON_TEXT_REPL = '"notice_text": "' + PH + '"'

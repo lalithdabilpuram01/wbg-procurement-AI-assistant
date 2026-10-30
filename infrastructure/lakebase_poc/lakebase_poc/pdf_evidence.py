@@ -22,7 +22,7 @@ import numpy as np
 
 REPO = Path(__file__).resolve().parents[3]
 PILOT = REPO / "rag" / "corpus_v3" / "processed" / "pilot_v2"
-SCOPE = REPO / "rag" / "module1_discovery" / "rag_scope_v3_35_projects"
+SCOPE = REPO / "data" / "rag_scope" / "rag_scope_v3_35_projects"
 CORPUS_MANIFEST = REPO / "rag" / "corpus_v3" / "CORPUS_MANIFEST_FIRST10.csv"
 ALLOWED_SOURCES = ("shared", "strategies")
 

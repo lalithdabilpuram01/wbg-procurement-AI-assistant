@@ -14,6 +14,7 @@ Usage (from procurement-intelligence/):
 """
 from __future__ import annotations
 
+from app_config.paths import COHORT_MANIFEST
 import argparse
 import csv
 import hashlib
@@ -32,7 +33,7 @@ from silver.common.write import create_table
 
 REPO = Path(__file__).resolve().parents[2]
 RUNS = runs_dir(REPO / "gold" / "runs")
-COHORT = REPO / "cohort" / "poc_cohort_2000_manifest.csv"
+COHORT = COHORT_MANIFEST
 SILVER = ["wdi_indicator_observations", "wdi_country", "income_classification_history", "wgi_estimates", "cpia_ratings", "projects", "contract_award_lines",
           "contract_awards", "contract_awards_legacy", "procurement_notices", "procurement_notice_details", "notice_contract_link_candidates",
           "notice_contract_links", "ieg_project_ratings", "ibrd_loans", "ida_credits", "project_details_v3", "project_loan_transactions"]

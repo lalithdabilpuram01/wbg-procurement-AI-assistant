@@ -9,6 +9,7 @@ independent WDS-text links (rag_scope_v3_35_projects/plan_coverage), and the 'Na
 """
 from __future__ import annotations
 
+from app_config.paths import RAG_PILOT_FIRST10, RAG_SCOPE
 import collections
 import csv
 import json
@@ -22,8 +23,8 @@ import pdfplumber
 from . import config
 from .sanitize import EMAIL, LABEL, NAME, PHONE, STOP, _is_name
 
-PILOT = config.REPO / "rag" / "module1_discovery" / "pilot_first10_v1"
-TEXT_LINKS = config.REPO / "rag" / "module1_discovery" / "rag_scope_v3_35_projects" / "plan_coverage" / "CONTRACT_PLAN_EVIDENCE_LINKS.csv"
+PILOT = RAG_PILOT_FIRST10
+TEXT_LINKS = RAG_SCOPE / "plan_coverage" / "CONTRACT_PLAN_EVIDENCE_LINKS.csv"
 STATUS_MAP = {"verified_amount": "amount_verified", "verified_exact_date": "exact_actual_date_supported", "candidate": "candidate",
               "conflicting": "conflicting", "ambiguous": "candidate"}
 ISR_TEMPLATES = ["Key Dates", "Project Development Objectives", "Components Table", "Overall Ratings", "Implementation Status and Key Decisions",

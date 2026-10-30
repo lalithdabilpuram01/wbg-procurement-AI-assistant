@@ -12,6 +12,7 @@ Usage (from procurement-intelligence/):  python -m silver.notices.d14_gate_tests
 """
 from __future__ import annotations
 
+from app_config.paths import COHORT_MANIFEST
 import hashlib
 import json
 import re
@@ -34,7 +35,7 @@ from silver.common.session import DEFAULT_PROFILE, ensure_databricks_cli_on_path
 from silver.notices.d14_gate_tests import JSON_TEXT_RE, JSON_TEXT_REPL, PH, sql_lit
 
 RUNS = Path(__file__).resolve().parents[1] / "runs"
-COHORT = Path(__file__).resolve().parents[2] / "cohort" / "poc_cohort_2000_manifest.csv"
+COHORT = COHORT_MANIFEST
 PATCH = [iam.PatchSchema.URN_IETF_PARAMS_SCIM_API_MESSAGES_2_0_PATCH_OP]
 PROD_PROBES = ["workspace.wbg_bronze.bronze_procurement_notices_api", "workspace.wbg_silver.procurement_notice_details",
                "workspace.wbg_silver.contract_award_lines"]

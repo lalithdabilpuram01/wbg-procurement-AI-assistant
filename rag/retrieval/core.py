@@ -29,7 +29,6 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[2]
 PILOT = ROOT / "rag" / "corpus_v3" / "processed" / "pilot_v2"
 CACHE = Path(__file__).resolve().parent / "index_cache"
-sys.path.insert(0, str(ROOT / "discovery"))
 from wbdisc.normalize import normalize_ref  # noqa: E402
 
 EMBED_MODEL = "Alibaba-NLP/gte-base-en-v1.5"

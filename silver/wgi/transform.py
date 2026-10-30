@@ -18,6 +18,7 @@ Rules:
 """
 from __future__ import annotations
 
+from app_config.paths import REF_BRONZE_INPUTS_MANIFEST
 import json
 from pathlib import Path
 
@@ -30,7 +31,7 @@ TRANSFORM_VERSION = "wgi_silver_v1.0.0"
 BRONZE_TABLE = f"{CATALOG}.wbg_ref_bronze.wgi_estimates"
 WDI_COUNTRY = f"{CATALOG}.wbg_silver.wdi_country"
 EXPECTED_SHORT_CODES = ("CC.EST", "GE.EST", "PV.EST", "RL.EST", "RQ.EST", "VA.EST")
-MANIFEST = manifest("WBG_REF_BRONZE_MANIFEST", Path(__file__).resolve().parents[2] / "databricks_upload" / "ref_bronze_inputs" / "_manifest" / "ref_bronze_inputs_manifest.json")
+MANIFEST = manifest("WBG_REF_BRONZE_MANIFEST", REF_BRONZE_INPUTS_MANIFEST)
 
 RECORD_SCHEMA = T.StructType([
     T.StructField("indicator", T.StructType([T.StructField("id", T.StringType()), T.StructField("value", T.StringType())])),

@@ -12,6 +12,7 @@ Usage (from procurement-intelligence/):
 """
 from __future__ import annotations
 
+from app_config.paths import COHORT_MANIFEST
 import argparse
 import hashlib
 import json
@@ -35,7 +36,7 @@ S = f"{CATALOG}.wbg_silver"
 TARGETS = {"lines": f"{S}.contract_award_lines", "contracts": f"{S}.contract_awards", "legacy": f"{S}.contract_awards_legacy"}
 RUNS = runs_dir(Path(__file__).resolve().parents[1] / "runs")
 EXISTING_SILVER = ["wdi_indicator_observations", "wdi_country", "income_classification_history", "wgi_estimates", "cpia_ratings", "projects"]
-COHORT = T.REPO / "cohort" / "poc_cohort_2000_manifest.csv"
+COHORT = COHORT_MANIFEST
 SPEC: dict[str, dict[str, Any]] = {
     "lines": {
         "not_null": ["line_key", "wb_contract_number", "supplier_id_type", "is_amount_missing", "contract_supplier_line_count", "project_id",

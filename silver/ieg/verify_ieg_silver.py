@@ -12,6 +12,7 @@ Usage (from procurement-intelligence/):
 """
 from __future__ import annotations
 
+from app_config.paths import BRONZE_INPUTS_MANIFEST, COHORT_MANIFEST, SOURCE_PULLS_CACHE_MANIFEST
 import argparse
 import hashlib
 import io
@@ -29,9 +30,9 @@ TARGET = "workspace.wbg_silver.ieg_project_ratings"
 BRONZE = "workspace.wbg_bronze.bronze_ieg_ratings_ds00053"
 REPO = Path(__file__).resolve().parents[2]
 RUNS = REPO / "silver" / "runs"
-COHORT = REPO / "cohort" / "poc_cohort_2000_manifest.csv"
-MANIFEST = REPO / "databricks_upload" / "bronze_inputs" / "_manifest" / "bronze_inputs_manifest.json"
-CACHE_MANIFEST = REPO / "discovery" / "data_cache" / "MANIFEST.jsonl"
+COHORT = COHORT_MANIFEST
+MANIFEST = BRONZE_INPUTS_MANIFEST
+CACHE_MANIFEST = SOURCE_PULLS_CACHE_MANIFEST
 SEP = "\x1f"
 SIX = ["Highly Unsatisfactory", "Unsatisfactory", "Moderately Unsatisfactory", "Moderately Satisfactory", "Satisfactory", "Highly Satisfactory"]
 FOUR = ["Negligible", "Modest", "Substantial", "High"]
