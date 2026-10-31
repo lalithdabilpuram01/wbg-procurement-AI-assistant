@@ -4,6 +4,7 @@ from __future__ import annotations
 from conversation.routing.routes import Route
 
 from rag.tablelens.query import TableAnswer, TableResult
+from structured_agent.nl2sql.llm_client import LlmError, LlmFailure
 from tests.rag.tablelens.test_query import TABLE, T
 from wbg_orchestrator.contracts import EvidenceKind, NumericUse, TaskState, ValidationStatus
 from wbg_orchestrator.planner import build_plan
@@ -31,13 +32,18 @@ class FakeLens:
         return TableAnswer(self.results, {"llm_calls": 1, "input_tokens": 500, "output_tokens": 40}, [])
 
 
+class ClaudeRefusedLens(FakeLens):
+    def ask(self, question, write_sql, scope_projects=None):
+        raise LlmError(LlmFailure.DISABLED)
+
+
 class ScopedRetriever(FakeRetriever):
     def guard(self, q):
         return {"status": "ok", "scope_projects": {"P148850"}, "exact_units": [], "notes": []}
 
 
-def run(results, *, release="pilot_v3_tablelens", response=None, operation="answer_document_question"):
-    authority, lens = TicketAuthority(), FakeLens(results)
+def run(results, *, release="pilot_v3_tablelens", response=None, operation="answer_document_question", lens=None):
+    authority, lens = TicketAuthority(), lens or FakeLens(results)
     worker = DocumentIntelligenceWorker(lambda r: FakePipeline(response), lambda r: ScopedRetriever(), authority,
                                         table_lens_for=lambda r: lens if r == "pilot_v3_tablelens" else None,
                                         table_writer=lambda request_id: (lambda q, s: (None, {})))
@@ -73,6 +79,11 @@ def test_flagged_rows_are_not_approved_figures():
 def test_tables_alone_answer_when_the_text_search_finds_nothing():
     out, _ = run([LOOKUP], response=answer_response(status="insufficient_evidence", citations=[]))
     assert out.status == TaskState.SUCCEEDED and [e.kind for e in out.evidence] == [EvidenceKind.DOCUMENT_TABLE]
+
+
+def test_a_failed_table_step_still_answers_from_the_passages():
+    out, _ = run([], lens=ClaudeRefusedLens([]))
+    assert out.status == TaskState.SUCCEEDED and [e.kind for e in out.evidence] == [EvidenceKind.DOCUMENT_PASSAGE]
 
 
 def test_other_releases_never_call_tablelens():

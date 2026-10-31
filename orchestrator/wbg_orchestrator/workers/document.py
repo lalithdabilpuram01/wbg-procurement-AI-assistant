@@ -170,7 +170,10 @@ class DocumentIntelligenceWorker:
         guard = self._retriever_for(context.rag_release).guard(question)
         if guard["status"] != "ok":
             return (), Usage()
-        answer = lens.ask(question, self._table_writer(context.request_id), guard["scope_projects"])
+        try:
+            answer = lens.ask(question, self._table_writer(context.request_id), guard["scope_projects"])
+        except Exception:                                    # Claude off or refused, Lakebase down: the passages still answer
+            return (), Usage()
         used = answer.usage
         usage = Usage(llm_calls=used.get("llm_calls", 0), input_tokens=used.get("input_tokens", 0),
                       output_tokens=used.get("output_tokens", 0))
