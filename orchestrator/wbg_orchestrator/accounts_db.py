@@ -28,9 +28,10 @@ from .learning_db import dev_schema_pool, learning_endpoint
 
 ACCOUNTS_SCHEMA = "wbg_auth"
 LEGACY_USERS_FILE = Path.home() / ".wbg" / "api_users.json"
-SCHEMA_SQL = """
-CREATE SCHEMA IF NOT EXISTS {schema};
-CREATE TABLE IF NOT EXISTS {schema}.app_user (
+# One statement each: Lakebase connections prepare every statement, and a prepared statement holds one command.
+SCHEMA_SQL = (
+    "CREATE SCHEMA IF NOT EXISTS {schema}",
+    """CREATE TABLE IF NOT EXISTS {schema}.app_user (
     tenant_id        text NOT NULL,
     user_id          text NOT NULL,
     roles            text[] NOT NULL DEFAULT '{{}}',
@@ -42,9 +43,10 @@ CREATE TABLE IF NOT EXISTS {schema}.app_user (
     created_at       timestamptz NOT NULL DEFAULT now(),
     updated_at       timestamptz NOT NULL DEFAULT now(),
     PRIMARY KEY (tenant_id, user_id)
-);
-COMMENT ON TABLE {schema}.app_user IS 'App users: salted scrypt hashes of passwords and recovery codes, SHA-256 of script tokens. No secret in clear.';
-"""
+)""",
+    "COMMENT ON TABLE {schema}.app_user IS 'App users: salted scrypt hashes of passwords and recovery codes, "
+    "SHA-256 of script tokens. No secret in clear.'",
+)
 
 
 class AccountStoreMissing(RuntimeError):
@@ -60,7 +62,8 @@ def accounts_pool(endpoint: str | None = None) -> ConnectionPool:
 
 
 def apply_schema(conn, schema: str = ACCOUNTS_SCHEMA) -> None:
-    conn.execute(sql.SQL(SCHEMA_SQL).format(schema=sql.Identifier(schema)))      # '{{}}' becomes the empty array '{}'
+    for statement in SCHEMA_SQL:                                  # '{{}}' becomes the empty array '{}'
+        conn.execute(sql.SQL(statement).format(schema=sql.Identifier(schema)))
 
 
 def verify(pool: ConnectionPool, schema: str = ACCOUNTS_SCHEMA) -> None:
