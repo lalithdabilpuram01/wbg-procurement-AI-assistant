@@ -1,0 +1,5 @@
+project_id,activity_reference,description,procurement_method,procurement_category,review_type,status,estimated_amount_usd,actual_amount_usd,planned_signing_date,actual_signing_date
+P175325,SN-PDEC-900101-CW-RFB,"Rehabilitation of 60 km of rural roads, lot 1 (sample)",Request for Bids,Works,Post,Signed,1500000,1720000,2025-03-15,2025-07-02
+P175325,SN-PDEC-900102-CW-RFB,"Rehabilitation of 44 km of rural roads, lot 2 (sample)",Request for Bids,Works,Post,Pending Implementation,1300000,,2025-04-30,
+P175325,SN-PDEC-900103-CS-QCBS,Supervision of rural road works (sample),Quality and Cost-Based Selection,Consultant Services,Prior,Signed,450000,430000,2025-02-28,2025-03-20
+P175325,SN-PDEC-900104-GO-RFQ,Laboratory equipment for road quality control (sample),Request for Quotations,Goods,Post,Under Implementation,80000,,2025-06-30,
