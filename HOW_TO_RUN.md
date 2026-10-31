@@ -174,11 +174,16 @@ uv run wbg-ingest neighbours project:P148850 --depth 2
 - Every outcome is logged in `_ledger/ledger.jsonl`.
 - An ICR, IEG review or PAD also creates proposed lesson cards automatically.
 
-Scanned PDFs need Tesseract for OCR. It isn't installed yet:
+Scanned PDFs and images are read with Tesseract OCR, in English and French. On a new machine:
 
 ```bash
-brew install tesseract
+brew install tesseract                                   # English only
+curl -fsSL -o /opt/homebrew/share/tessdata/fra.traineddata \
+  https://github.com/tesseract-ocr/tessdata_fast/raw/4.1.0/fra.traineddata   # adds French
+tesseract --list-langs                                   # eng, fra, osd
 ```
+
+The Databricks document job has no OCR yet, so it still refuses scanned files.
 
 ---
 
