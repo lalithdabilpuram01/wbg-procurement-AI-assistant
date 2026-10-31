@@ -2,7 +2,7 @@
 
     uv run wbg-api [--live] [--cap 5] [--port 8080]   the API; Claude is off unless --live (then capped per session)
     uv run wbg-web                                     the web app (npm run dev; npm install on first use)
-    uv run wbg-user --user <name> --password <pw> [--reviewer]
+    uv run wbg-user init-db|migrate|add|recovery-code|list   app users in Lakebase (accounts_db.py)
     uv run wbg-test                                    the offline tests (tests/, never tests/live/)
     uv run wbg-ingest <command>                        document ingestion (python -m ingest)
     uv run wbg-lessons <command>                       lesson cards (python -m lessons)
@@ -64,8 +64,8 @@ def web() -> int:
 
 
 def user() -> int:
-    from .api import main
-    return main(["add-user", *_argv()])
+    from .accounts_db import main
+    return main(_argv())
 
 
 # -------------------------------------------------------------------------------------------------- tools

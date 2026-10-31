@@ -1,16 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { BrainCircuit, Database, FileSearch, KeyRound, ShieldCheck } from "lucide-react";
+import { KeyRound } from "lucide-react";
+import { AuthLink, AuthShell } from "@/components/app/auth-shell";
 import { Button } from "@/components/ui/button";
-import { Card, Input, Label, Spinner } from "@/components/ui/primitives";
-
-const FEATURES = [
-  { icon: Database, text: "Contract awards, notices and project data from World Bank open data" },
-  { icon: FileSearch, text: "237 appraisal, status, completion and procurement-plan documents" },
-  { icon: BrainCircuit, text: "Tender-duration and risk models for new packages" },
-  { icon: ShieldCheck, text: "Every answer checked against its cited sources" },
-];
+import { Input, Label, Spinner } from "@/components/ui/primitives";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -35,45 +29,23 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="grid min-h-screen lg:grid-cols-2">
-      <section className="relative hidden overflow-hidden bg-gradient-to-br from-[#0b2545] via-[#0f3a6b] to-[#0078d4] p-12 text-white lg:flex lg:flex-col">
-        <div className="absolute -right-24 -top-24 size-96 rounded-full bg-white/5" />
-        <div className="absolute -bottom-32 -left-16 size-[28rem] rounded-full bg-[#2b88d8]/20" />
-        <div className="relative flex items-center gap-3">
-          <div className="grid size-10 place-items-center rounded-xl bg-white/15 font-bold">PI</div>
-          <span className="text-lg font-semibold">Procurement Intelligence</span>
+    <AuthShell icon={KeyRound} title="Sign in" subtitle="Sign in with your username and password.">
+      <form onSubmit={submit} className="mt-6 space-y-4">
+        <div className="space-y-1.5">
+          <Label htmlFor="username">Username</Label>
+          <Input id="username" value={username} onChange={(e) => setUsername(e.target.value)} autoFocus autoComplete="username" />
         </div>
-        <div className="relative mt-auto max-w-md">
-          <h1 className="text-4xl font-semibold leading-tight tracking-tight">Plan procurement with the evidence of past projects.</h1>
-          <ul className="mt-8 space-y-4">
-            {FEATURES.map((f) => (
-              <li key={f.text} className="flex items-start gap-3 text-sm text-white/85">
-                <f.icon className="mt-0.5 size-5 shrink-0 text-[#9fd0ff]" /> {f.text}
-              </li>
-            ))}
-          </ul>
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="password">Password</Label>
+            <span className="text-xs"><AuthLink href="/forgot-password">Forgot password?</AuthLink></span>
+          </div>
+          <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" />
         </div>
-        <p className="relative mt-12 text-xs text-white/50">Assessment prototype · public World Bank Group data</p>
-      </section>
-      <section className="flex items-center justify-center p-6">
-        <Card className="w-full max-w-sm p-8">
-          <div className="grid size-10 place-items-center rounded-xl bg-primary-soft text-primary"><KeyRound className="size-5" /></div>
-          <h2 className="mt-4 text-xl font-semibold">Sign in</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Sign in with your username and password.</p>
-          <form onSubmit={submit} className="mt-6 space-y-4">
-            <div className="space-y-1.5">
-              <Label htmlFor="username">Username</Label>
-              <Input id="username" value={username} onChange={(e) => setUsername(e.target.value)} autoFocus autoComplete="username" />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" />
-            </div>
-            {error && <p className="text-sm text-danger">{error}</p>}
-            <Button type="submit" className="w-full" disabled={!username.trim() || !password || busy}>{busy && <Spinner />} Sign in</Button>
-          </form>
-        </Card>
-      </section>
-    </div>
+        {error && <p className="text-sm text-danger">{error}</p>}
+        <Button type="submit" className="w-full" disabled={!username.trim() || !password || busy}>{busy && <Spinner />} Sign in</Button>
+      </form>
+      <p className="mt-6 text-center text-sm text-muted-foreground">New here? <AuthLink href="/signup">Create an account</AuthLink></p>
+    </AuthShell>
   );
 }

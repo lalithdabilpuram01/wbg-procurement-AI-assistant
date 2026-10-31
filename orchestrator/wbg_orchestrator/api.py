@@ -1,17 +1,18 @@
 """Local web API (FastAPI) over `AppService`.
 
-Authentication: `Authorization: Bearer <token>`. Tokens are issued once with `add-user`; only their SHA-256 is kept
-in the user file (outside the repository, mode 600). A user given a password (`add-user --password`) can also sign in
-with it (`POST /auth/login`): the password is kept as a salted scrypt hash and each sign-in issues a session token
-that lives in memory for SESSION_HOURS (a restart signs everyone out). The server derives the owner from the token; no request body or
-path carries a user id. Another user's conversation, investigation or job is reported as 404, like a missing one.
+Authentication: `Authorization: Bearer <token>`. Users live in Lakebase (schema wbg_auth, accounts.py and
+accounts_db.py): anyone can create an account (`POST /auth/signup`), sign in with a password (`POST /auth/login`) and
+reset a forgotten password with their recovery code (`POST /auth/reset`). Each sign-in issues a session token that
+lives in memory for 12 hours (a restart signs everyone out); script users get a bearer token from `wbg-user add`.
+The server derives the owner from the token; no request body or path carries a user id. Another user's
+conversation, investigation or job is reported as 404, like a missing one.
 
-    cd orchestrator
-    uv run python -m wbg_orchestrator.api add-user --user alice          # prints the token once
-    uv run python -m wbg_orchestrator.api add-user --user rita --password '...' --reviewer
-    WBG_ALLOW_LIVE_LLM_CALLS=true uv run python -m wbg_orchestrator.api serve --confirm-live-call
+    uv run wbg-user init-db && uv run wbg-user migrate       # once: the account table, and the existing users
+    uv run wbg-user add --user rita --password '...' --reviewer
+    uv run wbg-api [--live]
 
 Endpoints:
+- auth: sign up, sign in, reset a password with the recovery code (attempts limited per client address);
 - conversations: create, list, read;
 - messages: submit (returns a job);
 - jobs: poll;
@@ -27,16 +28,10 @@ from __future__ import annotations
 import argparse
 import base64
 import binascii
-import hashlib
-import hmac
 import json
-import os
 import re
-import secrets
-import stat
 import sys
 import time
-from pathlib import Path
 from typing import Any
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request, status
@@ -58,90 +53,30 @@ from .contracts import PackageAssessment, PlanningSpec, TenderSpec, new_id
 from .feedback import FeedbackRefused, FeedbackRequest, Preferences, ReviewerOnly
 from .rate_limit import RateLimiter
 from .engine import InvestigationNotFound
+from .accounts import AccountError, UserDirectory, UsernameTaken
 from .logs import get_logger, log_context
 
 log = get_logger("api")
 
-DEFAULT_USERS_FILE = Path.home() / ".wbg" / "api_users.json"
 CLIENT_ID = r"^[A-Za-z0-9_-]{8,64}$"
 PROJECT_ID = re.compile(r"P\d{6}")
-SESSION_HOURS = 12
-SCRYPT = {"n": 2 ** 14, "r": 8, "p": 1}
-
-
-# --------------------------------------------------------------------------------------------------- users
-class UserDirectory:
-    """Local app users: SHA-256 of a bearer token -> (tenant, user). Re-reads its file when it changes, so a user added
-    (or a token replaced) with `add-user` takes effect without restarting the API."""
-
-    def __init__(self, entries: list[dict[str, str]], path: Path | None = None):
-        self._entries, self._path = entries, path
-        self._mtime = path.stat().st_mtime_ns if path and path.is_file() else None
-        self._sessions: dict[str, tuple[Owner, float]] = {}                 # token SHA-256 -> (owner, expiry)
-
-    @classmethod
-    def load(cls, path: Path = DEFAULT_USERS_FILE) -> "UserDirectory":
-        return cls(json.loads(path.read_text())["users"] if path.is_file() else [], path)
-
-    def _refresh(self) -> None:
-        if self._path and self._path.is_file() and self._path.stat().st_mtime_ns != self._mtime:
-            self._entries, self._mtime = json.loads(self._path.read_text())["users"], self._path.stat().st_mtime_ns
-
-    def authenticate(self, token: str) -> Owner | None:
-        self._refresh()
-        digest = hashlib.sha256(token.encode()).hexdigest()
-        for entry in self._entries:
-            if hmac.compare_digest(entry["token_sha256"], digest):
-                return Owner(tenant_id=entry["tenant_id"], user_id=entry["user_id"])
-        session = self._sessions.get(digest)
-        if session and session[1] > time.time():
-            return session[0]
-        self._sessions.pop(digest, None)
-        return None
-
-    def sign_in(self, user_id: str, password: str) -> str | None:
-        """A session token for the right password (None otherwise; the same work is done for unknown users)."""
-        self._refresh()
-        entry = next((e for e in self._entries if e["user_id"] == user_id and e.get("password")), None)
-        stored = entry["password"] if entry else {"salt": "00" * 16, "scrypt": "00" * 32}
-        attempt = hashlib.scrypt(password.encode(), salt=bytes.fromhex(stored["salt"]), **SCRYPT).hex()
-        if entry is None or not hmac.compare_digest(attempt, stored["scrypt"]):
-            return None
-        token = secrets.token_urlsafe(32)
-        self._sessions[hashlib.sha256(token.encode()).hexdigest()] = (
-            Owner(tenant_id=entry["tenant_id"], user_id=entry["user_id"]), time.time() + SESSION_HOURS * 3600)
-        return token
-
-    def is_reviewer(self, owner: Owner) -> bool:
-        """Reviewers decide what feedback is shared with the tenant and which evaluation cases are kept."""
-        self._refresh()
-        return any(e["tenant_id"] == owner.tenant_id and e["user_id"] == owner.user_id and "reviewer" in e.get("roles", [])
-                   for e in self._entries)
-
-    @staticmethod
-    def add_user(path: Path, user_id: str, tenant_id: str = "local", reviewer: bool = False, password: str | None = None) -> str:
-        """Create a token for a user (and a password sign-in when given), store only hashes, and return the token."""
-        token = secrets.token_urlsafe(32)
-        data = json.loads(path.read_text()) if path.is_file() else {"users": []}
-        data["users"] = [u for u in data["users"] if not (u["user_id"] == user_id and u["tenant_id"] == tenant_id)]
-        data["users"].append({"tenant_id": tenant_id, "user_id": user_id, "token_sha256": hashlib.sha256(token.encode()).hexdigest(),
-                              "roles": ["reviewer"] if reviewer else [],
-                              **({"password": _password_hash(password)} if password else {})})
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(data, indent=2))
-        os.chmod(path, stat.S_IRUSR | stat.S_IWUSR)
-        return token
-
-
-def _password_hash(password: str) -> dict[str, str]:
-    salt = secrets.token_bytes(16)
-    return {"salt": salt.hex(), "scrypt": hashlib.scrypt(password.encode(), salt=salt, **SCRYPT).hex()}
 
 
 # ------------------------------------------------------------------------------------------------- requests
 class SignIn(BaseModel):
     username: str = Field(min_length=1, max_length=64)
     password: str = Field(min_length=1, max_length=200)
+
+
+class SignUp(BaseModel):
+    username: str = Field(min_length=1, max_length=64)
+    password: str = Field(min_length=1, max_length=200)
+
+
+class PasswordReset(BaseModel):
+    username: str = Field(min_length=1, max_length=64)
+    recovery_code: str = Field(min_length=1, max_length=64)
+    new_password: str = Field(min_length=1, max_length=200)
 
 
 class NewConversation(BaseModel):
@@ -251,7 +186,7 @@ def review_view(review: Review) -> dict[str, Any]:
 
 # ------------------------------------------------------------------------------------------------------ app
 def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter | None = None,
-               kpi_board: KpiBoard | None = None) -> FastAPI:
+               kpi_board: KpiBoard | None = None, auth_limiter: RateLimiter | None = None) -> FastAPI:
     app = FastAPI(title="WBG Procurement Intelligence API", version="0.1.0")
 
     def current_owner(authorization: str = Header(default="")) -> Owner:
@@ -273,6 +208,16 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
                                 f"Please try again in {refusal.retry_after_seconds} seconds.",
                                 {"Retry-After": str(refusal.retry_after_seconds)})
         return owner
+
+    attempts = auth_limiter or RateLimiter(per_minute=10, per_day=300)
+
+    def limited_attempt(request: Request) -> None:
+        """Sign-in, sign-up and reset attempts per client address: slows down password and recovery-code guessing."""
+        refusal = attempts.check(f"auth\x00{request.client.host if request.client else '-'}")
+        if refusal:
+            raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS,
+                                f"Too many attempts. Please try again in {refusal.retry_after_seconds} seconds.",
+                                {"Retry-After": str(refusal.retry_after_seconds)})
 
     def reviewer_owner(owner: Owner = Depends(current_owner)) -> Owner:
         if not users.is_reviewer(owner):
@@ -328,12 +273,37 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
         response.headers["X-Request-ID"] = reference
         return response
 
-    @app.post("/auth/login")
+    @app.post("/auth/login", dependencies=[Depends(limited_attempt)])
     def sign_in(body: SignIn) -> dict[str, str]:
-        token = users.sign_in(body.username.strip(), body.password)
+        token = users.sign_in(body.username, body.password)
         if token is None:
             raise HTTPException(status.HTTP_401_UNAUTHORIZED, "wrong username or password")
         return {"token": token}
+
+    @app.post("/auth/signup", status_code=201, dependencies=[Depends(limited_attempt)])
+    def sign_up(body: SignUp) -> dict[str, str]:
+        """A new normal user, signed in at once. The recovery code is returned this once and never again."""
+        try:
+            token, code = users.sign_up(body.username, body.password)
+        except UsernameTaken as error:
+            raise HTTPException(status.HTTP_409_CONFLICT, str(error)) from None
+        except AccountError as error:
+            raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(error)) from None
+        log.info("account created")
+        return {"token": token, "recovery_code": code}
+
+    @app.post("/auth/reset", dependencies=[Depends(limited_attempt)])
+    def reset_password(body: PasswordReset) -> dict[str, str]:
+        """Forgot password: username + recovery code + new password. Returns a session and a NEW recovery code."""
+        try:
+            result = users.reset_password(body.username, body.recovery_code, body.new_password)
+        except AccountError as error:
+            raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(error)) from None
+        if result is None:
+            raise HTTPException(status.HTTP_401_UNAUTHORIZED, "wrong username or recovery code")
+        log.info("password reset")
+        token, code = result
+        return {"token": token, "recovery_code": code}
 
     @app.get("/health")
     def health() -> dict[str, str]:
@@ -567,30 +537,29 @@ def kpi_board() -> KpiBoard | None:
 def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description="WBG Procurement Intelligence local API")
     commands = parser.add_subparsers(dest="command", required=True)
-    add = commands.add_parser("add-user", help="create (or replace) a user's token; prints it once")
-    add.add_argument("--user", required=True)
-    add.add_argument("--tenant", default="local")
-    add.add_argument("--reviewer", action="store_true", help="may approve shared feedback and evaluation cases")
-    add.add_argument("--password", help="also allow signing in with this password (kept as a salted hash)")
-    serve = commands.add_parser("serve", help="run the API on this laptop (127.0.0.1)")
+    serve = commands.add_parser("serve", help="run the API on this laptop (127.0.0.1); users: uv run wbg-user")
     serve.add_argument("--confirm-live-call", action="store_true", help="operator approval for live Claude calls")
     serve.add_argument("--port", type=int, default=8080)
     args = parser.parse_args(argv)
-    if args.command == "add-user":
-        print(UserDirectory.add_user(DEFAULT_USERS_FILE, args.user, args.tenant, args.reviewer, args.password))
-        return 0
     import uvicorn
+
+    from . import accounts_db
 
     from .logs import configure_logging
     from .runtime import ORCHESTRATOR_DIR, RuntimeConfig, build_runtime
     log_file = configure_logging(ORCHESTRATOR_DIR / "runs" / "logs")
     print(f"Logs: {log_file}")
-    service, close = build_runtime(RuntimeConfig.from_env(), operator_confirmed=args.confirm_live_call)
-    board = kpi_board()
+    accounts = accounts_db.accounts_pool()
     try:
-        uvicorn.run(create_app(service, UserDirectory.load(), kpi_board=board), host="127.0.0.1", port=args.port)
+        accounts_db.verify(accounts)                       # fail closed: no sign-in against a missing account store
+        service, close = build_runtime(RuntimeConfig.from_env(), operator_confirmed=args.confirm_live_call)
+        board = kpi_board()
+        try:
+            uvicorn.run(create_app(service, accounts_db.directory(accounts), kpi_board=board), host="127.0.0.1", port=args.port)
+        finally:
+            close()
     finally:
-        close()
+        accounts.close()
     return 0
 
 

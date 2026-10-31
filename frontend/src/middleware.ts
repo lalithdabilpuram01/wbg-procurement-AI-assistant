@@ -9,4 +9,4 @@ export function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-export const config = { matcher: ["/((?!login|api|_next|favicon.ico).*)"] };
+export const config = { matcher: ["/((?!login|signup|forgot-password|api|_next|favicon.ico).*)"] };

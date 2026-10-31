@@ -33,6 +33,7 @@ procurement-intelligence/
     workers/                       one adapter per agent (structured data, documents, prediction, monitoring, ...)
     observability.py, logs.py      Logfire spans and the JSON log file (see "Debugging")
     state_view.py, log_view.py     the state summary logged after every step; `wbg-logs`, which reads the log as a tree
+    accounts.py, accounts_db.py    user accounts: sign-up, sign-in, recovery codes, roles (Lakebase wbg_auth); `wbg-user`
     runtime.py                     wires the real services together at start-up
   conversation/        chat memory, intent routing, personal-data masking, feedback learning
   structured_agent/    questions over the Gold tables: question > SQL (Claude) > validation > Databricks; MCP server

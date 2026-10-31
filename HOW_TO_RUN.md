@@ -32,6 +32,8 @@ Each opens your browser. Run them again whenever a command complains that the lo
 **Create the Lakebase stores.** They live on the `dev-orchestrator` branch, and these commands are safe to run twice:
 
 ```bash
+uv run wbg-user init-db          # user accounts table (wbg_auth)
+uv run wbg-user migrate          # copy the existing users (user1, reviewer1, ...) from ~/.wbg/api_users.json
 uv run wbg-feedback-db init      # feedback store
 uv run wbg-ingest init-db        # knowledge graph
 uv run wbg-lessons init-db       # lesson cards table
@@ -75,9 +77,9 @@ you start with `--live`.
 uv run wbg-web
 ```
 
-Open http://localhost:3000 and sign in.
+Open http://localhost:3000 and sign in, or click **Create an account**.
 
-**Demo accounts:**
+**Demo accounts** (or create your own: every new account is a normal user):
 
 | Username | Password | What they can do |
 | --- | --- | --- |
@@ -105,15 +107,33 @@ To stop the app, press `Ctrl+C` in both terminals. Restarting the API signs ever
 
 ## 4. Users
 
-Add or change a user:
+Accounts live in Lakebase (schema `wbg_auth`, table `app_user`), so any number of people can use the app, each
+with their own chats. Only salted hashes of passwords and recovery codes are stored.
+
+**In the web app (self-service):**
+
+- **Create an account** (link on the sign-in page): choose a username and a password of at least 8 characters.
+  You are signed in at once and shown a **recovery code** such as `K7QM-3XRA-PZ4T-HW9C`. Save it: it is shown only
+  this once.
+- **Forgot password?** (link on the sign-in page): enter your username, the recovery code and a new password.
+  You are signed in, signed out on every other device, and shown a **new** recovery code; each code works once.
+- New accounts are normal users. Only the command below makes someone a reviewer.
+
+**From the terminal (operator):**
 
 ```bash
-uv run wbg-user --user <name> --password '<password>'
-uv run wbg-user --user <name> --password '<password>' --reviewer
+uv run wbg-user add --user <name> --password '<password>'             # create or replace a user
+uv run wbg-user add --user <name> --password '<password>' --reviewer  # ... with the Review queue
+uv run wbg-user recovery-code --user <name>                           # a new code for someone who lost theirs
+uv run wbg-user list                                                  # who exists, roles, sign-in method
+uv run wbg-user add --user <name>                                     # a script user: prints a bearer token once
 ```
 
-Users live in `~/.wbg/api_users.json`, outside the repo. Only salted password hashes are stored. Running `wbg-user`
-again for the same name replaces that user. It also prints an access token, which is only needed for scripts.
+Users moved over with `migrate` (such as `user1` and `reviewer1`) have no recovery code yet: give them one with
+`wbg-user recovery-code` before they need "Forgot password". The account store is on the `dev-orchestrator` branch
+by default; set `WBG_ACCOUNTS_ENDPOINT` in `.env` to move it to another branch.
+
+Sign-in, sign-up and reset attempts are limited per address (10 a minute), against password guessing.
 
 ---
 
@@ -305,10 +325,12 @@ line. The audit trail of each investigation (metadata only) stays in `orchestrat
 | "Claude is off for this session" | Expected without `--live`; restart with `uv run wbg-api --live` |
 | "the learning store is not initialised" | `uv run wbg-feedback-db init` (step 1) |
 | "the lesson cards are not initialised" | `uv run wbg-lessons init-db` and then `uv run wbg-lessons backfill` |
+| "the account store is not initialised" when starting the API | `uv run wbg-user init-db` and then `uv run wbg-user migrate` |
+| A user lost both password and recovery code | `uv run wbg-user recovery-code --user <name>` and pass the code on |
 | The login page says "the API is not reachable" | Terminal 1 isn't running, or it's on another port (the web app expects 8080) |
 | `ModuleNotFoundError` | Run `uv sync` |
 | Port 3000 or 8080 already in use | Stop the old process (`Ctrl+C` in its terminal) or `lsof -i :8080` to find it |
 
-**One date to remember:** the Lakebase `dev-orchestrator` branch expires on **2026-11-02**. It holds the feedback,
-the knowledge graph, the lesson cards and the checkpoints. Extend it before then, or we move everything to a new
+**One date to remember:** the Lakebase `dev-orchestrator` branch expires on **2026-11-02**. It holds the user accounts,
+the feedback, the knowledge graph, the lesson cards and the checkpoints. Extend it before then, or we move everything to a new
 branch.
