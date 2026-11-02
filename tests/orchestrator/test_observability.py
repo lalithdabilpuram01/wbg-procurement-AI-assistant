@@ -15,7 +15,10 @@ from conversation.routing.routes import Route
 from structured_agent.nl2sql.resilience import BreakerSettings
 
 from wbg_orchestrator.contracts import InvestigationStatus
-from wbg_orchestrator.observability import SAFE_ATTRIBUTES, TEXT_ATTRIBUTES, OrchestratorTracer, safe_attributes
+from wbg_orchestrator.observability import (SAFE_ATTRIBUTES, STANDARD_NAMES, TEXT_ATTRIBUTES, OrchestratorTracer,
+                                            safe_attributes)
+
+RECORDED = {STANDARD_NAMES.get(name, name) for name in SAFE_ATTRIBUTES} | set(TEXT_ATTRIBUTES)   # as spans name them
 from wbg_orchestrator.planner import FakePlanner
 from wbg_orchestrator.safety import external_tracing_enabled
 
@@ -65,7 +68,7 @@ def test_traces_carry_metadata_and_masked_text_only(traced):
     assert {"orchestrator.node.intake", "orchestrator.node.execute", "orchestrator.task_attempt"} <= names
     for span in spans:
         own = {k for k in span.attributes if not k.startswith(("logfire.", "code."))}
-        assert own <= SAFE_ATTRIBUTES | set(TEXT_ATTRIBUTES), f"{span.name}: {own - SAFE_ATTRIBUTES - set(TEXT_ATTRIBUTES)}"
+        assert own <= RECORDED, f"{span.name}: {own - RECORDED}"
         dump = json.dumps({k: str(v) for k, v in span.attributes.items()})
         assert not any(term in dump for term in PERSONAL), f"{span.name} leaked personal data"
         metadata = json.dumps({k: str(v) for k, v in span.attributes.items() if k not in TEXT_ATTRIBUTES})
@@ -101,7 +104,7 @@ def test_a_failure_is_recorded_on_the_step_that_failed_and_on_its_parents():
     tracer.force_flush()
     spans = {s.name: s.attributes for s in exporter.get_finished_spans()}
     inner, outer = spans["orchestrator.node.plan"], spans["job.message"]
-    assert inner["error_type"] == "ValueError" and inner["failed_step"] == "orchestrator.node.plan"
+    assert inner["error.type"] == "ValueError" and inner["failed_step"] == "orchestrator.node.plan"
     assert inner["error_location"].startswith("test_observability.py:")
     assert inner["error_message"] == "no plan for <EMAIL_ADDRESS>"
     assert outer["failed_step"] == "orchestrator.node.plan" and "error_message" not in outer
@@ -117,7 +120,7 @@ def test_a_handled_failure_marks_the_span_without_stopping_the_block():
             span(error=error, execution_state="failed")
     tracer.force_flush()
     (attributes,) = [s.attributes for s in exporter.get_finished_spans()]
-    assert attributes["error_type"] == "TimeoutError" and attributes["execution_state"] == "failed"
+    assert attributes["error.type"] == "TimeoutError" and attributes["execution_state"] == "failed"
 
 
 def test_langsmith_stays_off_even_when_the_environment_asks_for_it(monkeypatch):
@@ -151,13 +154,13 @@ def test_every_span_and_event_correlates_investigation_conversation_plan_and_tas
         attributes = span.attributes
         if span.name.startswith("orchestrator.node.") or \
                 span.name in ("orchestrator.dispatch", "orchestrator.investigation_finished", "orchestrator.task_attempt"):
-            assert attributes["investigation_id"] == investigation and attributes["conversation_id"] == "conv-77", span.name
+            assert attributes["investigation_id"] == investigation and attributes["gen_ai.conversation.id"] == "conv-77", span.name
         if span.name.removeprefix("orchestrator.node.") in planned_nodes or span.name == "orchestrator.task_attempt":
             assert attributes["plan_id"] == done.values["plan"]["plan_id"], span.name
         if span.name == "orchestrator.task_attempt":
             assert attributes["task_id"].startswith(done.values["plan"]["plan_id"])
         if span.name.startswith("orchestrator.node."):
-            assert attributes["owner_hash"] == ALICE.user_hash and "alice" not in json.dumps(dict(attributes))
+            assert attributes["user.hash"] == ALICE.user_hash and "alice" not in json.dumps(dict(attributes))
         dump = json.dumps({k: str(v) for k, v in attributes.items()})
         assert not any(secret in dump for secret in SYNTHETIC_SECRETS)
     assert "orchestrator.checkpoint_saved" in {s.name for s in spans}

@@ -10,6 +10,7 @@
     uv run wbg-feedback-db init|check                  the feedback store on Lakebase (python -m wbg_orchestrator.learning_db)
     uv run wbg-eval <command>                          golden evaluations (python -m evaluation.golden)
     uv run wbg-logs [<job_id>] [--failed] [--state]    one job from the app log, as a tree of steps (log_view.py)
+    uv run wbg-logs --session [<id>] | --sessions      one sign-in session (its requests and jobs), or the list
 """
 from __future__ import annotations
 

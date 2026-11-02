@@ -66,6 +66,7 @@ from .uploaded_documents import UploadedDocumentSearch
 from .feedback import FeedbackService
 from .graph import EngineDeps
 from .live_llm import SONNET_5_5_PRICES, BudgetedClaudeClient, ClaudeOff, LedgerLimits, SpendLedger
+from .logs import ServiceInfo
 from .observability import AuditTrail, JsonlAuditSink, OrchestratorTracer
 from .planner import ClaudePlanner
 from .rag_modules import answering
@@ -162,10 +163,10 @@ def build_runtime(config: RuntimeConfig, operator_confirmed: bool) -> tuple[AppS
 def _tracer() -> OrchestratorTracer:
     """Spans go to Logfire when LOGFIRE_SEND_TO_LOGFIRE=true and a token is set; otherwise they stay local, which still
     gives every log line a trace id."""
-    settings = load_logfire_settings()
+    settings, service = load_logfire_settings(), ServiceInfo.from_env()
     if settings.send_to_logfire and settings.token:
-        return OrchestratorTracer.exporting(settings.token, "wbg-orchestrator-app")
-    return OrchestratorTracer.local(service_name="wbg-orchestrator-app")
+        return OrchestratorTracer.exporting(settings.token, "wbg-orchestrator-app", service=service)
+    return OrchestratorTracer.local(service_name="wbg-orchestrator-app", service=service)
 
 
 def _claude_client(config: RuntimeConfig, operator_confirmed: bool, tracer: OrchestratorTracer) -> BudgetedClaudeClient | ClaudeOff:

@@ -33,7 +33,11 @@ from structured_agent.nl2sql.llm_client import ClaudeRequest, ClaudeResponse, Ll
 from structured_agent.nl2sql.settings import ClaudeSettings
 
 from .budget import PriceTable
+from .logs import current_context
 from .observability import OrchestratorTracer
+
+LLM_PROVIDER = "anthropic"             # gen_ai.provider.name: Claude, reached through the Portkey gateway
+LLM_OPERATION = "chat"                 # gen_ai.operation.name: the Messages API
 
 # Verified 2026-10-26 at https://platform.claude.com/docs/en/about-claude/pricing (model pricing table):
 # Claude Sonnet 5.5, base input $2 / MTok, output $10 / MTok; full 1M context at standard pricing.
@@ -201,6 +205,8 @@ class BudgetedClaudeClient(PortkeyClaudeClient):
         self._gateway_retry_count = None
         started = time.perf_counter()
         with self._tracer.span("orchestrator.llm_call", request_id=request.trace_id, model=model_slug(self.model),
+                               llm_provider=LLM_PROVIDER, llm_operation=LLM_OPERATION,
+                               conversation_id=current_context().get("conversation_id"),
                                attempt=index + 1, worst_case_usd=worst) as span:
             try:
                 response = call()
@@ -219,8 +225,8 @@ class BudgetedClaudeClient(PortkeyClaudeClient):
                                           output_tokens=response.output_tokens, gateway_retry_count=self._gateway_retry_count,
                                           duration_ms=response.duration_ms, cache_read_tokens=response.cache_read_tokens,
                                           cache_write_tokens=response.cache_write_tokens)
-            span(status="ok", input_tokens=response.input_tokens, output_tokens=response.output_tokens,
-                 cache_read_tokens=response.cache_read_tokens, cache_write_tokens=response.cache_write_tokens,
+            span(status="ok", llm_input_tokens=response.input_tokens, llm_output_tokens=response.output_tokens,
+                 llm_cache_read_tokens=response.cache_read_tokens, llm_cache_write_tokens=response.cache_write_tokens,
                  cost_usd=float(attempt["estimated_usd"]), gateway_retry_count=self._gateway_retry_count,
                  committed_usd=float(self._ledger.committed_usd()), attempts_used=len(self._ledger.attempts),
                  duration_ms=response.duration_ms)

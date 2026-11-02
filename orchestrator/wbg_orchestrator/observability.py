@@ -22,6 +22,17 @@ What a trace looks like: one trace per user action (a chat message, a tender che
 Graph steps also carry `state_changes` (what the step wrote) and `state` (the state after it), as JSON summaries
 built by state_view.py: ids, statuses, counts and masked text, never rows or document excerpts.
 
+Sessions: a trace is one job, never a whole session (traces that stay open for hours break most tools). Instead,
+every span carries `session.id` (the sign-in session) and `user.hash` (the pseudonymous user), taken from the log
+context the API opens, so Logfire can show all the traces of one session or one user with a filter.
+
+Standard names (OpenTelemetry semantic conventions): code passes plain keyword names and `STANDARD_NAMES` records
+them under their standard name where one exists, on spans and in the log alike: `user.hash`, `session.id`,
+`error.type`, `http.response.status_code`, and for Claude calls `gen_ai.provider.name`, `gen_ai.operation.name`,
+`gen_ai.request.model`, `gen_ai.usage.input_tokens` / `output_tokens` / `cache_read.input_tokens` /
+`cache_creation.input_tokens` and `gen_ai.conversation.id`. Names with no standard (job_id, request_id, ...) stay.
+The resource carries `service.name`, `service.version` and `deployment.environment.name` (logs.ServiceInfo).
+
 When a step fails, its span is marked as an error and records `error_type`, `error_message` (personal data masked)
 and `error_location` (file:line:function where it was raised); every enclosing span records `failed_step`, the name
 of the innermost span that failed. The same failure is written once to the JSON log (logs.py) with its traceback
@@ -50,7 +61,7 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Callable, Iterator, Protocol, Sequence
 
-from .logs import current_steps, describe_error, get_logger, redacted, step_scope
+from .logs import ServiceInfo, current_context, current_steps, describe_error, get_logger, redacted, step_scope
 
 log = get_logger("trace")
 
@@ -68,7 +79,23 @@ SAFE_ATTRIBUTES = frozenset({
     "trace_id", "error_codes", "guard_policy", "guard_reason", "cache_read_tokens", "cache_write_tokens",
     # jobs, routing and failures
     "job_id", "job_kind", "reason", "error_type", "error_location", "failed_step",
+    # sessions and Claude calls (recorded under their standard names, see STANDARD_NAMES)
+    "session_id", "user_hash", "http_request_id", "llm_provider", "llm_operation",
+    "llm_input_tokens", "llm_output_tokens", "llm_cache_read_tokens", "llm_cache_write_tokens",
 })
+# Our keyword name -> the OpenTelemetry semantic-convention name it is recorded under (spans and log lines).
+# Token counts take the gen_ai.usage names only on the Claude call itself (llm_*): the investigation's totals keep
+# input_tokens / output_tokens, so tools that add up gen_ai.usage do not count the same tokens twice.
+STANDARD_NAMES = {
+    "session_id": "session.id", "user_hash": "user.hash", "owner_hash": "user.hash",
+    "error_type": "error.type", "http_status": "http.response.status_code",
+    "conversation_id": "gen_ai.conversation.id", "model": "gen_ai.request.model",
+    "llm_provider": "gen_ai.provider.name", "llm_operation": "gen_ai.operation.name",
+    "llm_input_tokens": "gen_ai.usage.input_tokens", "llm_output_tokens": "gen_ai.usage.output_tokens",
+    "llm_cache_read_tokens": "gen_ai.usage.cache_read.input_tokens",
+    "llm_cache_write_tokens": "gen_ai.usage.cache_creation.input_tokens",
+}
+IDENTITY_KEYS = ("session_id", "user_hash")          # from the log context, on every span
 # Free text allowed on spans only (never in the audit trail), masked and cut to this many characters.
 TEXT_ATTRIBUTES = {"question": 1000, "sql": 4000, "error_message": 500,
                    "state_changes": 6000, "state": 12000}         # the graph state after each step (state_view.py)
@@ -104,6 +131,22 @@ def safe_attributes(attributes: dict[str, Any], allow_text: bool = False) -> dic
     return clean
 
 
+def standard_names(attributes: dict[str, Any]) -> dict[str, Any]:
+    """The attributes under their OpenTelemetry names where one exists (Python keywords cannot contain dots)."""
+    return {STANDARD_NAMES.get(key, key): value for key, value in attributes.items()}
+
+
+def recordable(attributes: dict[str, Any]) -> dict[str, Any]:
+    """What a span or a log line records: the safe attributes (masked free text included), under standard names."""
+    return standard_names(safe_attributes(attributes, allow_text=True))
+
+
+def identity_attributes() -> dict[str, Any]:
+    """The session and pseudonymous user of the running work, from the log context (empty outside a session)."""
+    ids = current_context()
+    return standard_names(safe_attributes({key: ids.get(key) for key in IDENTITY_KEYS}))
+
+
 SpanSetter = Callable[..., None]
 
 
@@ -120,17 +163,19 @@ class OrchestratorTracer:
         return cls(None)
 
     @classmethod
-    def local(cls, extra_span_processors: Sequence[Any] = (), service_name: str = "wbg-orchestrator") -> "OrchestratorTracer":
+    def local(cls, extra_span_processors: Sequence[Any] = (), service_name: str = "wbg-orchestrator",
+              service: ServiceInfo | None = None) -> "OrchestratorTracer":
         """Local Logfire instance: never exports (explicit send_to_logfire=False, no token, no console). Spans still
         get trace ids, so log lines can be correlated."""
         import logfire
         instance = logfire.configure(local=True, send_to_logfire=False, token=None, console=False, service_name=service_name,
                                      additional_span_processors=list(extra_span_processors), inspect_arguments=False,
-                                     metrics=False)
+                                     metrics=False, scrubbing=_scrubbing(), **_resource(service))
         return cls(instance)
 
     @classmethod
-    def exporting(cls, token: str, service_name: str, extra_span_processors: Sequence[Any] = ()) -> "OrchestratorTracer":
+    def exporting(cls, token: str, service_name: str, extra_span_processors: Sequence[Any] = (),
+                  service: ServiceInfo | None = None) -> "OrchestratorTracer":
         """Local Logfire instance that ALSO exports to the existing Logfire project.
 
         The caller passes the existing write token explicitly; nothing is read from the environment here.
@@ -138,7 +183,7 @@ class OrchestratorTracer:
         import logfire
         instance = logfire.configure(local=True, send_to_logfire=True, token=token, console=False, service_name=service_name,
                                      additional_span_processors=list(extra_span_processors), inspect_arguments=False,
-                                     metrics=False)
+                                     metrics=False, scrubbing=_scrubbing(), **_resource(service))
         return cls(instance)
 
     @contextmanager
@@ -156,18 +201,17 @@ class OrchestratorTracer:
             with step_scope(name), self._open(name, {}) as setter:
                 yield setter
             return
-        started, recorded = time.perf_counter(), safe_attributes(attributes, allow_text=True)
+        started, recorded = time.perf_counter(), recordable(attributes)
         outcome = "failed"
         with step_scope(name):
             log.info("step started", extra={"attributes": recorded})
             try:
-                with self._open(name, recorded) as setter:
+                with self._open(name, {**identity_attributes(), **recorded}) as setter:
                     def set_attributes(**values: Any) -> None:
                         nonlocal outcome
                         if isinstance(values.get("error"), BaseException):
                             outcome = "failed (handled)"
-                        cleaned = safe_attributes({k: v for k, v in values.items() if k not in ("error", "log_message")},
-                                                  allow_text=True)
+                        cleaned = recordable({k: v for k, v in values.items() if k not in ("error", "log_message")})
                         recorded.update(cleaned)
                         setter(**cleaned, **{k: v for k, v in values.items() if k in ("error", "log_message")})
                     yield set_attributes
@@ -209,9 +253,9 @@ class OrchestratorTracer:
         logged = log.isEnabledFor(logging.INFO)
         if self._logfire is None and not logged:
             return
-        clean = safe_attributes(attributes, allow_text=True)
+        clean = recordable(attributes)
         if self._logfire is not None:
-            self._logfire.log(level, name, attributes=clean)
+            self._logfire.log(level, name, attributes={**identity_attributes(), **clean})
         if logged:
             log.log(logging.WARNING if level in ("warn", "warning") else logging.INFO, name, extra={"attributes": clean})
 
@@ -227,8 +271,7 @@ def record_failure(span: Any, step: str, error: BaseException, log_message: str 
     span.set_level("error")
     first_step = getattr(error, "_wbg_failed_step", None)
     if first_step is None:
-        details = describe_error(error)
-        for key, value in safe_attributes(details, allow_text=True).items():
+        for key, value in recordable(describe_error(error)).items():
             span.set_attribute(key, value)
         span.set_attribute("failed_step", step)
         try:
@@ -237,8 +280,23 @@ def record_failure(span: Any, step: str, error: BaseException, log_message: str 
             pass
         log.error(log_message, exc_info=error)
     else:
-        span.set_attribute("error_type", type(error).__name__)
+        span.set_attribute(STANDARD_NAMES["error_type"], type(error).__name__)
         span.set_attribute("failed_step", first_step)
+
+
+def _resource(service: ServiceInfo | None) -> dict[str, str]:
+    """service.version and deployment.environment.name for logfire.configure (nothing when not given)."""
+    return {"service_version": service.version, "environment": service.environment} if service else {}
+
+
+def _scrubbing() -> Any:
+    """Logfire's scrubber, except for `session.id`: Logfire hides every attribute whose name contains "session", but
+    the session id is not a secret (the token is, and it is never recorded), and without it no session can be found."""
+    import logfire
+
+    def keep_session_id(match: Any) -> Any:
+        return match.value if match.path and match.path[-1] == STANDARD_NAMES["session_id"] else None
+    return logfire.ScrubbingOptions(callback=keep_session_id)
 
 
 def _ignore(**values: Any) -> None:

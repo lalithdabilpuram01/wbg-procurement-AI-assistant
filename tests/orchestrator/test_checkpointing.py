@@ -257,4 +257,4 @@ def test_checkpoint_saves_and_resumes_are_traced(pool):
     assert {s.name for s in events} == {"orchestrator.checkpoint_saved", "orchestrator.checkpoint_resumed"}
     for span in events:
         assert span.attributes["checkpointer"] == "PostgresSaver" and span.attributes["checkpoint_thread"] == thread_id
-        assert span.attributes["checkpoint_id"] and span.attributes["conversation_id"] == "conv-1"
+        assert span.attributes["checkpoint_id"] and span.attributes["gen_ai.conversation.id"] == "conv-1"

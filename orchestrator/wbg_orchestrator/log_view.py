@@ -1,10 +1,22 @@
-"""Read one job from the JSON log as an indented tree: every step, what it wrote, where it went next, and what failed.
+"""Read one job, or one sign-in session, from the JSON log as an indented tree: every step, what it wrote, where it
+went next, and what failed.
 
     uv run wbg-logs                     the latest job
     uv run wbg-logs <job_id>            one job (the id is in the API's job response and on every log line)
     uv run wbg-logs --failed            the latest job that logged an error
     uv run wbg-logs <job_id> --state    also the full state after every graph step
     uv run wbg-logs --list              the latest jobs, one line each
+    uv run wbg-logs --sessions          the latest sign-in sessions, one line each
+    uv run wbg-logs --session [<id>]    one session (default: the latest): its security events and HTTP requests in
+                                        order, and each job it started as a tree of steps
+
+A session reads like this (shortened):
+
+    Session ses_3f2a...  user 9c1e...  (2 jobs, 14 requests)
+    10:00:01.002        auth.sign_in  outcome=success
+    10:00:04.310        http request  method=POST path=/conversations status_code=201
+    10:00:05.120        job job_1 (message), started by http_5c...
+                          + job.message ...
 
 Example (shortened):
 
@@ -66,14 +78,35 @@ def jobs(lines: Iterable[dict]) -> list[dict[str, Any]]:
     return list(found.values())
 
 
+def sessions(lines: Iterable[dict]) -> list[dict[str, Any]]:
+    """One entry per sign-in session, in start order: id, user hash, first and last time, jobs, requests, problems."""
+    found: dict[str, dict[str, Any]] = {}
+    for line in lines:
+        session_id = line.get("session_id")
+        if not session_id:
+            continue
+        session = found.setdefault(session_id, {"session_id": session_id, "user_hash": line.get("user_hash"),
+                                                "started": line.get("time"), "last": None, "jobs": set(), "requests": 0,
+                                                "problems": 0})
+        session["last"] = line.get("time")
+        if line.get("job_id"):
+            session["jobs"].add(line["job_id"])
+        if line.get("message") == "http request":
+            session["requests"] += 1
+        if line.get("level") in ("ERROR", "WARNING"):
+            session["problems"] += 1
+    return list(found.values())
+
+
 # -------------------------------------------------------------------------------------------------- rendering
 def _short(value: Any) -> str:
     text = value if isinstance(value, str) else json.dumps(value, default=str, ensure_ascii=False)
     return text if len(text) <= VALUE_CHARS else text[:VALUE_CHARS] + "..."
 
 
-# Shown once in the header instead of on every step line.
-HEADER_IDS = ("investigation_id", "conversation_id", "request_id", "owner_hash", "plan_id")
+# Shown once in the header instead of on every step line ("owner_hash": logs written before the standard names).
+HEADER_IDS = ("session_id", "user_hash", "investigation_id", "conversation_id", "gen_ai.conversation.id", "request_id",
+              "user.hash", "owner_hash", "plan_id", "service_version", "environment")
 REPEATED = {*HEADER_IDS, "node", "job_id", "job_kind", "state", "state_changes"}
 
 
@@ -100,7 +133,8 @@ def _changes(changes: dict[str, Any]) -> str:
 
 
 IDS = ("job_id", "job_kind", "request_id", "investigation_id", "conversation_id", "http_request_id", "trace_id", "span_id",
-       "time", "level", "logger", "message", "step", "step_path", "depth")
+       "time", "level", "logger", "message", "step", "step_path", "depth", "session_id", "user_hash", "service_version",
+       "environment", "event", "gen_ai.conversation.id", "session.id", "user.hash")
 
 
 def render(lines: list[dict[str, Any]], show_state: bool = False, show_traceback: bool = False) -> list[str]:
@@ -151,6 +185,32 @@ def header(job_id: str, lines: list[dict[str, Any]]) -> str:
     return f"Job {job_id}  ({len(lines)} log lines)\n{ids}\n"
 
 
+def render_session(session_id: str, lines: list[dict[str, Any]], show_state: bool = False,
+                   show_traceback: bool = False) -> list[str]:
+    """The session in time order: its own lines (security events, HTTP requests) one per row, and each job, where it
+    started, as a block with its steps as a tree."""
+    own = [line for line in lines if line.get("session_id") == session_id]
+    out: list[str] = []
+    shown: set[str] = set()
+    for line in own:
+        job_id = line.get("job_id")
+        if not job_id:
+            out += render([line], show_traceback=show_traceback)
+        elif job_id not in shown:
+            shown.add(job_id)
+            started_by = f", started by {line['http_request_id']}" if line.get("http_request_id") else ""
+            out.append(f"{(line.get('time') or '')[11:23]}       job {job_id} ({line.get('job_kind')}){started_by}")
+            job_lines = [entry for entry in own if entry.get("job_id") == job_id]
+            out += [f"{' ' * 4}{row}" for row in render(job_lines, show_state=show_state, show_traceback=show_traceback)]
+    return out
+
+
+def session_header(session: dict[str, Any]) -> str:
+    return (f"Session {session['session_id']}  user {session['user_hash'] or '-'}  ({len(session['jobs'])} jobs, "
+            f"{session['requests']} requests, {session['problems']} warnings or errors)\n"
+            f"  from {session['started']}  to {session['last']}\n")
+
+
 def failure_summary(lines: list[dict[str, Any]]) -> list[str]:
     """Where the job failed: the step path of each ERROR line, and the error at its innermost step."""
     errors = [line for line in lines if line.get("level") == "ERROR"]
@@ -168,10 +228,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--state", action="store_true", help="also print the full state after every graph step")
     parser.add_argument("--traceback", action="store_true", help="also print the traceback of each error")
     parser.add_argument("--list", action="store_true", help="list the latest jobs instead")
+    parser.add_argument("--sessions", action="store_true", help="list the latest sign-in sessions instead")
+    parser.add_argument("--session", nargs="?", const="latest", metavar="SESSION_ID",
+                        help="show one sign-in session (default: the latest) with its requests and jobs")
     parser.add_argument("--log", type=Path, default=DEFAULT_LOG, help=f"the log file (default: {DEFAULT_LOG})")
     args = parser.parse_args(argv)
 
     lines = list(read_lines(args.log))
+    if args.sessions or args.session:
+        return show_sessions(lines, args)
     known = jobs(lines)
     if not known:
         print(f"No jobs in {args.log}. Start the API (uv run wbg-api) and ask a question first.")
@@ -198,6 +263,28 @@ def main(argv: list[str] | None = None) -> int:
     print(header(job_id, selected))
     print("\n".join(render(selected, show_state=args.state, show_traceback=args.traceback)))
     print("\n" + "\n".join(failure_summary(selected)))
+    return 0
+
+
+def show_sessions(lines: list[dict[str, Any]], args: argparse.Namespace) -> int:
+    """`--sessions` (a list) or `--session [<id>]` (one session as a tree)."""
+    known = sessions(lines)
+    if not known:
+        print(f"No sessions in {args.log}. Sign in to the web app and ask a question first.")
+        return 1
+    if args.sessions:
+        for session in known[-20:]:
+            print(f"{session['started']}  {session['session_id']}  user {(session['user_hash'] or '-')[:12]}  "
+                  f"jobs={len(session['jobs'])} requests={session['requests']}"
+                  f"{'  warnings/errors=' + str(session['problems']) if session['problems'] else ''}")
+        return 0
+    session: dict[str, Any] | None = (known[-1] if args.session == "latest"
+                                      else next((s for s in known if s["session_id"] == args.session), None))
+    if session is None:
+        print(f"Session {args.session} is not in {args.log}.")
+        return 1
+    print(session_header(session))
+    print("\n".join(render_session(session["session_id"], lines, show_state=args.state, show_traceback=args.traceback)))
     return 0
 
 

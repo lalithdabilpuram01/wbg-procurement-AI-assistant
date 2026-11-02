@@ -82,7 +82,7 @@ def test_a_failed_job_logs_its_traceback_with_the_ids_to_find_it(traced_stack, j
     assert line["error_type"] == "RuntimeError" and line["error_location"].startswith("test_tracing_and_logs.py:")
     assert "broken" in line["traceback"] and "jane.doe" not in json.dumps(line)            # personal data masked
     root = next(s for s in exporter.get_finished_spans() if s.name == "job.message")
-    assert root.attributes["failed_step"] == "job.message" and root.attributes["error_type"] == "RuntimeError"
+    assert root.attributes["failed_step"] == "job.message" and root.attributes["error.type"] == "RuntimeError"
 
 
 def test_log_lines_carry_the_ids_of_the_surrounding_context(json_log):

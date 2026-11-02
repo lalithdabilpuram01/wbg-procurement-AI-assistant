@@ -7,6 +7,11 @@ lives in memory for 12 hours (a restart signs everyone out); script users get a 
 The server derives the owner from the token; no request body or path carries a user id. Another user's
 conversation, investigation or job is reported as 404, like a missing one.
 
+Logging: the middleware identifies the token once per request and opens a log context with the request id, the
+session id and the pseudonymous user hash, so every line written for the request (and every job it starts) belongs
+to its session. Sign-in, sign-up, resets, refused requests (401, 403, 429) and reviewer decisions are security events
+(logs.security_event).
+
     uv run wbg-user init-db && uv run wbg-user migrate       # once: the account table, and the existing users
     uv run wbg-user add --user rita --password '...' --reviewer
     uv run wbg-api [--live]
@@ -34,9 +39,10 @@ import sys
 import time
 from typing import Any
 
-from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request, status
+from fastapi import Depends, FastAPI, HTTPException, Query, Request, status
 from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, Field
+from starlette.concurrency import run_in_threadpool
 
 from conversation.learning import Feedback, LearnedItem, LearningItemNotFound, Review
 from conversation.models import Owner
@@ -53,8 +59,8 @@ from .contracts import PackageAssessment, PlanningSpec, TenderSpec, new_id
 from .feedback import FeedbackRefused, FeedbackRequest, Preferences, ReviewerOnly
 from .rate_limit import RateLimiter
 from .engine import InvestigationNotFound
-from .accounts import AccountError, UserDirectory, UsernameTaken
-from .logs import get_logger, log_context
+from .accounts import AccountError, Identity, UserDirectory, UsernameTaken, user_hash
+from .logs import get_logger, log_context, security_event
 
 log = get_logger("api")
 
@@ -189,12 +195,18 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
                kpi_board: KpiBoard | None = None, auth_limiter: RateLimiter | None = None) -> FastAPI:
     app = FastAPI(title="WBG Procurement Intelligence API", version="0.1.0")
 
-    def current_owner(authorization: str = Header(default="")) -> Owner:
+    def identify(authorization: str) -> Identity | None:
         scheme, _, token = authorization.partition(" ")
-        owner = users.authenticate(token) if scheme.lower() == "bearer" and token else None
-        if owner is None:
+        return users.identify(token) if scheme.lower() == "bearer" and token else None
+
+    def current_owner(request: Request) -> Owner:
+        """The owner identified by the middleware (once per request); a missing or unknown token is refused."""
+        identity: Identity | None = getattr(request.state, "identity", None)
+        if identity is None:
+            reason = "invalid_token" if request.headers.get("authorization") else "missing_token"
+            security_event("access.denied", "failure", status_code=401, reason=reason, path=request.url.path)
             raise HTTPException(status.HTTP_401_UNAUTHORIZED, "authentication required", {"WWW-Authenticate": "Bearer"})
-        return owner
+        return identity.owner
 
     limits = limiter or RateLimiter.from_env()
 
@@ -202,6 +214,7 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
         """The owner of a request that starts work, within that user's request limits."""
         refusal = limits.check(f"{owner.tenant_id}\x00{owner.user_id}")
         if refusal:
+            security_event("access.denied", "failure", status_code=429, reason=f"rate_limited_{refusal.limit}")
             window = "minute" if refusal.limit == "per_minute" else "day"
             raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS,
                                 f"Too many requests: the limit is {refusal.allowed} per {window}. "
@@ -215,12 +228,15 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
         """Sign-in, sign-up and reset attempts per client address: slows down password and recovery-code guessing."""
         refusal = attempts.check(f"auth\x00{request.client.host if request.client else '-'}")
         if refusal:
+            security_event("access.denied", "failure", status_code=429, reason="auth_attempts_limited",
+                           path=request.url.path)
             raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS,
                                 f"Too many attempts. Please try again in {refusal.retry_after_seconds} seconds.",
                                 {"Retry-After": str(refusal.retry_after_seconds)})
 
     def reviewer_owner(owner: Owner = Depends(current_owner)) -> Owner:
         if not users.is_reviewer(owner):
+            security_event("access.denied", "failure", status_code=403, reason="reviewers_only")
             raise HTTPException(status.HTTP_403_FORBIDDEN, "reviewers only")
         return owner
 
@@ -256,14 +272,17 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
 
     @app.middleware("http")
     async def correlate(request: Request, call_next):
-        """Give every request a reference id (X-Request-ID, echoed back), log requests that change something or fail,
-        and attach the id to every log line written while the request is handled."""
+        """Give every request a reference id (X-Request-ID, echoed back), identify its session, log requests that
+        change something or fail, and attach the ids to every log line written while the request is handled."""
         reference = request.headers.get("X-Request-ID") or new_id("http")
         if not re.fullmatch(r"[A-Za-z0-9_.:-]{1,80}", reference):
             reference = new_id("http")
         request.state.request_ref = reference
+        identity = await run_in_threadpool(identify, request.headers.get("authorization", ""))
+        request.state.identity = identity
         started = time.perf_counter()
-        with log_context(http_request_id=reference):
+        with log_context(http_request_id=reference, session_id=identity.session_id if identity else None,
+                         user_hash=identity.user_hash if identity else None):
             response = await call_next(request)
             ms = round(1000 * (time.perf_counter() - started))
             if request.method != "GET" or response.status_code >= 400:
@@ -273,11 +292,25 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
         response.headers["X-Request-ID"] = reference
         return response
 
+    def session_started(event: str, token: str) -> None:
+        """The security event of a new session: which session, for which (pseudonymous) user."""
+        identity = users.identify(token)
+        security_event(event, "success", session_id=identity.session_id if identity else None,
+                       user_hash=identity.user_hash if identity else None)
+
+    def auth_failed(event: str, username: str, reason: str) -> None:
+        """A failed sign-in or reset. The user hash is logged only for an existing account, so a password typed into
+        the username field never reaches the log, not even hashed."""
+        owner = users.account_owner(username)
+        security_event(event, "failure", reason=reason, user_hash=user_hash(owner) if owner else None)
+
     @app.post("/auth/login", dependencies=[Depends(limited_attempt)])
     def sign_in(body: SignIn) -> dict[str, str]:
         token = users.sign_in(body.username, body.password)
         if token is None:
+            auth_failed("auth.sign_in", body.username, "wrong_credentials")
             raise HTTPException(status.HTTP_401_UNAUTHORIZED, "wrong username or password")
+        session_started("auth.sign_in", token)
         return {"token": token}
 
     @app.post("/auth/signup", status_code=201, dependencies=[Depends(limited_attempt)])
@@ -286,10 +319,12 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
         try:
             token, code = users.sign_up(body.username, body.password)
         except UsernameTaken as error:
+            security_event("auth.sign_up", "failure", reason="username_taken")
             raise HTTPException(status.HTTP_409_CONFLICT, str(error)) from None
         except AccountError as error:
+            security_event("auth.sign_up", "failure", reason="invalid_credentials")
             raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(error)) from None
-        log.info("account created")
+        session_started("auth.sign_up", token)
         return {"token": token, "recovery_code": code}
 
     @app.post("/auth/reset", dependencies=[Depends(limited_attempt)])
@@ -298,11 +333,13 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
         try:
             result = users.reset_password(body.username, body.recovery_code, body.new_password)
         except AccountError as error:
+            auth_failed("auth.password_reset", body.username, "invalid_new_password")
             raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(error)) from None
         if result is None:
+            auth_failed("auth.password_reset", body.username, "wrong_recovery_code")
             raise HTTPException(status.HTTP_401_UNAUTHORIZED, "wrong username or recovery code")
-        log.info("password reset")
         token, code = result
+        session_started("auth.password_reset", token)
         return {"token": token, "recovery_code": code}
 
     @app.get("/health")
@@ -430,7 +467,9 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
 
     @app.post("/lessons/{card_id}")
     def decide_lesson(card_id: str, body: LessonDecision, owner: Owner = Depends(reviewer_owner)) -> dict[str, Any]:
-        return lesson_view(service.decide_lesson(owner, card_id, body.approved, body.note))
+        card = service.decide_lesson(owner, card_id, body.approved, body.note)
+        security_event("review.lesson_decided", "success", card_id=card_id, approved=body.approved)
+        return lesson_view(card)
 
     @app.get("/reviews")
     def list_reviews(state: str = Query("pending", alias="status"), owner: Owner = Depends(reviewer_owner)) -> list[dict[str, Any]]:
@@ -441,7 +480,9 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
 
     @app.post("/reviews/{review_id}")
     def decide_review(review_id: str, body: ReviewDecision, owner: Owner = Depends(reviewer_owner)) -> dict[str, Any]:
-        return review_view(service.decide_review(owner, review_id, body.approved, body.note, body.expected_terms))
+        review = service.decide_review(owner, review_id, body.approved, body.note, body.expected_terms)
+        security_event("review.feedback_decided", "success", review_id=review_id, approved=body.approved)
+        return review_view(review)
 
     @app.post("/conversations/{conversation_id}/messages", status_code=202)
     def submit_message(conversation_id: str, body: NewMessage, owner: Owner = Depends(limited_owner)) -> dict[str, Any]:
@@ -545,17 +586,21 @@ def main(argv: list[str]) -> int:
 
     from . import accounts_db
 
-    from .logs import configure_logging
+    from .logs import ServiceInfo, configure_logging, level_from_env
     from .runtime import ORCHESTRATOR_DIR, RuntimeConfig, build_runtime
-    log_file = configure_logging(ORCHESTRATOR_DIR / "runs" / "logs")
-    print(f"Logs: {log_file}")
+    service_info = ServiceInfo.from_env()
+    log_file = configure_logging(ORCHESTRATOR_DIR / "runs" / "logs", level=level_from_env("WBG_LOG_LEVEL", "INFO"),
+                                 console_level=level_from_env("WBG_CONSOLE_LOG_LEVEL", "WARNING"), service=service_info)
+    print(f"Logs: {log_file}  (version {service_info.version}, environment {service_info.environment})")
     accounts = accounts_db.accounts_pool()
     try:
         accounts_db.verify(accounts)                       # fail closed: no sign-in against a missing account store
         service, close = build_runtime(RuntimeConfig.from_env(), operator_confirmed=args.confirm_live_call)
         board = kpi_board()
         try:
-            uvicorn.run(create_app(service, accounts_db.directory(accounts), kpi_board=board), host="127.0.0.1", port=args.port)
+            print(f"API: http://127.0.0.1:{args.port}")
+            uvicorn.run(create_app(service, accounts_db.directory(accounts), kpi_board=board), host="127.0.0.1",
+                        port=args.port, log_config=None)          # uvicorn's own lines go to the app's JSON log
         finally:
             close()
     finally:

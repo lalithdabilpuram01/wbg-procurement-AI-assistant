@@ -33,7 +33,7 @@ from .contracts import InvestigationResponse, PackageAssessment, PlanningSpec, T
 from .conversation_bridge import ConversationFrontDoor, owner_ref
 from .engine import EngineOutcome, InvestigationEngine, InvestigationNotFound, checkpoint_thread_id
 from .feedback import FeedbackRequest, FeedbackService, Preferences
-from .logs import bind, get_logger, log_context
+from .logs import bind, current_context, get_logger, log_context
 from .observability import current_trace_id
 from .progress import JobStreams
 
@@ -62,6 +62,8 @@ class Job:
     status: str | None = None                 # conversation or investigation status at the end
     error: str | None = None                  # error class only (never a message that could contain data)
     trace_id: str | None = None               # the job's Logfire trace (also on every log line of the job)
+    session_id: str | None = None             # the sign-in session that started the job
+    http_request_id: str | None = None        # the HTTP request that started the job
     cancel_requested: bool = False            # the owner pressed stop (applied as soon as the investigation id is known)
     created_at: dt.datetime = field(default_factory=lambda: dt.datetime.now(dt.timezone.utc))
 
@@ -307,7 +309,9 @@ class AppService:
                 return self._jobs[existing]                                     # a repeat: the same job, not a new run
             if self._busy(owner, conversation_id):
                 raise ConversationBusy("another request is still running in this conversation")
-            job = Job(job_id=new_id("job"), owner=owner, conversation_id=conversation_id, kind=kind)
+            started_by = current_context()                                      # the API's request and session ids
+            job = Job(job_id=new_id("job"), owner=owner, conversation_id=conversation_id, kind=kind,
+                      session_id=started_by.get("session_id"), http_request_id=started_by.get("http_request_id"))
             self._jobs[job.job_id], self._by_client_id[key] = job, job.job_id
             self.streams.open(job.job_id)
         self._pool.submit(self._guarded, job, work)
@@ -330,11 +334,14 @@ class AppService:
 
     def _guarded(self, job: Job, work: Callable[[Job], None]) -> None:
         """Run one job in a worker thread. The job is the root of its trace: every span below it (routing, graph
-        steps, tool and model calls) nests under `job.<kind>`, and every log line carries the job's ids."""
+        steps, tool and model calls) nests under `job.<kind>`, and every log line carries the job's ids together with
+        the session, the user and the HTTP request that started it (so the job is part of its session)."""
         tracer = self._engine.deps.tracer
-        with log_context(job_id=job.job_id, job_kind=job.kind, conversation_id=job.conversation_id), \
+        user = owner_ref(job.owner).user_hash
+        with log_context(session_id=job.session_id, user_hash=user, http_request_id=job.http_request_id,
+                         job_id=job.job_id, job_kind=job.kind, conversation_id=job.conversation_id), \
                 tracer.span(f"job.{job.kind}", job_id=job.job_id, job_kind=job.kind, conversation_id=job.conversation_id,
-                            owner_hash=owner_ref(job.owner).user_hash) as span:
+                            http_request_id=job.http_request_id) as span:
             job.trace_id = current_trace_id()
             self._job_spans[job.job_id] = span
             log.info("job started")

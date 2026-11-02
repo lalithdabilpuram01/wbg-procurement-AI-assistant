@@ -10,7 +10,9 @@ Accounts:
 * a recovery code is shown once (at sign-up, after a reset, or when issued with `wbg-user recovery-code`) and works
   once: "forgot password" takes the username, the recovery code and a new password, and hands out a new code;
 * a password sign-in gives a session token kept in memory for SESSION_HOURS (a restart signs everyone out); a reset
-  ends every session of that user.
+  ends every session of that user;
+* every session also has a session id (`ses_...`), which is not a secret: the logs and traces carry it, so all the
+  work of one sign-in can be found together. A script token has one fixed id (`tok_` + part of its hash).
 Every failed sign-in or reset gives the same answer and does the same work for a known and an unknown username, so
 the answers do not reveal which usernames exist.
 """
@@ -32,6 +34,9 @@ from pathlib import Path
 from typing import Any, Callable, ContextManager, Iterator, Protocol
 
 from conversation.models import Owner
+
+from .contracts import OwnerRef
+from .logs import security_event
 
 SCRYPT = {"n": 2**14, "r": 8, "p": 1}                     # the same parameters as the hashes already stored
 SESSION_HOURS = 12
@@ -82,6 +87,11 @@ def token_digest(token: str) -> str:
 
 def normalise_username(username: str) -> str:
     return username.strip().lower()
+
+
+def user_hash(owner: Owner) -> str:
+    """The pseudonymous id that logs and traces use for a user (never the username itself)."""
+    return OwnerRef.from_identity(owner.tenant_id, owner.user_id).user_hash
 
 
 def check_new_credentials(username: str, password: str) -> None:
@@ -242,31 +252,63 @@ def _to_row(account: Account) -> tuple:
 
 
 # ------------------------------------------------------------------------------------------------- directory
+@dataclass(frozen=True)
+class Identity:
+    """Who sent a request: the owner and the session the token belongs to (the session id is safe to log)."""
+
+    owner: Owner
+    session_id: str
+
+    @property
+    def user_hash(self) -> str:
+        return user_hash(self.owner)
+
+
+@dataclass(frozen=True)
+class _Session:
+    identity: Identity
+    expires_at: float
+
+
 @dataclass
 class _Sessions:
-    """Password sign-in sessions: token SHA-256 -> (owner, expiry), in memory."""
+    """Password sign-in sessions: token SHA-256 -> session (owner, session id, expiry), in memory."""
 
-    entries: dict[str, tuple[Owner, float]] = field(default_factory=dict)
+    entries: dict[str, _Session] = field(default_factory=dict)
     lock: threading.Lock = field(default_factory=threading.Lock)
 
     def open(self, owner: Owner) -> str:
         token = secrets.token_urlsafe(32)
+        identity = Identity(owner, f"ses_{secrets.token_hex(10)}")
         with self.lock:
-            self.entries[token_digest(token)] = (owner, time.time() + SESSION_HOURS * 3600)
+            self.entries[token_digest(token)] = _Session(identity, time.time() + SESSION_HOURS * 3600)
         return token
 
-    def owner(self, digest: str) -> Owner | None:
+    def identity(self, digest: str) -> Identity | None:
         with self.lock:
             session = self.entries.get(digest)
-            if session and session[1] > time.time():
-                return session[0]
-            self.entries.pop(digest, None)
+            if session and session.expires_at > time.time():
+                return session.identity
+            expired = self.entries.pop(digest, None)
+        if expired:
+            _ended(expired.identity, "expired")
         return None
 
-    def end_all(self, owner: Owner) -> None:
+    def end_all(self, owner: Owner, reason: str) -> None:
         with self.lock:
-            for digest in [d for d, (o, _) in self.entries.items() if o == owner]:
-                del self.entries[digest]
+            ended = [self.entries.pop(d).identity for d in [d for d, s in self.entries.items() if s.identity.owner == owner]]
+        for identity in ended:
+            _ended(identity, reason)
+
+
+def _ended(identity: Identity, reason: str) -> None:
+    security_event("auth.session_ended", "success", reason=reason, session_id=identity.session_id,
+                   user_hash=identity.user_hash)
+
+
+def script_identity(account: Account, digest: str) -> Identity:
+    """A script token's fixed session id: part of the token's SHA-256, which reveals nothing about the token."""
+    return Identity(account.owner, f"tok_{digest[:12]}")
 
 
 class UserDirectory:
@@ -282,10 +324,23 @@ class UserDirectory:
         return cls(JsonFileAccountStore(path))
 
     # ------------------------------------------------------------------------------------------- tokens
-    def authenticate(self, token: str) -> Owner | None:
+    def identify(self, token: str) -> Identity | None:
+        """The owner and session of a token: a sign-in session (in memory, checked first), else a script token."""
         digest = token_digest(token)
+        session = self._sessions.identity(digest)
+        if session:
+            return session
         account = self.store.by_token(digest)
-        return account.owner if account else self._sessions.owner(digest)
+        return script_identity(account, digest) if account else None
+
+    def authenticate(self, token: str) -> Owner | None:
+        identity = self.identify(token)
+        return identity.owner if identity else None
+
+    def account_owner(self, username: str) -> Owner | None:
+        """The owner of an existing account (None for an unknown username), for logging a failed attempt."""
+        account = self.store.get(self.tenant_id, normalise_username(username))
+        return account.owner if account else None
 
     def is_reviewer(self, owner: Owner) -> bool:
         account = self.store.get(owner.tenant_id, owner.user_id)
@@ -320,7 +375,7 @@ class UserDirectory:
         check_new_credentials(user_id, new_password)
         code = new_recovery_code()
         self.store.save(replace(account, password=hash_secret(new_password), recovery=hash_secret(normalise_code(code))))
-        self._sessions.end_all(account.owner)
+        self._sessions.end_all(account.owner, reason="password_reset")
         return self._sessions.open(account.owner), code
 
     # ------------------------------------------------------------------------------------------ operator

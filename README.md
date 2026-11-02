@@ -11,6 +11,7 @@ A PNG copy for slides is at [docs/architecture/architecture.png](docs/architectu
 
 | Read next | What it covers |
 |---|---|
+| [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md) | **Start here.** The official plain-English guide: what the project is, its features, how it works, its file structure |
 | [HOW_TO_RUN.md](HOW_TO_RUN.md) | Start the app (`uv run wbg-api`, `uv run wbg-web`) and the commands |
 | [etl/README.md](etl/README.md) | The Lakeflow ingestion pipelines and the live demo script |
 | [docs/architecture/DATA_MODELING.md](docs/architecture/DATA_MODELING.md) | How the data was modelled: Bronze, Silver, Gold, documents, graph |

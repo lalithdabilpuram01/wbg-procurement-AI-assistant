@@ -28,6 +28,8 @@ databricks auth login --profile wbg-databricks-free    # Lakebase (checkpoints, 
 ```
 
 Each opens your browser. Run them again whenever a command complains that the login or token has expired.
+If `databricks` is not found, use the copy bundled with the VS Code extension:
+`~/.vscode/extensions/databricks.databricks-<version>-darwin-arm64/bin/databricks`.
 
 **Create the Lakebase stores.** They live on the `dev-orchestrator` branch, and these commands are safe to run twice:
 
@@ -78,6 +80,9 @@ uv run wbg-web
 ```
 
 Open http://localhost:3000 and sign in, or click **Create an account**.
+
+At start the API prints where it logs, and the version and environment it runs as. To see what one sign-in did
+(its requests and each question, step by step), run `uv run wbg-logs --session`; see section 9.
 
 **Demo accounts** (or create your own: every new account is a normal user):
 
@@ -249,13 +254,17 @@ LangSmith. Everything else stays on your laptop.
 ## 9. Debugging: logs and traces
 
 Every chat message, tender check or plan runs as a background **job**. Everything the job does is written, step by
-step, to two places that share the same ids.
+step, to two places that share the same ids. Each job belongs to the **session** (one sign-in) that started it, so
+everything one person did after signing in can be read together: session > its requests and jobs > each job's steps.
 
 **The log file: `orchestrator/runs/logs/app.jsonl`**
 
 The file has one JSON line per event. Every line carries:
 
-- **Ids:** `job_id`, `request_id`, `conversation_id` and `trace_id`.
+- **Ids:** `session_id` (the sign-in), `user_hash` (the user, pseudonymous: never the username), `http_request_id`
+  (on a job's lines: the request that started it), `job_id`, `request_id`, `conversation_id` and `trace_id`.
+- **Which code:** `service_version` (the git commit, or `WBG_SERVICE_VERSION`) and `environment` (`WBG_ENVIRONMENT`,
+  default `local`).
 - **Where it happened:** `step` is the step the line was written in, and `step_path` is the full path to it, for
   example `job.message > conversation.message > orchestrator.node.execute > orchestrator.task >
   orchestrator.task_attempt > worker.structured_data`. `depth` is how deep that step is.
@@ -270,9 +279,14 @@ The lines you will see:
 | `task state updated` | After every task: its state change (for example `running -> succeeded`) and the results, evidence and errors it added |
 | `next step` | Which step comes next, and the phase that decided it |
 | `step failed` (ERROR) | Each failure, written once by the innermost step that saw it: `error_type`, `error_location` (file:line:function), the traceback and the step path |
+| `auth.sign_in`, `auth.sign_up`, `auth.password_reset`, `auth.session_ended` | Security events, with `outcome` (`success` or `failure`) and a reason code; failures are warnings |
+| `access.denied` (WARNING) | A refused request: `status_code` 401, 403 or 429 and the reason |
+| `review.lesson_decided`, `review.feedback_decided` | A reviewer's decision |
 
 Personal data is masked. The state lines hold ids, statuses, counts and the masked question and answer, never data rows
-or document text.
+or document text. Warnings and errors from other libraries (uvicorn, psycopg, httpx, mcp) are in the same file.
+
+Levels: `WBG_LOG_LEVEL` sets the file (default `INFO`), `WBG_CONSOLE_LOG_LEVEL` the terminal (default `WARNING`).
 
 **Read one job as a tree:**
 
@@ -283,6 +297,8 @@ uv run wbg-logs <job_id>           # one job (the id is in GET /jobs/<id> and on
 uv run wbg-logs <job_id> --state   # plus the full state after every step
 uv run wbg-logs --traceback        # plus each error's traceback
 uv run wbg-logs --list             # the latest jobs, with their status and error count
+uv run wbg-logs --sessions         # the latest sign-in sessions, with their jobs, requests and warnings
+uv run wbg-logs --session [<id>]   # one session (default: the latest): its sign-in, requests and every job as a tree
 ```
 
 The output is indented by step, and ends with where the job failed:
@@ -304,7 +320,12 @@ FAILED in: job.message > conversation.message > orchestrator.node.execute > orch
 **Logfire**
 
 Logfire shows the same tree: one trace per job, with a span per step. Each graph step span also carries
-`state_changes` and `state`, and a failed span is red, with `error_type`, `error_location` and `failed_step`.
+`state_changes` and `state`, and a failed span is red, with `error.type`, `error_location` and `failed_step`.
+
+Span attributes use the OpenTelemetry standard names, so Logfire's own views work: every span has `session.id` and
+`user.hash` (filter on `session.id` to see all the traces of one sign-in), Claude calls have `gen_ai.request.model`,
+`gen_ai.usage.input_tokens` / `output_tokens` and `gen_ai.conversation.id`, and every trace names
+`service.version` and `deployment.environment.name`.
 
 Spans are sent to Logfire only when `.env` has `LOGFIRE_SEND_TO_LOGFIRE=true` and `LOGFIRE_TOKEN`. Without them, the
 trace ids are still in the log file. To open a run in Logfire, paste its `trace_id` (from `wbg-logs` or

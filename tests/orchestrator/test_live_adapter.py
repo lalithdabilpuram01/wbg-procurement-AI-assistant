@@ -184,13 +184,13 @@ def test_planner_and_responder_calls_are_budgeted_priced_and_traced(tmp_path):
     tracer.force_flush()
     spans = exporter.get_finished_spans()
     calls = [s for s in spans if s.name == "orchestrator.llm_call"]
-    assert len(calls) == 2 and all(s.attributes["model"] == "test-claude-model" for s in calls)
+    assert len(calls) == 2 and all(s.attributes["gen_ai.request.model"] == "test-claude-model" for s in calls)
     by_id = {s.context.span_id: s for s in spans}
     for call in calls:                                                # each provider call sits inside a node span
         parent = by_id[call.parent.span_id]
         assert parent.name in ("orchestrator.node.plan", "orchestrator.node.respond")
         assert parent.attributes["investigation_id"] == out.values["request"]["investigation_id"]
-        assert parent.attributes["conversation_id"] == "conv-1"
+        assert parent.attributes["gen_ai.conversation.id"] == "conv-1"
 
 
 
