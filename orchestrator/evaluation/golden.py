@@ -50,6 +50,7 @@ def row(case_id: str, group: str, inputs: dict, reference: dict, outputs: dict, 
 def summarize(rows: list[Row]) -> dict[str, Any]:
     """Mean of every score, overall and per group (a score is averaged only over the cases that have it)."""
     def means(subset: list[Row]) -> dict[str, float]:
+        """Mean of each score over the rows that have it, plus the number of rows."""
         values: dict[str, list[float]] = defaultdict(list)
         for r in subset:
             for key, value in r["scores"].items():
@@ -233,6 +234,7 @@ def _scores(inputs: dict[str, Any], outputs: dict[str, Any], reference_outputs: 
 
 
 def _experiment_url(ls, experiment: str) -> str | None:
+    """The LangSmith link of an experiment, or None when it cannot be read."""
     try:
         return ls.read_project(project_name=experiment).url
     except Exception:                                    # the link is a convenience; the experiment name is enough
@@ -240,6 +242,7 @@ def _experiment_url(ls, experiment: str) -> str | None:
 
 
 def main(argv: list[str]) -> int:
+    """Command line: `run` scores the chosen sets locally, `upload` sends their saved results to LangSmith."""
     parser = argparse.ArgumentParser(description="Golden evaluations (no LLM)")
     parser.add_argument("step", choices=["run", "upload"])
     parser.add_argument("--sets", nargs="*", choices=SETS, default=list(SETS))

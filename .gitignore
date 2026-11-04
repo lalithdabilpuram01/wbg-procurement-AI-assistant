@@ -110,8 +110,7 @@ demo/structured/*.csv
 # ---------------------------------------------------------------------------------------------------------------
 # Discovery work, experiments and earlier releases (not used by the app)
 research/
-# One-off live verification scripts and their raw outputs; the evaluation datasets and golden results stay tracked
-orchestrator/live/
+# Raw outputs of live verification runs; the evaluation datasets and golden results stay tracked
 orchestrator/live_results/*
 !orchestrator/live_results/eval/
 !orchestrator/live_results/golden/

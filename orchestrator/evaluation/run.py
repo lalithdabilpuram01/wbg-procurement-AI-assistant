@@ -83,6 +83,7 @@ def client():
 
 
 def code_version() -> str:
+    """Short git commit of the repository, plus the number of uncommitted files when the tree is not clean."""
     root = ORCHESTRATOR_DIR.parent
     head = subprocess.run(["git", "-C", str(root), "rev-parse", "--short", "HEAD"], capture_output=True, text=True).stdout.strip()
     dirty = subprocess.run(["git", "-C", str(root), "status", "--porcelain"], capture_output=True, text=True).stdout.splitlines()
@@ -129,6 +130,8 @@ def upload(examples: list[dict[str, Any]]) -> str:
 
 
 def run(run_dir: Path, confirmed: bool) -> dict[str, Any]:
+    """Paid run: every dataset case through the app, scored by the checks and the Claude judge, saved to results.json;
+    returns the experiment name and both ledger summaries."""
     from langsmith import evaluate
     from structured_agent.nl2sql.live_guard import authorize_live_access
     from structured_agent.nl2sql.settings import load_claude_settings
@@ -136,23 +139,27 @@ def run(run_dir: Path, confirmed: bool) -> dict[str, Any]:
     from .evaluators import ClaudeJudge, deterministic
     from .target import AppHarness
 
+    # A run folder is written once, so a new run never mixes its results or spend with an earlier one.
     if (run_dir / "results.json").exists():
         raise SystemExit(f"{run_dir.name} already has results; choose a new --name")
     run_dir.mkdir(parents=True, exist_ok=True)
     config, judge_ledger = app_config(run_dir), run_dir / "judge_ledger.json"
     examples = json.loads(DATASET_FILE.read_text())
     dataset = upload(examples)
+    # The judge has its own budgeted client and ledger, separate from the app's, so each cap holds on its own.
     settings = dataclasses.replace(load_claude_settings(), timeout_seconds=120.0, max_output_tokens=JUDGE_OUTPUT_TOKENS)
     judge_client = BudgetedClaudeClient(settings, SpendLedger(judge_ledger, JUDGE_LIMITS), output_caps={"eval_judge": JUDGE_OUTPUT_TOKENS},
                                         live_access=authorize_live_access(confirmed))
     harness = AppHarness(config, confirmed)
     try:
+        # max_concurrency=0 runs the cases one at a time.
         results = evaluate(harness, data=dataset, evaluators=[deterministic, ClaudeJudge(PortkeyJsonClient(judge_client))],
                            experiment_prefix="wbg-app", max_concurrency=0, client=client(),
                            description="Full application through the local API; deterministic checks + Claude judge",
                            metadata={"code_version": code_version(), "model": judge_client.model, "documents": "pilot_v3",
                                      "tablelens": "tablelens_pilot (74 tables)", "app_cap_usd": str(config.max_usd),
                                      "judge_cap_usd": str(JUDGE_LIMITS.max_usd)})
+        # Plain rows from LangSmith's results, so the offline audit can re-read and re-score them later.
         rows = [{"case_id": r["example"].inputs["case_id"], "category": r["example"].inputs["category"],
                  "inputs": r["example"].inputs, "reference": r["example"].outputs, "outputs": r["run"].outputs,
                  "error": r["run"].error, "scores": [{"key": e.key, "score": e.score, "comment": e.comment}
@@ -166,12 +173,14 @@ def run(run_dir: Path, confirmed: bool) -> dict[str, Any]:
 
 
 def main(argv: list[str]) -> int:
+    """Command line: runs one step for the named run folder and prints its result (cut to 5,000 characters)."""
     parser = argparse.ArgumentParser(description="LangSmith evaluation of the application")
     parser.add_argument("step", choices=["preflight", "dataset", "run", "audit"])
     parser.add_argument("--name", default="run1", help="the run's folder under live_results/eval/")
     parser.add_argument("--confirm-live-call", action="store_true")
     args = parser.parse_args(argv)
     run_dir = RESULTS / args.name
+    # The audit is offline: it only reads the saved run folder and the dataset file.
     if args.step == "audit":
         from .audit import audit
         result: dict[str, Any] = audit(run_dir, DATASET_FILE)

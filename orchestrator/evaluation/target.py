@@ -27,6 +27,7 @@ class AppHarness:
     """The app built once (runtime, API, an evaluation user); `__call__` is the LangSmith target."""
 
     def __init__(self, config: RuntimeConfig, operator_confirmed: bool):
+        """Builds the runtime and the API once and keeps a client signed in as the evaluation user."""
         self._service, self._close = build_runtime(config, operator_confirmed)
         token = UserDirectory.add_user(USERS, USER)                         # held in memory only
         app = create_app(self._service, UserDirectory.load(USERS), limiter=RateLimiter(60, 1000))
@@ -61,6 +62,7 @@ class AppHarness:
         return {"message": "messages", "plan": "plans", "package": "packages"}[inputs["kind"]]
 
     def _body(self, inputs: dict[str, Any]) -> dict[str, Any]:
+        """The request body: the plan or package as given, or a message with its execute and TableLens switches."""
         if inputs["kind"] == "plan":
             return {**inputs["plan"], "client_message_id": self._client_id()}
         if inputs["kind"] == "package":
@@ -69,6 +71,7 @@ class AppHarness:
                 "client_message_id": self._client_id()}
 
     def _investigation(self, cid: str, job: dict[str, Any]) -> dict[str, Any] | None:
+        """The investigation view of a job, or None when the job has no request id or is not an investigation."""
         if not job.get("request_id"):
             return None
         try:

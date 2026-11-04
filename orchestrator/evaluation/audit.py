@@ -47,6 +47,7 @@ def rescored(rows: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dic
 
 
 def audit(results_dir: Path, dataset_file: Path) -> dict[str, Any]:
+    """Builds the audit report of one run folder, writes it to audit.json there and returns it."""
     data = json.loads((results_dir / "results.json").read_text())
     rows, changes = rescored(data["rows"])
     dataset = json.loads(dataset_file.read_text())
@@ -59,6 +60,7 @@ def audit(results_dir: Path, dataset_file: Path) -> dict[str, Any]:
 
 
 def coverage(rows, dataset) -> dict[str, Any]:
+    """Which dataset cases ran, which never ran, and which crashed or did not complete."""
     expected = {e["inputs"]["case_id"] for e in dataset}
     ran = {r["case_id"] for r in rows}
     unfinished = [r["case_id"] for r in rows if r["error"] or not scores_of(r).get("completed")]
@@ -66,6 +68,7 @@ def coverage(rows, dataset) -> dict[str, Any]:
 
 
 def category_scores(rows) -> dict[str, dict[str, Any]]:
+    """Mean and count of every check per category; TableLens is split into its switch-on and switch-off runs."""
     table: dict[str, dict[str, list[float]]] = defaultdict(lambda: defaultdict(list))
     for r in rows:
         group = r["category"] + ("" if r["category"] != "tablelens" else ("_on" if r["inputs"].get("table_lens") else "_off"))
@@ -76,6 +79,7 @@ def category_scores(rows) -> dict[str, dict[str, Any]]:
 
 
 def tablelens(rows) -> dict[str, Any]:
+    """Pairs the ON and OFF run of each TableLens question and lists where the switch helped or hurt value_in_answer."""
     pairs: dict[str, dict[str, float]] = defaultdict(dict)
     for r in rows:
         if r["category"] == "tablelens":
@@ -87,6 +91,7 @@ def tablelens(rows) -> dict[str, Any]:
 
 
 def judge(rows) -> dict[str, Any]:
+    """Judge score spread and failures, and the cases where its groundedness disagrees with the exact value check."""
     judged = [r for r in rows if "groundedness" in scores_of(r)]
     grounded = [scores_of(r)["groundedness"] for r in judged]
     disagreements = []
@@ -105,6 +110,7 @@ def judge(rows) -> dict[str, Any]:
 
 
 def cost(rows, results_dir: Path) -> dict[str, Any]:
+    """Per-case app costs summed and checked against the app ledger (the gap is unaccounted); the judge ledger."""
     per_case = sum(Decimal(str(scores_of(r).get("cost_usd", 0))) for r in rows)
     app, judge_ledger = SpendLedger(results_dir / "app_ledger.json").summary(), SpendLedger(results_dir / "judge_ledger.json").summary()
     return {"app_cases_sum_usd": str(round(per_case, 4)), "app_ledger_usd": app["committed_usd"], "app_attempts": app["attempts_used"],
@@ -124,6 +130,7 @@ def upload_scan(rows) -> dict[str, Any]:
 
 
 def latency(rows) -> dict[str, Any]:
+    """Median and slowest (seconds, case id) per category, over the cases that produced outputs."""
     by: dict[str, list[tuple[float, str]]] = defaultdict(list)
     for r in rows:
         if r["outputs"]:
@@ -132,6 +139,7 @@ def latency(rows) -> dict[str, Any]:
 
 
 def _strings(value: Any):
+    """Yields every string nested anywhere inside dicts and lists."""
     if isinstance(value, str):
         yield value
     elif isinstance(value, dict):

@@ -29,6 +29,7 @@ PHONE = "+94 77 123 4567"
 
 @dataclass(frozen=True)
 class Case:
+    """One evaluation case; `example()` turns it into a LangSmith example (inputs, reference outputs, metadata)."""
     case_id: str
     category: str
     kind: str                                   # message | plan | package
@@ -76,6 +77,7 @@ def reference_values(rows: list[dict[str, Any]], column: str) -> list[float]:
 
 
 def _numeric(value: Any) -> bool:
+    """True when the value converts to a number (SQL results may carry numbers as strings or decimals)."""
     try:
         float(value)
         return True
@@ -133,6 +135,7 @@ PACKAGES = [
 
 
 def planning_cases() -> list[Case]:
+    """One Planning Brief case and one package assessment per PACKAGES entry, with the evidence each must contain."""
     brief = Case("P1-brief", "planning", "plan", {"plan": BRIEF},
                  {"kinds": {"similar_project": 3, "model_prediction": 3}, "min_sections": 4})
     packages = [Case(f"P{n}-package", "planning", "package", {"package": p}, {"kinds": {"model_prediction": 3}})
