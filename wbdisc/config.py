@@ -41,6 +41,7 @@ def _env_bool(name: str, default: bool) -> bool:
     return os.environ.get(name, str(default)).strip().lower() in {"1", "true", "yes", "y"}
 
 
+# Discovery settings. Defaults are read from the environment once, when this module is imported.
 @dataclass(frozen=True)
 class Settings:
     # Endpoints (overridable so a mirror or proxy can be used)

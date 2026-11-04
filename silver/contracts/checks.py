@@ -13,6 +13,7 @@ def _cnt(df: DataFrame, cond) -> int:
 
 
 def check_lines(lines: DataFrame, bronze: DataFrame, projects: DataFrame, rep: DQReport) -> None:
+    """Data-quality rules for the DS00005 supplier lines (contract_award_lines)."""
     n = lines.count()
     rep.equals("lines:rows_equal_bronze", n, bronze.count())
     rep.equals("lines:line_key_unique", lines.select("line_key").distinct().count(), n)
@@ -70,6 +71,7 @@ def check_lines(lines: DataFrame, bronze: DataFrame, projects: DataFrame, rep: D
 
 
 def check_contracts(contracts: DataFrame, lines: DataFrame, rep: DQReport) -> None:
+    """Data-quality rules for the contract-level table built from the supplier lines."""
     n = contracts.count()
     rep.equals("contracts:rows_equal_distinct_wb_contract_numbers", n, lines.select("wb_contract_number").distinct().count())
     rep.equals("contracts:key_unique", contracts.select("wb_contract_number").distinct().count(), n)
@@ -95,6 +97,7 @@ def check_contracts(contracts: DataFrame, lines: DataFrame, rep: DQReport) -> No
 
 
 def check_legacy(legacy: DataFrame, bronze: DataFrame, projects: DataFrame, ds5_contracts: DataFrame, rep: DQReport) -> None:
+    """Data-quality rules for the DS01004 legacy contracts (contract_awards_legacy)."""
     n = legacy.count()
     rep.equals("legacy:rows_equal_bronze", n, bronze.count())
     rep.equals("legacy:contract_number_unique", legacy.select("contract_number").distinct().count(), n)

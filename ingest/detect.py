@@ -30,6 +30,7 @@ ENGLISH = re.compile(r"\b(the|and|of|for|in|is|to|project|procurement|with)\b", 
 
 
 def sha256_of(path: Path) -> str:
+    """SHA-256 of the file, read in 1 MB blocks."""
     digest = hashlib.sha256()
     with path.open("rb") as fh:
         for block in iter(lambda: fh.read(1 << 20), b""):
@@ -57,6 +58,7 @@ def sniff(path: Path) -> str:
 
 
 def _office(path: Path) -> str:
+    """docx or xlsx, told apart by the parts inside the ZIP container."""
     try:
         names = set(zipfile.ZipFile(path).namelist())
     except zipfile.BadZipFile as error:
@@ -69,6 +71,7 @@ def _office(path: Path) -> str:
 
 
 def _text_format(path: Path) -> str:
+    """json (including JSON Lines) or csv, judged from the decoded text; anything else is quarantined."""
     text = read_text(path)
     stripped = text.lstrip()
     if stripped[:1] in "[{":
@@ -89,6 +92,7 @@ def _text_format(path: Path) -> str:
 
 
 def _is_json_object(line: str) -> bool:
+    """True when the line parses as a JSON object (used to recognise JSON Lines files)."""
     try:
         return isinstance(json.loads(line), dict)
     except json.JSONDecodeError:
@@ -96,6 +100,7 @@ def _is_json_object(line: str) -> bool:
 
 
 def read_text(path: Path) -> str:
+    """The file decoded with the first encoding that works: UTF-8 (with or without BOM), Windows-1252, then Latin-1."""
     raw = path.read_bytes()
     for encoding in ("utf-8-sig", "cp1252", "latin-1"):
         try:
@@ -138,6 +143,7 @@ def check_type(declared: str | None, detected: str | None) -> tuple[str, list[st
         return detected, []
     if detected is None:
         return declared, ["type_unconfirmed: the content does not name its document type"]
+    # The icr/ folder holds IEG reviews too, so an ICRR found there is expected, not a mismatch.
     compatible = detected == declared or (declared == "ICR" and detected == "ICRR")
     if not compatible:
         raise Quarantined("type_mismatch", f"the content looks like {detected} but the file is in the {declared} folder")

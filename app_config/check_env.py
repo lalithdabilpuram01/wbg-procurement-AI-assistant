@@ -30,6 +30,7 @@ MODEL_CATALOG_FORMAT = re.compile(r"^@[\w.-]+/\S+$")
 NOT_ALLOWED_IN_ENV_FILE = ("ANTHROPIC_API_KEY", "XAI_API_KEY", "PORTKEY_CONFIG_ID", "WBG_ALLOW_LIVE_LLM_CALLS")
 
 
+# Result of one check: lists of variable names only, so the report can be printed safely.
 @dataclass
 class EnvCheckReport:
     missing: list[str] = field(default_factory=list)       # required but empty or absent
@@ -42,6 +43,7 @@ class EnvCheckReport:
 
 
 def read_env_file(env_file: Path = ENV_FILE) -> dict[str, str]:
+    """Read the .env file into a dict without touching os.environ; returns {} when there is no file."""
     if not env_file.exists():
         return {}
     return {name: value for name, value in dotenv_values(env_file).items() if value is not None}
@@ -54,6 +56,7 @@ def merged_settings(file_values: dict[str, str]) -> dict[str, str]:
 
 
 def check(settings: dict[str, str], file_values: dict[str, str]) -> EnvCheckReport:
+    """Check the merged settings and the raw .env values; returns which names are missing, invalid or not allowed."""
     report = EnvCheckReport()
     report.missing = [name for name in REQUIRED if not settings.get(name, "").strip()]
 
@@ -64,11 +67,13 @@ def check(settings: dict[str, str], file_values: dict[str, str]) -> EnvCheckRepo
         if settings.get(name, "false").strip().lower() not in ("true", "false"):
             report.invalid.append(name)
 
+    # Judged on the .env file only: these may be set in the process environment, just never stored on disk.
     report.not_allowed = [name for name in NOT_ALLOWED_IN_ENV_FILE if file_values.get(name, "").strip()]
     return report
 
 
 def print_report(report: EnvCheckReport, env_file_found: bool) -> None:
+    """Print the check result as names and counts only (no values)."""
     print(f".env file: {'found' if env_file_found else 'NOT FOUND (copy .env.example to .env)'}")
     print("Missing: " + (", ".join(report.missing) or "none"))
     print("Invalid format: " + (", ".join(report.invalid) or "none"))
@@ -77,6 +82,7 @@ def print_report(report: EnvCheckReport, env_file_found: bool) -> None:
 
 
 def main() -> int:
+    """Run the check and print the report; returns the process exit code (0 when OK)."""
     file_values = read_env_file()
     report = check(merged_settings(file_values), file_values)
     print_report(report, ENV_FILE.exists())

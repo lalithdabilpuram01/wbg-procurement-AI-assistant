@@ -23,6 +23,7 @@ MANIFEST = manifest("WBG_REF_BRONZE_MANIFEST", REF_BRONZE_INPUTS_MANIFEST)
 
 
 def load_manifest_vintages(bronze_folder: str, manifest_path: Path = MANIFEST) -> list[dict]:
+    """Manifest entries of one reference Bronze folder: vintage, retrieval time, SHA-256, records and URL per file."""
     files = json.loads(manifest_path.read_text())["files"]
     return [{"file_name": Path(f["staged_file"]).name, "source_lastupdated": f["source_lastupdated"],
              "source_retrieved_utc": f["retrieved_utc"], "source_file_sha256": f["sha256"],
@@ -64,6 +65,7 @@ def verify_csv_source_file(spark: SparkSession, bronze: DataFrame, columns: list
 
 
 def verify_source_files(spark: SparkSession, bronze: DataFrame, vintages: list[dict], report: DQReport) -> None:
+    """Check each Volume file behind the Bronze rows against the manifest, and its lines against raw_record."""
     paths = sorted(r[0] for r in bronze.select("source_file").distinct().collect())
     files = {r.path.split("/")[-1]: bytes(r.content) for r in spark.read.format("binaryFile").load(paths).select("path", "content").collect()}
     by_name = {v["file_name"]: v for v in vintages}
@@ -79,6 +81,7 @@ def verify_source_files(spark: SparkSession, bronze: DataFrame, vintages: list[d
     for n, b in files.items():
         text = (gzip.decompress(b) if n.endswith(".gz") else b).decode("utf-8")
         lines = [ln for ln in text.splitlines() if ln.strip()]
+        # Sorted hash lists: line order does not matter, but a missing or duplicated line does.
         if sorted(hashlib.sha256(ln.encode("utf-8")).hexdigest() for ln in lines) != sorted(bronze_hashes.get(n, [])):
             mismatch[n] = {"file_lines": len(lines), "bronze_rows": len(bronze_hashes.get(n, []))}
     report.equals("bronze_records_equal_source_file_lines (exact, per file)", mismatch, {})

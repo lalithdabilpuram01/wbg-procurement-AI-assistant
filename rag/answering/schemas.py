@@ -38,6 +38,7 @@ class DraftAnswer(BaseModel):
     limitations: list[str] = []
 
 
+# Final citation shown to the user; every field is copied from index metadata, never from generator text.
 class Citation(BaseModel):
     evidence_id: str
     unit_id: str
@@ -62,6 +63,7 @@ class Citation(BaseModel):
     plan_version_id: str | None = None
 
 
+# One generated claim after validation, with the result of every check.
 class ClaimResult(BaseModel):
     text: str
     evidence_ids: list[str]
@@ -69,12 +71,14 @@ class ClaimResult(BaseModel):
     checks: dict
 
 
+# Values that disagree for one field, each tied to its evidence ID.
 class Conflict(BaseModel):
     field: str
     values: list[dict]
     source: Literal["typed_record", "generator_reported", "deterministic"]
 
 
+# The full response returned to the caller: answer, citations, conflicts, limitations and a trace.
 class AnswerResponse(BaseModel):
     question: str
     status: Status
@@ -92,6 +96,7 @@ class AnswerResponse(BaseModel):
 
 
 def export(out: Path) -> None:
+    """Write the JSON schemas of DraftAnswer, AnswerResponse and Citation into the given folder."""
     out.mkdir(parents=True, exist_ok=True)
     for m in (DraftAnswer, AnswerResponse, Citation):
         (out / f"{m.__name__}.schema.json").write_text(json.dumps(m.model_json_schema(), indent=1))

@@ -70,6 +70,7 @@ SPEC: dict[str, dict[str, Any]] = {
 
 
 def main() -> int:
+    """Dry run by default: build and check the three contract tables and save the reports; write mode creates them."""
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--mode", choices=["dry-run", "write"], default="dry-run")
     ap.add_argument("--confirm-create", action="store_true")
@@ -82,6 +83,7 @@ def main() -> int:
     run_dir = RUNS / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
     spark = get_spark(args.profile)
+    # Version and row count of each input table before the write, so the verify script can prove nothing else changed.
     baseline: dict = {"bronze": {}, "silver": {}, "targets_exist": {k: spark.catalog.tableExists(v) for k, v in TARGETS.items()},
                       "cohort_manifest_sha256": hashlib.sha256(COHORT.read_bytes()).hexdigest()}
     for group, tables in (("bronze", [T.BRONZE_DS5, T.BRONZE_DS1]), ("silver", [f"{S}.{t}" for t in EXISTING_SILVER])):

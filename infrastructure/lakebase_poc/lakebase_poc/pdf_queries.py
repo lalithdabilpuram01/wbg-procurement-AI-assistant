@@ -22,6 +22,7 @@ OUTPUT = PROJECT_DIR / "results" / "pdf_poc_queries.npz"
 
 
 def benchmark_questions() -> list[dict]:
+    """The benchmark questions whose gold evidence is in the POC document, with their gold pages."""
     benchmark = json.loads((REPO / "rag" / "retrieval" / "benchmark_v1.json").read_text())
     selected = []
     for question in benchmark["questions"]:
@@ -32,6 +33,7 @@ def benchmark_questions() -> list[dict]:
 
 
 def main() -> None:
+    """Encode those questions with the cached retrieval model and save the vectors to OUTPUT."""
     sys.dont_write_bytecode = True
     sys.path.insert(0, str(REPO))
     from rag.retrieval import core

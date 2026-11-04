@@ -47,6 +47,7 @@ def rows(spark, table: str, *cols: str) -> list[dict]:
 
 
 def expected(spark, run_id: str) -> dict:
+    """Every expected Gold row, keyed by (country code, year), recomputed in plain Python from the Silver tables."""
     eco = [r for r in rows(spark, "wdi_country", "country_code", "country_wb_id", "country_name", "entity_type") if r["entity_type"] == "economy"]
     vals: dict = defaultdict(dict)
     meta: dict = {}
@@ -97,6 +98,7 @@ def expected(spark, run_id: str) -> dict:
 
 
 def main() -> int:
+    """Recompute the table (or the transform's frame, with --dry-run) independently and compare; 0 when all passed."""
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--run-id", required=True)
     ap.add_argument("--dry-run", action="store_true")

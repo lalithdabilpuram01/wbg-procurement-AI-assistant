@@ -31,6 +31,7 @@ class LegacyCacheError(RuntimeError):
 
 @dataclass
 class ImportReport:
+    """Outcome of importing one legacy .npy file into the store, with the provenance evidence that allowed it."""
     file: str
     scope: str
     units: int
@@ -70,6 +71,7 @@ def provenance_evidence(path: Path, config: EmbeddingConfig) -> dict:
 
 
 def read_legacy_matrix(path: Path, n_units: int, config: EmbeddingConfig) -> np.ndarray:
+    """Load and check a legacy matrix: shape, dtype, finite values and unit norm; raises LegacyCacheError otherwise."""
     if not path.is_file():
         raise LegacyCacheError(f"no legacy cache {path.name} (units, order or texts differ from the cached index)")
     try:

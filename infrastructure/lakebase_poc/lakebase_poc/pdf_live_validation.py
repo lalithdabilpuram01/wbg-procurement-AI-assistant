@@ -48,6 +48,7 @@ def opened_files_while(build) -> tuple[Any, list[str]]:
 
 
 def precheck_offline() -> dict[str, Any]:
+    """Rebuild the bundle offline and confirm the approved counts, hashes, cache key and privacy rules."""
     bundle, opened = opened_files_while(pdf_evidence.build_bundle)
     counts = {t: len(r) for t, r in bundle.records.items()}
     vectors = np.stack(bundle.vectors)
@@ -96,6 +97,7 @@ def endpoint_host_matches(host: str) -> bool:
 
 
 def precheck_live() -> dict[str, Any]:
+    """Read-only checks on the live database: approved endpoint and database, extensions, schemas, clean target."""
     settings = load_settings()
     with connect(settings, autocommit=True) as conn:
         with conn.cursor() as cur:
@@ -128,6 +130,7 @@ def numeric_lookup_sql(conn, name: str) -> list[dict[str, Any]]:
 
 
 def measure() -> dict[str, Any]:
+    """Read-only measurements after the write: row counts, storage, HNSW index and plans, lookup, content match."""
     bundle = pdf_evidence.build_bundle()
     with connect(load_settings(), autocommit=True) as conn:
         register_vector(conn)
@@ -182,6 +185,7 @@ def measure() -> dict[str, Any]:
 
 
 def main(command: str) -> None:
+    """Run one command (precheck-offline, precheck-live or measure), then save and print its result."""
     if command == "precheck-offline":
         result = precheck_offline()
     elif command in ("precheck-live", "measure"):

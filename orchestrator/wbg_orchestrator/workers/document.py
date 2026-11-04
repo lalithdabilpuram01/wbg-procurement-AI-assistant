@@ -61,6 +61,7 @@ class TableFlagIndex:
     """Extraction flags of table rows (pilot_v2_1 `extraction_flags`), read from the sanitised shared table rows."""
 
     def __init__(self, processed_dir: Path):
+        """Load the flags of every flagged row from shared/table_rows.jsonl; no file means no flags."""
         self._flags: dict[tuple[str, int], dict] = {}
         path = processed_dir / "shared" / "table_rows.jsonl"
         if path.is_file():
@@ -70,6 +71,7 @@ class TableFlagIndex:
                     self._flags[(row["table_id"], row["row_index"])] = row["extraction_flags"]
 
     def warnings(self, table_id: str | None, unit_id: str | None) -> tuple[str, ...]:
+        """Quality warnings for the rows a table window covers (its unit id ends in ":w<first>-<last>")."""
         match = WINDOW.search(unit_id or "")
         if not table_id or not match:
             return ()
@@ -84,6 +86,7 @@ class TableFlagIndex:
 
 
 class DocumentIntelligenceWorker:
+    """Worker for document questions: the RAG answer pipeline, plus TableLens rows and uploaded-document passages."""
     name = WorkerName.DOCUMENT
     operations = frozenset({"answer_document_question", "retrieve_passages"})
 
@@ -105,6 +108,7 @@ class DocumentIntelligenceWorker:
         return self._retriever_for(release)
 
     def run(self, task: AgentTask, context: WorkerContext) -> WorkerOutput:
+        """Check the ticket and the release, then run the operation; timeouts and connection errors are retryable."""
         self._authority.verify(context.ticket, task)
         if context.rag_release not in context.authorization.scope.rag_releases:
             return WorkerOutput(TaskState.FAILED, error=_error(task, ErrorCategory.AUTHORIZATION, "rag_release_not_in_scope",
@@ -122,6 +126,10 @@ class DocumentIntelligenceWorker:
                                                              "The operation is not offered by this worker."))
 
     def _answer(self, task: AgentTask, context: WorkerContext) -> WorkerOutput:
+        """A grounded answer: every pipeline citation becomes a record, after any TableLens and uploaded passages.
+
+        When the pipeline finds nothing, the extra sources alone can still make the task succeed.
+        """
         question = scoped_question(task.question, context.upstream_evidence)
         response = self._pipeline_for(context.rag_release).answer(question)
         usage = _usage(response)
@@ -146,6 +154,7 @@ class DocumentIntelligenceWorker:
         return WorkerOutput(status, evidence, usage, notes=notes)
 
     def _retrieve(self, task: AgentTask, context: WorkerContext) -> WorkerOutput:
+        """The top 5 hybrid search hits as records (no answer generation), plus TableLens and uploaded passages."""
         question = scoped_question(task.question, context.upstream_evidence)
         result = self._retriever_for(context.rag_release).search(question, method="hybrid", k=5, guarded=True)
         if result["status"] == "withheld_personal_data":
@@ -196,6 +205,7 @@ class DocumentIntelligenceWorker:
 
 # ------------------------------------------------------------------------------------------------------ helpers
 def _extra_only(records: tuple[EvidenceRecord, ...]) -> str:
+    """The note for an answer that rests only on TableLens rows, or on uploaded passages (with or without tables)."""
     return "tablelens_only" if all(r.unit_id and r.unit_id.startswith("tablelens:") for r in records) else "uploaded_or_tables_only"
 
 
@@ -218,6 +228,8 @@ def _uploaded_evidence(task: AgentTask, hit: dict, release: str) -> EvidenceReco
 
 def _citation_evidence(task: AgentTask, c: dict[str, Any], release: str, flags: TableFlagIndex | None,
                        conflict: bool) -> EvidenceRecord:
+    """One pipeline citation as a record. Only a verified page check makes it VERIFIED, and only verified narrative
+    text or typed plan records may support figures; table windows never do."""
     unit_type = c.get("unit_type")
     page_check = c.get("page_check")
     verified = page_check in VERIFIED_PAGE_CHECKS
@@ -292,11 +304,13 @@ def row_ranges(rows: list[int]) -> str:
 
 
 def _combined(a: Usage, b: Usage) -> Usage:
+    """The sum of two usages (calls and tokens; cost is not tracked here)."""
     return Usage(llm_calls=a.llm_calls + b.llm_calls, input_tokens=a.input_tokens + b.input_tokens,
                  output_tokens=a.output_tokens + b.output_tokens)
 
 
 def _usage(response: Any) -> Usage:
+    """Claude usage reported by the answer pipeline's generator; none when the generator is not an LLM."""
     meta = (response.trace or {}).get("generator_meta", {}) if hasattr(response, "trace") else {}
     if not getattr(response, "generator_is_llm", False):
         return Usage()
@@ -319,4 +333,5 @@ def _error(task: AgentTask, category: ErrorCategory, code: str, message: str) ->
 
 @lru_cache(maxsize=4)
 def table_flag_index(processed_dir: str) -> TableFlagIndex:
+    """The flag index of a processed corpus directory, loaded once per directory."""
     return TableFlagIndex(Path(processed_dir))

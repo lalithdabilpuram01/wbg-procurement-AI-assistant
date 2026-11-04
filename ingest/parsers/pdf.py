@@ -21,7 +21,9 @@ STATUS_ADJUSTMENT = {"amount_verified": 0.1, "exact_actual_date_supported": 0.1,
 
 
 def parse(path: Path, sha256: str, document_id: str, doc_type: str, project_id: str | None, ref: Reference) -> ParsedDocument:
+    """Run the corpus extractor on a text PDF and map its output onto the shared document model."""
     project = ref.project(project_id) or {}
+    # The extractor expects a manifest row; fields an inbox file does not have are left empty.
     row = {"document_id": document_id, "project_id": project_id or "", "local_path": str(path), "sha256": sha256,
            "country_code": project.get("country_code") or "", "doc_type": doc_type, "role": "inbox", "title": "",
            "document_date": "", "disclosure_date": "", "language": "", "version_type": "", "report_number": "", "guid": "",
@@ -65,6 +67,7 @@ def _sections(records: list[dict]) -> list[Section]:
 
 
 def _tables(tables: list[dict], rows: list[dict]) -> list[TableBlock]:
+    """Tables with their body rows in order; the header comes from the table's columns, header rows are skipped."""
     by_table: dict[str, list[dict]] = {}
     for r in rows:
         by_table.setdefault(r["table_id"], []).append(r)
@@ -78,6 +81,7 @@ def _tables(tables: list[dict], rows: list[dict]) -> list[TableBlock]:
 
 
 def _activity(a: dict) -> Record:
+    """A procurement-plan activity as a plan_activity Record, with the extractor's cleaned fields."""
     fields = {"reference": a["activity_reference_printed"], "reference_norm": normalise_reference(a["activity_reference_printed"]),
               "description": a.get("description_clean"), "method": a.get("method_clean"), "category": a.get("category_family"),
               "review_type": a.get("review_type"), "status": a.get("process_status"),

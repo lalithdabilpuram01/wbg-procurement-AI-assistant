@@ -52,6 +52,7 @@ class SupervisedMcpSession:
 
     def __init__(self, parameters: Callable[[], Any], tracer: OrchestratorTracer | None = None,
                  open_session: Callable[[Any], Any] = lambda p: BackgroundMcpSession(p).open()):
+        """Keep how to launch and open the server; the session starts in `open`, and `restarts` counts restarts."""
         self._parameters, self._open = parameters, open_session
         self._tracer = tracer or OrchestratorTracer.disabled()
         self._lock = threading.Lock()
@@ -59,17 +60,20 @@ class SupervisedMcpSession:
         self.restarts = 0
 
     def open(self) -> "SupervisedMcpSession":
+        """Start the server process and check its tool list; raises McpUnavailable when either fails."""
         with self._lock:
             self._start()
         return self
 
     def close(self) -> None:
+        """Close the session if one is open; an error while closing is ignored."""
         with self._lock:
             if self._session is not None:
                 _quietly(self._session.close)
                 self._session = None
 
     def call(self, tool: str, **arguments: Any) -> dict[str, Any]:
+        """Call one tool inside an `mcp.tool_call` span; tool errors and an unavailable server are re-raised."""
         started = time.perf_counter()
         sql = arguments.get("sql") if isinstance(arguments.get("sql"), str) else None        # masked on the span
         with self._tracer.span("mcp.tool_call", operation=tool, request_id=arguments.get("request_id"), sql=sql) as span:
@@ -85,6 +89,7 @@ class SupervisedMcpSession:
             return result
 
     def _call_with_restart(self, tool: str, arguments: dict[str, Any]) -> dict[str, Any]:
+        """Make the call; if the transport breaks, restart the server and try this call once more."""
         session = self._current()
         try:
             return session.call(tool, **arguments)
@@ -105,12 +110,14 @@ class SupervisedMcpSession:
                 raise McpUnavailable(f"{MCP_SERVER} did not answer after a restart") from retry_error
 
     def _current(self) -> Any:
+        """The live session, starting a new server process when there is none."""
         with self._lock:
             if self._session is None:
                 self._start()
             return self._session
 
     def _start(self) -> None:
+        """Open a session; a server whose tools differ from the expected set is closed and refused."""
         try:
             session = self._open(self._parameters())
         except Exception as error:
@@ -130,6 +137,7 @@ def mcp_parameters(principal_id: str, databricks_profile: str, audit_log: Path) 
 def gold_sql(tools: ToolCaller) -> RunSql:
     """Fixed, reviewed Gold lookups through the `execute_readonly_sql` tool (over MCP or in-process)."""
     def run(sql: str, parameters: dict[str, Any]) -> list[dict[str, Any]]:
+        """Run one fixed query and return its rows; any status other than ok raises LookupFailed."""
         result = tools.call("execute_readonly_sql", {"sql": sql, "parameters": parameters, "max_rows": GATEWAY_MAX_ROWS},
                             current_trace_id() or "gold-lookup")
         if result.get("status") != "ok":
@@ -140,6 +148,7 @@ def gold_sql(tools: ToolCaller) -> RunSql:
 
 
 def _quietly(close: Callable[[], None]) -> None:
+    """Call `close` and ignore any error (it is logged at debug level)."""
     try:
         close()
     except Exception:                                            # a dead server cannot be closed cleanly; nothing to do

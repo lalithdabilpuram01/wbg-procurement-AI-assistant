@@ -52,6 +52,7 @@ def corpus():
 
 
 def build() -> dict[str, Any]:
+    """Run the 3.0.0 extraction into pilot_v3 with the network blocked; raises on an unexpected tokenizer."""
     with no_network():                                                         # cached tokenizer and local PDFs only
         manifest = pipeline_v2.run(profile="3.0.0")
     statuses = manifest["document_status"]
@@ -67,6 +68,7 @@ def build() -> dict[str, Any]:
 
 
 def embed() -> dict[str, Any]:
+    """Encode the release's missing units into its own store (network blocked) and report what was generated."""
     config = local_model_config()
     if not STORE.exists():
         UnitEmbeddingStore(config).save(STORE)                                # a new, empty store for this release only
@@ -84,6 +86,8 @@ def embed() -> dict[str, Any]:
 
 
 def install() -> dict[str, Any]:
+    """Write releases/pilot_v3/release.json binding corpus, indexed text, store and model, then build the retriever
+    once as a check."""
     config = local_model_config()
     UnitEmbeddingStore.load(STORE, config)                                    # full integrity check
     corpus_dir = ingestion_config.OUTPUT_V3
@@ -107,6 +111,7 @@ def install() -> dict[str, Any]:
 
 
 def main(step: str) -> None:
+    """Run one step (build, embed or install) and save its result as evidence in results/<step>.json."""
     RESULTS.mkdir(exist_ok=True)
     result = {"build": build, "embed": embed, "install": install}[step]()
     (RESULTS / f"{step}.json").write_text(json.dumps(result, indent=1, sort_keys=True, default=str))

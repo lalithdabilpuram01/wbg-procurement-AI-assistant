@@ -153,8 +153,7 @@ The system has six layers. Each layer talks only to the layer below it.
 
 ## 5. How the code is organised
 
-Each top-level folder is one working component. Tests are kept apart in `tests/`. Code that the app no longer uses is
-kept for the record in `research/`.
+Each top-level folder is one working component. Tests are kept apart in `tests/`.
 
 ```text
 procurement-intelligence/
@@ -176,7 +175,6 @@ procurement-intelligence/
   tests/               all tests, one folder per component; tests/live/ runs only with WBG_RUN_LIVE_TESTS=1
   docs/                architecture, decisions, reports, evaluation results
   demo/                demo questions with expected answers
-  research/            history; not used by the app
 ```
 
 ---
@@ -212,5 +210,3 @@ is logged once, with its step, file and line.
 | [docs/evaluation/RESULTS.md](docs/evaluation/RESULTS.md) | Evaluation results |
 | [docs/decisions/](docs/decisions/) | Scope and data decisions (for example D-26 and D-32) |
 | [demo/DEMO_QUESTIONS.pdf](demo/DEMO_QUESTIONS.pdf) | Demo questions with expected answers |
-
-Phase 1 discovery notes (history) are in [research/discovery/PHASE1_README.md](research/discovery/PHASE1_README.md).

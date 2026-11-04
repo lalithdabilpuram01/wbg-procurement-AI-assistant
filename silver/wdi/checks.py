@@ -15,6 +15,7 @@ def _counts(df: DataFrame, key: str) -> dict:
 
 
 def check_observations(silver: DataFrame, bronze: DataFrame, report: DQReport) -> None:
+    """Run every data-quality rule for wdi_indicator_observations and add the results to `report`."""
     n_years = YEARS[1] - YEARS[0] + 1
     # --- completeness: one Silver row per Bronze row
     report.equals("row_count_equals_bronze", silver.count(), bronze.count())
@@ -80,6 +81,7 @@ def check_observations(silver: DataFrame, bronze: DataFrame, report: DQReport) -
 
 
 def check_countries(countries: DataFrame, observations: DataFrame, report: DQReport) -> None:
+    """Run the data-quality rules for wdi_country (one row per API entity, unique codes, entity types)."""
     n = countries.count()
     api_total = countries.select("metadata_api_total").distinct().collect()
     report.equals("row_count_equals_api_total", n, api_total[0][0] if len(api_total) == 1 else api_total)

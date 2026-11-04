@@ -41,6 +41,7 @@ class AuditRejectedCalls(Middleware):
         self._principal_id = principal_id
 
     async def on_call_tool(self, context: MiddlewareContext, call_next):
+        """Pass the call on; if FastMCP rejects it, audit the rejection (known tool names only) and re-raise."""
         started = time.perf_counter()
         try:
             return await call_next(context)
@@ -54,12 +55,16 @@ class AuditRejectedCalls(Middleware):
 
 
 def build_server(service: StructuredDataService, principal_id: str, workspace: str) -> FastMCP:
+    """Build the FastMCP server with the seven tools, all bound to one fixed principal and workspace."""
     mcp = FastMCP("wbg-structured-procurement-data")
     mcp.add_middleware(AuditRejectedCalls(service, principal_id))
 
+    # A missing request id falls back to RequestContext's default, which generates a new one.
     def context(request_id: str | None) -> RequestContext:
         return RequestContext(principal_id, workspace, request_id) if request_id else RequestContext(principal_id, workspace)
 
+    # Each tool below only forwards to the service and returns its response as JSON. Tool docstrings are the
+    # descriptions the MCP client (and the model) sees, so they stay short and exact.
     @mcp.tool
     def search_table_registry(query: str, top_k: int = 5, request_id: str | None = None) -> dict[str, Any]:
         """Find the registered tables, views and metrics relevant to a question (authorized objects only)."""
@@ -104,6 +109,7 @@ def build_server(service: StructuredDataService, principal_id: str, workspace: s
 
 
 def main() -> None:
+    """Start the stdio MCP server for the principal and workspace set in the environment."""
     principal_id = os.environ.get("WBG_MCP_PRINCIPAL")
     workspace = os.environ.get("WBG_MCP_WORKSPACE")
     if not principal_id or not workspace:

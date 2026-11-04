@@ -1,5 +1,8 @@
 "use client";
 
+// The "Check a tender design" dialog. An uploaded file is first turned into text by POST /drafts/text so the user can
+// review it; AppShell then sends the form to POST /conversations/{id}/tenders.
+
 import { useRef, useState } from "react";
 import { FileSearch, Upload } from "lucide-react";
 import { api, type TenderInput } from "@/lib/api";
@@ -8,8 +11,11 @@ import { Input, Label, Select, Spinner, Textarea } from "@/components/ui/primiti
 import { Dialog, DialogContent } from "@/components/ui/overlays";
 import { CATEGORIES, METHODS, inDays } from "./package-dialog";
 
+// The API accepts at most 20,000 characters of draft (TenderSpec.draft_text) and cuts extracted text to that length.
 const MAX_DRAFT = 20_000;
 
+/** The file's bytes as base64 for the JSON upload. It converts in 32 KB chunks, because spreading a whole large
+ *  file into String.fromCharCode would exceed the argument limit. */
 async function asBase64(file: File): Promise<string> {
   const bytes = new Uint8Array(await file.arrayBuffer());
   let binary = "";
@@ -31,6 +37,7 @@ export function TenderDialog({ open, onOpenChange, onSubmit }:
   const set = <K extends keyof TenderInput>(key: K, value: TenderInput[K]) => setInput((p) => ({ ...p, [key]: value }));
   const validProject = /^P\d{6}$/.test(input.project_id);
 
+  /** Reads an uploaded draft through the API (nothing is stored there) and puts the text in the box for review. */
   const upload = async (picked: File | undefined) => {
     if (!picked) return;
     setReading(true);
@@ -42,6 +49,7 @@ export function TenderDialog({ open, onOpenChange, onSubmit }:
       setError(e instanceof Error ? e.message : "The file could not be read.");
     } finally {
       setReading(false);
+      // Cleared so picking the same file again still fires onChange.
       if (file.current) file.current.value = "";
     }
   };

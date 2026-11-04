@@ -97,6 +97,7 @@ def select_csv(src: Path, dst: Path, key_column: str, keep: set[str]) -> dict:
 
 
 def _open_binary(path: Path) -> IO[bytes]:
+    """Open a file for binary reading, decompressing it on the fly when its name ends in .gz."""
     if path.suffix == ".gz":
         return cast(IO[bytes], gzip.open(path, "rb"))
     return path.open("rb")

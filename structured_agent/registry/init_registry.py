@@ -22,6 +22,7 @@ from structured_agent.registry.vector_index import EmbeddingModel
 
 
 def main() -> None:
+    """Build, embed and load the registry, then check it can be read with the read-only role."""
     settings = load_settings()
     bundle = build_bundle()
     bundle_path = METADATA_DIR / "bundles" / f"{bundle.build.build_id}.json"

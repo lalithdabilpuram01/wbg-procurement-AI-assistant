@@ -54,6 +54,7 @@ def _one(df: DataFrame, col: str) -> Column:
 
 
 def contracts_agg(c: DataFrame) -> DataFrame:
+    """Per project: contract count, exact total amount, multi-supplier and missing-amount counts, signing date range."""
     return c.groupBy("project_id").agg(
         F.count("*").alias("contract_award_count"), F.sum("contract_amount_usd").cast("decimal(38,2)").alias("contract_award_amount_usd"),
         F.sum(F.col("is_multi_supplier").cast("int")).cast("bigint").alias("multi_supplier_contract_count"),
@@ -62,6 +63,7 @@ def contracts_agg(c: DataFrame) -> DataFrame:
 
 
 def notices_agg(n: DataFrame) -> DataFrame:
+    """Per project: notice count, count per notice type, publication date range and notices in duplicate groups."""
     return n.groupBy("project_id").agg(
         F.count("*").alias("notice_count"),
         *[F.sum(F.when(F.col("notice_type") == t, 1).otherwise(0)).cast("bigint").alias(c) for t, c in NOTICE_TYPES.items()],
@@ -70,6 +72,7 @@ def notices_agg(n: DataFrame) -> DataFrame:
 
 
 def build(dfs: dict[str, DataFrame], silver_versions: str, run_id: str) -> DataFrame:
+    """One row per cohort project with contract, notice, financing, IEG, detail and country-context columns."""
     p = dfs["projects"]
     ca, nt, nd, ib, ida = dfs["contract_awards"], dfs["procurement_notices"], dfs["procurement_notice_details"], dfs["ibrd_loans"], dfs["ida_credits"]
     ieg, pd, wc, ic = dfs["ieg_project_ratings"], dfs["project_details_v3"], dfs["wdi_country"], dfs["income_classification_history"]

@@ -20,6 +20,7 @@ TOP_K = 5
 
 @dataclass(frozen=True)
 class Query:
+    """One benchmark question with its gold pages and query vector."""
     query_id: str
     text: str
     gold_pages: list[int]
@@ -27,6 +28,7 @@ class Query:
 
 
 def load_queries(path: Path = QUERIES_FILE) -> list[Query]:
+    """Read the encoded benchmark questions written by pdf_queries."""
     data = np.load(path)
     return [Query(str(i), str(q), json.loads(str(g)), v.astype(np.float32))
             for i, q, g, v in zip(data["ids"], data["questions"], data["gold_pages"], data["vectors"])]
@@ -98,6 +100,7 @@ def citations(conn: psycopg.Connection, unit_ids: list[str]) -> list[dict]:
 
 
 def projects_present(conn: psycopg.Connection) -> list[str]:
+    """Distinct project ids stored in the documents and citations tables."""
     with conn.cursor() as cur:
         cur.execute(sql.SQL("SELECT DISTINCT project_id FROM {} UNION SELECT DISTINCT project_id FROM {}").format(
             _t("documents"), _t("citations")))

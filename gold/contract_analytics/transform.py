@@ -40,12 +40,14 @@ MISSING_COUNTRY = ["null", ""]  # literal "null" strings are published in DS0000
 
 
 def load_sources(spark) -> tuple[dict[str, DataFrame], str]:
+    """Read every Silver source, plus their current Delta versions as a JSON string (recorded on each Gold row)."""
     dfs = {t: spark.table(S + t) for t in SOURCES}
     versions = {t: spark.sql(f"DESCRIBE HISTORY {S}{t} LIMIT 1").collect()[0].version for t in SOURCES}
     return dfs, json.dumps(dict(sorted(versions.items())), separators=(",", ":"))
 
 
 def lines_agg(lines: DataFrame) -> DataFrame:
+    """Per contract: supplier-ID type flags, supplier countries, missing-country count and a hash of the line hashes."""
     missing = F.col("supplier_country_code").isNull() | F.col("supplier_country_code").isin(MISSING_COUNTRY)
     return lines.groupBy("wb_contract_number").agg(
         F.count("*").alias("_line_count"),
@@ -58,12 +60,14 @@ def lines_agg(lines: DataFrame) -> DataFrame:
 
 
 def links_agg(links: DataFrame) -> DataFrame:
+    """Per contract: number of notice links, whether any is ambiguous, and the earliest linked award notice date."""
     return links.groupBy("wb_contract_number").agg(
         F.count("*").alias("_links"), F.max((F.col("ambiguity_status") == "ambiguous").cast("int")).alias("_ambiguous"),
         F.min("notice_date").alias("earliest_linked_award_notice_date"))
 
 
 def build(dfs: dict[str, DataFrame], silver_versions: str, run_id: str) -> DataFrame:
+    """One row per Silver contract with project, country, income-group, supplier and notice-link context."""
     a, p, wc, ic = dfs["contract_awards"], dfs["projects"], dfs["wdi_country"], dfs["income_classification_history"]
     covered = dfs["procurement_notice_details"].select("project_id").distinct().withColumn("_covered", F.lit(True))
     proj = p.select("project_id", F.col("project_name"), F.col("region_name"), "geography_type", F.col("country_name").alias("project_country_name"),
@@ -80,6 +84,7 @@ def build(dfs: dict[str, DataFrame], silver_versions: str, run_id: str) -> DataF
     bstatus = (F.when(~single, F.lit("regional_project")).when(F.col("borrower_country_code").isNull(), F.lit("missing_in_source"))
                .when(F.col("borrower_country_code") == F.col("_w"), F.lit("equal_to_project_wdi_code")).otherwise(F.lit("differs_from_project_wdi_code")))
     codes = F.col("supplier_country_codes_published")
+    # Supplier countries are compared only when the borrower code matches the project and every line has a country.
     relation = (F.when((bstatus != "equal_to_project_wdi_code") | (F.col("supplier_lines_missing_country") > 0), F.lit("undetermined"))
                 .when(F.forall(codes, lambda c: c == F.col("borrower_country_code")), F.lit("all_suppliers_same_country"))
                 .otherwise(F.lit("includes_other_country")))

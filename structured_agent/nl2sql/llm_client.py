@@ -39,6 +39,7 @@ from structured_agent.nl2sql.settings import PORTKEY_CHAT_COMPLETIONS_URL, Claud
 SAFE_ERROR_TYPE = re.compile(r"^[a-z0-9_.-]{1,64}$")   # short provider codes only, never free text
 
 
+# Typed reasons an LLM call failed; the values match result.FailureClass so they map one to one.
 class LlmFailure(str, Enum):
     RATE_LIMITED = "provider_rate_limited"        # 429
     UNAVAILABLE = "provider_unavailable"          # 5xx, 529
@@ -57,8 +58,12 @@ TRANSIENT_FAILURES = {LlmFailure.RATE_LIMITED, LlmFailure.UNAVAILABLE, LlmFailur
 
 
 class LlmError(Exception):
+    """A failed LLM call: the failure class plus safe details (HTTP status, retry hint, short provider code)."""
+
     def __init__(self, failure: LlmFailure, status_code: int | None = None, retry_after_seconds: float | None = None,
                  provider_error_type: str | None = None):
+        """Keep the failure class and safe details; the message is the failure name plus HTTP status and provider
+        code."""
         self.failure = failure
         self.status_code = status_code
         self.retry_after_seconds = retry_after_seconds
@@ -74,6 +79,7 @@ class LlmError(Exception):
 
 CACHE_CONTROL = {"type": "ephemeral"}               # Anthropic prompt cache, 5-minute lifetime
 
+# One Claude call as the workflow describes it; turned into a Portkey request body by PortkeyClaudeClient.
 @dataclass(frozen=True)
 class ClaudeRequest:
     system: str
@@ -85,6 +91,7 @@ class ClaudeRequest:
     cache_prefix: str | None = None                # stable text sent before `user` and marked for prompt caching
 
 
+# The useful parts of a successful reply: the text, the parsed JSON (for structured replies) and token usage.
 @dataclass(frozen=True)
 class ClaudeResponse:
     content: str
@@ -98,6 +105,8 @@ class ClaudeResponse:
 
 
 class PortkeyClaudeClient:
+    """Claude through Portkey: one HTTP request per call, Claude-only, with typed errors (see the module docstring)."""
+
     def __init__(self, settings: ClaudeSettings, *, transport: httpx.MockTransport | None = None,
                  live_access: LiveAccess | None = None):
         """Offline (tests): pass an httpx.MockTransport. Live: pass a LiveAccess grant from authorize_live_access().
@@ -124,6 +133,7 @@ class PortkeyClaudeClient:
         return self._settings.model
 
     def complete(self, request: ClaudeRequest) -> ClaudeResponse:
+        """Send one request and wait for the whole reply; raises LlmError on any provider or output problem."""
         if self._live:
             require_live_env_opt_in()   # re-checked on every live request
         timeout = request.timeout_seconds or self._settings.timeout_seconds
@@ -168,12 +178,14 @@ class PortkeyClaudeClient:
 
     # ------------------------------------------------------------------------------------------------------ request
     def _headers(self, request: ClaudeRequest, timeout_seconds: float) -> dict[str, str]:
+        """Request headers: Portkey key, trace id and timeout."""
         # Deliberately no x-portkey-config header: Claude-only routing.
         return {"Content-Type": "application/json", "x-portkey-api-key": self._settings.api_key,
                 "x-portkey-trace-id": request.trace_id,
                 "x-portkey-request-timeout": str(int(timeout_seconds * 1000))}
 
     def _body(self, request: ClaudeRequest) -> dict[str, Any]:
+        """Build the OpenAI-compatible chat body with cache markers and, when asked, a strict JSON-schema format."""
         # Prompt caching (Anthropic, through Portkey): the system prompt and the stable prefix are cache breakpoints;
         # a prefix shorter than the model's minimum (about 1,024 tokens) is simply not cached.
         user: Any = request.user
@@ -195,6 +207,7 @@ class PortkeyClaudeClient:
     # ----------------------------------------------------------------------------------------------------- response
     @staticmethod
     def _http_error(response: httpx.Response) -> LlmError:
+        """Map a non-200 response to a typed LlmError; the response body is never kept."""
         status = response.status_code
         error_type = _provider_error_type(response)
         if status == 429:
@@ -209,8 +222,10 @@ class PortkeyClaudeClient:
 
     @staticmethod
     def _parse(payload: dict[str, Any], request: ClaudeRequest, duration_ms: int) -> ClaudeResponse:
+        """Check the reply came from Claude, then extract text, parsed JSON and token usage."""
         model = str(payload.get("model", ""))
         provider = str(payload.get("provider", "anthropic"))
+        # A reply from any other model means a fallback route was used: it is refused, never shown.
         if "claude" not in model.lower() or provider.lower() != "anthropic":
             raise LlmError(LlmFailure.UNEXPECTED_PROVIDER)
         try:
@@ -236,6 +251,7 @@ class _StreamedReply:
         self.model, self.provider, self.finish, self.usage = "", "anthropic", None, {}
 
     def add(self, line: str, on_text: Callable[[str], None]) -> None:
+        """Handle one server-sent event line: check the model, then pass any new text to `on_text`."""
         if not line.startswith("data:") or line[5:].strip() == "[DONE]":
             return
         try:
@@ -255,6 +271,7 @@ class _StreamedReply:
                 on_text(text)
 
     def response(self, duration_ms: int, structured: bool = False) -> ClaudeResponse:
+        """Join the streamed pieces into one ClaudeResponse, with the same truncation check as `complete`."""
         if not self.model:
             raise LlmError(LlmFailure.INVALID_OUTPUT)
         if self.finish == "length":
@@ -296,6 +313,7 @@ def _provider_error_type(response: httpx.Response) -> str | None:
 
 
 def _retry_after_seconds(response: httpx.Response) -> float | None:
+    """Seconds from the Retry-After header, when it is a plain number; None otherwise."""
     value = response.headers.get("retry-after")
     try:
         return float(value) if value is not None else None

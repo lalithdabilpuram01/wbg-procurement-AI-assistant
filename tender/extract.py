@@ -20,6 +20,8 @@ MAX_SENTENCE = 300
 
 @dataclass(frozen=True)
 class Term:
+    """One term read from the draft: its value, unit and the sentence it came from."""
+
     name: str
     value: float
     unit: str                    # days | percent | lots | usd | contracts | years | months

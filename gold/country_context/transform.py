@@ -36,6 +36,7 @@ CPIA = {"IQ.CPA.IRAI.XQ": "cpia_irai_overall", "IQ.CPA.PROP.XQ": "cpia_property_
 
 
 def load_sources(spark) -> tuple[dict[str, DataFrame], str]:
+    """Read every Silver source, plus their current Delta versions as a JSON string (recorded on each Gold row)."""
     dfs = {t: spark.table(S + t) for t in SOURCES}
     versions = {t: spark.sql(f"DESCRIBE HISTORY {S}{t} LIMIT 1").collect()[0].version for t in SOURCES}
     return dfs, json.dumps(dict(sorted(versions.items())), separators=(",", ":"))
@@ -51,12 +52,14 @@ def _pivot(df: DataFrame, code_col: str, mapping: dict[str, str], prefix: str) -
 
 
 def _one(df: DataFrame, col: str) -> str:
+    """The single value of `col` across the whole source; fails if there are several."""
     vals = [r[0] for r in df.select(col).distinct().collect()]
     assert len(vals) == 1, f"{col}: expected one source-wide value, got {len(vals)}"
     return vals[0]
 
 
 def build(dfs: dict[str, DataFrame], silver_versions: str, run_id: str) -> DataFrame:
+    """One row per economy and year (2000-2025) with WDI, WGI and CPIA values, coverage statuses and income groups."""
     wc = dfs["wdi_country"].filter("entity_type = 'economy'").select("country_code", F.col("country_wb_id").alias("country_iso3"), "country_name")
     grid = wc.crossJoin(dfs["wdi_country"].sparkSession.range(YEARS[0], YEARS[1] + 1).select(F.col("id").cast("int").alias("year")))
     wdi = _pivot(dfs["wdi_indicator_observations"].filter("entity_type = 'economy'"), "indicator_code", WDI, "wdi")
@@ -67,6 +70,7 @@ def build(dfs: dict[str, DataFrame], silver_versions: str, run_id: str) -> DataF
     wgi_eco = dfs["wgi_estimates"].filter("wdi_match_status = 'matched'").select("country_code").distinct().withColumn("_in_wgi", F.lit(True))
     wgi_years = dfs["wgi_estimates"].select("year").distinct().withColumn("_wgi_year", F.lit(True))
     inc = dfs["income_classification_history"]
+    # A calendar year overlaps two World Bank fiscal years (July-June): the one ending in it and the one starting in it.
     end = inc.select(F.col("iso3_code").alias("country_iso3"), F.col("fiscal_year").alias("year"), F.col("income_group_code").alias("income_group_fy_ending_in_year"),
                      F.col("classification_status").alias("income_status_fy_ending_in_year"))
     start = inc.select(F.col("iso3_code").alias("country_iso3"), (F.col("fiscal_year") - 1).alias("year"),

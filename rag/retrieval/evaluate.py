@@ -43,10 +43,12 @@ def norm(s: str) -> str:
 
 
 class PageText:
+    """Reads and caches the normalised text layer of PDF pages from the local copy (PyMuPDF)."""
     def __init__(self, corpus: Corpus):
         self.c, self.cache = corpus, {}
 
     def get(self, doc: str, page: int) -> str:
+        """Return the normalised text of one physical page (an empty string when the page is out of range)."""
         key = (doc, page)
         if key not in self.cache:
             with fitz.open(ROOT / self.c.versions[doc]["local_path"]) as pdf:
@@ -74,6 +76,7 @@ def verify(r: dict, pt: PageText) -> dict:
 
 
 def relevant(r: dict, g: dict) -> bool:
+    """True when a result matches a gold group: same document and the gold activity row, or one of the gold pages."""
     if r["document_id"] != g["document_id"]:
         return False
     if g.get("activity_id"):
@@ -82,6 +85,7 @@ def relevant(r: dict, g: dict) -> bool:
 
 
 def main() -> None:
+    """Run every configuration on benchmark_v1; write metrics, per-question results and citation and privacy checks."""
     bench = json.loads((HERE / "benchmark_v1.json").read_text())
     qs = bench["questions"]
     out = HERE / "runs" / dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
@@ -152,6 +156,7 @@ def main() -> None:
                                             "units_with_mask_token": sum(1 for t in texts if re.search(r"\[[A-Z_ ]+\]", t))}
     src = (HERE / "core.py").read_text()
     for v in priv.values():
+        # Confirm that the retrieval code never mentions the restricted folder (its own module docstring excepted).
         v["retrieval_code_references_restricted_dir"] = "restricted/" in src.replace("Never reads `restricted/`", "")
     (out / "privacy_check.json").write_text(json.dumps(priv, indent=1))
     ver = [v for v in cites.values() if v["verified"] is not None]

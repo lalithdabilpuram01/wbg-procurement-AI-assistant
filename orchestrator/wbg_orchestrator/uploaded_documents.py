@@ -49,6 +49,7 @@ def in_corpus(document_id: str, corpus: frozenset[str]) -> bool:
 
 
 class UploadedDocumentSearch:
+    """Vector search over uploaded Knowledge Graph documents, leaving out those already in the corpus release."""
     def __init__(self, connect: Connect, encode_query: Callable[[str], list[float]], schema: str = "wbg_kg",
                  corpus: frozenset[str] | None = None, min_similarity: float = MIN_SIMILARITY):
         self._connect, self._encode, self._min, self._schema = connect, encode_query, min_similarity, schema
@@ -65,6 +66,7 @@ class UploadedDocumentSearch:
         documents = self.uploaded()
         if not documents:
             return []
+        # pgvector text form of the query vector; six decimals is plenty for halfvec precision.
         vector = "[" + ",".join(f"{v:.6f}" for v in self._encode(question)) + "]"
         with self._connect() as conn, conn.cursor(row_factory=dict_row) as cur:
             cur.execute(SEARCH_SQL.replace("{schema}", self._schema),

@@ -25,6 +25,7 @@ NO_HISTORY = "There is nothing earlier in this conversation to go back to. What 
 
 
 class HistoryResponder:
+    """Answers conversational messages with Claude from the topic transcript, falling back to the offline replies."""
     name = "claude-conversation-history"
     uses_live_model = True
 
@@ -33,6 +34,7 @@ class HistoryResponder:
         self._offline = offline or OfflineResponder()
 
     def respond(self, request: ConversationRequest, on_text: Callable[[str], None] | None = None) -> ConversationResponse:
+        """Answer one message, streaming text pieces to `on_text` as they arrive; returns the full response."""
         if request.reason in OfflineResponder.REPLIES:                 # greetings, thanks, small talk: instant, free
             return self._offline.respond(request, on_text)
         if not request.transcript:
@@ -49,6 +51,7 @@ class HistoryResponder:
             text, _ = self._client.stream_text(system=SYSTEM, user=f"{request.transcript}\n\nMESSAGE:\n{request.message}",
                                                schema_name="conversation_answer", trace_id="conversation", on_text=forward)
         except (LlmError, SpendLimitReached):                          # Claude unavailable or the cap reached
+            # If part of the Claude answer already streamed, do not stream the offline reply on top of it.
             return self._offline.respond(request, None if streamed else on_text)
         answer = text.strip()
         if not answer:

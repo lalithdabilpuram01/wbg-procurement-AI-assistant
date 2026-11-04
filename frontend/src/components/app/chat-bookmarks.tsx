@@ -1,5 +1,7 @@
 "use client";
 
+// The "Bookmarks" menu in the chat header. AppShell passes this chat's bookmarks and handles removal.
+
 import { Bookmark as BookmarkIcon, BookmarkX } from "lucide-react";
 import type { Bookmark } from "@/lib/api";
 import { Button } from "@/components/ui/button";
@@ -9,6 +11,7 @@ import { relativeTime } from "@/lib/utils";
 /** The bookmarks of the open chat only, from a button at the top of the chat. Picking one scrolls to that answer. */
 export function ChatBookmarks({ bookmarks, onJump, onRemove }:
   { bookmarks: Bookmark[]; onJump: (seq: number) => void; onRemove: (bookmark: Bookmark) => void }) {
+  // Each row's remove button stops its click and pointer events, so removing does not also select the row and jump.
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

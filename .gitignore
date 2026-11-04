@@ -103,3 +103,22 @@ ingestion_inbox/_ledger/
 
 # Demo upload files made by `uv run wbg-etl-seed` (real World Bank rows; reproducible)
 demo/structured/*.csv
+
+# ---------------------------------------------------------------------------------------------------------------
+# Review scope (2026-11-04): git holds only the working code, its tests, docs and the files the app reads.
+# These stay on the developer's machine and are not part of the repository.
+# ---------------------------------------------------------------------------------------------------------------
+# Discovery work, experiments and earlier releases (not used by the app)
+research/
+# One-off live verification scripts and their raw outputs; the evaluation datasets and golden results stay tracked
+orchestrator/live/
+orchestrator/live_results/*
+!orchestrator/live_results/eval/
+!orchestrator/live_results/golden/
+!orchestrator/live_results/claude_spend_ledger.json
+!orchestrator/live_results/lakebase_checkpoint_live_results.json
+# Per-row ML test predictions and segment tables (the metrics JSON and charts stay tracked)
+ml/**/*test_predictions*.csv
+ml/**/segments_by_*.csv
+# Editor settings
+.vscode/

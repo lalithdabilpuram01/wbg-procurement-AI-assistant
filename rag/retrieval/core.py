@@ -92,6 +92,7 @@ def jl(name: str, base: Path | None = None) -> list[dict]:
 
 @dataclass
 class Unit:
+    """One retrievable unit (narrative chunk, table-row window or plan activity) with its indexed text and excerpt."""
     unit_id: str
     unit_type: str
     document_id: str
@@ -108,7 +109,9 @@ class Unit:
 
 
 class Corpus:
+    """One processed corpus (documents, pages, plan rows, contract links) and the retrievable units built from it."""
     def __init__(self, strategy: str = "A", include_tables: bool = True, processed_dir: Path | None = None):
+        """Read the shared JSONL files and build chunk, table and activity units for the chosen chunking strategy."""
         self.strategy = strategy
         self.include_tables = include_tables
         self._base = Path(processed_dir) if processed_dir else None    # None = the default corpus (PILOT)
@@ -157,6 +160,7 @@ class Corpus:
         return f"[{d['doc_type']} {d['project_id']} {d['country_code']}: {d['api'].get('title', '')}]"
 
     def _chunks(self, strategy: str) -> None:
+        """Add the narrative chunks of one strategy (A or C) as units; for C also load the parent sections."""
         self.parents = {}
         if strategy == "C":
             self.parents = {p["chunk_id"]: p for p in jl("strategies/C/parents.jsonl", self._base)}
@@ -167,6 +171,8 @@ class Corpus:
                                                                        "sanitisation": c.get("sanitisation", {})}))
 
     def _tables(self) -> None:
+        """Add table units: windows of up to three cleaned rows that overlap by one row, so split header and value rows
+        stay together in at least one window."""
         tables = {t["table_id"]: t for t in jl("shared/tables.jsonl", self._base)}
         rows: dict[str, list[dict]] = {}
         for r in jl("shared/table_rows.jsonl", self._base):
@@ -185,6 +191,7 @@ class Corpus:
                                        section=t.get("section_path"), table_id=tid, meta={"rows": [r["row_index"] for r in win]}))
 
     def _activities(self) -> None:
+        """Add one unit per procurement-plan activity row, keeping its typed fields in meta for citations."""
         for a in jl("shared/plan_activities.jsonl", self._base):
             stages = "; ".join(f"{k}: " + ", ".join(f"{kk} {vv}" for kk, vv in v.items()) for k, v in (a.get("stage_dates") or {}).items())
             text = (f"{a['row_text_for_embedding']} Market approach {a.get('market_approach_clean')}. Component {a.get('component_clean')}. "
@@ -200,6 +207,8 @@ class Corpus:
 
     # ---------- citation record ----------
     def cite(self, u: Unit, rank: int, scores: dict) -> dict:
+        """Build the citation record for a unit at a given rank: document, page, section and excerpt metadata.
+        Plan rows also carry their typed fields and their contract links (unmatched links are left out)."""
         d, v = self.docs[u.document_id], self.versions[u.document_id]
         pg = self.pages.get((u.document_id, u.page_start), {})
         proj = self.projects.get(u.project_id, {}).get("api", {})
@@ -241,6 +250,7 @@ EMBEDDING_CACHE_MODES = ("legacy", "unit")   # legacy = whole-index .npy (defaul
 
 
 class Retriever:
+    """BM25, dense and hybrid search over a Corpus, with an optional guard layer (privacy, scope, exact references)."""
     def __init__(self, corpus: Corpus, embedding_cache: str | None = None, resolve_project_names: bool = False,
                  dense_index=None, query_encoder=None, excluded_tables: frozenset[str] = frozenset()):
         """dense_index (opt-in): an external vector index with `nearest(query, scope_projects)`, e.g. the Lakebase
@@ -265,12 +275,15 @@ class Retriever:
 
     # ---------- dense ----------
     def model(self):
+        """Load the dense embedding model from the local cache on first use."""
         if self._model is None:
             from sentence_transformers import SentenceTransformer
             self._model = load_cached_model(SentenceTransformer, EMBED_MODEL, trust_remote_code=True)
         return self._model
 
     def embeddings(self) -> np.ndarray:
+        """Return the unit embedding matrix: from the per-unit cache, a saved .npy file, or by encoding the corpus once.
+        The .npy name holds a hash of unit ids, texts and model name, so a changed corpus never reuses old vectors."""
         if self._emb is None and self.embedding_cache == "unit":
             # opt-in: every vector must come from the verified per-unit store; a miss raises, never re-encodes or falls back
             if str(ROOT) not in sys.path:
@@ -293,11 +306,13 @@ class Retriever:
         return self._emb
 
     def rank_bm25(self, q: str, mask: np.ndarray) -> np.ndarray:
+        """BM25 score of every unit for the query; units outside the mask get -inf."""
         s = self.bm25.get_scores(tok(q))
         s[~mask] = -np.inf
         return s
 
     def rank_dense(self, q: str, mask: np.ndarray, scope: set[str] | None = None) -> np.ndarray:
+        """Cosine score of every unit for the query (external-index scores when one is set); masked units get -inf."""
         if self.dense_index is not None:
             return self._rank_dense_index(q, mask, scope)
         qv = self.model().encode([q], normalize_embeddings=True)[0]
@@ -314,6 +329,7 @@ class Retriever:
         return s
 
     def reranker(self):
+        """Load the cross-encoder reranker from the local cache on first use."""
         if self._rerank is None:
             from sentence_transformers import CrossEncoder
             self._rerank = load_cached_model(CrossEncoder, RERANK_MODEL)
@@ -321,6 +337,8 @@ class Retriever:
 
     # ---------- guarded pipeline ----------
     def guard(self, q: str) -> dict:
+        """Run the checks that come before ranking: privacy, corpus scope, project scope and exact reference lookup.
+        Status is 'ok', 'withheld_personal_data' or 'insufficient_evidence'; also returns scope and exact matches."""
         out: dict = {"status": "ok", "scope_projects": None, "exact_units": [], "notes": []}
         if PRIVACY.search(q):
             return {**out, "status": "withheld_personal_data", "notes": ["Personal contact data is masked in the sanitised corpus and is not returned."]}
@@ -328,6 +346,7 @@ class Retriever:
         named = {code for name, code in COUNTRIES.items() if re.search(rf"\b{name}\b", q, re.I)}
         if pids - self.c.corpus_projects or (named and not named & self.c.corpus_countries):
             return {**out, "status": "insufficient_evidence", "notes": [f"Out of the pilot corpus scope (projects {sorted(pids - self.c.corpus_projects) or '-'}, countries {sorted(named - self.c.corpus_countries) or '-'})."]}
+        # Search scope: the project IDs named in the question, or else every corpus project of a named country.
         scope = set(pids) or {p for p in self.c.corpus_projects if self.c.docs and any(d['project_id'] == p and d['country_code'] in named for d in self.c.docs.values())}
         if not pids and self._project_names:
             by_name = {pid for word, pid in self._project_names.items() if re.search(rf"\b{word}\b", q, re.I)}
@@ -335,6 +354,7 @@ class Retriever:
                 scope = (scope & by_name) or by_name
                 out["notes"].append(f"Project named in the question: {sorted(by_name)}.")
         out["scope_projects"] = scope or None
+        # Plan references and contract numbers must match a typed record; an unknown one means no answer, not a guess.
         refs = [normalize_ref(m) for m in STEP_REF.findall(q) + LEGACY_REF.findall(q)]
         nums = CONTRACT_NO.findall(q)
         if refs or nums:
@@ -354,6 +374,8 @@ class Retriever:
         return out
 
     def search(self, q: str, method: str = "hybrid", k: int = 10, guarded: bool = True, rerank: bool = False) -> dict:
+        """Rank units with bm25, dense or hybrid (reciprocal-rank fusion) and return the top k as citation records.
+        Exact reference matches from the guard always come first; rerank re-orders the top 30 with the cross-encoder."""
         t0 = time.perf_counter()
         g = self.guard(q) if guarded else {"status": "ok", "scope_projects": None, "exact_units": [], "notes": []}
         if g["status"] != "ok":
@@ -375,6 +397,7 @@ class Retriever:
             fused = 1 / (RRF_K + rb) + 1 / (RRF_K + rd)
             fused[~mask] = -np.inf
             order, scores = np.argsort(-fused), {"rrf": fused, "bm25": b, "dense": dn}
+        # Keep only units that were not masked out (a masked unit scores -inf).
         cand = [i for i in order if np.isfinite(list(scores.values())[0][i])][: (30 if rerank else k)]
         if rerank and cand:
             rs = self.reranker().predict([(q, self.c.units[i].excerpt[:1500]) for i in cand])

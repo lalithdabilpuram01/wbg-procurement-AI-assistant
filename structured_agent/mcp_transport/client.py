@@ -65,4 +65,5 @@ def structured(result: CallToolResult) -> dict[str, Any]:
 
 
 async def call_tool(session: ClientSession, name: str, arguments: dict[str, Any]) -> dict[str, Any]:
+    """Call one tool and return its structured response (ToolCallError on an MCP error result)."""
     return structured(await session.call_tool(name, arguments))

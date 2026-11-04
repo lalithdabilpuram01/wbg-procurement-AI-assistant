@@ -20,6 +20,8 @@ SCHEMA_SQL = Path(__file__).resolve().parent / "sql" / "schema.sql"
 
 
 class RegistryWriter:
+    """Writes a complete registry build with the owner role; used only by init_registry."""
+
     def __init__(self, admin_dsn: str):
         self._dsn = admin_dsn
 
@@ -62,6 +64,7 @@ class RegistryWriter:
 
     @staticmethod
     def _insert_object(cur, obj: RegisteredObject, build_id: str) -> None:
+        """Insert one object row and all of its column rows."""
         cur.execute("""INSERT INTO registry.registered_objects
                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
                     (obj.fqn, obj.logical_name, obj.layer, obj.object_type, obj.certified_aggregate, obj.short_description,
@@ -76,6 +79,7 @@ class RegistryWriter:
 
     @staticmethod
     def _insert_relationship(cur, rel: Relationship) -> None:
+        """Insert one relationship row; required conditions and verification are stored as JSONB."""
         cur.execute("INSERT INTO registry.relationships VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                     (rel.relationship_id, rel.from_object, rel.from_columns, rel.to_object, rel.to_columns,
                      rel.cardinality, Jsonb([c.model_dump() for c in rel.required_conditions]), rel.aggregation_rule,
@@ -89,11 +93,13 @@ class RegistryStore:
         self._dsn = reader_dsn
 
     def _fetch(self, cur, sql: str) -> list[dict]:
+        """Run a query and return the rows as dicts keyed by column name."""
         cur.execute(sql)
         names = [d.name for d in cur.description]
         return [dict(zip(names, row)) for row in cur.fetchall()]
 
     def load_bundle(self) -> RegistryBundle:
+        """Load the newest registry build with all its objects, columns, joins, metrics, synonyms and examples."""
         with psycopg.connect(self._dsn) as conn, conn.cursor() as cur:
             build = self._fetch(cur, "SELECT * FROM registry.registry_builds ORDER BY built_at DESC LIMIT 1")[0]
             columns: dict[str, list[RegisteredColumn]] = {}
@@ -115,6 +121,7 @@ class RegistryStore:
                 examples=[VerifiedSqlExample(**r) for r in self._fetch(cur, "SELECT * FROM registry.verified_sql_examples ORDER BY example_id")])
 
     def load_documents_and_index(self) -> tuple[list[SearchDocument], NumpyCosineIndex]:
+        """Load the search documents and their vectors; all vectors must come from one model and dimension."""
         with psycopg.connect(self._dsn) as conn, conn.cursor() as cur:
             rows = self._fetch(cur, "SELECT * FROM registry.description_embeddings ORDER BY doc_id")
         models = {(r["model_id"], r["dimensions"]) for r in rows}
@@ -127,6 +134,7 @@ class RegistryStore:
         return documents, NumpyCosineIndex(model_id, dimensions, [d.doc_id for d in documents], vectors)
 
     def table_counts(self) -> dict[str, int]:
+        """Row count of every registry table (used as a read-only connectivity check)."""
         tables = ("registry_builds", "data_classifications", "registered_objects", "registered_columns", "relationships",
                   "metrics", "synonyms", "verified_sql_examples", "description_embeddings", "audit_events")
         with psycopg.connect(self._dsn) as conn, conn.cursor() as cur:

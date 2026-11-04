@@ -30,6 +30,7 @@ RUNS = Path(__file__).resolve().parents[1] / "runs"
 
 
 def expected_grid(content: bytes) -> dict:
+    """The published cell per (ISO3 code, fiscal year), read straight from the workbook without reusing the parser."""
     ws = openpyxl.load_workbook(io.BytesIO(content), data_only=True)["Country Analytical History"]
     hdr = next(r for r in range(1, 20) if str(ws.cell(r, 2).value or "").lower().startswith("bank's fiscal year"))
     cols = [(c, ws.cell(hdr + 1, c).value + 2) for c in range(3, ws.max_column + 1)
@@ -45,6 +46,7 @@ def expected_grid(content: bytes) -> dict:
 
 
 def main() -> int:
+    """Re-check the written table against the workbook grid and the Bronze baseline; return 0 when all passed."""
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-id", required=True)
     ap.add_argument("--profile", default=DEFAULT_PROFILE)

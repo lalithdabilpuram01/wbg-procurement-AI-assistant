@@ -25,11 +25,14 @@ from structured_agent.contracts import ErrorCode, ToolError
 from structured_agent.registry.models import RegistryBundle, Relationship
 from structured_agent.sql_validation.lineage import BaseColumn, LineageResolver, table_fqn
 
+# Value aggregates that rule 5 rejects over repeated rows (MIN and MAX are not affected by duplicates).
 VALUE_AGGREGATES = (exp.Sum, exp.Avg, exp.Stddev, exp.Variance, exp.PercentileCont, exp.PercentileDisc, exp.Median)
 
 
 @dataclass
 class Edge:
+    """The join between two aliases of one scope: its key column pairs and whether each side is unique on them."""
+
     left: str
     right: str
     pairs: list[tuple[str, str]] = field(default_factory=list)  # (left column, right column)
@@ -38,6 +41,7 @@ class Edge:
     relationship_id: str | None = None
 
     def describe(self) -> str:
+        """Readable summary of the join, e.g. 'a -> b ON a.k = b.k (N:1, registered rel_x)'."""
         on = " AND ".join(f"{self.left}.{a} = {self.right}.{b}" for a, b in self.pairs)
         kind = {(True, True): "1:1", (False, True): "N:1", (True, False): "1:N", (False, False): "N:M"}[
             (self.left_unique, self.right_unique)]
@@ -46,6 +50,7 @@ class Edge:
 
 
 def _conjuncts(condition: exp.Expression | None) -> list[exp.Expression]:
+    """Split an AND chain into its parts; a single condition is returned as a one-item list."""
     if condition is None:
         return []
     return list(condition.flatten()) if isinstance(condition, exp.And) else [condition]
@@ -59,12 +64,14 @@ class KeyDomains:
     """Groups base columns that hold the same key, linked through registered relationships (union-find)."""
 
     def __init__(self, relationships: list[Relationship]):
+        """Link the paired key columns of every registered relationship into groups."""
         self._parent: dict[BaseColumn, BaseColumn] = {}
         for rel in relationships:
             for a, b in zip(rel.from_columns, rel.to_columns):
                 self._union((rel.from_object, a), (rel.to_object, b))
 
     def _find(self, column: BaseColumn) -> BaseColumn:
+        """Return the representative column of the key group this column belongs to."""
         self._parent.setdefault(column, column)
         while self._parent[column] != column:
             column = self._parent[column]
@@ -78,15 +85,20 @@ class KeyDomains:
 
 
 class JoinAnalyzer:
+    """Checks every join of a resolved query against the registry and finds rows that would repeat (fan-out)."""
+
     def __init__(self, bundle: RegistryBundle, resolver: LineageResolver):
+        """Keep the registry and resolved query, and build the key groups from the registry relationships."""
         self._bundle = bundle
         self._resolver = resolver
         self._domains = KeyDomains(bundle.relationships)
+        # Filled scope by scope, so an outer scope knows which outputs of an inner CTE or subquery already repeat.
         self._repeated_outputs: dict[int, set[str]] = {}   # derived scope -> outputs whose rows repeat
         self.descriptions: list[str] = []
 
     # ------------------------------------------------------------------------------------------------ public entry point
     def analyze(self) -> list[ToolError]:
+        """Analyze every scope of the query; returns all join and fan-out errors found."""
         errors: list[ToolError] = []
         for scope in self._resolver.scopes:  # children first, so derived facts are known before their parents
             errors += self._analyze_scope(scope)
@@ -94,6 +106,7 @@ class JoinAnalyzer:
 
     # ---------------------------------------------------------------------------------------------------- one scope
     def _analyze_scope(self, scope: Scope) -> list[ToolError]:
+        """Check the joins of one scope, then its aggregates, and record which of its outputs repeat."""
         select = scope.expression
         joins = select.args.get("joins") or []
         repeated_aliases: set[str] = set()
@@ -110,6 +123,7 @@ class JoinAnalyzer:
         return errors
 
     def _edges(self, scope: Scope, joins: list[exp.Join]) -> tuple[list[Edge], list[ToolError]]:
+        """Group the ON conditions into one Edge per pair of aliases and approve each edge."""
         fixed = self._fixed_columns(scope)
         edges: dict[frozenset[str], Edge] = {}
         errors: list[ToolError] = []
@@ -138,6 +152,7 @@ class JoinAnalyzer:
 
     @staticmethod
     def _column_pair(conjunct: exp.Expression):
+        """Return ((alias, column), (alias, column)) for an equality between columns of two aliases, else None."""
         if isinstance(conjunct, (exp.EQ, exp.NullSafeEQ)) and isinstance(conjunct.this, exp.Column) \
                 and isinstance(conjunct.expression, exp.Column) and conjunct.this.table != conjunct.expression.table:
             return ((conjunct.this.table, conjunct.this.name.lower()), (conjunct.expression.table, conjunct.expression.name.lower()))
@@ -160,6 +175,7 @@ class JoinAnalyzer:
 
     # ---------------------------------------------------------------------------------------------------- approval
     def _approve(self, scope: Scope, edge: Edge, fixed: dict[str, set[str]]) -> list[ToolError]:
+        """Approve one edge: a registered relationship, or conformed keys with at least one side unique."""
         left_source, right_source = scope.sources.get(edge.left), scope.sources.get(edge.right)
         left_cols = [a for a, _ in edge.pairs]
         right_cols = [b for _, b in edge.pairs]
@@ -185,6 +201,7 @@ class JoinAnalyzer:
         return []
 
     def _registered(self, left_fqn: str, left_cols: list[str], right_fqn: str, right_cols: list[str]) -> Relationship | None:
+        """Find the registered relationship covered by these join columns, in either direction; None if none."""
         pairs = set(zip(left_cols, right_cols))
         for rel in self._bundle.relationships:
             forward = {(a, b) for a, b in zip(rel.from_columns, rel.to_columns)}
@@ -195,6 +212,7 @@ class JoinAnalyzer:
         return None
 
     def _required_conditions(self, rel: Relationship, edge: Edge, scope: Scope, fixed: dict[str, set[str]]) -> list[ToolError]:
+        """Errors for the relationship's required conditions that are neither fixed by a filter nor part of the join."""
         errors = []
         for condition in rel.required_conditions:
             alias = edge.left if self._alias_object(scope, edge.left) == condition.object else edge.right
@@ -214,6 +232,7 @@ class JoinAnalyzer:
 
     # --------------------------------------------------------------------------------------------------- uniqueness
     def _unique(self, source, columns: set[str]) -> bool:
+        """True when the source has at most one row per value of these columns (verified grain or derived keys)."""
         if isinstance(source, exp.Table):
             obj = self._bundle.object(table_fqn(source))
             return bool(obj and obj.grain_status == "verified" and set(obj.grain_columns) <= columns)
@@ -267,6 +286,7 @@ class JoinAnalyzer:
 
     @staticmethod
     def _reach(root: str, steps: dict[str, list[tuple[str, bool]]]) -> dict[str, bool] | None:
+        """Walk the uniqueness steps from root; returns alias -> 'rows repeat' for every alias reached."""
         repeated = {root: False}
         queue = deque([root])
         while queue:
@@ -279,6 +299,7 @@ class JoinAnalyzer:
 
     # -------------------------------------------------------------------------------------------------- aggregates
     def _check_aggregates(self, scope: Scope, repeated_aliases: set[str]) -> list[ToolError]:
+        """Reject value aggregates (SUM, AVG, ...) of this scope that read columns whose rows repeat."""
         errors = []
         for aggregate in scope.expression.find_all(*VALUE_AGGREGATES):
             if not _in_scope(aggregate, scope):
@@ -294,6 +315,7 @@ class JoinAnalyzer:
         return errors
 
     def _record_repeated_outputs(self, scope: Scope, repeated_aliases: set[str]) -> None:
+        """Remember which outputs of this scope carry repeated rows, for the scopes that read it."""
         select = scope.expression
         if select.args.get("group") or any(_in_scope(a, scope) for a in select.find_all(exp.AggFunc)):
             return  # aggregated output: grain resolved here (fan-out inside was already checked)

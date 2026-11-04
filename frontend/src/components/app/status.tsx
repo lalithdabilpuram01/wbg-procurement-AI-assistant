@@ -1,7 +1,10 @@
+// The status badge on each answer: maps the API's answer status (Investigation.status, Turn.status) to a label,
+// a colour and an icon.
 import { AlertTriangle, CheckCircle2, CircleHelp, CircleStop, ClipboardList, Compass, Scale, ShieldAlert, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/primitives";
 
 type Tone = "success" | "warning" | "danger" | "info" | "neutral";
+// Known statuses. An unknown one still shows, with its underscores turned into spaces.
 const STATUS: Record<string, { label: string; tone: Tone; icon: React.ElementType }> = {
   answered: { label: "Answered", tone: "success", icon: CheckCircle2 },
   partial: { label: "Partial answer", tone: "warning", icon: AlertTriangle },
@@ -20,6 +23,7 @@ const STATUS: Record<string, { label: string; tone: Tone; icon: React.ElementTyp
   declined: { label: "Not something I can judge", tone: "neutral", icon: Scale },
 };
 
+/** The badge for one answer status; renders nothing when there is no status yet. */
 export function StatusBadge({ status }: { status: string | null }) {
   if (!status) return null;
   const { label, tone, icon: Icon } = STATUS[status] ?? { label: status.replaceAll("_", " "), tone: "neutral", icon: CircleHelp };

@@ -1,5 +1,8 @@
 "use client";
 
+// Feedback on answers: rating buttons, the correction form, the status note, and the list of saved learning that
+// guided an answer. AppShell sends the feedback (POST /conversations/{id}/feedback).
+
 import { useState } from "react";
 import { Brain, ChevronDown, ThumbsDown, ThumbsUp, Users } from "lucide-react";
 import type { FeedbackReason, FeedbackState, LearnedItem } from "@/lib/api";
@@ -8,6 +11,7 @@ import { Spinner, Textarea } from "@/components/ui/primitives";
 import { Tooltip } from "@/components/ui/overlays";
 import { cn } from "@/lib/utils";
 
+// The reason ids match FeedbackReason in src/lib/api.ts and REASONS in conversation/learning.py.
 const REASONS: { id: FeedbackReason; label: string }[] = [
   { id: "wrong_number", label: "Wrong number" },
   { id: "wrong_scope", label: "Wrong filter or period" },
@@ -16,6 +20,7 @@ const REASONS: { id: FeedbackReason; label: string }[] = [
   { id: "other", label: "Other" },
 ];
 
+/** Sends one rating for an answer, with optional reasons and a correction; resolves when the API call is done. */
 export type SendFeedback = (rating: "up" | "down", reasons?: FeedbackReason[], correction?: string) => Promise<void>;
 
 /** Thumbs up / down under an answer; the current rating stays highlighted. */
@@ -42,6 +47,7 @@ export function CorrectionForm({ onSubmit, onCancel }: { onSubmit: SendFeedback;
   const toggle = (id: FeedbackReason) => setReasons((r) => (r.includes(id) ? r.filter((x) => x !== id) : [...r, id]));
   const ready = reasons.length > 0 || correction.trim().length > 0;
 
+  // `finally` re-enables the buttons even when sending fails (the error itself is shown by AppShell).
   const submit = async () => {
     setBusy(true);
     try {

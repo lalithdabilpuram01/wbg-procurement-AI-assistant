@@ -27,7 +27,10 @@ class Principal:
 
 
 class AccessPolicy:
+    """Static access policy: which workspaces, roles and principals exist, and what each role may see."""
+
     def __init__(self, config: dict | None = None):
+        """Load the policy (curated access_policy.json by default): workspaces, roles and principals."""
         config = config or curated("access_policy.json")
         self._workspaces = set(config["workspaces"])
         self._roles = config["roles"]
@@ -46,11 +49,14 @@ class AccessPolicy:
         return any(role in obj.authorized_roles for role in principal.roles)
 
     def can_use_column(self, principal: Principal, column: RegisteredColumn, use: ColumnUse) -> bool:
+        """Whether one of the principal's roles allows this column's classification for output or filter use."""
+        # Prohibited columns are refused before any role is looked at, so no role can grant them.
         if column.classification == "prohibited":
             return False
         key = "output_classifications" if use == "output" else "filter_classifications"
         return any(column.classification in self._roles[role][key] for role in principal.roles if role in self._roles)
 
     def max_rows(self, principal: Principal, default: int) -> int:
+        """Smallest row limit among the principal's roles, capped by the caller's default."""
         limits = [self._roles[r]["max_rows"] for r in principal.roles if r in self._roles]
         return min(limits + [default]) if limits else default

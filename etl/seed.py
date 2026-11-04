@@ -59,6 +59,7 @@ def ensure_folder(files, folder: str, dry_run: bool) -> None:
 
 
 def is_file(files, path: str) -> bool:
+    """True when the Files API finds a file at `path` (NotFound means there is none)."""
     from databricks.sdk.errors import NotFound
     try:
         files.get_metadata(path)
@@ -68,6 +69,7 @@ def is_file(files, path: str) -> bool:
 
 
 def upload(path: Path, folder: str, profile: str, dry_run: bool) -> None:
+    """Copy one local file into `folder` on the Volume with the Databricks CLI (only printed on a dry run)."""
     target = f"dbfs:{folder}/{path.name}"
     print(f"  {path.name} -> {target}")
     if not dry_run:
@@ -76,6 +78,7 @@ def upload(path: Path, folder: str, profile: str, dry_run: bool) -> None:
 
 
 def main(argv: list[str]) -> int:
+    """Split the contract awards, then upload every landing dataset and the parser reference files; return 0."""
     parser = argparse.ArgumentParser(prog="wbg-etl-seed", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--profile", default="wbg-databricks-free")
     parser.add_argument("--catalog", default="wbg_etl")

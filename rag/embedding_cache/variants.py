@@ -49,6 +49,7 @@ def stacked_only(p1_rows: list[dict], pilot_rows: list[dict]) -> list[dict]:
 
 
 def table_rows(variant: str) -> list[dict]:
+    """Return the table rows of a variant: pilot_v2 as indexed, the full Step 6A output, or its stacked-only subset."""
     pilot_rows = core.jl("shared/table_rows.jsonl")
     if variant == "pilot_v2":
         return pilot_rows
@@ -62,6 +63,7 @@ def table_rows(variant: str) -> list[dict]:
 
 @contextmanager
 def _table_rows_source(rows: list[dict]) -> Iterator[None]:
+    """Temporarily make core.jl return the given rows for shared/table_rows.jsonl; every other file is read as usual."""
     original = core.jl
 
     def jl(name: str, base: Path | None = None) -> list[dict]:
@@ -75,6 +77,7 @@ def _table_rows_source(rows: list[dict]) -> Iterator[None]:
 
 
 def corpus(scope: str, variant: str = "pilot_v2") -> "core.Corpus":
+    """Build the core.Corpus for an index scope and a table-row variant."""
     strategy, include_tables = SCOPES[scope]
     if variant == "pilot_v2":
         return core.Corpus(strategy, include_tables=include_tables)

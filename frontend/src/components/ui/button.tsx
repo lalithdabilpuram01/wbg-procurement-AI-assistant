@@ -1,8 +1,10 @@
+// The shared Button component: one set of styles with variants (default, outline, ghost, ...) and sizes.
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
+/** Tailwind classes per variant and size; the base string also sizes any icon placed inside the button. */
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-colors " +
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 " +
@@ -28,10 +30,13 @@ const buttonVariants = cva(
   },
 );
 
+/** Native button props plus `variant`, `size` and `asChild`, which renders the styles on the child element (for
+ *  example a link) instead of a <button>. */
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   asChild?: boolean;
 }
 
+/** A styled button. The ref is forwarded so dialogs and menus (Radix) can focus and position it. */
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";

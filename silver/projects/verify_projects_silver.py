@@ -32,6 +32,7 @@ RUNS = Path(__file__).resolve().parents[1] / "runs"
 
 
 def main() -> int:
+    """Re-check the written table in plain Python against Bronze, the cohort and the baseline; 0 when all passed."""
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-id", required=True)
     ap.add_argument("--profile", default=DEFAULT_PROFILE)

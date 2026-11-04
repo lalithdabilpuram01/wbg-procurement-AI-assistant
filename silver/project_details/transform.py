@@ -75,6 +75,7 @@ RECORD_SCHEMA = (
 
 
 def load_provenance() -> dict:
+    """Provenance of the v3 all-fields Bronze input from the manifests: SHA-256s, record counts, retrieval time."""
     m = json.loads(BRONZE_INPUTS_MANIFEST.read_text())
     e = next(f for f in m["files"] if f["bronze_table"] == "bronze_projects_v3_allfields")
     src_name = Path(e["source_file"]).name
@@ -88,6 +89,7 @@ def _int(c: Column) -> Column:
 
 
 def _theme(x: Column, child: str | None, level_child=None) -> Column:
+    """One theme as a struct, with its child themes nested under level2 / level3."""
     fields = [x["code"].alias("code"), x["name"].alias("name"), _int(x["seqno"]).alias("seqno"), _int(x["percent"]).alias("percent")]
     if child:
         fields.append(F.transform(x[child], level_child).alias(child.replace("theme", "level")))
@@ -99,6 +101,7 @@ def _measure(m: Column) -> Column:
 
 
 def _lineage(prov: dict, run_id: str) -> list[Column]:
+    """Lineage columns shared by both tables: raw record hash, Bronze file, manifest SHA-256s and run id."""
     return [F.lit(SOURCE_API).alias("source_api"), F.sha2("raw_record", 256).alias("raw_record_sha256"), F.lit(BRONZE).alias("bronze_table"),
             F.col("source_file").alias("bronze_source_file"), F.col("cohort_id").alias("bronze_cohort_id"), F.col("ingested_at").alias("bronze_ingested_at"),
             F.lit(prov["bronze_input_file_sha256"]).alias("bronze_input_file_sha256"), F.lit(prov["source_population_sha256"]).alias("source_population_sha256"),
@@ -111,6 +114,7 @@ def parsed(bronze: DataFrame) -> DataFrame:
 
 
 def build_details(bronze: DataFrame, prov: dict, run_id: str) -> DataFrame:
+    """One row per project: themes, results indicators, locations and element counts, with lineage."""
     p = parsed(bronze)
     r = lambda k: F.col(f"r.{k}")  # noqa: E731
     themes = F.transform(r("theme_list"), lambda t1: _theme(t1, "theme2", lambda t2: _theme(t2, "theme3", lambda t3: _theme(t3, None))))
@@ -137,12 +141,14 @@ def build_details(bronze: DataFrame, prov: dict, run_id: str) -> DataFrame:
 
 
 def build_transactions(bronze: DataFrame, prov: dict, run_id: str) -> DataFrame:
+    """One row per loan transaction in each project's loan_transactions array, kept in source order."""
     p = parsed(bronze)
     e = p.select(F.col("r.id").alias("project_id"), F.posexplode("r.loan_transactions").alias("transaction_index", "t"),
                  "raw_record", "source_file", "cohort_id", "ingested_at")
     t = lambda k: F.col(f"t.{k}")  # noqa: E731
     amount_ok = t("amount").rlike(NUMERIC)
     placeholder = t("period").startswith(PLACEHOLDER_PERIOD_PREFIX)
+    # Rows identical in every published field are counted (identical_transaction_group_size), never de-duplicated.
     ident = Window.partitionBy("project_id", t("financier_loan"), t("period"), t("transactiontype"), t("amount"))
     return e.select(
         F.concat_ws(":", "project_id", F.col("transaction_index").cast("string")).alias("transaction_key"), "project_id", "transaction_index",

@@ -74,6 +74,7 @@ WORKER_LABELS = {WorkerName.STRUCTURED: "Querying procurement data", WorkerName.
 
 @dataclass
 class EngineDeps:
+    """Everything the graph nodes need, injected by the host (offline tests pass fakes)."""
     controller: ExecutionController
     supervisor: Supervisor
     planner: Planner
@@ -110,6 +111,7 @@ def evidence_gaps(plan: InvestigationPlan, errors: list[dict], failed: tuple[str
 
 
 def partial_gaps_opening(gaps: list[str]) -> str:
+    """The opening sentence used when part of the question found no evidence (also streamed to the live view)."""
     return "No evidence found for part of the question: " + "; ".join(gaps) + ". What the evidence shows: "
 
 
@@ -124,6 +126,7 @@ def no_evidence_first(response: InvestigationResponse, plan: InvestigationPlan, 
 
 
 def build_graph(deps: EngineDeps) -> StateGraph:
+    """The uncompiled investigation graph: every node wrapped by `_Nodes.step`, with the edges drawn above."""
     nodes = _Nodes(deps)
     graph = StateGraph(InvestigationState)
     for name in NODES:
@@ -158,12 +161,15 @@ def _logged(source: str, route: Callable[[InvestigationState], str]) -> Callable
 
 
 def _by_phase(mapping: dict[str, str], default: str | None = None) -> Callable[[InvestigationState], str]:
+    """An edge function that picks the next node from the state's `phase` ("fail" when no default is given)."""
     def route(state: InvestigationState) -> str:
         return mapping.get(state.get("phase", ""), default or "fail")
     return route
 
 
 class _Nodes:
+    """The graph's node functions and conditional edges, sharing one set of dependencies."""
+
     def __init__(self, deps: EngineDeps):
         self.d = deps
 
@@ -187,6 +193,7 @@ class _Nodes:
     def step(self, name: str, node: Callable[[InvestigationState], dict]) -> Callable[[InvestigationState], dict]:
         """The node as a traced step: its span, then the changes it wrote and the state after them (log and span)."""
         def run(state: InvestigationState) -> dict:
+            """Run the node inside its span (made current for the node), then record what it changed."""
             with self.d.tracer.span(f"orchestrator.node.{name}", node=name, **self._correlation(state)) as span:
                 token = _NODE_SPAN.set(span)
                 try:
@@ -235,6 +242,7 @@ class _Nodes:
                                    "ms": round(1000 * (time.perf_counter() - started))})
 
     def _progress(self, state, event: dict) -> None:
+        """Send one event to the live view of this investigation; failures are logged and ignored."""
         try:
             self.d.progress(state["request"]["investigation_id"], event)
         except Exception:                                  # the live view must never break an investigation
@@ -272,12 +280,14 @@ class _Nodes:
                               category=category, code=code[:80], safe_message=message)
 
     def _respond_now(self, request, status, message, *, errors=(), options=()) -> dict:
+        """The update that ends the run early with a fixed response (blocked, clarify or refused); no task runs."""
         response = InvestigationResponse(investigation_id=request.investigation_id, status=status, message=message,
                                          clarification_options=tuple(options), error_codes=tuple(e.code for e in errors))
         return {"phase": "done", "response": response.to_state(), "errors": [e.to_state() for e in errors]}
 
     # --------------------------------------------------------------------------------------------- intake
     def intake(self, state: InvestigationState) -> dict:
+        """Run the input guardrail on the question; a blocked question ends the run with a BLOCKED response."""
         request = self.request(state)
         with self._span("intake", state, mode=request.mode, rag_release=request.rag_release, question=request.question) as span:
             decision = self.d.guard.check_input(request.question)
@@ -295,6 +305,7 @@ class _Nodes:
 
     # ------------------------------------------------------------------------------------------ supervise
     def supervise(self, state: InvestigationState) -> dict:
+        """Ask the supervisor for a mode: build the fast or fixed plan at once, ask the planner, clarify or refuse."""
         request = self.request(state)
         with self._span("supervise", state) as span:
             decision = self.d.supervisor.decide(request)
@@ -322,6 +333,11 @@ class _Nodes:
 
     # ----------------------------------------------------------------------------------------------- plan
     def plan(self, state: InvestigationState) -> dict:
+        """Ask the planner for a plan (a replan also gets the previous plan and the failure codes).
+
+        Phase "plan_failed" lets after_plan try again while replans remain; "plan_failed_final" (budget, breaker,
+        provider or unexpected errors) goes straight to fail.
+        """
         request = self.request(state)
         previous = state.get("plan")
         replanning = bool(state.get("plans")) or bool(state.get("plan_errors"))
@@ -372,6 +388,7 @@ class _Nodes:
         return {**update, "usage": usage, "plan": plan.to_state(), "plans": [plan.to_state()], "phase": "planned"}
 
     def after_plan(self, state: InvestigationState) -> str:
+        """Edge after plan: validate a new plan, retry a rejected one while replans remain, else fail."""
         if state.get("phase") == "planned":
             return "validate_plan"
         if state.get("phase") == "plan_failed" and state.get("replans", 0) < self.request(state).budget.max_replans:
@@ -380,6 +397,7 @@ class _Nodes:
 
     # ------------------------------------------------------------------------------------------ validation
     def validate_plan(self, state: InvestigationState) -> dict:
+        """Check the plan with the controller; a valid plan sets every task to pending."""
         request, plan = self.request(state), self.plan_of(state)
         with self._span("validate_plan", state, plan_id=plan.plan_id, task_count=len(plan.tasks)) as span:
             errors = self.d.controller.validate_plan(plan, request)
@@ -390,6 +408,7 @@ class _Nodes:
         return {"task_states": {t.task_id: TaskState.PENDING.value for t in plan.tasks}, "phase": "plan_valid"}
 
     def after_validation(self, state: InvestigationState) -> str:
+        """Edge after validation: dispatch a valid plan; replan an invalid one unless it was a fast-path plan."""
         if state.get("phase") == "plan_valid":
             return "dispatch"
         plan = self.plan_of(state)
@@ -399,9 +418,14 @@ class _Nodes:
 
     # -------------------------------------------------------------------------------------------- execution
     def dispatch(self, state: InvestigationState) -> dict:
+        """Choose the next batch of ready tasks, after cancelling tasks whose dependencies failed.
+
+        A budget limit or a user cancellation cancels every pending task instead, so the run moves on to verify.
+        """
         request, plan = self.request(state), self.plan_of(state)
         states = dict(state.get("task_states", {}))
         cancelled: dict[str, str] = {}
+        # Repeat until nothing changes: cancelling one task can make the tasks that depend on it cancellable too.
         while new := {k: v for k, v in self.d.controller.cancellations(plan, states).items() if k not in cancelled}:
             cancelled.update(new)
             states.update(new)
@@ -422,7 +446,9 @@ class _Nodes:
                 "errors": errors, "phase": "executing" if batch else "executed"}
 
     def execute(self, state: InvestigationState) -> dict:
+        """Run each task of the batch through the controller and collect results, evidence, errors and usage."""
         request, plan = self.request(state), self.plan_of(state)
+        # A working copy of the state, so a later task in the same batch sees what earlier ones produced.
         view = {k: list(v) if isinstance(v, list) else v for k, v in state.items()}
         update: dict[str, Any] = {"task_states": {}, "results": [], "evidence": [], "errors": [], "usage": {}}
         allowed = self._execution_allowed(plan, request)
@@ -462,6 +488,7 @@ class _Nodes:
 
     # ----------------------------------------------------------------------------------------- verification
     def verify(self, state: InvestigationState) -> dict:
+        """Check the evidence against the plan's requirements (deterministic, no model call)."""
         plan = self.plan_of(state)
         with self._span("verify", state, plan_id=plan.plan_id) as span:
             report = verify(plan, state)
@@ -469,6 +496,7 @@ class _Nodes:
         return {"verification": report.model_dump(mode="json"), "phase": "verified"}
 
     def after_verify(self, state: InvestigationState) -> str:
+        """Edge after verify: replan only when nothing verified was found and a required task found no evidence."""
         plan, request = self.plan_of(state), self.request(state)
         if plan.produced_by == "fast_path" or state.get("replans", 0) >= request.budget.max_replans:
             return "respond"
@@ -479,6 +507,10 @@ class _Nodes:
         return "plan" if required & failed else "respond"
 
     def respond(self, state: InvestigationState) -> dict:
+        """Write the answer from the verified evidence, then keep only claims the evidence supports.
+
+        A model or budget failure still produces a response (without claims), carrying the error codes.
+        """
         request, plan = self.request(state), self.plan_of(state)
         report = VerificationReport.model_validate(state["verification"])
         records = ledger(state)
@@ -543,6 +575,7 @@ class _Nodes:
 
     @staticmethod
     def _clarification(state, response: InvestigationResponse) -> InvestigationResponse:
+        """Turn an answer without claims into a clarification request when a worker asked for one (with its options)."""
         if response.claims:
             return response
         options = [n.removeprefix("option:") for r in state.get("results", []) for n in r.get("notes", []) if n.startswith("option:")]
@@ -555,6 +588,7 @@ class _Nodes:
 
     # ------------------------------------------------------------------------------------------------ ends
     def fail(self, state: InvestigationState) -> dict:
+        """End a run that could not be planned or validated: cancel pending tasks and return a FAILED response."""
         request = self.request(state)
         codes = tuple(dict.fromkeys(e["code"] for e in state.get("errors", [])))
         pending = {t: TaskState.CANCELLED.value for t, s in state.get("task_states", {}).items() if s == TaskState.PENDING.value}
@@ -564,6 +598,7 @@ class _Nodes:
         return {"task_states": pending, "response": response.to_state(), "phase": "done"}
 
     def finalize(self, state: InvestigationState) -> dict:
+        """Last node of every run: emit the finished event and audit line with the usage totals."""
         request = self.request(state)
         response = state.get("response") or {}
         usage = state.get("usage", {})
@@ -580,5 +615,7 @@ class _Nodes:
 
 
 class _Stop(Exception):
+    """Carries a budget refusal out of the answer step, so it is recorded like any other answer error."""
+
     def __init__(self, error: ExecutionError):
         self.error = error

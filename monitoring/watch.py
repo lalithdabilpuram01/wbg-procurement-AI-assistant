@@ -40,6 +40,8 @@ STALE_DAYS = 730                        # pending this long after the planned si
 
 @dataclass(frozen=True)
 class Benchmark:
+    """Signing-slippage percentiles (in days) of one group of similar signed packages."""
+
     group: str
     n: int
     p50: float
@@ -49,6 +51,8 @@ class Benchmark:
 
 @dataclass
 class Warning:
+    """One early warning, with the value it rests on, the benchmark used and the records it cites."""
+
     code: str
     severity: str                       # high | medium | low
     message: str
@@ -61,6 +65,8 @@ class Warning:
 
 @dataclass
 class ProjectWatch:
+    """The monitoring result for one project: summary counts, warnings, packages and ISR ratings."""
+
     project_id: str
     title: str | None
     country: str | None
@@ -86,12 +92,14 @@ def slippage_benchmarks(directory: Path = data.SHARED) -> dict[tuple[str, str], 
     out = {}
     for k, values in groups.items():
         if len(values) >= MIN_GROUP:
+            # Cut points at 5% steps: index 14 is the 75th percentile and index 17 the 90th.
             q = quantiles(values, n=20)
             out[k] = Benchmark(f"{k[0]} / {k[1]}", len(values), median(values), q[14], q[17])
     return out
 
 
 def benchmark_for(package: Package, directory: Path = data.SHARED) -> Benchmark:
+    """The most specific benchmark with enough data: category and method, then category, then all packages."""
     table = slippage_benchmarks(directory)
     for k in ((package.category or "?", package.method or "?"), (package.category or "?", "*"), ("*", "*")):
         if k in table:
@@ -101,6 +109,7 @@ def benchmark_for(package: Package, directory: Path = data.SHARED) -> Benchmark:
 
 @lru_cache(maxsize=2)
 def cancellation_p75(directory: Path = data.SHARED) -> float:
+    """75th percentile of the cancelled share among projects with 5+ planned packages (1.0 when there are too few)."""
     shares = []
     by_project: dict[str, list[Package]] = defaultdict(list)
     for p in data.packages(directory):
@@ -113,6 +122,7 @@ def cancellation_p75(directory: Path = data.SHARED) -> float:
 
 # --------------------------------------------------------------------------------------------------- watch
 def watch(project_id: str, directory: Path = data.SHARED) -> ProjectWatch:
+    """Milestones, early warnings (most severe first) and summary counts for one project."""
     packages = [p for p in data.packages(directory) if p.project_id == project_id]
     ratings = list(data.ratings(directory).get(project_id, ()))
     warnings = ([w for p in packages for w in _package_warnings(p, directory)] + _project_warnings(packages, directory)
@@ -149,6 +159,7 @@ def watched_projects(directory: Path = data.SHARED) -> list[dict[str, Any]]:
 
 
 def _package_warnings(p: Package, directory: Path) -> list[Warning]:
+    """Package warnings: overdue or stale signing, slipped signing, stalled stage, cost overrun, plan out of date."""
     out, cite = [], [_plan_citation(p)]
     bench = benchmark_for(p, directory)
     if p.status in OPEN and not p.signed and p.planned_signing and p.plan_date and p.planned_signing < p.plan_date:
@@ -194,6 +205,7 @@ def _stalled_stage(p: Package) -> data.Stage | None:
 
 
 def _project_warnings(packages: list[Package], directory: Path) -> list[Warning]:
+    """many_cancellations when the project's cancelled share is in the top quarter (projects with 5+ packages only)."""
     if len(packages) < 5:
         return []
     share = sum(p.status in CLOSED_BAD for p in packages) / len(packages)
@@ -207,6 +219,7 @@ def _project_warnings(packages: list[Package], directory: Path) -> list[Warning]
 
 
 def _rating_warnings(ratings: list[data.Rating]) -> list[Warning]:
+    """Warnings from the latest ISR value of each indicator: a downgrade, an unsatisfactory rating, or high risk."""
     latest: dict[str, data.Rating] = {}
     for r in ratings:
         latest[r.indicator] = r                                              # ratings are oldest first
@@ -214,6 +227,7 @@ def _rating_warnings(ratings: list[data.Rating]) -> list[Warning]:
     for r in latest.values():
         cite = [f"ISR {r.document_id} ({r.date})"]
         scale = RISKS if r.indicator == "Overall risk" else RATINGS
+        # The text pattern accepts both scales, so a value from the wrong scale for this indicator is skipped.
         if r.current not in scale:
             continue
         if r.indicator == "Overall risk":
@@ -237,6 +251,7 @@ def _contract_citation(p: Package) -> list[str]:
 
 
 def _package_view(p: Package) -> dict[str, Any]:
+    """The package as a JSON-ready dict (ISO dates, description cut to 200 characters)."""
     return {"activity_id": p.activity_id, "reference": p.reference, "description": (p.description or "")[:200], "category": p.category,
             "method": p.method, "review_type": p.review_type, "status": p.status, "estimated_usd": p.estimated_usd,
             "contract_amount_usd": p.contract_amount_usd, "planned_signing": _iso(p.planned_signing), "signed": _iso(p.signed),

@@ -13,6 +13,7 @@ def _counts(df: DataFrame, key: str) -> dict:
 
 
 def check(silver: DataFrame, bronze: DataFrame, report: DQReport) -> None:
+    """Run every data-quality rule for cpia_ratings and add the results to `report`."""
     n = silver.count()
     raw_val = F.get_json_object("raw_record", "$.value")
     # --- completeness: every Bronze record kept, with or without a score

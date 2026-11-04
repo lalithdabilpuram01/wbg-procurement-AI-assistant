@@ -18,6 +18,7 @@ class ConfigurationError(Exception):
     """The Portkey configuration is missing or inconsistent. The message names variables, never values."""
 
 
+# Portkey route for Claude plus per-call limits; built only by load_claude_settings().
 @dataclass(frozen=True)
 class ClaudeSettings:
     api_key: str = field(repr=False)        # never printed (repr disabled)
@@ -27,6 +28,7 @@ class ClaudeSettings:
     use_json_schema_output: bool = True     # structured outputs via response_format json_schema
 
 
+# Thresholds of one circuit breaker (see resilience.CircuitBreaker).
 @dataclass(frozen=True)
 class BreakerSettings:
     failure_threshold: int

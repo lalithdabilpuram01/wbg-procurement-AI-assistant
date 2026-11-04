@@ -12,6 +12,7 @@ from .models import DurationPrediction, FrozenModels, RiskPrediction
 
 @dataclass(frozen=True)
 class PackagePrediction:
+    """All three model outputs for one package, with the looked-up context and the notes shown alongside."""
     request: PackageRequest
     context: dict                         # what was looked up (region, country, sector, approval, prior tenders)
     duration: DurationPrediction

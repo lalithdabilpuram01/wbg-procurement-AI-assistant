@@ -11,6 +11,7 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class Dataset:
+    """One upload folder of the ETL job and the Bronze table(s) it feeds."""
     folder: str                 # upload folder, also the staged folder
     tables: tuple[str, ...]     # Bronze tables fed by this folder (schema.table)
     kind: str                   # csv | jsonl | series | wdi_observations | wdi_indicator | json_response | xlsx

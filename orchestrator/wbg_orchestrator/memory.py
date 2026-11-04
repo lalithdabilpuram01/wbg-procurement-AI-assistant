@@ -26,6 +26,7 @@ from .contracts import TERMINAL_TASK_STATES, Record, TaskState
 PROJECT_ID = re.compile(r"\bP\d{6}\b")
 
 
+# Links a conversation turn to an investigation's checkpoint thread (references only, no state copied).
 class CheckpointRef(Record):
     tenant_id: str
     user_hash: str
@@ -34,6 +35,7 @@ class CheckpointRef(Record):
     checkpoint_thread_id: str
 
 
+# The compressed memory of one investigation that later turns must keep (ids and verbatim user constraints).
 class InvestigationDigest(Record):
     investigation_id: str
     checkpoint_thread_id: str
@@ -49,10 +51,12 @@ class InvestigationDigest(Record):
 
 def build_digest(values: Mapping[str, Any], checkpoint_thread_id: str, decisions: list[Decision],
                  pending_approval_ids: tuple[str, ...] = ()) -> InvestigationDigest:
+    """Compress an investigation's state into its digest: active constraints, projects, evidence and open tasks."""
     active = [d for d in decisions if d.active]
     states = values.get("task_states", {})
     evidence = values.get("evidence", [])
     projects = {p for e in evidence for p in e.get("project_ids", [])} | set(PROJECT_ID.findall(values["request"]["question"]))
+    # Unresolved = still running, or ended without a usable result (failed, cancelled, blocked).
     unresolved = tuple(t for t, s in states.items() if TaskState(s) not in TERMINAL_TASK_STATES
                        or TaskState(s) in (TaskState.FAILED, TaskState.CANCELLED, TaskState.BLOCKED))
     response = values.get("response") or {}
@@ -76,6 +80,7 @@ def digest_losses(digest: InvestigationDigest, values: Mapping[str, Any], decisi
     return missing
 
 
+# A digest rendered as prompt text, with its token count and whether it exceeds the budget.
 class RenderedDigest(BaseModel):
     model_config = ConfigDict(frozen=True)
     text: str
@@ -84,6 +89,7 @@ class RenderedDigest(BaseModel):
 
 
 def render_digest(digest: InvestigationDigest, budget_tokens: int, counter: ApproxTokenCounter | None = None) -> RenderedDigest:
+    """Render the digest as a memory block for a prompt; it is never cut, only flagged when over budget."""
     counter = counter or ApproxTokenCounter()
     lines = ["BEGIN INVESTIGATION MEMORY (references, not evidence text)",
              f"investigation {digest.investigation_id} status {digest.status} checkpoint {digest.checkpoint_thread_id}"]
@@ -108,6 +114,7 @@ class ConversationMemoryView:
         self.budget = budget or ContextBudget()
 
     def recent_messages(self, owner: Owner, thread_id: str, limit: int = 6) -> list[Turn]:
+        """The last `limit` turns of the current topic, leaving out turns the guardrails blocked."""
         thread = self._store.get_thread(owner, thread_id)
         turns = self._store.turns(owner, thread_id, topic_epoch=thread.topic_epoch)
         return [t for t in turns if not t.metadata.blocked][-limit:]
@@ -130,6 +137,7 @@ class OwnerScopedMemoryRetriever:
         self._store = store
 
     def retrieve(self, owner: Owner, query: str, limit: int = 5) -> list[MemoryHit]:
+        """The best-matching summaries and user turns from the owner's 50 most recent threads (score above zero)."""
         words = _words(query)
         hits = []
         for thread in self._store.list_threads(owner, limit=50):

@@ -15,6 +15,7 @@ class ClassificationInfo(BaseModel):
     source: str
 
 
+# A column and its data policy. 'classification' decides who may select or filter on it.
 class RegisteredColumn(BaseModel):
     name: str
     position: int
@@ -35,6 +36,8 @@ class RequiredFilter(BaseModel):
     reason: str
 
 
+# A registered table or view. grain_columns identify one row; they are trusted only when grain_status is
+# 'verified'. authorized_roles lists the roles that may query the object.
 class RegisteredObject(BaseModel):
     fqn: str
     logical_name: str
@@ -63,6 +66,7 @@ class RegisteredObject(BaseModel):
         return next((c for c in self.columns if c.name == name), None)
 
 
+# An equality condition on a column that a join must include, and why.
 class RequiredCondition(BaseModel):
     object: str
     column: str
@@ -70,6 +74,7 @@ class RequiredCondition(BaseModel):
     reason: str
 
 
+# An approved join between two objects, with the conditions it requires and how to aggregate across it.
 class Relationship(BaseModel):
     relationship_id: str
     from_object: str
@@ -88,6 +93,8 @@ class Relationship(BaseModel):
         return self.cardinality in ("1:1", "1:0..1")
 
 
+# A business measure. certified_source names the KPI view column that already holds it, when one exists;
+# metrics sharing an ambiguity_group are different measures that generic wording can confuse.
 class Metric(BaseModel):
     metric_id: str
     name: str
@@ -103,6 +110,8 @@ class Metric(BaseModel):
     status: MetadataStatus
 
 
+# A business term pointing at an object, column or metric. A note starting with 'ambiguous' marks a
+# generic term (see search.py).
 class Synonym(BaseModel):
     term: str
     target_kind: Literal["object", "column", "metric"]
@@ -112,6 +121,7 @@ class Synonym(BaseModel):
     status: MetadataStatus
 
 
+# A reviewed SQL template; verification_status says whether it was checked against a baseline.
 class VerifiedSqlExample(BaseModel):
     example_id: str
     question: str
@@ -124,6 +134,7 @@ class VerifiedSqlExample(BaseModel):
     verification_note: str
 
 
+# Which inputs one registry build was made from (file names and checksums).
 class BuildInfo(BaseModel):
     build_id: str
     built_at: str

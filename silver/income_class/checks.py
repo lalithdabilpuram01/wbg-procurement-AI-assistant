@@ -36,6 +36,7 @@ def independent_cell_counts(content: bytes, header_row: int, data_year_row: int)
 
 
 def check(df: DataFrame, parsed: ParsedWorkbook, bronze: dict, report: DQReport) -> None:
+    """Run every data-quality rule for income_classification_history and add the results to `report`."""
     # --- source integrity
     report.equals("bronze_row_count", bronze["rows"], 1)
     report.equals("bronze_sha256_matches_stored_column", bronze["computed_sha256"], bronze["stored_sha256"])

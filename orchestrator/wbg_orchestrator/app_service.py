@@ -53,6 +53,7 @@ class JobNotFound(LookupError):
 
 @dataclass
 class Job:
+    """One background job as the API reports it; kept in memory only (a restart forgets every job)."""
     job_id: str
     owner: Owner
     conversation_id: str
@@ -70,6 +71,7 @@ class Job:
 
 @dataclass(frozen=True)
 class InvestigationRef:
+    """A pointer to one investigation of a conversation: its request id and the user turn that started it."""
     request_id: str
     turn_seq: int
     question: str
@@ -90,9 +92,13 @@ DELETED_FOLDER = "__deleted__"          # system folder holding deleted conversa
 
 
 class AppService:
+    """Everything the API can do for a signed-in owner; long work runs on a small thread pool as jobs."""
+
     def __init__(self, conversations: ConversationService, store: ConversationStore, engine: InvestigationEngine,
                  front_door: ConversationFrontDoor, *, workspace: WorkspaceStore | None = None,
                  learning: FeedbackService | None = None, lessons: LessonStore | None = None, max_workers: int = 2):
+        """Wire the conversation service, store, engine and front door; keeps the job pool, jobs and live job
+        streams."""
         self._conversations, self._store, self._engine, self._front_door = conversations, store, engine, front_door
         self._workspace = workspace or InMemoryWorkspaceStore()
         self.learning = learning
@@ -106,7 +112,7 @@ class AppService:
         self._by_client_id: dict[tuple[str, str, str, str], str] = {}
         self._job_spans: dict[str, Callable[..., None]] = {}                   # a running job's root span setter
         self.streams = JobStreams()                                             # live steps and text, per job
-        engine.deps.progress = self.streams.publish_investigation
+        engine.deps.progress = self.streams.publish_investigation  # graph steps go to the job's live stream
 
     # ------------------------------------------------------------------------------------------ conversations
     def start_conversation(self, owner: Owner, title: str | None = None) -> ThreadInfo:
@@ -125,6 +131,7 @@ class AppService:
         self._workspace.file_thread(owner, conversation_id, self._deleted_folder(owner, create=True))
 
     def _deleted_folder(self, owner: Owner, create: bool = False) -> str | None:
+        """The id of the owner's hidden "deleted" folder; created when `create` is set, else None if absent."""
         found = next((f.folder_id for f in self._workspace.list_folders(owner) if f.name == DELETED_FOLDER), None)
         if found is None and create:
             found = self._workspace.create_folder(owner, DELETED_FOLDER).folder_id
@@ -164,6 +171,7 @@ class AppService:
         return out
 
     def add_bookmark(self, owner: Owner, conversation_id: str, turn_seq: int, note: str) -> Bookmark:
+        """Bookmark one assistant answer of the owner's conversation; any other turn is refused as not found."""
         turns = self._store.turns(owner, conversation_id)                       # ownership of the conversation
         if not any(t.seq == turn_seq and t.role == "assistant" for t in turns):
             raise WorkspaceItemNotFound("only answers can be bookmarked")
@@ -184,18 +192,21 @@ class AppService:
                             lambda job: self._run_message(job, text, execute, release))
 
     def submit_package(self, owner: Owner, conversation_id: str, package: PackageAssessment, client_message_id: str) -> Job:
+        """Start a package assessment job (the fixed prediction plan) in the owner's conversation."""
         self._store.get_thread(owner, conversation_id)                         # ownership before anything runs
         return self._submit(owner, conversation_id, "package", client_message_id,
                             lambda job: self._finish_outcome(job, self._front_door.assess_package(
                                 owner, conversation_id, package, on_start=lambda rid: self._started(job, rid))))
 
     def submit_plan(self, owner: Owner, conversation_id: str, spec: PlanningSpec, client_message_id: str) -> Job:
+        """Start a Planning Brief job in the owner's conversation."""
         self._store.get_thread(owner, conversation_id)                         # ownership before anything runs
         return self._submit(owner, conversation_id, "plan", client_message_id,
                             lambda job: self._finish_outcome(job, self._front_door.plan_project(
                                 owner, conversation_id, spec, on_start=lambda rid: self._started(job, rid))))
 
     def submit_tender(self, owner: Owner, conversation_id: str, spec: TenderSpec, client_message_id: str) -> Job:
+        """Start a tender-design check job in the owner's conversation."""
         self._store.get_thread(owner, conversation_id)                         # ownership before anything runs
         return self._submit(owner, conversation_id, "tender", client_message_id,
                             lambda job: self._finish_outcome(job, self._front_door.check_tender(
@@ -256,12 +267,14 @@ class AppService:
         return self._lessons().decide(card_id, approved, owner.user_id, note)
 
     def _lessons(self) -> LessonStore:
+        """The lesson store, or LessonNotFound when the app runs without lesson cards."""
         if self.lessons is None:
             raise LessonNotFound("lesson cards are not enabled in this app")
         return self.lessons
 
     # ------------------------------------------------------------------------------------------ investigations
     def investigations(self, owner: Owner, conversation_id: str) -> list[InvestigationRef]:
+        """The investigations of a conversation: user turns with a request id that have a checkpoint."""
         turns = self._store.turns(owner, conversation_id)
         return [InvestigationRef(t.metadata.request_id, t.seq, t.text) for t in turns
                 if t.role == "user" and t.metadata.request_id and self._has_checkpoint(owner, conversation_id, t.metadata.request_id)]
@@ -270,6 +283,7 @@ class AppService:
         return self._engine.outcome(owner_ref(owner), self._checkpoint_thread(owner, conversation_id, request_id))
 
     def recover(self, owner: Owner, conversation_id: str, request_id: str, client_message_id: str) -> Job:
+        """Start a job that continues an interrupted investigation from its last checkpoint."""
         thread = self._checkpoint_thread(owner, conversation_id, request_id)
         return self._submit(owner, conversation_id, "recover", client_message_id,
                             lambda job: self._finish(job, request_id, self._engine.recover(owner_ref(owner), thread)))
@@ -287,6 +301,7 @@ class AppService:
         return job
 
     def job(self, owner: Owner, job_id: str) -> Job:
+        """The owner's job; another user's job raises the same JobNotFound as a missing one."""
         job = self._jobs.get(job_id)
         if job is None or job.owner != owner:
             raise JobNotFound("job not found")
@@ -302,6 +317,7 @@ class AppService:
     # ------------------------------------------------------------------------------------------------ internals
     def _submit(self, owner: Owner, conversation_id: str, kind: str, client_message_id: str,
                 work: Callable[[Job], None]) -> Job:
+        """Register a job and queue `work`, unless it repeats a client message id or the conversation is busy."""
         key = (owner.tenant_id, owner.user_id, conversation_id, client_message_id)
         with self._lock:
             existing = self._by_client_id.get(key)
@@ -321,11 +337,13 @@ class AppService:
         return any(j.state == "running" and j.owner == owner and j.conversation_id == conversation_id for j in self._jobs.values())
 
     def _learning(self) -> FeedbackService:
+        """The feedback service, or RuntimeError when the app runs without feedback."""
         if self.learning is None:
             raise RuntimeError("feedback is not enabled in this app")
         return self.learning
 
     def _run_revision(self, job: Job, feedback: Feedback) -> None:
+        """Job body: answer the original question again with the user's correction, and link the feedback to it."""
         outcome = self._front_door.revise(job.owner, job.conversation_id, feedback.request_id, feedback.correction,
                                           on_start=lambda rid: self._started(job, rid))
         request_id = outcome.values["request"]["request_id"]
@@ -359,6 +377,7 @@ class AppService:
                 self.streams.close(job.job_id, {"state": job.state, "status": job.status})
 
     def _run_message(self, job: Job, text: str, execute: bool, rag_release: str | None = None) -> None:
+        """Job body: hand the message to the front door, streaming reply text and then the checked answer."""
         reply = self._front_door.handle_message(job.owner, job.conversation_id, text, execute=execute,
                                                 on_start=lambda rid: self._started(job, rid), rag_release=rag_release,
                                                 on_text=lambda piece: self.streams.publish(job.job_id, {"type": "text", "text": piece}))
@@ -372,6 +391,7 @@ class AppService:
             self.streams.publish(job.job_id, {"type": "answer", "text": answer_text(outcome.response)})
 
     def _started(self, job: Job, request_id: str) -> None:
+        """Called once the request id is known: tag logs, the span and the live stream, and apply a pending stop."""
         job.request_id = request_id
         bind(request_id=request_id, investigation_id=investigation_id_for(request_id))
         if span := self._job_spans.get(job.job_id):
@@ -395,6 +415,7 @@ class AppService:
         return checkpoint_thread_id(owner_ref(owner), conversation_id, investigation_id_for(request_id))
 
     def _has_checkpoint(self, owner: Owner, conversation_id: str, request_id: str) -> bool:
+        """True when the request started an investigation that has a checkpoint for this owner."""
         try:
             self._engine.outcome(owner_ref(owner), self._checkpoint_thread(owner, conversation_id, request_id))
             return True

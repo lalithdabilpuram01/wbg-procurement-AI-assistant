@@ -33,6 +33,7 @@ from structured_agent.observability import JsonlAuditSink, Telemetry
 
 
 def parse_arguments() -> argparse.Namespace:
+    """Read the command line: the question, the live-call confirmation and the run options."""
     parser = argparse.ArgumentParser(description="Claude-only natural-language-to-SQL workflow (live call).")
     parser.add_argument("question")
     parser.add_argument("--confirm-live-call", action="store_true",
@@ -46,6 +47,7 @@ def parse_arguments() -> argparse.Namespace:
 
 
 def main() -> int:
+    """Run one live question end to end; returns the exit code (0 ok, 2 config, 3 not live, 4 no guardrails)."""
     arguments = parse_arguments()
     try:
         live_access = authorize_live_access(arguments.confirm_live_call)   # both opt-ins, before anything else

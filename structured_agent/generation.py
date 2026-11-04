@@ -30,6 +30,8 @@ class ProviderNotConfigured(RuntimeError):
 
 @dataclass
 class GeneratedSql:
+    """One generated statement with its parameters and which generator produced it."""
+
     sql: str
     parameters: dict[str, ParameterValue]
     generator: str
@@ -49,6 +51,8 @@ class SchemaContext(BaseModel):
 
 
 class SqlGenerator(Protocol):
+    """Anything that turns a SchemaContext (plus optional validator feedback) into SQL."""
+
     name: str
     is_llm: bool
 
@@ -67,6 +71,8 @@ class TemplateSqlGenerator:
         self._parameters = parameters
 
     def generate(self, context: SchemaContext, feedback: list[ToolError] | None = None) -> GeneratedSql:
+        """Return the reviewed template's SQL and parameters; raises LookupError when the template is not in the
+        context."""
         example = next((e for e in context.examples if e.example_id == self._example_id), None)
         if example is None:
             raise LookupError(f"No reviewed SQL template '{self._example_id}' for the selected tables")
@@ -77,6 +83,8 @@ class TemplateSqlGenerator:
 
 # ---------------------------------------------------------------------------------------------------------- LLM path
 class LlmProvider(Protocol):
+    """A language model behind a single system + user prompt call that returns plain text."""
+
     name: str
 
     def complete(self, system: str, user: str) -> str: ...
@@ -90,6 +98,7 @@ Reply with JSON: {"sql": "...", "parameters": {"name": value}}"""
 
 
 def build_prompt(context: SchemaContext, feedback: list[ToolError] | None) -> str:
+    """Build the user prompt from schema metadata only; validator errors are appended when this is a correction."""
     lines = [f"Question: {context.question}", "", "Tables:"]
     for candidate in context.candidates:
         types = context.column_types.get(candidate.object_fqn, {})
@@ -106,6 +115,8 @@ def build_prompt(context: SchemaContext, feedback: list[ToolError] | None) -> st
 
 
 class LlmSqlGenerator:
+    """Asks an LlmProvider for SQL and parses the JSON reply into GeneratedSql."""
+
     is_llm = True
 
     def __init__(self, provider: LlmProvider):
@@ -113,7 +124,10 @@ class LlmSqlGenerator:
         self.name = f"llm ({provider.name})"
 
     def generate(self, context: SchemaContext, feedback: list[ToolError] | None = None) -> GeneratedSql:
+        """Ask the provider for SQL and parse the JSON object in its reply into GeneratedSql."""
         reply = self._provider.complete(SYSTEM_PROMPT, build_prompt(context, feedback))
+        # The reply may wrap the JSON in prose or a code fence, so take the outermost {...}; no JSON gives empty SQL,
+        # which the validator then rejects.
         match = re.search(r"\{.*\}", reply, re.S)
         payload = json.loads(match.group(0)) if match else {}
         return GeneratedSql(sql=payload.get("sql", ""), parameters=payload.get("parameters", {}), generator=self.name, is_llm=True)
@@ -125,6 +139,8 @@ class ClaudeProvider:
     name = "anthropic-claude"
 
     def __init__(self, model: str = "claude-opus-5-5"):
+        """Create the Anthropic client; raises ProviderNotConfigured unless external LLM use is allowed and a key is
+        set."""
         if os.environ.get("WBG_ALLOW_EXTERNAL_LLM", "").lower() != "true" or not os.environ.get("ANTHROPIC_API_KEY"):
             raise ProviderNotConfigured("Claude is not approved/configured (WBG_ALLOW_EXTERNAL_LLM and ANTHROPIC_API_KEY)")
         import anthropic
@@ -155,6 +171,8 @@ class PortkeyProvider:
 # ------------------------------------------------------------------------------------------------ bounded correction
 @dataclass
 class GenerationOutcome:
+    """Every (generated SQL, validation report) pair tried for one question, in order."""
+
     attempts: list[tuple[GeneratedSql, ValidationReport]]
 
     @property
@@ -164,9 +182,11 @@ class GenerationOutcome:
 
 def generate_with_correction(generator: SqlGenerator, context: SchemaContext, validator: SqlValidator,
                              principal: Principal) -> GenerationOutcome:
+    """Generate and validate SQL, allowing one correction when every error is recoverable; returns all attempts."""
     generated = generator.generate(context)
     report = validator.validate(generated.sql, generated.parameters, principal)
     attempts = [(generated, report)]
+    # Stop when approved, or when any error is not recoverable (security and authorization errors never are).
     if report.approved or not report.errors or not all(e.recoverable for e in report.errors):
         return GenerationOutcome(attempts)
     corrected = generator.generate(context, feedback=report.errors)       # the one bounded correction

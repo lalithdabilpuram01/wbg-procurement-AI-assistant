@@ -50,6 +50,8 @@ SQL_DRAFT_SCHEMA = {
 }
 
 
+# One :named parameter of the draft. The value always travels as text and is converted by value_type,
+# because the strict JSON schema above allows only string values.
 class SqlParameter(BaseModel):
     name: str
     value: str
@@ -60,6 +62,7 @@ class SqlParameter(BaseModel):
         return converters[self.value_type](self.value)
 
 
+# The structured reply the model must return (matches SQL_DRAFT_SCHEMA). Its SQL is only a proposal.
 class SqlDraft(BaseModel):
     answerable: bool
     sql: str

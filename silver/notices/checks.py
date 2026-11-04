@@ -31,6 +31,7 @@ def _ws(s: str | None) -> str | None:
 
 
 def check_notices(n: DataFrame, bronze: DataFrame, projects: DataFrame, details: DataFrame, prov: dict, rep: DQReport) -> None:
+    """Data-quality rules for the DS00979 notice metadata (procurement_notices)."""
     rows = n.count()
     rep.equals("notices:rows_equal_bronze", rows, bronze.count())
     rep.equals("notices:rows_equal_manifest", rows, prov["records"])
@@ -93,6 +94,7 @@ def check_notices(n: DataFrame, bronze: DataFrame, projects: DataFrame, details:
 
 
 def check_details(d: DataFrame, bronze: DataFrame, projects: DataFrame, notices: DataFrame, prov: dict, rep: DQReport) -> dict:
+    """Data-quality rules for the API notice details; returns the rows used for the ML evidence inventory."""
     rows = d.count()
     rep.equals("details:rows_equal_bronze", rows, bronze.count())
     rep.equals("details:rows_equal_manifest", rows, prov["records"])
@@ -188,6 +190,7 @@ def check_details(d: DataFrame, bronze: DataFrame, projects: DataFrame, notices:
 
 
 def check_links(cand: DataFrame, links: DataFrame, details: DataFrame, contracts: DataFrame, rep: DQReport) -> dict:
+    """Data-quality rules for the notice-contract link candidates and links; returns coverage counts."""
     n = cand.count()
     rep.equals("candidates:key_unique", cand.select("candidate_key").distinct().count(), n)
     rep.equals("candidates:notice_in_details", cand.join(details, "notice_op_id", "left_anti").count(), 0)

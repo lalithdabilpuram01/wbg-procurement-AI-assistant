@@ -1,15 +1,20 @@
+// Cards for the three prediction models of a package: tender duration (trained on real tenders), and amendment and
+// re-bidding risk (trained on synthetic outcomes, so always labelled as such). Fed by "model_prediction" evidence.
 import { CalendarClock, FlaskConical, Gauge, RefreshCcw, Timer } from "lucide-react";
 import type { Evidence } from "@/lib/api";
 import { Badge, Card } from "@/components/ui/primitives";
 import { Tooltip } from "@/components/ui/overlays";
 
+/** The value of one named fact on an evidence item, or undefined. */
 const fact = (e: Evidence, name: string) => e.facts.find((f) => f.name === name)?.value;
 
+/** Up to three driver phrases parsed from the evidence summary ("Drivers: a; b; c."); none when no driver dominates. */
 function drivers(summary: string): string[] {
   const match = summary.match(/(?:Simulated )?[Dd]rivers: (.*?)\.(?:\s|$)/);
   return match && match[1] !== "no dominant driver" ? match[1].split("; ").slice(0, 3) : [];
 }
 
+/** The short list of what pushed the estimate up or down. */
 function Drivers({ items, synthetic }: { items: string[]; synthetic?: boolean }) {
   if (!items.length) return null;
   return (
@@ -26,12 +31,15 @@ function Drivers({ items, synthetic }: { items: string[]; synthetic?: boolean })
   );
 }
 
+/** Model 1: estimated days from first tender to contract signing, its P10 to P90 range on a bar with a one-year mark,
+ *  the chance of taking over a year and the estimated signing month. */
 function DurationCard({ e }: { e: Evidence }) {
   const days = Number(fact(e, "estimated_duration"));
   const low = Number(fact(e, "likely_range_p10"));
   const high = Number(fact(e, "likely_range_p90"));
   const overYear = fact(e, "probability_over_365_days");
   const signing = fact(e, "estimated_signing_date");
+  // The bar always reaches past one year, so the 365-day mark stays visible for short estimates.
   const scale = Math.max(high * 1.15, 420);
   const pos = (v: number) => `${Math.min(100, (v / scale) * 100)}%`;
   return (
@@ -59,6 +67,7 @@ function DurationCard({ e }: { e: Evidence }) {
   );
 }
 
+/** Models 2 and 3: a simulated probability with its assessment and drivers, clearly marked as synthetic. */
 function RiskCard({ e, title, icon: Icon }: { e: Evidence; title: string; icon: React.ElementType }) {
   const probability = fact(e, "simulated_probability");
   const assessment = fact(e, "assessment") ?? "";
@@ -78,6 +87,7 @@ function RiskCard({ e, title, icon: Icon }: { e: Evidence; title: string; icon: 
   );
 }
 
+// The package name, and the method suggested from history when the user gave none, both read from the citation text.
 const packageOf = (e: Evidence) => e.citation.match(/package '([^']+)'(?: \(method suggested: ([^)]+)\))?/);
 
 /** Three cards per package: one group for a single package, a labelled group per package in a Planning Brief. */
@@ -92,6 +102,7 @@ export function PredictionCards({ evidence }: { evidence: Evidence[] }) {
   return (
     <div className="mt-4 space-y-4">
       {[...groups.entries()].map(([name, items]) => {
+        // Each model is found by its citation prefix ("Model 1", "Model 2", "Model 3"); a missing one is just skipped.
         const byModel = (n: number) => items.find((e) => e.citation.startsWith(`Model ${n}`));
         const [duration, amendment, rebid] = [byModel(1), byModel(2), byModel(3)];
         const suggested = packageOf(items[0])?.[2];

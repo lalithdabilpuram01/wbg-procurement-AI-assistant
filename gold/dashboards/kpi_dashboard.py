@@ -18,6 +18,7 @@ OUT = Path(__file__).with_name("wbg_procurement_kpis.lvdash.json")
 
 
 def datasets(gold: str) -> dict[str, tuple[str, str]]:
+    """Dashboard datasets: {name: (display name, SELECT on one Gold view)}; subtotal views are pinned to one level."""
     return {
         "overview": ("Overview", f"SELECT * FROM {gold}.vw_kpi_overview"),
         "awards": ("Contract awards", f"SELECT * FROM {gold}.vw_kpi_contract_awards"),
@@ -42,6 +43,7 @@ def field(name: str, expression: str | None = None) -> dict:
 
 
 def counter(name: str, title: str, column: str, x: int, y: int) -> dict:
+    """A single-number tile showing one column of the overview dataset."""
     return {"widget": {"name": name,
                        "queries": [{"name": "main_query", "query": {"datasetName": "overview", "fields": [field(column)],
                                                                      "disaggregated": True}}],
@@ -78,6 +80,7 @@ def text(name: str, lines: list[str], y: int, height: int = 2) -> dict:
 
 # --------------------------------------------------------------------------------------------------- pages
 def overview_page(gold: str) -> dict:
+    """The Overview page: title text, six headline counters and four charts."""
     counters = [("projects", "Projects", "total_projects"), ("awards_n", "Contract awards", "contract_awards"),
                 ("value", "Contract value (USD)", "total_contract_award_value_usd"),
                 ("notices_n", "Procurement notices", "procurement_notices"), ("ibrd", "IBRD loans", "ibrd_loan_instruments"),
@@ -99,6 +102,7 @@ def overview_page(gold: str) -> dict:
 
 
 def countries_page() -> dict:
+    """The Countries page: top countries by contract value, projects by income group, median contract size."""
     return {"name": "countries", "displayName": "Countries", "pageType": "PAGE_TYPE_CANVAS", "layout": [
         text("countries_title", ["## Countries", "Single-country projects only; regional projects are kept as a separate geography."], 0),
         chart("top_countries", "bar", "Top 15 countries by contract value (USD)", "countries", "country_name", "Country",
@@ -111,6 +115,7 @@ def countries_page() -> dict:
 
 
 def financing_page() -> dict:
+    """The Financing page: IBRD and IDA instruments by Board approval fiscal year."""
     return {"name": "financing", "displayName": "Financing", "pageType": "PAGE_TYPE_CANVAS", "layout": [
         text("financing_title", ["## Financing instruments", "IBRD loans and IDA credits of the cohort's projects (counts only)."], 0),
         chart("instruments_by_year", "bar", "Instruments by Board approval fiscal year", "financing", "board_approval_fiscal_year",

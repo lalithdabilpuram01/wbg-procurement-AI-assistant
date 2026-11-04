@@ -102,6 +102,7 @@ def step_scope(name: str) -> Iterator[None]:
 
 
 def current_steps() -> dict[str, Any]:
+    """The innermost step, the full step path and its depth (empty outside any step)."""
     steps = _steps.get()
     if not steps:
         return {}
@@ -125,6 +126,7 @@ class ServiceInfo:
 
 
 def _git_commit() -> str:
+    """The short git commit of the repository, or "unknown" when git is missing or this is not a checkout."""
     try:
         result = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=REPO, capture_output=True, text=True, timeout=5)
     except (OSError, subprocess.SubprocessError):
@@ -186,6 +188,7 @@ def _is_app_logger(name: str) -> bool:
 
 
 def _trace_ids() -> dict[str, str]:
+    """The current OpenTelemetry trace and span ids as hex (empty outside a span)."""
     from opentelemetry import trace
     context = trace.get_current_span().get_span_context()
     if not context.is_valid:
@@ -204,6 +207,7 @@ class JsonLineFormatter(logging.Formatter):
         self._service = {"service_version": service.version, "environment": service.environment} if service else {}
 
     def format(self, record: logging.LogRecord) -> str:
+        """The record as one JSON line; extra fields passed to the logger become top-level keys."""
         line: dict[str, Any] = {
             "time": dt.datetime.fromtimestamp(record.created, dt.timezone.utc).isoformat(timespec="milliseconds"),
             "level": record.levelname, "logger": record.name, "message": record.getMessage(),
@@ -223,6 +227,7 @@ class ConsoleFormatter(logging.Formatter):
     """A short line for the terminal; the JSON log file has the full record."""
 
     def format(self, record: logging.LogRecord) -> str:
+        """Level, logger, message and step, then the job and request ids and the trace id when known."""
         ids = " ".join(f"{k}={v}" for k, v in current_context().items() if k in ("job_id", "request_id"))
         trace_id = _trace_ids().get("trace_id")
         step = current_steps().get("step")

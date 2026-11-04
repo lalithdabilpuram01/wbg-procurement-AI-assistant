@@ -47,16 +47,19 @@ class ToolCallerLike(Protocol):
 
 
 class StructuredDataWorker:
+    """Worker for data questions and registry lookups, over the Structured Data Agent's workflow and tools."""
     name = WorkerName.STRUCTURED
     operations = frozenset({"answer_data_question", "describe_metric", "find_tables"})
 
     def __init__(self, workflow_for: Callable[[AppAuthorizationContext], WorkflowLike],
                  tools_for: Callable[[AppAuthorizationContext], ToolCallerLike], authority: TicketAuthority,
                  result_cache: ResultCache):
+        """Wire the per-authorization workflow and tool factories, the ticket authority and the result cache."""
         self._workflow_for, self._tools_for = workflow_for, tools_for
         self._authority, self._cache = authority, result_cache
 
     def run(self, task: AgentTask, context: WorkerContext) -> WorkerOutput:
+        """Check the ticket and dispatch to the operation's handler."""
         self._authority.verify(context.ticket, task)
         if task.operation == "answer_data_question":
             return self._answer(task, context)
@@ -69,6 +72,10 @@ class StructuredDataWorker:
 
     # ------------------------------------------------------------------------------------------------- NL2SQL
     def _answer(self, task: AgentTask, context: WorkerContext) -> WorkerOutput:
+        """Run the NL2SQL workflow and map its status to a task state and evidence.
+
+        SQL runs only when the task asks for it and the controller allows it; otherwise the query is only validated.
+        """
         execute = task.requires_execution and context.execution_allowed
         memory = _memory_block(context)
         try:
@@ -84,6 +91,7 @@ class StructuredDataWorker:
             return WorkerOutput(TaskState.SUCCEEDED, (self._result_evidence(task, result, transport),), usage)
         if status == WorkflowStatus.VALIDATED_NOT_EXECUTED:
             notes = ("execution_not_approved",) if task.requires_execution else ()
+            # Asked to run but only validated: partial, since the figures the task wanted are missing.
             state = TaskState.PARTIAL if task.requires_execution else TaskState.SUCCEEDED
             return WorkerOutput(state, (_validated_query_evidence(task, result),), usage, notes=notes)
         if status == WorkflowStatus.NEEDS_CLARIFICATION:
@@ -103,6 +111,10 @@ class StructuredDataWorker:
             retry_after=result.retry_after_seconds))
 
     def _result_evidence(self, task: AgentTask, result: WorkflowResult, transport: str) -> EvidenceRecord:
+        """The executed result as approved evidence: bounded facts, hashes of the SQL and parameters, and warnings.
+
+        The full rows go to the request-scoped cache; the record keeps only a reference to them.
+        """
         validation_id = result.validation.validation_id if result.validation else None
         result_ref = self._cache.put(new_id("rows"), list(result.rows))
         facts = _row_facts(result.rows)
@@ -131,6 +143,7 @@ class StructuredDataWorker:
 
     # ------------------------------------------------------------------------------------------- registry tools
     def _describe_metric(self, task: AgentTask, context: WorkerContext) -> WorkerOutput:
+        """Up to three matching metric definitions; several close matches ask the user to choose."""
         response = self._call(context, "get_metric_definition", {"query": task.question})
         if response.get("status") == "needs_clarification" or response.get("ambiguity"):
             options = tuple(o["name"] for o in (response.get("ambiguity") or {}).get("options", []))[:5]
@@ -153,6 +166,7 @@ class StructuredDataWorker:
                                                                "No registered metric matches."))
 
     def _find_tables(self, task: AgentTask, context: WorkerContext) -> WorkerOutput:
+        """Up to three approved tables or views that match the question."""
         response = self._call(context, "search_table_registry", {"query": task.question, "top_k": 3})
         problem = _tool_problem(task, response)
         if problem:
@@ -170,6 +184,7 @@ class StructuredDataWorker:
                                                                "No approved table matches."))
 
     def _call(self, context: WorkerContext, tool: str, arguments: dict[str, Any]) -> dict[str, Any]:
+        """Call a registry tool; timeouts and connection errors become retryable TransientWorkerErrors."""
         try:
             return self._tools_for(context.authorization).call(tool, arguments, context.request_id)
         except TimeoutError as error:
@@ -189,6 +204,7 @@ def _memory_block(context: WorkerContext) -> str | None:
 
 
 def _row_facts(rows: list[dict[str, Any]]) -> tuple[Fact, ...]:
+    """Result cells as facts, row by row, up to MAX_FACTS_PER_EVIDENCE; names get a row prefix if several rows."""
     facts = []
     for index, row in enumerate(rows):
         for column, value in row.items():
@@ -200,6 +216,7 @@ def _row_facts(rows: list[dict[str, Any]]) -> tuple[Fact, ...]:
 
 
 def _validated_query_evidence(task: AgentTask, result: WorkflowResult) -> EvidenceRecord:
+    """A query that passed validation but did not run: verified as a query, but carries no approved figures."""
     validation_id = result.validation.validation_id if result.validation else None
     return EvidenceRecord(
         evidence_id=new_id("ev"), investigation_id=task.investigation_id, task_id=task.task_id,
@@ -213,6 +230,7 @@ def _validated_query_evidence(task: AgentTask, result: WorkflowResult) -> Eviden
 
 
 def _tool_problem(task: AgentTask, response: dict[str, Any]) -> WorkerOutput | None:
+    """None for an ok tool response; otherwise the failed output, classed as refused, not found or a tool failure."""
     status = response.get("status")
     if status == "ok":
         return None

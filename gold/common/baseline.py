@@ -14,6 +14,7 @@ COHORT = COHORT_MANIFEST
 
 
 def _tables(spark, schema: str) -> list[str]:
+    """Every table in `schema` of the catalog; an empty list when the schema does not exist yet."""
     if not spark.sql(f"SHOW SCHEMAS IN {CATALOG} LIKE '{schema}'").collect():
         return []
     return [f"{CATALOG}.{schema}.{r.tableName}" for r in spark.sql(f"SHOW TABLES IN {CATALOG}.{schema}").collect()]
@@ -44,6 +45,7 @@ def capture(spark, exclude: set[str]) -> dict:
 
 
 def check_unchanged(spark, base: dict, rep: DQReport, expected_counts: tuple[int, int, int]) -> None:
+    """Check that every baselined table, grant, column mask and the cohort manifest is unchanged since capture()."""
     rep.equals("baseline_covers (Bronze, Silver, Gold)", (len(base["bronze"]), len(base["silver"]), len(base["gold"])), expected_counts)
     for group in ("bronze", "silver", "gold"):
         changed = {t: (b, _state(spark, t)) for t, b in base[group].items() if _state(spark, t) != b}

@@ -17,6 +17,7 @@ from .http import utcnow
 
 
 def sha256_file(path: Path) -> str:
+    """SHA-256 of a file, read in 1 MiB blocks."""
     h = hashlib.sha256()
     with open(path, "rb") as fh:
         for block in iter(lambda: fh.read(1 << 20), b""):
@@ -25,6 +26,7 @@ def sha256_file(path: Path) -> str:
 
 
 def _manifest(entry: dict[str, Any], manifest_dir: Path) -> None:
+    """Append one provenance entry to MANIFEST.jsonl in the given folder."""
     manifest_dir.mkdir(parents=True, exist_ok=True)
     with open(manifest_dir / "MANIFEST.jsonl", "a") as fh:
         fh.write(json.dumps(entry) + "\n")
@@ -32,6 +34,7 @@ def _manifest(entry: dict[str, Any], manifest_dir: Path) -> None:
 
 def write_jsonl(records: Iterable[dict[str, Any]], path: Path, *, source: str, method: str,
                 notes: str = "", compress: bool | None = None) -> Path:
+    """Write records as JSON Lines (gzip when the name ends in .gz) and record the file in the manifest."""
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     compress = path.suffix == ".gz" if compress is None else compress
@@ -46,6 +49,7 @@ def write_jsonl(records: Iterable[dict[str, Any]], path: Path, *, source: str, m
 
 
 def record_file(path: Path, *, source: str, method: str, records: int | None, notes: str = "") -> None:
+    """Append the file's provenance (source, method, time, record count, size, SHA-256) to the samples manifest."""
     path = Path(path)
     root = SETTINGS.samples_dir if SETTINGS.samples_dir in path.parents else path.parent
     _manifest({
@@ -61,6 +65,7 @@ def record_file(path: Path, *, source: str, method: str, records: int | None, no
 
 
 def read_jsonl(path: Path) -> list[dict[str, Any]]:
+    """Read a JSON Lines file (gzip when the name ends in .gz), skipping blank lines."""
     path = Path(path)
     opener = gzip.open if path.suffix == ".gz" else open
     with opener(path, "rt", encoding="utf-8") as fh:

@@ -42,6 +42,7 @@ class MemoryRecall(BaseModel):
     summary_version: int | None = None
 
 
+# Input to the conversation responder for the conversation routes: the message, route, reason and memory text.
 class ConversationRequest(BaseModel):
     message: str                                      # the redacted current message
     route: Route
@@ -51,6 +52,7 @@ class ConversationRequest(BaseModel):
     transcript: str = ""                              # recent turns of this topic, as stored (untrusted, not evidence)
 
 
+# The responder's reply and the memory items it drew on; that memory is not re-verified evidence.
 class ConversationResponse(BaseModel):
     text: str
     generated_by: str
@@ -59,6 +61,8 @@ class ConversationResponse(BaseModel):
 
 
 class ConversationResponder(Protocol):
+    """Writes replies for the conversation routes from the request alone (no retrieval, no tools)."""
+
     name: str
     uses_live_model: bool
 
@@ -137,6 +141,7 @@ class OfflineResponder:
                          "app with `uv run wbg-api --live`). You can ask a specific procurement question instead.")
 
     def respond(self, request: ConversationRequest, on_text: Callable[[str], None] | None = None) -> ConversationResponse:
+        """A fixed reply for the reason, or a recap of the stored conversation for memory questions."""
         if request.route == Route.CONVERSATION_MEMORY:
             response = self._recap(request.recall or MemoryRecall())
         else:
@@ -146,6 +151,7 @@ class OfflineResponder:
         return response
 
     def _recap(self, recall: MemoryRecall) -> ConversationResponse:
+        """List the questions, decisions, verified references and summary of this topic, labelled as memory."""
         lines = ["From this conversation (conversation memory, not re-verified evidence):"]
         sources: list[str] = []
         if recall.questions:

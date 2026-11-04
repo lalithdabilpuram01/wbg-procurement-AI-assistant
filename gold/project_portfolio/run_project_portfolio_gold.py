@@ -98,6 +98,7 @@ COMMENTS: dict[str, Any] = {
 
 
 def main() -> int:
+    """Dry run by default: build and check gold_project_portfolio and save the reports; write mode creates the table."""
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--mode", choices=["dry-run", "write"], default="dry-run")
     ap.add_argument("--confirm-create", action="store_true")
@@ -112,6 +113,8 @@ def main() -> int:
     spark = get_spark(args.profile)
 
     schema_exists = bool(spark.sql(f"SHOW SCHEMAS IN {CATALOG} LIKE 'wbg_gold'").collect())
+    # Version, row count and grants of every Bronze and Silver table before the write, so the verify script can prove
+    # nothing changed.
     baseline: dict = {"bronze": {}, "silver": {}, "gold_schema_exists": schema_exists, "target_exists": schema_exists and spark.catalog.tableExists(T.TARGET),
                       "cohort_manifest_sha256": hashlib.sha256(COHORT.read_bytes()).hexdigest()}
     bronze = [f"{CATALOG}.{sc}.{r.tableName}" for sc in ("wbg_bronze", "wbg_ref_bronze") for r in spark.sql(f"SHOW TABLES IN {CATALOG}.{sc}").collect()]

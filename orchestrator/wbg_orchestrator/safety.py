@@ -17,12 +17,14 @@ class ExternalTracingEnabledError(RuntimeError):
 
 
 def disable_external_tracing() -> None:
+    """Turn every LangSmith / LangChain tracing flag off for this process and opt out of NeMo usage stats."""
     for flag in TRACING_FLAGS:
         os.environ[flag] = "false"
     os.environ.setdefault("NEMO_GUARDRAILS_NO_USAGE_STATS", "1")
 
 
 def external_tracing_enabled() -> bool:
+    """Return True if LangSmith reports tracing as on; False when langsmith is not installed."""
     try:
         from langsmith.utils import tracing_is_enabled
     except ImportError:
@@ -32,6 +34,7 @@ def external_tracing_enabled() -> bool:
 
 @contextmanager
 def no_external_tracing() -> Iterator[None]:
+    """Run the wrapped block with tracing forced off, and refuse to run if LangSmith still reports it on."""
     disable_external_tracing()
     try:
         from langsmith.run_helpers import tracing_context

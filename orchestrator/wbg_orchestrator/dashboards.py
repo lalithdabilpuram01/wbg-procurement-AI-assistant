@@ -27,6 +27,7 @@ RunSql = Callable[[str], list[dict[str, Any]]]
 
 
 def settings(config: Path = CONFIG) -> dict:
+    """The dashboards configuration; no dashboards when the file is missing."""
     return json.loads(config.read_text()) if config.is_file() else {"dashboards": []}
 
 
@@ -67,6 +68,8 @@ def warehouse_sql(profile: str, warehouse_id: str) -> RunSql:
     client = workspace(profile)
 
     def run(statement: str) -> list[dict[str, Any]]:
+        """Run one statement (waiting up to 50 s) and return its rows as dicts; a failed statement raises
+        LookupError."""
         result = client.statement_execution.execute_statement(warehouse_id=warehouse_id, statement=statement, wait_timeout="50s")
         if result.status.error:
             raise LookupError(result.status.error.message or "query failed")
@@ -76,6 +79,7 @@ def warehouse_sql(profile: str, warehouse_id: str) -> RunSql:
 
 
 def _number(value: str | None) -> Any:
+    """Turn a warehouse cell (always text) into an int or float when it is a number; other text is returned as is."""
     if value is None:
         return None
     try:
@@ -89,24 +93,28 @@ class KpiBoard:
     """KPIs per dashboard key, cached; `warm()` fills the cache in the background at start-up."""
 
     def __init__(self, run_sql: RunSql, config: Path = CONFIG, clock: Callable[[], float] = time.monotonic):
+        """Read each dashboard's catalog from the config; KPIs are cached per dashboard key with their fetch time."""
         self._run, self._clock = run_sql, clock
         self._catalogs = {d["key"]: d["catalog"] for d in settings(config)["dashboards"]}
         self._cache: dict[str, tuple[float, dict]] = {}
         self._lock = threading.Lock()
 
     def kpis(self, key: str) -> dict[str, Any]:
+        """The KPIs of one dashboard, from the cache when fresh; raises KeyError for an unknown dashboard."""
         if key not in self._catalogs:
             raise KeyError(key)
         with self._lock:
             hit = self._cache.get(key)
         if hit and self._clock() - hit[0] < CACHE_SECONDS:
             return hit[1]
+        # Fetched outside the lock: a slow warehouse must not block readers of other dashboards.
         board = self._fetch(self._catalogs[key])
         with self._lock:
             self._cache[key] = (self._clock(), board)
         return board
 
     def _fetch(self, catalog: str) -> dict[str, Any]:
+        """Run the five queries in parallel; a query error gives a `not_built` or `unavailable` status, not a raise."""
         named = queries(f"{catalog}.wbg_gold")
         try:
             with ThreadPoolExecutor(max_workers=len(named)) as pool:
@@ -119,7 +127,9 @@ class KpiBoard:
         return {"status": "ok", "catalog": catalog, "overview": overview, **rows}
 
     def warm(self) -> None:
+        """Fill the cache for every dashboard on a background thread, so the first page view is fast."""
         def fill() -> None:
+            """Load every dashboard once; a failure is logged and the next dashboard is tried."""
             for key in self._catalogs:
                 try:
                     self.kpis(key)

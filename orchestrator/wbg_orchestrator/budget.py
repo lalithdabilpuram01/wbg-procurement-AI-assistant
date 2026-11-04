@@ -15,6 +15,7 @@ from .contracts import ErrorCategory, ExecutionError, InvestigationBudget, Usage
 
 CACHE_READ, CACHE_WRITE = Decimal("0.1"), Decimal("1.25")      # Anthropic prompt-cache price multipliers
 
+# USD prices per million tokens for one model; `cost` works out what a call cost from its token counts.
 class PriceTable(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
     model: str
@@ -30,6 +31,7 @@ class PriceTable(BaseModel):
 
 
 def priced(usage: Usage, prices: PriceTable | None) -> Usage:
+    """Return `usage` with its cost filled in from the price table; unchanged when there are no prices or no tokens."""
     if prices is None or not (usage.input_tokens or usage.output_tokens):
         return usage
     return usage.model_copy(update={"cost_usd": prices.cost(usage.input_tokens, usage.output_tokens)})

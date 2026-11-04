@@ -1,11 +1,14 @@
 "use client";
 
+// Create-account page "/signup". It posts to the /api/signup route and then shows the one-time recovery code.
+
 import { useState } from "react";
 import { UserPlus } from "lucide-react";
 import { AuthLink, AuthShell, MIN_PASSWORD, RecoveryCodePanel, USERNAME_HINT } from "@/components/app/auth-shell";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Spinner } from "@/components/ui/primitives";
 
+// Same pattern as USERNAME in orchestrator/wbg_orchestrator/accounts.py, so most mistakes show before submitting.
 const USERNAME = /^[a-z0-9][a-z0-9._-]{2,31}$/;
 
 // Create an account: a normal user, signed in at once, then shown their recovery code once.
@@ -18,6 +21,7 @@ export default function SignupPage() {
   const [code, setCode] = useState<string | null>(null);
 
   const name = username.trim().toLowerCase();
+  // The first problem to show while typing; null until both fields have something, so an empty form shows no error.
   const problem = !name || !password ? null
     : !USERNAME.test(name) ? USERNAME_HINT
     : password.length < MIN_PASSWORD ? `The password needs at least ${MIN_PASSWORD} characters.`
@@ -39,6 +43,7 @@ export default function SignupPage() {
     setBusy(false);
   };
 
+  // After success the form is replaced by the recovery code, which the API returns only this once.
   if (code) {
     return (
       <AuthShell icon={UserPlus} title="Your account is ready" subtitle={`You are signed in as ${name}.`}>

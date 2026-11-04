@@ -30,6 +30,7 @@ _DATE_PATTERNS = [
 
 
 def value_kind(v: Any) -> str:
+    """Classify a raw value for profiling: JSON type, or for strings empty, sentinel, number, date pattern or text."""
     if v is None:
         return "null"
     if isinstance(v, bool):
@@ -69,6 +70,8 @@ def _hashable(v: Any) -> str:
 
 def profile_records(records: Iterable[dict[str, Any]], *, columns: list[str] | None = None, top_n: int = 8,
                     max_distinct_tracked: int = 200_000) -> dict[str, Any]:
+    """Profile each column of the records: observed kinds, null / empty / sentinel shares, distinct and top values,
+    and a date range for columns where most present values are dates."""
     recs = list(records)
     n = len(recs)
     cols = columns or sorted({k for r in recs for k in r if not k.startswith("_")})
@@ -116,6 +119,7 @@ def profile_records(records: Iterable[dict[str, Any]], *, columns: list[str] | N
 
 
 def markdown_table(profile: dict[str, Any], *, max_cols: int | None = None) -> str:
+    """Render a profile as a Markdown table, one row per column."""
     lines = ["| Column | Observed type(s) | Populated % | Null % | Empty % | Sentinel % | Distinct | Range / top values |",
              "|---|---|---:|---:|---:|---:|---:|---|"]
     for i, (c, p) in enumerate(profile["columns"].items()):

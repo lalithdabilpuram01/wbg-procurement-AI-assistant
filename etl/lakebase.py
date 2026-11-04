@@ -14,6 +14,7 @@ PROTECTED_BRANCHES = {"production", "main"}
 
 
 def branch_of(endpoint: str) -> str:
+    """The branch name inside a Lakebase endpoint path; raises ValueError for any other format."""
     match = re.fullmatch(r"projects/[^/]+/branches/([^/]+)/endpoints/[^/]+", endpoint)
     if not match:
         raise ValueError("the endpoint must be projects/<p>/branches/<b>/endpoints/<e>")
@@ -31,6 +32,7 @@ def pool(endpoint: str, schema: str, purpose: str) -> ConnectionPool:
     user = w.current_user.me().user_name
 
     class JobCredentialConnection(psycopg.Connection):
+        """A psycopg connection that mints a fresh database credential each time it connects."""
         @classmethod
         def connect(cls, conninfo: str = "", **kwargs):
             kwargs["password"] = w.postgres.generate_database_credential(endpoint=endpoint).token

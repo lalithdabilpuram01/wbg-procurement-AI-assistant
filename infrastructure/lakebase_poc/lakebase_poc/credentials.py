@@ -31,6 +31,7 @@ def databricks_cli() -> str:
 
 
 def generate_token(endpoint: str, profile: str) -> str:
+    """A fresh Lakebase database credential from the Databricks CLI; raises CredentialError, never showing the token."""
     command = [databricks_cli(), "postgres", "generate-database-credential", endpoint, "-p", profile, "-o", "json"]
     try:
         completed = subprocess.run(command, capture_output=True, text=True, timeout=CLI_TIMEOUT_SECONDS, check=False)

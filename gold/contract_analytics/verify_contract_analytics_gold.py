@@ -66,6 +66,7 @@ def rows(spark, table: str, *cols: str) -> list[dict]:
 
 
 def expected(spark, run_id: str) -> dict:
+    """Every expected Gold row, keyed by contract number, recomputed in plain Python from the Silver tables."""
     A = rows(spark, "contract_awards", "wb_contract_number", "project_id", "borrower_country_code", "borrower_country_name", "procurement_category",
              "procurement_method", "review_type", "global_practices", "contract_signing_date", "fiscal_year", "contract_signed_calendar_year", "contract_amount_usd",
              "contracts_sharing_reference_in_project",
@@ -134,6 +135,7 @@ def expected(spark, run_id: str) -> dict:
 
 
 def main() -> int:
+    """Recompute the table (or the transform's frame, with --dry-run) independently and compare; 0 when all passed."""
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--run-id", required=True)
     ap.add_argument("--dry-run", action="store_true")

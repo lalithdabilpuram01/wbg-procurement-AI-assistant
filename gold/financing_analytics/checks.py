@@ -18,6 +18,7 @@ def _n(df: DataFrame, cond) -> int:
 
 
 def check(g: DataFrame, dfs: dict[str, DataFrame], portfolio: DataFrame, cohort_ids: set[str], rep: DQReport) -> dict:
+    """Run every data-quality rule for gold_financing_analytics and add the results to `rep`; returns a summary."""
     ib, ida, tx = dfs["ibrd_loans"], dfs["ida_credits"], dfs["project_loan_transactions"]
     rows = g.count()
     rep.equals("rows_equal_612_ibrd_plus_2073_ida", (rows, _n(g, "lender = 'IBRD'"), _n(g, "lender = 'IDA'")), (2685, ib.count(), ida.count()))

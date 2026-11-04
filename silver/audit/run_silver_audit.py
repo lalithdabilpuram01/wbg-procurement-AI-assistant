@@ -71,6 +71,7 @@ def dec(v) -> str | None:
 
 
 def main() -> int:
+    """Run the read-only audit over all Silver tables and save the results and DQ report; 0 when every check passed."""
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--baseline-run", required=True, help="run folder whose baseline_before_write.json is the reference state")
     ap.add_argument("--profile", default=DEFAULT_PROFILE)

@@ -20,6 +20,7 @@ _session: requests.Session | None = None
 
 
 class FetchError(RuntimeError):
+    """A request failed: a non-retryable status, retries exhausted, or a body that is not JSON."""
     def __init__(self, url: str, status: int | None, message: str):
         super().__init__(f"{status} {url}: {message}")
         self.url, self.status, self.message = url, status, message
@@ -30,6 +31,7 @@ def utcnow() -> str:
 
 
 def session() -> requests.Session:
+    """Return the shared requests session, created on first use with the configured User-Agent."""
     global _session
     if _session is None:
         _session = requests.Session()
@@ -38,6 +40,7 @@ def session() -> requests.Session:
 
 
 def _log(entry: dict[str, Any]) -> None:
+    """Append one entry to evidence/access_log.jsonl."""
     SETTINGS.evidence_dir.mkdir(parents=True, exist_ok=True)
     with open(SETTINGS.evidence_dir / "access_log.jsonl", "a") as fh:
         fh.write(json.dumps(entry) + "\n")
@@ -75,6 +78,7 @@ def fetch(url: str, params: dict[str, Any] | None = None, *, stream: bool = Fals
 
 
 class _RetrySignal(Exception):
+    """Internal signal that the server returned a retryable status; wait holds its Retry-After hint, if any."""
     def __init__(self, wait: float | None):
         super().__init__("retry")
         self.wait = wait
@@ -86,6 +90,7 @@ def _sleep_backoff(attempt: int, server_hint: float | None) -> None:
 
 
 def fetch_json(url: str, params: dict[str, Any] | None = None, *, purpose: str = "") -> Any:
+    """GET a URL and decode its JSON body; raises FetchError when the body is not JSON."""
     resp = fetch(url, params, purpose=purpose)
     try:
         return resp.json()

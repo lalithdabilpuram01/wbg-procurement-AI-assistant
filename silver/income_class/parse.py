@@ -38,6 +38,7 @@ NAMES = {"L": "Low income", "LM": "Lower middle income", "UM": "Upper middle inc
 
 @dataclass
 class ParsedWorkbook:
+    """The parsed OGHIST sheet: header rows, fiscal-year columns, entities, note rows, one cell per entity and year."""
     sheet_names: list[str]
     fy_header_row: int            # 1-based Excel row
     data_year_row: int
@@ -66,6 +67,7 @@ def classify(raw) -> dict:
 
 
 def parse_oghist(content: bytes) -> ParsedWorkbook:
+    """Parse the OGHIST workbook bytes; raises ValueError when the sheet layout is not as expected."""
     wb = openpyxl.load_workbook(io.BytesIO(content), read_only=True, data_only=True)
     if SHEET not in wb.sheetnames:
         raise ValueError(f"sheet {SHEET!r} not found; sheets={wb.sheetnames}")
@@ -88,6 +90,7 @@ def parse_oghist(content: bytes) -> ParsedWorkbook:
         dy = rows[dy_i][j] if j < len(rows[dy_i]) else None
         if not isinstance(dy, int):
             raise ValueError(f"fiscal-year column {c} has no integer data year (found {dy!r})")
+        # A fiscal year's classification uses GNI data from two years earlier, so the FY label must equal data year + 2.
         fy = dy + 2
         if fy % 100 != int(m.group(1)):
             raise ValueError(f"{c}: data year {dy} + 2 = {fy} does not match the FY label")

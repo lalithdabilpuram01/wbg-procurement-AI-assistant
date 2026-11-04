@@ -56,6 +56,7 @@ def vector_sha256(vector: np.ndarray) -> str:
 
 
 def file_sha256(path: Path) -> str:
+    """SHA-256 of a file, read in 1 MiB blocks."""
     digest = hashlib.sha256()
     with path.open("rb") as handle:
         for block in iter(lambda: handle.read(1 << 20), b""):
@@ -83,6 +84,7 @@ class UnitEmbeddingStore:
     """In-memory view of one store; `save` persists it atomically."""
 
     def __init__(self, config: EmbeddingConfig):
+        """An empty store bound to one embedding configuration, whose fingerprint is part of every cache key."""
         self.config = config
         self.fingerprint = config.fingerprint()
         self._entries: dict[str, dict[str, Any]] = {}
@@ -97,6 +99,7 @@ class UnitEmbeddingStore:
         return None if entry is None else self._vectors[entry["row"]]
 
     def plan(self, scope: str, units: Iterable[IndexedUnit]) -> Plan:
+        """Split the units into cache hits and misses for one index scope."""
         plan = Plan()
         for unit in units:
             (plan.hits if self.get(scope, unit) is not None else plan.misses).append(unit.unit_id)
@@ -115,6 +118,7 @@ class UnitEmbeddingStore:
 
     # ------------------------------------------------------------------------------------------------- write
     def _check_vector(self, vector: np.ndarray) -> np.ndarray:
+        """Check a vector against this configuration (shape, dtype, finite, norm); return a copy in the config dtype."""
         vector = np.asarray(vector)
         if vector.shape != (self.config.dimension,) or vector.dtype != np.dtype(self.config.dtype):
             raise CacheIntegrityError(f"vector {vector.shape}/{vector.dtype} does not match the config "
@@ -218,6 +222,7 @@ class UnitEmbeddingStore:
         return store
 
     def _load_entry(self, entry: dict[str, Any], row: int, vector: np.ndarray) -> None:
+        """Add one entry read from disk after checking its fields, row order, key and vector hash."""
         if set(entry) != ENTRY_FIELDS or entry["row"] != row or entry["key"] in self._entries:
             raise CacheIntegrityError(f"entry {row} malformed, out of order or duplicated")
         if entry["key"] != entry_key(self.fingerprint, entry["scope"], entry["unit_id"], entry["text_sha256"]):
@@ -249,12 +254,14 @@ def _sync(handle) -> None:
 
 
 def _write_synced(path: Path, text: str) -> None:
+    """Write a text file and fsync it before returning."""
     with path.open("w") as handle:
         handle.write(text)
         _sync(handle)
 
 
 def _sync_dir(path: Path) -> None:
+    """fsync a directory so that a rename inside it survives a crash."""
     fd = os.open(path, os.O_RDONLY)
     try:
         os.fsync(fd)
@@ -263,6 +270,7 @@ def _sync_dir(path: Path) -> None:
 
 
 def _fingerprint_of(config: dict[str, Any] | None) -> str | None:
+    """Recompute the fingerprint of a config read from JSON (lists turned back into the tuple shape that was hashed)."""
     if not isinstance(config, dict):
         return None
     normalised = {**config, "library_versions": [list(p) for p in config.get("library_versions", [])]}

@@ -24,6 +24,7 @@ QUALIFIED_TABLE = sql.Identifier(SCHEMA, TABLE)
 
 @dataclass(frozen=True)
 class ServerInfo:
+    """PostgreSQL version and the vector extensions the server offers and has installed."""
     version: str
     version_num: int
     vector_available: str | None        # default version offered by the server
@@ -32,6 +33,7 @@ class ServerInfo:
 
 
 def _one(cur: psycopg.Cursor) -> tuple[Any, ...]:
+    """The cursor's next row; raises LookupError when the query returned none."""
     row = cur.fetchone()
     if row is None:
         raise LookupError("query returned no row")
@@ -39,6 +41,7 @@ def _one(cur: psycopg.Cursor) -> tuple[Any, ...]:
 
 
 def server_info(conn: psycopg.Connection) -> ServerInfo:
+    """Server version and the available and installed versions of `vector` and `lakebase_vector`."""
     with conn.cursor() as cur:
         cur.execute("SELECT version(), current_setting('server_version_num')::int")
         version, version_num = _one(cur)
@@ -60,6 +63,7 @@ def enable_vector(conn: psycopg.Connection) -> None:
 
 
 def create_table(conn: psycopg.Connection) -> None:
+    """Create the test schema and the synthetic embeddings table if they do not exist."""
     with conn.cursor() as cur:
         cur.execute(sql.SQL("CREATE SCHEMA IF NOT EXISTS {}").format(sql.Identifier(SCHEMA)))
         cur.execute(sql.SQL("CREATE TABLE IF NOT EXISTS {} ("
@@ -90,6 +94,7 @@ def row_count(conn: psycopg.Connection) -> int:
 
 
 def fetch_embedding(conn: psycopg.Connection, item_id: int) -> np.ndarray:
+    """The stored embedding of one item as a float32 array."""
     with conn.cursor() as cur:
         cur.execute(sql.SQL("SELECT embedding FROM {} WHERE item_id = %s").format(QUALIFIED_TABLE), (item_id,))
         value = _one(cur)[0]                          # pgvector 0.5 returns a Vector object
@@ -120,6 +125,7 @@ def create_hnsw_index(conn: psycopg.Connection) -> None:
 
 
 def analyze(conn: psycopg.Connection) -> None:
+    """Refresh the planner statistics of the synthetic table."""
     with conn.cursor() as cur:
         cur.execute(sql.SQL("ANALYZE {}").format(QUALIFIED_TABLE))
     conn.commit()
@@ -166,6 +172,7 @@ def plan_nodes(conn: psycopg.Connection, query: np.ndarray, k: int, force_index:
 
 
 def sizes(conn: psycopg.Connection) -> dict[str, int]:
+    """Database, table, heap, all-index and HNSW index sizes in bytes."""
     with conn.cursor() as cur:
         cur.execute(sql.SQL("SELECT pg_database_size(current_database()), pg_total_relation_size({t}), "
                             "pg_relation_size({t}), pg_indexes_size({t}), pg_relation_size({i})").format(

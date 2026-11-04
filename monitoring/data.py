@@ -34,6 +34,8 @@ def clean_reference(printed: str) -> str:
 
 @dataclass
 class Stage:
+    """One plan stage with its planned and actual dates."""
+
     name: str
     planned: dt.date | None
     actual: dt.date | None
@@ -41,6 +43,8 @@ class Stage:
 
 @dataclass
 class Package:
+    """One procurement-plan activity as of its plan revision, joined to its best-matching contract record if any."""
+
     activity_id: str
     project_id: str
     reference: str
@@ -64,6 +68,7 @@ class Package:
 
     @property
     def signed(self) -> dt.date | None:
+        """Signing date: the one reported in the plan, else the one in the contract record."""
         return self.actual_signing or self.recorded_signing
 
     @property
@@ -73,6 +78,8 @@ class Package:
 
 @dataclass(frozen=True)
 class Project:
+    """Title, country and sector of a corpus project."""
+
     project_id: str
     title: str
     country: str | None
@@ -81,6 +88,8 @@ class Project:
 
 @dataclass
 class Rating:
+    """One ISR rating of one indicator: the previous and the current value as printed in the report."""
+
     document_id: str
     date: dt.date | None
     indicator: str
@@ -89,6 +98,7 @@ class Rating:
 
 
 def day(value) -> dt.date | None:
+    """The date at the start of an ISO date or datetime value; None when it is missing or not a date."""
     try:
         return dt.date.fromisoformat(str(value)[:10]) if value else None
     except ValueError:
@@ -105,6 +115,7 @@ def packages(directory: Path = SHARED) -> tuple[Package, ...]:
     """Activities of each plan stream's latest revision, joined to their best contract match."""
     versions = _jsonl("plan_versions", directory)
     dated = {v["plan_version_id"]: day(v["pdf"].get("revision_date") or (v.get("api") or {}).get("wds_document_date")) for v in versions}
+    # Keep only the latest revision of each plan stream (by revision date, else the document date).
     latest: dict[str, str] = {}
     for v in versions:
         current = latest.get(v["plan_stream_id"])
@@ -112,6 +123,7 @@ def packages(directory: Path = SHARED) -> tuple[Package, ...]:
             latest[v["plan_stream_id"]] = v["plan_version_id"]
     keep = set(latest.values())
     links: dict[str, dict] = {}
+    # Keep the strongest contract match per activity (see LINK_RANK); a match needs a contract number.
     for link in _jsonl("evidence_links", directory):
         if link.get("wb_contract_number") and LINK_RANK.get(link.get("evidence_status"), 0) > \
                 LINK_RANK.get((links.get(link["activity_id"]) or {}).get("evidence_status"), 0):
@@ -120,6 +132,7 @@ def packages(directory: Path = SHARED) -> tuple[Package, ...]:
     for a in _jsonl("plan_activities", directory):
         if a["plan_version_id"] not in keep or (a["plan_stream_id"], a["activity_reference_printed"]) in seen:
             continue
+        # An activity printed twice in the same plan revision is kept once.
         seen.add((a["plan_stream_id"], a["activity_reference_printed"]))
         link = links.get(a["activity_id"], {})
         out.append(Package(
@@ -144,6 +157,7 @@ def ratings(directory: Path = SHARED) -> dict[str, tuple[Rating, ...]]:
             continue
         for m in RATING_TEXT.finditer(paragraph["text"]):
             label = INDICATORS[m.group(1)]
+            # Two values are printed as "previous current"; a single value is the current rating.
             previous, current = (m.group(2), m.group(3)) if m.group(3) else (None, m.group(2))
             found.setdefault((doc["document_id"], label), Rating(doc["document_id"], day(doc["api"].get("wds_document_date")), label,
                                                                   previous, current))

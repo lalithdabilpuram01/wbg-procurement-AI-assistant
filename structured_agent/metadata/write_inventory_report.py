@@ -17,6 +17,7 @@ def load_latest_bundle() -> RegistryBundle:
 
 
 def object_rows(bundle: RegistryBundle) -> list[str]:
+    """Markdown table rows for every object, Gold first."""
     rows = ["| Object | Type | Rows | Cols | Grain (columns) | Grain status / source | Description source | CHECKs | Non-public columns |",
             "|---|---|---:|---:|---|---|---|---:|---|"]
     for o in sorted(bundle.objects, key=lambda o: (o.layer != "gold", o.object_type, o.fqn)):
@@ -30,6 +31,7 @@ def object_rows(bundle: RegistryBundle) -> list[str]:
 
 
 def sensitive_rows(bundle: RegistryBundle) -> list[str]:
+    """Markdown table rows for every prohibited or restricted column."""
     rows = ["| Column | Classification | Policy source |", "|---|---|---|"]
     for o in bundle.objects:
         for c in o.columns:
@@ -39,6 +41,7 @@ def sensitive_rows(bundle: RegistryBundle) -> list[str]:
 
 
 def relationship_rows(bundle: RegistryBundle) -> list[str]:
+    """Markdown table rows for every relationship with its live check summary."""
     rows = ["| Relationship | Join | Cardinality | Live check | Status | Source |", "|---|---|---|---|---|---|"]
     for r in bundle.relationships:
         v = r.verification
@@ -52,6 +55,7 @@ def relationship_rows(bundle: RegistryBundle) -> list[str]:
 
 
 def main() -> None:
+    """Write METADATA_INVENTORY.md from the newest saved registry bundle."""
     bundle = load_latest_bundle()
     columns = [c for o in bundle.objects for c in o.columns]
     lines = [

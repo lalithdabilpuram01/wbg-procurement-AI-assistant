@@ -57,6 +57,7 @@ class EvidenceBundle:
 
 # ------------------------------------------------------------------------------------------------- helpers
 def _jsonl(relative: str) -> list[dict[str, Any]]:
+    """Records of one sanitised pilot output file; refuses any path outside shared/ and strategies/."""
     if relative.split("/")[0] not in ALLOWED_SOURCES:
         raise EvidenceError(f"refusing to read outside sanitised outputs: {relative}")
     with (PILOT / relative).open(encoding="utf-8") as handle:
@@ -84,6 +85,7 @@ def _repo_import() -> None:
 
 
 def _retrieval_core():
+    """The existing rag.retrieval.core module, imported read-only."""
     _repo_import()
     from rag.retrieval import core
     return core
@@ -98,6 +100,7 @@ def _residual_risk(text: str) -> dict[str, int]:
 
 # ------------------------------------------------------------------------------------------------ identity
 def verify_identity() -> dict[str, Any]:
+    """Check that the PDF, its manifests and its processed outputs agree on the approved project and SHA-256."""
     approved = {r["project_id"] for r in _read_csv(SCOPE / "PROJECT_SELECTION_35.csv")}
     planned = {r["document_id"]: r for r in _read_csv(SCOPE / "DOCUMENT_DOWNLOAD_MANIFEST_v3_35.csv")}
     corpus_row = next((r for r in _read_csv(CORPUS_MANIFEST) if r["document_id"] == DOCUMENT_ID), None)
@@ -166,6 +169,7 @@ def is_results_indicator_table(table: dict[str, Any]) -> bool:
 
 # ------------------------------------------------------------------------------------------------- bundle
 def build_bundle() -> EvidenceBundle:
+    """Map the approved document's evidence to records for every POC table, then run the integrity checks."""
     identity = verify_identity()
     version, document = identity["version"], identity["document"]
     corpus, units, vectors, cache_name = mapped_units_and_vectors()
@@ -242,6 +246,7 @@ def build_bundle() -> EvidenceBundle:
 
 # --------------------------------------------------------------------------------------------------- checks
 def run_checks(bundle: EvidenceBundle, identity: dict[str, bool], cache_name: str) -> dict[str, Any]:
+    """Integrity and privacy checks of a built bundle: vectors, ids, one document version, residual personal data."""
     r, vectors = bundle.records, np.stack(bundle.vectors) if bundle.vectors else np.zeros((0, DIMENSIONS))
     units = r["retrieval_units"]
     texts = [u["excerpt"] for u in units] + [" ".join(row["cells"]) for row in r["pdf_table_rows"]] + [p["text"] for p in r["parent_chunks"]]

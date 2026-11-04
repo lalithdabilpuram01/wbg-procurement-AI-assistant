@@ -1,5 +1,8 @@
 "use client";
 
+// The Dashboard view: KPI tiles and charts from GET /dashboards/{key}/kpis, which the API reads from the vw_kpi_*
+// Gold views on the Databricks SQL warehouse. Charts are plain HTML and CSS, with a table view for each.
+
 import { useEffect, useState } from "react";
 import { Database, ExternalLink, RefreshCw, Table2, Workflow } from "lucide-react";
 import { api, type Dashboard, type KpiBar, type Kpis } from "@/lib/api";
@@ -7,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, Select } from "@/components/ui/primitives";
 import { cn } from "@/lib/utils";
 
+// Number formats for tiles and charts: compact dollars (US$1.2B), grouped counts and days.
 const usd = (v: number) => "US$" + Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(v);
 const count = (v: number) => Intl.NumberFormat("en").format(v);
 const days = (v: number) => `${count(v)} d`;
@@ -17,9 +21,12 @@ export function DashboardView({ onError }: { onError: (e: unknown) => void }) {
   const [key, setKey] = useState<string | null>(null);
   const [kpis, setKpis] = useState<Kpis | null>(null);
   const [loading, setLoading] = useState(false);
-  const [attempt, setAttempt] = useState(0);
+  const [attempt, setAttempt] = useState(0);          // bumped by "Try again" to re-run the KPI effect
 
+  // The list of dashboards is loaded once; the first one is selected.
   useEffect(() => { api.dashboards().then((b) => { setBoards(b); setKey(b[0]?.key ?? null); }).catch(onError); }, [onError]);
+  // Loads the KPIs of the selected dashboard, again on every retry. `current` is cleared when the selection changes
+  // or the view closes, so a slow, outdated response cannot overwrite newer state.
   useEffect(() => {
     if (!key) return;
     let current = true;
@@ -74,6 +81,7 @@ export function DashboardView({ onError }: { onError: (e: unknown) => void }) {
   );
 }
 
+/** Placeholder tiles while the KPIs load. */
 function Loading() {
   return (
     <div className="mt-6 space-y-4" aria-busy>
@@ -85,6 +93,7 @@ function Loading() {
   );
 }
 
+/** The KPI tiles, the data freshness line and the four charts. */
 function Board({ kpis }: { kpis: Extract<Kpis, { status: "ok" }> }) {
   const o = kpis.overview;
   const tiles: [string, string][] = [
@@ -115,6 +124,7 @@ function Board({ kpis }: { kpis: Extract<Kpis, { status: "ok" }> }) {
   );
 }
 
+/** A card with a title and a Chart/Table toggle; the table lists the same values exactly. */
 function ChartCard({ title, bars, format, children }: { title: string; bars: KpiBar[]; format: (v: number) => string; children: React.ReactNode }) {
   const [table, setTable] = useState(false);
   return (
@@ -186,6 +196,7 @@ function ColumnChart({ title, bars, format }: { title: string; bars: KpiBar[]; f
   );
 }
 
+/** A CSS-only hover label for a bar or column (shown by its parent's `group-hover`). */
 function Tip({ text, above = false }: { text: string; above?: boolean }) {
   return (
     <span role="tooltip" className={cn(

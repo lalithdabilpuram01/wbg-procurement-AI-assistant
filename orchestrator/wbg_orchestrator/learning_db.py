@@ -61,6 +61,7 @@ def table_status(conn: psycopg.Connection) -> dict[str, bool]:
 
 
 def verify(pool: ConnectionPool) -> None:
+    """Raise LearningStoreMissing unless every learning table exists with row-level security enabled and forced."""
     with pool.connection() as conn:
         status = table_status(conn)
     if set(status) != set(LEARNING_TABLES) or not all(status.values()):
@@ -68,6 +69,7 @@ def verify(pool: ConnectionPool) -> None:
 
 
 def main(argv: list[str]) -> int:
+    """Command line: `init` applies the schema, then both commands print each table's row-level security status."""
     parser = argparse.ArgumentParser(description="Feedback and learning store in Lakebase")
     parser.add_argument("command", choices=["init", "check"])
     args = parser.parse_args(argv)

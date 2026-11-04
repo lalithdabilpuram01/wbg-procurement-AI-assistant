@@ -13,6 +13,7 @@ APPLICATION_NAME = "wbg-lakebase-pgvector-poc"
 
 
 def connection_kwargs(settings: LakebaseSettings, password: str) -> dict[str, object]:
+    """psycopg connection arguments for these settings and a credential."""
     return {"host": settings.host, "port": settings.port, "dbname": settings.database, "user": settings.user,
             "password": password, "sslmode": settings.sslmode, "connect_timeout": settings.connect_timeout_seconds,
             "application_name": APPLICATION_NAME}

@@ -36,6 +36,7 @@ _ENTITY_ID = re.compile(r"\((\d{3,9})\)")
 
 
 def _sections(text: str) -> dict[str, str]:
+    """Split notice text into its awarded / evaluated / rejected sections (the text after each heading)."""
     marks = [(m.start(), m.end(), m.group(1)) for m in _SECTION.finditer(text)]
     out: dict[str, str] = {}
     for i, (_, end, label) in enumerate(marks):
@@ -46,6 +47,8 @@ def _sections(text: str) -> dict[str, str]:
 
 
 def parse_award_notice(notice_text: str | None) -> dict[str, Any]:
+    """Parse a Contract Award notice into dates, price, duration, version, loans and bidder supplier IDs.
+    Fields whose label is missing are left out; bidder counts use distinct STEP supplier IDs, not names."""
     text = strip_html(notice_text or "")
     res: dict[str, Any] = {"is_step_template": "Notice Version No" in text and "Bid/Contract Reference No" in text}
     for key, rx in _RE.items():

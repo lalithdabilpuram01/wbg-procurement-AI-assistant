@@ -1,9 +1,12 @@
+// The sources side panel of an answer: every evidence item in citation order, with its kind, citation, summary,
+// key facts, warnings and a link to the source document when there is one.
 import { BrainCircuit, Database, ExternalLink, FileText, ShieldCheck, TableProperties } from "lucide-react";
 import type { Evidence } from "@/lib/api";
 import { Badge } from "@/components/ui/primitives";
 import { Sheet } from "@/components/ui/overlays";
 import { cn } from "@/lib/utils";
 
+// Display label and icon per evidence kind; an unknown kind shows its raw name.
 const KIND: Record<string, { label: string; icon: React.ElementType }> = {
   structured_result: { label: "Databricks result", icon: Database },
   validated_query: { label: "Validated query", icon: Database },
@@ -18,6 +21,7 @@ const KIND: Record<string, { label: string; icon: React.ElementType }> = {
   lesson_card: { label: "Reviewed lesson", icon: FileText },
 };
 
+// Evidence warnings worth showing to the user; other warning codes are not displayed.
 const WARNING_LABELS: Record<string, string> = {
   synthetic_training_data: "Synthetic training data",
   pdf_table_value_unverified: "Table value not verified",
@@ -27,6 +31,8 @@ const WARNING_LABELS: Record<string, string> = {
   model_input_note: "See model notes",
 };
 
+/** The sources sheet. `focusId` highlights the source whose citation number was clicked (null opens it unfocused).
+ *  Model predictions skip the facts grid because their cards in the answer already show those numbers. */
 export function EvidencePanel({ open, onOpenChange, evidence, focusId }:
   { open: boolean; onOpenChange: (open: boolean) => void; evidence: Evidence[]; focusId: string | null }) {
   return (
@@ -61,6 +67,7 @@ export function EvidencePanel({ open, onOpenChange, evidence, focusId }:
                   <Badge key={w} tone={w === "synthetic_training_data" ? "synthetic" : "warning"}>{WARNING_LABELS[w]}</Badge>
                 ))}
                 {e.source_url && (
+                  // noreferrer also implies noopener: the opened page cannot reach back into this tab.
                   <a href={e.source_url} target="_blank" rel="noreferrer"
                     className="ml-auto inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline">
                     Open document <ExternalLink className="size-3" />

@@ -24,6 +24,7 @@ from pydantic import BaseModel
 
 log = logging.getLogger("wbg.structured_agent")
 
+# The only attribute names that may be written to audit events and spans; anything else is dropped.
 SAFE_ATTRIBUTES = {
     "tool", "status", "duration_ms", "error_codes", "objects", "candidate_objects", "approved", "validation_id",
     "query_id", "row_count", "truncated", "credential_mode", "production_read_only", "checks_failed", "sql_sha256",
@@ -52,6 +53,7 @@ def log_failure(message: str, error: BaseException, **ids: Any) -> None:
 
 
 def principal_hash(principal_id: str) -> str:
+    """Short, stable hash of a principal id, so audit events can be grouped by caller without naming them."""
     return hashlib.sha256(principal_id.encode()).hexdigest()[:12]
 
 
@@ -65,6 +67,7 @@ def sanitize(attributes: dict[str, Any]) -> dict[str, Any]:
     return clean
 
 
+# One line of the audit log. 'attributes' holds only sanitised, allow-listed values.
 class AuditEvent(BaseModel):
     event_id: str
     occurred_at: str
@@ -79,6 +82,8 @@ class AuditSink(Protocol):
 
 
 class JsonlAuditSink:
+    """Audit sink that appends one JSON line per event to a local file."""
+
     def __init__(self, path: Path):
         self._path = path
         self._path.parent.mkdir(parents=True, exist_ok=True)
@@ -96,6 +101,7 @@ class Telemetry:
         self._tracer = (tracer_provider or trace.get_tracer_provider()).get_tracer("wbg.structured_agent")
 
     def audit(self, request_id: str, invocation_id: str, event_type: str, **attributes: Any) -> None:
+        """Write one sanitised audit event to the sink."""
         self._sink.write(AuditEvent(event_id="evt_" + uuid.uuid4().hex[:16],
                                     occurred_at=datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
                                     request_id=request_id, invocation_id=invocation_id, event_type=event_type,
@@ -103,6 +109,7 @@ class Telemetry:
 
     @contextmanager
     def span(self, name: str, request_id: str, invocation_id: str) -> Iterator[trace.Span]:
+        """Open a tracing span tagged with the request and invocation ids."""
         with self._tracer.start_as_current_span(name) as span:
             span.set_attribute("wbg.request_id", request_id)
             span.set_attribute("wbg.invocation_id", invocation_id)

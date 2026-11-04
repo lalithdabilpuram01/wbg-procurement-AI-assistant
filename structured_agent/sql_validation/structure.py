@@ -67,6 +67,7 @@ def parse_single_select(sql: str) -> tuple[exp.Select | None, list[ToolError]]:
 
 
 def find_forbidden(tree: exp.Expression) -> list[ToolError]:
+    """Errors for every forbidden node anywhere in the tree, including inside CTEs and subqueries."""
     errors = []
     for node in tree.walk():
         if isinstance(node, FORBIDDEN_NODES):
@@ -138,10 +139,12 @@ def enforce_limit(tree: exp.Select, max_rows: int) -> tuple[list[str], list[Tool
 
 
 def subquery_depth(tree: exp.Expression) -> int:
+    """Deepest nesting of SELECTs inside other SELECTs (0 for a flat query)."""
     return max((sum(isinstance(a, exp.Select) for a in _ancestors(node)) for node in tree.find_all(exp.Select)), default=0)
 
 
 def _ancestors(node: exp.Expression):
+    """Yield each parent of `node`, nearest first, up to the root."""
     parent = node.parent
     while parent is not None:
         yield parent
@@ -149,6 +152,7 @@ def _ancestors(node: exp.Expression):
 
 
 def check_complexity(tree: exp.Select, limits: QueryLimits) -> tuple[dict[str, int], list[ToolError]]:
+    """Measure joins, CTEs, subquery depth and AST size; returns the measures and any over-limit errors."""
     measures = {
         "joins": len(list(tree.find_all(exp.Join))),
         "ctes": len(list(tree.find_all(exp.CTE))),

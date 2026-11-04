@@ -43,6 +43,7 @@ def _listed(items: list[Any]) -> list[Any]:
 
 
 # ------------------------------------------------------------------------------------------------- records
+# One small view per record type: ids, statuses and counts, with any text masked and cut; never facts or excerpts.
 def _request(request: dict) -> dict:
     return {"investigation_id": request.get("investigation_id"), "request_id": request.get("request_id"),
             "mode": request.get("mode"), "execute_requested": request.get("execute_requested"),
@@ -50,6 +51,7 @@ def _request(request: dict) -> dict:
 
 
 def _plan(plan: dict | None) -> dict | None:
+    """The plan's id, version and author, and its tasks (local ids, worker, operation, dependencies, short question)."""
     if not plan:
         return None
     tasks = [{"task": t.get("local_id"), "worker": t.get("worker"), "operation": t.get("operation"),
@@ -66,6 +68,7 @@ def _result(result: dict) -> dict:
 
 
 def _evidence(record: dict) -> dict:
+    """One evidence record's ids, kind, source, validation status, document pages and projects (no content)."""
     pages = record.get("pages")
     return {"evidence_id": record.get("evidence_id"), "task": _local(record.get("task_id")), "kind": record.get("kind"),
             "source": record.get("source_system"), "validation": record.get("validation_status"),
@@ -79,6 +82,7 @@ def _error(error: dict) -> dict:
 
 
 def _verification(report: dict | None) -> dict | None:
+    """Counts from the verification report: verified evidence, conflicts and unmet requirements."""
     if not report:
         return None
     return {"verified_evidence": report.get("verified_evidence_count"), "conflicts": len(report.get("conflicts", [])),
@@ -86,6 +90,7 @@ def _verification(report: dict | None) -> dict | None:
 
 
 def _response(response: dict | None) -> dict | None:
+    """The answer's status, claim counts, error codes and shortened message."""
     if not response:
         return None
     return {"status": response.get("status"), "claims": len(response.get("claims", [])),
@@ -94,6 +99,7 @@ def _response(response: dict | None) -> dict | None:
 
 
 def _supervisor(decision: dict | None) -> dict | None:
+    """The supervisor's decision: mode, worker, operation and its first five reasons."""
     if not decision:
         return None
     return {"mode": decision.get("mode"), "worker": decision.get("worker"), "operation": decision.get("operation"),
@@ -125,6 +131,7 @@ def summarize_state(state: dict) -> dict[str, Any]:
     return {k: v for k, v in summary.items() if v not in (None, {}, [], "")}
 
 
+# How each state field is shown when a step writes it (fields not listed are shown as written).
 _CHANGE_VIEWS = {
     "request": _request, "supervisor": _supervisor, "plan": _plan, "verification": _verification, "response": _response,
     "plans": lambda rows: [p.get("plan_id") for p in rows],

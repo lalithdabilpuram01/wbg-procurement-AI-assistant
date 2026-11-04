@@ -17,12 +17,14 @@ MINUTE, DAY = 60.0, 86_400.0
 
 @dataclass(frozen=True)
 class Refusal:
+    """Why a request was refused: which limit was hit, its size, and how many seconds until a retry can succeed."""
     limit: str                 # "per_minute" | "per_day"
     allowed: int
     retry_after_seconds: int
 
 
 class RateLimiter:
+    """Thread-safe per-user sliding-window limiter; `check` both tests and records a request."""
     def __init__(self, per_minute: int = 20, per_day: int = 500, clock: Callable[[], float] = time.monotonic):
         self.per_minute, self.per_day, self._clock = per_minute, per_day, clock
         self._seen: dict[str, deque[float]] = {}
@@ -39,6 +41,7 @@ class RateLimiter:
             times = self._seen.setdefault(user_key, deque())
             while times and now - times[0] >= DAY:
                 times.popleft()
+            # Refused requests are not recorded, so a user who keeps retrying is not locked out for longer.
             last_minute = [t for t in times if now - t < MINUTE]
             if len(last_minute) >= self.per_minute:
                 return Refusal("per_minute", self.per_minute, max(1, round(MINUTE - (now - last_minute[0]))))

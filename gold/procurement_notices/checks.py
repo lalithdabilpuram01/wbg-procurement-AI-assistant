@@ -23,6 +23,7 @@ def _n(df: DataFrame, cond) -> int:
 
 
 def check(g: DataFrame, dfs: dict[str, DataFrame], portfolio: DataFrame, cohort_ids: set[str], rep: DQReport) -> dict:
+    """Run every data-quality rule for gold_procurement_notices and add the results to `rep`; returns a summary."""
     n, d, k = dfs["procurement_notices"], dfs["procurement_notice_details"], dfs["notice_contract_links"]
     rows = g.count()
     rep.equals("rows_equal_silver_243533", (rows, n.count()), (243533, 243533))

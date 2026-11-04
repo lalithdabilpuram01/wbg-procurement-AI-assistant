@@ -1,9 +1,0 @@
-segment,n,projects,actual_median,actual_long,MAE_b1,bias_b1,recall_b1,precision_b1,F1_b1,alerts_b1,MAE_ridge,bias_ridge,recall_ridge,precision_ridge,F1_ridge,alerts_ridge,MAE_rf,bias_rf,recall_rf,precision_rf,F1_rf,alerts_rf,sparse_n_lt_20
-Request for Bids,256,39,135.0,16,73.9,-32.8,0.0,0.0,0.0,0,65.3,-32.3,0.188,0.273,0.222,11,68.6,-40.2,0.0,0.0,0.0,0,False
-Individual Consultant Selection,146,31,122.5,6,66.0,-15.6,0.0,0.0,0.0,0,69.8,-30.0,0.0,0.0,0.0,0,70.2,-33.4,0.0,0.0,0.0,0,False
-Consultant Qualification  Selection,109,16,104.0,3,57.1,-28.8,0.0,0.0,0.0,0,74.7,-12.7,0.0,0.0,0.0,0,58.3,-35.6,0.0,0.0,0.0,0,False
-Quality And Cost-Based Selection,69,23,371.0,37,99.8,-24.1,1.0,0.536,0.698,69,139.3,-100.0,0.595,0.647,0.62,34,120.7,-79.7,0.514,0.679,0.585,28,False
-Request for Quotations,25,12,77.0,0,74.1,-56.9,0.0,0.0,0.0,0,43.7,-23.2,0.0,0.0,0.0,0,45.0,-21.4,0.0,0.0,0.0,0,False
-Least Cost Selection,7,5,251.0,1,157.4,-157.4,0.0,0.0,0.0,0,164.4,-164.4,0.0,0.0,0.0,0,179.2,-179.2,0.0,0.0,0.0,0,True
-Request for Proposals,3,2,221.0,1,359.8,359.8,1.0,0.333,0.5,3,83.7,-83.3,0.0,0.0,0.0,0,112.6,-33.0,0.0,0.0,0.0,0,True
-Quality Based Selection,1,1,233.0,0,89.0,89.0,0.0,0.0,0.0,1,63.6,-63.6,0.0,0.0,0.0,0,46.1,-46.1,0.0,0.0,0.0,0,True

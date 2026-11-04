@@ -15,6 +15,7 @@ def cohort_df(spark: SparkSession, cohort_pd) -> DataFrame:
 
 
 def check(spark: SparkSession, s: DataFrame, bronze: DataFrame, cohort: DataFrame, prov: dict, report: DQReport) -> None:
+    """Run every data-quality rule for projects and add the results to `report`."""
     n = s.count()
     # --- identity and cohort boundary
     report.equals("bronze_rows", bronze.count(), 2000)

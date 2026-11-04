@@ -46,6 +46,7 @@ def project_for(name: str, text: str, ref: Reference) -> tuple[str | None, str, 
 
 
 def document_date(text: str) -> str | None:
+    """The first plausible date printed on the cover pages (years 1980 to next year), as ISO text; None if none."""
     head = text[:6000]
     found = []
     for pattern, formats in DATE_PATTERNS:

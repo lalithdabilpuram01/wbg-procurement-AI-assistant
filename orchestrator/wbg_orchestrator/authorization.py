@@ -77,6 +77,7 @@ class AppAuthorizationContext(BaseModel):
     user_scoped_data_access: Literal[False] = False                # future scope: per-user Unity Catalog access
 
     def allows(self, worker: str, operation: str, requires_execution: bool = False) -> bool:
+        """True when the investigation holds every capability the operation needs (and execution rights, if asked)."""
         needed = OPERATIONS.get(worker, {}).get(operation)
         if needed is None or not needed <= set(self.capabilities):
             return False

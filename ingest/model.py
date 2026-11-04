@@ -15,6 +15,8 @@ class Quarantined(Exception):
 
 @dataclass
 class Section:
+    """A heading and the part of the document under it; `parent_id` places it in the section tree."""
+
     section_id: str
     parent_id: str | None
     level: int                       # 0 = front matter / document root level
@@ -29,6 +31,8 @@ class Section:
 
 @dataclass
 class Block:
+    """One paragraph, list item, heading or table text of a section, in reading order."""
+
     block_id: str
     section_id: str
     kind: str                        # paragraph | list_item | heading | table_text
@@ -40,6 +44,8 @@ class Block:
 
 @dataclass
 class TableBlock:
+    """A table of the document, with its header and sanitised rows."""
+
     table_id: str
     section_id: str | None
     page: int | None
@@ -50,6 +56,8 @@ class TableBlock:
 
 @dataclass
 class Chunk:
+    """A retrieval unit: sanitised text from one section, which is embedded and searched."""
+
     chunk_id: str
     section_id: str
     text: str                        # sanitised; what is embedded and retrieved
@@ -84,6 +92,8 @@ class Link:
 
 @dataclass
 class ParsedDocument:
+    """Everything parsed from one file, whatever its modality: the input of resolution, graph building and loading."""
+
     document_id: str
     doc_type: str                    # PAD | ISR | ICR | ICRR | PP | contract_feed | notice_feed
     modality: str                    # pdf_text | pdf_ocr | image_ocr | docx | tabular

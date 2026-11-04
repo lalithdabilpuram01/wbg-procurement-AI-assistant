@@ -32,6 +32,7 @@ STRUCTURED_ROW_SHARE = 0.6
 
 @dataclass
 class Column:
+    """One column of a logical table: printed header, SQL name, value type and up to three sample values."""
     header: str                    # the header as printed (merged across header rows by the extraction)
     sql_name: str = ""
     type: str = "text"             # text | number | date
@@ -40,6 +41,7 @@ class Column:
 
 @dataclass
 class Row:
+    """One data row of a logical table, with its page, the group heading above it and a quality flag."""
     cells: list[str]
     page: int
     group: str | None = None
@@ -48,6 +50,7 @@ class Row:
 
 @dataclass
 class LogicalTable:
+    """A table joined from its continuation parts, with cleaned columns and rows, ready for the relational store."""
     table_id: str                  # id of the first part
     document_id: str
     pages: list[int]
@@ -61,6 +64,7 @@ class LogicalTable:
 
 
 def _jsonl(path: Path) -> Iterable[dict]:
+    """Yield the records of a JSONL file, skipping blank lines."""
     with path.open() as handle:
         for line in handle:
             if line.strip():
@@ -68,6 +72,7 @@ def _jsonl(path: Path) -> Iterable[dict]:
 
 
 def load_parts(shared: Path, documents: Iterable[str]) -> tuple[list[dict], dict[str, list[dict]]]:
+    """Return (table parts, rows per table id) for the given documents from the shared extraction outputs."""
     wanted = set(documents)
     tables = [t for t in _jsonl(shared / "tables.jsonl") if t["document_id"] in wanted]
     rows: dict[str, list[dict]] = {}
@@ -78,6 +83,7 @@ def load_parts(shared: Path, documents: Iterable[str]) -> tuple[list[dict], dict
 
 
 def assemble(tables: list[dict], rows: dict[str, list[dict]]) -> list[LogicalTable]:
+    """Group table parts by continuation group, in page order, and build one LogicalTable per group."""
     groups: dict[str, list[dict]] = {}
     for t in sorted(tables, key=lambda t: (t["document_id"], t["page"], t["index_on_page"])):
         groups.setdefault(t["continuation_group"] or t["table_id"], []).append(t)
@@ -85,6 +91,7 @@ def assemble(tables: list[dict], rows: dict[str, list[dict]]) -> list[LogicalTab
 
 
 def build(parts: list[dict], rows: dict[str, list[dict]]) -> LogicalTable:
+    """Build one logical table from its parts: drop header rows, split stacked cells, clean, group and type columns."""
     first = parts[0]
     headers = [h for h in first["columns"]]
     data: list[Row] = []
@@ -117,6 +124,8 @@ TRAILING_TOTAL = re.compile(r"\s(?=Total\b)")
 
 
 def _unstack(cells: list[str], page: int) -> list[Row]:
+    """Split a row into one row per line when all its multi-line cells have the same line count.
+    Otherwise the row is kept whole and flagged 'stacked'."""
     counts = {len(c.split("\n")) for c in cells if "\n" in c}
     if not counts:
         return [Row(cells=[c.strip() for c in cells], page=page)]
@@ -167,6 +176,7 @@ def _absorb_header_rows(headers: list[str], data: list[Row]) -> tuple[list[str],
 
 
 def _clean_columns(headers: list[str], data: list[Row]) -> tuple[list[Column], list[Row]]:
+    """Drop always-empty columns, fold unnamed columns into a named neighbour when they never clash, set SQL names."""
     keep: list[int] = []
     for i, header in enumerate(headers):
         values = [r.cells[i] for r in data]
@@ -195,6 +205,7 @@ def _clean_columns(headers: list[str], data: list[Row]) -> tuple[list[Column], l
 
 
 def _sql_name(header: str, used: set[str]) -> str:
+    """Return a unique lower-case SQL name for a header (not starting with a digit) and reserve it in used."""
     base = re.sub(r"[^a-z0-9]+", "_", header.lower()).strip("_")[:40] or "column"
     if base[0].isdigit():
         base = f"c_{base}"
@@ -206,6 +217,7 @@ def _sql_name(header: str, used: set[str]) -> str:
 
 
 def _carry_groups(data: list[Row]) -> list[Row]:
+    """Remove section-heading rows (only the first cell filled) and record their text as the group of the rows below."""
     out, group = [], None
     for r in data:
         filled = [c for c in r.cells if c]
@@ -218,6 +230,8 @@ def _carry_groups(data: list[Row]) -> list[Row]:
 
 
 def parse_number(text: str) -> float | None:
+    """Parse a printed amount ('US$ 1,200.50', '(300)', '12%') to a float; brackets or a minus sign make it negative.
+    Returns None when the text is not a number."""
     value = text.strip()
     if not value or not NUMBER.match(value):
         return None
@@ -231,6 +245,7 @@ def parse_number(text: str) -> float | None:
 
 
 def _type_columns(columns: list[Column], data: list[Row]) -> None:
+    """Set each column's samples and type: 'date' or 'number' when every non-placeholder value parses as one."""
     for i, column in enumerate(columns):
         values = [r.cells[i] for r in data if r.cells[i]]
         column.samples = list(dict.fromkeys(v[:60] for v in values))[:3]
@@ -246,6 +261,7 @@ def _type_columns(columns: list[Column], data: list[Row]) -> None:
 
 
 def _structure(table: LogicalTable) -> str:
+    """Return 'structured' when enough columns are named and most rows fill two or more cells, else 'text'."""
     named = [c for c in table.columns if not UNNAMED.match(c.header)]
     if len(named) < 2 or len(named) < len(table.columns) / 2 or not table.rows:
         return "text"                                            # SQL over unnamed columns would be guesswork

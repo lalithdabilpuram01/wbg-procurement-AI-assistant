@@ -26,6 +26,7 @@ Return JSON matching the schema."""
 
 
 def render_evidence(items) -> str:
+    """Format evidence items as labelled text blocks (an [E1] header line, then the text) for the generator prompt."""
     blocks = []
     for e in items:
         r = e.record
@@ -39,15 +40,20 @@ def render_evidence(items) -> str:
 
 
 class OllamaGenerator:
+    """Answer generator backed by a local Ollama model; any endpoint other than localhost is refused."""
     is_llm = True
 
     def __init__(self, model: str = "llama3.2:1b", url: str = "http://localhost:11434/api/chat", seed: int = 7, timeout: int = 180):
+        """Set the model, endpoint, seed and timeout; raises ValueError for an endpoint that is not local."""
+        # Only a local endpoint is allowed, so document text never leaves the machine.
         if not url.startswith("http://localhost") and not url.startswith("http://127.0.0.1"):
             raise ValueError("Only a local inference endpoint is permitted")
         self.model, self.url, self.seed, self.timeout = model, url, seed, timeout
         self.name = f"ollama:{model}"
 
     def generate(self, question: str, items) -> tuple[DraftAnswer | None, dict]:
+        """Ask the local model for a DraftAnswer; return (answer or None, metadata such as latency and token counts).
+        Makes two attempts; if both fail (endpoint error or invalid JSON) it returns None, so the pipeline abstains."""
         body = {"model": self.model, "stream": False, "format": DraftAnswer.model_json_schema(),
                 "options": {"temperature": 0, "seed": self.seed, "num_ctx": 8192, "num_predict": 700},
                 "messages": [{"role": "system", "content": SYSTEM},
@@ -90,6 +96,7 @@ class EvidenceOnlyGenerator:
     name = "evidence_only (no LLM; verbatim excerpts)"
 
     def generate(self, question: str, items) -> tuple[DraftAnswer, dict]:
+        """Return the first four evidence excerpts as cited claims, without any synthesis."""
         claims = [{"text": excerpt(e.record.get("excerpt") or e.text), "evidence_ids": [e.eid]} for e in items[:4]]
         return DraftAnswer(status="answered" if claims else "insufficient_evidence",
                            answer=" … ".join(c["text"] for c in claims) or "No evidence retrieved.",
@@ -103,6 +110,7 @@ class TypedRecordAnswerer:
     name = "typed_record (deterministic; no LLM)"
 
     def generate(self, question: str, items) -> tuple[DraftAnswer, dict]:
+        """Build claims from every exact-match plan row: method and status, amounts and dates, each contract link."""
         claims = []
         for e in items:
             if not e.record.get("scores", {}).get("exact_reference_match") or e.record["unit_type"] != "activity":

@@ -25,6 +25,7 @@ class InvestigationNotFound(LookupError):
 
 @dataclass(frozen=True)
 class EngineOutcome:
+    """What the engine reports after a run: status, checked answer, evidence, task states and the raw state values."""
     thread_id: str
     status: InvestigationStatus
     response: InvestigationResponse | None
@@ -35,11 +36,17 @@ class EngineOutcome:
 
 
 def checkpoint_thread_id(owner: OwnerRef, conversation_thread_id: str, investigation_id: str) -> str:
+    """The stable checkpoint thread id of one investigation (the same inputs always give the same id)."""
     return stable_id("lgt", owner.tenant_id, owner.user_hash, conversation_thread_id, investigation_id)
 
 
 class InvestigationEngine:
+    """Runs investigation graphs: one checkpoint thread per investigation, owner checked on every read."""
+
     def __init__(self, deps: EngineDeps, checkpointer: Any | None = None):
+        """Hook memory and cancellation into `deps`, then compile the graph with the checkpointer (in memory by
+        default)."""
+        # The graph nodes read memory and cancellation through these hooks, so neither is stored in a checkpoint.
         self._memory: dict[str, str] = {}
         self._cancelled: set[str] = set()
         deps.memory = self._memory.get
@@ -50,6 +57,7 @@ class InvestigationEngine:
 
     # ------------------------------------------------------------------------------------------------ api
     def start(self, request: InvestigationRequest, memory_block: str | None = None) -> EngineOutcome:
+        """Run a new investigation to its end (or until it stops) and return the outcome."""
         thread_id = checkpoint_thread_id(request.owner, request.conversation_thread_id, request.investigation_id)
         if memory_block:
             self._memory[request.investigation_id] = memory_block
@@ -83,6 +91,7 @@ class InvestigationEngine:
         return self.outcome(owner, thread_id)
 
     def outcome(self, owner: OwnerRef, thread_id: str) -> EngineOutcome:
+        """The current outcome from the latest checkpoint; FAILED when no response was written."""
         snapshot = self._owned_snapshot(owner, thread_id)
         values = snapshot.values
         response = InvestigationResponse.from_state(values["response"]) if values.get("response") else None
@@ -93,12 +102,14 @@ class InvestigationEngine:
 
     # ------------------------------------------------------------------------------------------- internals
     def _invoke(self, payload: Any, thread_id: str) -> None:
+        """Run the graph on a thread (None payload = resume) with tracing off and synchronous checkpoint writes."""
         config = {"configurable": {"thread_id": thread_id}}
         with no_external_tracing():
             self.graph.invoke(payload, config, durability="sync")
         self._checkpoint_event("orchestrator.checkpoint_saved", self.graph.get_state(config), thread_id)
 
     def _checkpoint_event(self, name: str, snapshot, thread_id: str) -> None:
+        """Emit a metadata-only tracer event about a checkpoint (ids and step, no content)."""
         request = (snapshot.values or {}).get("request") or {}
         self.deps.tracer.event(name, checkpoint_thread=thread_id, checkpointer=type(self.checkpointer).__name__,
                                checkpoint_id=(snapshot.config or {}).get("configurable", {}).get("checkpoint_id"),
@@ -106,6 +117,7 @@ class InvestigationEngine:
                                conversation_id=request.get("conversation_thread_id"))
 
     def _owned_snapshot(self, owner: OwnerRef, thread_id: str):
+        """The thread's state if it belongs to `owner`; a missing and a foreign thread raise the same error."""
         snapshot = self.graph.get_state({"configurable": {"thread_id": thread_id}})
         request = (snapshot.values or {}).get("request")
         if not request or OwnerRef.from_state(request["owner"]) != owner:

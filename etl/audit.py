@@ -32,6 +32,7 @@ def reports(node, path: str = ""):
 
 
 def check_rows(run_id: str, runs: Path, now: datetime) -> list[tuple]:
+    """One dq_results row per check found in the dq_report.json files under the run folder (long values truncated)."""
     rows = []
     for f in sorted(runs.rglob("dq_report.json")):
         step = str(f.parent.relative_to(runs))
@@ -43,6 +44,7 @@ def check_rows(run_id: str, runs: Path, now: datetime) -> list[tuple]:
 
 
 def table_rows(spark, catalog: str, run_id: str, now: datetime) -> list[tuple]:
+    """One table_snapshots row per table or view in the four schemas: row count and Delta version (None for views)."""
     rows = []
     for schema in SCHEMAS:
         for t in spark.sql(f"SHOW TABLES IN {catalog}.{schema}").collect():
@@ -60,12 +62,14 @@ def append(spark, rows: list[tuple], schema: str, target: str) -> None:
 
 
 def run(catalog: str, run_id: str, runs: Path) -> int:
+    """Append this run's checks and table snapshots; return 1 if a blocking check failed or a table is missing."""
     spark = get_spark()
     now = datetime.now(timezone.utc)
     checks = check_rows(run_id, runs, now)
     tables = table_rows(spark, catalog, run_id, now)
     append(spark, checks, RESULTS, f"{catalog}.etl.dq_results")
     append(spark, tables, SNAPSHOTS, f"{catalog}.etl.table_snapshots")
+    # Tuple positions follow RESULTS: 4 is the severity and 5 is passed.
     failed = [c for c in checks if c[4] == "error" and not c[5]]
     warned = [c for c in checks if c[4] == "warn" and not c[5]]
     counts = {s: sum(1 for t in tables if t[1].split(".")[1] == s and t[2] != "VIEW") for s in SCHEMAS}

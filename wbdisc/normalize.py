@@ -143,6 +143,7 @@ def clean_label(value) -> str | None:
 
 
 def strip_html(value) -> str:
+    """Turn HTML into plain text: line breaks at block ends, ' | ' between table cells, entities decoded."""
     if not value:
         return ""
     s = re.sub(r"(?i)<br\s*/?>|</p>|</tr>|</li>|</h\d>", "\n", str(value))

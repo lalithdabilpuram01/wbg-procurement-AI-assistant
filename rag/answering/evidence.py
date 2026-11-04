@@ -23,6 +23,7 @@ INJECTION = re.compile(r"ignore (all |any )?(previous|prior|above) instructions|
 
 @dataclass
 class Evidence:
+    """One piece of evidence shown to the generator under its ID (E1, E2, ...), with page-check and quarantine flags."""
     eid: str
     unit_id: str
     record: dict                 # core.cite() record (metadata + excerpt)
@@ -35,6 +36,7 @@ class Evidence:
 
 @dataclass
 class EvidencePack:
+    """Result of evidence selection: retrieval status, notes, the selected evidence and a trace for debugging."""
     status: str
     notes: list[str]
     items: list[Evidence]
@@ -42,6 +44,7 @@ class EvidencePack:
 
 
 def typed_text(r: dict) -> str:
+    """Render a procurement-plan row and its contract links as plain-text facts for the generator."""
     a = r["activity"]
     links = "; ".join(f"contract link status={e['evidence_status']} match={e['match_class']} WB contract {e['wb_contract_number']} "
                       f"recorded signing {e['date_recorded_signing']} contract amount US${e['contract_amount_usd']}"
@@ -75,6 +78,7 @@ def classify_page_check(r: dict, v: dict, pt: PageText) -> tuple[str, dict]:
 
 
 class EvidenceSelector:
+    """Picks the evidence for one question from guarded retrieval and checks each item before generation."""
     def __init__(self, retriever: Retriever):
         self.R = retriever
         self.c = retriever.c
@@ -100,6 +104,8 @@ class EvidenceSelector:
         return out
 
     def select(self, q: str, plan, injected_units: list[dict] | None = None) -> EvidencePack:
+        """Run guarded hybrid retrieval and return up to MAX_EVIDENCE diverse, screened and page-checked evidence items.
+        Items with instruction-like text are kept but flagged as quarantined; injected_units are appended after them."""
         res = self.R.search(q, method="hybrid", k=20, guarded=True)
         trace = {"retrieval_status": res["status"], "retrieved_unit_ids": [r["unit_id"] for r in res["results"]], "targeted": {}}
         if res["status"] != "ok":
@@ -125,6 +131,8 @@ class EvidenceSelector:
         ordinary = [r for r in rest if not r["scores"].get("targeted_document_coverage")]
         chosen, per_doc, seen_parent, seen_table_rows = [], {}, set(), {}
         def take(r: dict) -> bool:
+            """Add a record unless it repeats a unit, a parent, table rows or a full document; return True when added.
+            Exact reference matches are exempt from the per-document limit."""
             if any(c["unit_id"] == r["unit_id"] for c in chosen):
                 return False
             if r.get("parent_id") and r["parent_id"] in seen_parent:
@@ -155,9 +163,11 @@ class EvidenceSelector:
             u = self.c.by_id.get(r["unit_id"])
             text = typed_text(r) if r["unit_type"] == "activity" else r["excerpt"]
             ctx = ""
+            # Strategy C: attach the start of the parent section as context (it is shown, but not citable on its own).
             if u is not None and u.parent_id and u.parent_id in self.c.parents:
                 ctx = self.c.parents[u.parent_id].get("text", "")[:600]
             e = Evidence(f"E{n}", r["unit_id"], r, text, ctx)
+            # Quarantine text that looks like a prompt-injection attempt; the pipeline never shows it to the generator.
             if INJECTION.search(text) or INJECTION.search(ctx):
                 e.quarantined = True
             if u is not None:

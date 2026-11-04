@@ -11,7 +11,9 @@ ESCAPES = {"n": "\n", "t": "\t", '"': '"', "\\": "\\", "/": "/", "b": "", "f": "
 
 
 class ClaimTextStream:
+    """Feed it raw JSON chunks; it calls `emit` with the characters of each claim's "text" value as they arrive."""
     def __init__(self, emit: Callable[[str], None]):
+        """Keep `emit` and the parser state: bracket stack, string and escape flags, and the current key."""
         self._emit = emit
         self._stack: list[str] = []
         self._in_string = self._escape = False
@@ -28,6 +30,7 @@ class ClaimTextStream:
 
     # ---------------------------------------------------------------------------------------------- inside "..."
     def _string_char(self, ch: str) -> None:
+        """Handle one character inside a JSON string, decoding escapes; a malformed \\u escape is dropped."""
         if self._unicode is not None:
             self._unicode += ch
             if len(self._unicode) == 4:
@@ -49,6 +52,7 @@ class ClaimTextStream:
             self._out(ch)
 
     def _out(self, text: str) -> None:
+        """Collect decoded string text: into the current key name, or out to `emit` when inside a "text" value."""
         if self._role == "key":
             self._key.append(text)
         elif self._role == "text" and text:
@@ -56,6 +60,7 @@ class ClaimTextStream:
 
     # --------------------------------------------------------------------------------------------- the structure
     def _structure_char(self, ch: str) -> None:
+        """Track nesting, keys and colons outside strings, and decide what the next string is (key, text or other)."""
         if ch in "{[":
             self._stack.append(ch)
             self._expect_key = ch == "{"
@@ -73,7 +78,7 @@ class ClaimTextStream:
                 self._role, self._key = "key", []
             elif self._after_colon and self._last_key == "text":
                 self._role = "text"
-                if self._claims:
+                if self._claims:                       # a blank line between claims, none before the first
                     self._emit(PARAGRAPH)
                 self._claims += 1
             else:

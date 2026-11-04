@@ -20,6 +20,7 @@ class InvalidRequest(ValueError):
 
 @dataclass(frozen=True)
 class PackageRequest:
+    """One procurement package to score: method, category, review type, bid window and tender date."""
     project_id: str | None                    # None for a new project (context comes from its profile)
     procurement_method: str
     procurement_category: str
@@ -28,6 +29,7 @@ class PackageRequest:
     tender_date: dt.date
 
     def validate(self) -> None:
+        """Raise InvalidRequest when the project ID, the bid window or a required text field is not usable."""
         if self.project_id is not None and not (self.project_id.startswith("P") and self.project_id[1:].isdigit()):
             raise InvalidRequest("project_id must look like P123456")
         if self.bid_window_days < 0 or self.bid_window_days > 365:
@@ -39,6 +41,7 @@ class PackageRequest:
 
 @dataclass(frozen=True)
 class ProjectContext:
+    """What the models need to know about the project: region, country, sector, approval date, income, prior tenders."""
     project_id: str
     region_name: str
     country_code: str | None                  # WDI code; None = regional project
@@ -85,12 +88,14 @@ def income_at(context: ProjectContext, fy: int) -> tuple[float | None, str | Non
 
 
 def deadline_status(window_days: float) -> str:
+    """Model 3 deadline category: no window, a positive window, or a positive window over 180 days (for review)."""
     if window_days == 0:
         return "equals_publication_date_no_window"
     return "positive_window_over_180_days_review" if window_days > LONG_WINDOW_DAYS else "positive_window"
 
 
 def _common(request: PackageRequest, context: ProjectContext) -> dict:
+    """Features shared by all three models; a regional project (no country) uses the country group 'REGIONAL'."""
     return {"procurement_method": " ".join(request.procurement_method.split()),
             "procurement_category": request.procurement_category, "region_name": context.region_name,
             "country_grp": context.country_code or "REGIONAL", "sector": context.sector}

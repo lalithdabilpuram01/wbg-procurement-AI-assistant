@@ -41,6 +41,8 @@ SINGULAR_COUNTRY_REFERENCE = re.compile(r"\b(that|this|the) country\b", re.IGNOR
 
 @dataclass
 class Resolution:
+    """Outcome of one message: its kind, the context after it, and the standalone question (or a clarification)."""
+
     kind: TurnKind
     context: ActiveContext
     standalone_question: str | None             # None when clarification is required or the topic was reset
@@ -51,6 +53,8 @@ class Resolution:
 
 @dataclass
 class Mentions:
+    """Entities named in one message. Bare years ("2021") are kept apart: reading them as fiscal years is assumed."""
+
     countries: list[CountryRef]
     ambiguous: list[tuple[str, list[CountryRef]]]
     fiscal_years: list[int]
@@ -59,12 +63,16 @@ class Mentions:
 
 
 class FollowUpResolver:
+    """Turns a message plus the active context into a Resolution, using the cue precedence in the module docstring."""
+
     def __init__(self, vocabulary: CountryVocabulary | None = None):
         self._vocabulary = vocabulary or cohort_vocabulary()
 
     # ------------------------------------------------------------------------------------------------- entry point
     def resolve(self, message: str, active: ActiveContext) -> Resolution:
+        """Classify the message as a follow-up kind or a new question and return the updated context."""
         mentions = self._mentions(message)
+        # An ambiguous country name ("Congo") always asks first, whatever kind of turn this is.
         if mentions.ambiguous:
             return self._clarify(active, f"'{mentions.ambiguous[0][0]}' matches several countries; which one do you mean?",
                                  [c.name for c in mentions.ambiguous[0][1]])
@@ -90,6 +98,7 @@ class FollowUpResolver:
 
     # ------------------------------------------------------------------------------------------------- turn kinds
     def _new_question(self, message: str, mentions: Mentions) -> Resolution:
+        """A fresh question: only the entities it names itself, nothing inherited."""
         if len(message.split()) < 3 and not self._has_entities(mentions):
             return self._clarify(ActiveContext(), "The question is too short to interpret; please ask it in full.")
         context = ActiveContext(topic=message.strip(), countries=mentions.countries, fiscal_years=self._years(mentions),
@@ -97,6 +106,7 @@ class FollowUpResolver:
         return self._finish(TurnKind.QUESTION, context, message, mentions, standalone=message.strip())
 
     def _refinement(self, message: str, active: ActiveContext, mentions: Mentions) -> Resolution:
+        """Change the active filters to the ones named; countries are added on "also/add", otherwise replaced."""
         if active.topic is None:
             return self._clarify(active, "There is no earlier question to refine; please ask the full question.")
         if not self._has_entities(mentions):
@@ -112,6 +122,7 @@ class FollowUpResolver:
         return self._finish(TurnKind.REFINEMENT, context, message, mentions)
 
     def _comparison(self, message: str, active: ActiveContext, mentions: Mentions) -> Resolution:
+        """Add the newly named countries to the active query and compare by country."""
         if active.topic is None:
             if not mentions.countries:
                 return self._clarify(active, "There is nothing earlier to compare; please name what to compare.")
@@ -125,6 +136,7 @@ class FollowUpResolver:
         return self._finish(TurnKind.COMPARISON, context, message, mentions)
 
     def _reference(self, message: str, active: ActiveContext) -> Resolution:
+        """Read "that/those/the same" as the active scope; ask when "that country" could mean more than one."""
         if active.topic is None:
             return self._clarify(active, "It is not clear what 'that' refers to; please name the country, project or year.")
         if SINGULAR_COUNTRY_REFERENCE.search(message) and len(active.countries) != 1:
@@ -137,6 +149,7 @@ class FollowUpResolver:
                             notes=[f"'{_referenced_words(message)}' read as the active scope ({_scope_phrase(active)})."])
 
     def _removal(self, message: str, active: ActiveContext, mentions: Mentions) -> Resolution:
+        """Remove the fiscal-year filter, the named countries, or the whole country filter, as the message says."""
         context = active.model_copy(deep=True)
         notes = []
         if YEAR_FILTER_WORDS.search(message) and not mentions.countries:
@@ -156,6 +169,8 @@ class FollowUpResolver:
         return self._finish(TurnKind.FILTER_REMOVAL, context, message, mentions, notes=notes)
 
     def _correction(self, message: str, active: ActiveContext, mentions: Mentions) -> Resolution:
+        """Replace an earlier value ("I meant Tanzania, not Uganda"). With several active countries and no "not X",
+        it asks which one to replace."""
         negated = self._negated_countries(message)
         replacements = [c for c in mentions.countries if c not in negated]
         if not replacements and not self._years(mentions):
@@ -176,6 +191,7 @@ class FollowUpResolver:
     # ---------------------------------------------------------------------------------------------------- helpers
     def _finish(self, kind: TurnKind, context: ActiveContext, message: str, mentions: Mentions | None,
                 standalone: str | None = None, notes: list[str] | None = None) -> Resolution:
+        """Build the Resolution; the standalone question is written from the context unless one is given."""
         if kind == TurnKind.TOPIC_RESET:
             return Resolution(kind, context, None, notes=notes or [])
         question = standalone or _standalone(context)
@@ -187,6 +203,7 @@ class FollowUpResolver:
                           clarification_options=options or [])
 
     def _mentions(self, message: str) -> Mentions:
+        """Countries (unique and ambiguous), fiscal years, bare years and project ids named in the message."""
         countries, ambiguous = [], []
         for text, candidates in self._vocabulary.find(message):
             if len(candidates) > 1:
@@ -194,10 +211,12 @@ class FollowUpResolver:
             elif candidates[0] not in countries:
                 countries.append(candidates[0])
         fiscal = sorted({_full_year(y) for y in FISCAL_YEAR.findall(message)})
+        # Explicit "FY 2021" mentions are removed first so their digits are not counted again as bare years.
         bare = sorted({int(y) for y in BARE_YEAR.findall(FISCAL_YEAR.sub(" ", message))} - set(fiscal))
         return Mentions(countries, ambiguous, fiscal, bare, sorted(set(PROJECT_ID.findall(message))))
 
     def _negated_countries(self, message: str) -> list[CountryRef]:
+        """Countries named after "not" ("not Uganda"), i.e. the values a correction takes away."""
         negated = []
         for phrase in NEGATED_COUNTRY.findall(message):
             for _text, candidates in self._vocabulary.find(phrase):
@@ -223,6 +242,7 @@ ENTITY_PHRASE = re.compile(r"\s*\b((in|for|from|of|during)\s+)?((fiscal year|fy)
 
 
 def _standalone(context: ActiveContext) -> str:
+    """The topic without its entity phrases, then the active scope ("Show contracts for Kenya, in fiscal year 2022")."""
     topic = context.topic or "Show procurement activity"
     ending = "?" if topic.rstrip().endswith("?") else "."
     return f"{_strip_entities(topic)} {_scope_phrase(context)}".strip() + ending
@@ -234,14 +254,17 @@ def _referenced_words(message: str) -> str:
 
 
 def _strip_entities(text: str) -> str:
+    """The text without year, project and "in <country>" phrases, so the scope phrase can add them back once."""
     vocabulary = cohort_vocabulary()
     text = ENTITY_PHRASE.sub("", text)
+    # [3:-3] drops the leading "\b(" and trailing ")\b" of the vocabulary pattern, leaving the list of country names.
     text = re.sub(r"\s*\b(in|for|from)\s+(" + vocabulary.mention_pattern().pattern[3:-3] + r")\b(\s*(,|and)\s*(" +
                   vocabulary.mention_pattern().pattern[3:-3] + r"))*", "", text, flags=re.IGNORECASE)
     return re.sub(r"\s+", " ", text).strip(" .?!,")
 
 
 def _scope_phrase(context: ActiveContext) -> str:
+    """The active filters in words ("for Kenya and Uganda, in fiscal year 2022") or "across all countries and years"."""
     parts = []
     if context.countries:
         parts.append("for " + _join([c.name for c in context.countries]))

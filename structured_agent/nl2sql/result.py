@@ -12,6 +12,7 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 
+# Final outcome of one workflow run, as shown to the caller.
 class WorkflowStatus(str, Enum):
     ANSWERED = "answered"                              # validated SQL executed through the gateway
     VALIDATED_NOT_EXECUTED = "validated_not_executed"  # approved by the validator; execution not requested
@@ -23,6 +24,7 @@ class WorkflowStatus(str, Enum):
     BLOCKED_BY_GUARDRAIL = "blocked_by_guardrail"      # an input, context, output, tool or execution guardrail
 
 
+# Why a run did not answer; one value per distinct cause, so dashboards and tests can tell them apart.
 class FailureClass(str, Enum):
     # LLM provider (values match llm_client.LlmFailure)
     PROVIDER_RATE_LIMITED = "provider_rate_limited"
@@ -49,6 +51,7 @@ class FailureClass(str, Enum):
     DEADLINE_EXCEEDED = "deadline_exceeded"
 
 
+# The parts of the validator's report that the workflow passes on (no SQL text beyond the validated one).
 class ValidationSummary(BaseModel):
     approved: bool
     validation_id: str | None = None
@@ -58,6 +61,7 @@ class ValidationSummary(BaseModel):
     checks_failed: list[str] = Field(default_factory=list)
 
 
+# Everything one workflow run returns. Fields marked unverified come from the model and are never facts.
 class WorkflowResult(BaseModel):
     request_id: str
     question: str

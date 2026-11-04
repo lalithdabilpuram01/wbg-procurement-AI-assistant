@@ -29,6 +29,7 @@ class CheckpointStore(Protocol):
     def latest(self, owner: Owner, thread_id: str) -> tuple[str, dict[str, Any]] | None: ...
 
 
+# One piece of remembered text found by a LongTermMemoryRetriever, with its score and where it came from.
 class MemoryHit(BaseModel):
     thread_id: str
     turn_seq: int | None = None
@@ -56,6 +57,7 @@ class PredictionContext(BaseModel):
     created_at: dt.datetime = Field(default_factory=utc_now)
 
 
+# A bookmarked assistant answer with the evidence references it cited (contract only; not implemented yet).
 class SavedResponse(BaseModel):
     saved_id: str = Field(default_factory=new_id)
     owner: Owner
@@ -66,6 +68,7 @@ class SavedResponse(BaseModel):
     created_at: dt.datetime = Field(default_factory=utc_now)
 
 
+# An optional named set of projects and threads for one owner (contract only; not implemented yet).
 class Workspace(BaseModel):
     workspace_id: str = Field(default_factory=new_id)
     owner: Owner

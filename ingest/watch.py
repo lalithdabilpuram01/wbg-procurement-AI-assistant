@@ -13,6 +13,8 @@ from .layout import MANAGED, Inbox
 
 
 class _Changes(FileSystemEventHandler):
+    """Remembers when the inbox last changed; events in the managed folders (the pipeline's own moves) are ignored."""
+
     def __init__(self) -> None:
         self.last = 0.0
         self.event = threading.Event()
@@ -24,6 +26,7 @@ class _Changes(FileSystemEventHandler):
 
 
 def watch(inbox: Inbox, run: Callable[[], dict], settle_seconds: float = 3.0, on_report: Callable[[dict], None] = print) -> None:
+    """Run the pipeline each time new files have settled in the inbox, until interrupted (Ctrl+C)."""
     inbox.create()
     changes = _Changes()
     observer = Observer()
@@ -47,6 +50,7 @@ def watch(inbox: Inbox, run: Callable[[], dict], settle_seconds: float = 3.0, on
 
 
 def _growing(inbox: Inbox) -> bool:
+    """True when a pending file changes size within one second, i.e. it is still being copied."""
     before = {p: p.stat().st_size for _, p in inbox.pending()}
     time.sleep(1.0)
     return any(p.exists() and p.stat().st_size != size for p, size in before.items())

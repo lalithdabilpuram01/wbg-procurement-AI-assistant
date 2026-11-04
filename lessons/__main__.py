@@ -26,18 +26,21 @@ KG_SCHEMA = "wbg_kg"
 
 
 def lakebase_store():
+    """A PostgresLessonStore on the Knowledge Graph schema of the development branch, and its pool to close."""
     from wbg_orchestrator.learning_db import dev_schema_pool
     pool = dev_schema_pool(os.environ.get("WBG_KG_ENDPOINT", DEV_ENDPOINT), KG_SCHEMA, "lessons")
     return PostgresLessonStore(pool.connection, KG_SCHEMA), pool
 
 
 def preview() -> dict:
+    """Card counts the pilot corpus would give, without touching a database."""
     cards = corpus_cards()
     return {"cards": len(cards), "projects": len({c.project_id for c in cards}), "by_source": Counter(c.doc_type for c in cards),
             "by_stage": Counter(s for c in cards for s in c.stages), "by_topic": Counter(t for c in cards for t in c.topics)}
 
 
 def main(argv: list[str]) -> int:
+    """Run one command. Every command except preview opens the Lakebase pool and closes it afterwards."""
     parser = argparse.ArgumentParser(prog="python -m lessons", description="Lesson cards (Continuous Learning)")
     parser.add_argument("command", choices=["preview", "init-db", "backfill", "status"])
     args = parser.parse_args(argv)

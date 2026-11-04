@@ -39,6 +39,7 @@ def verify_source_files(spark: SparkSession, bronze: DataFrame, vintages: list[d
 
 
 def check(silver: DataFrame, bronze: DataFrame, report: DQReport) -> None:
+    """Run every data-quality rule for wgi_estimates and add the results to `report`."""
     n = silver.count()
     # --- completeness
     report.equals("row_count_equals_bronze", n, bronze.count())

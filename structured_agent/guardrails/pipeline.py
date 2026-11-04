@@ -24,6 +24,7 @@ from structured_agent.guardrails.decisions import (GuardDecision, GuardrailBlock
 from structured_agent.nl2sql.context import SchemaContext
 from structured_agent.nl2sql.sql_generator import SqlDraft
 
+# Which MCP tools each workflow stage may call.
 RETRIEVAL_TOOLS = frozenset({"search_table_registry", "get_table_schema", "get_table_relationships",
                              "get_metric_definition", "get_verified_sql_examples"})
 VALIDATION_TOOLS = frozenset({"validate_sql"})
@@ -39,12 +40,15 @@ class ToolGate:
     """Wraps a ToolCaller so one workflow stage can only call its approved tools (application policy)."""
 
     def __init__(self, tools: Any, allowed_tools: frozenset[str], stage_name: str):
+        """Keep the wrapped tool caller, the tools this stage may call, and the stage name used in refusals."""
         self._tools = tools
         self._allowed = allowed_tools
         self._stage_name = stage_name
+        # Exposed so the gate can stand in for the ToolCaller it wraps.
         self.principal_id = tools.principal_id
 
     def call(self, tool: str, arguments: dict[str, Any], request_id: str) -> dict[str, Any]:
+        """Forward the call when the tool is approved for this stage; otherwise raise GuardrailBlocked."""
         if tool not in self._allowed:
             raise GuardrailBlocked(GuardDecision(
                 stage=GuardStage.TOOL_AUTHORIZATION, policy_id=f"app.tool_gate.{self._stage_name}", allowed=False,
@@ -71,6 +75,7 @@ class Guardrails:
     # ------------------------------------------------------------------------------------- application policies
     @staticmethod
     def guard_context(context: SchemaContext) -> tuple[SchemaContext, GuardDecision]:
+        """Sanitise the retrieved schema context; returns the clean context and the decision."""
         with timed() as timing:
             clean, result, _removed = policies.sanitize_retrieved_context(context)
         return clean, _application_decision(GuardStage.RETRIEVED_CONTEXT, "app.retrieved_context", result, timing["ms"])
@@ -78,6 +83,7 @@ class Guardrails:
     @staticmethod
     def check_execution(trusted_principal: str, current_principal: str, validation_approved: bool,
                         validation_id: str | None, prior_decisions: list[GuardDecision]) -> GuardDecision:
+        """Execution gate: same identity as at request start, an approved validation, and no earlier block."""
         with timed() as timing:
             result = policies.evaluate_execution(trusted_principal, current_principal, validation_approved, validation_id,
                                                  prior_decisions)

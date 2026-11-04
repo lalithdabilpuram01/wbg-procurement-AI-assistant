@@ -23,6 +23,7 @@ Clock = Callable[[], float]
 
 
 class RateLimitExceeded(Exception):
+    """Raised when a rate limit has no token left; carries the limit name and the wait in seconds."""
     def __init__(self, limit: str, retry_after_seconds: float):
         self.limit = limit
         self.retry_after_seconds = retry_after_seconds
@@ -30,6 +31,7 @@ class RateLimitExceeded(Exception):
 
 
 class CircuitOpenError(Exception):
+    """Raised while a circuit breaker is open; carries the breaker name and the wait in seconds."""
     def __init__(self, breaker: str, retry_after_seconds: float):
         self.breaker = breaker
         self.retry_after_seconds = retry_after_seconds
@@ -45,6 +47,7 @@ class TokenBucketRateLimiter:
     """`capacity` requests per `period_seconds` per key, refilled continuously."""
 
     def __init__(self, name: str, capacity: int, period_seconds: float = 60.0, clock: Clock = time.monotonic):
+        """Every key starts with a full bucket, refilled at `capacity / period_seconds` tokens per second."""
         self.name = name
         self._capacity = capacity
         self._refill_per_second = capacity / period_seconds
@@ -65,6 +68,8 @@ class TokenBucketRateLimiter:
 
 
 class ConcurrencyLimiter:
+    """Caps how many calls of one kind run at the same time; a caller waits at most `wait_seconds` for a slot."""
+
     def __init__(self, name: str, max_concurrent: int, wait_seconds: float):
         self.name = name
         self._semaphore = threading.BoundedSemaphore(max_concurrent)
@@ -101,6 +106,7 @@ class CircuitBreaker:
 
     def __init__(self, name: str, settings: BreakerSettings, clock: Clock = time.monotonic,
                  on_transition: TransitionListener | None = None):
+        """Start closed with no recorded failures; `on_transition` is told about every state change."""
         self.name = name
         self._settings = settings
         self._clock = clock
@@ -120,6 +126,7 @@ class CircuitBreaker:
             return self._state
 
     def before_call(self) -> None:
+        """Ask to make one upstream call; raises CircuitOpenError while the circuit is open or probes are full."""
         with self._lock:
             self._refresh_open_state()
             if self._state == CircuitState.OPEN:
@@ -130,6 +137,7 @@ class CircuitBreaker:
                 self._probes_in_flight += 1
 
     def record_success(self) -> None:
+        """Record a successful call; enough successes in HALF-OPEN close the circuit again."""
         with self._lock:
             if self._state == CircuitState.HALF_OPEN:
                 self._probes_in_flight -= 1
@@ -140,6 +148,7 @@ class CircuitBreaker:
                     self._transition(CircuitState.CLOSED)
 
     def record_failure(self) -> None:
+        """Record a transient failure; a failed probe (cooldown doubled) or too many in the window opens it."""
         with self._lock:
             now = self._clock()
             if self._state == CircuitState.HALF_OPEN:
@@ -159,6 +168,7 @@ class CircuitBreaker:
 
     # ------------------------------------------------------------------------------------------------- internals
     def _refresh_open_state(self) -> None:
+        """Move OPEN to HALF-OPEN once the cooldown has passed (checked lazily on each access)."""
         if self._state == CircuitState.OPEN and self._remaining_cooldown() <= 0:
             self._probes_in_flight = 0
             self._probe_successes = 0
@@ -173,13 +183,17 @@ class CircuitBreaker:
         self._transition(CircuitState.OPEN)
 
     def _transition(self, new_state: CircuitState) -> None:
+        """Move to `new_state` and notify the listener when the state really changed."""
         old_state, self._state = self._state, new_state
+        # The listener (tracing, audit) runs while the lock is held, so it must be quick and must not call back.
         if self._on_transition and old_state != new_state:
             self._on_transition(self.name, old_state, new_state)
 
 
 # --------------------------------------------------------------------------------------------------------- deadline
 class Deadline:
+    """Time budget for one user request, shared by every stage of the workflow."""
+
     def __init__(self, total_seconds: float, clock: Clock = time.monotonic):
         self._clock = clock
         self._expires_at = clock() + total_seconds

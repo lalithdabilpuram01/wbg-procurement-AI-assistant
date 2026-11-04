@@ -28,12 +28,14 @@ class CachedToken:
 
     def __init__(self, fetch: Callable[[], str], reuse_seconds: float = TOKEN_REUSE_SECONDS,
                  clock: Callable[[], float] = time.monotonic):
+        """`fetch` gets a fresh credential; `clock` measures the token's age (monotonic time by default)."""
         self._fetch, self._reuse, self._clock = fetch, reuse_seconds, clock
         self._lock = threading.Lock()
         self._token: str | None = None
         self._fetched_at = 0.0
 
     def get(self) -> str:
+        """Return the cached token, fetching a new one when none is cached or it is older than the reuse window."""
         with self._lock:
             if self._token is None or self._clock() - self._fetched_at >= self._reuse:
                 self._token, self._fetched_at = self._fetch(), self._clock()
@@ -41,7 +43,9 @@ class CachedToken:
 
 
 def _connection_class(token: CachedToken) -> type[psycopg.Connection]:
+    """A psycopg Connection class that sets the OAuth password from the token cache on every new connection."""
     class OAuthConnection(psycopg.Connection):
+        """psycopg Connection that takes its password from the token cache each time it connects."""
         @classmethod
         def connect(cls, conninfo: str = "", **kwargs: Any):
             kwargs["password"] = token.get()
@@ -50,7 +54,9 @@ def _connection_class(token: CachedToken) -> type[psycopg.Connection]:
 
 
 def _configure(read_only: bool, statement_timeout_ms: int) -> Callable[[psycopg.Connection], None]:
+    """Return the per-connection setup: search_path, statement timeout, read-only default and pgvector types."""
     def configure(conn: psycopg.Connection) -> None:
+        """Apply the session settings and register the pgvector types on one new pool connection."""
         conn.execute("SELECT set_config('search_path', %s, false), set_config('statement_timeout', %s, false), "
                      "set_config('default_transaction_read_only', %s, false)",
                      (f"{SCHEMA}, public", f"{statement_timeout_ms}ms", "on" if read_only else "off"))

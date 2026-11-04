@@ -24,6 +24,8 @@ from silver.common.dq import DQReport
 
 
 def _meta(df: DataFrame, cohort_id: str | None) -> DataFrame:
+    # The xlsx reader already sets source_file; every other reader takes it from the file metadata.
+    """Add source_file (without the dbfs: prefix), cohort_id when one is given, and ingested_at."""
     df = df.withColumn("source_file", F.col("_metadata.file_path")) if "source_file" not in df.columns else df
     df = df.withColumn("source_file", F.regexp_replace("source_file", "^dbfs:", ""))
     if cohort_id is not None:

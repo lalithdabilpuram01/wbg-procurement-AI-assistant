@@ -47,6 +47,7 @@ def summarise(tool: str, response: dict) -> str:
 
 
 async def run(execute: bool) -> None:
+    """Connect, list the tools and call each of the seven once, printing one summary line per call."""
     started = time.perf_counter()
     async with connect(server_parameters(allow_dev_execution=execute)) as session:
         print(f"connected and initialized in {time.perf_counter() - started:.1f} s")

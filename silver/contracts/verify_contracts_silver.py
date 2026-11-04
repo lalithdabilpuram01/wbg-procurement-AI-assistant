@@ -36,6 +36,7 @@ SEP = "\x1f"
 
 
 def load_csv(spark, table: str) -> pd.DataFrame:
+    """The Volume CSV behind a Bronze table, re-read from its bytes with pandas (every value as a string)."""
     path = spark.table(table).select("source_file").distinct().collect()[0][0]
     content = bytes(spark.read.format("binaryFile").load(path).select("content").collect()[0][0])
     return pd.read_csv(io.BytesIO(content), dtype=str, keep_default_na=False, encoding="utf-8-sig")
@@ -50,6 +51,7 @@ def date(s: str):
 
 
 def main() -> int:
+    """Re-check the written contract tables against the Volume CSVs and the baseline; return 0 when all passed."""
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-id", required=True)
     ap.add_argument("--profile", default=DEFAULT_PROFILE)

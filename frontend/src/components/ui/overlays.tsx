@@ -1,5 +1,8 @@
 "use client";
 
+// Overlay components built on Radix UI (dialog, side sheet, dropdown menu, tooltip). Radix handles focus, keyboard
+// and screen-reader behaviour; this file only adds the app's styles.
+
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import * as Menu from "@radix-ui/react-dropdown-menu";
@@ -12,6 +15,7 @@ export const Dialog = DialogPrimitive.Root;
 export const DialogTrigger = DialogPrimitive.Trigger;
 export const DialogClose = DialogPrimitive.Close;
 
+/** A centred modal with a required `title` (read by screen readers), an optional description and a close button. */
 export function DialogContent({ className, children, title, description, ...props }:
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & { title: string; description?: string }) {
   return (
@@ -34,6 +38,7 @@ export function DialogContent({ className, children, title, description, ...prop
 }
 
 /* --------------------------------------------------------------------------------------- side sheet */
+/** A panel that slides in from the right edge. Used for the evidence list, hence its fixed screen-reader text. */
 export function Sheet({ open, onOpenChange, title, children }:
   { open: boolean; onOpenChange: (open: boolean) => void; title: string; children: React.ReactNode }) {
   return (
@@ -59,6 +64,7 @@ export function Sheet({ open, onOpenChange, title, children }:
 export const DropdownMenu = Menu.Root;
 export const DropdownMenuTrigger = Menu.Trigger;
 
+/** The menu panel, rendered in a portal so it is not clipped by scrolling containers; aligned to the trigger's end. */
 export function DropdownMenuContent({ className, ...props }: React.ComponentPropsWithoutRef<typeof Menu.Content>) {
   return (
     <Menu.Portal>
@@ -68,6 +74,7 @@ export function DropdownMenuContent({ className, ...props }: React.ComponentProp
   );
 }
 
+/** One clickable menu row; highlighted by keyboard or pointer through Radix data attributes. */
 export function DropdownMenuItem({ className, ...props }: React.ComponentPropsWithoutRef<typeof Menu.Item>) {
   return (
     <Menu.Item className={cn("flex cursor-pointer select-none items-center gap-2 rounded-md px-2 py-1.5 outline-none",
@@ -75,11 +82,15 @@ export function DropdownMenuItem({ className, ...props }: React.ComponentPropsWi
   );
 }
 
+/** A thin line between menu groups. */
 export const DropdownMenuSeparator = () => <Menu.Separator className="my-1 h-px bg-border" />;
+/** A small heading above a group of menu items. */
 export const DropdownMenuLabel = ({ children }: { children: React.ReactNode }) =>
   <Menu.Label className="px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{children}</Menu.Label>;
 
 /* --------------------------------------------------------------------------------------------- tooltip */
+/** A hover or focus tooltip around `children` (which must accept a ref). Each one has its own provider, so it can be
+ *  used anywhere without a provider at the app root. */
 export function Tooltip({ content, children }: { content: React.ReactNode; children: React.ReactNode }) {
   return (
     <TooltipPrimitive.Provider delayDuration={250}>

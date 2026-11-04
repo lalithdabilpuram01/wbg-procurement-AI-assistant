@@ -17,11 +17,13 @@ from structured_agent.policy import AccessPolicy, Principal
 from structured_agent.registry.models import RegistryBundle
 from structured_agent.sql_validation.lineage import BaseColumn, LineageResolver, table_fqn
 
+# Schemas the registry covers: an unregistered name here is a typo (unknown), anywhere else it is refused.
 REGISTERED_SCHEMAS = {"workspace.wbg_gold", "workspace.wbg_silver"}
 ARITHMETIC = (exp.Add, exp.Sub, exp.Mul, exp.Div, exp.Coalesce)
 
 
 def check_objects(bundle: RegistryBundle, policy: AccessPolicy, principal: Principal, fqns: list[str]) -> list[ToolError]:
+    """Each referenced object must be registered and authorized for the principal."""
     errors = []
     for fqn in fqns:
         obj = bundle.object(fqn)
@@ -37,6 +39,7 @@ def check_objects(bundle: RegistryBundle, policy: AccessPolicy, principal: Princ
 
 def check_columns(bundle: RegistryBundle, policy: AccessPolicy, principal: Principal,
                   used: set[BaseColumn], output: set[BaseColumn]) -> list[ToolError]:
+    """Each base column used must be known, not prohibited, and allowed for its use (output or filter)."""
     errors = []
     for fqn, name in sorted(used):
         obj = bundle.object(fqn)
@@ -74,6 +77,7 @@ def check_required_filters(bundle: RegistryBundle, resolver: LineageResolver) ->
 
 
 def check_measures(bundle: RegistryBundle, resolver: LineageResolver) -> list[ToolError]:
+    """Reject SUM over non-additive numeric or date columns, and arithmetic that mixes measure families."""
     errors = []
     for scope in resolver.scopes:
         for node in scope.expression.find_all(exp.Sum, *ARITHMETIC):
@@ -95,6 +99,7 @@ def check_measures(bundle: RegistryBundle, resolver: LineageResolver) -> list[To
 
 
 def unit_for(bundle: RegistryBundle, lineage: set[BaseColumn], aggregate: str | None) -> str | None:
+    """Unit of an output column: 'count' for counting aggregates, otherwise the one shared unit of its sources."""
     if aggregate in ("Count", "CountIf", "ApproxDistinct"):
         return "count"
     units = {bundle.object(f).column(n).unit for f, n in lineage}

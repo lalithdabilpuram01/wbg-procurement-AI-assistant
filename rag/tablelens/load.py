@@ -36,6 +36,7 @@ DATA_LIKE = re.compile(r"^\d{1,2}[-/ ][A-Za-z]{3}[-/ ]\d{2,4}$|^[A-Za-z]{3}/\d{4
 
 
 def documents() -> dict[str, DocumentInfo]:
+    """Return DocumentInfo for each TableLens pilot document, read from the pilot_v3 shared outputs."""
     shared = config.OUTPUT_V3 / "shared"
     titles = {p["project_id"]: p["api"].get("project_title", "") for p in map(json.loads, (shared / "projects.jsonl").open())}
     out = {}
@@ -60,12 +61,14 @@ def worth_loading(table: LogicalTable) -> bool:
 
 
 def entries() -> list[TableEntry]:
+    """Assemble the pilot documents' tables; return a TableEntry (table, document, card) for each one worth loading."""
     docs = documents()
     tables = assemble(*load_parts(config.OUTPUT_V3 / "shared", DOCUMENTS))
     return [TableEntry(t, docs[t.document_id], card_text(t, docs[t.document_id])) for t in tables if worth_loading(t)]
 
 
 def plan() -> dict[str, Any]:
+    """Offline dry run: count the tables and rows that would be loaded and show one example card."""
     items = entries()
     return {"structured_tables": len(items), "rows": sum(len(e.table.rows) for e in items),
             "flagged_rows": sum(r.quality != "ok" for e in items for r in e.table.rows),
@@ -74,6 +77,7 @@ def plan() -> dict[str, Any]:
 
 
 def load() -> dict[str, Any]:
+    """Encode the cards with bge-m3 and replace the TableLens release in Lakebase (a live write)."""
     items = entries()
     model = encoder.load_model()
     vectors = model.model.encode([e.card for e in items], batch_size=8, normalize_embeddings=True,
@@ -90,6 +94,7 @@ def load() -> dict[str, Any]:
 
 
 def verify() -> dict[str, Any]:
+    """Read-only check: the release record exists, its cards fingerprint matches and every table's row count matches."""
     items = entries()
     pool = open_pool(read_only=True)
     try:
@@ -109,6 +114,7 @@ def verify() -> dict[str, Any]:
 
 
 def main(argv: list[str]) -> int:
+    """Command-line entry point; 'load' refuses to run without --confirm-live-write."""
     parser = argparse.ArgumentParser(description="TableLens build and load (10 pilot PDFs)")
     parser.add_argument("step", choices=["plan", "load", "verify"])
     parser.add_argument("--confirm-live-write", action="store_true")

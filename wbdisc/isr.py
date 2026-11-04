@@ -73,6 +73,8 @@ def _row(line: str) -> tuple[str, list[str]] | None:
 
 
 def parse_isr_text(text: str) -> dict:
+    """Parse an ISR text rendition: sequence number, archive date, template, and the overall and risk ratings.
+    Each rating is the last value of its row (current or proposed); '--' is stored as None."""
     res: dict = {"ratings": {}, "risk_ratings": {}, "rating_tables_found": 0}
     m = _SEQ.search(text)
     res["seq_no"] = int(m.group(1)) if m else None

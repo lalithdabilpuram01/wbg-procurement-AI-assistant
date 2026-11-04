@@ -59,6 +59,7 @@ class EmbeddingModel:
         self._model = None
 
     def _load(self):
+        """Load the model from the local cache on first use; raises RuntimeError when it is not cached."""
         if self._model is None:
             force_hugging_face_offline()
             from sentence_transformers import SentenceTransformer
@@ -75,6 +76,7 @@ class EmbeddingModel:
         return self._load().get_sentence_embedding_dimension()
 
     def embed(self, texts: list[str]) -> np.ndarray:
+        """Embed texts as unit-length float32 vectors, one row per text."""
         vectors = self._load().encode(texts, batch_size=16, normalize_embeddings=True, show_progress_bar=False)
         return np.asarray(vectors, dtype=np.float32)
 
@@ -86,6 +88,8 @@ class VectorHit:
 
 
 class VectorIndex(Protocol):
+    """Any vector index the search can use: cosine search limited to allowed documents."""
+
     model_id: str
     dimensions: int
 
@@ -98,6 +102,7 @@ class NumpyCosineIndex:
     """In-memory cosine index over vectors loaded from registry.description_embeddings."""
 
     def __init__(self, model_id: str, dimensions: int, doc_ids: list[str], vectors: np.ndarray):
+        """Check the matrix shape and normalise every stored vector."""
         if vectors.shape != (len(doc_ids), dimensions):
             raise InvalidVectorError(f"matrix shape {vectors.shape} does not match {len(doc_ids)} x {dimensions}")
         self.model_id = model_id
@@ -106,6 +111,7 @@ class NumpyCosineIndex:
         self._matrix = np.vstack([validate_vector(v, dimensions) for v in vectors]) if doc_ids else vectors
 
     def search(self, query_vector: np.ndarray, allowed_doc_ids: set[str], top_k: int) -> list[VectorHit]:
+        """Top-k allowed documents by cosine similarity to the query vector."""
         query = validate_vector(query_vector, self.dimensions)
         allowed = [i for i, doc_id in enumerate(self._doc_ids) if doc_id in allowed_doc_ids]
         if not allowed:

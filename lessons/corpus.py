@@ -15,6 +15,7 @@ LESSONS_HEADING = "lesson"
 
 
 def _jsonl(directory: Path, name: str):
+    """Records of one JSONL file, read lazily; nothing when the file is missing."""
     path = directory / f"{name}.jsonl"
     if path.exists():
         with path.open() as lines:
@@ -22,6 +23,7 @@ def _jsonl(directory: Path, name: str):
 
 
 def corpus_cards(directory: Path = SHARED) -> list[LessonCard]:
+    """Cards from every lessons section of the corpus's ICR, ICRR and PAD documents, each card once."""
     documents = {d["document_id"]: d for d in _jsonl(directory, "documents") if d["doc_type"] in SOURCES}
     projects = {p["project_id"]: p["api"] for p in _jsonl(directory, "projects")}
     sections = {s["section_id"]: s for s in _jsonl(directory, "sections")

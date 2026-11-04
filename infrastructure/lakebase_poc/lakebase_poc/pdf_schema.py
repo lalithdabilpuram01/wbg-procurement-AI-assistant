@@ -33,6 +33,7 @@ PRIMARY_KEYS: dict[str, tuple[str, ...]] = {
 
 
 def checked(identifier: str) -> str:
+    """Return `identifier` unchanged if it is a safe lowercase SQL identifier; raise ValueError otherwise."""
     if not IDENTIFIER.match(identifier):
         raise ValueError(f"unsafe SQL identifier: {identifier!r}")
     return identifier

@@ -53,6 +53,7 @@ class Preferences(BaseModel):
     answer_length: Literal["brief", "detailed"] | None = None
     table_lens: bool | None = None
 
+    # The default fiscal years must be two years between 1990 and 2035, oldest first.
     @model_validator(mode="after")
     def _years_in_order(self) -> "Preferences":
         years = self.default_fiscal_years
@@ -79,6 +80,7 @@ class AnswerRecords(Protocol):
 
 @dataclass(frozen=True)
 class FeedbackOutcome:
+    """The stored feedback, whether a revision job should run, and the learned items it created."""
     feedback: Feedback
     revise: bool                                     # the question will be re-run with the correction
     saved: tuple[str, ...] = ()                      # learned item ids created by this feedback
@@ -90,12 +92,14 @@ class Guidance:
     item_ids: tuple[str, ...] = ()
 
 
+# One rating from the API: the answer's turn, up or down, known reasons and an optional free-text correction.
 class FeedbackRequest(BaseModel):
     turn_seq: int = Field(gt=0)
     rating: Rating
     reasons: tuple[str, ...] = ()
     correction: str | None = Field(default=None, max_length=500)
 
+    # Every reason given must be one of the known REASONS.
     @model_validator(mode="after")
     def _known_reasons(self) -> "FeedbackRequest":
         unknown = set(self.reasons) - set(REASONS)
@@ -105,6 +109,8 @@ class FeedbackRequest(BaseModel):
 
 
 class FeedbackService:
+    """Records feedback and turns it into conversation constraints, personal guidance and reviewer queue items."""
+
     def __init__(self, store: LearningStore, conversations: ConversationService, conversation_store: ConversationStore,
                  answers: AnswerRecords, embed: Embedder | None = None, clock: Callable[[], dt.datetime] = utc_now):
         self._store, self._conversations, self._turns = store, conversations, conversation_store
@@ -149,6 +155,7 @@ class FeedbackService:
         now = self._clock()
         items = [i for i in self._store.items(owner) if not i.expired(now)]
         matched = self._rank(question, items)[:MAX_GUIDANCE_ITEMS]
+        # Stored text is checked again here: a line that reads like an instruction never reaches the planner.
         lines = [line for line in preference_lines + [_item_line(i) for i in matched] if not contains_instruction_like_text(line)]
         if not lines:
             return Guidance(None)
@@ -181,6 +188,7 @@ class FeedbackService:
         return [(i, i.expired(now)) for i in self._store.items(owner)]
 
     def revoke(self, owner: Owner, item_id: str, reviewer: bool) -> LearnedItem:
+        """Stop using a learned item; a shared (tenant-wide) item can only be revoked by a reviewer."""
         item = next((i for i in self._store.items(owner) if i.item_id == item_id), None)
         if item is None:
             raise LearningItemNotFound("item not found")
@@ -211,6 +219,7 @@ class FeedbackService:
 
     # ------------------------------------------------------------------------------------------- internals
     def _answer_turn(self, owner: Owner, thread_id: str, turn_seq: int) -> tuple[Turn, str]:
+        """The rated assistant turn and the user question just before it; any other turn is refused as not found."""
         turns = self._turns.turns(owner, thread_id)                           # ownership of the conversation
         answer = next((t for t in turns if t.seq == turn_seq and t.role == "assistant"), None)
         if answer is None:
@@ -219,6 +228,7 @@ class FeedbackService:
         return answer, question
 
     def _clean_correction(self, correction: str | None) -> str | None:
+        """The correction with whitespace collapsed and personal data filtered; refused when instruction-like."""
         text = " ".join((correction or "").split())
         if not text:
             return None
@@ -227,6 +237,7 @@ class FeedbackService:
         return self._conversations.text_filter(text)[:500]
 
     def _learn_from_approval(self, owner: Owner, answer: Turn, feedback: Feedback, record: AnswerRecord | None) -> tuple[str, ...]:
+        """On a thumbs-up: validate the correction this answer revised, and save how the answer was produced (once)."""
         saved = []
         corrected = self._store.feedback_for_revision(owner, answer.metadata.request_id) if answer.metadata.request_id else None
         if corrected and corrected.status == "revised" and corrected.correction:
@@ -257,6 +268,7 @@ class FeedbackService:
         return tuple(float(x) for x in self._embed(text)) if self._embed and text else None
 
     def _rank(self, question: str, items: list[LearnedItem]) -> list[LearnedItem]:
+        """Items similar enough to the question, best first: cosine similarity with vectors, else word overlap."""
         query = self._vector(question)
         scored = []
         for item in items:
@@ -271,6 +283,7 @@ class FeedbackService:
 
 # ------------------------------------------------------------------------------------------------- helpers
 def _preference_lines(preferences: Preferences) -> list[str]:
+    """The saved preferences that shape answers, as guidance lines (the TableLens switch is not one of them)."""
     lines = []
     if preferences.default_fiscal_years:
         first, last = preferences.default_fiscal_years
@@ -287,6 +300,7 @@ def _preference_lines(preferences: Preferences) -> list[str]:
 
 
 def _item_line(item: LearnedItem) -> str:
+    """One learned item as a labelled guidance line, naming whether it is the user's own or a team note."""
     source = "team note" if item.scope == "shared" else "saved"
     asked = f'"{item.question[:160]}"'
     if item.kind == "correction":
@@ -295,6 +309,7 @@ def _item_line(item: LearnedItem) -> str:
 
 
 def _approach_statement(record: AnswerRecord) -> str:
+    """A short description of how an answer was produced: its steps, up to 4 tables and up to 3 filters."""
     parts = [f"steps {', '.join(record.steps)}"] if record.steps else []
     if record.tables:
         parts.append(f"tables {', '.join(t.rsplit('.', 1)[-1] for t in record.tables[:4])}")

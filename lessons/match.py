@@ -12,6 +12,8 @@ MAX_LESSONS = 4
 
 @dataclass(frozen=True)
 class Situation:
+    """What lessons are wanted for: the lifecycle stage, plus optional topics, category, project, sector and country."""
+
     stage: str                                   # planning | tender_design | execution | learning
     topics: frozenset[str] = frozenset()
     category: str | None = None                  # Works | Goods | Consultant Services
@@ -21,6 +23,7 @@ class Situation:
 
 
 def score(card: LessonCard, s: Situation) -> float:
+    """Relevance of a card to the situation; 0 when the card does not apply to the lifecycle stage."""
     if s.stage not in card.stages:
         return 0.0
     same_project = s.project_id is not None and card.project_id == s.project_id

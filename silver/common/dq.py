@@ -14,6 +14,7 @@ from silver.common.pipeline import relaxed
 
 @dataclass
 class CheckResult:
+    """One evaluated check: its name, severity, outcome, and the observed and expected values."""
     name: str
     severity: str  # "error" | "warn"
     passed: bool
@@ -24,10 +25,12 @@ class CheckResult:
 
 @dataclass
 class DQReport:
+    """The checks run for one target, in order; the report fails when any "error" check failed."""
     target: str
     results: list[CheckResult] = field(default_factory=list)
 
     def add(self, name: str, observed: Any, expected: Any, passed: bool, severity: str = "error", detail: str = "") -> None:
+        """Record one check; in pipeline mode a failing snapshot check is downgraded to a warning."""
         if severity == "error" and not passed and relaxed(name):
             severity, detail = "warn", ("pipeline: snapshot check, reported only. " + detail).strip()
         self.results.append(CheckResult(name, severity, bool(passed), observed, expected, detail))
@@ -52,6 +55,7 @@ class DQReport:
                 "results": [asdict(r) for r in self.results]}
 
     def render(self) -> str:
+        """A readable summary: the overall result, then one line per check."""
         lines = [f"DQ report for {self.target}: {'PASSED' if self.passed else 'FAILED'} "
                  f"({len(self.errors)} errors, {len(self.warnings)} warnings, {len(self.results)} checks)"]
         for r in self.results:

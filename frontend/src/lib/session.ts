@@ -5,12 +5,14 @@ import { API_URL, SESSION_COOKIE } from "@/lib/server";
 // Route-handler helpers for the sign-in pages: call an /auth endpoint of the API, and keep the session token it
 // returns in an httpOnly cookie (never readable by page scripts). Passwords and recovery codes are not stored here.
 
+/** POSTs a JSON body to the API's /auth/{path} endpoint (login, signup, reset); null when the API is unreachable. */
 export async function callAuth(path: string, body: Record<string, string>): Promise<Response | null> {
   return fetch(`${API_URL}/auth/${path}`, {
     method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body), cache: "no-store",
   }).catch(() => null);
 }
 
+/** Stores the session token in an httpOnly, SameSite=strict cookie for 12 hours (HTTPS-only in production). */
 export async function startSession(token: string): Promise<void> {
   (await cookies()).set(SESSION_COOKIE, token, {
     httpOnly: true, sameSite: "strict", secure: process.env.NODE_ENV === "production", path: "/", maxAge: 60 * 60 * 12,
@@ -25,6 +27,8 @@ export async function relayError(response: Response | null, fallback: string): P
   return NextResponse.json({ detail }, { status: response.status });
 }
 
+/** Picks the named string fields from a request body. Returns null if any is missing, not a string, empty or
+ *  longer than `maxLength`, so a route can answer 400 before calling the API. */
 export function fields(input: unknown, names: string[], maxLength = 200): Record<string, string> | null {
   const record = (input ?? {}) as Record<string, unknown>;
   const out: Record<string, string> = {};

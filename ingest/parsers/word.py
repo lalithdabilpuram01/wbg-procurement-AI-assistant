@@ -24,6 +24,7 @@ MAX_TABLE_TEXT_ROWS = 40
 
 
 def parse(path: Path, sha256: str, document_id: str, declared_type: str | None, ref: Reference) -> ParsedDocument:
+    """Parse a Word document: heading styles give the hierarchy; each table becomes both a text block and a table."""
     try:
         document = docx.Document(str(path))
     except Exception as error:                                          # python-docx raises several error types
@@ -40,6 +41,7 @@ def parse(path: Path, sha256: str, document_id: str, declared_type: str | None, 
                             title=common.title_for(text, path.stem), project_id=project_id,
                             country_code=(ref.project(project_id) or {}).get("country_code"), document_date=common.document_date(text),
                             language=detect.language(text), sections=sections, blocks=blocks, warnings=warnings)
+    # Table text blocks and parsed tables are in the same document order, so they pair up by position.
     parsed.tables = [TableBlock(f"{document_id}:t{n:03d}", section_of.get(block.block_id), None, None, header, rows)
                      for n, (block, (header, rows)) in enumerate(zip(table_blocks, tables))]
     parsed.chunks = hierarchy.chunk(document_id, sections, blocks)
@@ -70,6 +72,7 @@ def _read(document) -> tuple[list[hierarchy.Line], list[tuple[list[str], list[li
 
 
 def _level(paragraph: Paragraph) -> int | None:
+    """Heading level from the paragraph style ("Title", "Heading 2") or its outline level; None for body text."""
     style = paragraph.style.name if paragraph.style is not None else ""
     if style.lower() == "title":
         return 1
@@ -81,6 +84,7 @@ def _level(paragraph: Paragraph) -> int | None:
 
 
 def _kind(paragraph: Paragraph) -> str:
+    """list_item for list styles and numbered paragraphs, otherwise paragraph."""
     style = (paragraph.style.name if paragraph.style is not None else "").lower()
     numbered = paragraph._p.pPr is not None and paragraph._p.pPr.numPr is not None
     return "list_item" if "list" in style or numbered else "paragraph"

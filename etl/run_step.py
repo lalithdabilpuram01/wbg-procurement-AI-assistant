@@ -49,12 +49,15 @@ def configure(catalog: str, run_id: str) -> None:
 
 
 def run_bronze(catalog: str, run_id: str) -> int:
+    """Stage the uploads, write the manifests and rebuild the Bronze tables; return 0 when every check passed."""
     from etl import bronze
     from etl.stage import stage_all
     from silver.common.session import get_spark
 
     staged = stage_all(volume(catalog) / "landing", volume(catalog) / "staged")
     staged.write_manifests(runs_folder(catalog, run_id) / "manifests")
+    # Expected Bronze row counts: the records selected per cohort extract, plus the records of every file of the
+    # multi-file reference series (summed per table).
     records = {f"wbg_bronze.{f['bronze_table']}": f["records_selected"] for f in staged.bronze["files"]}
     for f in staged.ref["files"]:
         if f["records"] and f["bronze_table"] in ("wgi_estimates", "cpia_ratings", "wdi_indicator_observations"):
@@ -66,11 +69,13 @@ def run_bronze(catalog: str, run_id: str) -> int:
 
 def run_job(module: str) -> int:
     """An existing Silver/Gold job, unchanged, in write mode (pipeline mode makes the write a replace)."""
+    # The Silver and Gold jobs read their options from sys.argv, so the arguments are set here.
     sys.argv = [module, "--mode", "write", "--confirm-create"]
     return importlib.import_module(module).main()
 
 
 def report(rep, folder: Path) -> int:
+    """Write the step's DQ report to `folder`/dq_report.json and print it; return 0 when it passed, else 1."""
     folder.mkdir(parents=True, exist_ok=True)
     (folder / "dq_report.json").write_text(json.dumps({"target": rep.target, "dq": rep.to_dict()}, indent=1, default=str))
     print(rep.render())
@@ -78,6 +83,7 @@ def report(rep, folder: Path) -> int:
 
 
 def main(argv: list[str]) -> int:
+    """Parse the arguments, switch on pipeline mode and run the requested step; return its exit code."""
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("step", choices=STEPS)
     ap.add_argument("--catalog", required=True)

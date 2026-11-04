@@ -28,6 +28,7 @@ class Owner(BaseModel, frozen=True):
     user_id: str = Field(min_length=1, max_length=100)
 
 
+# The kind of a stored turn: how a user message relates to the active context, or ANSWER for an assistant turn.
 class TurnKind(str, Enum):
     QUESTION = "question"                  # a new question (no inherited filters)
     REFINEMENT = "refinement"              # narrows or adds filters to the active query
@@ -60,6 +61,7 @@ class ActiveContext(BaseModel):
         return not (self.countries or self.fiscal_years or self.project_ids)
 
 
+# One conversation thread and its owner; `topic_epoch` separates topics inside the same thread.
 class ThreadInfo(BaseModel):
     thread_id: str
     owner: Owner
@@ -101,6 +103,7 @@ class TurnMetadata(BaseModel):
     registry_build_id: str | None = None
 
 
+# One stored message (user or assistant). Turns are append-only and never edited.
 class Turn(BaseModel):
     turn_id: str = Field(default_factory=new_id)
     thread_id: str
@@ -147,6 +150,7 @@ class StructuredSummary(BaseModel):
     narrative: str = ""
 
 
+# One stored version of a summary: which turns it covers, how it was made, and whether it has been invalidated.
 class SummaryRecord(BaseModel):
     summary_id: str = Field(default_factory=new_id)
     thread_id: str

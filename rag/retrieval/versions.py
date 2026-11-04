@@ -30,6 +30,7 @@ DEFAULT_VERSION = "pilot_v2"
 
 @dataclass(frozen=True)
 class RagVersion:
+    """One registered RAG version: which processed corpus is indexed and where its embeddings come from."""
     name: str
     processed_dir: Path | None       # None = the default corpus (core.PILOT)
     embedding_cache: str | None      # None = the Retriever's own default (legacy whole-index cache)
@@ -65,12 +66,14 @@ class UnknownRagVersionError(ValueError):
 
 
 def get_version(name: str = DEFAULT_VERSION) -> RagVersion:
+    """Return the registered version by name, or raise UnknownRagVersionError."""
     if name not in VERSIONS:
         raise UnknownRagVersionError(f"unknown RAG version {name!r}; available: {sorted(VERSIONS)}")
     return VERSIONS[name]
 
 
 def build_corpus(version: str = DEFAULT_VERSION, strategy: str = "C", include_tables: bool = True) -> "core.Corpus":
+    """Build the Corpus of a version, refusing strategies or table settings that the version is not released for."""
     spec = get_version(version)
     if strategy not in spec.strategies:
         raise UnknownRagVersionError(f"strategy {strategy!r} is not enabled for {version}; enabled: {spec.strategies}")

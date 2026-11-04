@@ -63,6 +63,8 @@ class GraphError(ValueError):
 
 @dataclass
 class Node:
+    """One graph node; its type comes from the id prefix, and document-owned nodes are replaced on re-ingestion."""
+
     node_id: str
     label: str
     props: dict[str, Any] = field(default_factory=dict)
@@ -82,6 +84,8 @@ class Node:
 
 @dataclass
 class Edge:
+    """One typed edge with its match class, confidence and the evidence for it."""
+
     edge_type: str
     src: str
     dst: str
@@ -92,10 +96,13 @@ class Edge:
 
 @dataclass
 class Graph:
+    """The subgraph of one document, built in memory and validated before it is loaded."""
+
     nodes: dict[str, Node] = field(default_factory=dict)
     edges: dict[tuple[str, str, str], Edge] = field(default_factory=dict)
 
     def node(self, node_id: str, label: str, **props: Any) -> str:
+        """Add a node, or merge non-empty properties into an existing one; returns the node id."""
         existing = self.nodes.get(node_id)
         if existing:
             existing.props.update({k: v for k, v in props.items() if v is not None})
@@ -104,12 +111,14 @@ class Graph:
         return node_id
 
     def edge(self, edge_type: str, src: str, dst: str, match_class: str = "structural", confidence: float = 1.0, **evidence: Any) -> None:
+        """Add an edge; for the same type, source and target only the most confident one is kept."""
         key = (edge_type, src, dst)
         current = self.edges.get(key)
         if current is None or confidence > current.confidence:          # the strongest evidence for a pair is kept
             self.edges[key] = Edge(edge_type, src, dst, match_class, confidence, evidence)
 
     def validate(self) -> None:
+        """Raise GraphError for an unknown edge type, wrong endpoint types, or an edge to a missing node."""
         for e in self.edges.values():
             if e.edge_type not in EDGE_TYPES:
                 raise GraphError(f"unknown edge type {e.edge_type}")
@@ -122,6 +131,7 @@ class Graph:
 
 
 def build(doc: ParsedDocument, res: Resolution, ref: Reference, lessons: list[LessonCard] = ()) -> Graph:
+    """The validated subgraph of one document: project, structure, lessons, records, contracts, links, mentions."""
     g = Graph()
     project = _project(g, doc.project_id, ref)
     if not doc.is_feed:
@@ -145,6 +155,7 @@ def build(doc: ParsedDocument, res: Resolution, ref: Reference, lessons: list[Le
 
 # --------------------------------------------------------------------------------------------------- pieces
 def _project(g: Graph, project_id: str | None, ref: Reference) -> str | None:
+    """The project node with its country and sector edges; None when there is no project id."""
     if not project_id:
         return None
     info = ref.project(project_id) or {}
@@ -158,6 +169,7 @@ def _project(g: Graph, project_id: str | None, ref: Reference) -> str | None:
 
 
 def _document(g: Graph, doc: ParsedDocument, project: str | None) -> None:
+    """The document node with its section tree, its chunks in reading order (NEXT edges) and its tables."""
     document = g.node(f"document:{doc.document_id}", doc.title or doc.source_name, doc_type=doc.doc_type, modality=doc.modality,
                       document_date=doc.document_date, language=doc.language, page_count=doc.page_count)
     if project:
@@ -181,10 +193,12 @@ def _document(g: Graph, doc: ParsedDocument, project: str | None) -> None:
     known_sections = {s.section_id for s in doc.sections}
     for t in doc.tables:
         table = g.node(f"table:{t.table_id}", t.caption or f"table {t.table_id}", page=t.page, columns=t.header[:20], rows=len(t.rows))
+        # A table whose section is not part of the document hangs directly from the document.
         g.edge("HAS_TABLE", f"section:{t.section_id}" if t.section_id in known_sections else document, table)
 
 
 def _lesson(g: Graph, card: LessonCard, project: str | None) -> None:
+    """A Lesson node with its section, project, topic and lifecycle-stage edges."""
     lesson = g.node(f"lesson:{card.card_id}", card.headline[:200], doc_type=card.doc_type, page_start=card.page_start,
                     page_end=card.page_end, categories=list(card.categories))
     if card.section_id and f"section:{card.section_id}" in g.nodes:
@@ -198,6 +212,7 @@ def _lesson(g: Graph, card: LessonCard, project: str | None) -> None:
 
 
 def _record(g: Graph, doc: ParsedDocument, r: Record, ref: Reference) -> None:
+    """Nodes and edges for one feed or plan record: a plan activity, a contract (with its supplier) or a notice."""
     f = r.fields
     project = _project(g, r.project_id, ref)
     method = g.node(f"method:{slug(method_name(f['method']))}", method_name(f["method"])) if f.get("method") else None
@@ -229,6 +244,7 @@ def _record(g: Graph, doc: ParsedDocument, r: Record, ref: Reference) -> None:
 
 
 def _contract(g: Graph, node_id: str, c: dict, ref: Reference, project: str | None = None) -> str:
+    """The contract node; accepts the field names of both feed records and the reference contract snapshot."""
     amount = c.get("amount_usd", c.get("contract_amount_usd"))
     signed = c.get("signing_date", c.get("contract_signing_date"))
     reference = c.get("reference", c.get("borrower_contract_reference"))
@@ -244,6 +260,7 @@ def _contract(g: Graph, node_id: str, c: dict, ref: Reference, project: str | No
 
 
 def _link(g: Graph, link: Link) -> None:
+    """Add a parser or resolver link, but only when both of its nodes are in this subgraph."""
     if link.src in g.nodes and link.dst in g.nodes:
         g.edge(link.edge_type, link.src, link.dst, link.match_class, link.confidence, **link.evidence)
 

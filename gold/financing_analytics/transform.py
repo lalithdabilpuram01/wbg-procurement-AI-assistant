@@ -35,12 +35,14 @@ LATE_DISBURSEMENT_DAYS = 183  # same threshold as the Silver anomaly list
 
 
 def load_sources(spark) -> tuple[dict[str, DataFrame], str]:
+    """Read every Silver source, plus their current Delta versions as a JSON string (recorded on each Gold row)."""
     dfs = {t: spark.table(S + t) for t in SOURCES}
     versions = {t: spark.sql(f"DESCRIBE HISTORY {S}{t} LIMIT 1").collect()[0].version for t in SOURCES}
     return dfs, json.dumps(dict(sorted(versions.items())), separators=(",", ":"))
 
 
 def instruments(ib: DataFrame, ida: DataFrame) -> DataFrame:
+    """IBRD loans and IDA credits in one frame with shared columns; lender-specific columns are NULL for the other."""
     n = lambda t: F.lit(None).cast(t)  # noqa: E731
     a = ib.select(F.col("loan_number").alias("financing_number"), F.col("loan_number").alias("ibrd_loan_number"), n("string").alias("ida_credit_number"), *COMMON,
                   "loan_type", "interest_rate", "guarantor_country_code", n("decimal(12,6)").alias("service_charge_rate"), n("boolean").alias("has_repayment_schedule"))
@@ -51,6 +53,7 @@ def instruments(ib: DataFrame, ida: DataFrame) -> DataFrame:
 
 
 def build(dfs: dict[str, DataFrame], silver_versions: str, run_id: str) -> DataFrame:
+    """One row per IBRD loan or IDA credit with project and country context, anomaly flags and transaction coverage."""
     f = instruments(dfs["ibrd_loans"], dfs["ida_credits"])
     p = dfs["projects"].select("project_id", "project_name", "region_name", "geography_type", F.col("wdi_country_code").alias("_w"),
                                F.col("board_approval_date").alias("_p_approval"))

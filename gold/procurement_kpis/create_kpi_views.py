@@ -43,6 +43,7 @@ FY_CHECKS = {
 
 
 def reviewed_bodies(path: Path) -> dict[str, str]:
+    """The reviewed body of each view, parsed from the approved dry run's proposed_kpi_views.sql."""
     text = path.read_text()
     out = {}
     for block in text.split(";\n\n"):
@@ -57,6 +58,7 @@ def view_exists(spark, name: str) -> bool:
 
 
 def main() -> int:
+    """Run the pre-flight checks and, with --confirm-create, create the seven views; 0 on success or pre-flight only."""
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--approved-dry-run", required=True)
     ap.add_argument("--confirm-create", action="store_true")
@@ -113,6 +115,7 @@ def main() -> int:
     created: list[str] = []
     status = "preflight_only"
     if rep.passed and args.confirm_create:
+        # One view at a time; stop at the first problem. Views already created are reported, never dropped.
         for n in Q.QUERIES:
             if view_exists(spark, n):
                 status = f"stopped: {n} already exists"

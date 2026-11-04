@@ -1,5 +1,8 @@
 "use client";
 
+// The assistant's answer card in the chat, and its "in progress" version (PendingAnswer). A finished answer is drawn
+// from its investigation (claims, evidence, limitations) when one exists, else from the stored turn text.
+
 import { useState } from "react";
 import { Bookmark, BookmarkCheck, Calculator, ChevronDown, ClipboardList, Copy, Eye, FileSearch, Info, Library, PencilLine, Sparkles } from "lucide-react";
 import type { FeedbackState, Investigation, LiveStep, Turn } from "@/lib/api";
@@ -32,6 +35,7 @@ type Props = {
 const ANSWER_BODY = "mt-3 space-y-2.5 text-[15px] leading-relaxed";
 const ANSWER_FOOTER = "mt-4 flex min-h-11 items-center border-t border-border pt-3";
 const OPENING = "text-muted-foreground";
+// The opening the API puts before an answer that covers only part of the question; it is shown muted.
 const GAP_OPENING = /^(No evidence found for part of the question:[\s\S]*?What the evidence shows:)\s*/;
 
 /** An answer's text as the card lays it out: the no-evidence opening on its own, then one paragraph per blank line. */
@@ -41,6 +45,7 @@ export function paragraphs(text: string): string[] {
   return [...(opening ? [opening[1]] : []), ...rest.split(/\n{2,}/)].map((p) => p.trim()).filter(Boolean);
 }
 
+/** The round assistant icon left of an answer; it pulses while the answer is being worked on. */
 function AnswerAvatar({ working = false }: { working?: boolean }) {
   return (
     <div className="mt-1 grid size-8 shrink-0 place-items-center rounded-full bg-gradient-to-br from-[#0078d4] to-[#005a9e] text-white shadow-sm">
@@ -49,6 +54,8 @@ function AnswerAvatar({ working = false }: { working?: boolean }) {
   );
 }
 
+/** One finished answer: status, text with numbered citations (or a sectioned brief), model and tender-check cards,
+ *  notes, applied learning, and the footer actions (sources, project watch, feedback, copy, bookmark). */
 export function AnswerCard(props: Props) {
   const { turn, investigation, bookmarked, onToggleBookmark, onAssess, onPlan, onInvestigate } = props;
   const [sourcesOpen, setSourcesOpen] = useState(false);
@@ -56,14 +63,19 @@ export function AnswerCard(props: Props) {
   const [focus, setFocus] = useState<string | null>(null);
   const [notesOpen, setNotesOpen] = useState(false);
   const evidence = investigation?.evidence ?? [];
+  // Citation numbers follow the order of the evidence list, so [2] in the text is the second source in the panel.
   const number = (id: string) => evidence.findIndex((e) => e.evidence_id === id) + 1;
+  // A run the user stopped is shown as "Stopped", whatever status the partial investigation has.
   const stopped = investigation?.error_codes.includes("cancelled_by_user");
   const status = stopped ? "stopped" : investigation?.status ?? turn.status;
+  // Claims with a section belong to a planning brief, which has its own layout.
   const brief = investigation?.claims.some((c) => c.section) ?? false;
+  // Up to three cited projects get a "Watch" shortcut in the footer.
   const projects = [...new Set(evidence.flatMap((e) => e.project_ids))].slice(0, 3);
   const checked = new Set(evidence.filter((e) => e.kind === "tender_check").map((e) => e.evidence_id));
   const claims = (investigation?.claims ?? []).filter((c) => !c.evidence_ids.every((id) => checked.has(id)));   // shown as checks
   const opening = investigation?.message.match(GAP_OPENING)?.[1];
+  /** The small numbered button after a claim; it opens the sources panel on that source. */
   const cite = (id: string) => number(id) > 0 && (
     <button key={id} onClick={() => openSource(id)}
       className="ml-1 inline-grid h-[18px] min-w-[18px] place-items-center rounded-md bg-primary-soft px-1 align-text-top text-[10px] font-bold text-primary-strong hover:bg-primary hover:text-white">
@@ -75,6 +87,8 @@ export function AnswerCard(props: Props) {
     setFocus(id);
     setSourcesOpen(true);
   };
+  // The needs_*_details statuses mean the API wants structured input; their buttons open the matching form.
+  // A thumbs-up is sent at once, while a thumbs-down first opens the correction form at the bottom of the card.
   return (
     <div id={`turn-${turn.seq}`} className="group flex gap-3">
       <AnswerAvatar />
@@ -170,6 +184,7 @@ export function AnswerCard(props: Props) {
   );
 }
 
+// The mark before each finished live step; a running step shows a spinner instead.
 const STEP_ICON: Record<LiveStep["state"], string> = { running: "", done: "✓", failed: "✕", no_result: "–" };
 
 /** The running answer, in the same card as the finished one: the steps while the work runs, then the answer's paragraphs

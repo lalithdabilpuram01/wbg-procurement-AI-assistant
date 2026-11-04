@@ -1,5 +1,8 @@
 "use client";
 
+// The "Assess a procurement package" dialog: a form for the inputs of the three prediction models. AppShell sends it
+// to POST /conversations/{id}/packages. Also exports the method and category lists the other dialogs reuse.
+
 import { useState } from "react";
 import { Calculator } from "lucide-react";
 import type { PackageAssessmentInput } from "@/lib/api";
@@ -8,16 +11,21 @@ import { Button } from "@/components/ui/button";
 import { Input, Label, Select, Spinner } from "@/components/ui/primitives";
 import { Dialog, DialogContent } from "@/components/ui/overlays";
 
+/** World Bank procurement methods offered in the forms. */
 export const METHODS = ["Request for Bids", "Request for Quotations", "Request for Proposals", "Direct Selection",
   "Quality And Cost-Based Selection", "Quality Based Selection", "Consultant Qualification Selection",
   "Least Cost Selection", "Fixed Budget Selection", "Individual Consultant Selection"];
+/** Procurement categories offered in the forms. */
 export const CATEGORIES = ["Works", "Goods", "Consultant Services", "Non-consulting Services"];
 
+/** The date `days` from today (negative for the past) as YYYY-MM-DD, the value format of a date input. */
 export function inDays(days: number): string {
   const date = new Date(Date.now() + days * 86_400_000);
   return date.toISOString().slice(0, 10);
 }
 
+/** The package form, prefilled with sensible defaults. `onSubmit` returns once the request is handed over, so the
+ *  dialog closes and the chat shows the progress; an earlier error (for example creating the chat) is shown here. */
 export function PackageDialog({ open, onOpenChange, onSubmit }:
   { open: boolean; onOpenChange: (open: boolean) => void; onSubmit: (input: PackageAssessmentInput) => Promise<void> }) {
   const [input, setInput] = useState<PackageAssessmentInput>({
@@ -29,6 +37,7 @@ export function PackageDialog({ open, onOpenChange, onSubmit }:
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const set = <K extends keyof PackageAssessmentInput>(key: K, value: PackageAssessmentInput[K]) => setInput((p) => ({ ...p, [key]: value }));
+  // Only the project id format is checked here; the API validates every field again.
   const validProject = input.project_id === null || /^P\d{6}$/.test(input.project_id);
   const regional = input.country_code === "REGIONAL";                // no single country: the user gives the region
   const ready = validProject && (!regional || input.region_name !== null);

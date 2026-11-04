@@ -55,6 +55,7 @@ COLUMN_COMMENTS = {
 
 
 def main() -> int:
+    """Dry run by default: build and check projects and save the reports; write mode creates the table."""
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--mode", choices=["dry-run", "write"], default="dry-run")
     ap.add_argument("--confirm-create", action="store_true")
@@ -67,6 +68,7 @@ def main() -> int:
     run_dir = RUNS / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
     spark = get_spark(args.profile)
+    # Version and row count of each input table before the write, so the verify script can prove nothing else changed.
     baseline: dict = {"bronze": {}, "silver": {}, "target_exists": spark.catalog.tableExists(TARGET)}
     for group, tables in (("bronze", [P.BRONZE_TABLE]), ("silver", [f"{CATALOG}.wbg_silver.{t}" for t in EXISTING_SILVER])):
         for t in tables:

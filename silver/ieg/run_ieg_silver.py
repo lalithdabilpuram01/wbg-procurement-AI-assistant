@@ -73,6 +73,7 @@ SPEC: dict[str, Any] = {
 
 
 def main() -> int:
+    """Dry run by default: build and check ieg_project_ratings and save the reports; write mode creates the table."""
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--mode", choices=["dry-run", "write"], default="dry-run")
     ap.add_argument("--confirm-create", action="store_true")
@@ -85,6 +86,8 @@ def main() -> int:
     run_dir = RUNS / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
     spark = get_spark(args.profile)
+    # Version and row count of every Bronze and Silver table (and the column masks) before the write,
+    # so the verify script can prove nothing else changed.
     baseline: dict = {"bronze": {}, "silver": {}, "target_exists": spark.catalog.tableExists(TARGET),
                       "cohort_manifest_sha256": hashlib.sha256(COHORT.read_bytes()).hexdigest()}
     bronze_tables = [f"{CATALOG}.{sc}.{r.tableName}" for sc in ("wbg_bronze", "wbg_ref_bronze") for r in spark.sql(f"SHOW TABLES IN {CATALOG}.{sc}").collect()]

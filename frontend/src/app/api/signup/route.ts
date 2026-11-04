@@ -1,3 +1,4 @@
+// API route POST /api/signup, used by the sign-up page; it calls POST /auth/signup on the API.
 import { NextResponse } from "next/server";
 import { callAuth, fields, relayError, startSession } from "@/lib/session";
 

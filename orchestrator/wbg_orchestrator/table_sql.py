@@ -37,11 +37,14 @@ class TableSqlWriter:
         self._client = client
 
     def writer(self, trace_id: str) -> SqlWriter:
+        """Return a SQL writer bound to `trace_id`; it gives (None, usage) when Claude says the table cannot answer."""
         def write(question: str, schema: str) -> tuple[str | None, dict[str, int]]:
+            """Ask Claude for SQL over one table; returns (the SQL or None, the usage)."""
             parsed, content, usage = self._client.complete(
                 system=SYSTEM, user=f"QUESTION:\n{question}\n\nTABLE:\n{schema}", schema=TableSql.model_json_schema(),
                 schema_name="table_sql", trace_id=trace_id)
             used = {"llm_calls": usage.llm_calls, "input_tokens": usage.input_tokens, "output_tokens": usage.output_tokens}
+            # A reply that does not match the schema is treated like "cannot answer", never as SQL to run.
             try:
                 draft = TableSql.model_validate(parsed if parsed is not None else content)
             except ValidationError:

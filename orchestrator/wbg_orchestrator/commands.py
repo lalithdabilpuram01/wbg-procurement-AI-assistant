@@ -36,6 +36,7 @@ def _argv() -> list[str]:
 
 # --------------------------------------------------------------------------------------------------- app
 def api() -> int:
+    """wbg-api: start the API. With --live, Claude is switched on with a per-session dollar cap and its own ledger."""
     parser = argparse.ArgumentParser(prog="wbg-api", description="Run the API on this laptop (http://127.0.0.1:<port>).")
     parser.add_argument("--live", action="store_true", help="turn Claude on for this session (answers written by Claude cost money)")
     parser.add_argument("--cap", type=float, default=DEFAULT_CAP_USD, help="with --live: most this session may spend on Claude, in US$")
@@ -47,7 +48,7 @@ def api() -> int:
                            "WBG_LLM_MAX_ATTEMPTS": str(LIVE_MAX_ATTEMPTS), "WBG_LLM_LEDGER": str(ledger)})
         print(f"Claude: ON for this session, at most US$ {args.cap:.2f} (spend ledger: {ledger.relative_to(REPO)})")
     else:
-        os.environ.pop("WBG_ALLOW_LIVE_LLM_CALLS", None)
+        os.environ.pop("WBG_ALLOW_LIVE_LLM_CALLS", None)          # an opt-in left in the shell must not turn Claude on
         print("Claude: OFF. Project watch, monitoring, Check tender and lesson cards work; use --live for Claude answers.")
     from .api import main
     os.chdir(ORCHESTRATOR)                                   # the same working folder as `python -m wbg_orchestrator.api`
@@ -55,6 +56,7 @@ def api() -> int:
 
 
 def web() -> int:
+    """wbg-web: start the Next.js dev server, installing the npm packages the first time."""
     npm = shutil.which("npm")
     if npm is None:
         print("npm not found: install Node.js (https://nodejs.org) first")

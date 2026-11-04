@@ -41,12 +41,14 @@ SOLICITATION = ["Invitation for Bids", "Invitation for Prequalification", "Reque
 
 
 def load_sources(spark) -> tuple[dict[str, DataFrame], str]:
+    """Read every Silver source, plus their current Delta versions as a JSON string (recorded on each Gold row)."""
     dfs = {t: spark.table(S + t) for t in SOURCES}
     versions = {t: spark.sql(f"DESCRIBE HISTORY {S}{t} LIMIT 1").collect()[0].version for t in SOURCES}
     return dfs, json.dumps(dict(sorted(versions.items())), separators=(",", ":"))
 
 
 def details_lookup(d: DataFrame) -> DataFrame:
+    """Per API notice: status, award version, deadline and how many notices share its bid reference in the project."""
     ref = Window.partitionBy("project_id", "bid_reference_normalized")
     ref_type = Window.partitionBy("project_id", "bid_reference_normalized", "notice_type")
     has_ref = F.col("bid_reference_normalized").isNotNull()
@@ -63,6 +65,7 @@ def links_agg(k: DataFrame) -> DataFrame:
 
 
 def build(dfs: dict[str, DataFrame], silver_versions: str, run_id: str) -> DataFrame:
+    """One row per DS00979 notice with project, country, income, API-detail and link context, and its bid window."""
     n, p, wc, ic = dfs["procurement_notices"], dfs["projects"], dfs["wdi_country"], dfs["income_classification_history"]
     covered = dfs["procurement_notice_details"].select("project_id").distinct().withColumn("_covered", F.lit(True))
     proj = p.select("project_id", "project_name", F.col("region_name").alias("_pregion"), "geography_type", F.col("country_name").alias("project_country_name"),

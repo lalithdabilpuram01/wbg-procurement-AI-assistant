@@ -67,6 +67,7 @@ class IsolationError(RuntimeError):
 # -------------------------------------------------------------------------------------------------- settings
 @dataclass(frozen=True)
 class CheckpointDbSettings:
+    """Connection settings of the checkpoint database; host and user are hidden from repr so they never reach a log."""
     host: str = field(repr=False)
     database: str
     user: str = field(repr=False)
@@ -105,6 +106,7 @@ class CheckpointDbSettings:
 
 
 def branch_of(endpoint: str) -> str:
+    """The branch name inside a Lakebase endpoint path; raises CheckpointConfigError for any other shape."""
     match = re.fullmatch(r"projects/[^/]+/branches/([^/]+)/endpoints/[^/]+", endpoint)
     if not match:
         raise CheckpointConfigError("the endpoint must be projects/<p>/branches/<b>/endpoints/<e>")
@@ -112,12 +114,14 @@ def branch_of(endpoint: str) -> str:
 
 
 def validate_schema_name(schema: str) -> str:
+    """Return the schema name if it is a dedicated lower-case schema; raise for public, pg_* or odd names."""
     if not SCHEMA_NAME.match(schema) or schema in RESERVED_SCHEMAS or schema.startswith("pg_"):
         raise CheckpointConfigError("the checkpoint schema must be a dedicated lower-case schema (not public or pg_*)")
     return schema
 
 
 def validate_settings(settings: CheckpointDbSettings) -> None:
+    """Refuse unsafe settings: a bad schema name, a protected branch, or a connection without TLS."""
     validate_schema_name(settings.schema)
     if settings.branch in PROTECTED_BRANCHES:
         raise CheckpointConfigError(f"checkpoint writes on the '{settings.branch}' branch are not allowed; use a dev branch")
@@ -134,6 +138,7 @@ class TokenProvider:
 
     def __init__(self, fetch: Callable[[], str], lifetime_seconds: float = 60 * 60, refresh_margin_seconds: float = 15 * 60,
                  clock: Callable[[], float] = time.monotonic):
+        """Keep `fetch`; a token is reused until `refresh_margin_seconds` before its lifetime ends."""
         self._fetch = fetch
         self._ttl = lifetime_seconds - refresh_margin_seconds
         self._clock = clock
@@ -143,6 +148,7 @@ class TokenProvider:
         self.fetch_count = 0
 
     def get(self) -> str:
+        """The current token, fetching a new one when none is held or the held one is close to expiry."""
         with self._lock:
             if self._token is None or self._clock() >= self._expires:
                 self._token = self._fetch()
@@ -164,6 +170,7 @@ def oauth_connection_class(tokens: TokenProvider) -> type[psycopg.Connection]:
     """A psycopg Connection class that sets a current credential as the password of every NEW connection."""
 
     class OAuthConnection(psycopg.Connection):
+        """A psycopg connection that takes a current token from `tokens` as its password when it connects."""
         @classmethod
         def connect(cls, conninfo: str = "", **kwargs: Any):
             kwargs["password"] = tokens.get()
@@ -174,7 +181,9 @@ def oauth_connection_class(tokens: TokenProvider) -> type[psycopg.Connection]:
 
 # ------------------------------------------------------------------------------------------------------ pool
 def _session_setup(schema: str, statement_timeout_ms: int) -> Callable[[psycopg.Connection], None]:
+    """The pool's per-connection setup: search_path pinned to `schema`, plus statement, lock and idle timeouts."""
     def configure(conn: psycopg.Connection) -> None:
+        """Pin search_path to the schema and set the statement, lock and idle-in-transaction timeouts."""
         path = sql.Identifier(schema).as_string(conn)
         conn.execute("SELECT set_config('search_path', %s, false), set_config('statement_timeout', %s, false), "
                      "set_config('lock_timeout', '10s', false), set_config('idle_in_transaction_session_timeout', '60s', false)",
@@ -195,6 +204,7 @@ def checkpoint_pool(connect_kwargs: Mapping[str, Any], schema: str, tokens: Toke
 
 
 def lakebase_checkpoint_pool(settings: CheckpointDbSettings, tokens: TokenProvider) -> ConnectionPool:
+    """A closed checkpoint pool built from validated settings (call `.open(wait=True)`)."""
     validate_settings(settings)
     return checkpoint_pool(settings.connect_kwargs(), settings.schema, tokens, max_size=settings.pool_max_size,
                            wait_seconds=settings.pool_wait_seconds, statement_timeout_ms=settings.statement_timeout_ms,
@@ -223,6 +233,7 @@ def checkpointer(pool: ConnectionPool) -> PostgresSaver:
 # ------------------------------------------------------------------------------------------------- isolation
 @dataclass(frozen=True)
 class IsolationReport:
+    """What verify_isolation found on a pooled connection (only returned when every check passed)."""
     schema: str
     search_path: str
     effective_schemas: tuple[str, ...]
@@ -234,6 +245,7 @@ class IsolationReport:
 
 @dataclass(frozen=True)
 class SetupReport:
+    """What isolated_setup did: the objects it created, the ones now present, and that other schemas are unchanged."""
     schema: str
     created: tuple[str, ...]
     present: tuple[str, ...]

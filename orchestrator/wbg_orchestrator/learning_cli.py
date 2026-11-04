@@ -32,6 +32,7 @@ APPROACH_CANDIDATES = EXPORT_DIR / "approach_candidates.json"
 def quality_report(feedback: list[Feedback], items: list[LearnedItem], uses: list[tuple[str, str]],
                    reviews: list[Review]) -> dict[str, Any]:
     """What users said, what was corrected, and how answers that used saved items were rated."""
+    # A user may rate the same answer more than once; only their latest rating of each turn counts.
     latest = {(f.thread_id, f.turn_seq): f for f in sorted(feedback, key=lambda f: f.created_at)}.values()
     ratings = Counter(f.rating for f in latest)
     guided = {request_id for request_id, _ in uses}
@@ -51,6 +52,7 @@ def quality_report(feedback: list[Feedback], items: list[LearnedItem], uses: lis
 
 
 def evaluation_cases(reviews: list[Review]) -> list[dict[str, Any]]:
+    """Reviewer-approved evaluation cases that have a question, in the shape the evaluation set reads."""
     return [{"case_id": f"F-{r.review_id[:8]}", "question": r.payload["question"], "expected_terms": list(r.expected_terms),
              "correction": r.payload.get("correction"), "note": r.note}
             for r in reviews if r.kind == "eval_case" and r.status == "approved" and r.payload.get("question")]
@@ -65,12 +67,14 @@ def approach_candidates(reviews: list[Review]) -> list[dict[str, Any]]:
 
 
 def load_all(connect) -> tuple[list[Feedback], list[LearnedItem], list[tuple[str, str]], list[Review]]:
+    """Read every user's feedback, learned items, item uses (request id, item id) and reviews."""
     rows = read_all(connect)
     return ([row_to_feedback(r) for r in rows["feedback"]], [row_to_item(r) for r in rows["learned_items"]],
             [(r["request_id"], str(r["item_id"])) for r in rows["learning_uses"]], [row_to_review(r) for r in rows["reviews"]])
 
 
 def export(reviews: list[Review], directory: Path = EXPORT_DIR) -> dict[str, int]:
+    """Write the two export files (overwriting them) and return how many entries each holds."""
     directory.mkdir(parents=True, exist_ok=True)
     cases, approaches = evaluation_cases(reviews), approach_candidates(reviews)
     (directory / FEEDBACK_CASES.name).write_text(json.dumps(cases, indent=1))
@@ -79,6 +83,7 @@ def export(reviews: list[Review], directory: Path = EXPORT_DIR) -> dict[str, int
 
 
 def main(argv: list[str]) -> int:
+    """Command line: print the quality report, or export the approved items and print the counts."""
     parser = argparse.ArgumentParser(description="Feedback loop: report and export")
     parser.add_argument("command", choices=["report", "export"])
     args = parser.parse_args(argv)

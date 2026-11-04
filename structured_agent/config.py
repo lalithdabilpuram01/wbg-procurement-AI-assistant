@@ -34,6 +34,7 @@ class QueryLimits:
     max_scanned_rows: int = 1_500_000  # sum of registered row counts of the base objects a query reads
 
 
+# All runtime settings; each field reads its environment variable when a Settings object is created.
 @dataclass(frozen=True)
 class Settings:
     # PostgreSQL registry store: the runtime reads with a SELECT-only role; initialisation uses the owner role.

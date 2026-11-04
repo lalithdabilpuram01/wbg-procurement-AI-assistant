@@ -278,7 +278,7 @@ Evaluation results for each part are in [docs/evaluation/RESULTS.md](evaluation/
 ## 10. File structure
 
 The project is organised so that **each top-level folder is one part of the system**. Tests are kept together in
-`tests/`, and code that the app no longer uses is kept for the record in `research/`.
+`tests/`.
 
 ### 10.1 The main folders
 
@@ -303,7 +303,6 @@ The project is organised so that **each top-level folder is one part of the syst
 | `tests/` | **All automated tests**, one folder per part. `tests/live/` holds the tests that touch real systems; they only run when explicitly switched on |
 | `docs/` | **Documentation**: architecture, decisions, reports, evaluation results, plans, and this overview |
 | `demo/` | Demo material: suggested questions with their expected answers |
-| `research/` | **History**: discovery work, experiments and earlier versions. The app does not use it |
 
 ### 10.2 The files at the top
 
@@ -354,7 +353,6 @@ procurement-intelligence/
 ├── tests/                 all automated tests
 ├── docs/                  documentation (this file is docs/PROJECT_OVERVIEW.md)
 ├── demo/                  demo questions and answers
-├── research/              history; not used by the app
 ├── README.md              technical introduction
 └── HOW_TO_RUN.md          how to set up and run everything
 ```

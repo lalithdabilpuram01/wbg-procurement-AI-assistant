@@ -15,6 +15,7 @@ def _n(df: DataFrame, cond) -> int:
 
 
 def check(g: DataFrame, dfs: dict[str, DataFrame], gold: dict[str, DataFrame], rep: DQReport) -> dict:
+    """Run every data-quality rule for gold_country_context and add the results to `rep`; returns summary figures."""
     wc, w, gi, cp, ic = (dfs[k] for k in ("wdi_country", "wdi_indicator_observations", "wgi_estimates", "cpia_ratings", "income_classification_history"))
     rows = g.count()
     rep.equals("rows_217_economies_x_26_years", (rows, g.select("country_code", "year").distinct().count()), (ROWS, ROWS))

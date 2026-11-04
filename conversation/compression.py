@@ -27,6 +27,8 @@ MAX_SUMMARY_QUESTION_CHARS = 160
 
 
 class Summarizer(Protocol):
+    """Turns older turns into a StructuredSummary; `name` is stored on each summary as its generator."""
+
     name: str
 
     def summarize(self, turns: list[Turn], decisions: list[Decision], superseded_countries: set[str]) -> StructuredSummary: ...
@@ -34,6 +36,8 @@ class Summarizer(Protocol):
 
 @dataclass(frozen=True)
 class CompressionPolicy:
+    """When to summarize: how many recent turns stay verbatim, and how old a summary may get before it is stale."""
+
     recent_window_turns: int = 6           # user + assistant turns kept verbatim (3 exchanges)
     min_turns_to_summarize: int = 4        # do not summarize fewer older turns than this
     max_summary_age: dt.timedelta = dt.timedelta(days=30)
@@ -41,6 +45,8 @@ class CompressionPolicy:
 
 @dataclass
 class CompressionOutcome:
+    """Result of one compression attempt; `missing` lists the facts a failed summary lost."""
+
     status: str                            # not_needed | up_to_date | created | compression_loss
     record: SummaryRecord | None = None
     missing: list[str] = field(default_factory=list)
@@ -53,6 +59,7 @@ class DeterministicSummarizer:
     name = "deterministic-v1"
 
     def summarize(self, turns: list[Turn], decisions: list[Decision], superseded_countries: set[str]) -> StructuredSummary:
+        """Summary of the user questions, assistant outcomes and required ids of `turns`."""
         facts = required_facts(turns, decisions, superseded_countries)
         user_turns = [t for t in usable(turns) if t.role == "user"
                       and t.kind not in (TurnKind.CLARIFICATION_REQUIRED, TurnKind.CONVERSATION)]
@@ -71,6 +78,8 @@ class DeterministicSummarizer:
 # ----------------------------------------------------------------------------------------- facts and checks
 @dataclass
 class RequiredFacts:
+    """Ids and entities from the covered turns that a summary must keep (the input of the loss check)."""
+
     project_ids: set[str] = field(default_factory=set)
     evidence_ids: set[str] = field(default_factory=set)
     citations: set[str] = field(default_factory=set)
@@ -104,6 +113,7 @@ def required_facts(turns: list[Turn], decisions: list[Decision], superseded_coun
 
 
 def missing_facts(summary: StructuredSummary, facts: RequiredFacts) -> list[str]:
+    """Required facts that the summary left out, as "label:value" strings; an empty list means nothing was lost."""
     checks = [("project_id", facts.project_ids, summary.project_ids), ("evidence_id", facts.evidence_ids, summary.evidence_source_ids),
               ("citation", facts.citations, summary.citations), ("decision_id", facts.decision_ids, summary.decision_ids),
               ("country", facts.countries, summary.countries)]
@@ -139,6 +149,8 @@ def stale_reason(summary: SummaryRecord, thread: ThreadInfo, turns: list[Turn], 
 
 # ------------------------------------------------------------------------------------------------- compressor
 class Compressor:
+    """Decides when older turns need a new summary and builds it, marking it invalid if the loss check fails."""
+
     def __init__(self, summarizer: Summarizer, policy: CompressionPolicy = CompressionPolicy()):
         self.summarizer = summarizer
         self.policy = policy
@@ -154,6 +166,7 @@ class Compressor:
         older = self.older_turns(epoch_turns)
         if len(older) < self.policy.min_turns_to_summarize:
             return CompressionOutcome("not_needed")
+        # A valid summary of this topic already reaches the last older turn: nothing new to summarize.
         if latest and latest.valid and latest.topic_epoch == thread.topic_epoch and latest.covers_through_seq >= older[-1].seq:
             return CompressionOutcome("up_to_date", latest)
 
@@ -164,6 +177,7 @@ class Compressor:
             covers_from_seq=older[0].seq, covers_through_seq=older[-1].seq, content=content,
             generator=self.summarizer.name, inputs_sha256=_inputs_hash(older, decisions), registry_build_id=registry_build_id)
         missing = missing_facts(content, required_facts(older, decisions, superseded))
+        # A lossy summary is still returned so it can be stored as invalid; it is never used as memory.
         if missing:
             record.invalidated_at, record.invalidation_reason = utc_now(), "compression_loss"
             return CompressionOutcome("compression_loss", record, missing)
@@ -172,6 +186,8 @@ class Compressor:
 
 # ---------------------------------------------------------------------------------------------------- helpers
 def _correction_pairs(turns: list[Turn]) -> list[tuple[Turn, Turn]]:
+    """(previous user question, correction) pairs; clarification turns are skipped so the correction is paired
+    with the question it fixes."""
     pairs, previous = [], None
     for turn in usable(turns):
         if turn.role != "user" or turn.kind == TurnKind.CLARIFICATION_REQUIRED:
@@ -183,6 +199,7 @@ def _correction_pairs(turns: list[Turn]) -> list[tuple[Turn, Turn]]:
 
 
 def _corrections(turns: list[Turn]) -> list[str]:
+    """Readable notes of what each correction replaced, e.g. "turn 7: Uganda replaced by Tanzania"."""
     notes = []
     for previous, correction in _correction_pairs(turns):
         before, after = {c.name for c in previous.context.countries}, {c.name for c in correction.context.countries}

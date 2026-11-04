@@ -34,6 +34,7 @@ REMEMBERED = 64                 # recent decisions kept: a message is routed twi
 
 
 class ClaudeTopicRouter:
+    """Classifier that asks Claude for a route and a confidence, remembering recent answers to avoid repeat calls."""
     name = "claude-topic-router"
 
     def __init__(self, client: PortkeyJsonClient):
@@ -41,6 +42,7 @@ class ClaudeTopicRouter:
         self._recent: OrderedDict[tuple[str, str | None], ClassifierOutput] = OrderedDict()
 
     def classify(self, request: ClassifierInput) -> ClassifierOutput:
+        """Return the route for a message, reusing the decision if the same message and context were just routed."""
         key = (request.text, request.previous_task_route.value if request.previous_task_route else None)
         if key not in self._recent:
             self._recent[key] = self._ask(request)
@@ -49,6 +51,7 @@ class ClaudeTopicRouter:
         return self._recent[key]
 
     def _ask(self, request: ClassifierInput) -> ClassifierOutput:
+        """Make the Claude call; the confidence is clamped to 0..1 and marked as an uncalibrated score."""
         context = f"PREVIOUS TASK ROUTE: {request.previous_task_route.value}\n" if request.previous_task_route else ""
         parsed, _, _ = self._client.complete(system=SYSTEM, user=f"{context}MESSAGE:\n{request.text}", schema=SCHEMA,
                                              schema_name="route_message", trace_id="route-message")

@@ -16,6 +16,7 @@ MAX_SEQUENCE_TOKENS = 1024
 
 @dataclass(frozen=True)
 class LoadedModel:
+    """The loaded model with its id and snapshot revision; encode_query returns one normalised float32 vector."""
     model: object            # sentence_transformers.SentenceTransformer
     model_id: str
     revision: str            # Hugging Face snapshot commit: identifies the exact weights

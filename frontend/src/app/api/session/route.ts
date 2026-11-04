@@ -1,3 +1,4 @@
+// API route /api/session: POST signs in through the API's POST /auth/login, DELETE signs out.
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { SESSION_COOKIE } from "@/lib/server";
@@ -15,6 +16,7 @@ export async function POST(request: Request) {
   return NextResponse.json({ ok: true });
 }
 
+// Sign out: removes the session cookie, so the next page load is redirected to /login by the middleware.
 export async function DELETE() {
   (await cookies()).delete(SESSION_COOKIE);
   return NextResponse.json({ ok: true });

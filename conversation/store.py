@@ -17,6 +17,7 @@ class ThreadNotFound(LookupError):
 
 
 class ConversationStore(Protocol):
+    """Owner-scoped storage of threads, turns, decisions and summaries (in-memory or PostgreSQL)."""
     def create_thread(self, owner: Owner, title: str) -> ThreadInfo: ...
     def get_thread(self, owner: Owner, thread_id: str) -> ThreadInfo: ...
     def list_threads(self, owner: Owner, limit: int = 20) -> list[ThreadInfo]: ...
@@ -35,7 +36,10 @@ class ConversationStore(Protocol):
 
 
 class InMemoryConversationStore:
+    """Dictionary-backed ConversationStore for tests and local runs; it keeps copies so callers cannot alter records."""
+
     def __init__(self) -> None:
+        """Empty per-thread lists of turns, decisions and summaries, keyed by thread id, and one lock for writes."""
         self._lock = threading.Lock()
         self._threads: dict[str, ThreadInfo] = {}
         self._turns: dict[str, list[Turn]] = {}
@@ -63,6 +67,7 @@ class InMemoryConversationStore:
             self._owned(owner, thread_id).title = title[:200]
 
     def start_new_topic(self, owner: Owner, thread_id: str) -> ThreadInfo:
+        """Begin a new topic in the owner's thread by raising its topic_epoch; returns a copy of the thread."""
         with self._lock:
             thread = self._owned(owner, thread_id)
             thread.topic_epoch += 1
@@ -74,6 +79,7 @@ class InMemoryConversationStore:
         with self._lock:
             thread = self._owned(owner, turn.thread_id)
             turns = self._turns[turn.thread_id]
+            # Turns are append-only: a sequence number that does not increase means a stale or duplicate write.
             if turns and turn.seq <= turns[-1].seq:
                 raise ValueError("turn sequence numbers must increase")
             turns.append(turn.model_copy(deep=True))
@@ -82,6 +88,7 @@ class InMemoryConversationStore:
 
     def turns(self, owner: Owner, thread_id: str, topic_epoch: int | None = None, after_seq: int = 0,
               limit: int | None = None) -> list[Turn]:
+        """The thread's turns after `after_seq`, optionally of one topic and only the newest `limit`, oldest first."""
         self._owned(owner, thread_id)
         selected = [t for t in self._turns[thread_id]
                     if t.seq > after_seq and (topic_epoch is None or t.topic_epoch == topic_epoch)]
@@ -101,6 +108,7 @@ class InMemoryConversationStore:
         return decision
 
     def revoke_decision(self, owner: Owner, thread_id: str, decision_id: str, reason: str) -> Decision:
+        """Revoke one decision and return it; revoking twice keeps the first time and reason. KeyError if not found."""
         with self._lock:
             self._owned(owner, thread_id)
             for decision in self._decisions[thread_id]:
@@ -130,6 +138,7 @@ class InMemoryConversationStore:
         return summaries[-1].model_copy(deep=True) if summaries else None
 
     def invalidate_summary(self, owner: Owner, thread_id: str, summary_id: str, reason: str) -> None:
+        """Mark one summary of the owner's thread invalid with a reason; an already invalid one is left as it is."""
         with self._lock:
             self._owned(owner, thread_id)
             for summary in self._summaries[thread_id]:

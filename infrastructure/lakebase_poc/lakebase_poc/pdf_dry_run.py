@@ -22,6 +22,7 @@ ROW_OVERHEAD = 1.5                                # tuple headers, page fill, pr
 
 
 def storage_estimate(bundle: pdf_evidence.EvidenceBundle) -> dict[str, Any]:
+    """Rough storage for the bundle: record JSON size x 1.5 plus the per-vector bytes measured in Step 2."""
     text_bytes = {table: sum(len(json.dumps(row, default=str).encode()) for row in rows) for table, rows in bundle.records.items()}
     vectors = len(bundle.vectors)
     relational = sum(text_bytes.values()) * ROW_OVERHEAD
@@ -43,6 +44,7 @@ def retrieval_preview(bundle: pdf_evidence.EvidenceBundle) -> list[dict[str, Any
 
 
 def dry_run() -> dict[str, Any]:
+    """Build and guard the bundle and describe exactly what a write would do; nothing is connected or written."""
     bundle = pdf_evidence.build_bundle()
     guard_bundle(bundle)
     vectors = np.stack(bundle.vectors)
@@ -74,6 +76,7 @@ def dry_run() -> dict[str, Any]:
 
 
 def main() -> None:
+    """Run the dry run, save the full report under results/ and print a summary."""
     report = dry_run()
     out = PROJECT_DIR / "results" / f"pdf_dry_run_{report['generated_at_utc'].replace(':', '').replace('-', '')[:15]}Z.json"
     out.write_text(json.dumps(report, indent=1, default=str))

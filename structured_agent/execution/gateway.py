@@ -29,11 +29,14 @@ from structured_agent.registry.models import Metric, RegistryBundle
 from structured_agent.sql_validation.structure import DIALECT
 from structured_agent.sql_validation.validator import SqlValidator
 
+# Matches a metric expression that is a plain sum of one column, e.g. 'sum(total_amount)'.
 SUM_OF_COLUMN = re.compile(r"sum\((\w+)\)")
 
 
 @dataclass
 class GatewayResult:
+    """Everything one execution produced, success or failure, before it becomes a QueryResult."""
+
     status: str                                  # ok | rejected | error
     report: ValidationReport | None = None
     query_id: str | None = None
@@ -49,7 +52,10 @@ class GatewayResult:
 
 
 class ExecutionGateway:
+    """Credential gate, re-validation, bounded execution and result checks for every query."""
+
     def __init__(self, settings: Settings, bundle: RegistryBundle, validator: SqlValidator, executor: SqlExecutor):
+        """Wire the settings, registry, validator and executor; the credential check is cached on first use."""
         self._settings = settings
         self._bundle = bundle
         self._validator = validator
@@ -58,6 +64,8 @@ class ExecutionGateway:
 
     # ------------------------------------------------------------------------------------------------- credential gate
     def credential_mode(self) -> tuple[str | None, ToolError | None]:
+        # Checked once per gateway and cached: the credential does not change while the process runs.
+        """Return the credential mode to stamp on results, or a CREDENTIAL_NOT_READ_ONLY error."""
         if self._credential is None:
             self._credential = self._executor.check_credential()
         if not self._credential.write_capable:
@@ -72,6 +80,7 @@ class ExecutionGateway:
     # ------------------------------------------------------------------------------------------------------- execute
     def execute(self, sql: str, parameters: dict[str, ParameterValue], principal: Principal,
                 max_rows: int | None = None) -> GatewayResult:
+        """Validate and run one statement for a principal; returns a GatewayResult with a status, never raises."""
         mode, error = self.credential_mode()
         if error:
             return GatewayResult(status="error", errors=[error])
@@ -100,6 +109,7 @@ class ExecutionGateway:
         provenance = ExecutionProvenance(credential_mode=mode, production_read_only=mode == "read_only_principal",
                                          registry_build_id=self._bundle.build.build_id,
                                          executed_at=datetime.now(timezone.utc).isoformat(timespec="seconds"))
+        # When a result check fails, the rows are withheld: only the checks and provenance are returned.
         if not all(c.passed for c in checks):
             failed = [c.name for c in checks if not c.passed]
             return GatewayResult(status="error", report=report, query_id=query_id, result_checks=checks, provenance=provenance,
@@ -111,6 +121,7 @@ class ExecutionGateway:
                                 source_columns=units[name.lower()].source_columns) for name, dtype in raw.columns]
         return GatewayResult(
             status="ok", report=report, query_id=query_id, columns=columns, rows=raw.rows,
+            # A result that fills the whole LIMIT is reported as possibly truncated.
             truncated=len(raw.rows) >= limit, metrics=self._metrics_used(report), limitations=self._limitations(report, mode),
             result_checks=checks, provenance=provenance, execution_ms=execution_ms)
 
@@ -132,6 +143,7 @@ class ExecutionGateway:
         return used
 
     def _limitations(self, report: ValidationReport, mode: str) -> list[str]:
+        """Known limitations of the objects read, plus a warning when owner credentials were used."""
         notes = [n for fqn in report.objects for n in self._bundle.object(fqn).limitations]
         if mode == "dev_owner_credentials":
             notes.append("Executed with the owner (write-capable) Databricks credential in labelled development mode: "

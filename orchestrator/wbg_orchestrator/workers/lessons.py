@@ -31,6 +31,7 @@ CardSource = Callable[[], list[LessonCard]]          # every card with its statu
 
 
 class LessonsWorker:
+    """Worker for `find_lessons`: turns the request into a situation and returns the approved cards that fit."""
     name = WorkerName.LESSONS
     operations = frozenset({"find_lessons"})
 
@@ -39,6 +40,7 @@ class LessonsWorker:
         self._authority, self._cards, self._projects = authority, cards, projects
 
     def run(self, task: AgentTask, context: WorkerContext) -> WorkerOutput:
+        """Check the ticket, find the situation and return lesson records, or one "none yet" record when none fit."""
         self._authority.verify(context.ticket, task)
         if task.operation not in self.operations:
             return _failed(task, ErrorCategory.AUTHORIZATION, "unknown_operation", "The operation is not offered by this worker.")
@@ -52,10 +54,12 @@ class LessonsWorker:
         chosen = relevant(cards, situation)
         if chosen:
             return WorkerOutput(TaskState.SUCCEEDED, evidence=tuple(_lesson(task, c) for c in chosen))
+        # Only counted, never shown: proposed cards tell the user a reviewer has work waiting for this stage.
         waiting = sum(c.status == "proposed" and score(c, situation) > 0 for c in cards)
         return WorkerOutput(TaskState.SUCCEEDED, evidence=(_none_yet(task, situation, waiting),))
 
     def _situation(self, task: AgentTask, context: WorkerContext) -> Situation | None:
+        """Stage and topics of the request: from a tender check first, then a Planning Brief, then a project ID."""
         if isinstance(context.tender, TenderSpec):
             spec = context.tender
             return self._about(Situation("tender_design", STAGE_TOPICS["tender_design"], spec.procurement_category, spec.project_id))
@@ -72,6 +76,7 @@ class LessonsWorker:
 
 # ---------------------------------------------------------------------------------------------- records
 def _lesson(task: AgentTask, card: LessonCard) -> EvidenceRecord:
+    """One approved lesson card as verified evidence, citing its report, pages and reviewer."""
     facts = (Fact(name="card_id", value=card.card_id), Fact(name="source", value=card.source_label[:200]),
              Fact(name="project_id", value=card.project_id or "none"), Fact(name="topics", value=", ".join(card.topics)[:200]),
              Fact(name="stages", value=", ".join(card.stages)[:200]), Fact(name="reviewed_by", value=card.decided_by or "unknown"))
@@ -86,6 +91,7 @@ def _lesson(task: AgentTask, card: LessonCard) -> EvidenceRecord:
 
 
 def _none_yet(task: AgentTask, s: Situation, waiting: int) -> EvidenceRecord:
+    """The record used when no approved card fits: says so, and how many proposed cards await review."""
     text = (f"No reviewed lessons for {STAGE_LABELS[s.stage]} match yet"
             + (f"; {waiting} proposed lesson cards for this stage await a reviewer." if waiting else "."))
     return EvidenceRecord(

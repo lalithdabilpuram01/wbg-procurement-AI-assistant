@@ -59,6 +59,7 @@ class UsernameTaken(AccountError):
 
 # --------------------------------------------------------------------------------------------------- secrets
 def hash_secret(value: str) -> dict[str, str]:
+    """A salted scrypt hash of a password or recovery code, as hex strings {"salt", "scrypt"}."""
     salt = secrets.token_bytes(16)
     return {"salt": salt.hex(), "scrypt": hashlib.scrypt(value.encode(), salt=salt, **SCRYPT).hex()}
 
@@ -95,6 +96,7 @@ def user_hash(owner: Owner) -> str:
 
 
 def check_new_credentials(username: str, password: str) -> None:
+    """Raise AccountError when a new username or password breaks the sign-up rules."""
     if not USERNAME.match(username):
         raise AccountError("A username has 3 to 32 characters: lowercase letters, digits, dots, dashes or underscores, "
                            "starting with a letter or digit.")
@@ -107,6 +109,7 @@ def check_new_credentials(username: str, password: str) -> None:
 # --------------------------------------------------------------------------------------------------- records
 @dataclass(frozen=True)
 class Account:
+    """One stored account: roles and the hashes of its password, recovery code and script token (never the secrets)."""
     user_id: str
     tenant_id: str = TENANT
     roles: tuple[str, ...] = ()
@@ -119,6 +122,7 @@ class Account:
         return Owner(tenant_id=self.tenant_id, user_id=self.user_id)
 
     def to_json(self) -> dict[str, Any]:
+        """The account as a JSON file entry; absent secrets are left out rather than written as null."""
         out: dict[str, Any] = {"tenant_id": self.tenant_id, "user_id": self.user_id, "roles": list(self.roles)}
         out.update({k: v for k, v in (("password", self.password), ("recovery", self.recovery),
                                       ("token_sha256", self.token_sha256)) if v})
@@ -131,6 +135,8 @@ class Account:
 
 
 class AccountStore(Protocol):
+    """What the user directory needs from a store: lookups, insert-if-new, insert-or-replace and a full listing."""
+
     def get(self, tenant_id: str, user_id: str) -> Account | None: ...
     def by_token(self, digest: str) -> Account | None: ...
     def insert(self, account: Account) -> bool: ...          # False when the username is taken
@@ -148,6 +154,7 @@ class JsonFileAccountStore:
 
     @contextlib.contextmanager
     def _locked(self) -> Iterator[list[dict[str, Any]]]:
+        """Hold the file lock, yield the users list for changing, then write it back atomically with mode 600."""
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with open(self.path.with_name(self.path.name + ".lock"), "a") as lock:
             fcntl.flock(lock, fcntl.LOCK_EX)
@@ -169,6 +176,7 @@ class JsonFileAccountStore:
                      if e.get("token_sha256") and hmac.compare_digest(e["token_sha256"], digest)), None)
 
     def insert(self, account: Account) -> bool:
+        """Add the account unless the username exists; returns False when it was taken."""
         with self._locked() as users:
             if any(e["tenant_id"] == account.tenant_id and e["user_id"] == account.user_id for e in users):
                 return False
@@ -176,6 +184,7 @@ class JsonFileAccountStore:
             return True
 
     def save(self, account: Account) -> None:
+        """Insert the account, replacing any existing entry with the same tenant and username."""
         with self._locked() as users:
             users[:] = [e for e in users if not (e["tenant_id"] == account.tenant_id and e["user_id"] == account.user_id)]
             users.append(account.to_json())
@@ -198,6 +207,7 @@ class PostgresAccountStore:
         self._table = sql.SQL("{}.app_user").format(sql.Identifier(schema))
 
     def _one(self, where: str, params: tuple) -> Account | None:
+        """The first account matching a fixed WHERE clause (values are always bound parameters), or None."""
         from psycopg.rows import dict_row
         query = self._sql.SQL("SELECT {} FROM {} WHERE " + where).format(
             self._sql.SQL(", ").join(map(self._sql.Identifier, COLUMNS)), self._table)
@@ -212,6 +222,7 @@ class PostgresAccountStore:
         return self._one("token_sha256 = %s", (digest,))
 
     def insert(self, account: Account) -> bool:
+        """Add the account unless the username exists; returns False when it was taken."""
         query = self._sql.SQL("INSERT INTO {} ({}) VALUES ({}) ON CONFLICT (tenant_id, user_id) DO NOTHING RETURNING user_id").format(
             self._table, self._sql.SQL(", ").join(map(self._sql.Identifier, COLUMNS)),
             self._sql.SQL(", ").join(self._sql.Placeholder() * len(COLUMNS)))
@@ -219,6 +230,7 @@ class PostgresAccountStore:
             return conn.execute(query, _to_row(account)).fetchone() is not None
 
     def save(self, account: Account) -> None:
+        """Upsert the account; every column except the key is replaced and updated_at is refreshed."""
         updates = self._sql.SQL(", ").join(self._sql.SQL("{0} = EXCLUDED.{0}").format(self._sql.Identifier(c)) for c in COLUMNS[2:])
         query = self._sql.SQL("INSERT INTO {} ({}) VALUES ({}) ON CONFLICT (tenant_id, user_id) DO UPDATE SET {}, "
                               "updated_at = now()").format(
@@ -228,6 +240,7 @@ class PostgresAccountStore:
             conn.execute(query, _to_row(account))
 
     def all(self) -> list[Account]:
+        """Every account, ordered by tenant and username."""
         from psycopg.rows import dict_row
         query = self._sql.SQL("SELECT {} FROM {} ORDER BY tenant_id, user_id").format(
             self._sql.SQL(", ").join(map(self._sql.Identifier, COLUMNS)), self._table)
@@ -240,12 +253,14 @@ def _secret(salt: str | None, digest: str | None) -> dict[str, str] | None:
 
 
 def _from_row(row: dict[str, Any]) -> Account:
+    """Build an Account from a table row (the salt and hash columns become the secret dicts)."""
     return Account(user_id=row["user_id"], tenant_id=row["tenant_id"], roles=tuple(row["roles"] or ()),
                    password=_secret(row["password_salt"], row["password_scrypt"]),
                    recovery=_secret(row["recovery_salt"], row["recovery_scrypt"]), token_sha256=row["token_sha256"])
 
 
 def _to_row(account: Account) -> tuple:
+    """The account's values in COLUMNS order, ready to bind to an INSERT."""
     password, recovery = account.password or {}, account.recovery or {}
     return (account.tenant_id, account.user_id, list(account.roles), password.get("salt"), password.get("scrypt"),
             recovery.get("salt"), recovery.get("scrypt"), account.token_sha256)
@@ -278,6 +293,7 @@ class _Sessions:
     lock: threading.Lock = field(default_factory=threading.Lock)
 
     def open(self, owner: Owner) -> str:
+        """Start a session for `owner` and return its token; only the token's SHA-256 is kept."""
         token = secrets.token_urlsafe(32)
         identity = Identity(owner, f"ses_{secrets.token_hex(10)}")
         with self.lock:
@@ -285,6 +301,7 @@ class _Sessions:
         return token
 
     def identity(self, digest: str) -> Identity | None:
+        """The identity of a live session; an expired one is removed and logged as ended."""
         with self.lock:
             session = self.entries.get(digest)
             if session and session.expires_at > time.time():
@@ -295,6 +312,7 @@ class _Sessions:
         return None
 
     def end_all(self, owner: Owner, reason: str) -> None:
+        """End every session of `owner` (used after a password reset) and log each one."""
         with self.lock:
             ended = [self.entries.pop(d).identity for d in [d for d, s in self.entries.items() if s.identity.owner == owner]]
         for identity in ended:
@@ -372,6 +390,7 @@ class UserDirectory:
         account = self.store.get(self.tenant_id, user_id)
         if not secret_matches(normalise_code(recovery_code), account.recovery if account else None):
             return None
+        # Checked only after the code matches, so a wrong code always gets the same None answer as an unknown user.
         check_new_credentials(user_id, new_password)
         code = new_recovery_code()
         self.store.save(replace(account, password=hash_secret(new_password), recovery=hash_secret(normalise_code(code))))

@@ -24,6 +24,7 @@ REQUIRED_FIELDS = {
 
 @dataclass
 class QueryPlan:
+    """What the query step learned about a question: comparison intent, document-type hints and required fields."""
     question: str
     comparison: bool
     doc_type_hints: list[str]
@@ -31,6 +32,7 @@ class QueryPlan:
 
 
 def understand(q: str) -> QueryPlan:
+    """Build the QueryPlan for a question with regular expressions only (no model)."""
     hints = [k for k, rx in DOC_HINTS.items() if re.search(rx, q, re.I)]
     req = {name: ev for name, (ask, ev) in REQUIRED_FIELDS.items() if ask.search(q)}
     return QueryPlan(q, bool(COMPARISON.search(q)), hints, req)

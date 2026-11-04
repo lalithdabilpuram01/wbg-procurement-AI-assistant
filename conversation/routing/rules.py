@@ -141,6 +141,7 @@ def conversational_reason(text: str) -> ReasonCategory | None:
         if match is None:
             return None
         reasons.append(match)
+    # "Hi, thanks!" counts as gratitude: a greeting is the reason only when nothing else was said.
     return next((r for r in reasons if r != ReasonCategory.GREETING), ReasonCategory.GREETING)
 
 

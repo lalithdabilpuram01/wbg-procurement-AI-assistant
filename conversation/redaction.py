@@ -21,6 +21,7 @@ MAX_STORED_TEXT_CHARS = 4000
 
 @lru_cache(maxsize=1)
 def secret_value_patterns() -> tuple[re.Pattern, ...]:
+    """The secret-value regexes of the guardrails config, compiled once."""
     config = yaml.safe_load(NEMO_CONFIG.read_text())
     patterns = config["rails"]["config"]["regex_detection"]["output"]["patterns"]
     return tuple(re.compile(p) for p in patterns)

@@ -22,6 +22,7 @@ DEFAULT_FILE = ORCHESTRATOR_DIR / "runs" / "app_audit.jsonl"
 
 
 def read(path: Path) -> list[dict]:
+    """Every event in the audit file, oldest first; an empty list when the file does not exist."""
     if not path.is_file():
         return []
     return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
@@ -65,6 +66,7 @@ def timeline(events: Iterable[dict], key: str) -> list[str]:
 
 
 def _describe(e: dict) -> str:
+    """One readable line for an audit event; unknown event kinds are shown by name only."""
     kind = e["event"]
     errors = f"  errors: {e['error_codes']}" if e.get("error_codes") else ""
     if kind == "guard.input":
@@ -91,6 +93,7 @@ def _describe(e: dict) -> str:
 
 
 def main(argv: list[str]) -> int:
+    """Command line: `list` prints recent investigations, `show <id>` prints one timeline."""
     parser = argparse.ArgumentParser(description="Read the orchestrator audit trail")
     parser.add_argument("command", choices=["list", "show"])
     parser.add_argument("key", nargs="?", help="request_id or investigation_id (for show)")

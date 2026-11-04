@@ -50,6 +50,7 @@ class ReleaseMismatchError(RuntimeError):
 
 @dataclass(frozen=True)
 class ReleaseRecord:
+    """The release row stored in wbg_rag.releases: model, dimension, unit count and content fingerprints."""
     release: str
     model_id: str
     model_revision: str
@@ -66,6 +67,7 @@ def vectors_sha256(vectors: np.ndarray) -> str:
 
 
 def create_tables(conn: psycopg.Connection) -> None:
+    """Create the pgvector extension, schema, tables and project index if they do not exist, in one transaction."""
     with conn.transaction():
         for statement in TABLE_DDL:
             conn.execute(statement)
@@ -80,6 +82,7 @@ def create_hnsw_index(conn: psycopg.Connection) -> None:
 
 
 def stored_release(conn: psycopg.Connection, release: str) -> ReleaseRecord | None:
+    """Return the stored ReleaseRecord of a release, or None when it is not loaded."""
     columns = ", ".join(ReleaseRecord.__dataclass_fields__)
     row = conn.execute(f"SELECT {columns} FROM {SCHEMA}.releases WHERE release = %s", (release,)).fetchone()
     return ReleaseRecord(*row) if row else None
@@ -127,6 +130,7 @@ class LakebaseVectorIndex:
         self._pool, self.release = pool, release
 
     def record(self) -> ReleaseRecord:
+        """Return the stored release record; raises ReleaseMismatchError when it is not loaded."""
         with self._pool.connection() as conn:
             record = stored_release(conn, self.release)
         if record is None:
@@ -143,6 +147,7 @@ class LakebaseVectorIndex:
             raise ReleaseMismatchError(f"release {self.release!r} differs from the local corpus/model in {differing}")
         return record
 
+    # Same as the module-level nearest(), on a connection borrowed from the pool.
     def nearest(self, query: np.ndarray, scope_projects: Iterable[str] | None = None,
                 limit: int = DENSE_CANDIDATES) -> list[tuple[str, float]]:
         with self._pool.connection() as conn:

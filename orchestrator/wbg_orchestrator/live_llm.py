@@ -58,6 +58,7 @@ class SpendLimitReached(RuntimeError):
 
 
 def input_token_bound(request: ClaudeRequest) -> int:
+    """An upper bound on the request's input tokens: one per UTF-8 byte sent, plus the framing allowance."""
     sent = (request.system + (request.cache_prefix or "") + request.user
             + (json.dumps(request.json_schema) if request.json_schema else ""))
     return len(sent.encode("utf-8")) + FRAMING_TOKENS
@@ -77,8 +78,10 @@ class SpendLedger:
     """Append-only record of live attempts, saved to disk before and after each request (survives a crash)."""
 
     def __init__(self, path: Path, limits: LedgerLimits = LedgerLimits(), prices: PriceTable = SONNET_5_5_PRICES):
+        """Load the ledger at `path` if it exists (its stored limits win), or start an empty one with `limits`."""
         self.path = Path(path)
         self.prices = prices
+        # An existing ledger keeps its own limits and attempts, so a restart cannot reset the spend ceiling.
         data = json.loads(self.path.read_text()) if self.path.is_file() else {}
         stored = data.get("limits")
         self.limits = LedgerLimits(stored["max_attempts"], Decimal(stored["max_usd"])) if stored else limits
@@ -102,6 +105,7 @@ class SpendLedger:
         return self.limits.max_attempts - len(self.attempts)
 
     def reserve(self, *, purpose: str, trace_id: str, model: str, max_tokens: int, input_bound: int) -> int:
+        """Record an attempt at its worst-case cost before sending; returns its index or raises SpendLimitReached."""
         # worst case: every input token written to the prompt cache (1.25x), at the regional multiplier
         worst = (self.prices.cost(input_bound, max_tokens, cache_write_tokens=input_bound) * GEO_MULTIPLIER).quantize(Decimal("0.000001"))
         if self.locked:
@@ -120,6 +124,7 @@ class SpendLedger:
                http_status: int | None = None, provider_error_type: str | None = None,
                gateway_retry_count: str | None = None, duration_ms: int = 0, cache_read_tokens: int = 0,
                cache_write_tokens: int = 0) -> dict[str, Any]:
+        """Record how a reserved attempt ended; gateway retries or more input than the bound lock the ledger."""
         attempt = self.attempts[index]
         estimated = self.prices.cost(input_tokens, output_tokens, cache_read_tokens, cache_write_tokens) if status == "ok" else None
         attempt.update(status=status, input_tokens=input_tokens, output_tokens=output_tokens, http_status=http_status,
@@ -137,12 +142,14 @@ class SpendLedger:
         return attempt
 
     def summary(self) -> dict[str, Any]:
+        """The ledger's totals and state, without the individual attempts."""
         return {"limits": {"max_attempts": self.limits.max_attempts, "max_usd": str(self.limits.max_usd)},
                 "prices": self.prices.model_dump(mode="json"), "attempts_used": len(self.attempts),
                 "estimated_usd": str(self.estimated_usd()), "committed_usd": str(self.committed_usd()),
                 "locked": self.locked}
 
     def _save(self) -> None:
+        """Write the ledger atomically (temporary file, fsync, rename), so a crash never leaves a half-written file."""
         self.path.parent.mkdir(parents=True, exist_ok=True)
         payload = {**self.summary(), "attempts": self.attempts}
         temporary = self.path.with_suffix(".tmp")
@@ -180,6 +187,7 @@ class BudgetedClaudeClient(PortkeyClaudeClient):
 
     def __init__(self, settings: ClaudeSettings, ledger: SpendLedger, *, output_caps: Mapping[str, int],
                  tracer: OrchestratorTracer | None = None, transport: httpx.MockTransport | None = None, live_access=None):
+        """Wrap the Portkey client with the spend ledger and per-schema output caps; reads gateway retry headers."""
         super().__init__(settings, transport=transport, live_access=live_access)
         self._ledger = ledger
         self._caps = dict(output_caps)
@@ -198,6 +206,7 @@ class BudgetedClaudeClient(PortkeyClaudeClient):
         return self._ledgered(request, lambda: super(BudgetedClaudeClient, self).stream(request, on_text))
 
     def _ledgered(self, request: ClaudeRequest, call: Callable[[], ClaudeResponse]) -> ClaudeResponse:
+        """Reserve in the ledger, make the call inside an `orchestrator.llm_call` span, then settle the attempt."""
         cap = self.output_cap(request)
         index = self._ledger.reserve(purpose=request.schema_name, trace_id=request.trace_id, model=self.model,
                                      max_tokens=cap, input_bound=input_token_bound(request))
@@ -233,6 +242,7 @@ class BudgetedClaudeClient(PortkeyClaudeClient):
         return response
 
     def _body(self, request: ClaudeRequest) -> dict[str, Any]:
+        """The parent's request body with max_tokens set to this schema's output cap."""
         body = super()._body(request)
         body["max_tokens"] = self.output_cap(request)
         return body

@@ -18,6 +18,8 @@ from structured_agent.service import RequestContext, StructuredDataService
 
 
 class ToolCaller(Protocol):
+    """The one call the workflow makes to reach a Structured Data tool, whatever the transport."""
+
     principal_id: str
 
     def call(self, tool: str, arguments: dict[str, Any], request_id: str) -> dict[str, Any]:

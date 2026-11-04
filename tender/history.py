@@ -17,6 +17,8 @@ SOURCE = "Procurement-plan records of the 35 pilot projects (pilot_v3, latest pl
 
 @dataclass(frozen=True)
 class Group:
+    """The plan packages of one category and canonical method: the peers a package is compared with."""
+
     category: str
     method: str
     packages: tuple[data.Package, ...]
@@ -34,6 +36,8 @@ class Group:
 
 @dataclass(frozen=True)
 class Spread:
+    """Percentiles of a peer group's estimates (US$)."""
+
     n: int
     p5: float
     p25: float
@@ -47,18 +51,22 @@ class Spread:
 
 
 def group(category: str, method: str, directory: Path = data.SHARED) -> Group:
+    """The peer group; the category is mapped to its plan family code and the method to its canonical name."""
     family, canonical = FAMILY.get(category, category), normalise.method(method) or method
     return Group(category, canonical, tuple(p for p in data.packages(directory) if p.category == family and p.method == canonical))
 
 
 def spread(values: list[float]) -> Spread | None:
+    """5th to 95th percentiles of the values, or None when there are fewer than MIN_PACKAGES."""
     if len(values) < MIN_PACKAGES:
         return None
+    # Cut points at 5% steps: index 0 is the 5th percentile, 4 the 25th, 14 the 75th and 18 the 95th.
     q = quantiles(values, n=20)
     return Spread(len(values), q[0], q[4], median(values), q[14], q[18])
 
 
 def prior_share(packages: list[data.Package]) -> float | None:
+    """Share of prior-review packages among those with a known review type; None when there are too few."""
     reviewed = [p for p in packages if p.review_type]
     if len(reviewed) < MIN_PACKAGES:
         return None

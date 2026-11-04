@@ -23,6 +23,7 @@ class _BlankSpacyEngine:
 
     @staticmethod
     def build():
+        """Return the engine; spaCy and Presidio are imported here so they load only when masking is first used."""
         import spacy
         from presidio_analyzer.nlp_engine import SpacyNlpEngine
 
@@ -41,11 +42,13 @@ def _offline_domain_list() -> None:
 
 @lru_cache(maxsize=1)
 def _engines():
+    """The Presidio analyzer and anonymizer, built once and kept for the life of the process."""
     _offline_domain_list()
     from presidio_analyzer import AnalyzerEngine
     from presidio_anonymizer import AnonymizerEngine
     from presidio_analyzer.predefined_recognizers import PhoneRecognizer
     analyzer = AnalyzerEngine(nlp_engine=_BlankSpacyEngine.build(), supported_languages=["en"])
+    # Replace the default phone recognizer with one that knows the corpus countries' number formats.
     analyzer.registry.remove_recognizer("PhoneRecognizer")
     analyzer.registry.add_recognizer(PhoneRecognizer(supported_regions=list(PHONE_REGIONS)))
     return analyzer, AnonymizerEngine()

@@ -131,6 +131,8 @@ def evidence_inventory(rows) -> dict:
 
 
 def main() -> int:
+    """Dry run by default: build and check the four notice tables and save the reports.
+    Write mode creates them; with --resume-run-id it creates only the targets a partial write left missing."""
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--mode", choices=["dry-run", "write"], default="dry-run")
     ap.add_argument("--confirm-create", action="store_true")
@@ -148,6 +150,7 @@ def main() -> int:
     run_dir.mkdir(parents=True, exist_ok=True)
     spark = get_spark(args.profile)
     first_baseline = json.loads((run_dir / "baseline_before_write.json").read_text()) if args.resume_run_id else None
+    # Version and row count of each input table before the write, so the verify script can prove nothing else changed.
     baseline: dict = {"bronze": {}, "silver": {}, "targets_exist": {k: spark.catalog.tableExists(v) for k, v in TARGETS.items()},
                       "cohort_manifest_sha256": hashlib.sha256(COHORT.read_bytes()).hexdigest()}
     for group, tables in (("bronze", [T.BRONZE_CSV, T.BRONZE_API]), ("silver", [f"{S}.{t}" for t in EXISTING_SILVER])):
@@ -197,6 +200,7 @@ def main() -> int:
                        {n: out[k].filter(f"NOT ({e}) OR ({e}) IS NULL").count() for n, e in spec["validated_rules"].items()},
                        {n: 0 for n in spec["validated_rules"]})
 
+    # Assessment only, for the summary: legacy and description matches are measured here but never become links.
     legacy = spark.table(f"{S}.contract_awards_legacy").join(details.select("project_id").distinct(), "project_id", "left_semi")
     nref = details.select("project_id", F.explode(F.array("bid_reference_normalized", "award_reference_in_text_normalized")).alias("r")).filter("r IS NOT NULL").distinct()
     leg_match = legacy.join(nref, (legacy.project_id == nref.project_id) & (T.normalize_ref(legacy.borrower_contract_reference) == nref.r), "left_semi")
@@ -249,6 +253,7 @@ def main() -> int:
                   f"RETURN CASE WHEN t IS NULL THEN NULL WHEN is_account_group_member('{T.TEXT_MASK_GROUP}') THEN t ELSE '{T.TEXT_PLACEHOLDER}' END")
     sources = {"notices": T.BRONZE_CSV, "details": T.BRONZE_API, "candidates": f"{T.BRONZE_API},{S}.contract_awards",
                "links": f"{T.BRONZE_API},{S}.contract_awards"}
+    # Details goes first: it holds the masked notice_text, and the run stops before the other tables if the mask fails.
     for k in ("details", "notices", "candidates", "links"):
         if baseline["targets_exist"][k] and not pipeline.ENABLED:
             if k == "details":  # metadata only: record the rules that cannot be CHECK constraints on a masked table

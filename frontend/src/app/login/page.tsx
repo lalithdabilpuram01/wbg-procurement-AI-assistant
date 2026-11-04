@@ -1,11 +1,14 @@
 "use client";
 
+// Sign-in page "/login". It posts to the /api/session route, which keeps the session token in an httpOnly cookie.
+
 import { useState } from "react";
 import { KeyRound } from "lucide-react";
 import { AuthLink, AuthShell } from "@/components/app/auth-shell";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Spinner } from "@/components/ui/primitives";
 
+/** The sign-in form; on success it does a full page load of "/" so the middleware sees the new cookie. */
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -23,6 +26,7 @@ export default function LoginPage() {
       window.location.assign("/");
       return;
     }
+    // The API's message for a wrong login is reworded for display; a null response means the route was unreachable.
     const body = await response?.json().catch(() => ({}));
     setError(body?.detail === "wrong username or password" ? "Wrong username or password." : body?.detail ?? "The API is not reachable.");
     setBusy(false);

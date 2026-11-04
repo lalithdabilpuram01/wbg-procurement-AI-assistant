@@ -64,12 +64,16 @@ def structured_runner(workflow: Any) -> AgentRunner:
 
 @dataclass(frozen=True)
 class ConversationState:
+    """What the next message inherits: the active filters and the last task route of the current topic."""
+
     active: ActiveContext
     previous_task_route: Route | None
 
 
 @dataclass
 class ConversationReply:
+    """What the caller gets back for one message. Only the turns' text and metadata are stored, not this object."""
+
     thread_id: str
     status: str        # a WorkflowStatus value, or responded | clarification_required | route_unavailable |
                        # context_over_budget | topic_reset | blocked_by_guardrail
@@ -87,12 +91,16 @@ class ConversationReply:
 
 
 class ConversationService:
+    """Single entry point for chat messages: guards, resolves, routes and records each turn (see module docstring)."""
+
     def __init__(self, store: ConversationStore, runners: dict[Route, AgentRunner], guard: InputGuard | None,
                  resolver: FollowUpResolver | None = None, builder: ContextBuilder | None = None,
                  compressor: Compressor | None = None, telemetry: Any = None, tracer: EventSink | None = None,
                  registry_build_id: str | None = None, router: IntentRouter | None = None,
                  responder: ConversationResponder | None = None, live_access: LiveAccess | None = None,
                  text_filter: Callable[[str], str] | None = None):
+        """Fails closed: guardrails are required, runners may serve task routes only, and a model-backed responder
+        needs live-call approval."""
         if guard is None:
             raise ValueError("the conversation service requires guardrails (fail closed)")
         if any(Route(route) not in TASK_ROUTES for route in runners):
@@ -186,6 +194,7 @@ class ConversationService:
 
         resolution = self._resolver.resolve(stored_text, state.active)  # redacted text: secrets never enter context or prompts
         routing = self._router.route(RouteRequest(stored_text, resolution, state.previous_task_route))
+        # A topic reset starts a new epoch; a task question in the same message is resolved again without old filters.
         if routing.reset_topic:
             thread = self._store.start_new_topic(owner, thread_id)
             if routing.is_task:
@@ -296,6 +305,7 @@ class ConversationService:
                             **fields)
 
     def _build_context(self, owner: Owner, thread: ThreadInfo, user_turn: Turn, resolution: Resolution) -> ContextPackage:
+        """Budgeted memory block for a task route: earlier turns of the topic, active decisions, a usable summary."""
         epoch_turns = [t for t in self._store.turns(owner, thread.thread_id, topic_epoch=thread.topic_epoch)
                        if t.seq < user_turn.seq]
         decisions = self._store.decisions(owner, thread.thread_id, include_revoked=True)
@@ -305,6 +315,7 @@ class ConversationService:
                                    summary, problem)
 
     def _usable_summary(self, owner: Owner, thread: ThreadInfo, epoch_turns: list[Turn], decisions: list[Decision]):
+        """(latest summary, None) when it may be used, else (None, reason); a stale summary is also invalidated."""
         latest = self._store.latest_summary(owner, thread.thread_id)
         if latest is None:
             return None, None
@@ -317,9 +328,11 @@ class ConversationService:
         return None, reason
 
     def _compress(self, owner: Owner, thread: ThreadInfo) -> None:
+        """Summarize older turns when needed and store the result, including a lossy summary (stored as invalid)."""
         epoch_turns = self._store.turns(owner, thread.thread_id, topic_epoch=thread.topic_epoch)
         decisions = self._store.decisions(owner, thread.thread_id, include_revoked=True)
         latest = self._store.latest_summary(owner, thread.thread_id)
+        # A stale summary is invalidated first so the next summary is built fresh instead of being reported up to date.
         if latest and latest.valid and stale_reason(latest, thread, epoch_turns, decisions, self._registry_build_id,
                                                     self._compressor.policy.max_summary_age):
             self._store.invalidate_summary(owner, thread.thread_id, latest.summary_id, "stale_before_compression")
@@ -332,6 +345,7 @@ class ConversationService:
 
     def _blocked(self, owner: Owner, thread: ThreadInfo, stored_text: str, active: ActiveContext, request_id: str,
                  decision: Any) -> ConversationReply:
+        """Store the blocked message and a plain reply explaining the block; no agent runs."""
         reason = decision.reason_category.value if decision.reason_category else "blocked"
         reply = guard_reply(reason)                      # a plain answer for every reason, never a bare refusal
         # The text is stored (redacted) for audit, flagged when it was a policy block, and never used as memory; the
@@ -343,6 +357,7 @@ class ConversationService:
 
     def _reply_without_agent(self, owner: Owner, thread: ThreadInfo, user_turn: Turn, routing: RoutingDecision,
                              resolution: Resolution, status: str, message: str, request_id: str) -> ConversationReply:
+        """Store an assistant turn with a fixed message (route unavailable, over budget) instead of running an agent."""
         assistant = self._append(owner, thread, "assistant", TurnKind.ANSWER, message, resolution.context,
                                  self._metadata(request_id, routing, status=status))
         return ConversationReply(thread.thread_id, status, message, resolution.kind, user_turn.seq, assistant.seq,
@@ -350,13 +365,16 @@ class ConversationService:
 
     def _append(self, owner: Owner, thread: ThreadInfo, role: Literal["user", "assistant"], kind: TurnKind, text: str,
                 context: ActiveContext, metadata: TurnMetadata) -> Turn:
+        """Store one turn with the next sequence number."""
         seq = self._store.next_seq(owner, thread.thread_id)
+        # Re-read the thread: a topic reset earlier in this request may have moved it to a new epoch.
         current = self._store.get_thread(owner, thread.thread_id)
         turn = Turn(thread_id=thread.thread_id, seq=seq, role=role, kind=kind, text=text, topic_epoch=current.topic_epoch,
                     context=context, metadata=metadata)
         return self._store.append_turn(owner, turn)
 
     def _finish(self, reply: ConversationReply, request_id: str, started: float, package: ContextPackage | None) -> ConversationReply:
+        """Write the audit and trace events for this turn (ids, counts and statuses only) and return the reply."""
         attributes = {"thread_id": reply.thread_id, "turn_seq": reply.user_turn_seq, "resolution": reply.kind.value,
                       "status": reply.status, "duration_ms": round(1000 * (time.perf_counter() - started))}
         if reply.routing is not None:

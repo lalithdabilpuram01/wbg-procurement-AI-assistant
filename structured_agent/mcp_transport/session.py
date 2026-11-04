@@ -19,7 +19,10 @@ CALL_TIMEOUT_SECONDS = 240
 
 
 class BackgroundMcpSession:
+    """Holds one MCP stdio session on a background event loop so synchronous code can call tools."""
+
     def __init__(self, parameters: StdioServerParameters, read_timeout_seconds: float = 180):
+        """Prepare the background event loop and its thread; nothing starts until `open`."""
         self._parameters = parameters
         self._read_timeout_seconds = read_timeout_seconds
         self._loop = asyncio.new_event_loop()
@@ -50,6 +53,7 @@ class BackgroundMcpSession:
         self._thread.join(timeout=10)
 
     async def _hold_session(self) -> None:
+        """Open the session and keep it open, in one task, until close() is requested."""
         async with connect(self._parameters, self._read_timeout_seconds) as session:
             self.session = session
             self._opened.set()

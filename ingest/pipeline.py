@@ -33,6 +33,8 @@ RECORD_TYPES = {"contract": "contract", "notice": "notice", "PP": "plan_activity
 
 
 class Sink(Protocol):
+    """Where loaded documents go: the Lakebase Knowledge Graph store, or MemorySink for dry runs and tests."""
+
     def known(self, sha256: str) -> tuple[str, str] | None: ...          # (status, pipeline version) of these exact bytes
     def load(self, doc: ParsedDocument, graph: Graph, mentions: Sequence[Mention], embeddings, source: dict,
              lessons: Sequence = ()) -> dict[str, int]: ...
@@ -43,6 +45,8 @@ class Sink(Protocol):
 
 @dataclass
 class FileOutcome:
+    """What happened to one file in a run; also the line written to the ledger."""
+
     file: str
     folder: str
     sha256: str
@@ -59,6 +63,8 @@ class FileOutcome:
 
 
 class Pipeline:
+    """Takes pending inbox files through every stage, one at a time, and files each one as processed or quarantined."""
+
     def __init__(self, inbox: Inbox, sink: Sink, embed: Embedder | None = None, reference: Reference | None = None,
                  clock: Callable[[], dt.datetime] = lambda: dt.datetime.now(dt.timezone.utc)):
         self.inbox, self.sink, self.embed, self.clock = inbox, sink, embed, clock
@@ -66,6 +72,7 @@ class Pipeline:
 
     @property
     def reference(self) -> Reference:
+        """The reference records, loaded on first use."""
         if self._reference is None:
             self._reference = load_reference()
         return self._reference
@@ -86,6 +93,7 @@ class Pipeline:
         return summary
 
     def ingest(self, folder: Folder, path: Path, run_id: str) -> FileOutcome:
+        """Take one file through every stage; any failure quarantines the file instead of stopping the run."""
         started = self.clock()
         sha = detect.sha256_of(path)
         outcome = FileOutcome(path.name, folder.name, sha, "processed")
@@ -125,6 +133,7 @@ class Pipeline:
         return doc
 
     def _parse(self, folder: Folder, path: Path, sha: str, fmt: str) -> ParsedDocument:
+        """Parse by format: tabular feeds, Word, OCR for images and scanned PDFs, or text PDFs with checks."""
         document_id = common.document_id_for(folder.name, path)
         declared = folder.doc_type if folder.kind == "document" else None
         if fmt in ("csv", "json", "xlsx"):
@@ -161,6 +170,7 @@ class Pipeline:
 
     # ---------------------------------------------------------------------------------------------- files
     def _quarantine(self, outcome: FileOutcome, path: Path, folder: Folder, source: dict, reason: str, detail: str) -> None:
+        """Move the file to quarantine with a .reason.json beside it, and record its lineage when possible."""
         outcome.status, outcome.reason, outcome.detail = "quarantined", reason, detail
         target = self._move(path, folder, "_quarantine")
         target.with_name(target.name + ".reason.json").write_text(json.dumps(
@@ -173,6 +183,7 @@ class Pipeline:
             outcome.warnings.append("lineage_not_recorded")
 
     def _move(self, path: Path, folder: Folder, area: str) -> Path:
+        """Move the file into `area` (processed files go into a dated folder); a name clash gets a hash suffix."""
         directory = self.inbox.folder(area) / folder.name
         if area == "_processed":
             directory = directory / f"{self.clock():%Y-%m-%d}"
@@ -184,6 +195,7 @@ class Pipeline:
         return target
 
     def _done(self, outcome: FileOutcome, started: dt.datetime) -> FileOutcome:
+        """Record the duration and append the outcome to the ledger."""
         outcome.seconds = round((self.clock() - started).total_seconds(), 2)
         ledger = self.inbox.folder("_ledger") / "ledger.jsonl"
         ledger.parent.mkdir(parents=True, exist_ok=True)
@@ -196,6 +208,7 @@ class MemorySink:
     """Keeps everything in memory: for `ingest run --dry-run` and the tests."""
 
     def __init__(self) -> None:
+        """Empty in-memory stores for documents, lesson cards, source records and run summaries."""
         self.documents: dict[str, tuple[ParsedDocument, Graph, list[Mention], Any]] = {}
         self.lessons: dict[str, list] = {}
         self.sources: dict[str, dict] = {}
@@ -206,6 +219,7 @@ class MemorySink:
         return (source["status"], source["pipeline"]) if source else None
 
     def load(self, doc, graph, mentions, embeddings, source, lessons=()) -> dict[str, int]:
+        """Keep a document, its graph, mentions, embeddings and lessons; mark the source processed; return counts."""
         self.documents[doc.document_id] = (doc, graph, list(mentions), embeddings)
         self.lessons[doc.document_id] = list(lessons)
         self.sources[source["sha256"]] = source | {"status": "processed", "document_id": doc.document_id}

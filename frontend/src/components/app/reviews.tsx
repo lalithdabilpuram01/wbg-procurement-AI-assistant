@@ -1,5 +1,8 @@
 "use client";
 
+// The reviewer-only Review queue: pending feedback items (GET /reviews, decided with POST /reviews/{id}) and a tab
+// for lesson cards. The API refuses both to non-reviewers with 403; the sidebar only shows the view to reviewers.
+
 import { useCallback, useEffect, useState } from "react";
 import { Check, ClipboardCheck, FlaskConical, Route as RouteIcon, Users, X } from "lucide-react";
 import { api, type Review } from "@/lib/api";
@@ -8,6 +11,7 @@ import { Badge, Card, Input, Spinner } from "@/components/ui/primitives";
 import { cn, relativeTime } from "@/lib/utils";
 import { LessonReviews } from "./lesson-reviews";
 
+// What each kind of review item is, and the wording of its approve button.
 const KINDS: Record<Review["kind"], { label: string; icon: React.ElementType; approve: string }> = {
   share_correction: { label: "Share a correction with the team", icon: Users, approve: "Share" },
   share_approach: { label: "Share an approach with the team", icon: RouteIcon, approve: "Share" },
@@ -19,6 +23,8 @@ export function ReviewsView({ onError, onChanged }: { onError: (e: unknown) => v
   const [reviews, setReviews] = useState<Review[] | null>(null);
   const [tab, setTab] = useState<"feedback" | "lessons">("feedback");
 
+  // Reloads the pending items and reports their count, which keeps the sidebar badge in step after each decision.
+  // `onError` and `onChanged` are stable callbacks from AppShell, so this does not reload on every render.
   const load = useCallback(async () => {
     try {
       const pending = await api.reviews();
@@ -63,6 +69,8 @@ export function ReviewsView({ onError, onChanged }: { onError: (e: unknown) => v
   );
 }
 
+/** One pending item with approve and reject buttons. An evaluation case needs at least one expected term (what a
+ *  correct answer must contain) before it can be added. */
 function ReviewCard({ review, onDone, onError }: { review: Review; onDone: () => void; onError: (e: unknown) => void }) {
   const [note, setNote] = useState("");
   const [terms, setTerms] = useState("");
@@ -71,6 +79,7 @@ function ReviewCard({ review, onDone, onError }: { review: Review; onDone: () =>
   const evalCase = review.kind === "eval_case";
   const expected = terms.split(",").map((t) => t.trim()).filter(Boolean);
 
+  // After a decision the list is reloaded, so the decided item leaves the queue; no local removal is needed.
   const decide = async (approved: boolean) => {
     setBusy(true);
     try {

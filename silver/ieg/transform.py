@@ -60,6 +60,7 @@ def source_columns(df: DataFrame) -> list[str]:
 
 
 def load_provenance() -> dict:
+    """Provenance of the DS00053 Bronze input from the manifests: SHA-256s, record counts, retrieval time."""
     m = json.loads(BRONZE_INPUTS_MANIFEST.read_text())
     e = next(f for f in m["files"] if f["bronze_table"] == "bronze_ieg_ratings_ds00053")
     src_name = Path(e["source_file"]).name
@@ -87,6 +88,7 @@ def _in_vocabulary(name: str, scale: dict[str, int]) -> Column:
 
 
 def build(bronze: DataFrame, prov: dict, run_id: str) -> DataFrame:
+    """The Silver rows: published ratings with ordinal scores, fiscal years, lag flags and lineage."""
     cols = source_columns(bronze)
     eval_fy, close_fy = _fy("Evaluation FY"), _fy("Final Closing FY")
     names = F.create_map(*[F.lit(x) for kv in EVALUATION_TYPE_NAMES.items() for x in kv])

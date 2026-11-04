@@ -16,9 +16,12 @@ const FEATURES = [
   { icon: ShieldCheck, text: "Every answer checked against its cited sources" },
 ];
 
+/** The username rule in words; the same rule as USERNAME in orchestrator/wbg_orchestrator/accounts.py. */
 export const USERNAME_HINT = "3 to 32 characters: lowercase letters, digits, dots, dashes or underscores.";
+/** Shortest password the API accepts (MIN_PASSWORD in accounts.py); checked here only for a quicker message. */
 export const MIN_PASSWORD = 8;
 
+/** The two-column auth page layout; `icon`, `title` and `subtitle` head the card that holds the form (`children`). */
 export function AuthShell({ icon: Icon, title, subtitle, children }: {
   icon: React.ComponentType<{ className?: string }>; title: string; subtitle: string; children: React.ReactNode;
 }) {
@@ -55,6 +58,7 @@ export function AuthShell({ icon: Icon, title, subtitle, children }: {
   );
 }
 
+/** A text link between the auth pages (sign in, create account, forgot password). */
 export function AuthLink({ href, children }: { href: string; children: React.ReactNode }) {
   return <Link href={href} className="font-medium text-primary hover:underline">{children}</Link>;
 }
@@ -64,10 +68,12 @@ export function AuthLink({ href, children }: { href: string; children: React.Rea
 export function RecoveryCodePanel({ code, intro }: { code: string; intro: string }) {
   const [copied, setCopied] = useState(false);
   const [saved, setSaved] = useState(false);
+  // A blocked clipboard (for example on an http page) is ignored; the code stays visible to copy by hand.
   const copy = async () => {
     await navigator.clipboard.writeText(code).catch(() => undefined);
     setCopied(true);
   };
+  // The session cookie is already set, so "Continue" just opens "/"; the checkbox asks the user to save the code first.
   return (
     <div className="mt-6 space-y-4">
       <p className="text-sm text-muted-foreground">{intro}</p>

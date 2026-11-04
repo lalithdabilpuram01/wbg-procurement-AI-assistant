@@ -45,6 +45,7 @@ def _blank_to_null(c: F.Column) -> F.Column:
 
 
 def build(bronze: DataFrame, wdi_country: DataFrame, vintages: DataFrame, run_id: str) -> DataFrame:
+    """The Silver rows: parsed record, WDI country match, manifest vintage, lineage and the validation-only columns."""
     p = bronze.select(
         F.from_json("raw_record", RECORD_SCHEMA).alias("r"),
         F.get_json_object("raw_record", "$.value").alias("_raw_value_text"),

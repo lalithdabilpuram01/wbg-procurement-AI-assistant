@@ -88,6 +88,7 @@ def source_columns(df: DataFrame) -> list[str]:
 
 
 def load_provenance(source: str) -> dict:
+    """Provenance of one financing Bronze input from the manifests: SHA-256s, record counts, retrieval time."""
     m = json.loads(BRONZE_INPUTS_MANIFEST.read_text())
     e = next(f for f in m["files"] if f["bronze_table"] == SOURCES[source]["bronze_short"])
     src_name = Path(e["source_file"]).name
@@ -106,6 +107,7 @@ def _date(name: str) -> Column:
 
 
 def build(bronze: DataFrame, source: str, prov: dict, run_id: str) -> DataFrame:
+    """The Silver rows for one source (IBRD or IDA): typed amounts, rates, dates, placeholder flags and lineage."""
     spec = SOURCES[source]
     cols = source_columns(bronze)
     key = _c(spec["key_src"])

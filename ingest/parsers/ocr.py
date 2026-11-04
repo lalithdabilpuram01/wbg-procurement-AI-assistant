@@ -17,9 +17,11 @@ LOW_CONFIDENCE = 60                  # mean word confidence (0-100) below which 
 
 
 def parse(path: Path, sha256: str, document_id: str, declared_type: str | None, ref: Reference, fmt: str) -> ParsedDocument:
+    """OCR every page, flag pages with low confidence, and structure the text with the same rules as Word documents."""
     if not detect.ocr_available():
         raise Quarantined("needs_ocr", "this file is scanned; install Tesseract (brew install tesseract) and run again")
     import pytesseract
+    # French is added only when its Tesseract language pack is installed.
     languages = "+".join(lang for lang in ("eng", "fra") if lang in pytesseract.get_languages(config=""))
     pages = list(_images(path, fmt))
     lines, low = [], []
@@ -28,6 +30,7 @@ def parse(path: Path, sha256: str, document_id: str, declared_type: str | None, 
         confidences = [float(c) for c in data["conf"] if float(c) >= 0]
         if confidences and sum(confidences) / len(confidences) < LOW_CONFIDENCE:
             low.append(number)
+        # The empty line after each page closes the last paragraph, so no paragraph runs across pages.
         lines += [hierarchy.Line(sanitize(text)[0] if text else "", number) for text in _lines(data)] + [hierarchy.Line("", number)]
     text = "\n".join(line.text for line in lines)
     if not text.strip():
@@ -45,6 +48,7 @@ def parse(path: Path, sha256: str, document_id: str, declared_type: str | None, 
 
 
 def _images(path: Path, fmt: str):
+    """The pages as RGB images: each PDF page rendered at DPI, or every frame of an image file."""
     from PIL import Image, ImageSequence
     if fmt == "pdf":
         import fitz  # type: ignore[import-untyped]

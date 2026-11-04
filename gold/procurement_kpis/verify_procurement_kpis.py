@@ -55,6 +55,7 @@ def mx(values):
 
 
 def expected(spark) -> dict[str, dict]:
+    """Expected rows of every KPI view, keyed by view name, recomputed in plain Python from the Gold tables."""
     pf = rows(spark, "gold_project_portfolio", "project_id", "geography_type", "wdi_country_code", "has_api_notice_details", "has_project_details_v3",
               "has_ieg_rating", "projects_source_retrieved_at", "gold_run_id")
     ca = rows(spark, "gold_contract_analytics", "wb_contract_number", "project_id", "contract_fiscal_year", "region_name", "geography_type", "wdi_country_code",
@@ -188,6 +189,7 @@ def expected(spark) -> dict[str, dict]:
 
 
 def main() -> int:
+    """Recompute every KPI view in plain Python and compare (the created views with --post-create); 0 if all passed."""
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--run-id", required=True)
     ap.add_argument("--post-create", action="store_true", help="verify the created views (read them from the catalog)")

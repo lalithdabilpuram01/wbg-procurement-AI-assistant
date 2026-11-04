@@ -17,6 +17,7 @@ def _cnt(df: DataFrame, cond) -> int:
 
 
 def check(df: DataFrame, bronze: DataFrame, source: str, projects: DataFrame, cohort_ids: set[str], prov: dict, rep: DQReport, expected_rows: int) -> None:
+    """Run every data-quality rule for one financing table (IBRD or IDA) and add the results to `rep`."""
     spec = T.SOURCES[source]
     key, p = spec["key"], f"{source}:"
     n = df.count()

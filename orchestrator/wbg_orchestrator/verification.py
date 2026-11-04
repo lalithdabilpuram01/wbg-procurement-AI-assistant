@@ -19,6 +19,7 @@ from pydantic import BaseModel, ConfigDict
 from .contracts import (USABLE_TASK_STATES, EvidenceRecord, InvestigationPlan, NumericUse, TaskState, ValidationStatus)
 
 
+# Evidence that gives different values for the same subject.
 class Conflict(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
     subject: str                                   # fact name and source objects, or a document conflict marker
@@ -26,6 +27,8 @@ class Conflict(BaseModel):
     evidence_ids: tuple[str, ...]
 
 
+# What verification found: evidence per task, unmet and missing requirements, conflicts, and which evidence may back
+# figures.
 class VerificationReport(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
     task_evidence: dict[str, tuple[str, ...]]      # task id -> evidence ids (own or reused)
@@ -40,10 +43,12 @@ class VerificationReport(BaseModel):
 
 
 def ledger(state: Mapping[str, Any]) -> dict[str, EvidenceRecord]:
+    """The evidence records in the state, by evidence id."""
     return {e["evidence_id"]: EvidenceRecord.from_state(e) for e in state.get("evidence", [])}
 
 
 def task_evidence(state: Mapping[str, Any]) -> dict[str, tuple[str, ...]]:
+    """Task id -> evidence ids from its usable or skipped results, without duplicates and in first-seen order."""
     out: dict[str, list[str]] = defaultdict(list)
     for result in state.get("results", []):
         if TaskState(result["status"]) in USABLE_TASK_STATES | {TaskState.SKIPPED}:
@@ -52,6 +57,7 @@ def task_evidence(state: Mapping[str, Any]) -> dict[str, tuple[str, ...]]:
 
 
 def verify(plan: InvestigationPlan, state: Mapping[str, Any]) -> VerificationReport:
+    """Check each task's evidence needs, overall completion, conflicts and which evidence may support figures."""
     records = ledger(state)
     states = state.get("task_states", {})
     by_task = task_evidence(state)
@@ -71,6 +77,7 @@ def verify(plan: InvestigationPlan, state: Mapping[str, Any]) -> VerificationRep
     verified = sum(1 for e in used if e.validation_status == ValidationStatus.VERIFIED)
     complete = not missing and verified >= plan.completion.min_verified_evidence
     warnings = sorted({w for e in used for w in e.quality_warnings})
+    # Any numeric use except NOT_APPROVED (so approved, document statements and model estimates), and only if verified.
     numeric = tuple(e.evidence_id for e in used if e.numeric_use != NumericUse.NOT_APPROVED
                     and e.validation_status == ValidationStatus.VERIFIED)
     return VerificationReport(task_evidence=by_task, unmet=tuple(unmet), satisfied_required=tuple(satisfied),
@@ -79,10 +86,12 @@ def verify(plan: InvestigationPlan, state: Mapping[str, Any]) -> VerificationRep
 
 
 def _conflicts(evidence: list[EvidenceRecord]) -> tuple[Conflict, ...]:
+    """Facts with different values from the same query, plus one entry for documents flagged as conflicting."""
     seen: dict[tuple[str, ...], dict[str, set[str]]] = defaultdict(lambda: defaultdict(set))
     for record in evidence:
         if record.numeric_use != NumericUse.APPROVED or record.validation_status != ValidationStatus.VERIFIED:
             continue
+        # Same sources, same SQL and same parameters: only then should the values agree.
         query = (",".join(sorted(record.source_objects)), record.provenance_value("sql_sha256") or "",
                  record.provenance_value("params_sha256") or "")
         for fact in record.facts:

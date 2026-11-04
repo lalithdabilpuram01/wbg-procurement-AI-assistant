@@ -64,6 +64,7 @@ def search_all(endpoint: str, params: dict[str, Any], *, page_size: int = 1000, 
 
 
 def search_facets(endpoint: str, fields: list[str], params: dict[str, Any] | None = None) -> dict[str, dict[str, int]]:
+    """Return facet counts ({field: {value: count}}) from a Search API endpoint without fetching any records."""
     q = {"format": "json", "rows": 0, "fct": ",".join(fields), "fct_limit": 500, **(params or {})}
     url, key = _endpoint_url(endpoint)
     data = fetch_json(url, q, purpose="facets")
@@ -77,6 +78,7 @@ def search_facets(endpoint: str, fields: list[str], params: dict[str, Any] | Non
 
 def fone_page(dataset_id: str, resource_id: str, *, top: int = 1000, skip: int = 0, filter_: str | None = None,
               select: str | None = None, purpose: str = "") -> tuple[int, list[dict[str, Any]]]:
+    """Fetch one page of a Finances One dataset; returns (total record count, records on this page)."""
     params: dict[str, Any] = {"datasetId": dataset_id, "resourceId": resource_id, "type": "json", "top": top, "skip": skip}
     if filter_:
         params["filter"] = filter_
@@ -90,6 +92,7 @@ def fone_page(dataset_id: str, resource_id: str, *, top: int = 1000, skip: int =
 
 def fone_all(dataset_id: str, resource_id: str, *, filter_: str | None = None, select: str | None = None,
              page_size: int = 1000, purpose: str = "") -> Iterator[dict[str, Any]]:
+    """Yield every record of a Finances One dataset, page by page."""
     skip = 0
     while True:
         total, recs = fone_page(dataset_id, resource_id, top=page_size, skip=skip, filter_=filter_, select=select,
@@ -102,6 +105,7 @@ def fone_all(dataset_id: str, resource_id: str, *, filter_: str | None = None, s
 
 def indicator_all(indicator: str, *, source: int | None = None, countries: str = "all",
                   date: str | None = None) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    """Fetch every page of a World Bank indicator; returns (metadata of the last page, all rows)."""
     page, rows, meta = 1, [], {}
     while True:
         params: dict[str, Any] = {"format": "json", "per_page": 20000, "page": page}

@@ -31,6 +31,7 @@ APP_IDENTITY = "wbg-procurement-app"
 
 def authorization_factory(registry_principal: str, workspace: str, scope: PublicDataScope | None = None,
                           app_identity: str = APP_IDENTITY) -> Callable[[tuple[Route, ...]], AppAuthorizationContext]:
+    """A function that turns a request's routes into its authorization context, with the app identity fixed."""
     def build(routes: tuple[Route, ...]) -> AppAuthorizationContext:
         return authorization_for_routes(routes, app_identity=app_identity, registry_principal=registry_principal,
                                         workspace=workspace, scope=scope)
@@ -54,6 +55,7 @@ def structured_worker(tools: ToolCaller, claude: Any, telemetry: Telemetry, auth
 def structured_worker_for_service(service: Any, claude: Any, telemetry: Telemetry, authority: TicketAuthority,
                                   cache: ResultCache, guardrails: Any = None,
                                   settings: RuntimeSettings = RuntimeSettings()) -> StructuredDataWorker:
+    """Like `structured_worker`, but tools run in-process and take the principal from each request's authorization."""
     def tools_for(auth: AppAuthorizationContext) -> InProcessToolCaller:
         return InProcessToolCaller(service, auth.registry_principal, auth.workspace)
 
@@ -94,6 +96,7 @@ def semantic_project_scores(document: DocumentIntelligenceWorker, release: str) 
     import numpy as np
 
     def scores(text: str) -> dict[str, float]:
+        """Best dense similarity of `text` to any chunk, per corpus project (0.0 when nothing scores)."""
         retriever = document.retriever(release)
         units = retriever.c.units
         dense = retriever.rank_dense(text, np.array([u.unit_type == "chunk" for u in units]))

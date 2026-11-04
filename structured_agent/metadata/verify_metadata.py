@@ -22,6 +22,7 @@ def _one(spark, sql: str) -> dict:
 
 
 def verify_grain(spark, fqn: str, columns: list[str]) -> dict:
+    """Row count, distinct key count and NULL-key rows for one object; 'unique' when rows equal distinct keys."""
     if not columns:  # single-row view
         rows = _one(spark, f"SELECT count(*) AS n FROM {fqn}")["n"]
         return {"rows": rows, "distinct_keys": min(rows, 1), "null_key_rows": 0, "unique": rows == 1}
@@ -36,6 +37,7 @@ def verify_grain(spark, fqn: str, columns: list[str]) -> dict:
 
 
 def verify_relationship(spark, rel: dict) -> dict:
+    """Live check of one relationship (NULL keys, orphans, rows per key); 'passed' says whether it holds."""
     frm, to = rel["from"], rel["to"]
     on = " AND ".join(f"f.{a} = t.{b}" for a, b in zip(rel["from_columns"], rel["to_columns"]))
     from_cols = ", ".join(rel["from_columns"])
@@ -67,6 +69,7 @@ def verify_relationship(spark, rel: dict) -> dict:
 
 
 def main() -> None:
+    """Verify the grains and relationships for the latest snapshot and save a timestamped result file."""
     spark = get_spark()
     snapshot_path = latest(SNAPSHOT_DIR, "databricks_metadata")
     snapshot = read_json(snapshot_path)

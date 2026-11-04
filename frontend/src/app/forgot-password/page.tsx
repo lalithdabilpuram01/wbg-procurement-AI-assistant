@@ -1,5 +1,7 @@
 "use client";
 
+// Forgot-password page "/forgot-password". It posts to the /api/reset route, which calls POST /auth/reset on the API.
+
 import { useState } from "react";
 import { LifeBuoy } from "lucide-react";
 import { AuthLink, AuthShell, MIN_PASSWORD, RecoveryCodePanel } from "@/components/app/auth-shell";
@@ -34,6 +36,7 @@ export default function ForgotPasswordPage() {
       setNewCode(body.recovery_code);
       return;
     }
+    // The API gives the same message for a wrong username or code, so it does not reveal which accounts exist.
     setError(body?.detail === "wrong username or recovery code" ? "The username or recovery code is not right."
       : body?.detail ?? "The API is not reachable.");
     setBusy(false);

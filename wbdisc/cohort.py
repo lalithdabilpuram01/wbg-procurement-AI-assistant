@@ -53,6 +53,7 @@ def approval_fy(fiscalyear, boardapprovaldate) -> tuple[int | None, str]:
 
 
 def fy_band(fy: int | None) -> str:
+    """Name of the fiscal-year band that contains fy, or UNKNOWN when fy is missing or outside every band."""
     if fy is None:
         return UNKNOWN
     for name, lo, hi in FY_BANDS:

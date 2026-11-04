@@ -1,5 +1,0 @@
-segment,n,projects,actual_median,actual_long,MAE_b1,bias_b1,recall_b1,precision_b1,F1_b1,alerts_b1,MAE_ridge,bias_ridge,recall_ridge,precision_ridge,F1_ridge,alerts_ridge,MAE_rf,bias_rf,recall_rf,precision_rf,F1_rf,alerts_rf,sparse_n_lt_20
-Consultant Services,332,45,158.0,47,72.1,-24.4,0.787,0.529,0.632,70,87.8,-41.8,0.468,0.647,0.543,34,79.0,-46.8,0.404,0.679,0.507,28,False
-Goods,151,31,124.0,9,79.5,-22.4,0.111,1.0,0.2,1,68.9,-39.4,0.0,0.0,0.0,0,70.4,-46.9,0.0,0.0,0.0,0,False
-Works,110,22,134.0,8,72.7,-52.8,0.0,0.0,0.0,0,60.3,-29.0,0.375,0.273,0.316,11,67.8,-41.6,0.0,0.0,0.0,0,False
-Non-consulting Services,23,7,83.0,0,80.3,19.9,0.0,0.0,0.0,2,44.4,2.5,0.0,0.0,0.0,0,40.9,31.0,0.0,0.0,0.0,0,False

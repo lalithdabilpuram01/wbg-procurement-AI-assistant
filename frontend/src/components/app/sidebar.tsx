@@ -1,5 +1,8 @@
 "use client";
 
+// The left sidebar: new chat, chat search, the view switches (project watch, dashboard, review queue), folders with
+// their chats, unfiled chats, the theme toggle and sign-out. All changes are sent through callbacks from AppShell.
+
 import { useMemo, useState } from "react";
 import {
   ChevronRight, ClipboardCheck, Eye, LayoutDashboard, Folder as FolderIcon, FolderOpen, FolderPlus, LogOut, MessageSquare, Moon, MoreHorizontal,
@@ -14,6 +17,7 @@ import {
 } from "@/components/ui/overlays";
 import { cn } from "@/lib/utils";
 
+/** Lists and callbacks from AppShell. The review queue shows only when `reviewer` and `feedback` are both true. */
 type Props = {
   conversations: Conversation[];
   folders: Folder[];
@@ -36,33 +40,41 @@ type Props = {
   onCollapse: () => void;
 };
 
+/** The open name dialog (new or renamed folder, renamed chat): its title, starting text and save action. */
 type Naming = { title: string; initial: string; save: (name: string) => Promise<void> } | null;
+/** The main area's views, switched from the sidebar. */
 export type View = "chat" | "reviews" | "watch" | "dashboard";
 
+/** The sidebar. Folders start expanded; the search filters chats by title inside and outside folders. */
 export function Sidebar(props: Props) {
   const { conversations, folders, activeId, view } = props;
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState<Record<string, boolean>>({});
   const [naming, setNaming] = useState<Naming>(null);
+  // The theme class is set on <html> by the script in app/layout.tsx before React runs, so it is read from there.
   const [dark, setDark] = useState(() => typeof document !== "undefined" && document.documentElement.classList.contains("dark"));
 
   const visible = useMemo(
     () => conversations.filter((c) => c.title.toLowerCase().includes(query.toLowerCase())),
     [conversations, query],
   );
+  // A chat whose folder no longer exists (for example a deleted folder) is listed with the unfiled chats.
   const unfiled = visible.filter((c) => !c.folder_id || !folders.some((f) => f.folder_id === c.folder_id));
 
+  /** Switches light and dark and remembers the choice for the next visit (read by the theme script in layout.tsx). */
   const toggleTheme = () => {
     const next = !dark;
     document.documentElement.classList.toggle("dark", next);
     try { localStorage.setItem("theme", next ? "dark" : "light"); } catch { /* storage unavailable */ }
     setDark(next);
   };
+  // The httpOnly cookie cannot be cleared from page scripts, so the /api/session route deletes it.
   const signOut = async () => {
     await fetch("/api/session", { method: "DELETE" });
     window.location.assign("/login");
   };
 
+  /** One chat row with its actions menu (rename, move to a folder, delete). */
   const item = (c: Conversation) => (
     <div key={c.conversation_id}
       className={cn("group flex items-center rounded-lg pr-1 text-sm transition-colors",
@@ -205,6 +217,7 @@ export function Sidebar(props: Props) {
   );
 }
 
+/** The small dialog to name a folder or chat; it closes once the save action has finished. */
 function NameDialog({ naming, onClose }: { naming: Naming; onClose: () => void }) {
   const [value, setValue] = useState("");
   const [busy, setBusy] = useState(false);

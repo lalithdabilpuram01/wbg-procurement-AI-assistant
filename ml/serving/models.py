@@ -44,6 +44,7 @@ class Driver:
 
 @dataclass(frozen=True)
 class DurationPrediction:
+    """Model 1 output: estimated days, P10-P90 range, probability of over 365 days, alert flag and top drivers."""
     days: int
     p10_days: int
     p90_days: int
@@ -55,6 +56,7 @@ class DurationPrediction:
 
 @dataclass(frozen=True)
 class RiskPrediction:
+    """Model 2 or 3 output: simulated probability, flag or band, the drivers that raise it, and the disclaimer."""
     model: str
     simulated_probability_pct: float
     flag: str                     # Model 2: "on review list" / "not on review list"; Model 3: Low / Medium / High
@@ -68,6 +70,7 @@ def _sha256(path: Path) -> str:
 
 
 def _checked(path: Path, expected: str) -> Path:
+    """Return the path when the file exists and matches its frozen SHA-256; raise FrozenModelError otherwise."""
     if not path.is_file() or _sha256(path) != expected:
         raise FrozenModelError(f"{path.parent.name}/{path.name} is missing or differs from its frozen hash")
     return path
@@ -103,6 +106,7 @@ class FrozenModels:
 
     @cached_property
     def _m1(self) -> tuple:
+        """Model 1 pipeline and its refit details, hash-checked on first use."""
         frozen = json.loads((self._m1_dir / "FROZEN.json").read_text())
         model = joblib.load(_checked(self._m1_dir / "models" / "ridge_final.joblib", frozen["models_sha256"]["ridge_final.joblib"]))
         details = json.loads(_checked(self._m1_dir / "refit_details.json", frozen["refit_details_sha256"]).read_text())["ridge"]
@@ -110,6 +114,7 @@ class FrozenModels:
 
     @cached_property
     def _m23(self) -> dict:
+        """Models 2 and 3 (scenario S2) with their refit details, hash-checked on first use."""
         frozen = json.loads((self._m23_dir / "FROZEN.json").read_text())["artefacts_sha256"]
         final23 = str(ML / "final23")
         if final23 not in sys.path:                     # the pickles reference common23 (Winsorizer)
@@ -122,6 +127,8 @@ class FrozenModels:
         return out
 
     def duration(self, features: dict) -> tuple[DurationPrediction, list[str]]:
+        """Score Model 1 for one feature row; returns the prediction and notes about categories never seen in training.
+        P(duration > 365 days) assumes normal residuals on the log scale, with the out-of-fold residual SD."""
         model, details = self._m1
         row = pd.DataFrame([features])[list(model.named_steps["pre"].feature_names_in_)]
         log_days = float(model.predict(row)[0])
@@ -137,6 +144,7 @@ class FrozenModels:
         return prediction, unknown_values(model, row)
 
     def _risk(self, m: str, features: dict) -> tuple[float, list[tuple[str, float]], list[str], dict]:
+        """Score Model 2 or 3: (probability, top three risk-raising features, unseen-category notes, refit details)."""
         artefact, details = self._m23[m]
         pipeline = artefact["pipeline"]
         row = pd.DataFrame([features])[list(pipeline.named_steps["pre"].feature_names_in_)]
@@ -145,12 +153,14 @@ class FrozenModels:
         return probability, raising, unknown_values(pipeline, row), details
 
     def amendment(self, features: dict) -> tuple[RiskPrediction, list[str]]:
+        """Score Model 2 and put the package on the review list when the probability reaches the frozen threshold."""
         probability, raising, unknown, details = self._risk("m2", features)
         flag = "on the demonstration review list" if probability >= details["threshold"]["t"] else "not on the review list"
         return RiskPrediction("Model 2 – contract amendment risk (L2 logistic, SYNTHETIC outcomes)", round(100 * probability, 1),
                               flag, tuple(Driver(k, "raises the simulated risk") for k, _ in raising)), unknown
 
     def rebid(self, features: dict) -> tuple[RiskPrediction, list[str]]:
+        """Score Model 3 and place the probability in the frozen Low / Medium / High bands."""
         probability, raising, unknown, details = self._risk("m3", features)
         bands = details["risk_bands"]
         band = "High" if probability >= bands["high_cutoff_q90"] else "Medium" if probability >= bands["medium_cutoff_q70"] else "Low"

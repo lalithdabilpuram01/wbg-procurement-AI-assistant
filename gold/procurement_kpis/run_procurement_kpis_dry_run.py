@@ -30,6 +30,7 @@ PROHIBITED = re.compile(r"supplier_(name|id|text)|description|notice_text|bid_de
 
 
 def main() -> int:
+    """Run every KPI query read-only, check and reconcile the results, and save the proposed DDL; 0 when all passed."""
     run_id = "gold_procurement_kpis_dryrun_" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     run_dir = RUNS / run_id
     run_dir.mkdir(parents=True, exist_ok=True)

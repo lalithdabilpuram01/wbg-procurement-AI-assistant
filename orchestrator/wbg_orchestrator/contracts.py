@@ -60,6 +60,7 @@ class Record(BaseModel):
 
 
 # --------------------------------------------------------------------------------------------------------- enums
+# The workers the controller can dispatch tasks to (values match the keys of authorization.OPERATIONS).
 class WorkerName(str, Enum):
     STRUCTURED = "structured_data"
     DOCUMENT = "document_intelligence"
@@ -70,6 +71,7 @@ class WorkerName(str, Enum):
     LESSONS = "lesson_cards"
 
 
+# The life of one task: pending -> running -> a terminal state (see ALLOWED_TRANSITIONS below).
 class TaskState(str, Enum):
     PENDING = "pending"
     RUNNING = "running"
@@ -92,6 +94,7 @@ ALLOWED_TRANSITIONS: dict[TaskState, frozenset[TaskState]] = {
 }
 
 
+# The overall outcome of an investigation, as reported with its response.
 class InvestigationStatus(str, Enum):
     ANSWERED = "answered"
     PARTIAL = "partial"
@@ -104,6 +107,7 @@ class InvestigationStatus(str, Enum):
     FAILED = "failed"
 
 
+# Broad error classes, so the graph can decide what to do (retry, replan, stop) without reading messages.
 class ErrorCategory(str, Enum):
     VALIDATION = "validation"                # plan or contract validation
     AUTHORIZATION = "authorization"
@@ -129,6 +133,7 @@ class ValidationStatus(str, Enum):
     UNVERIFIED = "unverified"                # not checked against its source
 
 
+# How a figure taken from a piece of evidence may be used in an answer.
 class NumericUse(str, Enum):
     APPROVED = "approved"                    # validated dataset values (structured results through the gateway)
     DOCUMENT_STATEMENT = "document_statement"  # a figure stated in narrative document text: quotable with its citation
@@ -136,6 +141,7 @@ class NumericUse(str, Enum):
     MODEL_ESTIMATE = "model_estimate"        # output of a frozen, hash-verified model: quotable as an estimate only
 
 
+# Which system a piece of evidence came from.
 class SourceSystem(str, Enum):
     DATABRICKS_PUBLIC = "databricks_public_procurement"   # Gold / Silver via the read-only gateway
     STRUCTURED_REGISTRY = "structured_registry"           # registry metadata (metric definitions, tables)
@@ -144,6 +150,7 @@ class SourceSystem(str, Enum):
     FROZEN_ML_MODELS = "frozen_ml_models"                 # Module 2 models (ml/final, ml/final23), hash-verified
 
 
+# What a piece of evidence is; each operation's allowed kinds are listed in OPERATION_EVIDENCE.
 class EvidenceKind(str, Enum):
     STRUCTURED_RESULT = "structured_result"
     VALIDATED_QUERY = "validated_query"      # SQL approved by the validator but not executed
@@ -172,6 +179,7 @@ class OwnerRef(Record):
 
 
 # ------------------------------------------------------------------------------------------------------- budgets
+# The limits of one investigation; budget.check_budget refuses a step before it would exceed any of them.
 class InvestigationBudget(Record):
     max_tasks: int = Field(default=6, ge=1, le=20)
     max_depth: int = Field(default=3, ge=1, le=6)
@@ -187,6 +195,7 @@ class InvestigationBudget(Record):
     max_replans: int = Field(default=1, ge=0, le=2)
 
 
+# What a call or task actually used, as reported by the provider.
 class Usage(Record):
     llm_calls: int = 0
     input_tokens: int = 0
@@ -245,6 +254,7 @@ class ProjectProfile(Record):
     total_cost_usd: float | None = Field(default=None, gt=0)
 
 
+# One package of a Planning Brief (a project that does not exist yet).
 class PlannedPackage(Record):
     name: str = Field(min_length=1, max_length=80)
     procurement_category: str = Field(min_length=1, max_length=60)
@@ -262,6 +272,8 @@ class PlanningSpec(Record):
     packages: tuple[PlannedPackage, ...] = Field(min_length=1, max_length=5)
 
 
+# Everything an investigation starts from. A tender, package, planning or monitor_project selects a fixed plan
+# (supervisor.py); otherwise the question is routed.
 class InvestigationRequest(Record):
     investigation_id: str
     request_id: str
@@ -284,6 +296,7 @@ class InvestigationRequest(Record):
 
 
 # --------------------------------------------------------------------------------------------------------- plans
+# What a task must produce: at least `min_count` records of the accepted kinds (verified ones, when required).
 class EvidenceRequirement(Record):
     kind: EvidenceKind
     alternatives: tuple[EvidenceKind, ...] = ()         # other kinds that satisfy the same requirement
@@ -339,6 +352,7 @@ def default_requirement(operation: str, requires_execution: bool) -> EvidenceReq
     return EvidenceRequirement(kind=spec.kinds[0], alternatives=spec.kinds[1:], must_be_verified=spec.verifiable)
 
 
+# One unit of work in a plan, run by one worker operation.
 class AgentTask(Record):
     task_id: str                                 # stable: <plan id>.<local id>
     local_id: str = Field(pattern=r"^[A-Za-z][A-Za-z0-9_-]{0,15}$")
@@ -356,12 +370,14 @@ class AgentTask(Record):
     idempotency_key: str
 
 
+# When a plan's answer counts as complete.
 class CompletionCondition(Record):
     required_task_ids: tuple[str, ...]           # must succeed for a complete answer
     min_verified_evidence: int = Field(default=1, ge=0)
     partial_allowed: bool = True                 # otherwise a missing required result fails the investigation
 
 
+# One version of a plan; a replan creates a new version that supersedes the old one.
 class InvestigationPlan(Record):
     plan_id: str
     investigation_id: str
@@ -386,6 +402,7 @@ class Fact(Record):
     unit: str | None = Field(default=None, max_length=60)
 
 
+# One entry of the append-only evidence ledger, with its source, citation and how its numbers may be used.
 class EvidenceRecord(Record):
     evidence_id: str
     investigation_id: str
@@ -414,6 +431,7 @@ class EvidenceRecord(Record):
 
 
 # ------------------------------------------------------------------------------------------------------- results
+# An error safe to store and show: a category and code, never exception text.
 class ExecutionError(Record):
     error_id: str
     investigation_id: str
@@ -427,6 +445,7 @@ class ExecutionError(Record):
     created_at: dt.datetime = Field(default_factory=utc_now)
 
 
+# The outcome of one attempt of one task (one record per task and attempt).
 class AgentResult(Record):
     task_id: str
     attempt: int = Field(ge=1)
@@ -451,12 +470,14 @@ class AgentResult(Record):
 BriefSection = Literal["similar_projects", "schedule", "market_approach", "risks", "lessons", "tender_design", "monitoring"]
 
 
+# One sentence of the final answer and the evidence that supports it.
 class ResponseClaim(Record):
     text: str = Field(min_length=1, max_length=600)
     evidence_ids: tuple[str, ...] = Field(min_length=1)
     section: BriefSection | None = None                 # Planning Brief section (None for ordinary answers)
 
 
+# The checked answer of an investigation.
 class InvestigationResponse(Record):
     investigation_id: str
     status: InvestigationStatus

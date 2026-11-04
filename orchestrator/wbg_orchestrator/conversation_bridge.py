@@ -76,6 +76,7 @@ FILTERS = re.compile(r"Filters applied: (.+?)\.?$")
 
 
 def describe_plan(spec: PlanningSpec) -> str:
+    """The Planning Brief request in words: stored as the user's turn and used as the investigation question."""
     profile = spec.profile
     packages = "; ".join(f"{p.name} ({p.procurement_category}, {p.procurement_method or 'method to suggest'}, "
                          f"{p.review_type} review, tender {p.tender_date.isoformat()})" for p in spec.packages)
@@ -84,6 +85,7 @@ def describe_plan(spec: PlanningSpec) -> str:
 
 
 def describe_tender(spec: TenderSpec) -> str:
+    """The tender check request in words; the draft is only counted, its text is not repeated."""
     amount = f", estimated US$ {spec.estimated_amount_usd:,.0f}" if spec.estimated_amount_usd else ""
     draft = f" Draft: {len(spec.draft_text):,} characters." if spec.draft_text.strip() else " No draft text."
     return (f"Check the tender design of a {spec.procurement_category} package for project {spec.project_id}: "
@@ -98,6 +100,7 @@ def describe_package(package: PackageAssessment) -> str:
 
 @dataclass(frozen=True)
 class OwnerBinding:
+    """The trusted owner and per-message options, passed to ConversationRunner through CURRENT_OWNER."""
     owner: Owner
     thread_id: str
     on_start: Callable[[str], None] | None = None          # told the request id before the engine starts (to cancel)
@@ -138,6 +141,7 @@ def owner_ref(owner: Owner) -> OwnerRef:
 
 
 def to_outcome(result: EngineOutcome) -> ConversationOutcome:
+    """Translate an engine outcome into what the conversation service expects from a runner."""
     response = result.response
     objects = sorted({o for e in result.evidence for o in e.source_objects})
     return ConversationOutcome(status=result.status, message=response.message if response else "",
@@ -148,13 +152,17 @@ def to_outcome(result: EngineOutcome) -> ConversationOutcome:
 
 
 class ConversationRunner:
+    """The conversation service's runner for one route: each call starts one investigation for the bound owner."""
+
     def __init__(self, engine: InvestigationEngine, route: Route, authorization_for: AuthorizationFactory,
                  rag_release: str = "pilot_v3"):
+        """Bind the engine to one route; only the structured_data and document_rag routes are accepted."""
         if route.value not in COMBINABLE:
             raise ValueError("the orchestrator runs only the structured_data and document_rag routes")
         self._engine, self._route, self._authorization_for, self._release = engine, route, authorization_for, rag_release
 
     def __call__(self, question: str, conversation_context: str, execute: bool, request_id: str) -> ConversationOutcome:
+        """Run the investigation for a routed question; refuses when no trusted owner is bound to the call."""
         binding = CURRENT_OWNER.get()
         if binding is None:
             raise MissingTrustedOwner("no trusted owner bound to this request")
@@ -170,6 +178,7 @@ class ConversationRunner:
 
 @dataclass
 class FrontDoorReply:
+    """What the front door returns for one message: its status, request id and the reply or investigation behind it."""
     status: str
     request_id: str | None
     conversation: ConversationReply | None = None           # set when the conversation service handled the message
@@ -177,8 +186,12 @@ class FrontDoorReply:
 
 
 class ConversationFrontDoor:
+    """Decides, per message or structured request, whether the conversation service or an investigation answers it."""
+
     def __init__(self, service: ConversationService, store: ConversationStore, engine: InvestigationEngine,
                  authorization_for: AuthorizationFactory, *, allow_combined: bool = True, rag_release: str = "pilot_v3"):
+        """Wire the conversation service, store and engine; `allow_combined` lets both-agent or unclear questions go
+        to an investigation."""
         self._service, self._store, self._engine = service, store, engine
         self._authorization_for, self._allow_combined, self._release = authorization_for, allow_combined, rag_release
         self._learning: FeedbackService | None = None
@@ -205,6 +218,8 @@ class ConversationFrontDoor:
     def _route_and_answer(self, owner: Owner, thread_id: str, text: str, execute: bool,
                           on_start: Callable[[str], None] | None, rag_release: str | None,
                           on_text: Callable[[str], None] | None, span: Callable[..., None]) -> FrontDoorReply:
+        """Route the message, then take the first matching path, in this order: ask for package / brief / tender fields,
+        project monitoring, the scope reply, an investigation, or the conversation service."""
         routing = self._service.route_message(owner, thread_id, text)
         if routing is not None:
             reason = getattr(routing.reason, "value", str(routing.reason))
@@ -370,6 +385,7 @@ class ConversationFrontDoor:
         return routing.is_task or routing.reason in UNCLEAR | {ReasonCategory.AMBIGUOUS_REFERENT}
 
     def _opens_investigation(self, routing: RoutingDecision) -> bool:
+        """True for a data + documents question, or an unclear one, when combined investigations are allowed."""
         combined = routing.reason == ReasonCategory.MIXED_INTENT and set(routing.matched_signals) == COMBINABLE
         return self._allow_combined and (combined or routing.reason in UNCLEAR)
 
@@ -387,6 +403,7 @@ class ConversationFrontDoor:
     def _open_investigation(self, owner: Owner, thread_id: str, text: str, execute: bool,
                             on_start: Callable[[str], None] | None, planning_context: str | None = None,
                             rag_release: str | None = None) -> EngineOutcome:
+        """Record the user turn and run a planned investigation over both data and documents."""
         memory = self._service.memory_for(owner, thread_id, text)
         guidance = self._guidance(owner, text)
         request_id = self._user_turn(owner, thread_id, text, "investigation")
@@ -411,6 +428,7 @@ class ConversationFrontDoor:
             self._learning.record_use(owner, request_id, guidance.item_ids)
 
     def _outcome(self, owner: Owner, thread_id: str, request_id: str) -> EngineOutcome | None:
+        """The owner's investigation behind a request id, or None when it has no checkpoint."""
         owner_key = owner_ref(owner)
         try:
             return self._engine.outcome(owner_key, checkpoint_thread_id(owner_key, thread_id, investigation_id_for(request_id)))
@@ -418,6 +436,8 @@ class ConversationFrontDoor:
             return None
 
     def _original_request(self, owner: Owner, thread_id: str, request_id: str) -> InvestigationRequest:
+        """The stored request behind an answer. Its saved authorization is replaced by a placeholder; `revise`
+        builds the real one from the request's kind."""
         outcome = self._outcome(owner, thread_id, request_id)
         if outcome is None:
             raise InvestigationNotFound("investigation not found")
@@ -435,6 +455,7 @@ class ConversationFrontDoor:
         return FrontDoorReply(status, request_id)
 
     def _scope_reply(self, owner: Owner, thread_id: str, text: str) -> FrontDoorReply:
+        """Record the message and the fixed "what I can help with" answer (no agent runs)."""
         request_id = self._user_turn(owner, thread_id, text, Route.CONVERSATION.value)
         thread = self._store.get_thread(owner, thread_id)
         self._store.append_turn(owner, Turn(

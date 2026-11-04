@@ -11,6 +11,8 @@ SCOPE = ("I'm the procurement intelligence assistant, so that's outside what I c
 
 @dataclass(frozen=True)
 class GuardReply:
+    """The status and message shown when a guardrail stops a message."""
+
     status: str          # conversation status shown to the user
     message: str
     blocked: bool        # a policy block (audit flag); off-topic requests are answered, not blocked

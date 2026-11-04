@@ -18,6 +18,7 @@ from pydantic import BaseModel
 EnforcedBy = Literal["nemo_builtin_rail", "nemo_custom_action", "application_policy", "nemo_rails"]
 
 
+# The point in the workflow where a guardrail decision is made.
 class GuardStage(str, Enum):
     INPUT = "input"
     RETRIEVED_CONTEXT = "retrieved_context"
@@ -27,6 +28,7 @@ class GuardStage(str, Enum):
     FINAL_RESPONSE = "final_response"
 
 
+# Why a guardrail blocked (or, for a few values, adjusted) a request. Only these codes are logged, never text.
 class ReasonCategory(str, Enum):
     INVALID_SIZE = "invalid_size"
     INVALID_FORMAT = "invalid_format"

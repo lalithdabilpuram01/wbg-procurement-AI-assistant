@@ -94,6 +94,7 @@ def source_columns(df: DataFrame) -> list[str]:
 
 
 def load_provenance(bronze_table_short: str) -> dict:
+    """Provenance of one notices Bronze input from the manifests: SHA-256s, record count, retrieval time, coverage."""
     m = json.loads(BRONZE_INPUTS_MANIFEST.read_text())
     e = next(f for f in m["files"] if f["bronze_table"] == bronze_table_short)
     src_name = Path(e["source_file"]).name
@@ -151,6 +152,7 @@ def _award_fields(plain: F.Column) -> list[F.Column]:
 
 
 def _lineage(prov: dict, bronze_table: str, dataset: str, run_id: str, row_hash: F.Column) -> list[F.Column]:
+    """Lineage columns shared by the notice tables: source row hash, Bronze file, manifest SHA-256s and run id."""
     return [F.lit(dataset).alias("source_dataset"), row_hash.alias("source_row_sha256"),
             F.lit(bronze_table).alias("bronze_table"), F.col("source_file").alias("bronze_source_file"),
             F.col("cohort_id").alias("bronze_cohort_id"), F.col("ingested_at").alias("bronze_ingested_at"),
@@ -161,10 +163,12 @@ def _lineage(prov: dict, bronze_table: str, dataset: str, run_id: str, row_hash:
 
 
 def build_details(api: DataFrame, prov: dict, run_id: str) -> DataFrame:
+    """One typed row per API notice, with normalised references, award-text fields, contact flags and lineage."""
     j = api.select(F.from_json("raw_record", API_SCHEMA).alias("r"), "raw_record", *META)
     r = lambda k: F.col(f"r.{k}")  # noqa: E731
     df = j.select(
         r("id").alias("notice_op_id"),
+        # The API id is "OP" plus the zero-padded 8-digit CSV notice ID; the CSV form is derived to join both sources.
         F.when(r("id").rlike(r"^OP\d{8}$"), F.substring(r("id"), 3, 8).cast("bigint").cast("string")).alias("notice_id"),
         r("notice_type").alias("notice_type"), r("notice_status").alias("notice_status"),
         F.to_date(r("noticedate"), "dd-MMM-yyyy").alias("notice_date"),
@@ -191,6 +195,7 @@ def build_details(api: DataFrame, prov: dict, run_id: str) -> DataFrame:
         r("submission_deadline_date").alias("_raw_deadline"), F.json_object_keys("raw_record").alias("_json_keys"),
         F.coalesce(r("notice_text").contains(SEC), F.lit(False)).alias("_has_section_marker"),
     )
+    # Award fields are parsed from the plain text, and kept only for Contract Award notices.
     af = _award_fields(F.col("_notice_text_plain"))
     names = ["is_step_award_template", "award_notice_version_no", "award_reference_in_text", "awarded_supplier_ids"]
     df = df.select("*", *[F.when(F.col("notice_type") == "Contract Award", c).alias(n) for c, n in zip(af, names)])
@@ -208,8 +213,10 @@ def build_details(api: DataFrame, prov: dict, run_id: str) -> DataFrame:
 
 
 def build_notices(csv: DataFrame, details: DataFrame, prov: dict, run_id: str) -> DataFrame:
+    """One typed row per DS00979 notice, flagged when the API also has its detail record."""
     cols = source_columns(csv)
     content = [c for c in cols if c not in ("ID", "URL")]
+    # Rows equal in every published column except ID and URL form a group; its size is kept, no row is dropped.
     gw = Window.partitionBy(*[F.coalesce(_c(c), F.lit("\u0000NULL")) for c in content])
     api_ids = details.select(F.col("notice_id").alias("_api_notice_id")).distinct()
     df = csv.select(

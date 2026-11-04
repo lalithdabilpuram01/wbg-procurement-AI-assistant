@@ -34,6 +34,7 @@ class TransientWorkerError(Exception):
 
 @dataclass(frozen=True)
 class WorkerTicket:
+    """Proof that the controller issued this task attempt: the task's ids and an HMAC signature over them."""
     investigation_id: str
     task_id: str
     attempt: int
@@ -56,6 +57,7 @@ class TicketAuthority:
                             self._sign(task.investigation_id, task.task_id, attempt, task.idempotency_key))
 
     def verify(self, ticket: WorkerTicket | None, task: AgentTask) -> None:
+        """Raise TicketError unless the ticket names this task and carries a valid signature."""
         if ticket is None or (ticket.task_id, ticket.investigation_id, ticket.idempotency_key) != \
                 (task.task_id, task.investigation_id, task.idempotency_key):
             raise TicketError("worker called without a controller ticket for this task")
@@ -78,6 +80,7 @@ class ResultCache:
         return key
 
     def get(self, key: str) -> list[dict[str, Any]] | None:
+        """The rows stored under `key`, or None when absent or expired (an expired entry is removed)."""
         with self._lock:
             entry = self._items.get(key)
             if entry is None or entry[0] < self._clock():
@@ -88,6 +91,7 @@ class ResultCache:
 
 @dataclass
 class WorkerContext:
+    """What the controller hands a worker for one attempt, besides the task itself."""
     ticket: WorkerTicket
     authorization: AppAuthorizationContext
     request_id: str
@@ -104,6 +108,7 @@ class WorkerContext:
 
 @dataclass(frozen=True)
 class WorkerOutput:
+    """What a worker returns: the task's final state, its evidence and usage, and an error when it failed."""
     status: TaskState
     evidence: tuple[EvidenceRecord, ...] = ()
     usage: Usage = Usage()
@@ -113,6 +118,8 @@ class WorkerOutput:
 
 
 class Worker(Protocol):
+    """A worker: a name, the operations it offers, and `run` for one task attempt."""
+
     name: WorkerName
     operations: frozenset[str]
 

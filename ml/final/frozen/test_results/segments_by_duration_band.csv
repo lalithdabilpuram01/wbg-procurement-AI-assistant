@@ -1,5 +1,0 @@
-segment,n,projects,actual_median,actual_long,MAE_b1,bias_b1,recall_b1,precision_b1,F1_b1,alerts_b1,MAE_ridge,bias_ridge,recall_ridge,precision_ridge,F1_ridge,alerts_ridge,MAE_rf,bias_rf,recall_rf,precision_rf,F1_rf,alerts_rf,sparse_n_lt_20
-middle,359,43,140.0,0,49.3,-11.9,0.0,0.0,0.0,15,55.9,-19.2,0.0,0.0,0.0,9,54.5,-30.1,0.0,0.0,0.0,2,False
-short (< refit p25),127,30,72.0,0,60.2,52.0,0.0,0.0,0.0,1,42.4,39.1,0.0,0.0,0.0,1,37.9,34.8,0.0,0.0,0.0,0,False
-upper (refit p75..365],66,23,299.0,0,121.6,-107.2,0.0,0.0,0.0,19,127.6,-118.4,0.0,0.0,0.0,10,125.7,-115.2,0.0,0.0,0.0,7,False
-long (> 365 d),64,21,417.0,64,194.3,-188.8,0.594,1.0,0.745,38,208.8,-206.6,0.391,1.0,0.562,25,196.7,-195.2,0.297,1.0,0.458,19,False

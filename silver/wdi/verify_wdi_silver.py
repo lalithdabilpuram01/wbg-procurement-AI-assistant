@@ -28,6 +28,7 @@ RUNS = Path(__file__).resolve().parents[1] / "runs"
 
 
 def main() -> int:
+    """Re-check both written WDI tables against Bronze and the run's baseline; return 0 when every check passed."""
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-id", required=True)
     ap.add_argument("--profile", default=DEFAULT_PROFILE)

@@ -40,6 +40,7 @@ def monitoring_project(text: str) -> str | None:
 
 
 class MonitoringWorker:
+    """Worker for `watch_project`: runs the deterministic monitoring rules for one project and cites each finding."""
     name = WorkerName.MONITORING
     operations = frozenset({"watch_project"})
 
@@ -47,6 +48,7 @@ class MonitoringWorker:
         self._authority, self._watch = authority, watch
 
     def run(self, task: AgentTask, context: WorkerContext) -> WorkerOutput:
+        """Check the ticket, find the project ID in the task question and return its status and selected warnings."""
         self._authority.verify(context.ticket, task)
         if task.operation not in self.operations:
             return _failed(task, ErrorCategory.AUTHORIZATION, "unknown_operation", "The operation is not offered by this worker.")
@@ -74,6 +76,7 @@ def _selected(warnings: list[Warning]) -> list[Warning]:
 
 # ---------------------------------------------------------------------------------------------- records
 def _status(task: AgentTask, view: ProjectWatch) -> EvidenceRecord:
+    """The project's status summary as one record: package counts, warnings, slippage and the latest ISR ratings."""
     s = view.summary
     text = (f"{view.title or view.project_id} ({view.project_id}): {s['packages']} packages in the latest procurement plan"
             f"{f' (statuses as of {view.as_of})' if view.as_of else ''}: {s['signed']} signed, {s['open']} open, "
@@ -97,6 +100,7 @@ def _status(task: AgentTask, view: ProjectWatch) -> EvidenceRecord:
 
 
 def _warning(task: AgentTask, view: ProjectWatch, w: Warning) -> EvidenceRecord:
+    """One early warning as a record, with its rule, severity, value and benchmark group when it has one."""
     text = f"{w.severity.capitalize()} warning: {f'{w.reference}: ' if w.reference else ''}{w.message}"
     facts = [Fact(name="rule", value=w.code), Fact(name="severity", value=w.severity)]
     if w.value is not None:
@@ -108,6 +112,7 @@ def _warning(task: AgentTask, view: ProjectWatch, w: Warning) -> EvidenceRecord:
 
 
 def _record(task: AgentTask, view: ProjectWatch, citation: str, facts: tuple[Fact, ...], summary: str) -> EvidenceRecord:
+    """A verified EARLY_WARNING record from the typed plan records; its figures are quotable document statements."""
     return EvidenceRecord(
         evidence_id=new_id("ev"), investigation_id=task.investigation_id, task_id=task.task_id,
         source_system=SourceSystem.TYPED_PLAN_RECORDS, kind=EvidenceKind.EARLY_WARNING, project_ids=(view.project_id,),

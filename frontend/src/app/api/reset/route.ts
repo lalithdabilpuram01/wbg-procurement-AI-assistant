@@ -1,3 +1,4 @@
+// API route POST /api/reset, used by the forgot-password page; it calls POST /auth/reset on the API.
 import { NextResponse } from "next/server";
 import { callAuth, fields, relayError, startSession } from "@/lib/session";
 

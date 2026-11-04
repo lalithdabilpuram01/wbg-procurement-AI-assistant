@@ -87,6 +87,7 @@ def epoch(v) -> int | None:
 
 
 def iso_date(s: str | None) -> date | None:
+    """A yyyy-mm-dd prefix as a date; None when absent or not a valid date."""
     try:
         return datetime.strptime(s[:10], "%Y-%m-%d").date() if s else None
     except ValueError:
@@ -98,6 +99,7 @@ def integer(s: str | None) -> int | None:
 
 
 def dec(s: str | None, places: str) -> Decimal | None:
+    """A numeric string rounded half-up to `places`; None when absent or not a number."""
     try:
         return Decimal(s.strip()).quantize(Decimal(places), rounding=ROUND_HALF_UP) if s is not None else None
     except InvalidOperation:
@@ -105,6 +107,7 @@ def dec(s: str | None, places: str) -> Decimal | None:
 
 
 def theme(x: dict, level: int) -> dict:
+    """One published theme as the expected nested dict (child levels down to level 3)."""
     out = {"code": x.get("code"), "name": x.get("name"), "seqno": integer(x.get("seqno")), "percent": integer(x.get("percent"))}
     if level < 3:
         kids = x.get(f"theme{level + 1}")
@@ -192,6 +195,7 @@ def decimal_11_digit_rows(rows: list[dict]) -> int:
 
 
 def main() -> int:
+    """Recompute both tables in plain Python and compare (written tables, or the transform's frames with --dry-run)."""
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--run-id", required=True)
     ap.add_argument("--dry-run", action="store_true", help="verify the transform's DataFrames instead of the written tables")

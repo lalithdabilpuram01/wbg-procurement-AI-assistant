@@ -47,12 +47,14 @@ class NemoGuardrails:
     """Deterministic NeMo rails: input-only and output-only checks, no LLM."""
 
     def __init__(self, config_dir: Path = CONFIG_DIR):
+        """Load the NeMo config, refuse any LLM in it, and register the deterministic policy actions."""
         config = RailsConfig.from_path(str(config_dir))
         if config.models:
             raise ConfigurationError("The NeMo guardrail configuration must not define models (no LLM may be called)")
         self._rails = LLMRails(config)
         if self._rails.llm is not None:
             raise ConfigurationError("NeMo created an LLM; these rails must run without one")
+        # Bind our deterministic policies to the action names the Colang flows call.
         self._rails.register_action(self._input_policy, "wbg_input_policy")
         self._rails.register_action(self._topic_policy, "wbg_topic_policy")
         self._rails.register_action(self._output_policy, "wbg_output_policy")
@@ -68,6 +70,7 @@ class NemoGuardrails:
 
     @staticmethod
     async def _output_policy(text: str, stage: str | None, context: dict | None = None) -> dict[str, Any]:
+        """Output policy for the model-output stage or the final-response stage; any other stage is blocked."""
         if stage == GuardStage.MODEL_OUTPUT.value:
             tables = (context or {}).get("context_tables") or []
             return _as_dict(policies.evaluate_model_output(text or "", tables))
@@ -89,6 +92,7 @@ class NemoGuardrails:
         return self._run(stage, messages, rails=["output"])
 
     def _run(self, stage: GuardStage, messages: list[dict], rails: list[str]) -> GuardDecision:
+        """Run the given NeMo rails on the messages and turn the outcome into one timed GuardDecision."""
         with timed() as timing:
             try:
                 response = self._rails.generate(messages=messages, options=GenerationOptions(
@@ -102,6 +106,7 @@ class NemoGuardrails:
 
     @staticmethod
     def _decision(stage: GuardStage, response: Any) -> GuardDecision:
+        """Map NeMo's activated rails and output variable to a decision; the first rail that stopped wins."""
         for rail in response.log.activated_rails:
             if not rail.stop:
                 continue

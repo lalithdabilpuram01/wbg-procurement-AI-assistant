@@ -67,8 +67,10 @@ def apply_schema(conn, schema: str = ACCOUNTS_SCHEMA) -> None:
 
 
 def verify(pool: ConnectionPool, schema: str = ACCOUNTS_SCHEMA) -> None:
+    """Raise AccountStoreMissing when the app_user table does not exist."""
     with pool.connection() as conn:
         found = conn.execute("SELECT to_regclass(%s) IS NOT NULL", (f"{schema}.app_user",)).fetchone()
+    # The pool may return dict rows or tuple rows; take the first column either way.
     if not (found and list(found.values() if isinstance(found, dict) else found)[0]):
         raise AccountStoreMissing("the account store is not initialised (run: uv run wbg-user init-db, then wbg-user migrate)")
 
@@ -104,6 +106,7 @@ def _parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str]) -> int:
+    """The `wbg-user` command; returns 1 with the message on stderr when an account action is refused."""
     if argv and argv[0].startswith("--"):                 # the older form: wbg-user --user x --password y [--reviewer]
         argv = ["add", *argv]
     args = _parser().parse_args(argv)
@@ -114,7 +117,7 @@ def main(argv: list[str]) -> int:
                 apply_schema(conn)
             print(json.dumps({"schema": ACCOUNTS_SCHEMA, "table": "app_user", "branch": _branch()}, indent=1))
             return 0
-        verify(pool)
+        verify(pool)                                      # every command except init-db needs the table
         users = directory(pool)
         if args.command == "migrate":
             print(json.dumps(migrate(JsonFileAccountStore(args.file), users), indent=1))

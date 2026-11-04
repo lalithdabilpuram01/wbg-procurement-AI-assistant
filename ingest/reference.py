@@ -27,6 +27,8 @@ def slug(value: str) -> str:
 
 @dataclass
 class Reference:
+    """The reference records plus lookup indexes built from them (by contract number, normalised reference, country)."""
+
     projects: dict[str, dict]                         # project id -> title, country, sector, approval year
     contracts: list[dict]
     codes: set[str]
@@ -43,6 +45,7 @@ class Reference:
 
 @lru_cache(maxsize=1)
 def load() -> Reference:
+    """Load the project manifest, contract snapshot and vocabulary once, and build the lookup indexes."""
     with config.PROJECT_MANIFEST.open(newline="") as fh:
         projects = {r["project_id"]: {"title": r["project_title"], "country_code": r["country_code"], "country_name": r["country_name"],
                                       "sector": r["sector"] or None, "approval_fy": r["approval_fy"] or None, "region": r["region"]}

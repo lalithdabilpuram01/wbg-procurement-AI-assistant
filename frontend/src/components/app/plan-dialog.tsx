@@ -1,5 +1,8 @@
 "use client";
 
+// The "Plan a new project" dialog: a project profile and up to five planned packages. AppShell sends it to
+// POST /conversations/{id}/plans, and the answer is shown as a planning brief (brief.tsx).
+
 import { useState } from "react";
 import { ClipboardList, Plus, Trash2 } from "lucide-react";
 import type { PlanInput, PlannedPackage } from "@/lib/api";
@@ -14,17 +17,21 @@ const METHODS = ["Request for Bids", "Request for Quotations", "Request for Prop
   "Least Cost Selection", "Fixed Budget Selection", "Individual Consultant Selection"];
 const CATEGORIES = ["Works", "Goods", "Consultant Services", "Non-consulting Services"];
 const MAX_PACKAGES = 5;
+// The select value for "Suggest from history": sent as a null method, and the API suggests one from past packages.
 const SUGGEST = "";
 
+/** The date `days` from today as YYYY-MM-DD, the value format of a date input. */
 function inDays(days: number): string {
   return new Date(Date.now() + days * 86_400_000).toISOString().slice(0, 10);
 }
 
+/** A blank planned package with defaults; the method is left for the API to suggest. */
 const newPackage = (n: number): PlannedPackage => ({
   name: `Package ${n}`, procurement_category: "Works", procurement_method: null, estimated_amount_usd: null,
   review_type: "Prior", bid_window_days: 45, tender_date: inDays(270),
 });
 
+/** The planning form. Like the other dialogs, it closes once `onSubmit` has handed the request over. */
 export function PlanDialog({ open, onOpenChange, onSubmit }:
   { open: boolean; onOpenChange: (open: boolean) => void; onSubmit: (input: PlanInput) => Promise<void> }) {
   const [input, setInput] = useState<PlanInput>({
@@ -39,6 +46,7 @@ export function PlanDialog({ open, onOpenChange, onSubmit }:
     setInput((p) => ({ ...p, packages: p.packages.map((pkg, j) => (j === i ? { ...pkg, ...patch } : pkg)) }));
   const country = COUNTRIES.find((c) => c.code === profile.country_code);
   const described = profile.description.trim().length;
+  // The description is used to find similar past projects, so a very short one is refused before sending.
   const missing = described < 20 ? `Describe what the project will do (at least 20 characters; ${described} so far).`
     : !input.packages.every((p) => p.name.trim()) ? "Give every package a name." : null;
 
@@ -107,6 +115,7 @@ export function PlanDialog({ open, onOpenChange, onSubmit }:
           <fieldset className="space-y-3">
             <legend className="mb-1 text-xs font-semibold uppercase tracking-wide text-primary">Planned packages</legend>
             {input.packages.map((pkg, i) => (
+              // Keyed by position because packages have no id; safe here since every field is controlled by `input`.
               <div key={i} className="grid grid-cols-2 gap-3 rounded-xl border border-border bg-muted/40 p-3 md:grid-cols-6">
                 <div className="col-span-2 space-y-1">
                   <Label htmlFor={`name-${i}`}>Package name</Label>

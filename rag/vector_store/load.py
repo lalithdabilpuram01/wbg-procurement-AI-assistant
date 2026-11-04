@@ -63,6 +63,7 @@ def release_inputs() -> tuple[core.Corpus, np.ndarray, ReleaseRecord]:
 
 
 def unit_rows(units, vectors: np.ndarray, docs: dict[str, dict]):
+    """Yield one COPY row per unit (release, ids, document facts, pages, text and half-precision vector)."""
     for unit, vector in zip(units, vectors):
         doc = docs[unit.document_id]
         yield (RELEASE, unit.unit_id, unit.unit_type, unit.document_id, unit.project_id, doc.get("country_code"),
@@ -71,6 +72,7 @@ def unit_rows(units, vectors: np.ndarray, docs: dict[str, dict]):
 
 
 def plan() -> dict[str, Any]:
+    """Offline check: validate the corpus and vectors and report what would be loaded."""
     units, vectors, record = release_inputs()
     by_type: dict[str, int] = {}
     for unit in units:
@@ -81,6 +83,7 @@ def plan() -> dict[str, Any]:
 
 
 def load(replace: bool) -> dict[str, Any]:
+    """Create the tables and load the release in one transaction (a live write); replace reloads an existing release."""
     units, vectors, record = release_inputs()
     docs = corpus().docs
     pool = open_pool(read_only=False, max_size=1, statement_timeout_ms=30 * 60_000)
@@ -98,6 +101,7 @@ def load(replace: bool) -> dict[str, Any]:
 
 
 def index() -> dict[str, Any]:
+    """Build the HNSW index on the loaded vectors and report its size (a live write)."""
     pool = open_pool(read_only=False, max_size=1, statement_timeout_ms=60 * 60_000)
     try:
         with pool.connection() as conn:
@@ -111,6 +115,7 @@ def index() -> dict[str, Any]:
 
 
 def _questions() -> list[str]:
+    """Up to VERIFY_QUESTIONS questions drawn from the v1, v3, French and cross-language sets."""
     from rag.release_v3.multilingual import question_sets
     sets = question_sets()
     picked = sets["v1"][:6] + sets["v3"][:6] + sets["fr_v3"][:4] + sets["cross"][:4]
@@ -118,6 +123,8 @@ def _questions() -> list[str]:
 
 
 def verify() -> dict[str, Any]:
+    """Read-only check: the release matches the corpus and model, and Lakebase neighbours match exact in-memory
+    neighbours for sample questions, with and without a project scope."""
     units, vectors, record = release_inputs()
     model = encoder.load_model()
     project_of = np.array([u.project_id for u in units])
@@ -147,6 +154,7 @@ def verify() -> dict[str, Any]:
 
 
 def evaluate() -> dict[str, Any]:
+    """Run every question set through build_retriever('pilot_v3') and compare with the in-memory bge-m3 results."""
     from rag.release_v3.evaluate import run_benchmark, summarize
     from rag.release_v3.multilingual import question_sets
     from rag.retrieval.versions import build_retriever
@@ -164,6 +172,7 @@ def evaluate() -> dict[str, Any]:
 
 
 def main(argv: list[str]) -> int:
+    """Command-line entry point; 'load' and 'index' refuse to run without --confirm-live-write."""
     parser = argparse.ArgumentParser(description="Load and verify the Lakebase vector store")
     parser.add_argument("step", choices=["plan", "load", "index", "verify", "evaluate"])
     parser.add_argument("--confirm-live-write", action="store_true")

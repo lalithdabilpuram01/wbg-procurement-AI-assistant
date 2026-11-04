@@ -79,6 +79,7 @@ TIMESTAMP_COLS = ["bronze_ingested_at", "source_retrieved_at"]
 
 
 def main() -> int:
+    """Recompute every column from the Volume CSV and compare with the written table; return 0 when all passed."""
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-id", required=True)
     ap.add_argument("--approved-dry-run", default="ieg_20261023T224233Z")

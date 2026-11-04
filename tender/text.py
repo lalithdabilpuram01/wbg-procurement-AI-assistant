@@ -13,6 +13,8 @@ class UnreadableDraft(ValueError):
 
 
 def text_from_file(filename: str, content: bytes) -> str:
+    """Plain text of the upload, cut to MAX_CHARS; raises UnreadableDraft with a message safe to show.
+    A PDF is recognised by its first bytes; Word needs the zip signature and a .docx name; text files go by name."""
     if len(content) > MAX_BYTES:
         raise UnreadableDraft("The file is larger than 5 MB.")
     name = filename.lower()
@@ -31,6 +33,7 @@ def text_from_file(filename: str, content: bytes) -> str:
 
 
 def _pdf(content: bytes) -> str:
+    """Text of the first MAX_PAGES pages."""
     import pdfplumber
     try:
         with pdfplumber.open(io.BytesIO(content)) as pdf:
@@ -40,6 +43,7 @@ def _pdf(content: bytes) -> str:
 
 
 def _docx(content: bytes) -> str:
+    """Paragraph text, then table cell text; a repeated cell text (merged cells repeat) is kept once."""
     import docx
     try:
         document = docx.Document(io.BytesIO(content))

@@ -18,6 +18,7 @@ from silver.notices.transform import EMAIL_RE, PHONE_RE
 
 
 def preflight(spark, name: str, rep: DQReport) -> None:
+    """Run one KPI query once and record its checks: unique grain, no sensitive columns, no e-mail or phone values."""
     df = spark.sql(Q.bound(name))
     schema = [(f.name, f.dataType.simpleString()) for f in df.schema.fields]
     rows = [r.asDict() for r in df.collect()]
@@ -30,13 +31,16 @@ def preflight(spark, name: str, rep: DQReport) -> None:
 
 
 def run(catalog: str, runs: Path) -> int:
+    """Check every KPI query, then create or replace the views; return 0 when every check passed, else 1."""
     spark = get_spark()
     rep = DQReport(f"{Q.VIEW_SCHEMA}.vw_kpi_*")
     for name in Q.QUERIES:
         preflight(spark, name, rep)
     created = []
+    # All or nothing: no view is replaced unless every query passed its checks.
     if rep.passed:
         for name in Q.QUERIES:
+            # The reviewed DDL says CREATE VIEW; it becomes CREATE OR REPLACE so that every run can refresh the views.
             spark.sql(Q.view_ddl(name).replace("CREATE VIEW", "CREATE OR REPLACE VIEW", 1))
             created.append(name)
     folder = runs / "gold" / "kpi_views"

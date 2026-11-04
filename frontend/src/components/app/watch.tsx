@@ -1,15 +1,20 @@
 "use client";
 
+// The Project watch view (execution and monitoring). It lists projects from GET /projects and shows one project's
+// summary, early warnings and packages from GET /projects/{id}/watch.
+
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { ChevronRight, Eye, FileText } from "lucide-react";
 import { api, type PackageView, type ProjectWatch, type WatchedProject, type WatchWarning } from "@/lib/api";
 import { Badge, Card, Select, Spinner } from "@/components/ui/primitives";
 import { cn } from "@/lib/utils";
 
+// Badge tone and label per warning severity; "low" covers stale or out-of-date plan entries, hidden by default.
 const SEVERITY = { high: "danger", medium: "warning", low: "neutral" } as const;
 const SEVERITY_LABEL = { high: "High", medium: "Medium", low: "Stale" } as const;
 const FILTERS = { all: "All", open: "Open", late: "Signed late", cancelled: "Cancelled" } as const;
 type Filter = keyof typeof FILTERS;
+// Plan statuses that count as "open" or "cancelled" for the package filter (as written in the procurement plans).
 const OPEN = new Set(["under/pending implementation", "under review", "blank", "unclassified"]);
 const CANCELLED = new Set(["cancelled", "terminated"]);
 
@@ -20,6 +25,8 @@ export function WatchView({ projectId, onProject, onError }:
   const [view, setView] = useState<ProjectWatch | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // The project list is loaded once per mount; a project picked elsewhere (an answer's "Watch" button) arrives as
+  // `projectId`, and the next effect loads it.
   useEffect(() => { api.projects().then(setProjects).catch(onError); }, [onError]);
 
   useEffect(() => {
@@ -57,6 +64,7 @@ export function WatchView({ projectId, onProject, onError }:
   );
 }
 
+/** One project: the header card with summary tiles and latest ISR ratings, then warnings and packages. */
 function Watch({ view }: { view: ProjectWatch }) {
   const s = view.summary;
   const latest = latestRatings(view);
@@ -91,6 +99,7 @@ function Watch({ view }: { view: ProjectWatch }) {
   );
 }
 
+/** A summary number with a label and an optional note below it. */
 function Tile({ label, value, note, tone }: { label: string; value: number | string; note?: string; tone?: string }) {
   return (
     <div className="rounded-lg bg-muted p-3">
@@ -101,6 +110,7 @@ function Tile({ label, value, note, tone }: { label: string; value: number | str
   );
 }
 
+/** The early warnings; a click on one shows the citations behind it and, when given, its benchmark group. */
 function Warnings({ warnings }: { warnings: WatchWarning[] }) {
   const [showStale, setShowStale] = useState(false);
   const [open, setOpen] = useState<number | null>(null);
@@ -146,6 +156,7 @@ function Warnings({ warnings }: { warnings: WatchWarning[] }) {
   );
 }
 
+/** The package table with status filters; a click on a row opens its stage timeline below it. */
 function Packages({ packages }: { packages: PackageView[] }) {
   const [filter, setFilter] = useState<Filter>("all");
   const [open, setOpen] = useState<string | null>(null);
@@ -202,6 +213,7 @@ function Packages({ packages }: { packages: PackageView[] }) {
   );
 }
 
+/** A package's planned and actual stage dates, and the plan row, contract and amounts it comes from. */
 function Timeline({ pkg }: { pkg: PackageView }) {
   return (
     <div className="text-xs">
@@ -227,6 +239,7 @@ function Timeline({ pkg }: { pkg: PackageView }) {
   );
 }
 
+/** The newest rating per ISR indicator. The API lists ratings oldest first, so later entries replace earlier ones. */
 function latestRatings(view: ProjectWatch) {
   const latest = new Map<string, ProjectWatch["ratings"][number]>();
   for (const r of view.ratings) latest.set(r.indicator, r);               // oldest first

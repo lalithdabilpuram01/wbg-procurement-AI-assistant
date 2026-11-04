@@ -1,9 +1,12 @@
+// The result card of a tender-design check: the terms found in the uploaded draft and one row per check, each with
+// its status and source. Fed by "tender_check" evidence items.
 import { CheckCircle2, CircleAlert, Info, XCircle } from "lucide-react";
 import type { Evidence } from "@/lib/api";
 import { Card } from "@/components/ui/primitives";
 import { Tooltip } from "@/components/ui/overlays";
 import { cn } from "@/lib/utils";
 
+// Icon, colour and hover label for each check status the API sets; anything else is shown as a note.
 const STATUS = {
   ok: { icon: CheckCircle2, tone: "text-success", label: "In line" },
   warn: { icon: CircleAlert, tone: "text-warning", label: "Check" },
@@ -11,12 +14,14 @@ const STATUS = {
   info: { icon: Info, tone: "text-muted-foreground", label: "Note" },
 } as const;
 
+/** The value of one named fact on an evidence item, or undefined. */
 const fact = (e: Evidence, name: string) => e.facts.find((f) => f.name === name)?.value;
 
 /** A tender check: the terms read from the draft (hover for the sentence) and each check with its status and source. */
 export function TenderChecks({ evidence }: { evidence: Evidence[] }) {
   const records = evidence.filter((e) => e.kind === "tender_check");
   if (!records.length) return null;
+  // The record without a "check" fact holds the terms read from the draft; every other record is one check.
   const terms = records.find((e) => !fact(e, "check"));
   const checks = records.filter((e) => fact(e, "check"));
   return (
@@ -38,6 +43,7 @@ export function TenderChecks({ evidence }: { evidence: Evidence[] }) {
       <ul className="divide-y divide-border">
         {checks.map((e) => {
           const status = STATUS[(fact(e, "status") ?? "info") as keyof typeof STATUS] ?? STATUS.info;
+          // The summary reads "Title: details"; only the first ": " splits, so details may contain colons.
           const [title, ...rest] = e.summary.split(": ");
           return (
             <li key={e.evidence_id} className="flex gap-3 px-4 py-3">

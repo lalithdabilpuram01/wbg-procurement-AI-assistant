@@ -60,6 +60,7 @@ def _jsonl(path: Path) -> list[dict[str, Any]]:
 
 
 def build_benchmark_v3() -> dict[str, Any]:
+    """Generate the v3 benchmark from pilot_v3 section headings: topic questions per project plus abstention ones."""
     shared = ingestion_config.OUTPUT_V3 / "shared"
     projects = {p["project_id"]: p["api"] for p in _jsonl(shared / "projects.jsonl")}
     docs = {d["document_id"]: d for d in _jsonl(shared / "documents.jsonl")}
@@ -87,6 +88,7 @@ def build_benchmark_v3() -> dict[str, Any]:
 
 
 def run_benchmark(retriever, questions: list[dict], rerank: bool) -> list[dict[str, Any]]:
+    """Search every question (hybrid, guarded, k = 10) and return one metrics row per question."""
     rows = []
     for q in questions:
         res = retriever.search(q["question"], method="hybrid", k=10, guarded=True, rerank=rerank)
@@ -104,6 +106,7 @@ def run_benchmark(retriever, questions: list[dict], rerank: bool) -> list[dict[s
 
 
 def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    """Average the per-question rows over answerable questions and count correct abstentions."""
     df = pd.DataFrame(rows)
     answerable, unanswerable = df[df.answerable], df[~df.answerable]
 
@@ -118,6 +121,7 @@ def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def main() -> None:
+    """Evaluate every configuration on benchmarks v1 and v3 with the network blocked, and write the results files."""
     RESULTS.mkdir(exist_ok=True)
     v1 = json.loads(V1.read_text())["questions"]
     benchmark_v3 = build_benchmark_v3()

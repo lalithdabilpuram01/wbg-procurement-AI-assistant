@@ -96,6 +96,7 @@ def matching_report(spark, df, run_dir: Path) -> dict:
 
 
 def main() -> int:
+    """Dry run by default: parse and check the income workbook and save the reports; write mode creates the table."""
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--mode", choices=["dry-run", "write"], default="dry-run")
     ap.add_argument("--confirm-create", action="store_true")
@@ -108,6 +109,7 @@ def main() -> int:
     run_dir = RUNS / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
     spark = get_spark(args.profile)
+    # The Bronze version and row count before the write: the verify script uses them to prove Bronze did not change.
     h = spark.sql(f"DESCRIBE HISTORY {T.BRONZE_TABLE} LIMIT 1").collect()[0]
     (run_dir / "bronze_version_before_write.json").write_text(json.dumps(
         {"table": T.BRONZE_TABLE, "version": h.version, "timestamp": str(h.timestamp), "rows": spark.table(T.BRONZE_TABLE).count(),

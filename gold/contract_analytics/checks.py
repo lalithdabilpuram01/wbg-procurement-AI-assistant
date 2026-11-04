@@ -22,6 +22,7 @@ def _n(df: DataFrame, cond) -> int:
 
 
 def check(g: DataFrame, dfs: dict[str, DataFrame], portfolio: DataFrame | None, cohort_ids: set[str], rep: DQReport) -> dict:
+    """Run every data-quality rule for gold_contract_analytics and add the results to `rep`; returns summary figures."""
     a, lines, links, p = dfs["contract_awards"], dfs["contract_award_lines"], dfs["notice_contract_links"], dfs["projects"]
     rows = g.count()
     keys = {r[0] for r in g.select("wb_contract_number").collect()}

@@ -32,6 +32,7 @@ SYNTHETIC = "Synthetic contact: probe.person@example.org, Tel: +00 000 000 0000"
 
 
 def main() -> int:
+    """Run the column-mask probe on synthetic objects, always drop them, and save the results; 0 when the mask holds."""
     ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     run_dir = RUNS / f"d14_access_probe_{ts}"
     run_dir.mkdir(parents=True, exist_ok=True)
@@ -46,6 +47,7 @@ def main() -> int:
         print(f"[{'ok  ' if ok else 'FAIL'}] {name}: {observed}")
 
     def attempt(name: str, f, expect_error: bool = False) -> None:
+        """Record `name` as passed when f() succeeds, or, with expect_error, when it raises."""
         try:
             out = f()
             rec(name, not expect_error, out if not expect_error else f"no error: {str(out)[:200]}")

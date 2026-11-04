@@ -57,6 +57,7 @@ COLUMN_COMMENTS = {
 
 
 def build(spark, run_id: str):
+    """Read the WDI Bronze tables and build both Silver frames: (Bronze observations, observations, countries)."""
     b = W.BRONZE
     obs_bronze = spark.table(f"{b}.wdi_indicator_observations")
     countries = W.parse_country_metadata(spark.table(f"{b}.wdi_country_metadata"))
@@ -68,6 +69,7 @@ def build(spark, run_id: str):
 
 
 def write_table(spark, df, target: str, run_id: str, comments: dict, table_comment: str) -> None:
+    """Create one WDI table (replaced only in pipeline mode), then add comments, NOT NULL and the entity_type check."""
     replace = pipeline.ENABLED and spark.catalog.tableExists(target)
     if spark.catalog.tableExists(target) and not replace:
         raise SystemExit(f"{target} already exists: refusing to overwrite (no replace mode without explicit approval)")
@@ -87,6 +89,7 @@ def write_table(spark, df, target: str, run_id: str, comments: dict, table_comme
 
 
 def main() -> int:
+    """Dry run by default: build and check both WDI tables and save the report; write mode creates them."""
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--mode", choices=["dry-run", "write"], default="dry-run")
     ap.add_argument("--confirm-create", action="store_true", help="required with --mode write")

@@ -47,6 +47,8 @@ CONFIDENCE = {"E": 1.0, "EN": 0.95, "K": 0.9}
 
 @dataclass
 class Mention:
+    """One entity found in a chunk: its span, its node (None if unresolved), match class and confidence."""
+
     chunk_id: str
     entity_type: str                   # project | step_reference | loan | country | method
     value: str
@@ -59,6 +61,8 @@ class Mention:
 
 @dataclass
 class Resolution:
+    """The mentions and links found in one document, plus the reference contracts they point to."""
+
     mentions: list[Mention] = field(default_factory=list)
     links: list[Link] = field(default_factory=list)
     contracts: dict[str, dict] = field(default_factory=dict)       # reference contracts the links point to
@@ -69,6 +73,7 @@ def method_name(value: str | None) -> str | None:
 
 
 def resolve(doc: ParsedDocument, ref: Reference) -> Resolution:
+    """Find and resolve the mentions in every chunk, add temporal links, and collect the contracts that are linked."""
     res = Resolution()
     country_pattern = _country_pattern(ref)
     for chunk in doc.chunks:
@@ -82,6 +87,7 @@ def resolve(doc: ParsedDocument, ref: Reference) -> Resolution:
 
 
 def _mentions(chunk_id: str, text: str, project_id: str | None, ref: Reference, country_pattern, res: Resolution) -> list[Mention]:
+    """Project ids, STEP references, loan numbers, procurement methods and countries mentioned in one chunk."""
     found = []
     for m in PROJECT.finditer(text):
         known = m.group(0) in ref.projects
@@ -134,6 +140,7 @@ def _temporal(doc: ParsedDocument, ref: Reference, res: Resolution) -> list[Link
         if abs(days) <= TEMPORAL_WINDOW:
             number = str(contract["wb_contract_number"])
             res.contracts[number] = contract
+            # Confidence falls from 1.0 (signed on the report date) to 0.5 at the edge of the window.
             links.append(Link("TEMPORALLY_NEAR", f"contract:{number}", f"document:{doc.document_id}", "P",
                               round(1 - abs(days) / TEMPORAL_WINDOW * 0.5, 2),
                               {"rule": "same project, signed within the report window", "days_report_minus_signing": days}))
@@ -141,5 +148,6 @@ def _temporal(doc: ParsedDocument, ref: Reference, res: Resolution) -> list[Link
 
 
 def _country_pattern(ref: Reference):
+    # Longest names first, so "south sudan" is matched before "sudan".
     names = sorted(ref.countries, key=len, reverse=True)
     return re.compile(r"\b(" + "|".join(re.escape(n) for n in names) + r")\b", re.I) if names else None

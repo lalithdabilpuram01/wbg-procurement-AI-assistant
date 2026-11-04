@@ -151,6 +151,8 @@ SpanSetter = Callable[..., None]
 
 
 class OrchestratorTracer:
+    """Spans and events for the orchestrator: a local Logfire instance (optionally exporting), or disabled."""
+
     def __init__(self, logfire_instance: Any | None = None):
         self._logfire = logfire_instance
 
@@ -208,6 +210,7 @@ class OrchestratorTracer:
             try:
                 with self._open(name, {**identity_attributes(), **recorded}) as setter:
                     def set_attributes(**values: Any) -> None:
+                        """Filter and mask new attributes, remember them for the log line, and pass them to the span."""
                         nonlocal outcome
                         if isinstance(values.get("error"), BaseException):
                             outcome = "failed (handled)"
@@ -233,8 +236,11 @@ class OrchestratorTracer:
                 raise
             return
         error: BaseException | None = None
+        # An exception is caught inside the span and raised again after it closes: record_failure has already marked
+        # the span, so Logfire's own exception handling does not record it a second time.
         with self._logfire.span(name, _span_name=name, **attributes) as span:
             def set_attributes(**values: Any) -> None:
+                """Set attributes on the Logfire span; an `error=` value marks the span failed without raising."""
                 handled, message = values.pop("error", None), values.pop("log_message", "step failed")
                 if isinstance(handled, BaseException):
                     record_failure(span, name, handled, message)
@@ -312,10 +318,14 @@ def _ignore(**values: Any) -> None:
 
 # -------------------------------------------------------------------------------------------------------- audit
 class AuditSink(Protocol):
+    """Where audit events go: one dict per event."""
+
     def write(self, event: dict[str, Any]) -> None: ...
 
 
 class MemoryAuditSink:
+    """Keeps audit events in a list (tests)."""
+
     def __init__(self) -> None:
         self.events: list[dict[str, Any]] = []
 
@@ -330,12 +340,15 @@ class JsonlAuditSink:
         self._path = Path(path)
 
     def write(self, event: dict[str, Any]) -> None:
+        """Append the event as one sorted-key JSON line."""
         self._path.parent.mkdir(parents=True, exist_ok=True)
         with self._path.open("a") as handle:
             handle.write(json.dumps(event, sort_keys=True) + "\n")
 
 
 class AuditTrail:
+    """Writes metadata-only audit events: allow-listed, identifier-like attributes and a UTC timestamp, no free text."""
+
     def __init__(self, sink: AuditSink | None = None):
         self._sink = sink
 

@@ -37,6 +37,7 @@ class LookupFailed(RuntimeError):
 
 
 class PredictionWorker:
+    """Worker for the two prediction operations: three frozen-model estimates per package."""
     name = WorkerName.PREDICTION
     operations = frozenset({"predict_package", "predict_planned_packages"})
 
@@ -45,6 +46,7 @@ class PredictionWorker:
         self._models = models or FrozenModels()
 
     def run(self, task: AgentTask, context: WorkerContext) -> WorkerOutput:
+        """Check the ticket and score the request's package (or, for a brief, its planned packages)."""
         self._authority.verify(context.ticket, task)
         if task.operation not in self.operations:
             return _failed(task, ErrorCategory.AUTHORIZATION, "unknown_operation", "The operation is not offered by this worker.")
@@ -66,6 +68,7 @@ class PredictionWorker:
 
 
     def _planned(self, task: AgentTask, context: WorkerContext) -> WorkerOutput:
+        """Score each planned package of a brief. A package with no method given or suggested is skipped with a note."""
         spec = context.planning
         if not isinstance(spec, PlanningSpec):
             return _failed(task, ErrorCategory.VALIDATION, "planning_missing", "A Planning Brief needs the project profile.")
@@ -78,6 +81,7 @@ class PredictionWorker:
                 if method is None:
                     notes.append(f"No method could be suggested for '{package.name}'; it was not scored.")
                     continue
+                # A new project has no tender history: the packages planned before this one stand in for it.
                 earlier = sum(1 for p in spec.packages if p.tender_date < package.tender_date)
                 project = new_project_context(spec.profile.country_code, spec.profile.sector, spec.profile.approval_date,
                                               earlier, self._run_sql)
@@ -139,6 +143,7 @@ def _drivers(drivers: tuple[Driver, ...]) -> str:
 
 def _evidence(task: AgentTask, package: PackageSpec, p: PackagePrediction, label: str = "",
               objects: tuple[str, ...] = SOURCE_OBJECTS) -> list[EvidenceRecord]:
+    """Three records for one package: the Model 1 duration, then the Model 2 and 3 risks marked as synthetic."""
     name = package.label() if hasattr(package, "label") else package.project_id
     inputs = (f"{label + ': ' if label else ''}{name}, {package.procurement_method}, {package.procurement_category}, "
               f"{package.review_type} review, {package.bid_window_days}-day bid window, tender {package.tender_date.isoformat()}")
@@ -167,6 +172,7 @@ def _evidence(task: AgentTask, package: PackageSpec, p: PackagePrediction, label
 
 def _record(task: AgentTask, package: PackageSpec, objects: tuple[str, ...], model: str, inputs: str, facts: tuple[Fact, ...],
             summary: str, warnings: tuple[str, ...]) -> EvidenceRecord:
+    """A verified MODEL_PREDICTION record; only a real project ID (P + 6 digits) is recorded as the project."""
     return EvidenceRecord(
         evidence_id=new_id("ev"), investigation_id=task.investigation_id, task_id=task.task_id,
         source_system=SourceSystem.FROZEN_ML_MODELS, kind=EvidenceKind.MODEL_PREDICTION,
@@ -188,6 +194,7 @@ def gateway_sql(service: Any, principal_id: str, workspace: str) -> RunSql:
     from structured_agent.service import RequestContext
 
     def run(sql: str, parameters: dict[str, Any]) -> list[dict[str, Any]]:
+        """Run one fixed query; any status other than ok raises LookupFailed."""
         result = service.execute_readonly_sql(RequestContext(principal_id, workspace), sql=sql, parameters=parameters,
                                               max_rows=GATEWAY_MAX_ROWS)
         if result.status != "ok":

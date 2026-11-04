@@ -34,6 +34,8 @@ class RawResult:
 
 
 class SqlExecutor(Protocol):
+    """What the gateway needs from an engine: a credential check and a bounded query run."""
+
     def check_credential(self) -> CredentialCheck: ...
 
     def execute(self, sql: str, parameters: dict[str, Any], timeout_seconds: int) -> RawResult: ...
@@ -51,13 +53,18 @@ def to_json_value(value: Any) -> Any:
 
 
 class DatabricksSparkExecutor:
+    """Runs validated SQL on Databricks through Databricks Connect, one query at a time."""
+
     def __init__(self, profile: str):
+        """Keep the Databricks profile; the Spark session is created on first use."""
         self._profile = profile
         self._spark = None
         self._lock = threading.Lock()
+        # One worker thread: queries run one at a time, and the caller can stop waiting at the timeout.
         self._pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="databricks-query")
 
     def _session(self):
+        """Create the Spark session on first use (thread-safe) and reuse it afterwards."""
         with self._lock:
             if self._spark is None:
                 from silver.common.session import get_spark
@@ -79,9 +86,11 @@ class DatabricksSparkExecutor:
                                evidence=f"owns {owned} approved objects; {privileged} write privileges")
 
     def execute(self, sql: str, parameters: dict[str, Any], timeout_seconds: int) -> RawResult:
+        """Run the SQL with bound parameters; raises QueryTimeout when it exceeds the time limit."""
         spark = self._session()
 
         def run() -> RawResult:
+            """Run the query and collect its columns (name, type) and its rows as JSON-ready values."""
             frame = spark.sql(sql, args=parameters or None)
             columns = [(f.name, f.dataType.simpleString()) for f in frame.schema.fields]
             rows = [{k: to_json_value(v) for k, v in row.asDict().items()} for row in frame.collect()]

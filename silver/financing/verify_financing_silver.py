@@ -56,6 +56,7 @@ LINEAGE = ["source_dataset", "source_row_sha256", "bronze_table", "bronze_source
 
 
 def schema(source: str) -> list[tuple[str, str]]:
+    """The exact expected schema (name, type) of one financing table, in column order."""
     key = str(CFG[source]["key"])
     head = [(key, "string"), ("financing_number_prefix", "string"), ("lender", "string"), ("project_id", "string"), ("project_name_source", "string"),
             ("region_name_source", "string"), ("country_code", "string"), ("country_name", "string"), ("borrower_name", "string")]
@@ -81,6 +82,7 @@ def epoch(v) -> int | None:
 
 
 def verify(spark, source: str, run_id: str, rep: DQReport) -> None:
+    """Recompute one financing table from its Volume CSV and compare schema, values, lineage and Delta metadata."""
     c, p = CFG[source], f"{source}:"
     got_schema = [(f.name, f.dataType.simpleString()) for f in spark.table(c["table"]).schema.fields]
     rep.equals(p + f"schema_exact ({len(schema(source))} columns, names, order, types)", got_schema, schema(source))
@@ -152,6 +154,7 @@ def verify(spark, source: str, run_id: str, rep: DQReport) -> None:
 
 
 def main() -> int:
+    """Verify both financing tables and the baseline; save the report and return 0 when every check passed."""
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-id", required=True)
     ap.add_argument("--approved-dry-run", required=True)

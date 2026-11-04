@@ -31,6 +31,8 @@ class Attempt:
 
 @dataclass
 class Case:
+    """One evaluation scenario: who asks, the question, the objects discovery should find, and its attempts."""
+
     case_id: str
     title: str
     question: str

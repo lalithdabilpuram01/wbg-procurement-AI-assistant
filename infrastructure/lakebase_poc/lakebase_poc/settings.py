@@ -19,6 +19,7 @@ class SettingsError(RuntimeError):
     """A required setting is missing or invalid (the message never contains values)."""
 
 
+# Connection settings only: no password is stored here (a fresh credential is generated for each connection).
 @dataclass(frozen=True)
 class LakebaseSettings:
     host: str

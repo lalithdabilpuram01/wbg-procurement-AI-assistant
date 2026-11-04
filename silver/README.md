@@ -76,9 +76,6 @@ WBG_RUN_LIVE_TESTS=1 uv run pytest tests/live/silver -q -p no:cacheprovider
   (`~/.vscode/extensions/databricks.databricks-*/bin`).
 - To use another profile, set `WBG_DATABRICKS_PROFILE`.
 
-The Phase 1 discovery tests (`research/discovery/`, plain pandas) are separate. Databricks Connect replaces `pyspark`, so the two
-should not share one environment.
-
 ## WDI economic indicators (`wdi/`)
 
 | Target | Grain | Rows (2026-10-08 vintage) |

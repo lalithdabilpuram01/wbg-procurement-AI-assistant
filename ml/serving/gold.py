@@ -39,6 +39,7 @@ def _date(value: Any) -> dt.date:
 
 
 def country_region(country_code: str, run_sql: RunSql) -> str:
+    """Region with the most portfolio projects for a country; raises InvalidRequest when the country has none."""
     rows = run_sql(REGION_SQL, {"country_code": country_code})
     if not rows:
         raise InvalidRequest(f"no projects are recorded for country {country_code}")
@@ -58,6 +59,8 @@ def new_project_context(country_code: str, sector: str, approval_date: dt.date, 
 
 
 def project_context(project_id: str, tender_date: dt.date, run_sql: RunSql) -> ProjectContext:
+    """Look up an existing project's context in Gold (portfolio row, income history, earlier tender notices).
+    Raises InvalidRequest when the project or its board approval date is missing."""
     rows = run_sql(PROJECT_SQL, {"project_id": project_id})
     if not rows:
         raise InvalidRequest(f"project {project_id} is not in the project portfolio")

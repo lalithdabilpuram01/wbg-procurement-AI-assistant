@@ -37,6 +37,8 @@ def checked_schema(schema: str) -> str:
 
 
 class PostgresConversationStore:
+    """ConversationStore on PostgreSQL; every method opens its own short transaction as the trusted owner."""
+
     def __init__(self, dsn: str | None = None, schema: str = DEFAULT_SCHEMA):
         self._dsn = dsn or conversation_dsn()
         self._schema = sql.Identifier(checked_schema(schema))
@@ -56,18 +58,21 @@ class PostgresConversationStore:
             return self._owned(cur, owner, thread_id)
 
     def list_threads(self, owner: Owner, limit: int = 20) -> list[ThreadInfo]:
+        """The owner's threads, most recently updated first."""
         with self._transaction(owner) as cur:
             cur.execute(self._q("SELECT * FROM {s}.threads WHERE tenant_id = %s AND user_id = %s "
                                 "ORDER BY updated_at DESC LIMIT %s"), (owner.tenant_id, owner.user_id, limit))
             return [_thread(row, owner) for row in cur.fetchall()]
 
     def set_title(self, owner: Owner, thread_id: str, title: str) -> None:
+        """Rename one of the owner's threads (title cut to 200 characters)."""
         with self._transaction(owner) as cur:
             self._owned(cur, owner, thread_id)
             cur.execute(self._q("UPDATE {s}.threads SET title = %s WHERE thread_id = %s AND tenant_id = %s AND user_id = %s"),
                         (title[:200], thread_id, owner.tenant_id, owner.user_id))
 
     def start_new_topic(self, owner: Owner, thread_id: str) -> ThreadInfo:
+        """Begin a new topic in the owner's thread by raising its topic_epoch; returns the updated thread."""
         with self._transaction(owner) as cur:
             self._owned(cur, owner, thread_id, lock=True)
             cur.execute(self._q("UPDATE {s}.threads SET topic_epoch = topic_epoch + 1, updated_at = %s "
@@ -88,14 +93,17 @@ class PostgresConversationStore:
 
     def turns(self, owner: Owner, thread_id: str, topic_epoch: int | None = None, after_seq: int = 0,
               limit: int | None = None) -> list[Turn]:
+        """The thread's turns after `after_seq`, optionally of one topic and only the newest `limit`, oldest first."""
         with self._transaction(owner) as cur:
             self._owned(cur, owner, thread_id)
+            # The inner query takes the newest `limit` turns; the outer one returns them oldest first.
             cur.execute(self._q("SELECT * FROM (SELECT * FROM {s}.turns WHERE thread_id = %s AND seq > %s "
                                 "AND (%s::int IS NULL OR topic_epoch = %s::int) ORDER BY seq DESC LIMIT %s) recent "
                                 "ORDER BY seq"), (thread_id, after_seq, topic_epoch, topic_epoch, limit))
             return [_turn(row) for row in cur.fetchall()]
 
     def next_seq(self, owner: Owner, thread_id: str) -> int:
+        """The next turn sequence number for the owner's thread (1 for an empty thread)."""
         with self._transaction(owner) as cur:
             self._owned(cur, owner, thread_id)
             cur.execute(self._q("SELECT coalesce(max(seq), 0) + 1 AS next FROM {s}.turns WHERE thread_id = %s"), (thread_id,))
@@ -112,8 +120,10 @@ class PostgresConversationStore:
         return decision
 
     def revoke_decision(self, owner: Owner, thread_id: str, decision_id: str, reason: str) -> Decision:
+        """Revoke one decision in the owner's thread and return it; KeyError if the thread has no such decision."""
         with self._transaction(owner) as cur:
             self._owned(cur, owner, thread_id)
+            # coalesce keeps the first revocation time and reason, so revoking twice changes nothing.
             cur.execute(self._q("UPDATE {s}.decisions SET revoked_at = coalesce(revoked_at, %s), "
                                 "revoked_reason = coalesce(revoked_reason, %s) WHERE thread_id = %s AND decision_id = %s "
                                 "RETURNING *"), (utc_now(), reason, thread_id, decision_id))
@@ -123,6 +133,7 @@ class PostgresConversationStore:
         return _decision(row)
 
     def decisions(self, owner: Owner, thread_id: str, include_revoked: bool = False) -> list[Decision]:
+        """The thread's decisions, oldest first; revoked ones only when asked."""
         with self._transaction(owner) as cur:
             self._owned(cur, owner, thread_id)
             cur.execute(self._q("SELECT * FROM {s}.decisions WHERE thread_id = %s AND (%s OR revoked_at IS NULL) "
@@ -143,6 +154,7 @@ class PostgresConversationStore:
         return summary
 
     def latest_summary(self, owner: Owner, thread_id: str) -> SummaryRecord | None:
+        """The thread's highest-version summary (valid or not), or None when there is none."""
         with self._transaction(owner) as cur:
             self._owned(cur, owner, thread_id)
             cur.execute(self._q("SELECT * FROM {s}.summaries WHERE thread_id = %s ORDER BY version DESC LIMIT 1"), (thread_id,))
@@ -150,6 +162,7 @@ class PostgresConversationStore:
         return _summary(row) if row else None
 
     def invalidate_summary(self, owner: Owner, thread_id: str, summary_id: str, reason: str) -> None:
+        """Mark one summary of the owner's thread invalid with a reason; an already invalid one is left as it is."""
         with self._transaction(owner) as cur:
             self._owned(cur, owner, thread_id)
             cur.execute(self._q("UPDATE {s}.summaries SET invalidated_at = %s, invalidation_reason = %s "
@@ -159,12 +172,15 @@ class PostgresConversationStore:
     # ---------------------------------------------------------------------------------------------- internals
     @contextmanager
     def _transaction(self, owner: Owner) -> Iterator[psycopg.Cursor]:
+        """A cursor in one transaction with the trusted owner set for row-level security (local to this transaction)."""
         with psycopg.connect(self._dsn, row_factory=dict_row) as conn, conn.cursor() as cur:
             cur.execute("SELECT set_config('wbg.tenant_id', %s, true), set_config('wbg.user_id', %s, true)",
                         (owner.tenant_id, owner.user_id))
             yield cur
 
     def _owned(self, cur: psycopg.Cursor, owner: Owner, thread_id: str, lock: bool = False) -> ThreadInfo:
+        """The owner's thread, or ThreadNotFound for a malformed id, a missing thread or another owner's thread.
+        `lock` holds the thread row (FOR UPDATE) so concurrent writes to one thread wait for each other."""
         if not _is_uuid(thread_id):
             raise ThreadNotFound("thread not found")
         query = "SELECT * FROM {s}.threads WHERE thread_id = %s AND tenant_id = %s AND user_id = %s" + (" FOR UPDATE" if lock else "")
@@ -192,6 +208,7 @@ def _thread(row: dict[str, Any], owner: Owner) -> ThreadInfo:
 
 
 def _turn(row: dict[str, Any]) -> Turn:
+    """Turn from a database row, with its context and metadata JSON validated back into models."""
     return Turn(turn_id=str(row["turn_id"]), thread_id=str(row["thread_id"]), seq=row["seq"], role=row["role"],
                 kind=row["kind"], text=row["text"], topic_epoch=row["topic_epoch"],
                 context=ActiveContext.model_validate(row["context"]), metadata=TurnMetadata.model_validate(row["metadata"]),
@@ -205,6 +222,7 @@ def _decision(row: dict[str, Any]) -> Decision:
 
 
 def _summary(row: dict[str, Any]) -> SummaryRecord:
+    """SummaryRecord from a database row, with its JSON content validated as a StructuredSummary."""
     return SummaryRecord(summary_id=str(row["summary_id"]), thread_id=str(row["thread_id"]), version=row["version"],
                          topic_epoch=row["topic_epoch"], covers_from_seq=row["covers_from_seq"],
                          covers_through_seq=row["covers_through_seq"], content=StructuredSummary.model_validate(row["content"]),

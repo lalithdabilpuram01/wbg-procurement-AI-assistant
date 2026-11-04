@@ -44,6 +44,7 @@ class ReleaseMismatchError(UnitCacheNotAllowedError):
 
 
 class CorpusLike(Protocol):
+    """The parts of a retrieval Corpus that the adapter reads (strategy, table flag, processed folder and units)."""
     strategy: str
     include_tables: bool
     processed_dir: Path

@@ -20,6 +20,7 @@ PROMPT_COLUMN_CLASSIFICATIONS = {"public"}     # lineage/restricted columns are 
 MAX_DESCRIPTION_CHARS = 160
 
 
+# The metadata-only pieces of the prompt context. Each mirrors part of a tool response, trimmed for the model.
 class ColumnContext(BaseModel):
     name: str
     data_type: str
@@ -27,6 +28,7 @@ class ColumnContext(BaseModel):
     description: str | None = None
 
 
+# One table as shown to Claude: grain, required filters, limitations and its authorized columns.
 class TableContext(BaseModel):
     object_fqn: str
     logical_name: str
@@ -37,6 +39,7 @@ class TableContext(BaseModel):
     columns: list[ColumnContext]
 
 
+# One approved join as shown to Claude, with its cardinality and aggregation rule.
 class JoinContext(BaseModel):
     relationship_id: str
     condition: str
@@ -45,6 +48,7 @@ class JoinContext(BaseModel):
     required_conditions: list[str]
 
 
+# One metric definition as shown to Claude: its SQL expression, unit and caveats.
 class MetricContext(BaseModel):
     metric_id: str
     name: str
@@ -60,6 +64,7 @@ class ExampleContext(BaseModel):
     parameters: dict[str, Any]
 
 
+# The full grounded context for one question: selected tables, the joins between them, metrics and examples.
 class SchemaContext(BaseModel):
     question: str
     tables: list[TableContext]
@@ -68,6 +73,7 @@ class SchemaContext(BaseModel):
     examples: list[ExampleContext]
 
 
+# How retrieval ended: ok, a clarification request, or nothing authorized matched.
 class RetrievalOutcome(BaseModel):
     status: Literal["ok", "needs_clarification", "not_found"]
     message: str = ""
@@ -76,6 +82,7 @@ class RetrievalOutcome(BaseModel):
 
 def build_schema_context(tools: ToolCaller, question: str, request_id: str, max_tables: int,
                          max_examples: int) -> tuple[SchemaContext | None, RetrievalOutcome]:
+    """Collect the schema context through the registry tools; returns (context or None, retrieval outcome)."""
     search = tools.call("search_table_registry", {"query": question, "top_k": 5}, request_id)
     if search["status"] == "needs_clarification":
         ambiguity = search["ambiguity"]
@@ -85,6 +92,7 @@ def build_schema_context(tools: ToolCaller, question: str, request_id: str, max_
     if not candidates:
         return None, RetrievalOutcome(status="not_found", message="No authorized registered table matches the question.")
 
+    # Only the top candidates are expanded, which keeps the prompt small.
     tables = [_table_context(tools, c["object_fqn"], request_id) for c in candidates]
     selected = {t.object_fqn for t in tables}
     context = SchemaContext(
@@ -95,6 +103,7 @@ def build_schema_context(tools: ToolCaller, question: str, request_id: str, max_
 
 
 def _table_context(tools: ToolCaller, object_fqn: str, request_id: str) -> TableContext:
+    """Authorized schema of one table, keeping only the column classifications that may be shown to the model."""
     schema = tools.call("get_table_schema", {"object_fqn": object_fqn}, request_id)
     columns = [ColumnContext(name=c["name"], data_type=c["data_type"], unit=c.get("unit"),
                              description=(c.get("description") or "")[:MAX_DESCRIPTION_CHARS] or None)
@@ -106,6 +115,7 @@ def _table_context(tools: ToolCaller, object_fqn: str, request_id: str) -> Table
 
 
 def _joins(tools: ToolCaller, selected: set[str], request_id: str) -> list[JoinContext]:
+    """Approved joins whose two ends are both selected tables, de-duplicated by relationship id."""
     joins: dict[str, JoinContext] = {}
     for object_fqn in sorted(selected):
         for rel in tools.call("get_table_relationships", {"object_fqn": object_fqn}, request_id)["relationships"]:
@@ -120,6 +130,7 @@ def _joins(tools: ToolCaller, selected: set[str], request_id: str) -> list[JoinC
 
 
 def _metrics(tools: ToolCaller, metric_ids: list[str], request_id: str) -> list[MetricContext]:
+    """Definitions of the given metric ids, as returned by get_metric_definition."""
     metrics = []
     for metric_id in metric_ids:
         for m in tools.call("get_metric_definition", {"metric_id": metric_id}, request_id).get("metrics", []):

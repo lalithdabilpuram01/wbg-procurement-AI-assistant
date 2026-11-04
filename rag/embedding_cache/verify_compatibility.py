@@ -45,6 +45,7 @@ class NetworkBlockedError(RuntimeError):
 
 @contextmanager
 def no_network() -> Iterator[list[str]]:
+    """Block every outbound socket connection inside the block; yields the list of attempts that were refused."""
     attempts: list[str] = []
     original_connect, original_create = socket.socket.connect, socket.create_connection
 
@@ -127,6 +128,7 @@ def compare(new: np.ndarray, old: np.ndarray) -> dict[str, Any]:
 
 # ------------------------------------------------------------------------------------------------------ run
 def run() -> dict[str, Any]:
+    """Re-encode the sample offline, compare it with the legacy vectors and write results/compatibility.json."""
     config = local_model_config()
     corpora = {scope: variants.corpus(scope, "pilot_v2") for scope in SCOPES}
     legacy_files = {scope: legacy_path(variants.core.CACHE, s, corpora[scope].units) for scope, s in SCOPES.items()}
@@ -154,6 +156,7 @@ _batch_cache: dict[tuple[str, int], np.ndarray] = {}
 
 
 def encode_and_compare(model, corpora, legacy, orders, item) -> dict[str, Any]:
+    """Re-encode one sampled unit inside its original batch and alone, and compare both with its legacy vector."""
     scope = item["scope"]
     units = corpora[scope].units
     index = next(i for i, u in enumerate(units) if u.unit_id == item["unit_id"])
@@ -202,6 +205,7 @@ def negative_controls(model, corpora, legacy, sample) -> dict[str, Any]:
 
 
 def summarise(config, settings, legacy_files, records, controls, attempts, elapsed) -> dict[str, Any]:
+    """Build the result record; the verdict is 'compatible' only when every check passes and no network was tried."""
     same = [r["same_batch"] for r in records]
     alone = [r["alone"] for r in records]
     passes = all(s["max_abs_diff"] <= SAME_BATCH_MAX_ABS and s["cosine"] >= SAME_BATCH_MIN_COSINE for s in same)
@@ -234,6 +238,7 @@ def summarise(config, settings, legacy_files, records, controls, attempts, elaps
 
 
 def _group(records, key) -> dict[str, list]:
+    """Group records by the value of key(record)."""
     groups: dict[str, list] = {}
     for record in records:
         groups.setdefault(key(record), []).append(record)

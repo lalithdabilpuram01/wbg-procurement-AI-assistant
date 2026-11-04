@@ -22,6 +22,7 @@ from structured_agent.sql_validation.lineage import LineageResolver, qualify_col
 
 
 def fingerprint(sql: str, parameters: dict[str, ParameterValue]) -> str:
+    """SHA-256 of the SQL text plus its parameters, used to tie audit events to one exact statement."""
     payload = sql + "\n" + json.dumps(parameters, sort_keys=True, default=str)
     return hashlib.sha256(payload.encode()).hexdigest()
 
@@ -33,6 +34,7 @@ class _Stages:
         self.report = report
 
     def passed(self, name: str, errors: list[ToolError], detail: str = "") -> bool:
+        """Record one stage's result and errors on the report; returns True when the stage had no errors."""
         ok = not errors
         message = detail if ok else "; ".join(e.message for e in errors)[:500]
         self.report.checks.append(CheckResult(name=name, passed=ok, detail=message))
@@ -41,7 +43,10 @@ class _Stages:
 
 
 class SqlValidator:
+    """Runs every validation stage for one statement and builds the ValidationReport."""
+
     def __init__(self, bundle: RegistryBundle, policy: AccessPolicy, limits: QueryLimits):
+        """Keep the registry, policy and limits, and build the sqlglot schema of the registered objects."""
         self._bundle = bundle
         self._policy = policy
         self._limits = limits
@@ -49,6 +54,7 @@ class SqlValidator:
 
     def validate(self, sql: str, parameters: dict[str, ParameterValue], principal: Principal,
                  max_rows: int | None = None) -> ValidationReport:
+        """Validate one statement for a principal; returns the report, approved only when every stage passed."""
         report = ValidationReport(validation_id="val_" + uuid.uuid4().hex[:16], approved=False,
                                   sql_sha256=fingerprint(sql, parameters), parameters=parameters)
         try:
@@ -63,6 +69,7 @@ class SqlValidator:
 
     def _run(self, sql: str, parameters: dict[str, ParameterValue], principal: Principal, max_rows: int | None,
              report: ValidationReport) -> None:
+        """Run the stages in order and stop at the first failure; on success fill in the approved SQL."""
         stage = _Stages(report)
 
         tree, errors = structure.parse_single_select(sql)
@@ -102,6 +109,7 @@ class SqlValidator:
         if not stage.passed("measure_rules", rules.check_measures(self._bundle, resolver)):
             return
 
+        # The tightest of the global limit, the principal's role limit and the caller's request wins.
         limit = min(x for x in (self._limits.max_rows, self._policy.max_rows(principal, self._limits.max_rows), max_rows) if x)
         rewrites, errors = structure.enforce_limit(tree, limit)
         report.applied_rewrites = rewrites
@@ -112,6 +120,7 @@ class SqlValidator:
         if not stage.passed("complexity_budget", errors, json.dumps(measures)):
             return
 
+        # Estimate from registered row counts, so the budget is checked without touching the warehouse.
         report.estimated_scanned_rows = sum(self._bundle.object(f).row_count for f in fqns)
         budget_errors = [] if report.estimated_scanned_rows <= self._limits.max_scanned_rows else [ToolError.of(
             ErrorCode.SCAN_BUDGET_EXCEEDED,
@@ -120,11 +129,13 @@ class SqlValidator:
             return
 
         report.output_columns = self._output_columns(resolver, outputs)
+        # Fingerprint the SQL that will actually run (normalised, with LIMIT), not the text the caller sent.
         report.validated_sql = tree.sql(dialect=structure.DIALECT)
         report.sql_sha256 = fingerprint(report.validated_sql, parameters)
         report.approved = True
 
     def _output_columns(self, resolver: LineageResolver, outputs: dict) -> list[OutputColumn]:
+        """Describe each result column: its source columns, outer aggregate, unit and strictest classification."""
         columns = []
         root = resolver.root_scope()
         for projection in root.expression.expressions:

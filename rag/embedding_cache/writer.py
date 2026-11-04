@@ -39,6 +39,7 @@ class WriteRejectedError(RuntimeError):
 
 
 class Encoder(Protocol):
+    """Anything with an embedding configuration and an encode(texts) method that returns one vector per text."""
     config: EmbeddingConfig
 
     def encode(self, texts: list[str]) -> np.ndarray: ...
@@ -89,6 +90,7 @@ def write_manifest(manifest: dict[str, Any], path: Path) -> None:
 
 
 def verify_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
+    """Return the manifest if its schema and identity hash match its content; raise WriteRejectedError otherwise."""
     body = {k: v for k, v in manifest.items() if k != "manifest_id"}
     if manifest.get("schema") != MANIFEST_SCHEMA or manifest.get("manifest_id") != _manifest_id(body):
         raise WriteRejectedError("manifest schema or identity hash does not match its content")
@@ -98,6 +100,7 @@ def verify_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
 # ---------------------------------------------------------------------------------------------------- apply
 @contextmanager
 def _exclusive(store_dir: Path) -> Iterator[None]:
+    """Hold an exclusive, non-blocking lock on the store while writing; a second writer is rejected at once."""
     lock_path = store_dir.parent / f".{store_dir.name}.lock"
     with lock_path.open("a") as handle:
         try:
@@ -111,6 +114,7 @@ def _exclusive(store_dir: Path) -> Iterator[None]:
 
 
 def _pairs(vectors: Iterable[tuple[str, np.ndarray]]) -> dict[str, np.ndarray]:
+    """Turn (unit ID, vector) pairs into a dict, rejecting any unit that appears twice."""
     out: dict[str, np.ndarray] = {}
     for unit_id, vector in vectors:
         if unit_id in out:
@@ -153,6 +157,7 @@ def apply(store_dir: Path, config: EmbeddingConfig, manifest: dict[str, Any], ve
             if conflicts:
                 raise WriteRejectedError(f"conflicting vector for existing entry {conflicts[0]}")
             return {"status": "no_op", "already_present": present, "added": 0, "manifest_id": manifest["manifest_id"]}
+        # Staleness is checked only when adding: applying a manifest changes the store, so a rerun is a no-op.
         if file_sha256(store_dir / "manifest.json") != manifest["base_store_manifest_sha256"]:
             raise WriteRejectedError("stale manifest: the store changed since the dry run")
         if conflicts:

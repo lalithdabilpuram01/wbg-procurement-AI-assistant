@@ -23,6 +23,7 @@ ACTIVE_STATES = {"QUEUED", "PENDING", "RUNNING", "TERMINATING", "BLOCKED", "WAIT
 
 @dataclass(frozen=True)
 class Watched:
+    """One upload Volume and the job that a new file in it starts."""
     label: str
     job_name: str               # the job's name prefix (resources/*.yml)
     volume: str                 # upload Volume under /Volumes/<catalog>/etl/
@@ -57,7 +58,9 @@ def latest_upload(entries: Callable[[str], Iterable], folder: str) -> tuple[int 
 
 
 class JobWatcher:
+    """Polls the upload Volumes and starts each job when the trigger rule in due() says so."""
     def __init__(self, workspace, catalog: str, say: Callable[[str], None] = print):
+        """Look up each watched job's id by its name prefix; exits when a job is not deployed."""
         self.w, self.catalog, self.say = workspace, catalog, say
         self.jobs = {}
         for watched in WATCHED:
@@ -67,6 +70,7 @@ class JobWatcher:
             self.jobs[watched.label] = matches[0].job_id
 
     def _latest_run(self, job_id: int) -> tuple[int | None, bool, str]:
+        """(start time in ms, still active, run page URL) of the job's latest run; (None, False, "") if it never ran."""
         for run in self.w.jobs.list_runs(job_id=job_id, limit=1):
             state = run.state.life_cycle_state.value if run.state and run.state.life_cycle_state else ""
             return run.start_time, state in ACTIVE_STATES, run.run_page_url or ""
@@ -85,6 +89,7 @@ class JobWatcher:
         return run.run_id
 
     def loop(self, poll_seconds: int) -> None:
+        """Check every watched Volume each `poll_seconds`, forever; a failed check is reported, not raised."""
         self.say(f"watching /Volumes/{self.catalog}/etl/inbox (documents) and /etl/landing (data); Ctrl+C stops")
         while True:
             for watched in WATCHED:
@@ -96,6 +101,7 @@ class JobWatcher:
 
 
 def main(argv: list[str]) -> int:
+    """Parse the arguments and watch the Volumes until Ctrl+C; return 0."""
     parser = argparse.ArgumentParser(prog="wbg-etl-watch", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--profile", default="wbg-databricks-free", help="Databricks CLI profile")
     parser.add_argument("--catalog", default="wbg_etl")

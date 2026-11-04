@@ -27,7 +27,9 @@ ABSTAIN_TEXT = {"insufficient_evidence": "The indexed documents and typed record
 
 
 class AnswerPipeline:
+    """End-to-end grounded answering for one question: retrieval, evidence checks, generation and claim validation."""
     def __init__(self, generator, strategy: str = "C", use_nli: bool = True, typed_router: bool = True, retriever=None):
+        """Wire the parts; by default a retriever over chunking strategy C, the typed-record router and NLI."""
         self.R = retriever or Retriever(Corpus(strategy))
         self.typed = TypedRecordAnswerer() if typed_router else None
         self.sel = EvidenceSelector(self.R)
@@ -35,6 +37,7 @@ class AnswerPipeline:
         self.nli = NLI() if use_nli else None
 
     def citation(self, e) -> Citation:
+        """Build the user-facing citation for one evidence item from index metadata (never from model text)."""
         r = e.record
         return Citation(evidence_id=e.eid, unit_id=e.unit_id, unit_type=r["unit_type"], project_id=r["project_id"], project_name=r.get("project_name"),
                         document_id=r["document_id"], title=r.get("title"), doc_type=r["doc_type"], document_date=r.get("document_date"),
@@ -44,6 +47,7 @@ class AnswerPipeline:
                         contract_links=r.get("evidence_links", []) or [], plan_version_id=r.get("plan_version_id"))
 
     def answer(self, question: str, injected_units: list[dict] | None = None) -> AnswerResponse:
+        """Answer one question: a validated AnswerResponse, or an abstention when evidence is missing or unsafe."""
         t0 = time.perf_counter()
         plan = understand(question)
         pack = self.sel.select(question, plan, injected_units)
@@ -54,6 +58,7 @@ class AnswerPipeline:
             st = "withheld" if pack.status == "withheld_personal_data" else "insufficient_evidence"
             return AnswerResponse(status=st, answer=ABSTAIN_TEXT[st], citations=[], supporting_evidence_ids=[], conflicts=[], limitations=pack.notes,
                                   timings_ms={"retrieval": round(1000 * (t_ret - t0)), "total": round(1000 * (time.perf_counter() - t0))}, **base)
+        # Quarantined items and items whose page could not be verified are never shown to the generator.
         usable = [e for e in pack.items if not e.quarantined and e.page_check != "unverified"]
         limitations = [f"Evidence {e.eid} ({e.unit_id}) was quarantined: it contains instruction-like text and was not shown to the generator."
                        for e in pack.items if e.quarantined]
@@ -85,15 +90,18 @@ class AnswerPipeline:
             vals = []
             for v in dc.values:
                 e = ev.get(v.evidence_id)
+                # A value with numbers needs all of them in the cited evidence; other values must appear there as text.
                 ok = e is not None and not e.quarantined and (not numbers(v.value) or numbers(v.value) <= numbers(e.text + " " + e.context)) \
                     and v.value.lower().strip(". ") in (e.text + " " + e.context).lower() if not numbers(v.value) else e is not None and numbers(v.value) <= numbers(e.text + " " + e.context)
                 if ok:
                     vals.append({"value": v.value, "evidence_id": v.evidence_id, "document_id": e.record["document_id"], "doc_type": e.record["doc_type"],
                                  "document_date": e.record.get("document_date")})
+            # Report a conflict only when its supported values come from at least two different documents.
             if len({v["document_id"] for v in vals}) >= 2:
                 conflicts.append(Conflict(field=dc.field, values=vals, source="generator_reported"))
         limitations += [f"Removed unsupported claim: {r.text[:160]}" for r in removed]
         limitations += link_status_notes([k.model_dump() for k in kept], usable)
+        # Status order: any conflict wins, then no supported claim (abstain), then partial when a claim was removed.
         if conflicts:
             status = "conflicting_evidence"
         elif not kept:
@@ -116,6 +124,7 @@ class AnswerPipeline:
 
 
 def main() -> None:
+    """Command-line entry point: answer one question and print (and optionally save) the JSON response."""
     ap = argparse.ArgumentParser()
     ap.add_argument("question")
     ap.add_argument("--generator", default="ollama", choices=["ollama", "evidence_only"])

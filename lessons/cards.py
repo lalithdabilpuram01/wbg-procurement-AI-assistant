@@ -56,6 +56,8 @@ CATEGORIES = {
 
 @dataclass(frozen=True)
 class Paragraph:
+    """One paragraph of a lessons section, with the pages it spans."""
+
     text: str
     page_start: int | None = None
     page_end: int | None = None
@@ -63,6 +65,8 @@ class Paragraph:
 
 @dataclass(frozen=True)
 class Source:
+    """The document and section a set of paragraphs comes from."""
+
     document_id: str
     doc_type: str                    # ICR | ICRR | PAD
     project_id: str | None
@@ -74,6 +78,9 @@ class Source:
 
 @dataclass(frozen=True)
 class LessonCard:
+    """One lesson: its text, citation, rule-based tags and review status.
+    `origin` and `section_id` are ignored when two cards are compared."""
+
     card_id: str
     project_id: str | None
     country: str | None
@@ -100,6 +107,7 @@ class LessonCard:
 
     @property
     def citation(self) -> str:
+        """Short citation: "<doc type> <document id>, p. <pages> (<project id>)"."""
         pages = (f", p. {self.page_start}" + (f"-{self.page_end}" if self.page_end and self.page_end != self.page_start else "")
                  if self.page_start else "")
         return f"{self.doc_type} {self.document_id}{pages} ({self.project_id or 'no project'})"
@@ -112,6 +120,7 @@ def cards(source: Source, paragraphs: list[Paragraph], origin: str = "ingest") -
         text = " ".join(p.text.split())
         if FOOTNOTE.search(text):
             continue
+        # Footnotes are recognised by their leading number, so they are dropped before list numbering is stripped.
         text = NUMBERING.sub("", text)
         if not _is_lesson(text) or card_id(source.document_id, text) in seen:
             continue
@@ -129,6 +138,7 @@ def cards(source: Source, paragraphs: list[Paragraph], origin: str = "ingest") -
 
 
 def card_id(document_id: str, text: str) -> str:
+    """Stable id from the document and the text's letters and digits only, so different spacing keeps the same id."""
     key = re.sub(r"[^a-z0-9]", "", text.lower())[:400]
     return hashlib.sha256(f"{document_id}\x00{key}".encode()).hexdigest()[:20]
 
@@ -143,6 +153,7 @@ def headline(text: str) -> str:
 
 
 def _is_lesson(text: str) -> bool:
+    """False for lead-ins, fragments, running headers or footers, and paragraphs too short to be a lesson."""
     words = len(text.split())
     if words < MIN_WORDS or text.endswith(":") or LEAD_IN.search(text) or not SENTENCE_END.search(text):
         return False

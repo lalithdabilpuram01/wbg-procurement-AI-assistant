@@ -50,9 +50,11 @@ class RuntimeControls:
 
     def __init__(self, settings: RuntimeSettings, telemetry: Telemetry, clock: Callable[[], float] = time.monotonic,
                  tracer: WorkflowTracer | None = None):
+        """Build the rate limiters, concurrency limits and circuit breakers from the settings."""
         tracer = tracer or WorkflowTracer.disabled()
 
         def audit_transition(name: str, old: CircuitState, new: CircuitState) -> None:
+            """Audit and trace one circuit breaker state change."""
             telemetry.audit("breaker", "inv_" + uuid.uuid4().hex[:16], "circuit_breaker.transition",
                             breaker=name, from_state=old.value, to_state=new.value)
             tracer.event("nl2sql.circuit_breaker_transition", level="warn", breaker=name, from_state=old.value,
@@ -69,9 +71,12 @@ class RuntimeControls:
 
 
 class NlToSqlWorkflow:
+    """The NL2SQL workflow for one question at a time; see the module docstring for the stages."""
+
     def __init__(self, tools: ToolCaller, claude: PortkeyClaudeClient, telemetry: Telemetry,
                  settings: RuntimeSettings = RuntimeSettings(), clock: Callable[[], float] = time.monotonic,
                  tracer: WorkflowTracer | None = None, guardrails: Guardrails | None = None):
+        """Wire the tool caller, Claude client, telemetry and optional guardrails, and build the runtime controls."""
         self._tools = tools
         self._guardrails = guardrails
         self._claude = claude
@@ -121,6 +126,7 @@ class NlToSqlWorkflow:
         return result
 
     def _run(self, result: WorkflowResult, execute: bool, conversation_context: str | None) -> None:
+        """The stages of one request in order; each stage sets the result status when it ends the request early."""
         trusted_principal = self._tools.principal_id   # fixed for the whole request
         self.controls.request_rate.acquire(trusted_principal)
         deadline = Deadline(self._settings.total_deadline_seconds, self._clock)
@@ -147,6 +153,7 @@ class NlToSqlWorkflow:
 
     # ------------------------------------------------------------------------------------------------- retrieval
     def _retrieve_context(self, result: WorkflowResult) -> SchemaContext | None:
+        """Build the schema context through the retrieval tools; returns None (status set) when there is none."""
         started = time.perf_counter()
         with self._tracer.stage("nl2sql.metadata_retrieval", request_id=result.request_id) as span:
             context, outcome = build_schema_context(TracedToolCaller(self._tools_for(RETRIEVAL_TOOLS, "retrieval"), self._tracer),
@@ -212,8 +219,10 @@ class NlToSqlWorkflow:
 
     def _call_claude(self, result: WorkflowResult, context: SchemaContext, deadline: Deadline, attempt: int,
                      feedback: list[str] | None, memory: str | None = None) -> SqlDraft:
+        """One rate-limited, deadline-bounded Claude call behind the circuit breaker; returns the parsed draft."""
         self.controls.llm_rate.acquire(self._tools.principal_id)
         with self.controls.llm_slots.slot():
+            # Never wait longer than the request has left, so the total deadline holds.
             timeout = min(self._claude.timeout_seconds, deadline.check(MINIMUM_SECONDS_FOR_A_CALL))
             breaker = self.controls.llm_breaker
             breaker.before_call()
@@ -244,12 +253,14 @@ class NlToSqlWorkflow:
         return draft
 
     def _reject(self, result: WorkflowResult) -> None:
+        """Mark the result rejected, as an authorization denial or a SQL validation denial."""
         result.status = WorkflowStatus.REJECTED
         codes = set(result.validation.error_codes) if result.validation else set()
         result.failure_class = FailureClass.AUTHORIZATION_DENIED if codes & AUTHORIZATION_CODES else FailureClass.SQL_VALIDATION_DENIED
 
     # -------------------------------------------------------------------------------------------------- execution
     def _execute(self, result: WorkflowResult, draft: SqlDraft, deadline: Deadline) -> None:
+        """Run the approved SQL once through execute_readonly_sql, behind the Databricks limiter and breaker."""
         self.controls.databricks_rate.acquire(self._tools.principal_id)
         with self.controls.databricks_slots.slot():
             deadline.check(MINIMUM_SECONDS_FOR_A_CALL)
@@ -276,6 +287,7 @@ class NlToSqlWorkflow:
 
     @staticmethod
     def _apply_execution(result: WorkflowResult, response: dict[str, Any], codes: set[str]) -> None:
+        """Copy an execution response into the result and map its error codes to a status and failure class."""
         if response["status"] == "ok":
             result.status = WorkflowStatus.ANSWERED
             result.executed_sql = result.validated_sql   # the gateway re-validates and runs this normalised SQL
@@ -310,6 +322,7 @@ class NlToSqlWorkflow:
             raise GuardrailBlocked(decision)
 
     def _record_guard(self, result: WorkflowResult, decision: GuardDecision) -> None:
+        """Store a decision on the result (once) and write it to the audit log and the tracer."""
         safe = {"guard_stage": decision.stage.value, "policy_id": decision.policy_id, "decision": decision.decision,
                 "reason_category": decision.reason_category.value if decision.reason_category else None,
                 "enforced_by": decision.enforced_by, "duration_ms": decision.duration_ms}
@@ -320,6 +333,7 @@ class NlToSqlWorkflow:
                            request_id=result.request_id, **safe)
 
     def _block(self, result: WorkflowResult, decision: GuardDecision) -> None:
+        """Set the result to blocked and clear any rows, so nothing withheld reaches the caller."""
         if decision.stage == GuardStage.TOOL_AUTHORIZATION:
             self._record_guard(result, decision)   # raised by the tool gate, not yet recorded
         result.status, result.failure_class = WorkflowStatus.BLOCKED_BY_GUARDRAIL, FailureClass.GUARDRAIL_BLOCKED
@@ -358,6 +372,7 @@ class NlToSqlWorkflow:
 
 
 def _validation_summary(response: dict[str, Any]) -> ValidationSummary:
+    """Turn a validate_sql response into the ValidationSummary kept on the result."""
     report = response.get("report") or {}
     return ValidationSummary(approved=bool(report.get("approved")), validation_id=report.get("validation_id"),
                              validated_sql=report.get("validated_sql"),

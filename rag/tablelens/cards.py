@@ -19,6 +19,7 @@ MAX_LABEL_CHARS = 80
 
 @dataclass(frozen=True)
 class DocumentInfo:
+    """The document facts printed in a table card's first line."""
     document_id: str
     doc_type: str
     project_id: str
@@ -27,6 +28,7 @@ class DocumentInfo:
 
 
 def card_text(table: LogicalTable, doc: DocumentInfo) -> str:
+    """Build the card text of a table: source line, caption, typed columns, row labels, groups and row count."""
     pages = f"page {table.pages[0]}" if len(table.pages) == 1 else f"pages {table.pages[0]}-{table.pages[-1]}"
     lines = [f"[{doc.doc_type} {doc.document_id} · {doc.project_title} ({doc.project_id}, {doc.country_code}) · "
              f"{table.section or 'no section'} · {pages}]"]

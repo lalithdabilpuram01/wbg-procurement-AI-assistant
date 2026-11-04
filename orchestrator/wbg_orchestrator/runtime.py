@@ -91,6 +91,7 @@ REGISTRY_PRINCIPAL, WORKSPACE = "analyst-demo", "wbg-procurement-poc"
 
 @dataclass(frozen=True)
 class RuntimeConfig:
+    """The app's runtime settings; `from_env` reads them from WBG_* environment variables."""
     ledger_path: Path
     max_attempts: int
     max_usd: Decimal
@@ -102,6 +103,7 @@ class RuntimeConfig:
 
     @classmethod
     def from_env(cls) -> "RuntimeConfig":
+        """Read the settings from WBG_* environment variables, with a default for each one that is unset."""
         env = os.environ
         return cls(ledger_path=Path(env.get("WBG_LLM_LEDGER", ORCHESTRATOR_DIR / "runs" / "llm_ledger.json")),
                    max_attempts=int(env.get("WBG_LLM_MAX_ATTEMPTS", "10")), max_usd=Decimal(env.get("WBG_LLM_MAX_USD", "2.00")),
@@ -151,7 +153,8 @@ def build_runtime(config: RuntimeConfig, operator_confirmed: bool) -> tuple[AppS
                          lessons=lessons)
 
     def close() -> None:
-        service.shutdown()
+        """Shut the service down first, then close the database pools and the tool session."""
+        service.shutdown()                       # first: running jobs finish before their connections close
         pool.close()
         learning_pool.close()
         lessons_pool.close()
@@ -216,11 +219,13 @@ def _settings(config: RuntimeConfig) -> Settings:
 
 def _structured_worker(config: RuntimeConfig, tools: ToolCaller, claude: BudgetedClaudeClient, guardrails,
                        authority: TicketAuthority):
+    """The Structured Data worker over the given tools, auditing to structured_audit.jsonl next to the app audit."""
     telemetry = Telemetry(AgentAuditSink(_settings(config).audit_log_path))
     return structured_worker(tools, claude, telemetry, authority, ResultCache(), guardrails=guardrails)
 
 
 def _learning_pool(config: RuntimeConfig):
+    """An open pool to the feedback store; the app refuses to start when the store is not initialised."""
     pool = learning_db.learning_pool(learning_db.learning_endpoint(config.checkpoint_endpoint))
     try:
         learning_db.verify(pool)                                          # fail closed when the store is not initialised
@@ -249,6 +254,7 @@ def _question_embedding(text: str):
 
 
 def _checkpoint_pool(config: RuntimeConfig):
+    """An open pool to the isolated checkpoint schema on the Lakebase development branch, checked before use."""
     from infrastructure.lakebase_poc.lakebase_poc.settings import load_settings as lakebase_login
     login = lakebase_login()
     settings = CheckpointDbSettings(host=endpoint_host(config.checkpoint_endpoint, login.databricks_profile),

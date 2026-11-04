@@ -95,6 +95,7 @@ COMMENTS: dict[str, Any] = {
 
 
 def main() -> int:
+    """Dry run by default: build and check gold_country_context and save the reports; write mode creates the table."""
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--mode", choices=["dry-run", "write"], default="dry-run")
     ap.add_argument("--confirm-create", action="store_true")
@@ -107,6 +108,7 @@ def main() -> int:
     run_dir.mkdir(parents=True, exist_ok=True)
     spark = get_spark(args.profile)
     target_exists = spark.catalog.tableExists(T.TARGET)
+    # Version, row count and grants of every other table before the write, so the verify script can prove no change.
     base = B.capture(spark, exclude={T.TARGET})
     base["target_exists"] = target_exists
     (run_dir / "baseline_before_write.json").write_text(json.dumps(base, indent=1))

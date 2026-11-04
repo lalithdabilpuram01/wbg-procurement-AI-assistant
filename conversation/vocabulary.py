@@ -18,6 +18,8 @@ COHORT_MANIFEST = COHORT_MANIFEST
 
 
 class CountryVocabulary:
+    """Lookup of country names and aliases (lower-cased) to the countries they may mean."""
+
     def __init__(self, names_to_countries: dict[str, list[CountryRef]]):
         self._index = names_to_countries
         alternatives = sorted(self._index, key=len, reverse=True)   # longest names first ("South Sudan" before "Sudan")
@@ -37,6 +39,7 @@ class CountryVocabulary:
 
 @lru_cache(maxsize=1)
 def cohort_vocabulary(manifest: Path = COHORT_MANIFEST) -> CountryVocabulary:
+    """Vocabulary of the cohort's non-regional countries: full WB name, display name and short form of each (cached)."""
     countries: dict[str, CountryRef] = {}
     with manifest.open(newline="") as handle:
         for row in csv.DictReader(handle):

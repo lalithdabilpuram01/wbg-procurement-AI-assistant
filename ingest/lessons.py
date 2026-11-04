@@ -11,6 +11,7 @@ TEXT_BLOCKS = {"paragraph", "list_item"}
 
 
 def cards_for(doc: ParsedDocument, ref: Reference) -> list[LessonCard]:
+    """Lesson cards from every lessons section of the document (none for types without lessons), each card once."""
     if doc.doc_type not in SOURCES:
         return []
     project = ref.project(doc.project_id) or {}

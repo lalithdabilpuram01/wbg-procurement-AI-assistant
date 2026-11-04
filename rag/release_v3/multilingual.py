@@ -89,6 +89,8 @@ def download() -> dict[str, Any]:
 
 
 def encode(name: str) -> dict[str, Any]:
+    """Encode every pilot_v3 unit with a candidate model into results/experiments/ and return its metadata.
+    Skips the work when vectors for the same indexed text exist; saved parts are reused after an interruption."""
     units = corpus().units
     fingerprint = indexed_text_fingerprint(units)
     target, meta = EXPERIMENTS / f"{name}.npy", EXPERIMENTS / f"{name}.json"
@@ -121,6 +123,7 @@ def _encode_part(model, units, path: Path) -> None:
 
 
 def question_sets() -> dict[str, list[dict[str, Any]]]:
+    """Return the question sets by name: v1, v3, its French version fr_v3, and the cross-language questions."""
     v3 = build_benchmark_v3()["questions"]
     from rag.ingestion import config
     projects = {json.loads(line)["project_id"]: json.loads(line)["api"]
@@ -134,6 +137,7 @@ def question_sets() -> dict[str, list[dict[str, Any]]]:
 
 
 def retriever_for(name: str):
+    """Return a pilot_v3 retriever whose dense side uses the named model (current model, or a candidate's vectors)."""
     retriever = build_retriever("pilot_v3_gte_local")                                  # current model: verified release store
     if name == "gte-base-en (current)":
         return retriever
@@ -146,6 +150,7 @@ def retriever_for(name: str):
 
 
 def evaluate() -> dict[str, Any]:
+    """Run every question set for the current model and each encoded candidate, and write the comparison files."""
     sets = question_sets()
     report: dict[str, Any] = {"question_sets": {k: len(v) for k, v in sets.items()}, "models": {}}
     rows = []

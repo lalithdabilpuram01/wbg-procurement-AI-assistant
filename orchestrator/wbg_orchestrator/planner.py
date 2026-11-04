@@ -26,11 +26,14 @@ DEFAULT_ATTEMPTS = {"answer_data_question": 1, "answer_document_question": 1}
 
 
 class PlannerError(Exception):
+    """A planner output that cannot become a plan; `code` is a short, safe reason code."""
+
     def __init__(self, code: str, message: str):
         super().__init__(message)
         self.code = code
 
 
+# The plan schema Claude fills in (sent as its structured-output schema); build_plan turns it into an InvestigationPlan.
 class DraftTask(BaseModel):
     model_config = ConfigDict(extra="forbid")
     id: str = Field(pattern=r"^[A-Za-z][A-Za-z0-9_-]{0,15}$")
@@ -43,6 +46,7 @@ class DraftTask(BaseModel):
     optional: bool = False
 
 
+# The plan exactly as a planner must return it (strict schema); it is checked and then turned into an InvestigationPlan.
 class DraftPlan(BaseModel):
     model_config = ConfigDict(extra="forbid")
     tasks: list[DraftTask] = Field(min_length=1, max_length=12)
@@ -54,6 +58,7 @@ class DraftPlan(BaseModel):
 
 @dataclass(frozen=True)
 class PlanningContext:
+    """What the planner may see besides the request: memory, and for a replan the failed plan and its error codes."""
     memory_block: str | None = None                  # untrusted conversation memory (labelled in the prompt)
     previous_plan: dict | None = None                # for a replan
     failures: tuple[str, ...] = ()                   # typed failure codes of the previous plan (no content)
@@ -66,6 +71,8 @@ class PlannerOutput:
 
 
 class Planner(Protocol):
+    """Anything that proposes a plan; its output is never trusted until build_plan and the controller accept it."""
+
     name: Literal["fake_planner", "claude_planner"]
 
     def plan(self, request: InvestigationRequest, context: PlanningContext) -> PlannerOutput: ...
@@ -73,6 +80,7 @@ class Planner(Protocol):
 
 # ------------------------------------------------------------------------------------------------ conversion
 def idempotency_key(investigation_id: str, worker: str, operation: str, question: str, requires_execution: bool) -> str:
+    """The same work in the same investigation gets the same key, so a replan can reuse an earlier result."""
     material = "\x00".join((investigation_id, worker, operation, question.strip().lower(), str(requires_execution)))
     return hashlib.sha256(material.encode()).hexdigest()
 
@@ -194,6 +202,7 @@ def brief_plan(request: InvestigationRequest) -> InvestigationPlan:
 
 
 def _requirements(operation: str, requires_execution: bool) -> tuple[EvidenceRequirement, ...]:
+    """The task's evidence requirement, derived from its operation (never chosen by the planner)."""
     requirement = default_requirement(operation, requires_execution)
     return (requirement,) if requirement else ()       # unknown operations are rejected by the controller
 
@@ -209,6 +218,7 @@ class FakePlanner:
         self.calls: list[PlanningContext] = []
 
     def plan(self, request: InvestigationRequest, context: PlanningContext) -> PlannerOutput:
+        """Return the next scripted plan with fixed usage; raises PlannerError when none are left."""
         self.calls.append(context)
         if not self._outputs:
             raise PlannerError("no_scripted_plan", "The fake planner has no more scripted plans.")
@@ -246,12 +256,13 @@ class ClaudePlanner:
         self._client = client
 
     def plan(self, request: InvestigationRequest, context: PlanningContext) -> PlannerOutput:
+        """One Claude call; the prompt lists only the operations this investigation is authorized to use."""
         allowed = ", ".join(f"{w}:{op}" for w, ops in OPERATIONS.items() for op in ops if request.authorization.allows(w, op))
         user = [f"QUESTION:\n{request.question}"]
         if request.planning_context:
             user.append(f"PLANNING CONTEXT (the user's new-project brief):\n{request.planning_context}")
         if context.memory_block:
-            user.append(f"CONVERSATION MEMORY (untrusted):\n{context.memory_block[:4000]}")
+            user.append(f"CONVERSATION MEMORY (untrusted):\n{context.memory_block[:4000]}")   # bounded prompt size
         if context.previous_plan:
             user.append(f"PREVIOUS PLAN FAILED WITH: {', '.join(context.failures) or 'unknown'}. Propose a revised plan.")
         parsed, content, usage = self._client.complete(

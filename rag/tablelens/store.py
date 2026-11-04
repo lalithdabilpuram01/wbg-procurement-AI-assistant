@@ -42,6 +42,7 @@ DDL = (
 
 @dataclass(frozen=True)
 class TableEntry:
+    """One table to load: the logical table, its document facts and its card text."""
     table: LogicalTable
     doc: DocumentInfo
     card: str
@@ -56,6 +57,7 @@ def cards_fingerprint(entries: Sequence[TableEntry]) -> str:
 
 
 def _value(text: str, kind: str):
+    """Convert cell text to the column's SQL value (number, date or text); None when empty or unparseable."""
     if not text:
         return None
     if kind == "number":
@@ -87,6 +89,7 @@ def load(conn: psycopg.Connection, record: ReleaseRecord, entries: Sequence[Tabl
 
 
 def _load_table(conn: psycopg.Connection, release: str, entry: TableEntry, vector: np.ndarray) -> int:
+    """Create and fill one physical table, add its registry row with the card vector, and return the rows written."""
     table, doc, name = entry.table, entry.doc, physical_name(entry.table.table_id)
     columns = [sql.SQL("{} {}").format(sql.Identifier(c.sql_name), sql.SQL(SQL_TYPES[c.type])) for c in table.columns]
     conn.execute(sql.SQL("CREATE TABLE {}.{} (_row int NOT NULL, _page int NOT NULL, _group text, _quality text NOT NULL, {})")

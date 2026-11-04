@@ -107,6 +107,7 @@ class NewBookmark(BaseModel):
     note: str = Field(default="", max_length=200)
 
 
+# Body of a new chat message: the text, run-the-SQL and TableLens switches, and the client id used to spot repeats.
 class NewMessage(BaseModel):
     text: str = Field(min_length=1, max_length=2000)
     execute: bool = False                       # the user asks to run the validated, read-only SQL
@@ -114,6 +115,7 @@ class NewMessage(BaseModel):
     client_message_id: str = Field(pattern=CLIENT_ID)
 
 
+# The structured request bodies below are the domain specs plus the client message id used to spot repeats.
 class NewPackage(PackageAssessment):
     client_message_id: str = Field(pattern=CLIENT_ID)
 
@@ -151,6 +153,7 @@ class ReviewDecision(BaseModel):
 
 
 def allowed_folder_name(name: str) -> str:
+    """The folder name, or 422 when it is the reserved name of the hidden "deleted" folder."""
     if name.strip() == DELETED_FOLDER:
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "that folder name is reserved")
     return name
@@ -167,12 +170,14 @@ def feedback_view(feedback: Feedback) -> dict[str, Any]:
 
 
 def item_view(item: LearnedItem, expired: bool = False) -> dict[str, Any]:
+    """A learned item as JSON for the user's memory page."""
     return {"item_id": item.item_id, "kind": item.kind, "scope": item.scope, "statement": item.statement,
             "question": item.question, "use_count": item.use_count, "created_at": item.created_at.isoformat(),
             "last_used_at": item.last_used_at.isoformat() if item.last_used_at else None, "expired": expired}
 
 
 def lesson_view(card: LessonCard) -> dict[str, Any]:
+    """A lesson card as JSON for the review queue."""
     return {"card_id": card.card_id, "status": card.status, "headline": card.headline, "text": card.text,
             "project_id": card.project_id, "country": card.country, "sector": card.sector, "doc_type": card.doc_type,
             "source": card.source_label, "citation": card.citation, "document_id": card.document_id, "page_start": card.page_start,
@@ -181,6 +186,7 @@ def lesson_view(card: LessonCard) -> dict[str, Any]:
 
 
 def review_view(review: Review) -> dict[str, Any]:
+    """A review item as JSON; approach details (steps, tables, filters) are shown only for shared approaches."""
     payload = review.payload
     return {"review_id": review.review_id, "kind": review.kind, "submitted_by": review.submitted_by, "status": review.status,
             "question": payload.get("question", ""), "statement": payload.get("statement") or payload.get("correction", ""),
@@ -193,9 +199,11 @@ def review_view(review: Review) -> dict[str, Any]:
 # ------------------------------------------------------------------------------------------------------ app
 def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter | None = None,
                kpi_board: KpiBoard | None = None, auth_limiter: RateLimiter | None = None) -> FastAPI:
+    """Build the FastAPI app: authentication, rate limits, error mapping, request logging and every endpoint."""
     app = FastAPI(title="WBG Procurement Intelligence API", version="0.1.0")
 
     def identify(authorization: str) -> Identity | None:
+        """The identity behind an `Authorization: Bearer <token>` header; None for any other header."""
         scheme, _, token = authorization.partition(" ")
         return users.identify(token) if scheme.lower() == "bearer" and token else None
 
@@ -235,11 +243,13 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
                                 {"Retry-After": str(refusal.retry_after_seconds)})
 
     def reviewer_owner(owner: Owner = Depends(current_owner)) -> Owner:
+        """The owner of a reviewer-only request; others get 403 and a security event."""
         if not users.is_reviewer(owner):
             security_event("access.denied", "failure", status_code=403, reason="reviewers_only")
             raise HTTPException(status.HTTP_403_FORBIDDEN, "reviewers only")
         return owner
 
+    # Every "not found" error maps to the same 404, so a foreign item cannot be told apart from a missing one.
     @app.exception_handler(ThreadNotFound)
     @app.exception_handler(InvestigationNotFound)
     @app.exception_handler(JobNotFound)
@@ -275,6 +285,7 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
         """Give every request a reference id (X-Request-ID, echoed back), identify its session, log requests that
         change something or fail, and attach the ids to every log line written while the request is handled."""
         reference = request.headers.get("X-Request-ID") or new_id("http")
+        # A client-supplied id goes into logs and headers, so anything outside a safe pattern is replaced.
         if not re.fullmatch(r"[A-Za-z0-9_.:-]{1,80}", reference):
             reference = new_id("http")
         request.state.request_ref = reference
@@ -304,6 +315,7 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
         owner = users.account_owner(username)
         security_event(event, "failure", reason=reason, user_hash=user_hash(owner) if owner else None)
 
+    # Sign in with a password: a session token, or 401 with the same message for a wrong username or password.
     @app.post("/auth/login", dependencies=[Depends(limited_attempt)])
     def sign_in(body: SignIn) -> dict[str, str]:
         token = users.sign_in(body.username, body.password)
@@ -350,6 +362,7 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
     def list_projects(owner: Owner = Depends(current_owner)) -> list[dict[str, Any]]:
         return watched_projects()
 
+    # The monitoring view of one project; 404 when it has neither a procurement plan nor ISR ratings.
     @app.get("/projects/{project_id}/watch")
     def project_watch(project_id: str, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
         if not PROJECT_ID.fullmatch(project_id):
@@ -363,6 +376,7 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
     def list_dashboards(owner: Owner = Depends(current_owner)) -> list[dict[str, str]]:
         return dashboards()
 
+    # One dashboard's KPIs (cached); 503 when no SQL warehouse is configured.
     @app.get("/dashboards/{key}/kpis")
     def dashboard_kpis(key: str, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
         if kpi_board is None:
@@ -428,6 +442,7 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
     def delete_bookmark(bookmark_id: str, owner: Owner = Depends(current_owner)) -> None:
         service.delete_bookmark(owner, bookmark_id)
 
+    # A conversation with its turns, the investigations it started and the feedback given on its answers.
     @app.get("/conversations/{conversation_id}")
     def read_conversation(conversation_id: str, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
         turns = service.history(owner, conversation_id)
@@ -439,6 +454,7 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
                 "feedback": [feedback_view(f) for f in service.thread_feedback(owner, conversation_id).values()]}
 
     # ------------------------------------------------------------------------------------------ feedback
+    # Rate an answer; a thumbs-down with a correction also returns the revision job it started.
     @app.post("/conversations/{conversation_id}/feedback", status_code=201)
     def give_feedback(conversation_id: str, body: FeedbackBody, owner: Owner = Depends(limited_owner)) -> dict[str, Any]:
         request = FeedbackRequest(**body.model_dump(exclude={"client_message_id"}))
@@ -465,12 +481,14 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
             raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "unknown status")
         return {"counts": service.lesson_counts(), "cards": [lesson_view(c) for c in service.lesson_cards(state)]}
 
+    # Approve or reject a lesson card (reviewers only); the decision is a security event.
     @app.post("/lessons/{card_id}")
     def decide_lesson(card_id: str, body: LessonDecision, owner: Owner = Depends(reviewer_owner)) -> dict[str, Any]:
         card = service.decide_lesson(owner, card_id, body.approved, body.note)
         security_event("review.lesson_decided", "success", card_id=card_id, approved=body.approved)
         return lesson_view(card)
 
+    # The reviewer queue filtered by status ("all" for every status).
     @app.get("/reviews")
     def list_reviews(state: str = Query("pending", alias="status"), owner: Owner = Depends(reviewer_owner)) -> list[dict[str, Any]]:
         wanted = None if state == "all" else state
@@ -478,6 +496,7 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
             raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "unknown status")
         return [review_view(r) for r in service.reviews(owner, wanted)]
 
+    # Decide a review item (reviewers only); the decision is a security event.
     @app.post("/reviews/{review_id}")
     def decide_review(review_id: str, body: ReviewDecision, owner: Owner = Depends(reviewer_owner)) -> dict[str, Any]:
         review = service.decide_review(owner, review_id, body.approved, body.note, body.expected_terms)
@@ -529,6 +548,7 @@ def create_app(service: AppService, users: UserDirectory, limiter: RateLimiter |
         return StreamingResponse(event_stream(service.streams, job_id, after), media_type="text/event-stream",
                                  headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
+    # One investigation. An unfinished one is "running" while its job runs, else "interrupted" (can be recovered).
     @app.get("/conversations/{conversation_id}/investigations/{request_id}")
     def read_investigation(conversation_id: str, request_id: str, owner: Owner = Depends(current_owner)) -> dict[str, Any]:
         outcome = service.investigation(owner, conversation_id, request_id)
@@ -576,6 +596,7 @@ def kpi_board() -> KpiBoard | None:
 
 
 def main(argv: list[str]) -> int:
+    """`serve`: configure logging, check the account store, build the runtime and run uvicorn on 127.0.0.1."""
     parser = argparse.ArgumentParser(description="WBG Procurement Intelligence local API")
     commands = parser.add_subparsers(dest="command", required=True)
     serve = commands.add_parser("serve", help="run the API on this laptop (127.0.0.1); users: uv run wbg-user")

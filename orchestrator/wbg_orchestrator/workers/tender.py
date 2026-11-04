@@ -38,10 +38,12 @@ UNITS = {"days": "days", "percent": "%", "lots": "", "years": "years", "months":
 
 
 def notice_type(category: str) -> str:
+    """The notice type whose response windows fit the category: consultants answer an REOI, the others bid."""
     return "Request for Expression of Interest" if category == "Consultant Services" else "Invitation for Bids"
 
 
 class TenderDesignWorker:
+    """Worker for `check_tender_design`: reads terms from the draft with rules and checks them against history."""
     name = WorkerName.TENDER
     operations = frozenset({"check_tender_design"})
 
@@ -50,6 +52,7 @@ class TenderDesignWorker:
         self._run_sql, self._authority, self._today, self._history = run_sql, authority, today, history_dir
 
     def run(self, task: AgentTask, context: WorkerContext) -> WorkerOutput:
+        """One record of the terms found (if any) and one per check; a draft with no readable terms adds a note."""
         self._authority.verify(context.ticket, task)
         if task.operation not in self.operations:
             return _failed(task, ErrorCategory.AUTHORIZATION, "unknown_operation", "The operation is not offered by this worker.")
@@ -82,6 +85,7 @@ class TenderDesignWorker:
 
 # ---------------------------------------------------------------------------------------------- records
 def _show(term: Term) -> str:
+    """A term's value with its unit, as the user would write it (US$ 1,200,000; 5%; 90 days)."""
     if term.unit == "usd":
         return f"US$ {term.value:,.0f}"
     if term.unit == "percent":
@@ -90,6 +94,7 @@ def _show(term: Term) -> str:
 
 
 def _terms_record(task: AgentTask, spec: TenderSpec, terms: list[Term]) -> EvidenceRecord:
+    """The terms read from the draft, each with the sentence it came from."""
     summary = "Read from the draft: " + "; ".join(f"{LABELS[t.name]} {_show(t)}" for t in terms) + "."
     facts = tuple(f for t in terms for f in (Fact(name=t.name, value=_show(t)), Fact(name=f"{t.name}_sentence", value=t.sentence[:200])))
     return _record(task, spec, "Draft tender text (terms read by rules)", facts, summary, SourceSystem.TYPED_PLAN_RECORDS,
@@ -97,6 +102,7 @@ def _terms_record(task: AgentTask, spec: TenderSpec, terms: list[Term]) -> Evide
 
 
 def _check_record(task: AgentTask, spec: TenderSpec, c: check.Check) -> EvidenceRecord:
+    """One check as a record; only the bid window with a Gold benchmark counts as approved data."""
     gold = c.code == "bid_window" and bool(c.benchmark)
     facts = (Fact(name="check", value=c.code), Fact(name="status", value=c.status),
              *(Fact(name=k, value=str(v)[:200]) for k, v in c.benchmark.items()))
@@ -108,6 +114,7 @@ def _check_record(task: AgentTask, spec: TenderSpec, c: check.Check) -> Evidence
 
 def _record(task: AgentTask, spec: TenderSpec, citation: str, facts: tuple[Fact, ...], summary: str, source: SourceSystem,
             numeric_use: NumericUse, provenance: tuple[tuple[str, str], ...], objects: tuple[str, ...] = ()) -> EvidenceRecord:
+    """A verified TENDER_CHECK record (facts and summary cut to the record limits)."""
     return EvidenceRecord(
         evidence_id=new_id("ev"), investigation_id=task.investigation_id, task_id=task.task_id, source_system=source,
         kind=EvidenceKind.TENDER_CHECK, project_ids=(spec.project_id,), source_objects=objects or ("pilot_v3.plan_activities",),

@@ -35,19 +35,26 @@ ROUTE_LABELS = {Route.STRUCTURED_DATA: "procurement data", Route.DOCUMENT_RAG: "
 
 @dataclass(frozen=True)
 class RouteRequest:
+    """What the router decides on: the message plus the follow-up resolution and the previous task route."""
+
     text: str                                   # the redacted message
     resolution: Resolution                      # deterministic follow-up resolution of the message
     previous_task_route: Route | None = None    # task route of the latest usable turn of the current topic
 
 
 class IntentRouter:
+    """Picks exactly one route per message: deterministic rules first, then the optional classifier."""
+
     def __init__(self, classifier: IntentClassifier | None = None, min_classifier_score: float = 0.75):
+        """`min_classifier_score`: a classifier answer scoring below it becomes a clarification instead of a route."""
         if not 0.0 < min_classifier_score <= 1.0:
             raise ValueError("min_classifier_score must be in (0, 1]")
         self._classifier = classifier
         self._min_score = min_classifier_score
 
     def route(self, request: RouteRequest) -> RoutingDecision:
+        """The routing decision for one message. A task route whose referent could not be resolved becomes a
+        clarification, except for a topic reset or an evidence recheck, which resolve the question again themselves."""
         text = rules.normalize(request.text)
         candidate = self._rules(text, request) or self._classify(text, request)
         rerun = candidate.reset_topic or candidate.reason == ReasonCategory.EVIDENCE_RECHECK
@@ -57,6 +64,7 @@ class IntentRouter:
 
     # ------------------------------------------------------------------------------------------------- rules
     def _rules(self, text: str, request: RouteRequest) -> RoutingDecision | None:
+        """Apply the deterministic rules in the order of the module docstring; None when no rule applies."""
         if not text:
             return _clarify(ReasonCategory.EMPTY_MESSAGE, "Please type a question or message.")
         if rules.is_tool_directive(text):
@@ -90,6 +98,7 @@ class IntentRouter:
 
     @staticmethod
     def _topic_reset(remainder: str) -> RoutingDecision:
+        """A bare reset goes to conversation; "start over and list ..." goes to the task named after the reset."""
         explicit = _explicit_task(remainder) if remainder else None
         if explicit is not None:
             return explicit.model_copy(update={"reset_topic": True,
@@ -107,6 +116,7 @@ class IntentRouter:
 
     @staticmethod
     def _memory_recall(text: str) -> RoutingDecision:
+        """Recall of the conversation, or a clarification when the same message also asks for a task."""
         if rules.task_signals(text):
             return _mixed([Route.CONVERSATION_MEMORY, *rules.task_signals(text)])
         return decision(Route.CONVERSATION_MEMORY, ReasonCategory.MEMORY_RECALL, "high", "deterministic_rule",
@@ -114,6 +124,7 @@ class IntentRouter:
 
     @staticmethod
     def _inherit(request: RouteRequest) -> RoutingDecision:
+        """Send a follow-up to the previous task route; ask for the full question when there is none."""
         previous = request.previous_task_route
         if previous is None:
             return _clarify(ReasonCategory.AMBIGUOUS_REFERENT,
@@ -124,12 +135,14 @@ class IntentRouter:
 
     @staticmethod
     def _unresolved_follow_up(request: RouteRequest) -> RoutingDecision:
+        """Pass on the resolver's own clarifying question and options."""
         resolution = request.resolution
         return _clarify(ReasonCategory.AMBIGUOUS_REFERENT, resolution.clarification or "Could you say that more fully?",
                         options=tuple(resolution.clarification_options), signals=("unresolved_reference",))
 
     # -------------------------------------------------------------------------------------------- classifier
     def _classify(self, text: str, request: RouteRequest) -> RoutingDecision:
+        """Ask the optional classifier. A missing, failing or unsure classifier gives a clarification, never a task."""
         if self._classifier is None:
             return _clarify(ReasonCategory.NO_CLEAR_INTENT, "Could you tell me a bit more about what you need?")
         name = self._classifier.name
@@ -149,6 +162,7 @@ class IntentRouter:
 
 # ------------------------------------------------------------------------------------------------------ helpers
 def _explicit_task(text: str) -> RoutingDecision | None:
+    """The task route named by a specific phrase; phrases for several task routes lead to a clarification."""
     signals = rules.task_signals(text)
     if len(signals) > 1:
         return _mixed(list(signals))
@@ -159,6 +173,7 @@ def _explicit_task(text: str) -> RoutingDecision | None:
 
 
 def _mixed(routes: list[Route]) -> RoutingDecision:
+    """A clarification that asks which of the mixed requests to do first."""
     labels = tuple(ROUTE_LABELS.get(r, "our earlier conversation") for r in routes)
     return _clarify(ReasonCategory.MIXED_INTENT, "This asks for several different things. Which should I do first?",
                     options=labels, signals=tuple(r.value for r in routes))
@@ -166,6 +181,7 @@ def _mixed(routes: list[Route]) -> RoutingDecision:
 
 def _clarify(reason: ReasonCategory, question: str, options: tuple[str, ...] = (), signals: tuple[str, ...] = (),
              by: str = "rules", score: float | None = None, calibrated: bool = False) -> RoutingDecision:
+    """A clarification decision; its confidence is "low" when it comes from a classifier score."""
     basis = "classifier_score" if score is not None else ("deterministic_rule" if by == "rules" else "none")
     return decision(Route.CLARIFICATION, reason, "low" if score is not None else "high", basis, decided_by=by,
                     clarification=question, clarification_options=options, matched_signals=signals, score=score,

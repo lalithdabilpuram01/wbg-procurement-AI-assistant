@@ -62,6 +62,7 @@ def safe_attributes(attributes: dict[str, Any]) -> dict[str, Any]:
 
 
 # ----------------------------------------------------------------------------------------------------- settings
+# Logfire options read by load_logfire_settings(); export stays off unless explicitly turned on.
 @dataclass(frozen=True)
 class LogfireSettings:
     send_to_logfire: bool = False
@@ -173,6 +174,7 @@ class TracedToolCaller:
         self.principal_id = tools.principal_id
 
     def call(self, tool: str, arguments: dict[str, Any], request_id: str) -> dict[str, Any]:
+        """Call the wrapped tool inside a span that records only the tool name, status and error codes."""
         with self._tracer.stage("nl2sql.registry_tool", request_id=request_id, tool=tool) as span:
             response = self._tools.call(tool, arguments, request_id)
             span(status=response.get("status"), error_codes=[e["code"] for e in response.get("errors", [])])

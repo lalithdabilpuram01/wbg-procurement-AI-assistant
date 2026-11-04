@@ -20,6 +20,7 @@ import json
 import os
 import sys
 
+# Set before the imports below: the embedding model is only ever loaded from the local cache, never downloaded.
 os.environ.setdefault("HF_HUB_OFFLINE", "1")
 os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
 
@@ -30,6 +31,7 @@ DEV_ENDPOINT = "projects/wbg-procurement-dev/branches/dev-orchestrator/endpoints
 
 
 def lakebase_store():
+    """A KnowledgeGraphStore on the development branch's wbg_kg schema, and its pool to close."""
     from wbg_orchestrator.learning_db import dev_schema_pool
 
     from .store import KG_SCHEMA, KnowledgeGraphStore
@@ -46,6 +48,7 @@ def bge_m3(batch_size: int = 16):
 
 
 def main(argv: list[str]) -> int:
+    """Run one command. Every command except init and run --dry-run opens the Lakebase pool and closes it afterwards."""
     parser = argparse.ArgumentParser(prog="python -m ingest", description="Automated multimodal ingestion")
     parser.add_argument("command", choices=["init", "init-db", "run", "watch", "status", "lessons", "neighbours"])
     parser.add_argument("target", nargs="?")

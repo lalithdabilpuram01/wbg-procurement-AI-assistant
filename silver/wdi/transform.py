@@ -97,6 +97,7 @@ def parse_vintages(api_responses: DataFrame) -> DataFrame:
 
 
 def parse_indicator_metadata(ind_meta: DataFrame) -> DataFrame:
+    """Indicator name, source name and source organisation from each /v2/indicator response."""
     return ind_meta.select(
         "indicator_code",
         F.get_json_object("raw_response", "$[1][0].name").alias("indicator_name"),

@@ -54,6 +54,7 @@ def _repo_dir(repo_id: str) -> Path:
 
 
 def _single_snapshot(repo_id: str) -> tuple[str, Path]:
+    """Return (revision, snapshot folder) of a cached model; raises unless refs/main names the only snapshot."""
     repo = _repo_dir(repo_id)
     ref = repo / "refs" / "main"
     snapshots = sorted(p for p in (repo / "snapshots").glob("*") if p.is_dir()) if repo.is_dir() else []
@@ -66,6 +67,7 @@ def _single_snapshot(repo_id: str) -> tuple[str, Path]:
 
 
 def _sha256_files(paths: list[Path]) -> str:
+    """SHA-256 over the names and bytes of the given files, in the order given."""
     digest = hashlib.sha256()
     for path in paths:
         digest.update(path.name.encode() + b"\0" + path.read_bytes() + b"\0")

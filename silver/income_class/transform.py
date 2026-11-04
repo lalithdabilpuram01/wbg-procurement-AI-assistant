@@ -49,6 +49,7 @@ SCHEMA = T.StructType([
 
 
 def read_bronze(spark: SparkSession) -> dict:
+    """Read the single Bronze row (the workbook bytes) and recompute its SHA-256; raises ValueError otherwise."""
     rows = spark.table(BRONZE_TABLE).collect()
     if len(rows) != 1:
         raise ValueError(f"{BRONZE_TABLE}: expected 1 row, found {len(rows)}")
@@ -59,6 +60,7 @@ def read_bronze(spark: SparkSession) -> dict:
 
 
 def build(spark: SparkSession, bronze: dict, run_id: str) -> tuple[DataFrame, ParsedWorkbook]:
+    """Parse the workbook and return (Silver DataFrame, ParsedWorkbook), with lineage on every cell row."""
     parsed = parse_oghist(bronze["content"])
     processed = datetime.now(timezone.utc).replace(tzinfo=None)
     name = bronze["source_file"].rsplit("/", 1)[-1]

@@ -27,6 +27,7 @@ def registry_schema(objects: list[RegisteredObject]) -> dict:
 
 
 def qualify_columns(tree: exp.Select, schema: dict) -> tuple[exp.Select | None, list[ToolError]]:
+    """Qualify every column against the registry schema; an unknown or ambiguous column becomes UNKNOWN_COLUMN."""
     try:
         qualified = qualify(tree.copy(), schema=schema, dialect=DIALECT, validate_qualify_columns=True,
                             quote_identifiers=False, identify=False)
@@ -47,6 +48,7 @@ class LineageResolver:
         self.scopes = traverse_scope(qualified)  # children before parents
 
     def base_columns(self, scope: Scope, column: exp.Column) -> set[BaseColumn]:
+        """Registered base columns behind one column reference, followed through CTEs and subqueries."""
         source = self._source(scope, column.table)
         if isinstance(source, exp.Table):
             return {(table_fqn(source), column.name.lower())}
@@ -62,12 +64,14 @@ class LineageResolver:
         return set()
 
     def expression_lineage(self, scope: Scope, expression: exp.Expression) -> set[BaseColumn]:
+        """Base columns behind every column used in an expression."""
         lineage: set[BaseColumn] = set()
         for column in expression.find_all(exp.Column):
             lineage |= self.base_columns(scope, column)
         return lineage
 
     def _source(self, scope: Scope, alias: str):
+        """Find what an alias refers to (table or derived scope), looking outward through enclosing scopes."""
         current = scope
         while current is not None:  # correlated references resolve in an enclosing scope
             if alias in current.sources:
@@ -79,6 +83,7 @@ class LineageResolver:
         return self.scopes[-1]
 
     def all_base_columns(self) -> set[BaseColumn]:
+        """Every base column the query touches, in any scope or clause."""
         used: set[BaseColumn] = set()
         for scope in self.scopes:
             for column in scope.columns:

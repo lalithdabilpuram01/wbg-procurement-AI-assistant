@@ -39,6 +39,8 @@ RESOLVER_EDGES = {"MENTIONS", "TEMPORALLY_NEAR"}              # found by entity 
 
 
 class KnowledgeGraphStore:
+    """The Lakebase Knowledge Graph: one-transaction document loads, cross-file reconciliation and graph queries."""
+
     def __init__(self, connect: Connect, schema: str = KG_SCHEMA, vector_schema: str | None = "public"):
         self._connect, self._name = connect, checked_schema(schema)
         self._schema = sql.Identifier(self._name)
@@ -50,6 +52,7 @@ class KnowledgeGraphStore:
 
     # --------------------------------------------------------------------------------------------- schema
     def apply_schema(self) -> None:
+        """Apply kg_schema.sql and the lesson_card schema, plus an HNSW index on chunk vectors when pgvector is used."""
         vector = f"{self._vector_schema}.halfvec(1024)" if self._vector_schema else "real[]"
         ddl = SCHEMA_SQL.read_text().replace("{schema}", self._name).replace("{vector}", vector)
         with self._connect() as conn, conn.transaction():
@@ -60,6 +63,7 @@ class KnowledgeGraphStore:
                              f"(embedding {self._vector_schema}.halfvec_cosine_ops) WITH (m = 16, ef_construction = 64)", prepare=False)
 
     def tables(self) -> list[str]:
+        """Names of the tables in the schema; rows may be tuples or dicts, depending on the connection's row factory."""
         with self._connect() as conn:
             rows = conn.execute("SELECT c.relname FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace "
                                 "WHERE n.nspname = %s AND c.relkind IN ('r', 'p') ORDER BY 1", (self._name,)).fetchall()
@@ -75,6 +79,7 @@ class KnowledgeGraphStore:
 
     def load(self, doc: ParsedDocument, graph: Graph, mentions: Sequence[Mention], embeddings: Sequence[Sequence[float]] | None,
              source: dict[str, Any], lessons: Sequence[LessonCard] = ()) -> dict[str, int]:
+        """Replace the document's subgraph with this one in a single transaction; returns the counts written."""
         now = dt.datetime.now(dt.timezone.utc)
         with self._connect() as conn, conn.transaction(), conn.cursor() as cur:
             self._remove_document(cur, doc.document_id)
@@ -95,6 +100,7 @@ class KnowledgeGraphStore:
             self._source(cur, source, dt.datetime.now(dt.timezone.utc))
 
     def record_run(self, run_id: str, started: dt.datetime, summary: dict[str, Any], pipeline: str) -> None:
+        """Store the run summary; a second write with the same run id updates it."""
         with self._connect() as conn, conn.transaction():
             conn.execute(self._q("INSERT INTO {s}.ingest_run (run_id, started_at, finished_at, pipeline, summary) VALUES (%s, %s, %s, %s, %s) "
                                  "ON CONFLICT (run_id) DO UPDATE SET finished_at = EXCLUDED.finished_at, summary = EXCLUDED.summary"),
@@ -104,6 +110,7 @@ class KnowledgeGraphStore:
     def reconcile(self) -> dict[str, int]:
         """Edges between records that arrived in different files (idempotent; existing edges are kept)."""
         now = dt.datetime.now(dt.timezone.utc)
+        # Each statement links only nodes that already exist, so a reconciled edge never points at a missing node.
         statements = {
             "PLANNED_AS": """
                 INSERT INTO {s}.edge (edge_type, src, dst, match_class, confidence, evidence, document_id, origin, updated_at)
@@ -183,6 +190,7 @@ class KnowledgeGraphStore:
             return cur.fetchall()
 
     def stats(self) -> dict[str, Any]:
+        """Counts of source files by status, nodes by type, and edges by type and match class."""
         with self._connect() as conn, conn.cursor(row_factory=dict_row) as cur:
             cur.execute(self._q("SELECT node_type, count(*) AS n FROM {s}.node GROUP BY 1 ORDER BY 1"))
             nodes = {r["node_type"]: r["n"] for r in cur.fetchall()}
@@ -194,16 +202,20 @@ class KnowledgeGraphStore:
 
     # ---------------------------------------------------------------------------------------- internals
     def _remove_document(self, cur: psycopg.Cursor, document_id: str) -> None:
+        """Delete everything the document owns: rows, its edges and edges touching its owned nodes, then the nodes."""
         for table in OWNED_TABLES:
             cur.execute(self._q(f"DELETE FROM {{s}}.{table} WHERE document_id = %s"), (document_id,))
+        # Table rows carry no document id: remove the rows whose table was just deleted.
         cur.execute(self._q("DELETE FROM {s}.doc_table_row r WHERE NOT EXISTS (SELECT 1 FROM {s}.doc_table t WHERE t.table_id = r.table_id)"))
         cur.execute(self._q("DELETE FROM {s}.edge WHERE document_id = %s"), (document_id,))
+        # Reconciled edges have no document id; those touching this document's owned nodes would otherwise dangle.
         cur.execute(self._q("DELETE FROM {s}.edge e WHERE e.document_id IS NULL AND EXISTS (SELECT 1 FROM {s}.node n "
                             "WHERE n.document_id = %s AND n.node_id IN (e.src, e.dst))"), (document_id,))
         cur.execute(self._q("DELETE FROM {s}.node WHERE document_id = %s"), (document_id,))
         cur.execute(self._q("DELETE FROM {s}.document WHERE document_id = %s"), (document_id,))
 
     def _document(self, cur: psycopg.Cursor, doc: ParsedDocument, now: dt.datetime) -> None:
+        """Insert the document row with its sections, tables and table rows."""
         cur.execute(self._q("INSERT INTO {s}.document VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"),
                     (doc.document_id, doc.doc_type, doc.modality, doc.title, doc.project_id, doc.country_code, doc.document_date,
                      doc.language, doc.page_count, doc.source_sha256, now))
@@ -216,6 +228,7 @@ class KnowledgeGraphStore:
                         [(t.table_id, n, Jsonb(row)) for t in doc.tables for n, row in enumerate(t.rows, start=1)])
 
     def _records(self, cur: psycopg.Cursor, doc: ParsedDocument) -> None:
+        """Insert the feed or plan records; a known contract or notice is updated, a known plan activity kept as is."""
         for r in doc.records:
             f = r.fields
             if r.record_type == "plan_activity":
@@ -246,6 +259,7 @@ class KnowledgeGraphStore:
                          for m in mentions])
 
     def _chunks(self, cur: psycopg.Cursor, doc: ParsedDocument, embeddings: Sequence[Sequence[float]] | None) -> None:
+        """Insert the chunks with their vectors (NULL when embedding was skipped)."""
         cast = f"::{self._vector_schema}.halfvec" if self._vector_schema else ""
         vectors: list[Sequence[float] | None] = list(embeddings) if embeddings is not None else [None] * len(doc.chunks)
         cur.executemany(self._q(f"INSERT INTO {{s}}.chunk VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s{cast})"),
@@ -253,6 +267,7 @@ class KnowledgeGraphStore:
                           _vector(v, bool(self._vector_schema))) for c, v in zip(doc.chunks, vectors)])
 
     def _graph(self, cur: psycopg.Cursor, doc: ParsedDocument, graph: Graph, now: dt.datetime) -> None:
+        """Upsert nodes (properties merged) and edges (higher confidence kept); only owned nodes get the document id."""
         cur.executemany(self._q("INSERT INTO {s}.node VALUES (%s, %s, %s, %s, %s, %s) ON CONFLICT (node_id) DO UPDATE SET "
                                 "props = {s}.node.props || EXCLUDED.props, label = EXCLUDED.label, updated_at = EXCLUDED.updated_at"),
                         [(n.node_id, n.node_type, n.label[:500], Jsonb(n.props), doc.document_id if n.owned else None, now)
@@ -263,6 +278,7 @@ class KnowledgeGraphStore:
                           "resolver" if e.edge_type in RESOLVER_EDGES else "parser", now) for e in graph.edges.values()])
 
     def _source(self, cur: psycopg.Cursor, source: dict[str, Any], now: dt.datetime) -> None:
+        """Insert or update the lineage row of one source file, keyed by its SHA-256."""
         cur.execute(self._q("INSERT INTO {s}.source_file VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) "
                             "ON CONFLICT (sha256) DO UPDATE SET status = EXCLUDED.status, reason = EXCLUDED.reason, "
                             "document_id = EXCLUDED.document_id, warnings = EXCLUDED.warnings, rejected_rows = EXCLUDED.rejected_rows, "
@@ -277,6 +293,7 @@ class KnowledgeGraphStore:
 
 
 def _vector(values: Sequence[float] | None, pgvector: bool) -> Any:
+    """A vector as pgvector text ("[0.1,...]"), or as a plain float list for a real[] column."""
     if values is None:
         return None
     return "[" + ",".join(f"{float(v):.6f}" for v in values) + "]" if pgvector else [float(v) for v in values]

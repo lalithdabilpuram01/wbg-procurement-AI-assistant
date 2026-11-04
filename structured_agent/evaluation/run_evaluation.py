@@ -32,6 +32,7 @@ RUNS_DIR = PACKAGE_DIR / "evaluation" / "runs"
 
 # ------------------------------------------------------------------------------------------------------ comparisons
 def _norm(value):
+    """Normalise a value for comparison: numbers as exact Decimals (so 1.0 equals 1), anything else as text."""
     if value is None:
         return None
     try:
@@ -41,6 +42,7 @@ def _norm(value):
 
 
 def compare_rows(agent_rows: list[dict], baseline_rows: list[dict], key: str, fields: list[str]) -> tuple[bool, str]:
+    """Compare two result sets keyed by `key` on the given fields; returns (match, readable detail)."""
     agent = {_norm(r[key]): {f: _norm(r[f]) for f in fields} for r in agent_rows}
     baseline = {_norm(r[key]): {f: _norm(r[f]) for f in fields} for r in baseline_rows}
     if agent.keys() != baseline.keys():
@@ -53,6 +55,7 @@ def compare_rows(agent_rows: list[dict], baseline_rows: list[dict], key: str, fi
 
 
 def compare(spec: str, agent_rows: list[dict], baseline_rows: list[dict]) -> tuple[bool, str]:
+    """Run the comparison named by `spec` (e.g. 'same_rows:key:field1,field2'); returns (match, detail)."""
     kind, _, rest = spec.partition(":")
     if kind == "same_rows":
         key, _, fields = rest.partition(":")
@@ -71,7 +74,10 @@ def compare(spec: str, agent_rows: list[dict], baseline_rows: list[dict]) -> tup
 
 # ------------------------------------------------------------------------------------------------------- execution
 class Evaluation:
+    """Runs the cases through StructuredDataService and checks executed results against trusted baselines."""
+
     def __init__(self):
+        """Load settings, refuse to run without the dev-owner opt-in, and open the service and a Spark session."""
         self.settings = load_settings()
         if not self.settings.allow_dev_owner_credentials:
             raise SystemExit("Set WBG_ALLOW_DEV_OWNER_CREDENTIALS=true: the only Databricks credential is write-capable")
@@ -83,12 +89,14 @@ class Evaluation:
         return [{k: to_json_value(v) for k, v in row.asDict().items()} for row in self.spark.sql(sql).collect()]
 
     def service_for(self, attempt: Attempt) -> StructuredDataService:
+        """The shared service, or a fresh one with this attempt's timeout override."""
         if attempt.timeout_seconds is None:
             return self.service
         limits = dataclasses.replace(self.settings.limits, timeout_seconds=attempt.timeout_seconds)
         return StructuredDataService.from_environment(dataclasses.replace(self.settings, limits=limits))
 
     def run_case(self, case: Case) -> dict:
+        """Run discovery and every attempt of one case; returns the case result as a dict."""
         ctx = RequestContext(case.principal, WORKSPACE, f"eval_{self.run_id}_{case.case_id}")
         started = time.perf_counter()
         search = self.service.search_table_registry(ctx, query=case.question, top_k=5)
@@ -108,6 +116,7 @@ class Evaluation:
                 "total_ms": round(1000 * (time.perf_counter() - started))}
 
     def run_attempt(self, case: Case, attempt: Attempt, ctx: RequestContext) -> dict:
+        """Validate (and, if asked, execute) one attempt's SQL and compare executed rows with the baseline."""
         if attempt.principal:
             ctx = RequestContext(attempt.principal, WORKSPACE, ctx.request_id)
         service = self.service_for(attempt)
@@ -128,6 +137,7 @@ class Evaluation:
             result["harm_measurement"] = self.baseline(attempt.measure_sql)[0]
 
         if attempt.execute:
+            # Case T12 records Delta table versions before and after, to prove execution wrote nothing.
             versions_before = self.delta_versions() if case.case_id == "T12" else None
             executed = service.execute_readonly_sql(ctx, sql=sql, parameters=parameters)
             result["execution"] = {
@@ -148,6 +158,7 @@ class Evaluation:
         return result
 
     def sql_for(self, attempt: Attempt, ctx: RequestContext, case: Case) -> tuple[str, dict, str]:
+        """The attempt's SQL: hand-written test SQL, or the reviewed template filled by TemplateSqlGenerator."""
         if attempt.sql:
             return attempt.sql, attempt.parameters, "hand-written test SQL"
         examples = self.service.get_verified_sql_examples(ctx, query=case.question, limit=10).examples
@@ -157,6 +168,9 @@ class Evaluation:
 
     @staticmethod
     def attempt_passed(attempt: Attempt, result: dict) -> bool:
+        """An approved attempt must also execute and match its baseline; a rejected one must fail with the
+        expected code and return no rows.
+        """
         validation = result["validation"]
         if attempt.expect == "approved":
             ok = validation["approved"]
@@ -170,6 +184,7 @@ class Evaluation:
         return attempt.expect in codes and never_ran
 
     def delta_versions(self) -> dict:
+        """Current Delta version of the watched Gold tables."""
         versions = {}
         for table in ("gold_project_portfolio",):
             row = self.spark.sql(f"DESCRIBE HISTORY workspace.wbg_gold.{table} LIMIT 1").collect()[0]
@@ -179,6 +194,7 @@ class Evaluation:
 
 # ------------------------------------------------------------------------------------------------------- reporting
 def write_outputs(evaluation: Evaluation, results: list[dict]) -> Path:
+    """Write results.json, the SQL example verification file and EVALUATION_RESULTS.md; returns the run folder."""
     out = RUNS_DIR / evaluation.run_id
     out.mkdir(parents=True, exist_ok=True)
     summary = {"run_id": evaluation.run_id, "cases": len(results), "passed": sum(r["passed"] for r in results),
@@ -186,6 +202,7 @@ def write_outputs(evaluation: Evaluation, results: list[dict]) -> Path:
                "credential_mode": "dev_owner_credentials", "production_read_only": False}
     (out / "results.json").write_text(json.dumps({"summary": summary, "results": results}, indent=1, default=str))
 
+    # Templates whose executed result matched a baseline become 'verified' at the next registry build.
     examples = {}
     for r in results:
         for a in r["attempts"]:
@@ -218,6 +235,7 @@ def write_outputs(evaluation: Evaluation, results: list[dict]) -> Path:
 
 
 def main() -> None:
+    """Run all cases, print progress and write the outputs."""
     evaluation = Evaluation()
     results = []
     for case in CASES:

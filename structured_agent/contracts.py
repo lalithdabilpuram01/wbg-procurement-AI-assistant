@@ -16,6 +16,7 @@ ParameterValue = str | int | float | bool | dt.date
 
 
 # ----------------------------------------------------------------------------------------------------------------- errors
+# Typed error codes returned to callers. The value is the stable string the client and the audit log see.
 class ErrorCode(str, Enum):
     INVALID_REQUEST = "INVALID_REQUEST"
     UNAUTHORIZED_PRINCIPAL = "UNAUTHORIZED_PRINCIPAL"
@@ -64,6 +65,7 @@ RECOVERABLE_CODES = {
 }
 
 
+# One typed failure. 'recoverable' is derived from the code (RECOVERABLE_CODES), never set by hand.
 class ToolError(BaseModel):
     code: ErrorCode
     message: str
@@ -78,6 +80,7 @@ class ToolError(BaseModel):
 Status = Literal["ok", "needs_clarification", "rejected", "error", "not_found"]
 
 
+# Common envelope of every operation's response; each response class below adds its own payload fields.
 class ToolResponse(BaseModel):
     request_id: str
     invocation_id: str
@@ -130,6 +133,8 @@ class JoinSummary(BaseModel):
     status: str
 
 
+# One search hit: a registered object with its score, why it matched, and the columns and joins the
+# principal is allowed to use.
 class TableCandidate(BaseModel):
     object_fqn: str
     logical_name: str
@@ -148,6 +153,7 @@ class TableCandidate(BaseModel):
     provenance: dict[str, Any]
 
 
+# A metric found by registry search, with its score and why it matched.
 class MetricMatch(BaseModel):
     metric_id: str
     name: str
@@ -156,6 +162,7 @@ class MetricMatch(BaseModel):
     reasons: list[str]
 
 
+# Returned when a question matches several metrics of one group and the caller must choose.
 class Ambiguity(BaseModel):
     group: str
     message: str
@@ -168,6 +175,7 @@ class SearchTableRegistryResponse(ToolResponse):
     ambiguity: Ambiguity | None = None
 
 
+# get_table_schema result: description, grain, required filters and only the columns the principal may use.
 class TableSchemaResponse(ToolResponse):
     object_fqn: str | None = None
     logical_name: str | None = None
@@ -205,6 +213,7 @@ class CheckResult(BaseModel):
     detail: str = ""
 
 
+# One output column of a validated query and the source columns it is computed from.
 class OutputColumn(BaseModel):
     name: str
     source_columns: list[str]          # fully qualified source columns this output is computed from
@@ -213,6 +222,8 @@ class OutputColumn(BaseModel):
     classification: str = "public"
 
 
+# Full result of validating one statement: every check that ran, the errors, and on approval the exact
+# SQL the gateway is allowed to execute.
 class ValidationReport(BaseModel):
     validation_id: str
     approved: bool
@@ -241,6 +252,7 @@ class ResultColumn(BaseModel):
     source_columns: list[str] = Field(default_factory=list)
 
 
+# Which credential ran the query, whether it was read-only, and which registry build approved it.
 class ExecutionProvenance(BaseModel):
     credential_mode: Literal["read_only_principal", "dev_owner_credentials"]
     production_read_only: bool
@@ -249,6 +261,8 @@ class ExecutionProvenance(BaseModel):
     engine: str = "Databricks Serverless (Spark Connect)"
 
 
+# Result of one executed query, with the checks that approved it, the checks on the returned rows,
+# and where it ran.
 class QueryResult(ToolResponse):
     validation_id: str | None = None
     query_id: str | None = None

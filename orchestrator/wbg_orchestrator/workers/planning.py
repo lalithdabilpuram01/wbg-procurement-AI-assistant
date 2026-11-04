@@ -54,6 +54,7 @@ GOVERNANCE_SQL = (f"SELECT year, cpia_irai_overall, cpia_public_sector_mgmt_clus
 
 @dataclass(frozen=True)
 class SimilarProject:
+    """One past project ranked against the new one, with its score, the reasons it matched and its document flags."""
     project_id: str
     name: str
     country: str
@@ -70,6 +71,7 @@ class SimilarProject:
 
 
 def _size_closeness(planned: float | None, actual: Any) -> float:
+    """How close two project sizes are on a log scale, from 1 (same size) to 0; 0 when either size is unknown."""
     if not planned or actual is None or float(actual) <= 0:
         return 0.0
     return max(0.0, 1 - abs(math.log10(float(actual) / planned)) / 2)   # 1 at the same size, 0 at 100x apart
@@ -91,7 +93,7 @@ def rank_similar(profile: ProjectProfile, candidates: list[dict[str, Any]], sect
     for c in candidates:
         pid, sector = c["project_id"], sector_of(c["project_id"])
         same_country, same_sector = c.get("wdi_country_code") == profile.country_code, sector == profile.sector
-        text = semantic.get(pid, 0.0) / best_semantic
+        text = semantic.get(pid, 0.0) / best_semantic           # relative to the best match (the closest scores 1)
         size = _size_closeness(profile.total_cost_usd, c.get("current_total_commitment_usd_snapshot"))
         reasons = tuple(r for r, hit in (("same country", same_country), ("same sector", same_sector),
                                          ("similar description", text >= 0.93), ("similar size", size >= 0.75)) if hit)
@@ -113,6 +115,7 @@ def rank_similar(profile: ProjectProfile, candidates: list[dict[str, Any]], sect
 
 
 class PlanningWorker:
+    """Worker for the Planning Brief's data steps: similar projects, market benchmarks and governance context."""
     name = WorkerName.PLANNING
     operations = frozenset({"match_similar_projects", "market_benchmarks", "governance_context"})
 
@@ -122,6 +125,7 @@ class PlanningWorker:
         self._sector_of, self._today = sector_of, today
 
     def run(self, task: AgentTask, context: WorkerContext) -> WorkerOutput:
+        """Check the ticket and run the operation on the brief's profile; no records is a NO_EVIDENCE failure."""
         self._authority.verify(context.ticket, task)
         if task.operation not in self.operations:
             return _failed(task, ErrorCategory.AUTHORIZATION, "unknown_operation", "The operation is not offered by this worker.")
@@ -138,6 +142,7 @@ class PlanningWorker:
 
     # ------------------------------------------------------------------------------------------ operations
     def _similar(self, task: AgentTask, spec: PlanningSpec) -> list[EvidenceRecord]:
+        """Rank the projects of the new project's region and return one SIMILAR_PROJECT record per chosen project."""
         profile = spec.profile
         region = country_region(profile.country_code, self._run_sql)
         candidates = self._run_sql(CANDIDATES_SQL, {"region_name": region})
@@ -160,6 +165,7 @@ class PlanningWorker:
             for p in projects]
 
     def _market(self, task: AgentTask, spec: PlanningSpec) -> list[EvidenceRecord]:
+        """Methods, review types and supplier origin per planned category, over the last YEARS_OF_HISTORY years."""
         profile, since = spec.profile, self._today().year - YEARS_OF_HISTORY
         region: str | None = None
         records = []
@@ -179,6 +185,7 @@ class PlanningWorker:
         return records
 
     def _governance(self, task: AgentTask, spec: PlanningSpec) -> list[EvidenceRecord]:
+        """The country's most recent CPIA, WGI and income group row as one record (none when the country is unknown)."""
         rows = self._run_sql(GOVERNANCE_SQL, {"country_code": spec.profile.country_code})
         if not rows:
             return []
@@ -197,6 +204,7 @@ LABELS = {"methods": "Procurement methods used", "review_types": "Review types",
 
 def _benchmark(task: AgentTask, template: str, category: str, scope: str, where: str, since: int, rows: list[dict],
                params: dict) -> EvidenceRecord:
+    """One benchmark table as a record: a fact per grouped value (up to 10), with the query and parameter hashes."""
     key = next(iter(rows[0]))                                                # the grouped column comes first
     facts = []
     for row in rows[:10]:
@@ -220,6 +228,7 @@ def _sha(text: str) -> str:
 
 def _record(task: AgentTask, kind: EvidenceKind, objects: tuple[str, ...], citation: str, facts: tuple[Fact, ...], summary: str,
             project_ids: tuple[str, ...] = (), provenance: tuple[tuple[str, str], ...] = ()) -> EvidenceRecord:
+    """A verified record from fixed Gold SQL: its figures are approved data."""
     return EvidenceRecord(
         evidence_id=new_id("ev"), investigation_id=task.investigation_id, task_id=task.task_id,
         source_system=SourceSystem.DATABRICKS_PUBLIC, kind=kind, project_ids=project_ids, source_objects=objects,

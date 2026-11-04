@@ -37,6 +37,7 @@ def _singular(token: str) -> str:
 
 
 def tokenize(text: str) -> list[str]:
+    """Lower-case word tokens with light plural normalisation, shared by BM25, exact matching and synonyms."""
     return [_singular(t) for t in TOKEN.findall(text.lower())]
 
 
@@ -48,14 +49,20 @@ class SynonymMatches:
 
 @dataclass
 class ObjectEvidence:
+    """Running score, reasons and matched columns collected for one object during a search."""
+
     score: float = 0.0
     reasons: list[str] = field(default_factory=list)
     matched_columns: set[str] = field(default_factory=set)
 
 
 class RegistrySearch:
+    """Hybrid search over the registry documents, always filtered to what the principal may use."""
+
     def __init__(self, bundle: RegistryBundle, documents: list[SearchDocument], index: VectorIndex,
                  embedder: EmbeddingModel, policy: AccessPolicy):
+        """Check that the index and query model match, then build the BM25 index over the documents."""
+        # Query and document vectors must come from the same model, or the similarity scores mean nothing.
         if index.model_id != embedder.model_id:
             raise ValueError(f"Index built with {index.model_id} but query model is {embedder.model_id}")
         self._bundle = bundle
@@ -68,6 +75,7 @@ class RegistrySearch:
 
     # ------------------------------------------------------------------------------------------------ authorization
     def allowed_doc_ids(self, principal: Principal) -> set[str]:
+        """Ids of the documents the principal may see: authorized objects, and only their usable columns."""
         allowed = set()
         for doc in self._docs:
             obj = self._bundle.object(doc.object_fqn)
@@ -84,6 +92,7 @@ class RegistrySearch:
     # --------------------------------------------------------------------------------------------------------- search
     def search(self, question: str, principal: Principal, top_k: int = 5
                ) -> tuple[list[TableCandidate], list[MetricMatch], Ambiguity | None]:
+        """Rank objects and metrics for a question; returns (top candidates, top metrics, ambiguity or None)."""
         allowed = self.allowed_doc_ids(principal)
         evidence: dict[str, ObjectEvidence] = {}
         metric_scores: dict[str, MetricMatch] = {}
@@ -105,6 +114,7 @@ class RegistrySearch:
         return candidates, metrics, self._ambiguity(question, synonyms, metrics)
 
     def _bm25_ranking(self, question: str, allowed: set[str]) -> list[str]:
+        """Document ids ranked by BM25 score, authorized and non-zero only, top 50."""
         scores = self._bm25.get_scores(tokenize(question))
         ranked = sorted(((s, d.doc_id) for s, d in zip(scores, self._docs) if d.doc_id in allowed and s > 0), reverse=True)
         return [doc_id for _, doc_id in ranked[:50]]
@@ -125,6 +135,7 @@ class RegistrySearch:
                 match.score += contribution
                 match.reasons.append(f"{method} rank {rank}")
             ev = evidence.setdefault(doc.object_fqn, ObjectEvidence())
+            # Only columns from the 15 best-ranked documents are reported as matched, to keep the list focused.
             if doc.doc_kind == "column" and rank <= 15:
                 ev.matched_columns.add(doc.column_name)
             if doc.object_fqn not in seen_objects:
@@ -133,6 +144,7 @@ class RegistrySearch:
                 ev.reasons.append(f"{method}: best match '{doc.text[:70]}' (rank {rank})")
 
     def _add_exact(self, evidence: dict[str, ObjectEvidence], question: str, allowed: set[str]) -> None:
+        """Add a fixed bonus for identifiers (snake_case names or a full object name) written in the question."""
         tokens = set(tokenize(question))
         for doc in self._docs:
             if doc.doc_id not in allowed:
@@ -215,6 +227,7 @@ class RegistrySearch:
 
     # --------------------------------------------------------------------------------------------------- candidates
     def _candidate(self, fqn: str, ev: ObjectEvidence, principal: Principal) -> TableCandidate:
+        """Build the response entry for one object: authorized columns, related metrics and visible approved joins."""
         obj = self._bundle.object(fqn)
         authorized = [c.name for c in obj.columns if self._policy.can_use_column(principal, c, "output")]
         joins = [JoinSummary(relationship_id=r.relationship_id, from_object=r.from_object, from_columns=r.from_columns,

@@ -24,6 +24,7 @@ from .planner import DEFAULT_ATTEMPTS
 
 @dataclass(frozen=True)
 class OperationContract:
+    """The documented contract of one worker operation (one row of the catalog table)."""
     worker: str
     operation: str
     reads: str                 # inputs taken from the task and the worker context
@@ -96,6 +97,7 @@ TOOLS = {
 
 
 def tools_text(operation: str) -> str:
+    """The operation's tools grouped by where they run, e.g. "mcp: validate_sql; in-process: frozen_ml_models"."""
     by: dict[str, list[str]] = {}
     for tool, transport in TOOLS[operation]:
         by.setdefault(transport, []).append(tool)
@@ -103,9 +105,11 @@ def tools_text(operation: str) -> str:
 
 
 def as_markdown() -> str:
+    """The whole catalog as a Markdown table, with evidence kinds and attempt counts taken from the code."""
     lines = ["| Worker | Operation | Reads | Returns (evidence kinds) | Data (read-only) | Tools (where they run) | LLM | Attempts | Approval |",
              "|---|---|---|---|---|---|---|---|---|"]
     for c in CATALOG:
+        # Show the executed variant where one exists (e.g. a data answer with results, not only the validated query).
         spec = evidence_spec(c.operation, requires_execution=True) or OPERATION_EVIDENCE[c.operation]
         kinds = ", ".join(k.value for k in spec.kinds) + ("" if spec.verifiable else " (unverified)")
         lines.append(f"| {c.worker} | {c.operation} | {c.reads} | {c.returns} ({kinds}) | {c.data} | {tools_text(c.operation)} | "

@@ -42,6 +42,7 @@ class LearningItemNotFound(KeyError):
     """The feedback, item or review does not exist for this owner."""
 
 
+# One rating of an assistant answer, with optional reasons and a correction.
 class Feedback(BaseModel):
     model_config = ConfigDict(frozen=True)
     feedback_id: str = Field(default_factory=new_id)
@@ -58,6 +59,7 @@ class Feedback(BaseModel):
     updated_at: dt.datetime = Field(default_factory=utc_now)
 
 
+# A correction or approach learned from feedback; applied to later questions while it is active and not expired.
 class LearnedItem(BaseModel):
     model_config = ConfigDict(frozen=True)
     item_id: str = Field(default_factory=new_id)
@@ -82,6 +84,7 @@ class LearnedItem(BaseModel):
         return self.scope == "personal" and now - last > dt.timedelta(days=PERSONAL_ITEM_DAYS)
 
 
+# A request in the reviewer queue: share a learned item with the tenant, or turn feedback into an eval case.
 class Review(BaseModel):
     model_config = ConfigDict(frozen=True)
     review_id: str = Field(default_factory=new_id)
@@ -98,6 +101,8 @@ class Review(BaseModel):
 
 
 class LearningStore(Protocol):
+    """Owner-scoped storage of feedback, preferences, learned items and reviews (in-memory or PostgreSQL)."""
+
     def add_feedback(self, owner: Owner, feedback: Feedback) -> Feedback: ...
     def set_feedback_status(self, owner: Owner, feedback_id: str, status: FeedbackStatus,
                             revision_request_id: str | None = None) -> Feedback: ...
@@ -118,7 +123,10 @@ class LearningStore(Protocol):
 
 
 class InMemoryLearningStore:
+    """Dictionary-backed LearningStore for tests and local runs, with the same visibility rules as PostgreSQL."""
+
     def __init__(self) -> None:
+        """Empty dictionaries: feedback, preferences and uses per owner; learned items and reviews per tenant."""
         self._lock = threading.Lock()
         self._feedback: dict[str, tuple[Owner, Feedback]] = {}
         self._preferences: dict[tuple[str, str, str], Any] = {}
@@ -134,6 +142,7 @@ class InMemoryLearningStore:
 
     def set_feedback_status(self, owner: Owner, feedback_id: str, status: FeedbackStatus,
                             revision_request_id: str | None = None) -> Feedback:
+        """Update the status of the owner's feedback; an earlier revision request id is kept when none is given."""
         with self._lock:
             entry = self._feedback.get(feedback_id)
             if entry is None or entry[0] != owner:
@@ -173,6 +182,7 @@ class InMemoryLearningStore:
         return sorted((i for i in visible if include_revoked or i.status == "active"), key=lambda i: i.created_at, reverse=True)
 
     def revoke_item(self, owner: Owner, item_id: str) -> LearnedItem:
+        """Mark an item revoked (nothing is deleted): the owner's personal items or the tenant's shared ones."""
         with self._lock:
             entry = self._items.get(item_id)
             if entry is None or entry[0] != owner.tenant_id or not self._visible(owner, entry[1]):
@@ -182,10 +192,12 @@ class InMemoryLearningStore:
             return revoked
 
     def record_uses(self, owner: Owner, request_id: str, item_ids: list[str]) -> None:
+        """Log that a request applied these items; use_count rises only for a (request, item) pair not seen before."""
         now = utc_now()
         with self._lock:
             for item_id in item_ids:
                 tenant, item = self._items[item_id]
+                # Each (request, item) pair is counted once, so a repeated request does not inflate use_count.
                 if (request_id, item_id) not in self._uses:
                     self._uses[(request_id, item_id)] = owner
                     self._items[item_id] = (tenant, item.model_copy(update={"use_count": item.use_count + 1, "last_used_at": now}))
@@ -205,6 +217,7 @@ class InMemoryLearningStore:
 
     def decide_review(self, owner: Owner, review_id: str, status: ReviewStatus, note: str | None,
                       expected_terms: tuple[str, ...] = ()) -> Review:
+        """Record a decision on one of the tenant's reviews; the caller checks that this user may decide it."""
         with self._lock:
             entry = self._reviews.get(review_id)
             if entry is None or entry[0] != owner.tenant_id:
@@ -255,6 +268,7 @@ class PostgresLearningStore:
 
     def set_feedback_status(self, owner: Owner, feedback_id: str, status: FeedbackStatus,
                             revision_request_id: str | None = None) -> Feedback:
+        """Update the status; an earlier revision request id is kept when none is given."""
         with self._transaction(owner) as cur:
             cur.execute(self._q(
                 "UPDATE {s}.feedback SET status = %s, revision_request_id = coalesce(%s, revision_request_id), updated_at = %s "
@@ -266,12 +280,14 @@ class PostgresLearningStore:
         return row_to_feedback(row)
 
     def thread_feedback(self, owner: Owner, thread_id: str) -> list[Feedback]:
+        """The owner's feedback on one thread, oldest first."""
         with self._transaction(owner) as cur:
             cur.execute(self._q("SELECT * FROM {s}.feedback WHERE thread_id = %s AND tenant_id = %s AND user_id = %s "
                                 "ORDER BY created_at"), (_uuid(thread_id), owner.tenant_id, owner.user_id))
             return [row_to_feedback(r) for r in cur.fetchall()]
 
     def feedback_for_revision(self, owner: Owner, request_id: str) -> Feedback | None:
+        """The owner's newest feedback whose correction was re-run as this request, or None."""
         with self._transaction(owner) as cur:
             cur.execute(self._q("SELECT * FROM {s}.feedback WHERE revision_request_id = %s AND tenant_id = %s AND user_id = %s "
                                 "ORDER BY created_at DESC LIMIT 1"), (request_id, owner.tenant_id, owner.user_id))
@@ -286,6 +302,7 @@ class PostgresLearningStore:
             return {r["key"]: r["value"] for r in cur.fetchall()}
 
     def set_preference(self, owner: Owner, key: str, value: Any) -> None:
+        """Save or replace one of the owner's preferences."""
         with self._transaction(owner) as cur:
             cur.execute(self._q("INSERT INTO {s}.preferences (tenant_id, user_id, key, value, updated_at) VALUES (%s, %s, %s, %s, %s) "
                                 "ON CONFLICT (tenant_id, user_id, key) DO UPDATE SET value = EXCLUDED.value, "
@@ -310,6 +327,7 @@ class PostgresLearningStore:
         return item
 
     def items(self, owner: Owner, include_revoked: bool = False) -> list[LearnedItem]:
+        """Items the owner may see (own personal and tenant shared), newest first; active ones only by default."""
         with self._transaction(owner) as cur:
             cur.execute(self._q("SELECT * FROM {s}.learned_items WHERE tenant_id = %s AND (user_id = %s OR scope = 'shared') "
                                 + ("" if include_revoked else "AND status = 'active' ") + "ORDER BY created_at DESC"),
@@ -317,6 +335,7 @@ class PostgresLearningStore:
             return [row_to_item(r) for r in cur.fetchall()]
 
     def revoke_item(self, owner: Owner, item_id: str) -> LearnedItem:
+        """Mark an item revoked (nothing is deleted): the owner's personal items or the tenant's shared ones."""
         with self._transaction(owner) as cur:
             cur.execute(self._q("UPDATE {s}.learned_items SET status = 'revoked', revoked_at = %s WHERE item_id = %s "
                                 "AND tenant_id = %s AND (user_id = %s OR scope = 'shared') RETURNING *"),
@@ -327,6 +346,7 @@ class PostgresLearningStore:
         return row_to_item(row)
 
     def record_uses(self, owner: Owner, request_id: str, item_ids: list[str]) -> None:
+        """Log that a request applied these items; use_count rises only for a (request, item) pair not seen before."""
         now = utc_now()
         with self._transaction(owner) as cur:
             for item_id in item_ids:
@@ -338,6 +358,7 @@ class PostgresLearningStore:
                                         "WHERE item_id = %s"), (now, item_id))
 
     def used_items(self, owner: Owner, request_id: str) -> list[LearnedItem]:
+        """The learned items that this owner's request applied."""
         with self._transaction(owner) as cur:
             cur.execute(self._q("SELECT i.* FROM {s}.learning_uses u JOIN {s}.learned_items i USING (item_id) "
                                 "WHERE u.request_id = %s AND u.tenant_id = %s AND u.user_id = %s ORDER BY i.kind"),
@@ -356,6 +377,7 @@ class PostgresLearningStore:
         return review
 
     def reviews(self, owner: Owner, status: ReviewStatus | None = None) -> list[Review]:
+        """The tenant's reviews, oldest first, optionally only those with one status."""
         with self._transaction(owner) as cur:
             cur.execute(self._q("SELECT * FROM {s}.reviews WHERE tenant_id = %s AND (%s::text IS NULL OR status = %s) "
                                 "ORDER BY created_at"), (owner.tenant_id, status, status))
@@ -363,6 +385,7 @@ class PostgresLearningStore:
 
     def decide_review(self, owner: Owner, review_id: str, status: ReviewStatus, note: str | None,
                       expected_terms: tuple[str, ...] = ()) -> Review:
+        """Record a decision on one of the tenant's reviews; the caller checks that this user may decide it."""
         with self._transaction(owner) as cur:
             cur.execute(self._q("UPDATE {s}.reviews SET status = %s, reviewer = %s, note = %s, expected_terms = %s, decided_at = %s "
                                 "WHERE review_id = %s AND tenant_id = %s RETURNING *"),
@@ -401,6 +424,7 @@ def read_all(connect: Connect, schema: str = LEARNING_SCHEMA) -> dict[str, list[
 
 # --------------------------------------------------------------------------------------------- row mapping
 def _uuid(value: str) -> str:
+    """Reject a malformed id as "not found" before it reaches PostgreSQL, which would fail on the uuid cast."""
     if not _is_uuid(value):
         raise LearningItemNotFound("not found")
     return value

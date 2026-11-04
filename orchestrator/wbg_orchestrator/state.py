@@ -29,7 +29,9 @@ def _canonical(record: dict[str, Any]) -> str:
 
 
 def append_records(*key_fields: str) -> Callable[[list[dict], list[dict]], list[dict]]:
+    """Build an append-only list reducer keyed by `key_fields`; a changed record under a known key raises."""
     def reducer(existing: list[dict] | None, new: list[dict] | None) -> list[dict]:
+        """Append new records, skip exact repeats, and raise ImmutableRecordError for a changed one."""
         merged = list(existing or [])
         index = {tuple(r[k] for k in key_fields): r for r in merged}
         for record in new or []:
@@ -45,6 +47,7 @@ def append_records(*key_fields: str) -> Callable[[list[dict], list[dict]], list[
 
 
 def merge_task_states(existing: dict[str, str] | None, new: dict[str, str] | None) -> dict[str, str]:
+    """Merge task states, allowing only forward transitions; a new task must enter as pending."""
     merged = dict(existing or {})
     for task_id, state in (new or {}).items():
         target = TaskState(state)
@@ -61,6 +64,7 @@ def merge_task_states(existing: dict[str, str] | None, new: dict[str, str] | Non
 
 
 def add_counters(existing: dict[str, Any] | None, new: dict[str, Any] | None) -> dict[str, Any]:
+    """Add usage counters together. Cost is summed as a Decimal string; an unknown (None) cost adds nothing."""
     merged = dict(existing or {})
     for key, value in (new or {}).items():
         if key == "cost_usd":
@@ -77,6 +81,7 @@ def last_value(existing: Any, new: Any) -> Any:
     return new
 
 
+# The investigation graph's state; each Annotated field names the reducer that merges a node's update into it.
 class InvestigationState(TypedDict, total=False):
     request: dict                                                        # InvestigationRequest (set once)
     phase: Annotated[str, last_value]

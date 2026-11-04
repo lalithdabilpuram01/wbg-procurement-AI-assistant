@@ -99,6 +99,7 @@ def _blank_to_null(c: F.Column) -> F.Column:
 
 
 def build(bronze: DataFrame, wdi_country: DataFrame, prov: dict, run_id: str) -> DataFrame:
+    """The Silver rows: one typed row per cohort project, with WDI match, provenance and lineage."""
     p = bronze.select(F.from_json("raw_record", RECORD_SCHEMA).alias("r"), F.col("raw_record").alias("bronze_raw_record"),
                       F.sha2("raw_record", 256).alias("raw_record_sha256"), F.col("source_file").alias("bronze_source_file"),
                       F.col("cohort_id").alias("bronze_cohort_id"), F.col("ingested_at").alias("bronze_ingested_at"))

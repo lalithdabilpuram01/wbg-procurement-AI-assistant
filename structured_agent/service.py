@@ -42,14 +42,19 @@ LAST_AUTHORIZATION_STAGE = "column_authorization_and_classification"
 
 @dataclass(frozen=True)
 class RequestContext:
+    """Who is calling and the request id that ties all of that request's audit events together."""
+
     principal_id: str
     workspace: str
     request_id: str = field(default_factory=lambda: "req_" + uuid.uuid4().hex[:16])
 
 
 class StructuredDataService:
+    """The seven Structured Data Agent operations; each one runs through `_invoke` (see the module docstring)."""
+
     def __init__(self, settings: Settings, bundle: RegistryBundle, search: RegistrySearch, policy: AccessPolicy,
                  validator: SqlValidator, gateway: ExecutionGateway, telemetry: Telemetry):
+        """Wire the registry, search, access policy, validator, execution gateway and telemetry."""
         self.settings = settings
         self.bundle = bundle
         self._search = search
@@ -74,6 +79,7 @@ class StructuredDataService:
     # -------------------------------------------------------------------------------------------- common invocation
     def _invoke(self, tool: str, ctx: RequestContext, request_model: type[BaseModel], raw: dict[str, Any],
                 response_cls: type[ToolResponse], handler: Callable[[Any, Principal, dict], ToolResponse]) -> ToolResponse:
+        """Run one operation end to end: time it, trace it, and write one audit event; returns the typed response."""
         invocation_id = "inv_" + uuid.uuid4().hex[:16]
         base = {"request_id": ctx.request_id, "invocation_id": invocation_id, "tool": tool}
         started = time.perf_counter()
@@ -87,6 +93,7 @@ class StructuredDataService:
         return response
 
     def _handle(self, ctx, request_model, raw, response_cls, handler, base) -> ToolResponse:
+        """Validate the request, resolve the principal, then run the handler; any failure becomes a typed error."""
         try:
             request = request_model.model_validate(raw)
         except ValidationError as error:
@@ -139,6 +146,7 @@ class StructuredDataService:
 
     @classmethod
     def _audit_attributes(cls, response: ToolResponse) -> dict[str, Any]:
+        """Allow-listed summary of a response for the audit log and span: ids, statuses and counts, never data."""
         attributes: dict[str, Any] = {"tool": response.tool, "status": response.status, "duration_ms": response.duration_ms,
                                       "error_codes": [e.code.value for e in response.errors],
                                       "authorization": cls._authorization_result(response),
@@ -165,6 +173,7 @@ class StructuredDataService:
 
     # ------------------------------------------------------------------------------------------- object authorization
     def _authorized_object(self, fqn: str, principal: Principal) -> tuple[RegisteredObject | None, ToolError | None]:
+        """Find a registered object and check the principal may use it; returns (object, None) or (None, error)."""
         obj = self.bundle.object(fqn.lower())
         if obj is None:
             return None, ToolError.of(ErrorCode.NOT_FOUND, f"'{fqn}' is not a registered object")
@@ -184,7 +193,9 @@ class StructuredDataService:
         return self._invoke("search_table_registry", ctx, SearchTableRegistryRequest, raw, SearchTableRegistryResponse, handler)
 
     def get_table_schema(self, ctx: RequestContext, **raw: Any) -> TableSchemaResponse:
+        """Describe one authorized table or view, listing only the columns the principal may use."""
         def handler(request: ObjectRequest, principal: Principal, base: dict):
+            """Build the schema response, or not_found / rejected when the object is unknown or not allowed."""
             obj, error = self._authorized_object(request.object_fqn, principal)
             if error:
                 return TableSchemaResponse(**base, status="not_found" if error.code == ErrorCode.NOT_FOUND else "rejected", errors=[error])
@@ -200,17 +211,22 @@ class StructuredDataService:
         return self._invoke("get_table_schema", ctx, ObjectRequest, raw, TableSchemaResponse, handler)
 
     def get_table_relationships(self, ctx: RequestContext, **raw: Any) -> TableRelationshipsResponse:
+        """List the approved joins of one authorized object."""
         def handler(request: ObjectRequest, principal: Principal, base: dict):
+            """Keep the relationships whose two objects the principal may both use."""
             obj, error = self._authorized_object(request.object_fqn, principal)
             if error:
                 return TableRelationshipsResponse(**base, status="not_found" if error.code == ErrorCode.NOT_FOUND else "rejected", errors=[error])
+            # A relationship is only shown when the principal may use both of its objects, so no hidden table is named.
             relationships = [r for r in self.bundle.relationships if obj.fqn in (r.from_object, r.to_object)
                              and all(self._policy.can_use_object(principal, self.bundle.object(o)) for o in (r.from_object, r.to_object))]
             return TableRelationshipsResponse(**base, status="ok", object_fqn=obj.fqn, relationships=relationships)
         return self._invoke("get_table_relationships", ctx, ObjectRequest, raw, TableRelationshipsResponse, handler)
 
     def get_metric_definition(self, ctx: RequestContext, **raw: Any) -> MetricDefinitionResponse:
+        """Look up metric definitions by id or by a search query, limited to authorized objects."""
         def handler(request: MetricDefinitionRequest, principal: Principal, base: dict):
+            """Match by metric_id when given, otherwise search; an ambiguous search asks for clarification."""
             authorized = [m for m in self.bundle.metrics if self._policy.can_use_object(principal, self.bundle.object(m.object_fqn))]
             if request.metric_id:
                 metrics = [m for m in authorized if m.metric_id == request.metric_id]
@@ -220,6 +236,7 @@ class StructuredDataService:
                 return MetricDefinitionResponse(**base, status="error", errors=[ToolError.of(ErrorCode.INVALID_REQUEST, "Give metric_id or query")])
             _, matches, ambiguity = self._search.search(request.query, principal, top_k=3)
             ids = [m.metric_id for m in matches]
+            # Keep the search's ranking order for the metrics that the principal may use.
             metrics = sorted((m for m in authorized if m.metric_id in ids), key=lambda m: ids.index(m.metric_id))
             if ambiguity:
                 return MetricDefinitionResponse(**base, status="needs_clarification", metrics=metrics, ambiguity=ambiguity,
@@ -228,25 +245,31 @@ class StructuredDataService:
         return self._invoke("get_metric_definition", ctx, MetricDefinitionRequest, raw, MetricDefinitionResponse, handler)
 
     def get_verified_sql_examples(self, ctx: RequestContext, **raw: Any) -> VerifiedSqlExamplesResponse:
+        """Reviewed SQL examples over authorized objects, optionally for one object and ranked against a query."""
         def handler(request: VerifiedSqlExamplesRequest, principal: Principal, base: dict):
+            """Keep examples over authorized objects, rank them by words shared with the query, and return `limit`."""
             examples = [e for e in self.bundle.examples
                         if all(self._policy.can_use_object(principal, self.bundle.object(o)) for o in e.objects)
                         and (request.object_fqn is None or request.object_fqn.lower() in e.objects)]
             if request.query:
                 words = set(tokenize(request.query))
+                # Simple relevance: examples sharing more words with the question come first.
                 examples.sort(key=lambda e: -len(words & set(tokenize(e.question + " " + " ".join(e.metrics)))))
             selected = examples[:request.limit]
             return VerifiedSqlExamplesResponse(**base, status="ok" if selected else "not_found", examples=selected)
         return self._invoke("get_verified_sql_examples", ctx, VerifiedSqlExamplesRequest, raw, VerifiedSqlExamplesResponse, handler)
 
     def validate_sql(self, ctx: RequestContext, **raw: Any) -> ValidateSqlResponse:
+        """Validate a SQL statement for the principal without running it."""
         def handler(request: SqlRequest, principal: Principal, base: dict):
             report = self._validator.validate(request.sql, request.parameters, principal)
             return ValidateSqlResponse(**base, status="ok" if report.approved else "rejected", report=report, errors=report.errors)
         return self._invoke("validate_sql", ctx, SqlRequest, raw, ValidateSqlResponse, handler)
 
     def execute_readonly_sql(self, ctx: RequestContext, **raw: Any) -> QueryResult:
+        """Validate and run a read-only query through the gateway; returns the rows with their checks and provenance."""
         def handler(request: ExecuteSqlRequest, principal: Principal, base: dict):
+            """Run the query through the gateway and copy the result and its validation report into a QueryResult."""
             result = self._gateway.execute(request.sql, request.parameters, principal, request.max_rows)
             report = result.report
             return QueryResult(

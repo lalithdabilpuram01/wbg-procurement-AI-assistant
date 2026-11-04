@@ -1,5 +1,8 @@
 "use client";
 
+// The planning brief: the layout of a "Plan a new project" answer. Claims are grouped by their `section`, and some
+// sections also show cards built from the evidence (similar projects, model predictions, market benchmarks).
+
 import { Activity, CalendarClock, FileCog, FileText, Landmark, Lightbulb, Search, ShieldAlert, Store } from "lucide-react";
 import type { Evidence, Investigation } from "@/lib/api";
 import { Button } from "@/components/ui/button";
@@ -7,6 +10,7 @@ import { Badge, Card } from "@/components/ui/primitives";
 import { PredictionCards } from "./prediction-cards";
 import { cn } from "@/lib/utils";
 
+// The sections in display order; `key` matches the claim's section name set by the API.
 const SECTIONS: { key: string; title: string; icon: React.ElementType; lead?: string }[] = [
   { key: "similar_projects", title: "Similar past projects", icon: Landmark },
   { key: "lessons", title: "Lessons learned", icon: Lightbulb, lead: "What similar projects learned, and what to do differently." },
@@ -17,6 +21,7 @@ const SECTIONS: { key: string; title: string; icon: React.ElementType; lead?: st
   { key: "monitoring", title: "What to monitor during execution", icon: Activity },
 ];
 
+/** The value of one named fact on an evidence item, or undefined. */
 const fact = (e: Evidence, name: string) => e.facts.find((f) => f.name === name)?.value;
 
 type Props = {
@@ -25,6 +30,7 @@ type Props = {
   onInvestigate: (question: string) => void;
 };
 
+/** Renders a planning brief. `citation` draws the numbered source buttons; `onInvestigate` sends a follow-up. */
 export function BriefView({ investigation, citation, onInvestigate }: Props) {
   const evidence = investigation.evidence;
   const similar = evidence.filter((e) => e.kind === "similar_project");
@@ -35,6 +41,8 @@ export function BriefView({ investigation, citation, onInvestigate }: Props) {
     <div className="mt-2 space-y-7">
       {SECTIONS.map(({ key, title, icon: Icon, lead }) => {
         const claims = claimsIn(key);
+        // Cards that come from evidence rather than claims, so a section with no claims can still show.
+        // "schedule" always counts as having content because its prediction cards decide for themselves.
         const extra = key === "similar_projects" ? similar.length : key === "schedule" ? 1 : key === "market_approach" ? benchmarks.length : 0;
         if (!claims.length && !extra) return null;
         const main = key === "lessons";
@@ -65,6 +73,7 @@ export function BriefView({ investigation, citation, onInvestigate }: Props) {
   );
 }
 
+/** One card per similar past project, with a button that asks for an investigation of its procurement history. */
 function SimilarProjects({ items, onInvestigate }: { items: Evidence[]; onInvestigate: (question: string) => void }) {
   if (!items.length) return null;
   return (
@@ -98,6 +107,7 @@ function SimilarProjects({ items, onInvestigate }: { items: Evidence[]; onInvest
   );
 }
 
+/** Small tables of market benchmarks from the Gold data (first eight facts each); the Gold table name is cut. */
 function Benchmarks({ items }: { items: Evidence[] }) {
   if (!items.length) return null;
   return (

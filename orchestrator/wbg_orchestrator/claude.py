@@ -39,6 +39,7 @@ def strict_output_schema(schema: Any) -> Any:
 
 
 class PortkeyJsonClient:
+    """Thin wrapper over the Portkey Claude client: sends Claude-compatible schemas, returns orchestrator Usage."""
     def __init__(self, client: PortkeyClaudeClient):
         self._client = client
 
@@ -63,6 +64,7 @@ class PortkeyJsonClient:
 
     def complete(self, *, system: str, user: str, schema: dict[str, Any], schema_name: str, trace_id: str,
                  timeout_seconds: float | None = None) -> tuple[dict[str, Any] | None, str, Usage]:
+        """One structured reply: (parsed JSON or None, raw text, usage). Callers still validate the parsed JSON."""
         response = self._client.complete(ClaudeRequest(system=system, user=user, trace_id=trace_id,
                                                        json_schema=strict_output_schema(schema), schema_name=schema_name,
                                                        timeout_seconds=timeout_seconds))

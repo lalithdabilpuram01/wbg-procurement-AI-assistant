@@ -16,6 +16,7 @@ def _cnt(df: DataFrame, cond) -> int:
 
 
 def check(ieg: DataFrame, bronze: DataFrame, projects: DataFrame, cohort_ids: set[str], prov: dict, rep: DQReport, expected_rows: int = 750) -> None:
+    """Run every data-quality rule for ieg_project_ratings and add the results to `report`."""
     n = ieg.count()
     # rows and keys
     rep.equals("rows_equal_bronze", n, bronze.count())

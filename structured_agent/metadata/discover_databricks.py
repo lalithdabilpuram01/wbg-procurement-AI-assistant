@@ -35,6 +35,7 @@ def _rows(spark, sql: str) -> list[dict]:
 
 
 def list_objects(spark) -> list[dict]:
+    """Every table and view in the two schemas, with its type and comment."""
     schemas = ", ".join(f"'{s}'" for s in SCHEMAS)
     return _rows(spark, f"""
         SELECT table_schema, table_name, table_type, comment
@@ -44,6 +45,7 @@ def list_objects(spark) -> list[dict]:
 
 
 def list_columns(spark) -> dict[str, list[dict]]:
+    """Columns of every object, keyed by fully qualified name and ordered by position."""
     schemas = ", ".join(f"'{s}'" for s in SCHEMAS)
     rows = _rows(spark, f"""
         SELECT table_schema, table_name, column_name, ordinal_position, full_data_type, is_nullable, comment
@@ -64,6 +66,7 @@ def list_columns(spark) -> dict[str, list[dict]]:
 
 
 def view_definitions(spark) -> dict[str, str]:
+    """SQL text of every view, keyed by fully qualified name."""
     schemas = ", ".join(f"'{s}'" for s in SCHEMAS)
     rows = _rows(spark, f"""
         SELECT table_schema, table_name, view_definition
@@ -73,6 +76,7 @@ def view_definitions(spark) -> dict[str, str]:
 
 
 def column_masks(spark) -> list[dict]:
+    """Column masks defined on objects in the two schemas."""
     schemas = ", ".join(f"'{s}'" for s in SCHEMAS)
     return _rows(spark, f"""
         SELECT table_schema, table_name, column_name, mask_name
@@ -81,6 +85,7 @@ def column_masks(spark) -> list[dict]:
 
 
 def row_filter_count(spark) -> int:
+    """Number of row filters defined in the two schemas (only the count is recorded)."""
     schemas = ", ".join(f"'{s}'" for s in SCHEMAS)
     return _rows(spark, f"""
         SELECT count(*) AS n FROM {CATALOG}.information_schema.row_filters
@@ -97,6 +102,7 @@ def row_count(spark, fqn: str) -> int:
 
 
 def discover() -> dict:
+    """Collect the full metadata snapshot (one dict, ready to save as JSON)."""
     spark = get_spark()
     columns = list_columns(spark)
     views = view_definitions(spark)
@@ -115,6 +121,7 @@ def discover() -> dict:
             "row_count": row_count(spark, fqn),
             "columns": columns.get(fqn, []),
             "view_definition": views.get(fqn),
+            # Views have no Delta table properties worth reading.
             "properties": {} if fqn in views else documentation_properties(spark, fqn),
             "column_masks": [m["column_name"] for m in masks if m["table_name"] == obj["table_name"]
                              and m["table_schema"] == obj["table_schema"]],
@@ -132,6 +139,7 @@ def discover() -> dict:
 
 
 def main() -> None:
+    """Discover the metadata and save it as a timestamped snapshot file."""
     snapshot = discover()
     SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
     stamp = snapshot["discovered_at"].replace("-", "").replace(":", "").replace("+0000", "Z")

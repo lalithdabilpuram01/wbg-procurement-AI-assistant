@@ -1,3 +1,5 @@
+// API route /api/backend/*: the only way the browser reaches the FastAPI app. The client in src/lib/api.ts calls
+// it; the handler reads the session cookie and forwards the call with the token as a bearer header.
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { ALLOWED_PREFIXES, API_URL, SESSION_COOKIE, backendHeaders } from "@/lib/server";
@@ -9,10 +11,12 @@ async function forward(request: Request, { params }: Context) {
   const token = (await cookies()).get(SESSION_COOKIE)?.value;
   if (!token) return NextResponse.json({ detail: "authentication required" }, { status: 401 });
   const { path } = await params;
+  // Only known API areas are forwarded, and no segment may climb out of the API path (".." or an encoded "/").
   if (!ALLOWED_PREFIXES.includes(path[0]) || path.some((p) => p === ".." || p.includes("/"))) {
     return NextResponse.json({ detail: "not found" }, { status: 404 });
   }
   const url = `${API_URL}/${path.map(encodeURIComponent).join("/")}${new URL(request.url).search}`;
+  // The client always sends JSON bodies, so the proxy sets that Content-Type itself instead of copying headers.
   const hasBody = !["GET", "HEAD", "DELETE"].includes(request.method);
   const upstream = await fetch(url, {
     method: request.method,
@@ -21,6 +25,7 @@ async function forward(request: Request, { params }: Context) {
     cache: "no-store",
   }).catch(() => null);
   if (!upstream) return NextResponse.json({ detail: "the API is not reachable" }, { status: 502 });
+  // A 204 must have no body, so it is not passed through the text copy below.
   if (upstream.status === 204) return new Response(null, { status: 204 });
   const type = upstream.headers.get("Content-Type") ?? "";
   if (type.startsWith("text/event-stream")) {                      // live job events: passed through as they arrive
@@ -35,4 +40,5 @@ async function forward(request: Request, { params }: Context) {
   });
 }
 
+// One handler serves every HTTP method the client uses.
 export { forward as GET, forward as POST, forward as PUT, forward as PATCH, forward as DELETE };

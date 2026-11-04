@@ -11,6 +11,7 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 
+# The one route a message is sent to; ROUTE_POLICIES below fixes what each route may use.
 class Route(str, Enum):
     CONVERSATION = "conversation"                    # greetings, small talk, general explanations; no evidence needed
     CONVERSATION_MEMORY = "conversation_memory"      # recall/summary of the user's own authorized conversation history
@@ -25,6 +26,7 @@ TASK_ROUTES = frozenset({Route.STRUCTURED_DATA, Route.DOCUMENT_RAG, Route.ML_PRE
 CONVERSATIONAL_ROUTES = frozenset({Route.CONVERSATION, Route.CONVERSATION_MEMORY})
 
 
+# Why the router chose a route: a fixed label that is safe to log (never message text).
 class ReasonCategory(str, Enum):
     GREETING = "greeting"
     GRATITUDE = "gratitude"
@@ -50,6 +52,7 @@ class ReasonCategory(str, Enum):
 MemoryAccess = Literal["none", "recent_context", "conversation_history"]
 
 
+# What one route may use: its capabilities, how much conversation memory it reads, and retrieval or tools.
 class RoutePolicy(BaseModel, frozen=True):
     capabilities: tuple[str, ...]
     memory_access: MemoryAccess
@@ -83,6 +86,7 @@ ConfidenceLevel = Literal["high", "medium", "low"]
 ConfidenceBasis = Literal["deterministic_rule", "conversation_inheritance", "classifier_score", "none"]
 
 
+# The router's typed decision for one message; `decision()` copies its permissions from ROUTE_POLICIES.
 class RoutingDecision(BaseModel, frozen=True):
     route: Route
     reason: ReasonCategory

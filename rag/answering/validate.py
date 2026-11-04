@@ -34,6 +34,7 @@ STOP = set("the a an of and or to in on for by with at from is was were be been 
 
 
 def dates(s: str) -> set[str]:
+    """Return every date in the text as YYYY-MM-DD, whether written '2020-03-05', '5 Mar 2020' or 'Mar 5, 2020'."""
     out = {f"{y}-{m}-{d}" for y, m, d in D_ISO.findall(s)}
     for d, mon, y in D_DMY.findall(s):
         if mon.lower()[:3] in MONTHS:
@@ -45,12 +46,14 @@ def dates(s: str) -> set[str]:
 
 
 def strip_ids(s: str) -> str:
+    """Blank out dates and project or procurement references so their digits are not read as amounts."""
     for rx in (D_ISO, D_DMY, D_MDY, STEP, LEGACY, PID):
         s = rx.sub(" ", s)
     return s
 
 
 def numbers(s: str, scale: bool = True) -> set[float]:
+    """Return the numbers in the text (dates and references removed); with scale, '2.5 million' also adds 2500000."""
     s2 = strip_ids(s)
     out = set()
     for m in NUM.finditer(s2):
@@ -71,7 +74,10 @@ def content_words(s: str) -> set[str]:
 
 
 class NLI:
+    """Local entailment checker (roberta-large-mnli) that tests whether cited evidence supports a claim."""
     def __init__(self, model: str = "FacebookAI/roberta-large-mnli"):
+        """Load the model from the local cache (on the Apple GPU when available) and find its entailment label."""
+        # Default to offline mode so the model is read from the local Hugging Face cache, not downloaded.
         os.environ.setdefault("HF_HUB_OFFLINE", "1")
         from transformers import AutoModelForSequenceClassification, AutoTokenizer
         import torch
@@ -82,6 +88,7 @@ class NLI:
         self.ent = [i for i, l in self.m.config.id2label.items() if l.upper().startswith("ENTAIL")][0]
 
     def entail(self, premises: list[str], hypothesis: str) -> float:
+        """Return the highest entailment probability of the hypothesis over all premises (0.0 when there are none)."""
         if not premises:
             return 0.0
         with self.torch.no_grad():
@@ -128,6 +135,7 @@ def check_claim(claim: dict, ev: dict, nli: NLI | None, mode: str = "text") -> d
 
 
 def typed_conflicts(items) -> list[dict]:
+    """List every field where a plan row and its linked DS00005 contract record disagree, with both values."""
     out = []
     for e in items:
         for link in e.record.get("evidence_links", []) or []:
@@ -141,6 +149,7 @@ def typed_conflicts(items) -> list[dict]:
 
 
 def link_status_notes(supported_claims: list[dict], items) -> list[str]:
+    """Warn when a supported claim names a contract whose link to the plan row is only 'candidate' or 'conflicting'."""
     notes = []
     text = " ".join(c["text"] for c in supported_claims)
     for e in items:

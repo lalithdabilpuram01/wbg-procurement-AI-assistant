@@ -14,6 +14,7 @@ QUERY_NOISE = 0.1
 
 @dataclass(frozen=True)
 class Item:
+    """One synthetic stored row: id, label and a unit-length embedding."""
     item_id: int
     label: str
     embedding: np.ndarray               # float32, unit length

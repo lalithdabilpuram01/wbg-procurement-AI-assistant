@@ -11,6 +11,8 @@ MANAGED = ("_processed", "_quarantine", "_ledger")
 
 @dataclass(frozen=True)
 class Folder:
+    """One inbox folder: the document or record type it holds and the formats it accepts."""
+
     name: str
     kind: str                       # document | records
     doc_type: str | None            # the corpus doc type (PAD, ISR, ICR, PP) or the record type (contract, notice)
@@ -34,6 +36,8 @@ FOLDERS = {f.name: f for f in (
 
 @dataclass(frozen=True)
 class Inbox:
+    """The inbox root: one folder per type, plus the managed folders for processed, quarantined and ledger files."""
+
     root: Path = DEFAULT_INBOX
 
     def folder(self, name: str) -> Path:

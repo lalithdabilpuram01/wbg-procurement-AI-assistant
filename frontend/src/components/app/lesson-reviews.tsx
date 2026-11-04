@@ -1,5 +1,8 @@
 "use client";
 
+// The "Lesson cards" tab of the Review queue: cards by status from GET /lessons?status=..., decided with
+// POST /lessons/{id}. Reviewers only.
+
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { BookOpen, Check, ChevronDown, X } from "lucide-react";
 import { api, type LessonCard, type LessonQueue, type LessonStatus } from "@/lib/api";
@@ -7,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge, Card, Input, Select, Spinner } from "@/components/ui/primitives";
 import { cn } from "@/lib/utils";
 
+// Labels for statuses, lifecycle stages and source document types.
 const STATUSES: Record<LessonStatus, string> = { proposed: "Proposed", approved: "Approved", rejected: "Rejected" };
 const STAGES: Record<string, string> = { all: "All stages", planning: "Planning", tender_design: "Tender design",
   execution: "Execution", learning: "Learning" };
@@ -21,8 +25,10 @@ export function LessonReviews({ onError }: { onError: (e: unknown) => void }) {
   const load = useCallback(async () => {
     try { setQueue(await api.lessons(status)); } catch (e) { onError(e); }
   }, [status, onError]);
+  // `load` changes when the status tab changes, so this reloads the cards (showing a spinner) for the new status.
   useEffect(() => { setQueue(null); void load(); }, [load]);
 
+  // The stage filter works on the loaded cards only; it does not call the API.
   const shown = useMemo(() => (queue?.cards ?? []).filter((c) => stage === "all" || c.stages.includes(stage)), [queue, stage]);
 
   return (
@@ -53,6 +59,7 @@ export function LessonReviews({ onError }: { onError: (e: unknown) => void }) {
   );
 }
 
+/** One lesson card: source, headline, the full paragraph on demand, topics, and approve/reject for a proposed card. */
 function LessonItem({ card, onDone, onError }: { card: LessonCard; onDone: () => void; onError: (e: unknown) => void }) {
   const [open, setOpen] = useState(false);
   const [note, setNote] = useState("");

@@ -111,12 +111,14 @@ REPEATED = {*HEADER_IDS, "node", "job_id", "job_kind", "state", "state_changes"}
 
 
 def _pairs(values: dict[str, Any] | None, skip: Iterable[str] = REPEATED) -> str:
+    """Non-empty values as `key=value` text, leaving out `skip` and shortening task ids to their local name."""
     skipped = set(skip)
     shown = {k: (v.rsplit(".", 1)[-1] if k == "task_id" and isinstance(v, str) else v) for k, v in (values or {}).items()}
     return " ".join(f"{k}={_short(v)}" for k, v in shown.items() if k not in skipped and v not in (None, "", [], {}))
 
 
 def _changes(changes: dict[str, Any]) -> str:
+    """A one-line reading of what a step wrote: task state moves, the plan's tasks, and added records."""
     parts = []
     for key, value in changes.items():
         if key == "task_states" and isinstance(value, dict):
@@ -132,6 +134,7 @@ def _changes(changes: dict[str, Any]) -> str:
     return "; ".join(parts) or "nothing"
 
 
+# Keys left out of a plain line's extra fields: the layout or the header already shows them.
 IDS = ("job_id", "job_kind", "request_id", "investigation_id", "conversation_id", "http_request_id", "trace_id", "span_id",
        "time", "level", "logger", "message", "step", "step_path", "depth", "session_id", "user_hash", "service_version",
        "environment", "event", "gen_ai.conversation.id", "session.id", "user.hash")
@@ -206,6 +209,7 @@ def render_session(session_id: str, lines: list[dict[str, Any]], show_state: boo
 
 
 def session_header(session: dict[str, Any]) -> str:
+    """The session's id, user hash, counts and time span, as the first lines of `--session`."""
     return (f"Session {session['session_id']}  user {session['user_hash'] or '-'}  ({len(session['jobs'])} jobs, "
             f"{session['requests']} requests, {session['problems']} warnings or errors)\n"
             f"  from {session['started']}  to {session['last']}\n")
@@ -222,6 +226,7 @@ def failure_summary(lines: list[dict[str, Any]]) -> list[str]:
 
 # ------------------------------------------------------------------------------------------------------ command
 def main(argv: list[str] | None = None) -> int:
+    """The `wbg-logs` command: list jobs or sessions, or print one job (latest, failed or by id) as a tree."""
     parser = argparse.ArgumentParser(prog="wbg-logs", description="Show one job from the app's JSON log as a tree of steps.")
     parser.add_argument("job_id", nargs="?", help="the job to show (default: the latest job)")
     parser.add_argument("--failed", action="store_true", help="the latest job that logged an error")

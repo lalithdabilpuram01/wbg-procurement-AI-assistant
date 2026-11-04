@@ -13,5 +13,5 @@ ml/
 ```
 
 The models are frozen: their files are verified against the checksums in FROZEN.json at load time and are never
-retrained or re-scored by the app. How they were built (data extraction, EDA, training stages, final refit and the
-one-time test scoring) is recorded in research/ml/ (see research/ml/README.md). Tests: tests/ml_serving/.
+retrained or re-scored by the app. Their test metrics are in each model's frozen/test_results/ folder.
+Tests: tests/ml_serving/.

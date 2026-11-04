@@ -35,6 +35,7 @@ class TaskTimeout(Exception):
 
 @dataclass(frozen=True)
 class RetryBackoff:
+    """Exponential wait between retries of a transient failure: 0.25 s, 0.5 s, 1 s, ... capped at `max_seconds`."""
     base_seconds: float = 0.25
     factor: float = 2.0
     max_seconds: float = 2.0
@@ -60,10 +61,13 @@ class TaskRun:
 
 
 class ExecutionController:
+    """Validates plans and runs each task through its worker with tickets, breakers, deadlines and bounded retries."""
+
     def __init__(self, workers: Mapping[WorkerName, Worker], authority: TicketAuthority, *, tracer: OrchestratorTracer | None = None,
                  breaker_settings: BreakerSettings = DEFAULT_BREAKER, backoff: RetryBackoff = RetryBackoff(),
                  clock: Callable[[], float] = time.monotonic, sleep: Callable[[float], None] = time.sleep,
                  prices: PriceTable | None = None, max_threads: int = 4):
+        """Wire the workers and ticket authority; keeps one circuit breaker per worker and a thread pool for tasks."""
         self._workers = dict(workers)
         self._authority = authority
         self._tracer = tracer or OrchestratorTracer.disabled()
@@ -81,6 +85,7 @@ class ExecutionController:
 
     # ------------------------------------------------------------------------------------------- plan validation
     def validate_plan(self, plan: InvestigationPlan, request: InvestigationRequest) -> list[ExecutionError]:
+        """Every problem that stops the plan from running (an empty list means it may run)."""
         budget, auth = request.budget, request.authorization
         problems: list[tuple[str, str, str | None]] = []
         ids = [t.task_id for t in plan.tasks]
@@ -109,6 +114,7 @@ class ExecutionController:
                                code=code, safe_message=message) for code, message, task_id in problems]
 
     def _task_problems(self, task: AgentTask, auth, budget, known: set[str]) -> list[tuple[str, str]]:
+        """(code, message) for each rule one task breaks: operation, permissions, dependencies, limits, evidence."""
         problems = []
         if task.worker not in self._workers or task.operation not in OPERATIONS.get(task.worker.value, {}):
             problems.append(("unknown_operation", "The worker or operation does not exist."))
@@ -153,6 +159,7 @@ class ExecutionController:
 
     @staticmethod
     def ready(plan: InvestigationPlan, states: Mapping[str, str], limit: int) -> list[str]:
+        """Up to `limit` pending tasks whose dependencies all finished with a usable result, in plan order."""
         ready = [t.task_id for t in plan.tasks if TaskState(states.get(t.task_id, "pending")) == TaskState.PENDING
                  and all(TaskState(states.get(d, "pending")) in USABLE_TASK_STATES for d in t.depends_on)]
         return ready[:limit]
@@ -160,6 +167,7 @@ class ExecutionController:
     # ---------------------------------------------------------------------------------------------- execution
     def execute(self, task: AgentTask, request: InvestigationRequest, state: Mapping[str, Any], *,
                 execution_allowed: bool, memory_block: str | None = None) -> TaskRun:
+        """Run one task: reuse an earlier identical result, or check permission and budget again, then attempt it."""
         reused = _previous_result(task, state)
         if reused is not None:
             return TaskRun(task.task_id, TaskState.SKIPPED, results=[AgentResult(
@@ -172,6 +180,7 @@ class ExecutionController:
         return self._attempts(task, request, state, execution_allowed, memory_block)
 
     def _refusal(self, task, request, state, execution_allowed) -> ExecutionError | None:
+        """The second check just before running: authorization, then the budget; None when the task may run."""
         auth = request.authorization
         if not auth.allows(task.worker.value, task.operation, task.requires_execution):
             return _error(request, task, ErrorCategory.AUTHORIZATION, "operation_not_authorized",
@@ -181,6 +190,10 @@ class ExecutionController:
                             needs_execution=task.requires_execution and execution_allowed)
 
     def _attempts(self, task, request, state, execution_allowed, memory_block) -> TaskRun:
+        """Try the task up to its attempt limit. Only transient errors and timeouts are retried, after a backoff wait.
+
+        Each attempt gets a fresh ticket and the smaller of the task deadline and the investigation's remaining time.
+        """
         run = TaskRun(task.task_id, TaskState.FAILED)
         breaker, worker = self._breakers[task.worker], self._workers[task.worker]
         budget = request.budget
@@ -239,6 +252,8 @@ class ExecutionController:
                                    "The task failed unexpectedly.")
                     return self._finish(run, task, attempt, TaskState.FAILED, error)
                 run.elapsed_ms += round(1000 * (self._clock() - started))
+                # Only infrastructure errors count against the breaker; a refusal or validation error says nothing
+                # about the worker's health.
                 if output.error is not None and output.error.category in (ErrorCategory.EXECUTION, ErrorCategory.TIMEOUT):
                     breaker.record_failure()
                 elif output.error is not None:
@@ -271,6 +286,7 @@ class ExecutionController:
 
     def _finish(self, run: TaskRun, task: AgentTask, attempt: int, state: TaskState, error: ExecutionError | None,
                 evidence=(), notes=()) -> TaskRun:
+        """Record the final attempt's state, error and result on the run and return it."""
         run.final_state = state
         if error is not None:
             run.errors.append(error)
@@ -279,6 +295,7 @@ class ExecutionController:
 
     @staticmethod
     def _result(task, attempt, state, error, evidence=(), notes=(), usage: Usage | None = None, elapsed_ms: int = 0) -> AgentResult:
+        """The AgentResult record of one attempt."""
         return AgentResult(task_id=task.task_id, attempt=attempt, worker=task.worker, idempotency_key=task.idempotency_key,
                            status=state, evidence_ids=tuple(e.evidence_id for e in evidence),
                            error_id=error.error_id if error else None, usage=usage or Usage(), duration_ms=elapsed_ms,
@@ -314,10 +331,12 @@ def _cycle(plan: InvestigationPlan) -> str | None:
 
 
 def _depth(plan: InvestigationPlan) -> int:
+    """The longest dependency chain in the plan, counted in tasks (call only after ruling out cycles)."""
     by_id = {t.task_id: t for t in plan.tasks}
     memo: dict[str, int] = {}
 
     def depth(task_id: str) -> int:
+        """Number of tasks in the longest chain ending at `task_id` (memoised)."""
         if task_id not in memo:
             deps = [d for d in by_id[task_id].depends_on if d in by_id]
             memo[task_id] = 1 + max((depth(d) for d in deps), default=0)
@@ -335,12 +354,14 @@ def _previous_result(task: AgentTask, state: Mapping[str, Any]) -> dict | None:
 
 
 def _upstream_evidence(task: AgentTask, state: Mapping[str, Any]) -> tuple[EvidenceRecord, ...]:
+    """The verified evidence produced by the tasks this task depends on (passed to its worker as context)."""
     ids = {e for r in state.get("results", []) if r["task_id"] in task.depends_on for e in r["evidence_ids"]}
     return tuple(EvidenceRecord.from_state(e) for e in state.get("evidence", [])
                  if e["evidence_id"] in ids and e["validation_status"] == "verified")
 
 
 def _add(a: Usage, b: Usage) -> Usage:
+    """The sum of two usages; the cost stays None only when both costs are unknown."""
     cost = None if a.cost_usd is None and b.cost_usd is None else (a.cost_usd or 0) + (b.cost_usd or 0)
     return Usage(llm_calls=a.llm_calls + b.llm_calls, input_tokens=a.input_tokens + b.input_tokens,
                  output_tokens=a.output_tokens + b.output_tokens, executions=a.executions + b.executions, cost_usd=cost)
@@ -348,6 +369,7 @@ def _add(a: Usage, b: Usage) -> Usage:
 
 def _error(request: InvestigationRequest, task: AgentTask, category: ErrorCategory, code: str, message: str, *,
            retryable: bool = False, retry_after: float | None = None) -> ExecutionError:
+    """An ExecutionError of the execute node for this task (the code is cut to 80 characters)."""
     return ExecutionError(error_id=new_id("err"), investigation_id=request.investigation_id, task_id=task.task_id, node="execute",
                           category=category, code=code[:80], retryable=retryable, retry_after_seconds=retry_after,
                           safe_message=message)

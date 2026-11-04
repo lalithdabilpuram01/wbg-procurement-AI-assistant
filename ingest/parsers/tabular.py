@@ -67,12 +67,15 @@ AMOUNT = re.compile(r"^(-?\d+(?:\.\d+)?)\s*([kmb])?$", re.I)
 
 
 def parse(path: Path, sha256: str, document_id: str, record_type: str | None, fmt: str) -> ParsedDocument:
+    """Map the columns, validate every row and keep the valid records. A file missing a required column, or with too
+    many invalid rows, is quarantined."""
     rows = _rows(path, fmt)
     if not rows:
         raise Quarantined("no_rows", "the file has a header but no data rows")
     mapping = _mapping(rows[0].keys())
     record_type = record_type or _infer(mapping)
     fields, required = SCHEMAS[record_type]
+    # A project id in the file name stands in for a missing project column.
     missing = [" or ".join(group) for group in required if not any(f in mapping.values() for f in group)
                and not (group == ("project_id",) and _project_from_name(path))]
     if missing:
@@ -99,6 +102,7 @@ def parse(path: Path, sha256: str, document_id: str, record_type: str | None, fm
 
 # --------------------------------------------------------------------------------------------------- reading
 def _rows(path: Path, fmt: str) -> list[dict[str, Any]]:
+    """The data rows as dicts: CSV with a sniffed delimiter (blank rows skipped), JSON or JSON Lines, or Excel."""
     if fmt == "csv":
         text = read_text(path)
         dialect = csv.Sniffer().sniff(text[:8192], delimiters=",;\t|")
@@ -110,6 +114,7 @@ def _rows(path: Path, fmt: str) -> list[dict[str, Any]]:
         except json.JSONDecodeError:
             data = [json.loads(line) for line in text.splitlines() if line.strip()]
         if isinstance(data, dict):
+            # A JSON object is either a wrapper around the record list or a single record.
             data = next((v for k, v in data.items() if k in ("records", "data", "items", "rows") and isinstance(v, list)), [data])
         if not all(isinstance(r, dict) for r in data):
             raise Quarantined("schema_mismatch", "JSON must be a list of objects (or {\"records\": [...]}, or JSON Lines)")
@@ -163,6 +168,7 @@ def _project_from_name(path: Path) -> str | None:
 # ------------------------------------------------------------------------------------------------- records
 def _record(record_type: str, raw: dict, mapping: dict, fields: tuple, required: tuple, default_project: str | None,
             notes: set[str]) -> tuple[Record | None, list[str]]:
+    """Type and validate one row; returns the Record, or None and the reasons it was rejected."""
     values: dict[str, Any] = {}
     errors: list[str] = []
     for column, field in mapping.items():
@@ -187,6 +193,7 @@ def _record(record_type: str, raw: dict, mapping: dict, fields: tuple, required:
 
 
 def _record_id(record_type: str, v: dict) -> str:
+    """Natural key of a record: contract or notice number, else project + normalised reference (or a content hash)."""
     if record_type == "contract" and v.get("wb_contract_number"):
         return str(v["wb_contract_number"])
     if record_type == "notice" and v.get("notice_id"):
@@ -196,6 +203,7 @@ def _record_id(record_type: str, v: dict) -> str:
 
 
 def _typed(field: str, value: Any, notes: set[str]) -> tuple[Any, str | None]:
+    """Type one value for its field, as (value, problem); an empty value is missing, not invalid."""
     if value is None or (isinstance(value, str) and not value.strip()):
         return None, None
     if field == "project_id":
@@ -212,6 +220,7 @@ def _typed(field: str, value: Any, notes: set[str]) -> tuple[Any, str | None]:
 
 
 def _amount(value: Any) -> tuple[float | None, str | None]:
+    """A US$ amount from a number or from text such as "US$ 1,234.5" or "1.2m"."""
     if isinstance(value, (int, float)):
         return float(value), None
     text = re.sub(r"(US\$|USD|\$|,|\s)", "", str(value), flags=re.I)
@@ -223,6 +232,7 @@ def _amount(value: Any) -> tuple[float | None, str | None]:
 
 
 def _date(value: Any, notes: set[str]) -> tuple[str | None, str | None]:
+    """An ISO date from a date value or text in a known format; d/m/Y is read day-first unless that is impossible."""
     if isinstance(value, dt.datetime):
         return value.date().isoformat(), None
     if isinstance(value, dt.date):

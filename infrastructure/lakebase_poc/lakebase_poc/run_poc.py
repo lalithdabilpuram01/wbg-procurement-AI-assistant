@@ -21,6 +21,7 @@ DISTANCE_TOLERANCE = 1e-5             # float32 storage vs float64 reference
 
 
 def ranking_check(conn, items, pairs, force_index: bool, ef_search: int | None = None) -> dict[str, object]:
+    """Compare the database top-k with the exact NumPy ranking for every query: order, top-1, recall, distance gap."""
     exact_order, top1, recall, max_gap = True, 0, [], 0.0
     for source, query in pairs:
         reference = synthetic.cosine_distance_ranking(items, query, TOP_K)
@@ -35,6 +36,7 @@ def ranking_check(conn, items, pairs, force_index: bool, ef_search: int | None =
 
 
 def run() -> dict[str, object]:
+    """Run the whole POC on one connection: enable pgvector, load the rows, test exact and HNSW search."""
     settings = load_settings()
     items = synthetic.items()
     pairs = synthetic.queries(items)
@@ -75,6 +77,7 @@ def run() -> dict[str, object]:
 
 
 def main() -> None:
+    """Run the POC only when LAKEBASE_LIVE_TESTS=1, then write and print the results file."""
     if not live_tests_enabled():
         sys.exit("Live Lakebase run not enabled: set LAKEBASE_LIVE_TESTS=1 for this invocation.")
     result = run()

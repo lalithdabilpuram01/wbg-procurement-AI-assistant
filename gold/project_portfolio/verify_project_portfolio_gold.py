@@ -71,12 +71,14 @@ def rows(spark, table: str, *cols: str) -> list[dict]:
 
 
 def single(values) -> object:
+    """The one distinct value in `values`; fails if there are several."""
     vals = set(values)
     assert len(vals) == 1, f"expected one source-wide value, got {len(vals)}"
     return next(iter(vals))
 
 
 def expected(spark, run_id: str) -> tuple[dict, dict]:
+    """Expected Gold rows keyed by project_id, recomputed in plain Python, plus reconciliation totals and counts."""
     P = rows(spark, "projects", "project_id", "project_name", "region_name", "geography_type", "country_code", "country_name", "wdi_country_code", "wdi_match_method",
              "approval_fiscal_year", "board_approval_date", "project_status", "closing_date", "current_total_commitment_usd", "source_retrieved_at", "raw_record_sha256")
     lines = rows(spark, "contract_award_lines", "project_id", "wb_contract_number", "supplier_amount_usd", "contract_signing_date")
@@ -158,6 +160,7 @@ def expected(spark, run_id: str) -> tuple[dict, dict]:
 
 
 def main() -> int:
+    """Recompute the table (or the transform's frame, with --dry-run) independently and compare; 0 when all passed."""
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--run-id", required=True)
     ap.add_argument("--dry-run", action="store_true")

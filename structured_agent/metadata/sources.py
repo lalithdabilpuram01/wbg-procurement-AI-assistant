@@ -25,6 +25,7 @@ CURATED_FILES = ("objects.json", "column_policy.json", "relationships.json", "me
 
 
 def latest(directory: Path, prefix: str) -> Path:
+    """Newest '<prefix>_*.json' in the folder (timestamped names sort by time)."""
     files = sorted(directory.glob(f"{prefix}_*.json"))
     if not files:
         raise FileNotFoundError(f"No {prefix}_*.json in {directory}: run the earlier pipeline step first")
@@ -36,6 +37,7 @@ def read_json(path: Path) -> dict:
 
 
 def sha256_of(paths: list[Path]) -> str:
+    """One SHA-256 over the contents of all the files, in the given order."""
     digest = hashlib.sha256()
     for path in paths:
         digest.update(path.read_bytes())
@@ -48,6 +50,8 @@ def curated(name: str) -> dict:
 
 @dataclass(frozen=True)
 class Grain:
+    """The documented grain of one object: what one row means, its key columns and where that comes from."""
+
     description: str
     columns: list[str]
     source: str

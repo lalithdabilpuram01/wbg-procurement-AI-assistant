@@ -30,6 +30,7 @@ def short_description(comment: str | None) -> str:
 
 
 def build_columns(snapshot_columns: list[dict], rules: ColumnPolicyRules) -> list[RegisteredColumn]:
+    """Registered columns of one object, each with its policy (classification, unit, family, additivity)."""
     columns = []
     for col in snapshot_columns:
         policy = rules.policy_for(col["name"], col["data_type"])
@@ -43,6 +44,7 @@ def build_columns(snapshot_columns: list[dict], rules: ColumnPolicyRules) -> lis
 
 
 def build_objects(snapshot: dict, verification: dict, rules: ColumnPolicyRules) -> list[RegisteredObject]:
+    """One RegisteredObject per discovered table or view, merging curated settings over the layer defaults."""
     curated_objects = curated("objects.json")
     grains = object_grains(snapshot)
     objects = []
@@ -63,6 +65,7 @@ def build_objects(snapshot: dict, verification: dict, rules: ColumnPolicyRules) 
             grain=grain.description,
             grain_columns=grain.columns,
             grain_source=grain.source,
+            # The grain is only trusted for fan-out checks when the live uniqueness check passed.
             grain_status="verified" if grain_check["unique"] else "unverified",
             row_count=obj["row_count"],
             authorized_roles=entry["authorized_roles"],
@@ -83,6 +86,7 @@ def build_objects(snapshot: dict, verification: dict, rules: ColumnPolicyRules) 
 
 
 def build_relationships(verification: dict) -> list[Relationship]:
+    """Curated relationships, marked verified only when the live orphan and cardinality check passed."""
     relationships = []
     for rel in curated("relationships.json")["relationships"]:
         check = verification["relationships"][rel["id"]]
@@ -96,6 +100,7 @@ def build_relationships(verification: dict) -> list[Relationship]:
 
 
 def build_metrics(objects: dict[str, RegisteredObject]) -> list[Metric]:
+    """Curated metric definitions; a metric whose object is not registered is marked unverified."""
     metrics = []
     for m in curated("metrics.json")["metrics"]:
         status = "curated" if m["object_fqn"] in objects else "unverified"
@@ -104,6 +109,7 @@ def build_metrics(objects: dict[str, RegisteredObject]) -> list[Metric]:
 
 
 def target_exists(kind: str, ref: str, objects: dict[str, RegisteredObject], metric_ids: set[str]) -> bool:
+    """True when a synonym's target (metric id, object fqn or object.column) exists in the registry."""
     if kind == "metric":
         return ref in metric_ids
     if kind == "object":
@@ -113,6 +119,7 @@ def target_exists(kind: str, ref: str, objects: dict[str, RegisteredObject], met
 
 
 def build_synonyms(objects: dict[str, RegisteredObject], metric_ids: set[str]) -> list[Synonym]:
+    """One Synonym per curated term; raises ValueError if any target does not exist."""
     config = curated("synonyms.json")
     synonyms = []
     for group in config["synonyms"]:
@@ -144,6 +151,7 @@ def build_examples() -> list[VerifiedSqlExample]:
 
 
 def build_bundle() -> RegistryBundle:
+    """Assemble the full bundle from the latest snapshot and verification; they must belong together."""
     snapshot_path = latest(SNAPSHOT_DIR, "databricks_metadata")
     verification_path = latest(VERIFICATION_DIR, "metadata_verification")
     snapshot, verification = read_json(snapshot_path), read_json(verification_path)

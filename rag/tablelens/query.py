@@ -48,6 +48,7 @@ class UnsafeSql(ValueError):
 
 @dataclass(frozen=True)
 class RegisteredTable:
+    """One table in the TableLens registry: its Lakebase name, source document, pages, columns and card."""
     table_id: str
     physical_name: str
     document_id: str
@@ -60,6 +61,7 @@ class RegisteredTable:
     card: str
 
     def schema_text(self) -> str:
+        """Schema text for the SQL writer: table name, card, registered columns with samples, system columns."""
         cols = "\n".join(f"  {c['sql_name']} ({c['type']}): printed header \"{c['header']}\"; e.g. "
                          f"{', '.join(repr(s) for s in c['samples'][:3])}" for c in self.columns)
         return (f"TABLE {SCHEMA}.{self.physical_name}\n{self.card}\nCOLUMNS:\n{cols}\n"
@@ -69,6 +71,7 @@ class RegisteredTable:
 
 @dataclass
 class TableResult:
+    """Rows that one validated query returned from one table, with the cited (row, page) pairs and quality flags."""
     table: RegisteredTable
     sql: str
     columns: list[str]
@@ -81,6 +84,7 @@ class TableResult:
 
 @dataclass
 class TableAnswer:
+    """Everything one question produced: the tables that returned rows, the writer's usage and a note per table."""
     results: list[TableResult]                                         # the tables that returned rows
     usage: dict[str, int]                                              # the writer's usage over every table tried
     notes: list[str]                                                   # per table: what happened (audit, debugging)
@@ -122,6 +126,7 @@ class TableLens:
     """Built with an open read-only pool and the question encoder; the SQL writer is given per question."""
 
     def __init__(self, pool, encode_query: Callable[[str], np.ndarray], release: str = RELEASE):
+        """Load the release's registry from Lakebase; raises LookupError when the release is not loaded."""
         self._pool, self._encode, self.release = pool, encode_query, release
         with pool.connection() as conn:
             if stored_release(conn, release) is None:
@@ -135,6 +140,8 @@ class TableLens:
         self._words = {tid: set(WORD.findall(t.card.lower())) for tid, t in self.tables.items()}
 
     def find_tables(self, question: str, scope_projects: set[str] | None = None) -> list[tuple[RegisteredTable, float]]:
+        """Rank registered tables for a question: dense similarity fused with keyword overlap, within the project scope.
+        Returns at most TOP_TABLES tables whose similarity is at least MIN_SIMILARITY."""
         where = "release = %s" + (" AND project_id = ANY(%s)" if scope_projects else "")
         vector = self._encode(question)
         params: list = [vector, self.release, *([sorted(scope_projects)] if scope_projects else []), vector]
@@ -150,6 +157,7 @@ class TableLens:
         return [(self.tables[tid], similarity[tid]) for tid in ranked if similarity[tid] >= MIN_SIMILARITY][:TOP_TABLES]
 
     def ask(self, question: str, write_sql: SqlWriter, scope_projects: set[str] | None = None) -> TableAnswer:
+        """Answer a question from the best-matching tables: the writer drafts SQL for each; it is validated and run."""
         answer = TableAnswer([], {}, [])
         usage: Counter = Counter()
         for table, _ in self.find_tables(question, scope_projects):
@@ -163,6 +171,8 @@ class TableLens:
         return answer
 
     def _answer_from(self, table: RegisteredTable, query: str | None) -> tuple[TableResult | None, str]:
+        """Validate and run the writer's SQL on one table; return (result or None, a note for the audit trail).
+        A row lookup whose filter matches nothing is re-run without the filter and marked broadened."""
         if not query:
             return None, "unanswerable"
         try:
@@ -185,6 +195,7 @@ class TableLens:
         return (broadened, "broadened: filter matched nothing") if broadened.rows else (None, "no rows")
 
     def _run(self, table: RegisteredTable, safe: str, aggregate: bool, where) -> TableResult:
+        """Run validated SQL in a transaction; for an aggregate also fetch the (row, page) pairs it used, to cite."""
         with self._pool.connection() as conn, conn.transaction():
             cursor = conn.execute(safe)
             columns = [d.name for d in cursor.description]

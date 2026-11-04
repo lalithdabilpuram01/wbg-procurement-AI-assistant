@@ -62,6 +62,7 @@ def sha(s: str | None) -> str | None:
 
 
 def main() -> int:
+    """Recompute the notice tables from the Volume files and check the D-14 mask and baseline; 0 when all passed."""
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-id", required=True)
     ap.add_argument("--profile", default=DEFAULT_PROFILE)

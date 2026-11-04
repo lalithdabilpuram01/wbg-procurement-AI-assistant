@@ -1,5 +1,8 @@
 "use client";
 
+// The chat view: header actions, the list of turns (user messages and answer cards), the running answer and the
+// message box. State and API calls live in AppShell; this file only renders and reports user actions.
+
 import { useEffect, useRef, useState } from "react";
 import { ArrowUp, Calculator, ClipboardList, Database, FileSearch, Landmark, PanelLeftOpen, PencilLine, ShieldCheck, Square, TableProperties } from "lucide-react";
 import type { Bookmark, ConversationDetail, FeedbackReason, Investigation, LiveStep } from "@/lib/api";
@@ -10,6 +13,7 @@ import { AnswerCard, PendingAnswer } from "./answer";
 import { ChatBookmarks } from "./chat-bookmarks";
 import { cn } from "@/lib/utils";
 
+// Example questions on the empty chat, one per kind of source (data, documents, both).
 const SUGGESTIONS = [
   { icon: Database, title: "Contract awards by method", text: "How many contract awards were made per procurement method in Ethiopia?" },
   { icon: FileSearch, title: "Lessons from documents", text: "What lessons were learned about road works procurement in Sri Lanka?" },
@@ -17,6 +21,7 @@ const SUGGESTIONS = [
     text: "Investigate the number of contract awards per procurement method in Ethiopia, and then summarize the procurement delays reported in the documents for the Ethiopia Expressway project." },
 ];
 
+/** Data and callbacks from AppShell. `pending` is the progress label while a job runs (null when idle). */
 type ChatProps = {
   title: string | null;
   detail: ConversationDetail | null;
@@ -40,6 +45,7 @@ type ChatProps = {
   onWatch: (projectId: string) => void;
 };
 
+/** The open conversation, or the welcome screen when it has no turns yet. */
 export function ChatView(props: ChatProps) {
   const { detail, investigations, pending } = props;
   const bottom = useRef<HTMLDivElement>(null);
@@ -47,10 +53,13 @@ export function ChatView(props: ChatProps) {
   const [draft, setDraft] = useState({ text: "", n: 0 });                // an example placed in the message box
   const send = (text: string, execute: boolean) => props.onSend(text, execute, tableLens);
   const feedback = new Map((detail?.feedback ?? []).map((f) => [f.turn_seq, f]));
+  // A revision is stored as a user turn with route "revision"; the answer right after it is the revised answer.
   const revisedSeqs = new Set((detail?.turns ?? []).filter((t) => t.role === "user" && t.route === "revision").map((t) => t.seq + 1));
 
+  // The saved TableLens preference arrives after the first render (AppShell loads it), so the toggle follows it.
   useEffect(() => setTableLens(props.defaultTableLens), [props.defaultTableLens]);
 
+  // After the turns change or a job starts or ends: jump to a bookmarked turn if one was asked for, else to the bottom.
   useEffect(() => {
     if (props.scrollToSeq !== null) {
       document.getElementById(`turn-${props.scrollToSeq}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -127,6 +136,8 @@ export function ChatView(props: ChatProps) {
   );
 }
 
+/** The message box. Enter sends, Shift+Enter adds a line; the send button becomes a stop button while a job runs.
+ *  `draft` carries a picked example: its counter `n` changes even when the same example is picked twice. */
 function Composer({ running, onSend, onStop, draft }:
   { running: boolean; onSend: (text: string, execute: boolean) => void; onStop: () => void; draft: { text: string; n: number } }) {
   const [text, setText] = useState("");
@@ -144,6 +155,7 @@ function Composer({ running, onSend, onStop, draft }:
     onSend(text.trim(), execute);
     setText("");
   };
+  // Grows the text area with its content, up to 200 px, after which it scrolls.
   useEffect(() => {
     if (area.current) {
       area.current.style.height = "auto";
@@ -186,6 +198,7 @@ function Composer({ running, onSend, onStop, draft }:
   );
 }
 
+/** The empty-chat screen: the plan-a-project card, example questions and the package assessment shortcut. */
 function Welcome({ onPick, onAssess, onPlan }: { onPick: (text: string) => void; onAssess: () => void; onPlan: () => void }) {
   return (
     <div className="mx-auto flex max-w-4xl flex-col items-center px-4 py-14 text-center">

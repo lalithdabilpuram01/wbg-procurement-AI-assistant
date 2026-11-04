@@ -41,6 +41,7 @@ def personal_values(bronze: DataFrame) -> tuple[set[str], set[str]]:
 
 
 def personal_data_scan(out: dict[str, DataFrame], names: set[str], upis: set[str], rep: DQReport) -> None:
+    """Check that no output column or value holds team-lead names, staff ids, e-mail addresses or phone numbers."""
     bad_cols = sorted(f"{k}.{c}" for k, df in out.items() for c in df.columns if re.search(r"teamlead|upi|staff|email|phone", c, re.I))
     rep.equals("personal:no_personal_column_names", bad_cols, [])
     for k, df in out.items():
@@ -56,6 +57,7 @@ def personal_data_scan(out: dict[str, DataFrame], names: set[str], upis: set[str
 
 
 def check_details(d: DataFrame, bronze: DataFrame, projects: DataFrame, cohort_ids: set[str], prov: dict, rep: DQReport, expected: int) -> None:
+    """Data-quality rules for the project details table (one row per covered cohort project)."""
     n = d.count()
     rep.equals("details:rows_equal_bronze", n, bronze.count())
     rep.equals("details:rows_equal_manifest", n, prov["records"])
@@ -119,6 +121,7 @@ def check_details(d: DataFrame, bronze: DataFrame, projects: DataFrame, cohort_i
 
 
 def check_transactions(t: DataFrame, details: DataFrame, ibrd: DataFrame, ida: DataFrame, rep: DQReport, expected: int) -> dict:
+    """Data-quality rules for the loan transactions; returns how their references match the IBRD and IDA tables."""
     n = t.count()
     rep.equals("transactions:rows_equal_expected", n, expected)
     rep.equals("transactions:rows_equal_sum_of_source_arrays", n, details.agg(F.sum("loan_transaction_count")).collect()[0][0])

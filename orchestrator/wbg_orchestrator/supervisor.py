@@ -25,6 +25,7 @@ COMPLEX = re.compile(r"\b(investigat\w*|root causes?|explain why|step by step|an
                      r"verify (?:it |them |this )?against|in each case|for each of)\b", re.I)
 
 
+# The supervisor's choice for one request: which mode, and for the fast path the single worker and operation.
 class SupervisorDecision(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
     mode: Literal["fast", "plan", "package", "brief", "monitor", "tender", "clarify", "refuse"]
@@ -36,7 +37,11 @@ class SupervisorDecision(BaseModel):
 
 
 class Supervisor:
+    """Deterministic first step of an investigation: no LLM call, only rules over the request."""
+
     def decide(self, request: InvestigationRequest) -> SupervisorDecision:
+        """Pick the mode for a request: a fixed plan for structured requests, else fast, plan, clarify or refuse."""
+        # Structured requests from the API (tender, package, brief, monitored project) win over the message text.
         if request.tender is not None:
             return self._tender(request)
         if request.package is not None:
@@ -49,6 +54,7 @@ class Supervisor:
         if rules.is_tool_directive(text):
             return SupervisorDecision(mode="refuse", reasons=("tool_directive_refused",))
         signals = rules.task_signals(text)
+        # Only prediction or planning wording, with nothing a chat worker can answer: those need the structured forms.
         if set(signals) & UNAVAILABLE_ROUTES and not set(signals) & set(ROUTE_WORKERS):
             return SupervisorDecision(mode="refuse", reasons=("route_unavailable",))
         routes = {r for r in signals if r in ROUTE_WORKERS}
@@ -60,6 +66,7 @@ class Supervisor:
                                       reasons=("route_not_authorized",))
         reasons = tuple(sorted(i for ids in signals.values() for i in ids))
         complex_wording = bool(COMPLEX.search(text))
+        # The user asking for "fast" overrides complex wording, but not a question that needs both workers.
         if request.mode == "investigation" or len(routes) > 1 or (complex_wording and request.mode != "fast"):
             routes = routes or {r for r in allowed if r in ROUTE_WORKERS}
             return SupervisorDecision(mode="plan", routes=tuple(sorted(r.value for r in routes)),

@@ -28,6 +28,8 @@ CANCELLATION_GAP = 0.10               # similar-size cancellations this much abo
 
 @dataclass(frozen=True)
 class Package:
+    """The package under design: category, method, review type, estimate, bid window and number of lots."""
+
     project_id: str
     category: str                     # Works | Goods | Consultant Services | Non-consulting Services
     method: str
@@ -39,6 +41,8 @@ class Package:
 
 @dataclass(frozen=True)
 class WindowBenchmark:
+    """Percentiles (days) of published bid windows for one notice type and peer group, from `since_fiscal_year` on."""
+
     notice_type: str
     scope: str                        # "category and method" or "category"
     notices: int
@@ -50,6 +54,8 @@ class WindowBenchmark:
 
 @dataclass
 class Check:
+    """One check result: status, plain message, the benchmark it used and the sources it rests on."""
+
     code: str
     status: Status
     title: str
@@ -59,6 +65,8 @@ class Check:
 
 
 def run(package: Package, terms: list[Term], window: WindowBenchmark | None, directory: Path = data.SHARED) -> list[Check]:
+    """Run every check that applies. Size checks need an estimate; without one a note says they were skipped.
+    Checks without enough history return None and are left out."""
     found = {t.name: t for t in terms}
     peers = history.group(package.category, package.method, directory)
     checks = [_bid_window(package, found.get("bid_window_days"), window)]
@@ -74,6 +82,7 @@ def run(package: Package, terms: list[Term], window: WindowBenchmark | None, dir
 
 # --------------------------------------------------------------------------------------------------- checks
 def _bid_window(package: Package, stated: Term | None, window: WindowBenchmark | None) -> Check:
+    """Compare the bid window with published windows: below the 25th percentile warns, below half the median fails."""
     days = package.bid_window_days
     note = (f" The draft itself says {stated.value:.0f} days." if stated and round(stated.value) != days else "")
     if window is None:
@@ -92,6 +101,7 @@ def _bid_window(package: Package, stated: Term | None, window: WindowBenchmark |
 
 
 def _method_fit(package: Package, peers: history.Group) -> Check:
+    """Is the estimate usual for this method? Warn above the 95th percentile of its peers, note below the 5th."""
     values = peers.estimates()
     s = history.spread(values)
     amount = package.estimated_usd
@@ -111,6 +121,7 @@ def _method_fit(package: Package, peers: history.Group) -> Check:
 
 
 def _review_type(package: Package, peers: history.Group) -> Check | None:
+    """Compare the review type with how often packages of similar size were prior review."""
     similar = peers.similar_size(package.estimated_usd)
     share = history.prior_share(similar)
     if share is None:
@@ -119,11 +130,14 @@ def _review_type(package: Package, peers: history.Group) -> Check | None:
     prior = package.review_type.lower().startswith("prior")
     text = f"{share:.0%} of {len(similar)} {peers.label} packages of similar size (US$ {_money(package.estimated_usd / history.BAND)}" \
            f" to {_money(package.estimated_usd * history.BAND)}) were prior review."
+    # Post review where most similar packages had prior review warns; prior review where almost none did is only noted.
     status: Status = "warn" if (not prior and share >= 0.5) else "info" if (prior and share < 0.1) else "ok"
     return Check("review_type", status, "Review type", f"{package.review_type} review. {text}", benchmark, [history.SOURCE])
 
 
 def _packaging(package: Package, peers: history.Group) -> Check | None:
+    """Warn when similar-size packages were cancelled clearly more often than the method overall; suggest lots
+    for a large single-lot package."""
     overall = history.cancelled_share(peers.packages)
     if overall is None:
         return None
@@ -146,8 +160,10 @@ def _packaging(package: Package, peers: history.Group) -> Check | None:
 
 
 def _turnover(package: Package, turnover: Term | None, months: Term | None) -> Check | None:
+    """Required annual turnover as a multiple of the contract's annual value; warn above TURNOVER_MULTIPLE."""
     if turnover is None:
         return None
+    # A contract shorter than a year counts as one year, so its annual value is never inflated.
     years = max(1.0, months.value / 12) if months else 1.0
     annual = package.estimated_usd / years
     multiple = turnover.value / annual
@@ -161,6 +177,7 @@ def _turnover(package: Package, turnover: Term | None, months: Term | None) -> C
 
 
 def _similar_contracts(package: Package, value: Term | None, count: Term | None) -> Check | None:
+    """Required value of each similar contract as a multiple of this package's estimate."""
     if value is None:
         return None
     multiple = value.value / package.estimated_usd

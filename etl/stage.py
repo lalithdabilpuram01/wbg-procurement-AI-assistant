@@ -54,6 +54,7 @@ class Staged:
     ref: dict = field(default_factory=dict)
 
     def write_manifests(self, folder: Path) -> dict[str, Path]:
+        """Write the three manifests into `folder`; return their paths by kind."""
         folder.mkdir(parents=True, exist_ok=True)
         paths = {k: folder / name for k, name in MANIFEST_NAMES.items()}
         paths["bronze"].write_text(json.dumps(self.bronze, indent=1))
@@ -64,6 +65,7 @@ class Staged:
 
 # ------------------------------------------------------------------------------------------------ helpers
 def sha256(path: Path) -> str:
+    """SHA-256 hex digest of a file, read in 1 MiB chunks."""
     h = hashlib.sha256()
     with path.open("rb") as f:
         for chunk in iter(lambda: f.read(1 << 20), b""):
@@ -90,6 +92,7 @@ def uploaded(folder: Path, ds: Dataset) -> list[Path]:
 
 
 def load_cohort(path: Path = COHORT) -> set[str]:
+    """The cohort project IDs; raises ValueError unless the manifest holds exactly COHORT_SIZE unique IDs."""
     with path.open(newline="", encoding="utf-8") as fh:
         ids = [r["project_id"] for r in csv.DictReader(fh)]
     if len(ids) != COHORT_SIZE or len(set(ids)) != COHORT_SIZE:
@@ -106,6 +109,7 @@ class Originals:
 
     @classmethod
     def load(cls) -> Originals:
+        """Read the Phase 1 manifests (Bronze inputs, source pulls, reference inputs) from the repository."""
         names = {f["bronze_table"]: Path(f["source_file"]).name for f in json.loads(ORIGINAL_BRONZE.read_text())["files"]}
         pulls = {r["sha256"]: r for p in ORIGINAL_PULLS for r in map(json.loads, p.read_text().splitlines()) if r.get("sha256")}
         ref = {f["sha256"]: f for f in json.loads(ORIGINAL_REF.read_text())["files"]}

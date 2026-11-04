@@ -21,7 +21,10 @@ class EncoderMismatchError(RuntimeError):
 
 
 class LocalModelEncoder:
+    """Sentence-transformers encoder that only exists when the local model matches an attested store configuration."""
     def __init__(self, config: EmbeddingConfig, attestation: Path = DEFAULT_ATTESTATION):
+        """Load the cached model; EncoderMismatchError unless its files, attestation and settings match `config`."""
+        # Refuse to load when the cached model files, the attestation or the loaded settings differ from the config.
         if config.fingerprint() != local_model_config(config.batch_size, config.normalize, config.prompt).fingerprint():
             raise EncoderMismatchError("the local model files do not match the requested configuration")
         record = json.loads(attestation.read_text()) if attestation.is_file() else {}
@@ -38,6 +41,7 @@ class LocalModelEncoder:
         self.config = config
 
     def encode(self, texts: list[str]) -> np.ndarray:
+        """Encode texts with the configuration's batch size, normalisation and prompt; returns one row per text."""
         vectors = self.model.encode(texts, batch_size=self.config.batch_size, normalize_embeddings=self.config.normalize,
                                     prompt=self.config.prompt or None, show_progress_bar=False, convert_to_numpy=True)
         return np.asarray(vectors, dtype=self.config.dtype)

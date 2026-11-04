@@ -29,6 +29,8 @@ SENTENCE = re.compile(r"(?<=[.!?;])\s+")
 
 @dataclass
 class Line:
+    """One line of extracted text with its page and, when the source marks it, its heading level."""
+
     text: str
     page: int | None = None
     level: int | None = None        # set when the source marks a heading (Word styles); else inferred
@@ -55,6 +57,7 @@ def heading_level(text: str) -> int | None:
         if re.fullmatch(r"[A-H]\.", number):
             return 2
         return min(len([p for p in number.rstrip(".").split(".") if p]), 4)
+    # A short line in (almost) all capitals is read as a top-level heading.
     letters = [c for c in line if c.isalpha()]
     if len(letters) >= 4 and sum(c.isupper() for c in letters) / len(letters) > 0.85 and len(line.split()) <= 10:
         return 1
@@ -69,6 +72,7 @@ def build(document_id: str, lines: list[Line], doc_kind: str = "narrative") -> t
     paragraph: list[Line] = []
 
     def flush() -> None:
+        """Close the paragraph being collected as one block of the current section."""
         if paragraph:
             text = " ".join(line.text.strip() for line in paragraph if line.text.strip())
             if text:
@@ -89,6 +93,7 @@ def build(document_id: str, lines: list[Line], doc_kind: str = "narrative") -> t
                     flush()
             continue
         flush()
+        # Close the open sections at this level or deeper, so the new heading becomes a sibling or moves up the tree.
         while len(stack) > 1 and stack[-1].level >= level:
             stack.pop()
         parent = stack[-1] if stack[-1].level < level else None
@@ -103,10 +108,12 @@ def build(document_id: str, lines: list[Line], doc_kind: str = "narrative") -> t
         stack.append(section)
     flush()
     _page_ranges(sections, blocks)
+    # The front-matter root section is kept only when some text came before the first heading.
     return [s for s in sections if s is not root or any(b.section_id == root.section_id for b in blocks)], blocks
 
 
 def _page_ranges(sections: list[Section], blocks: list[Block]) -> None:
+    """Set each section's page range from the pages of its blocks."""
     by_section: dict[str, list[int]] = {}
     for block in blocks:
         for page in (block.page_start, block.page_end):
@@ -128,6 +135,7 @@ def chunk(document_id: str, sections: list[Section], blocks: list[Block]) -> lis
         size = count_tokens(header)
         for text, block in pieces:
             tokens = count_tokens(text)
+            # Close the chunk once the target would be passed, but never leave a chunk smaller than CHUNK_MIN.
             if current and size + tokens > CHUNK_TARGET and size >= CHUNK_MIN:
                 chunks.append(_chunk(document_id, section, header, current, len(chunks)))
                 current, size = [], count_tokens(header)
@@ -153,6 +161,7 @@ def _pieces(block: Block) -> list[tuple[str, Block]]:
 
 
 def _chunk(document_id: str, section: Section, header: str, parts: list[tuple[str, Block]], order: int) -> Chunk:
+    """One chunk from consecutive pieces of a section, with the page range they cover."""
     text = header + "\n".join(t for t, _ in parts)
     pages = [p for _, b in parts for p in (b.page_start, b.page_end) if p is not None]
     return Chunk(f"{document_id}:k{order:05d}", section.section_id, text, count_tokens(text), order,

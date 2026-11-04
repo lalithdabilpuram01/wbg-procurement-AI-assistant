@@ -8,6 +8,8 @@ from structured_agent.registry.models import RegistryBundle
 
 @dataclass(frozen=True)
 class SearchDocument:
+    """One searchable text about an object, a column or a metric; doc_id is '<kind>:<reference>'."""
+
     doc_id: str
     doc_kind: str          # object | column | metric
     object_fqn: str

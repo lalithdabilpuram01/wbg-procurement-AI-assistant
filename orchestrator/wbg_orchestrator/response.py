@@ -33,6 +33,7 @@ MAX_RESTATED = 16                       # claims of a restated answer (e.g. a te
 CONFIDENCE = re.compile(r"\b(confiden\w*|probabilit\w*|likelihood|likely|certaint\w*|chance)\b", re.I)
 
 
+# The answer schema Claude fills in (sent as its structured-output schema): claims that cite evidence ids.
 class DraftClaim(BaseModel):
     model_config = ConfigDict(extra="forbid")
     text: str = Field(min_length=1, max_length=600)
@@ -47,6 +48,8 @@ class DraftResponse(BaseModel):
 
 
 class ResponseGenerator(Protocol):
+    """Anything that drafts an answer from evidence; the draft is always validated afterwards."""
+
     name: str
     is_llm: bool
 
@@ -60,6 +63,7 @@ class DeterministicResponseGenerator:
     name, is_llm = "deterministic", False
 
     def compose(self, request, evidence, report):
+        """One claim per record that has a restatement, at most MAX_RESTATED; no model call, so no usage."""
         claims = []
         for record in evidence:
             text = _restatement(record)
@@ -107,7 +111,7 @@ class ClaudeResponseGenerator:
         parsed, content, usage = self._stream(call, on_text) if on_text else self._client.complete(**call)
         try:
             return DraftResponse.model_validate(parsed if parsed is not None else content), usage
-        except ValidationError:
+        except ValidationError:                    # an unusable reply gives no draft (and so no claims), not an error
             return None, usage
 
 
@@ -130,6 +134,7 @@ def _summary_chars(record: EvidenceRecord) -> int:
 
 
 def _restatement(record: EvidenceRecord) -> str:
+    """A plain sentence restating one record, by kind; unverified PDF table values are never restated."""
     if record.kind == EvidenceKind.STRUCTURED_RESULT and record.facts:
         values = "; ".join(f"{f.name} = {f.value}" for f in record.facts[:10])
         return f"Result from {', '.join(record.source_objects)}: {values}."
@@ -151,6 +156,7 @@ def _restatement(record: EvidenceRecord) -> str:
 
 # ------------------------------------------------------------------------------------------------- validation
 def _support_text(records: list[EvidenceRecord]) -> str:
+    """All the text a claim may draw numbers and dates from: citations, summaries and facts of the records."""
     return " ".join(f"{r.citation} {r.summary} " + " ".join(f"{f.name} {f.value} {f.unit or ''}" for f in r.facts) for r in records)
 
 
@@ -167,6 +173,7 @@ def check_claim(claim: DraftClaim, ledger: dict[str, EvidenceRecord]) -> str | N
         body = body.replace(record.citation, " ")
     claim_numbers = validate.numbers(body, scale=False)
     allowed = [r for r in cited if r.numeric_use != NumericUse.NOT_APPROVED]
+    # Two steps: the number must appear in the cited evidence at all, and then in evidence approved for figures.
     if claim_numbers - validate.numbers(_support_text(cited)):
         return "unsupported_number"
     if claim_numbers - validate.numbers(_support_text(allowed)):
@@ -182,6 +189,7 @@ def validate_response(request: InvestigationRequest, plan: InvestigationPlan | N
                       ledger: dict[str, EvidenceRecord], report: VerificationReport | None,
                       partial_tasks: tuple[str, ...] = (), cancelled_tasks: tuple[str, ...] = (),
                       failed_tasks: tuple[str, ...] = ()) -> InvestigationResponse:
+    """Keep only the draft's supported claims, add the limitations a reader must know, and set the status."""
     kept, removed = [], []
     for claim in (draft.claims if draft else []):
         reason = check_claim(claim, ledger)
@@ -221,6 +229,7 @@ def validate_response(request: InvestigationRequest, plan: InvestigationPlan | N
 
 
 def _status(kept, report, partial_tasks, cancelled_tasks, removed) -> InvestigationStatus:
+    """Conflicting, then insufficient (no claims), then partial (anything missing or removed), else answered."""
     cited = {i for claim in kept for i in claim.evidence_ids}
     # a conflict decides the status only when the answer relies on it (or nothing else could be said)
     if report and any(not kept or cited & set(c.evidence_ids) for c in report.conflicts):

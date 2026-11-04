@@ -50,6 +50,7 @@ def write_approved(environ: dict[str, str] | None = None) -> bool:
 
 
 def guard_bundle(bundle: EvidenceBundle) -> None:
+    """Refuse a bundle that is not one approved document version, exceeds MAX_RECORDS or has other tables."""
     versions = {rec["document_version_id"] for rec in bundle.records["documents"]}
     total = sum(len(rows) for rows in bundle.records.values())
     if len(versions) != 1 or not next(iter(versions)).startswith(f"{DOCUMENT_ID}:"):
@@ -61,12 +62,14 @@ def guard_bundle(bundle: EvidenceBundle) -> None:
 
 
 def insert_statement(table: str, columns: list[str]) -> sql.Composed:
+    """INSERT ... ON CONFLICT DO NOTHING for `table`, with checked identifiers and one placeholder per column."""
     return sql.SQL("INSERT INTO {}.{} ({}) VALUES ({}) ON CONFLICT DO NOTHING").format(
         sql.Identifier(checked(SCHEMA)), sql.Identifier(checked(table)),
         sql.SQL(", ").join(sql.Identifier(checked(c)) for c in columns), sql.SQL(", ").join(sql.Placeholder() * len(columns)))
 
 
 def _adapt(column: str, value: Any) -> Any:
+    """Wrap JSON columns as Jsonb and turn ISO date strings into dates before binding."""
     if column in JSON_COLUMNS:
         return Jsonb(value)
     if column in DATE_COLUMNS and isinstance(value, str):
@@ -100,6 +103,7 @@ def inspect_target(conn: psycopg.Connection) -> dict[str, Any]:
 
 
 def verify_extensions(conn: psycopg.Connection) -> dict[str, str | None]:
+    """Require pgvector to be installed and lakebase_vector to be absent; returns the installed versions."""
     with conn.cursor() as cur:
         cur.execute("SELECT extname, extversion FROM pg_extension WHERE extname = ANY(%s)", (["vector", "lakebase_vector"],))
         installed = dict(cur.fetchall())
@@ -129,6 +133,7 @@ def normalise(value: Any) -> Any:
 
 
 def prepared_rows(bundle: EvidenceBundle, table: str) -> list[dict[str, Any]]:
+    """Copies of the bundle's records for `table`, with the vectors attached for unit_embeddings."""
     rows = [dict(row) for row in bundle.records[table]]
     if table == "unit_embeddings":
         for row, vector in zip(rows, bundle.vectors):

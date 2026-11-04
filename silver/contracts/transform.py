@@ -48,6 +48,7 @@ def source_columns(df: DataFrame) -> list[str]:
 
 
 def load_provenance(bronze_table_short: str) -> dict:
+    """Provenance of one Bronze input from the manifests: file SHA-256s, record count, retrieval time, source note."""
     m = json.loads(BRONZE_INPUTS_MANIFEST.read_text())
     e = next(f for f in m["files"] if f["bronze_table"] == bronze_table_short)
     src_name = Path(e["source_file"]).name
@@ -70,6 +71,7 @@ def _ws(c: F.Column) -> F.Column:
 
 
 def _lineage(prov: dict, bronze_table: str, dataset: str, run_id: str, cols: list[str]) -> list[F.Column]:
+    """Lineage columns shared by the contract tables: source row hash, Bronze file, manifest SHA-256s and run id."""
     return [F.lit(dataset).alias("source_dataset"), row_hash_expr(cols).alias("source_row_sha256"),
             F.lit(bronze_table).alias("bronze_table"), F.col("source_file").alias("bronze_source_file"),
             F.col("cohort_id").alias("bronze_cohort_id"), F.col("ingested_at").alias("bronze_ingested_at"),
@@ -80,12 +82,15 @@ def _lineage(prov: dict, bronze_table: str, dataset: str, run_id: str, cols: lis
 
 
 def build_lines(ds5: DataFrame, prov: dict, run_id: str) -> DataFrame:
+    """DS00005 rows as typed supplier lines (one per contract and supplier), with lineage and raw validation columns."""
     cols = source_columns(ds5)
     sid = _c("Supplier ID")
+    # A 16-character hex Supplier ID is how the source anonymises an individual consultant.
     sid_type = (F.when(sid.isNull(), F.lit("missing")).when(sid.rlike(HEX_ID), F.lit("anonymized_individual_consultant"))
                 .otherwise(F.lit("numeric")))
     w = Window.partitionBy(_c("WB Contract Number"))
     return ds5.select(
+        # Lines without a Supplier ID get a stable stand-in: a short hash of the supplier name.
         F.concat_ws(":", _c("WB Contract Number"), F.coalesce(sid, F.concat(F.lit("NO_SUPPLIER_ID-"), F.substring(F.sha2(F.coalesce(_c("Supplier"), F.lit("")), 256), 1, 12)))).alias("line_key"),
         _c("WB Contract Number").alias("wb_contract_number"),
         sid.alias("supplier_id"), sid_type.alias("supplier_id_type"),
@@ -117,8 +122,10 @@ CONTRACT_LEVEL = ["project_id", "project_name_source", "region_name_source", "bo
 
 
 def build_contracts(lines: DataFrame, run_id: str) -> DataFrame:
+    """One row per WB contract number: contract fields from its first line, supplier lists and the summed amount."""
     agg = lines.groupBy("wb_contract_number").agg(
         *[F.first(c, ignorenulls=False).alias(c) for c in CONTRACT_LEVEL],
+        # Distinct values per contract-level field, so the checks can prove every line of a contract agrees on it.
         *[F.countDistinct(F.coalesce(F.col(c).cast("string"), F.lit("<NULL>"))).alias(f"_distinct_{c}") for c in CONTRACT_LEVEL if c != "global_practices"],
         F.count("*").alias("supplier_line_count"),
         F.array_sort(F.collect_list("supplier_id")).alias("supplier_ids"),
@@ -144,6 +151,7 @@ def build_contracts(lines: DataFrame, run_id: str) -> DataFrame:
 
 
 def build_legacy(ds1: DataFrame, prov: dict, run_id: str) -> DataFrame:
+    """DS01004 legacy prior-review contracts, typed, with whitespace-normalised text copies and lineage."""
     cols = source_columns(ds1)
     return ds1.select(
         _c("Contract Number").alias("contract_number"), _c("Project ID").alias("project_id"),

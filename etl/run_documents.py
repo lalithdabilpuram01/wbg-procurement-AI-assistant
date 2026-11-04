@@ -26,6 +26,7 @@ STEPS = ("register", "parse", "enrich", "embed", "publish")
 
 
 def main(argv: list[str]) -> int:
+    """Run one document ETL step for the given catalog and run id; return the exit code."""
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("step", choices=STEPS)
     ap.add_argument("--catalog", required=True)

@@ -12,10 +12,12 @@ from structured_agent.execution.executor import RawResult
 
 EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+")
 PHONE = re.compile(r"(?:\+|\b00)\d[\d\s().-]{7,}\d")
+# Classifications whose values may be returned to the caller.
 DISCLOSABLE = {"public", "lineage"}
 
 
 def validate_result(raw: RawResult, report: ValidationReport, row_limit: int) -> list[CheckResult]:
+    """Run every result check; returns one CheckResult per check (all must pass for rows to be returned)."""
     expected = [c.name.lower() for c in report.output_columns]
     returned = [name.lower() for name, _ in raw.columns]
     checks = [
@@ -30,12 +32,14 @@ def validate_result(raw: RawResult, report: ValidationReport, row_limit: int) ->
 
 
 def _classification_check(report: ValidationReport) -> CheckResult:
+    """Every output column must have a disclosable classification (public or lineage)."""
     blocked = [c.name for c in report.output_columns if c.classification not in DISCLOSABLE]
     return CheckResult(name="output_classification_disclosable", passed=not blocked,
                        detail=f"blocked: {blocked}" if blocked else "all outputs public or lineage")
 
 
 def _non_negative_counts(raw: RawResult, report: ValidationReport) -> CheckResult:
+    """Columns whose unit is 'count' must never hold negative values."""
     count_columns = [c.name for c in report.output_columns if c.unit == "count"]
     negative = [c for c in count_columns for row in raw.rows if isinstance(row.get(c), (int, float)) and row[c] < 0]
     return CheckResult(name="counts_non_negative", passed=not negative, detail=f"negative: {sorted(set(negative))}" if negative else "")
